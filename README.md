@@ -3,5 +3,4 @@
 
 At [r/roguelikedev](https://www.reddit.com/r/roguelikedev/) we're doing a dev-along following [The Complete Roguelike Tutorial](http://rogueliketutorials.com/tutorials/tcod/)
 ## What is this
-
-I'm basically following along with the Python + libtcod tutorial, but with F# + SadConsole instead.
+I do a tutorial using the Python Arcade Library
