@@ -1,6 +1,7 @@
 from constants import *
 
-def pixel_tile(x, y):
+
+def pixel_position(x, y):
     """tilepositionからsprite_sizeに変換する"""
     px = x * SPRITE_SIZE * SPRITE_SCALE + SPRITE_SIZE // 2 * SPRITE_SCALE
     py = y * SPRITE_SIZE * SPRITE_SCALE + SPRITE_SIZE // 2 * SPRITE_SCALE

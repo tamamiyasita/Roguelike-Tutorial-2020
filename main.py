@@ -1,16 +1,19 @@
 import arcade
 from constants import *
-from util import map_position
 from set_map import SetMap
+from data import *
 
 
-pcimg = "rou6.png"
+class Actor(arcade.Sprite):
+    def __init__(self, image, center_x, center_y, scale=SPRITE_SCALE):
+        super().__init__(image, scale)
+        self.center_x = center_x
+        self.center_y = center_y
 
+    def move(self, dxy):
+        self.center_x += dxy[0]*SPRITE_SIZE
+        self.center_y += dxy[1]*SPRITE_SIZE
 
-class actor(arcade.Sprite):
-    def __init__(self, img, x, y, scale=SPRITE_SCALE):
-        super().__init__(scale)
-        x, y = map_position(self.center_x, self.center_y)
 
 class MG(arcade.Window):
     def __init__(self, width, height, title):
@@ -18,6 +21,7 @@ class MG(arcade.Window):
         self.player = None
         self.actor_list = None
         self.map_tile = None
+        self.dist = None
 
     def setup(self):
         arcade.set_background_color(arcade.color.WHITE)
@@ -25,7 +29,7 @@ class MG(arcade.Window):
         self.actor_list = arcade.SpriteList()
         self.map_list = arcade.SpriteList()
 
-        self.player = arcade.Sprite(pcimg, center_x=50, center_y=50)
+        self.player = Actor(image["player"], 50, 50)
         self.actor_list.append(self.player)
         self.map_tile = SetMap(15, 15, self.map_list)
 
@@ -34,9 +38,23 @@ class MG(arcade.Window):
         self.map_list.draw()
         self.actor_list.draw()
 
+    def on_update(self, delta_time):
+        if self.dist:
+            self.player.move(self.dist)
+            self.dist = 0
+
     def on_key_press(self, key, modifiers):
         if key == arcade.key.ESCAPE:
             arcade.close_window()
+
+        if key == arcade.key.UP:
+            self.dist = (0, 1)
+        if key == arcade.key.DOWN:
+            self.dist = (0, -1)
+        if key == arcade.key.LEFT:
+            self.dist = (-1, 0)
+        if key == arcade.key.RIGHT:
+            self.dist = (1, 0)
 
 
 def main():
