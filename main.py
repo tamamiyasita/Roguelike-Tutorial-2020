@@ -2,6 +2,7 @@ import arcade
 from constants import *
 from set_map import SetMap
 from data import *
+import random
 
 
 class Actor(arcade.Sprite):
@@ -19,6 +20,7 @@ class MG(arcade.Window):
     def __init__(self, width, height, title):
         super().__init__(width, height, title)
         self.player = None
+        self.crab = None
         self.actor_list = None
         self.map_tile = None
         self.dist = None
@@ -29,7 +31,10 @@ class MG(arcade.Window):
         self.actor_list = arcade.SpriteList()
         self.map_list = arcade.SpriteList()
 
-        self.player = Actor(image["player"], 50, 50)
+        self.player = Actor(image["player"], 20, 20)
+        self.crab = Actor(image["crab"], 270, 150, scale=0.5)
+
+        self.actor_list.append(self.crab)
         self.actor_list.append(self.player)
         self.map_tile = SetMap(15, 15, self.map_list)
 
@@ -41,6 +46,7 @@ class MG(arcade.Window):
     def on_update(self, delta_time):
         if self.dist:
             self.player.move(self.dist)
+            self.crab.move((random.randint(-1, 1), random.randint(-1, 1)))
             self.dist = 0
 
     def on_key_press(self, key, modifiers):
