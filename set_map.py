@@ -30,6 +30,15 @@ class SetMap:
 
         return tiles
 
+    def is_blocked(self, x, y):
+        try:
+            if self.tiles[x][y].blocked:
+                return True
+
+            return False
+        except:
+            pass
+
     def sprite_set(self):
         # px, py = 0, 0
         print(self.width)

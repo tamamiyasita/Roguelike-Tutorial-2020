@@ -2,18 +2,24 @@ import arcade
 from constants import *
 from set_map import SetMap
 from data import *
+from util import map_position
 import random
 
 
 class Actor(arcade.Sprite):
-    def __init__(self, image, center_x, center_y, scale=SPRITE_SCALE):
+    def __init__(self, image, center_x, center_y, scale=SPRITE_SCALE, map_tile=None):
         super().__init__(image, scale)
         self.center_x = center_x
         self.center_y = center_y
+        self.map_tile = map_tile
 
     def move(self, dxy):
-        self.center_x += dxy[0]*SPRITE_SIZE
-        self.center_y += dxy[1]*SPRITE_SIZE
+        dx, dy = dxy
+        self.x, self.y = map_position(self.center_x, self.center_y)
+
+        if not self.map_tile.is_blocked(self.x + dx, self.y + dy):
+            self.center_x += dx*SPRITE_SIZE
+            self.center_y += dy*SPRITE_SIZE
 
 
 class MG(arcade.Window):
@@ -27,16 +33,17 @@ class MG(arcade.Window):
 
     def setup(self):
         arcade.set_background_color(arcade.color.WHITE)
-
         self.actor_list = arcade.SpriteList()
         self.map_list = arcade.SpriteList()
 
-        self.player = Actor(image["player"], 20, 20)
-        self.crab = Actor(image["crab"], 270, 150, scale=0.5)
+        self.map_tile = SetMap(15, 15, self.map_list)
+
+        self.player = Actor(image["player"], 20, 20, map_tile=self.map_tile)
+        self.crab = Actor(image["crab"], 270, 150,
+                          scale=0.5, map_tile=self.map_tile)
 
         self.actor_list.append(self.crab)
         self.actor_list.append(self.player)
-        self.map_tile = SetMap(15, 15, self.map_list)
 
     def on_draw(self):
         arcade.start_render()
