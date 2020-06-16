@@ -40,12 +40,8 @@ class SetMap:
             pass
 
     def sprite_set(self):
-        # px, py = 0, 0
-        print(self.width)
-        print(self.height)
         for x in range(self.width):
             for y in range(self.height):
-                print(self.tiles[x][y].blocked)
                 if self.tiles[x][y].blocked:
                     px, py = pixel_position(x, y)
                     wall = arcade.Sprite(

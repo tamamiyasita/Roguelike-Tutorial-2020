@@ -18,8 +18,8 @@ class Actor(arcade.Sprite):
         self.x, self.y = map_position(self.center_x, self.center_y)
 
         if not self.map_tile.is_blocked(self.x + dx, self.y + dy):
-            self.center_x += dx*SPRITE_SIZE
-            self.center_y += dy*SPRITE_SIZE
+            self.center_x += int(dx*SPRITE_SIZE)
+            self.center_y += int(dy*SPRITE_SIZE)
 
 
 class MG(arcade.Window):
@@ -39,7 +39,7 @@ class MG(arcade.Window):
         self.map_tile = SetMap(15, 15, self.map_list)
 
         self.player = Actor(image["player"], 20, 20, map_tile=self.map_tile)
-        self.crab = Actor(image["crab"], 270, 150,
+        self.crab = Actor(image["crab"], 210, 110,
                           scale=0.5, map_tile=self.map_tile)
 
         self.actor_list.append(self.crab)
@@ -52,8 +52,8 @@ class MG(arcade.Window):
 
     def on_update(self, delta_time):
         if self.dist:
-            self.player.move(self.dist)
             self.crab.move((random.randint(-1, 1), random.randint(-1, 1)))
+            self.player.move(self.dist)
             self.dist = 0
 
     def on_key_press(self, key, modifiers):
