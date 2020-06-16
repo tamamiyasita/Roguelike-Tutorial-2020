@@ -1,0 +1,47 @@
+import arcade
+from util import map_position, pixel_tile
+
+class Tile:
+    def __init__(self, blocked, block_sight=None):
+        self.blocked = blocked
+
+        if not block_sight:
+            block_sight = blocked
+        self.block_sight = block_sight
+
+
+class SetMap:
+    def __init__(self, width, height, sprite_list):
+        self.width = width
+        self.height = height
+        self.tiles = self.initialize_tiles()
+        self.sprite_list = sprite_list
+        print(self.tiles, len(self.tiles), len(self.tiles[0]))
+        self.sprite_set()
+
+    def initialize_tiles(self):
+        tiles = [[Tile(False) for y in range(self.height)] for x in range(self.width)]
+
+        tiles[5][5].blocked = True
+        tiles[6][5].blocked = True
+        tiles[6][6].blocked = True
+
+
+        return tiles
+
+    def sprite_set(self):
+        # px, py = 0, 0
+        print(self.width)
+        print(self.height)
+        for x in range(self.width):
+            for y in range(self.height):
+                print(self.tiles[x][y].blocked)
+                if self.tiles[x][y].blocked:
+                    px, py = pixel_tile(x, y)
+                    wall = arcade.Sprite("wall.png", center_x=px, center_y=py)
+                    self.sprite_list.append(wall)
+                elif not self.tiles[x][y].blocked:
+                    px, py = pixel_tile(x, y)
+                    floor = arcade.Sprite("floor.jpg", center_x=px, center_y=py)
+                    self.sprite_list.append(floor)
+
