@@ -39,7 +39,7 @@ class MG(arcade.Window):
         self.map_tile = SetMap(15, 15, self.map_list)
 
         self.player = Actor(image["player"], 20, 20, map_tile=self.map_tile)
-        self.crab = Actor(image["crab"], 210, 110,
+        self.crab = Actor(image["crab"], 310, 210,
                           scale=0.5, map_tile=self.map_tile)
 
         self.actor_list.append(self.crab)
