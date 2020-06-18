@@ -1,5 +1,6 @@
 import arcade
 import random
+import pyglet.gl as gl
 from constants import *
 from data import *
 from set_map import SetMap
@@ -9,7 +10,7 @@ from actor import Actor
 
 class MG(arcade.Window):
     def __init__(self, width, height, title):
-        super().__init__(width, height, title)
+        super().__init__(width, height, title, antialiasing=False)
         self.player = None
         self.crab = None
         self.actor_list = None
@@ -18,22 +19,25 @@ class MG(arcade.Window):
 
     def setup(self):
         arcade.set_background_color(arcade.color.WHITE)
-        self.actor_list = arcade.SpriteList()
-        self.map_list = arcade.SpriteList()
+        self.actor_list = arcade.SpriteList(
+            use_spatial_hash=True, spatial_hash_cell_size=32)
+        self.map_list = arcade.SpriteList(
+            use_spatial_hash=True, spatial_hash_cell_size=32)
 
         self.map_tile = SetMap(15, 15, self.map_list)
 
-        self.player = Actor(image["player"], 2, 2, map_tile=self.map_tile)
+        self.player = Actor(image["player"], 2, 2,
+                            left_img=True, map_tile=self.map_tile)
         self.crab = Actor(image["crab"], 3, 2,
-                          scale=0.5, map_tile=self.map_tile)
+                          scale=0.5, left_img=True, map_tile=self.map_tile)
 
         self.actor_list.append(self.crab)
         self.actor_list.append(self.player)
 
     def on_draw(self):
         arcade.start_render()
-        self.map_list.draw()
-        self.actor_list.draw()
+        self.map_list.draw(filter=gl.GL_NEAREST)
+        self.actor_list.draw(filter=gl.GL_NEAREST)
 
     def on_update(self, delta_time):
 
