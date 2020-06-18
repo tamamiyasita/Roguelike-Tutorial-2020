@@ -1,25 +1,10 @@
 import arcade
-from constants import *
-from set_map import SetMap
-from data import *
-from util import map_position
 import random
-
-
-class Actor(arcade.Sprite):
-    def __init__(self, image, center_x, center_y, scale=SPRITE_SCALE, map_tile=None):
-        super().__init__(image, scale)
-        self.center_x = center_x
-        self.center_y = center_y
-        self.map_tile = map_tile
-
-    def move(self, dxy):
-        dx, dy = dxy
-        self.x, self.y = map_position(self.center_x, self.center_y)
-
-        if not self.map_tile.is_blocked(self.x + dx, self.y + dy):
-            self.center_x += int(dx*SPRITE_SIZE)
-            self.center_y += int(dy*SPRITE_SIZE)
+from constants import *
+from data import *
+from set_map import SetMap
+from util import map_position
+from actor import Actor
 
 
 class MG(arcade.Window):
@@ -38,8 +23,8 @@ class MG(arcade.Window):
 
         self.map_tile = SetMap(15, 15, self.map_list)
 
-        self.player = Actor(image["player"], 20, 20, map_tile=self.map_tile)
-        self.crab = Actor(image["crab"], 310, 210,
+        self.player = Actor(image["player"], 2, 2, map_tile=self.map_tile)
+        self.crab = Actor(image["crab"], 3, 2,
                           scale=0.5, map_tile=self.map_tile)
 
         self.actor_list.append(self.crab)
@@ -51,10 +36,8 @@ class MG(arcade.Window):
         self.actor_list.draw()
 
     def on_update(self, delta_time):
-        if self.dist:
-            self.crab.move((random.randint(-1, 1), random.randint(-1, 1)))
-            self.player.move(self.dist)
-            self.dist = 0
+
+        self.actor_list.update()
 
     def on_key_press(self, key, modifiers):
         if key == arcade.key.ESCAPE:
@@ -68,6 +51,10 @@ class MG(arcade.Window):
             self.dist = (-1, 0)
         if key == arcade.key.RIGHT:
             self.dist = (1, 0)
+
+        self.player.move(self.dist)
+
+        self.crab.move((random.randint(-1, 1), random.randint(-1, 1)))
 
 
 def main():

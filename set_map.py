@@ -17,7 +17,6 @@ class SetMap:
         self.height = height
         self.tiles = self.initialize_tiles()
         self.sprite_list = sprite_list
-        print(self.tiles, len(self.tiles), len(self.tiles[0]))
         self.sprite_set()
 
     def initialize_tiles(self):
