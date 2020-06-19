@@ -25,6 +25,7 @@ class MG(arcade.Window):
             use_spatial_hash=True, spatial_hash_cell_size=32)
 
         self.map_tile = SetMap(15, 15, self.map_list)
+        # self.map_tile.make_ma
 
         self.player = Actor(image["player"], 2, 2,
                             left_img=True, map_tile=self.map_tile)

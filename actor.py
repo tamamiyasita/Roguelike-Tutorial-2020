@@ -1,7 +1,7 @@
 import arcade
 from constants import *
 from util import map_position, pixel_position
-SPEED = 8
+
 
 
 class Actor(arcade.Sprite):
@@ -23,23 +23,20 @@ class Actor(arcade.Sprite):
                 (self.dx * SPRITE_SIZE)*SPRITE_SCALE
             self.target_y = self.center_y + \
                 (self.dy * SPRITE_SIZE)*SPRITE_SCALE
-            self.change_y = self.dy * SPEED
-            self.change_x = self.dx * SPEED
+            self.change_y = self.dy * MOVE_SPEED
+            self.change_x = self.dx * MOVE_SPEED
         if self.dx == 1:
             self.texture = self.textures.get("left")
         if self.dx == -1:
             self.texture = self.textures.get("right")
-        print(self.dx)
 
     def update(self):
         super().update()
         if not self.stop_move:
             if abs(self.target_x - self.center_x) <= 1 and self.dx:
-                print(self.x)
                 self.change_x = 0
                 self.center_x = self.target_x
                 self.x += self.dx
-                print(self.x)
                 self.stop_move = True
 
             if abs(self.target_y - self.center_y) <= 1 and self.dy:
@@ -53,5 +50,4 @@ class Actor(arcade.Sprite):
             image, mirrored=True)
         left = arcade.load_texture(image)
         self.textures = {"right": right, "left": left}
-        print(self.textures)
         return self.textures
