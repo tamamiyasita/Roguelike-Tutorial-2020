@@ -3,9 +3,9 @@ import random
 import pyglet.gl as gl
 from constants import *
 from data import *
-from set_map import SetMap
 from util import map_position
 from actor import Actor
+from dungeon_select import dungeon_select
 
 
 class MG(arcade.Window):
@@ -14,23 +14,20 @@ class MG(arcade.Window):
         self.player = None
         self.crab = None
         self.actor_list = None
-        self.map_tile = None
+        self.game_map = None
         self.dist = None
 
     def setup(self):
         arcade.set_background_color(arcade.color.WHITE)
-        self.actor_list = arcade.SpriteList(
-            use_spatial_hash=True, spatial_hash_cell_size=32)
-        self.map_list = arcade.SpriteList(
-            use_spatial_hash=True, spatial_hash_cell_size=32)
+        self.actor_list = ACTOR_LIST
+        self.map_list = MAP_LIST
 
-        self.map_tile = SetMap(15, 15, self.map_list)
-        # self.map_tile.make_ma
+        self.game_map = dungeon_select(MAP_WIDTH, MAP_HEIGHT)
 
-        self.player = Actor(image["player"], 2, 2,
-                            left_img=True, map_tile=self.map_tile)
-        self.crab = Actor(image["crab"], 3, 2,
-                          scale=0.5, left_img=True, map_tile=self.map_tile)
+        self.player = Actor(image["player"], self.game_map.player_pos[0], self.game_map.player_pos[1],
+                            left_img=True, map_tile=self.game_map)
+        self.crab = Actor(image["crab"], self.player.x+1, self.player.y,
+                          scale=0.5, left_img=True, map_tile=self.game_map)
 
         self.actor_list.append(self.crab)
         self.actor_list.append(self.player)
@@ -41,30 +38,42 @@ class MG(arcade.Window):
         self.actor_list.draw(filter=gl.GL_NEAREST)
 
     def on_update(self, delta_time):
-
         self.actor_list.update()
 
     def on_key_press(self, key, modifiers):
         if key == arcade.key.ESCAPE:
             arcade.close_window()
 
-        if key == arcade.key.UP:
-            self.dist = (0, 1)
-        if key == arcade.key.DOWN:
-            self.dist = (0, -1)
-        if key == arcade.key.LEFT:
-            self.dist = (-1, 0)
-        if key == arcade.key.RIGHT:
-            self.dist = (1, 0)
+        if self.player.stop_move:
 
-        self.player.move(self.dist)
-
-        self.crab.move((random.randint(-1, 1), random.randint(-1, 1)))
+            if key == arcade.key.UP:
+                self.dist = (0, 1)
+            elif key == arcade.key.DOWN:
+                self.dist = (0, -1)
+            elif key == arcade.key.LEFT:
+                self.dist = (-1, 0)
+            elif key == arcade.key.RIGHT:
+                self.dist = (1, 0)
+            elif key == arcade.key.HOME:
+                self.dist = (-1, 1)
+            elif key == arcade.key.END:
+                self.dist = (-1, -1)
+            elif key == arcade.key.PAGEUP:
+                self.dist = (1, 1)
+            elif key == arcade.key.PAGEDOWN:
+                self.dist = (1, -1)
+            if self.dist:
+                self.player.move(self.dist)
+                cdist = (random.choice([1, 0, -1]), random.choice([1, 0, -1]))
+                if self.crab.stop_move and cdist[0] or cdist[1]:
+                    self.crab.move(cdist)
 
 
 def main():
     window = MG(SCREEN_WIDTH, SCREEN_HEIGHT, TITLE)
     window.setup()
+    window.set_location(20, 200)
+
     arcade.run()
 
 

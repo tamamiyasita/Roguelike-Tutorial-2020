@@ -3,32 +3,33 @@ from constants import *
 from util import map_position, pixel_position
 
 
-
 class Actor(arcade.Sprite):
     def __init__(self, image, x, y, scale=SPRITE_SCALE, map_tile=None, left_img=None):
         super().__init__(image, scale)
         self.x, self.y = x, y
-        self.center_x, self.center_y = pixel_position(x, y)
-        self.map_tile = map_tile
+        self.center_x, self.center_y = pixel_position(self.x, self.y)
+        self.game_map = map_tile
         self.stop_move = True
         if left_img:
             self.left_image(image)
 
     def move(self, dxy):
-        if self.stop_move == True:
-            self.dx, self.dy = dxy
-
-            self.stop_move = False
-            self.target_x = self.center_x + \
-                (self.dx * SPRITE_SIZE)*SPRITE_SCALE
-            self.target_y = self.center_y + \
-                (self.dy * SPRITE_SIZE)*SPRITE_SCALE
-            self.change_y = self.dy * MOVE_SPEED
-            self.change_x = self.dx * MOVE_SPEED
+        self.dx, self.dy = dxy
         if self.dx == 1:
             self.texture = self.textures.get("left")
         if self.dx == -1:
             self.texture = self.textures.get("right")
+
+        if not self.game_map.is_blocked(self.dx + self.x, self.dy + self.y):
+            if self.stop_move == True:
+
+                self.stop_move = False
+                self.target_x = int(self.center_x +
+                                    (self.dx * SPRITE_SIZE)*SPRITE_SCALE)
+                self.target_y = int(self.center_y +
+                                    (self.dy * SPRITE_SIZE)*SPRITE_SCALE)
+                self.change_y = self.dy * MOVE_SPEED
+                self.change_x = self.dx * MOVE_SPEED
 
     def update(self):
         super().update()
