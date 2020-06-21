@@ -13,8 +13,6 @@ class CavesDungeon:
         for step in range(4):
             self.tiles = self.do_simulation_step()
 
-        MapSpriteSet(self.width, self.height, self.tiles)
-
     def initialize_grid(self):
         chance_to_start_alive = 0.4
 

@@ -1,11 +1,15 @@
 import arcade
 import random
 import pyglet.gl as gl
+
 from constants import *
 from data import *
 from util import map_position
 from actor import Actor
 from dungeon_select import dungeon_select
+from map_sprite_set import MapSpriteSet
+
+from basic_dungeon import BasicDungeon
 
 
 class MG(arcade.Window):
@@ -23,6 +27,8 @@ class MG(arcade.Window):
         self.map_list = MAP_LIST
 
         self.game_map = dungeon_select(MAP_WIDTH, MAP_HEIGHT)
+        # self.game_map = BasicDungeon(MAP_WIDTH, MAP_HEIGHT)
+        MapSpriteSet(MAP_WIDTH, MAP_HEIGHT, self.game_map.tiles)
 
         self.player = Actor(image["player"], self.game_map.player_pos[0], self.game_map.player_pos[1],
                             left_img=True, map_tile=self.game_map)

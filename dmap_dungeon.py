@@ -256,7 +256,6 @@ class DmapDungeon:
                     line += "="
                     self.tiles[x][y].blocked = False
             print(line)
-        MapSpriteSet(self.startx, self.starty, self.tiles)
 
     def is_blocked(self, x, y):
         return is_blocked(self.tiles, x, y)

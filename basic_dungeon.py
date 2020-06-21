@@ -55,7 +55,6 @@ class BasicDungeon:
                         self.create_h_tunnel(prev_x, new_x, prev_y)
                 rooms.append(new_room)
                 num_rooms += 1
-        MapSpriteSet(self.width, self.height, self.tiles)
 
     def create_room(self, room):
         for x in range(room.x1 + 1, room.x2):
