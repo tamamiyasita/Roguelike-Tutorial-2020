@@ -1,13 +1,16 @@
 import arcade
 import random
 import pyglet.gl as gl
+import tcod
+from itertools import chain
 
 from constants import *
 from data import *
-from util import map_position
+from util import map_position, pixel_position
 from actor import Actor
 from dungeon_select import dungeon_select
 from map_sprite_set import MapSpriteSet
+from fov_functions import initialize_fov, recompute_fov
 
 from basic_dungeon import BasicDungeon
 
@@ -22,17 +25,21 @@ class MG(arcade.Window):
         self.dist = None
 
     def setup(self):
-        arcade.set_background_color(arcade.color.WHITE)
+        arcade.set_background_color(arcade.color.BLACK)
         self.actor_list = ACTOR_LIST
         self.map_list = MAP_LIST
 
-        self.game_map = dungeon_select(MAP_WIDTH, MAP_HEIGHT)
         # self.game_map = BasicDungeon(MAP_WIDTH, MAP_HEIGHT)
-        MapSpriteSet(MAP_WIDTH, MAP_HEIGHT, self.game_map.tiles)
+        self.game_map = dungeon_select(MAP_WIDTH, MAP_HEIGHT)
+        self.fov_recompute = True
+        self.fov_map = initialize_fov(self.game_map)
+        self.mapsprite = MapSpriteSet(
+            MAP_WIDTH, MAP_HEIGHT, self.game_map.tiles)
+        self.mapsprite.sprite_set()
 
-        self.player = Actor(image["player"], self.game_map.player_pos[0], self.game_map.player_pos[1],
+        self.player = Actor(image["player"], "player", self.game_map.player_pos[0], self.game_map.player_pos[1],
                             left_img=True, map_tile=self.game_map)
-        self.crab = Actor(image["crab"], self.player.x+1, self.player.y,
+        self.crab = Actor(image["crab"], "crab", self.player.x+1, self.player.y,
                           scale=0.5, left_img=True, map_tile=self.game_map)
 
         self.actor_list.append(self.crab)
@@ -40,11 +47,47 @@ class MG(arcade.Window):
 
     def on_draw(self):
         arcade.start_render()
+
         self.map_list.draw(filter=gl.GL_NEAREST)
         self.actor_list.draw(filter=gl.GL_NEAREST)
 
     def on_update(self, delta_time):
         self.actor_list.update()
+        if self.player.stop_move and self.fov_recompute:
+            recompute_fov(self.fov_map, self.player.x, self.player.y,
+                          FOV_RADIUS, FOV_LIGHT_WALL, FOV_ALGO)
+
+            for y in range(self.game_map.height):
+                for x in range(self.game_map.width):
+                    visible = tcod.map_is_in_fov(self.fov_map, x, y)
+                    if not visible:
+                        point = pixel_position(x, y)
+                        sprite_point = arcade.get_sprites_at_exact_point(
+                            point, self.map_list)
+                        for sprite in sprite_point:
+                            sprite.is_visible = False
+
+                    if visible:
+                        point = pixel_position(x, y)
+                        sprite_point = arcade.get_sprites_at_exact_point(
+                            point, self.map_list)
+                        for sprite in sprite_point:
+                            sprite.is_visible = True
+                            sprite.alpha = 255
+                    for sprite in self.actor_list:
+                        if not tcod.map_is_in_fov(self.fov_map, sprite.x, sprite.y):
+                            sprite.alpha = 0
+                        else:
+                            sprite.alpha = 255
+
+            for sprite in chain(self.map_list, self.actor_list):
+                if sprite.is_visible:
+                    sprite.color = sprite.visible_color
+
+                else:
+                    sprite.color = sprite.not_visible_color
+
+            self.fov_recompute = False
 
     def on_key_press(self, key, modifiers):
         if key == arcade.key.ESCAPE:
@@ -70,6 +113,7 @@ class MG(arcade.Window):
                 self.dist = (1, -1)
             if self.dist:
                 self.player.move(self.dist)
+                self.fov_recompute = True
                 cdist = (random.choice([1, 0, -1]), random.choice([1, 0, -1]))
                 if self.crab.stop_move and cdist[0] or cdist[1]:
                     self.crab.move(cdist)

@@ -15,6 +15,18 @@ MAX_ROOM = 25
 ROOM_MIN_SIZE = 4
 ROOM_MAX_SIZE = 8
 
+FOV_ALGO = 0
+FOV_LIGHT_WALL = True
+FOV_RADIUS = 8
+
+COLORS = {
+    "transparent": arcade.color.BLACK,
+    "dark_wall": arcade.color.PURPLE_NAVY,
+    "dark_ground": arcade.color.PURPLE_NAVY,
+    "light_wall": arcade.color.WHITE,
+    "light_ground": arcade.color.WHITE
+}
+
 
 ACTOR_LIST = arcade.SpriteList(
     use_spatial_hash=True, spatial_hash_cell_size=32)

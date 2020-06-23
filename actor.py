@@ -4,11 +4,16 @@ from util import map_position, pixel_position
 
 
 class Actor(arcade.Sprite):
-    def __init__(self, image, x, y, scale=SPRITE_SCALE, map_tile=None, left_img=None):
+    def __init__(self, image, name=None, x=None, y=None, scale=SPRITE_SCALE, color=arcade.color.WHITE, visible_color=arcade.color.WHITE, not_visible_color=arcade.color.WHITE, map_tile=None, left_img=None):
         super().__init__(image, scale)
+        self.name = name
         self.x, self.y = x, y
         self.center_x, self.center_y = pixel_position(self.x, self.y)
         self.game_map = map_tile
+        self.color = color
+        self.visible_color = visible_color
+        self.not_visible_color = not_visible_color
+        self.is_visible = False
         self.stop_move = True
         if left_img:
             self.left_image(image)
