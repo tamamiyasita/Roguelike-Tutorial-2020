@@ -51,6 +51,7 @@ class CavesDungeon:
                 if self.old_tiles[x][y] == 1:
                     if alive_neighbors < death_limit:
                         new_tile[x][y].blocked = False
+                        new_tile[x][y].block_sight = False
                         pos_set += 1
                         if pos_set == 60:
                             self.player_pos = [x, y]
@@ -58,10 +59,13 @@ class CavesDungeon:
 
                     else:
                         new_tile[x][y].blocked = True
+                        new_tile[x][y].block_sight = True
                 else:
                     if alive_neighbors > birth_limit:
                         new_tile[x][y].blocked = True
+                        new_tile[x][y].block_sight = True
                     else:
                         new_tile[x][y].blocked = False
+                        new_tile[x][y].block_sight = False
 
         return new_tile

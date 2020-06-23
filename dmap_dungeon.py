@@ -233,21 +233,22 @@ class dMap:
 
 
 class DmapDungeon:
-    def __init__(self, startx, starty):
-        self.startx = startx
-        self.starty = starty
+    def __init__(self, width, height):
+        self.width = width
+        self.height = height
         somename = dMap()
-        somename.makeMap(self.startx, self.starty, 110, 30, 80)
+        somename.makeMap(self.width, self.height, 110, 30, 80)
 
         self.player_pos = somename.roomList[0][2], somename.roomList[0][3]
 
-        self.tiles = initialize_tiles(self.startx, self.starty)
-        for y in range(self.starty):
+        self.tiles = initialize_tiles(self.width, self.height)
+        for y in range(self.height):
             line = ""
-            for x in range(self.startx):
+            for x in range(self.width):
                 if somename.mapArr[y][x] == 0:
                     line += "."
                     self.tiles[x][y].blocked = False
+                    self.tiles[x][y].block_sight = False
                 if somename.mapArr[y][x] == 1:
                     line += " "
                 if somename.mapArr[y][x] == 2:
@@ -255,6 +256,7 @@ class DmapDungeon:
                 if somename.mapArr[y][x] == 3 or somename.mapArr[y][x] == 4 or somename.mapArr[y][x] == 5:
                     line += "="
                     self.tiles[x][y].blocked = False
+                    self.tiles[x][y].block_sight = False
             print(line)
 
     def is_blocked(self, x, y):

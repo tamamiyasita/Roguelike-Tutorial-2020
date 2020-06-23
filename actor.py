@@ -29,26 +29,32 @@ class Actor(arcade.Sprite):
             if self.stop_move == True:
 
                 self.stop_move = False
-                self.target_x = int(self.center_x +
-                                    (self.dx * SPRITE_SIZE)*SPRITE_SCALE)
-                self.target_y = int(self.center_y +
-                                    (self.dy * SPRITE_SIZE)*SPRITE_SCALE)
+                self.target_x = self.center_x
+                self.target_y = self.center_y
                 self.change_y = self.dy * MOVE_SPEED
                 self.change_x = self.dx * MOVE_SPEED
 
     def update(self):
         super().update()
         if not self.stop_move:
-            if abs(self.target_x - self.center_x) <= 1 and self.dx:
+            if abs(self.target_x - self.center_x) >= SPRITE_SIZE and self.dx:
                 self.change_x = 0
-                self.center_x = self.target_x
-                self.x += self.dx
+                if self.dx == 1:
+                    self.center_x = self.target_x + SPRITE_SIZE
+                    self.x += self.dx
+                if self.dx == -1:
+                    self.center_x = self.target_x - SPRITE_SIZE
+                    self.x += self.dx
                 self.stop_move = True
 
-            if abs(self.target_y - self.center_y) <= 1 and self.dy:
+            if abs(self.target_y - self.center_y) >= SPRITE_SIZE and self.dy:
                 self.change_y = 0
-                self.center_y = self.target_y
-                self.y += self.dy
+                if self.dy == 1:
+                    self.center_y = self.target_y + SPRITE_SIZE
+                    self.y += self.dy
+                if self.dy == -1:
+                    self.center_y = self.target_y - SPRITE_SIZE
+                    self.y += self.dy
                 self.stop_move = True
 
     def left_image(self, image):
