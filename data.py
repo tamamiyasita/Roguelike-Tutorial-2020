@@ -8,5 +8,3 @@ image = {"player": r"image/rou6.png",
 
 
          }
-
-wall_1 =
