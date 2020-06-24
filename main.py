@@ -14,6 +14,8 @@ from fov_functions import initialize_fov, recompute_fov
 from viewport import viewport
 
 from basic_dungeon import BasicDungeon
+from caves_dungeon import CavesDungeon
+from dmap_dungeon import DmapDungeon
 
 
 class MG(arcade.Window):
@@ -30,19 +32,21 @@ class MG(arcade.Window):
         self.actor_list = ACTOR_LIST
         self.map_list = MAP_LIST
 
+        # self.game_map = DmapDungeon(MAP_WIDTH, MAP_HEIGHT)
+        self.game_map = CavesDungeon(MAP_WIDTH, MAP_HEIGHT)
         # self.game_map = BasicDungeon(MAP_WIDTH, MAP_HEIGHT)
-        self.game_map = dungeon_select(MAP_WIDTH, MAP_HEIGHT)
+        # self.game_map = dungeon_select(MAP_WIDTH, MAP_HEIGHT)
         self.fov_recompute = True
         self.fov_map = initialize_fov(self.game_map)
         self.mapsprite = MapSpriteSet(
-            MAP_WIDTH, MAP_HEIGHT, self.game_map.tiles)
+            MAP_WIDTH, MAP_HEIGHT, self.game_map.tiles, floors.get(4), wall_3)
         self.mapsprite.sprite_set()
 
         self.player = Actor(image["player"], "player", self.game_map.player_pos[0], self.game_map.player_pos[1],
                             sub_img=image.get("player_move"), map_tile=self.game_map)
 
         self.crab = Actor(image["crab"], "crab", self.player.x+1, self.player.y,
-                          scale=0.8, sub_img=True, map_tile=self.game_map)
+                          scale=0.5, sub_img=True, map_tile=self.game_map)
 
         self.actor_list.append(self.crab)
         self.actor_list.append(self.player)

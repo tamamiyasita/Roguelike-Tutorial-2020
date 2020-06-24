@@ -5,7 +5,7 @@ from util import map_position, pixel_position
 
 
 class Actor(arcade.Sprite):
-    def __init__(self, image, name=None, x=None, y=None, scale=SPRITE_SCALE, color=arcade.color.WHITE, visible_color=arcade.color.WHITE, not_visible_color=arcade.color.WHITE, map_tile=None, sub_img=None):
+    def __init__(self, image=None, name=None, x=None, y=None, scale=SPRITE_SCALE, color=arcade.color.WHITE, visible_color=arcade.color.WHITE, not_visible_color=arcade.color.WHITE, map_tile=None, sub_img=None):
         super().__init__(image, scale)
         self.name = name
         self.x, self.y = x, y
