@@ -11,6 +11,7 @@ from actor import Actor
 from dungeon_select import dungeon_select
 from map_sprite_set import MapSpriteSet
 from fov_functions import initialize_fov, recompute_fov
+from viewport import viewport
 
 from basic_dungeon import BasicDungeon
 
@@ -38,21 +39,21 @@ class MG(arcade.Window):
         self.mapsprite.sprite_set()
 
         self.player = Actor(image["player"], "player", self.game_map.player_pos[0], self.game_map.player_pos[1],
-                            left_img=True, map_tile=self.game_map)
+                            sub_img=image.get("player_move"), map_tile=self.game_map)
+
         self.crab = Actor(image["crab"], "crab", self.player.x+1, self.player.y,
-                          scale=0.5, left_img=True, map_tile=self.game_map)
+                          scale=0.8, sub_img=True, map_tile=self.game_map)
 
         self.actor_list.append(self.crab)
         self.actor_list.append(self.player)
 
-    def on_draw(self):
-        arcade.start_render()
-
-        self.map_list.draw(filter=gl.GL_NEAREST)
-        self.actor_list.draw(filter=gl.GL_NEAREST)
-
     def on_update(self, delta_time):
+        self.actor_list.update_animation()
+
         self.actor_list.update()
+
+        viewport(self.player)
+
         if self.player.stop_move and self.fov_recompute:
             recompute_fov(self.fov_map, self.player.x, self.player.y,
                           FOV_RADIUS, FOV_LIGHT_WALL, FOV_ALGO)
@@ -67,7 +68,7 @@ class MG(arcade.Window):
                         for sprite in sprite_point:
                             sprite.is_visible = False
 
-                    if visible:
+                    elif visible:
                         point = pixel_position(x, y)
                         sprite_point = arcade.get_sprites_at_exact_point(
                             point, self.map_list)
@@ -88,6 +89,12 @@ class MG(arcade.Window):
                     sprite.color = sprite.not_visible_color
 
             self.fov_recompute = False
+
+    def on_draw(self):
+        arcade.start_render()
+
+        self.map_list.draw(filter=gl.GL_NEAREST)
+        self.actor_list.draw(filter=gl.GL_NEAREST)
 
     def on_key_press(self, key, modifiers):
         if key == arcade.key.ESCAPE:

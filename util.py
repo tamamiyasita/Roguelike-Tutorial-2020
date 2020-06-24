@@ -36,7 +36,7 @@ def get_tile_set(img, tile_size):
     # 空白タイルを取り除く
     textures = [i for i in textures if i.image.getbbox()]
 
-    print("タイル総数：", len(textures))
+    print("タイル総数：", len(textures), type(textures))
 
     return textures
 
@@ -47,7 +47,7 @@ class TileImageTest(arcade.Window):
     ついでに番号をつけた
     """
 
-    def __init__(self, width=1100, height=600, title="tile_test", textures=None, tile_size=32):
+    def __init__(self, width=1100, height=600, title="tile_test", textures=None, tile_size=16):
         super().__init__(width, height, title)
         self.tile_size = tile_size
         arcade.set_background_color(arcade.color.AERO_BLUE)
@@ -75,7 +75,7 @@ class TileImageTest(arcade.Window):
 
 
 def main():
-    t = r"image\Wall_3.png"
+    t = r"image\Wall1.png"
     tst = TileImageTest(textures=t)
 
     arcade.run()
