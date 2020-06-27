@@ -1,4 +1,6 @@
 import arcade
+from enum import Enum, auto
+
 
 TITLE = "Roguelike tutorial 2020"
 
@@ -33,8 +35,11 @@ COLORS = {
 LEFT_FACE = 1
 RIGHT_FACE = 2
 
-PLAYER_TURN = 1
-ENEMY_TURN = 2
+
+class State(Enum):
+    TICK = auto()
+    PLAYER = auto()
+    NPC = auto()
 
 
 ACTOR_LIST = arcade.SpriteList(

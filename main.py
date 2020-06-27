@@ -14,6 +14,7 @@ from fov_functions import initialize_fov, recompute_fov
 from viewport import viewport
 from fighter import Fighter
 from ai import Basicmonster
+from tick_sys import Ticker
 
 from basic_dungeon import BasicDungeon
 from caves_dungeon import CavesDungeon
@@ -31,23 +32,25 @@ class MG(arcade.Window):
 
     def setup(self):
         arcade.set_background_color(arcade.color.BLACK)
-        self.game_state = PLAYER_TURN
+        self.game_state = State.PLAYER
+        self.ticker = Ticker()
         self.actor_list = ACTOR_LIST
         self.map_list = MAP_LIST
-        self.game_map = BasicDungeon(MAP_WIDTH, MAP_HEIGHT)
+        self.game_map = BasicDungeon(MAP_WIDTH, MAP_HEIGHT, ticker=self.ticker)
 
         self.fov_recompute = True
         fighter_component = Fighter(hp=30, defense=2, power=5)
         ai_component = Basicmonster()
         self.player = Actor(image["player"], "player", self.game_map.player_pos[0], self.game_map.player_pos[1],
-                            blocks=True, fighter=fighter_component,
+                            blocks=True, speed=5, ticker=self.ticker, my_state=State.PLAYER,
+                            fighter=fighter_component,
                             sub_img=image.get("player_move"), map_tile=self.game_map)
 
-        # self.crab = Actor(image["crab"], "crab", self.player.x+1, self.player.y,
-        #                   blocks=True, fighter=fighter_component, ai=ai_component,
-        #                   scale=0.5, sub_img=True, map_tile=self.game_map)
+        self.crab = Actor(image["crab"], "crab", self.player.x+1, self.player.y,
+                          blocks=True, speed=25, ticker=self.ticker, my_state=State.NPC, fighter=fighter_component, ai=ai_component,
+                          scale=0.5, sub_img=True, map_tile=self.game_map)
 
-        # self.actor_list.append(self.crab)
+        self.actor_list.append(self.crab)
         self.actor_list.append(self.player)
 
         # self.game_map = DmapDungeon(MAP_WIDTH, MAP_HEIGHT)
@@ -60,8 +63,19 @@ class MG(arcade.Window):
 
     def on_update(self, delta_time):
         self.actor_list.update_animation()
-
         self.actor_list.update()
+        self.game_state = self.player.state
+        if self.game_state == State.TICK:
+            self.ticker.ticks += 1
+            self.ticker.next_turn()
+            for actor in self.actor_list:
+                if actor.state == State.PLAYER:
+                    self.game_state = State.PLAYER
+                if actor.state == State.NPC:
+                    self.game_state = State.NPC
+                    if self.game_state == State.NPC:
+                        self.move_enemies()
+
         # if ENEMY_TURN:
         #     self.move_enemies()
 
@@ -116,7 +130,7 @@ class MG(arcade.Window):
                     target=self.player, game_map=self.game_map, sprite_lists=ENTITY_LIST)
 
     def on_key_press(self, key, modifiers):
-        if self.game_state == PLAYER_TURN:
+        if self.game_state == State.PLAYER:
             if key == arcade.key.ESCAPE:
                 arcade.close_window()
 
@@ -141,11 +155,11 @@ class MG(arcade.Window):
                 if self.dist:
                     self.player.move(self.dist)
                     self.fov_recompute = True
-                    if self.game_state == PLAYER_TURN:
-                        self.game_state = ENEMY_TURN
-            if self.game_state == ENEMY_TURN:
-                self.move_enemies()
-                self.game_state = PLAYER_TURN
+                    # if self.game_state == PLAYER_TURN:
+                    #     self.game_state = ENEMY_TURN
+            # if self.game_state == ENEMY_TURN:
+            #     self.move_enemies()
+            #     self.game_state = PLAYER_TURN
 
 
 def main():

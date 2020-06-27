@@ -3,12 +3,14 @@ import math
 from constants import *
 from data import *
 from util import map_position, pixel_position, get_blocking_entity
+# from tick_sys import Ticker
 
 
 class Actor(arcade.Sprite):
     def __init__(self, image=None, name=None, x=None, y=None, blocks=False,
                  scale=SPRITE_SCALE, color=arcade.color.WHITE, fighter=None, ai=None,
-                 visible_color=arcade.color.WHITE, not_visible_color=arcade.color.WHITE, map_tile=None, sub_img=None):
+                 visible_color=arcade.color.WHITE, not_visible_color=arcade.color.WHITE,
+                 speed=None, ticker=None, my_state=None, map_tile=None, sub_img=None):
         super().__init__(image, scale)
         if isinstance(image, arcade.texture.Texture):
             self.texture = image
@@ -22,9 +24,21 @@ class Actor(arcade.Sprite):
         self.visible_color = visible_color
         self.not_visible_color = not_visible_color
         self.is_visible = False
+
+        self.speed = speed
+        self.ticker = ticker
+        if ticker:
+            self.ticker.schedule_turn(self.speed, self)
+
+        self.my_state = my_state
+        self.state = State.TICK
+
         self.fighter = fighter
         if self.fighter:
             self.fighter.owner = self
+            if not self.my_state:
+                self.my_state = State.NPC
+
         self.ai = ai
         if self.ai:
             self.ai.owner = self
@@ -39,6 +53,7 @@ class Actor(arcade.Sprite):
 
             if type(sub_img) == bool:
                 self.left_image(image)
+
         ENTITY_LIST.append(self)
 
     def move(self, dxy):
@@ -56,6 +71,11 @@ class Actor(arcade.Sprite):
                 self.target_y = self.center_y
                 self.change_y = self.dy * MOVE_SPEED
                 self.change_x = self.dx * MOVE_SPEED
+
+    def do_turn(self):
+        print("do_turn", self.name)
+        self.state = self.my_state
+        self.ticker.schedule_turn(self.speed, self)
 
     def distance_to(self, other):
         dx = other.x - self.x
@@ -101,6 +121,8 @@ class Actor(arcade.Sprite):
                     self.center_y = self.target_y - grid
                     self.y += self.dy
                 self.stop_move = True
+            if self.stop_move:
+                self.state = State.TICK
 
     def left_image(self, image, m_anime=None):
         left, right = arcade.load_texture_pair(image)
