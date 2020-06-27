@@ -16,6 +16,8 @@ class MapSpriteSet:
         self.sprite_list = MAP_LIST
         self.floor_img = floor_img
         self.wall_img = wall_img
+        if self.wall_img[0].width == 16:
+            self.scale = SPRITE_SCALE * 2
 
     def sprite_set(self):
         for x in range(self.width):
@@ -23,16 +25,14 @@ class MapSpriteSet:
                 if self.tiles[x][y].blocked:
                     wall_number = self.search_wall_number(x, y, self.tiles)
 
-                    self.wall = Actor(image=self.wall_img.get(wall_number).image, x=x, y=y, scale=2, color=arcade.color.BLACK, visible_color=COLORS.get(
+                    self.wall = Actor(image=self.wall_img.get(wall_number), x=x, y=y, blocks=True, scale=self.scale, color=arcade.color.BLACK, visible_color=COLORS.get(
                         "light_wall"), not_visible_color=COLORS.get("dark_wall"))
-                    self.wall.texture = self.wall_img.get(wall_number)
                     self.wall.alpha = 0
 
                     self.sprite_list.append(self.wall)
                 elif not self.tiles[x][y].blocked:
                     self.floor = Actor(self.floor_img, x=x, y=y, color=COLORS.get("transparent"), visible_color=COLORS.get(
                         "light_ground"), not_visible_color=COLORS.get("dark_ground"))
-                    self.floor.texture = self.floor_img
                     self.floor.alpha = 0
                     self.sprite_list.append(self.floor)
 

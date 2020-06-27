@@ -3,7 +3,7 @@ import arcade
 TITLE = "Roguelike tutorial 2020"
 
 SPRITE_SIZE = 32
-SPRITE_SCALE = 1
+SPRITE_SCALE = 2
 MAP_WIDTH = 45
 MAP_HEIGHT = 25
 

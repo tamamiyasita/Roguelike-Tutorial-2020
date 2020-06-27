@@ -28,6 +28,9 @@ wall_3 = {k: walls_3_tiles[v] for k, v in zip(
 
 ds_floor = get_tile_set(d_floor, tile_size=32)
 floor_len = len(ds_floor)
-print(floor_len)
 floors = {k: ds_floor[v] for k, v in zip(range(floor_len), range(floor_len))}
-print(floors)
+lname = "tile"
+dtile = (r"image/d_tile.tmx")
+mtile = arcade.tilemap.read_tmx(dtile)
+wlist = arcade.tilemap.process_layer(mtile, lname)
+print(wlist[1])

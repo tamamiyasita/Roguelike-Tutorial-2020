@@ -7,6 +7,7 @@ import random
 # from ST import State
 from Tick_sys import Ticker
 
+
 class Actor(arcade.Sprite):
     def __init__(self, image, name, center_x, center_y, actor_state, ticker, speed, scale=SPRITE_SCALE, map_tile=None):
         super().__init__(image, scale)
@@ -33,7 +34,6 @@ class Actor(arcade.Sprite):
             self.center_x += int(dx*SPRITE_SIZE)
             self.center_y += int(dy * SPRITE_SIZE)
             self.state = State.TICK
-            
 
 
 class MG(arcade.Window):
@@ -54,8 +54,9 @@ class MG(arcade.Window):
 
         self.map_tile = SetMap(15, 15, self.map_list)
 
-        self.player = Actor(image["player"],"player", 20, 20, State.PC, self.ticker, 15, map_tile=self.map_tile)
-        self.crab = Actor(image["crab"],"crab", 310, 210, State.ENM, self.ticker, 5,
+        self.player = Actor(image["player"], "player", 20, 20,
+                            State.PC, self.ticker, 5, map_tile=self.map_tile)
+        self.crab = Actor(image["crab"], "crab", 310, 210, State.ENM, self.ticker, 5,
                           scale=0.5, map_tile=self.map_tile)
 
         self.actor_list.append(self.crab)
@@ -83,8 +84,6 @@ class MG(arcade.Window):
             # elif self.crab.state == State.ENM:
             #     self.state = State.ENM
             #     self.crab.move((random.randint(-1, 1), random.randint(-1, 1)))
-
-
 
     def on_key_press(self, key, modifiers):
         if self.state == State.PC:

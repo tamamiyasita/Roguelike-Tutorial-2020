@@ -19,6 +19,18 @@ def map_position(x, y):
     return px, py
 
 
+def get_blocking_entity(x, y, sprite_list):
+    px, py = pixel_position(x, y)
+    sprite_list = arcade.get_sprites_at_exact_point((px, py), sprite_list)
+    for sprite in sprite_list:
+        if not sprite.blocks:
+            sprite_list.remove(sprite)
+    if len(sprite_list) > 0:
+        return sprite_list
+    else:
+        return None
+
+
 def get_tile_set(img, tile_size):
     """
     読み込んだタイルセットイメージからtile_sizeに従って一つずつ画像オブジェクトに変換する
@@ -36,7 +48,7 @@ def get_tile_set(img, tile_size):
     # 空白タイルを取り除く
     textures = [i for i in textures if i.image.getbbox()]
 
-    print("タイル総数：", len(textures), type(textures))
+    print("タイル総数：", len(textures), type(textures[0]), textures[0].width)
 
     return textures
 

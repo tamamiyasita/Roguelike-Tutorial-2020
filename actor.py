@@ -5,17 +5,30 @@ from util import map_position, pixel_position
 
 
 class Actor(arcade.Sprite):
-    def __init__(self, image=None, name=None, x=None, y=None, scale=SPRITE_SCALE, color=arcade.color.WHITE, visible_color=arcade.color.WHITE, not_visible_color=arcade.color.WHITE, map_tile=None, sub_img=None):
+    def __init__(self, image=None, name=None, x=None, y=None, blocks=False,
+                 scale=SPRITE_SCALE, color=arcade.color.WHITE, fighter=None, ai=None,
+                 visible_color=arcade.color.WHITE, not_visible_color=arcade.color.WHITE, map_tile=None, sub_img=None):
         super().__init__(image, scale)
+        if isinstance(image, arcade.texture.Texture):
+            self.texture = image
+
         self.name = name
         self.x, self.y = x, y
         self.dx, self.dy = 0, 0
         self.center_x, self.center_y = pixel_position(self.x, self.y)
-        self.game_map = map_tile
+        self.blocks = blocks
         self.color = color
         self.visible_color = visible_color
         self.not_visible_color = not_visible_color
         self.is_visible = False
+        self.fighter = fighter
+        if self.fighter:
+            self.fighter.owner = self
+        self.ai = ai
+        if self.ai:
+            self.ai.owner = self
+
+        self.game_map = map_tile
         self.stop_move = True
         self.sub_img = sub_img
         if sub_img:
@@ -83,14 +96,10 @@ class Actor(arcade.Sprite):
                 self.stop_move = True
 
     def left_image(self, image, m_anime=None):
-        right = arcade.load_texture(
-            image, mirrored=True)
-        left = arcade.load_texture(image)
+        left, right = arcade.load_texture_pair(image)
         self.textures = {"right": right, "left": left}
         if m_anime:
-            move_right = arcade.load_texture(
-                m_anime, mirrored=True)
-            move_left = arcade.load_texture(
+            move_left, move_right = arcade.load_texture_pair(
                 m_anime)
             self.textures = {"right": right, "left": left,
                              "move_right": move_right, "move_left": move_left}
