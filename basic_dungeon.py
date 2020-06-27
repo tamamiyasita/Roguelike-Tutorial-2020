@@ -59,7 +59,7 @@ class BasicDungeon:
 
                 rooms.append(new_room)
                 num_rooms += 1
-                # self.place_entities(new_room, max_monsters_poer_room=4)
+                self.place_entities(new_room, max_monsters_poer_room=4)
 
     def create_room(self, room):
         for x in range(room.x1 + 1, room.x2):
@@ -88,15 +88,12 @@ class BasicDungeon:
             x = randint(room.x1 + 1, room.x2 - 1)
             y = randint(room.y1 + 1, room.y2 - 1)
 
-            an = any(
-                [actor for actor in actor_list if actor.x == x and actor.y == y])
-            print("an", an)
             if not any([actor for actor in actor_list if actor.x == x and actor.y == y]):
                 if randint(0, 100) < 80:
                     fighter_component = Fighter(hp=10, defense=0, power=3)
                     print(x, y)
                     ai_component = Basicmonster()
-                    monster = Actor(image=image.get("crab"), name="orc", x=x, y=y, scale=1,
+                    monster = Actor(image=demi_human1[11], name="orc", x=x, y=y, scale=1,
                                     blocks=True, fighter=fighter_component, ai=ai_component, sub_img=False, map_tile=self.tiles)
                     print(monster.x, monster.y)
                     print("spown!")
