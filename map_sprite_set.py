@@ -53,5 +53,4 @@ class MapSpriteSet:
         if 0 < y:
             if self.tiles[x][y - 1].blocked:
                 tile_value.add(8)
-        print(sum(tile_value))
         return sum(tile_value)

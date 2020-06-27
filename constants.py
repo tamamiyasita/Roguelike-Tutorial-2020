@@ -3,7 +3,7 @@ import arcade
 TITLE = "Roguelike tutorial 2020"
 
 SPRITE_SIZE = 32
-SPRITE_SCALE = 2
+SPRITE_SCALE = 1
 MAP_WIDTH = 45
 MAP_HEIGHT = 25
 
@@ -33,8 +33,13 @@ COLORS = {
 LEFT_FACE = 1
 RIGHT_FACE = 2
 
+PLAYER_TURN = 1
+ENEMY_TURN = 2
+
 
 ACTOR_LIST = arcade.SpriteList(
     use_spatial_hash=True, spatial_hash_cell_size=32)
 MAP_LIST = arcade.SpriteList(
+    use_spatial_hash=True, spatial_hash_cell_size=32)
+ENTITY_LIST = arcade.SpriteList(
     use_spatial_hash=True, spatial_hash_cell_size=32)

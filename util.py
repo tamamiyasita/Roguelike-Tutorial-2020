@@ -37,18 +37,18 @@ def get_tile_set(img, tile_size):
     null_tileがTrueならタイルセットイメージの空白部分を取り除くようにがんばる(?)
     """
     tile_img = arcade.load_texture(img)
-    print(f"タイルセットの画像サイズ, {tile_img.width} x {tile_img.height}")
+    # print(f"タイルセットの画像サイズ, {tile_img.width} x {tile_img.height}")
     tile_column = tile_img.width // tile_size
-    print("列のタイル数", tile_column)
+    # print("列のタイル数", tile_column)
     tile_count = (tile_img.height // tile_size) * tile_column
-    print("暫定タイルの数", tile_count)
+    # print("暫定タイルの数", tile_count)
     textures = arcade.load_spritesheet(
         img, tile_size, tile_size, tile_column, tile_count)
 
     # 空白タイルを取り除く
     textures = [i for i in textures if i.image.getbbox()]
 
-    print("タイル総数：", len(textures), type(textures[0]), textures[0].width)
+    # print("タイル総数：", len(textures), type(textures[0]), textures[0].width)
 
     return textures
 
@@ -87,7 +87,7 @@ class TileImageTest(arcade.Window):
 
 
 def main():
-    t = r"image\Wall1.png"
+    t = (r"image/demi_human1.png")
     tst = TileImageTest(textures=t)
 
     arcade.run()

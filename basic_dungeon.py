@@ -6,6 +6,9 @@ from map_sprite_set import MapSpriteSet
 from util import map_position, pixel_position
 from actor import Actor
 from constants import *
+from data import *
+from fighter import Fighter
+from ai import Basicmonster
 
 
 class BasicDungeon:
@@ -53,8 +56,10 @@ class BasicDungeon:
                     else:
                         self.create_v_tunnel(prev_y, new_y, new_x)
                         self.create_h_tunnel(prev_x, new_x, prev_y)
+
                 rooms.append(new_room)
                 num_rooms += 1
+                # self.place_entities(new_room, max_monsters_poer_room=4)
 
     def create_room(self, room):
         for x in range(room.x1 + 1, room.x2):
@@ -75,10 +80,24 @@ class BasicDungeon:
     def is_blocked(self, x, y):
         return is_blocked(self.tiles, x, y)
 
-        # try:
-        #     if self.tiles[x][y].blocked:
-        #         return True
+    def place_entities(self, room, max_monsters_poer_room):
+        number_of_monsters = randint(0, max_monsters_poer_room)
+        actor_list = MAP_LIST
 
-        #     return False
-        # except:
-        #     pass
+        for i in range(number_of_monsters):
+            x = randint(room.x1 + 1, room.x2 - 1)
+            y = randint(room.y1 + 1, room.y2 - 1)
+
+            an = any(
+                [actor for actor in actor_list if actor.x == x and actor.y == y])
+            print("an", an)
+            if not any([actor for actor in actor_list if actor.x == x and actor.y == y]):
+                if randint(0, 100) < 80:
+                    fighter_component = Fighter(hp=10, defense=0, power=3)
+                    print(x, y)
+                    ai_component = Basicmonster()
+                    monster = Actor(image=image.get("crab"), name="orc", x=x, y=y, scale=1,
+                                    blocks=True, fighter=fighter_component, ai=ai_component, sub_img=False, map_tile=self.tiles)
+                    print(monster.x, monster.y)
+                    print("spown!")
+                    ACTOR_LIST.append(monster)

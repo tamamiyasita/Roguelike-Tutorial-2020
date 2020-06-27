@@ -1,7 +1,8 @@
 import arcade
+import math
 from constants import *
 from data import *
-from util import map_position, pixel_position
+from util import map_position, pixel_position, get_blocking_entity
 
 
 class Actor(arcade.Sprite):
@@ -38,6 +39,7 @@ class Actor(arcade.Sprite):
 
             if type(sub_img) == bool:
                 self.left_image(image)
+        ENTITY_LIST.append(self)
 
     def move(self, dxy):
         self.dx, self.dy = dxy
@@ -46,7 +48,7 @@ class Actor(arcade.Sprite):
         if self.dx == 1:
             self.left_face = False
 
-        if not self.game_map.is_blocked(self.dx + self.x, self.dy + self.y):
+        if not get_blocking_entity(self.x+self.dx, self.y+self.dy, ENTITY_LIST):
             if self.stop_move == True:
 
                 self.stop_move = False
@@ -54,6 +56,11 @@ class Actor(arcade.Sprite):
                 self.target_y = self.center_y
                 self.change_y = self.dy * MOVE_SPEED
                 self.change_x = self.dx * MOVE_SPEED
+
+    def distance_to(self, other):
+        dx = other.x - self.x
+        dy = other.y - self.y
+        return math.sqrt(dx ** 2 + dy ** 2)
 
     def update_animation(self, delta_time=1 / 60):
         if type(self.sub_img) != bool:
@@ -104,3 +111,14 @@ class Actor(arcade.Sprite):
             self.textures = {"right": right, "left": left,
                              "move_right": move_right, "move_left": move_left}
         return self.textures
+
+    def move_towards(self, target_x, target_y, sprite_list):
+        dx = target_x - self.x
+        dy = target_y - self.y
+        distance = math.sqrt(dx ** 2 + dy ** 2)
+
+        dx = int(round(dx / distance))
+        dy = int(round(dy / distance))
+
+        if not get_blocking_entity(self.x + dx, self.y + dy, ENTITY_LIST):
+            self.move((dx, dy))
