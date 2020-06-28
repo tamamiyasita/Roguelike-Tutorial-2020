@@ -62,26 +62,26 @@ class MG(arcade.Window):
         self.mapsprite.sprite_set()
 
     def on_update(self, delta_time):
-            
         self.actor_list.update_animation()
         self.actor_list.update()
         self.game_state = self.player.state
+
+        
+
         if QUEUE:
-            print(QUEUE,"QQQ")
+            print(QUEUE, "QQQ")
         if self.game_state == State.TICK:
             self.ticker.ticks += 1
             self.ticker.next_turn()
+                
             for actor in self.actor_list:
                 if actor.state == State.PLAYER:
                     self.game_state = State.PLAYER
                 if actor.state == State.NPC:
                     self.game_state = State.NPC
-                    # if self.game_state == State.NPC:
-                    #     self.move_enemies()
+
         self.queue_process()
 
-        # if ENEMY_TURN:
-        #     self.move_enemies()
         if self.game_state == State.PLAYER and not self.player.stop_move:
             viewport(self.player)
 
@@ -123,6 +123,10 @@ class MG(arcade.Window):
         if self.game_state == State.NPC:
             results = [{"NPC_turn": True}]
             QUEUE.extend(results)
+        if self.game_state == State.PLAYER and self.dist:
+            results = [{"player_go": self.player}]
+            QUEUE.extend(results)
+
     def on_draw(self):
         arcade.start_render()
 
@@ -133,12 +137,13 @@ class MG(arcade.Window):
         global QUEUE
         new_queue = []
         for action in QUEUE:
-            print(action," Action")
+            print(action, " Action")
             if "NPC_turn" in action:
                 self.move_enemies()
             if "player_go" in action:
                 action.get("player_go").move(self.dist)
-                self.dist = 0
+                self.fov_recompute = True
+                # self.dist = 0
 
         QUEUE = new_queue
 
@@ -149,43 +154,45 @@ class MG(arcade.Window):
                     target=self.player, game_map=self.game_map, sprite_lists=ENTITY_LIST)
 
     def on_key_press(self, key, modifiers):
-        if self.game_state == State.PLAYER:
-            if key == arcade.key.ESCAPE:
-                arcade.close_window()
+        # if self.game_state == State.PLAYER:
+        if key == arcade.key.ESCAPE:
+            arcade.close_window()
 
-            if self.player.stop_move:
+        # if self.player.stop_move:
 
-                if key == arcade.key.UP:
-                    self.dist = (0, 1)
-                elif key == arcade.key.DOWN:
-                    self.dist = (0, -1)
-                elif key == arcade.key.LEFT:
-                    self.dist = (-1, 0)
-                elif key == arcade.key.RIGHT:
-                    self.dist = (1, 0)
-                elif key == arcade.key.HOME:
-                    self.dist = (-1, 1)
-                elif key == arcade.key.END:
-                    self.dist = (-1, -1)
-                elif key == arcade.key.PAGEUP:
-                    self.dist = (1, 1)
-                elif key == arcade.key.PAGEDOWN:
-                    self.dist = (1, -1)
-                if self.dist:
-                    results = [{"player_go": self.player}]
-                    QUEUE.extend(results)
-                    self.fov_recompute = True
-                    # self.player.move(self.dist)
-                    # if self.game_state == PLAYER_TURN:
-                    #     self.game_state = ENEMY_TURN
+        if key == arcade.key.UP:
+            self.dist = (0, 1)
+        elif key == arcade.key.DOWN:
+            self.dist = (0, -1)
+        elif key == arcade.key.LEFT:
+            self.dist = (-1, 0)
+        elif key == arcade.key.RIGHT:
+            self.dist = (1, 0)
+        elif key == arcade.key.HOME:
+            self.dist = (-1, 1)
+        elif key == arcade.key.END:
+            self.dist = (-1, -1)
+        elif key == arcade.key.PAGEUP:
+            self.dist = (1, 1)
+        elif key == arcade.key.PAGEDOWN:
+            self.dist = (1, -1)
+                # if self.dist:
+                #     results = [{"player_go": self.player}]
+                #     QUEUE.extend(results)
+                #     self.fov_recompute = True
+                # self.player.move(self.dist)
+                # if self.game_state == PLAYER_TURN:
+                #     self.game_state = ENEMY_TURN
             # if self.game_state == ENEMY_TURN:
             #     self.move_enemies()
             #     self.game_state = PLAYER_TURN
                 # if self.state == State.NPC:
                 #     results = [{"NPC_turn": True}]
                 #     QUEUE.extend(results)
+
     def on_key_release(self, key, modifiers):
-        self.dist = 0
+        self.dist = None
+
 
 def main():
     window = MG(SCREEN_WIDTH, SCREEN_HEIGHT, TITLE)
