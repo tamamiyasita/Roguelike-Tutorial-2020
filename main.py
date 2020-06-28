@@ -46,8 +46,8 @@ class MG(arcade.Window):
                             fighter=fighter_component,
                             sub_img=image.get("player_move"), map_tile=self.game_map)
 
-        self.crab = Actor(image["crab"], "crab", self.player.x+1, self.player.y,
-                          blocks=True, speed=25, ticker=self.ticker, my_state=State.NPC, fighter=fighter_component, ai=ai_component,
+        self.crab = Actor(image["crab"], "crab", self.player.x+2, self.player.y,
+                          blocks=True, speed=15, ticker=self.ticker, my_state=State.NPC, fighter=fighter_component, ai=ai_component,
                           scale=0.5, sub_img=True, map_tile=self.game_map)
 
         self.actor_list.append(self.crab)
@@ -62,9 +62,12 @@ class MG(arcade.Window):
         self.mapsprite.sprite_set()
 
     def on_update(self, delta_time):
+            
         self.actor_list.update_animation()
         self.actor_list.update()
         self.game_state = self.player.state
+        if QUEUE:
+            print(QUEUE,"QQQ")
         if self.game_state == State.TICK:
             self.ticker.ticks += 1
             self.ticker.next_turn()
@@ -73,13 +76,14 @@ class MG(arcade.Window):
                     self.game_state = State.PLAYER
                 if actor.state == State.NPC:
                     self.game_state = State.NPC
-                    if self.game_state == State.NPC:
-                        self.move_enemies()
+                    # if self.game_state == State.NPC:
+                    #     self.move_enemies()
+        self.queue_process()
 
         # if ENEMY_TURN:
         #     self.move_enemies()
-
-        viewport(self.player)
+        if self.game_state == State.PLAYER and not self.player.stop_move:
+            viewport(self.player)
 
         if self.player.stop_move and self.fov_recompute:
             recompute_fov(self.fov_map, self.player.x, self.player.y,
@@ -116,12 +120,27 @@ class MG(arcade.Window):
                     sprite.color = sprite.not_visible_color
 
             self.fov_recompute = False
-
+        if self.game_state == State.NPC:
+            results = [{"NPC_turn": True}]
+            QUEUE.extend(results)
     def on_draw(self):
         arcade.start_render()
 
         self.map_list.draw(filter=gl.GL_NEAREST)
         self.actor_list.draw(filter=gl.GL_NEAREST)
+
+    def queue_process(self):
+        global QUEUE
+        new_queue = []
+        for action in QUEUE:
+            print(action," Action")
+            if "NPC_turn" in action:
+                self.move_enemies()
+            if "player_go" in action:
+                action.get("player_go").move(self.dist)
+                self.dist = 0
+
+        QUEUE = new_queue
 
     def move_enemies(self):
         for actor in ACTOR_LIST:
@@ -153,14 +172,20 @@ class MG(arcade.Window):
                 elif key == arcade.key.PAGEDOWN:
                     self.dist = (1, -1)
                 if self.dist:
-                    self.player.move(self.dist)
+                    results = [{"player_go": self.player}]
+                    QUEUE.extend(results)
                     self.fov_recompute = True
+                    # self.player.move(self.dist)
                     # if self.game_state == PLAYER_TURN:
                     #     self.game_state = ENEMY_TURN
             # if self.game_state == ENEMY_TURN:
             #     self.move_enemies()
             #     self.game_state = PLAYER_TURN
-
+                # if self.state == State.NPC:
+                #     results = [{"NPC_turn": True}]
+                #     QUEUE.extend(results)
+    def on_key_release(self, key, modifiers):
+        self.dist = 0
 
 def main():
     window = MG(SCREEN_WIDTH, SCREEN_HEIGHT, TITLE)

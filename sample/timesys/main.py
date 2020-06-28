@@ -24,6 +24,9 @@ class Actor(arcade.Sprite):
     def do_turn(self):
         print("do_turn", self.name)
         self.state = self.actor_state
+        if self.state == State.ENM:
+            results = [{"go": self}]
+            QUEUE.extend(results)
         self.ticker.schedule_turn(self.speed, self)
 
     def move(self, dxy):
@@ -55,8 +58,8 @@ class MG(arcade.Window):
         self.map_tile = SetMap(15, 15, self.map_list)
 
         self.player = Actor(image["player"], "player", 20, 20,
-                            State.PC, self.ticker, 5, map_tile=self.map_tile)
-        self.crab = Actor(image["crab"], "crab", 310, 210, State.ENM, self.ticker, 5,
+                            State.PC, self.ticker, 15, map_tile=self.map_tile)
+        self.crab = Actor(image["crab"], "crab", 310, 210, State.ENM, self.ticker, 15,
                           scale=0.5, map_tile=self.map_tile)
 
         self.actor_list.append(self.crab)
@@ -67,27 +70,39 @@ class MG(arcade.Window):
         self.map_list.draw()
         self.actor_list.draw()
 
+    def queue_process(self):
+        global QUEUE
+        new_queue = []
+        for action in QUEUE:
+            print(action)
+            if "go" in action:
+                print(action.values())
+                action.get("go").move((random.randint(-1, 1), random.randint(-1, 1)))
+            if "player_go" in action:
+                print("ok")
+                action.get("player_go").move(self.dist)
+                self.dist = 0
+            if "say" in action:
+                action.get("say")
+        QUEUE = new_queue
+            
+                
+
+
     def on_update(self, delta_time):
         self.state = self.player.state
         if self.state == State.TICK:
             self.ticker.ticks += 1
             self.ticker.next_turn()
-            for actor in self.actor_list:
-                if actor.state == State.PC:
-                    self.state = State.PC
-                if actor.state == State.ENM:
-                    self.state = State.ENM
-                    actor.move((random.randint(-1, 1), random.randint(-1, 1)))
-            # if self.player.state == State.PC:
-            #     self.state = State.PC
-
-            # elif self.crab.state == State.ENM:
-            #     self.state = State.ENM
-            #     self.crab.move((random.randint(-1, 1), random.randint(-1, 1)))
+            print(self.state)
+            if QUEUE:
+                print(QUEUE,"QQQ")
+        self.queue_process()
 
     def on_key_press(self, key, modifiers):
         if self.state == State.PC:
             print(self.state, "self.key state")
+            print(QUEUE)
             if key == arcade.key.ESCAPE:
                 arcade.close_window()
 
@@ -100,9 +115,17 @@ class MG(arcade.Window):
             if key == arcade.key.RIGHT:
                 self.dist = (1, 0)
             if self.dist:
-                self.player.move(self.dist)
-                self.dist = 0
-            print(self.state)
+                results = [{"player_go": self.player}]
+                QUEUE.extend(results)
+
+            if key == arcade.key.A:
+                results = [{"say": self.say()}]
+                QUEUE.extend(results)
+
+    def say(self):
+        print(f"says afrdrlsfr")
+        self.player.state = State.TICK
+
 
 
 def main():

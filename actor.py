@@ -31,6 +31,7 @@ class Actor(arcade.Sprite):
             self.ticker.schedule_turn(self.speed, self)
 
         self.my_state = my_state
+        
         self.state = State.TICK
 
         self.fighter = fighter
@@ -73,7 +74,7 @@ class Actor(arcade.Sprite):
                 self.change_x = self.dx * MOVE_SPEED
 
     def do_turn(self):
-        print("do_turn", self.name)
+        print("do_turn ", self.name)
         self.state = self.my_state
         self.ticker.schedule_turn(self.speed, self)
 
