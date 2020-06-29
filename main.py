@@ -66,14 +66,12 @@ class MG(arcade.Window):
         self.actor_list.update()
         self.game_state = self.player.state
 
-        
-
         if QUEUE:
             print(QUEUE, "QQQ")
         if self.game_state == State.TICK:
             self.ticker.ticks += 1
             self.ticker.next_turn()
-                
+
             for actor in self.actor_list:
                 if actor.state == State.PLAYER:
                     self.game_state = State.PLAYER
@@ -126,6 +124,7 @@ class MG(arcade.Window):
         if self.game_state == State.PLAYER and self.dist:
             results = [{"player_go": self.player}]
             QUEUE.extend(results)
+            self.fov_recompute = True
 
     def on_draw(self):
         arcade.start_render()
@@ -142,8 +141,6 @@ class MG(arcade.Window):
                 self.move_enemies()
             if "player_go" in action:
                 action.get("player_go").move(self.dist)
-                self.fov_recompute = True
-                # self.dist = 0
 
         QUEUE = new_queue
 
@@ -176,19 +173,19 @@ class MG(arcade.Window):
             self.dist = (1, 1)
         elif key == arcade.key.PAGEDOWN:
             self.dist = (1, -1)
-                # if self.dist:
-                #     results = [{"player_go": self.player}]
-                #     QUEUE.extend(results)
-                #     self.fov_recompute = True
-                # self.player.move(self.dist)
-                # if self.game_state == PLAYER_TURN:
-                #     self.game_state = ENEMY_TURN
+            # if self.dist:
+            #     results = [{"player_go": self.player}]
+            #     QUEUE.extend(results)
+            #     self.fov_recompute = True
+            # self.player.move(self.dist)
+            # if self.game_state == PLAYER_TURN:
+            #     self.game_state = ENEMY_TURN
             # if self.game_state == ENEMY_TURN:
             #     self.move_enemies()
             #     self.game_state = PLAYER_TURN
-                # if self.state == State.NPC:
-                #     results = [{"NPC_turn": True}]
-                #     QUEUE.extend(results)
+            # if self.state == State.NPC:
+            #     results = [{"NPC_turn": True}]
+            #     QUEUE.extend(results)
 
     def on_key_release(self, key, modifiers):
         self.dist = None

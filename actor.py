@@ -31,7 +31,7 @@ class Actor(arcade.Sprite):
             self.ticker.schedule_turn(self.speed, self)
 
         self.my_state = my_state
-        
+
         self.state = State.TICK
 
         self.fighter = fighter
@@ -58,20 +58,23 @@ class Actor(arcade.Sprite):
         ENTITY_LIST.append(self)
 
     def move(self, dxy):
-        self.dx, self.dy = dxy
-        if self.dx == -1:
-            self.left_face = True
-        if self.dx == 1:
-            self.left_face = False
+        try:
+            self.dx, self.dy = dxy
+            if self.dx == -1:
+                self.left_face = True
+            if self.dx == 1:
+                self.left_face = False
 
-        if not get_blocking_entity(self.x+self.dx, self.y+self.dy, ENTITY_LIST):
-            if self.stop_move == True:
+            if not get_blocking_entity(self.x+self.dx, self.y+self.dy, ENTITY_LIST):
+                if self.stop_move == True:
 
-                self.stop_move = False
-                self.target_x = self.center_x
-                self.target_y = self.center_y
-                self.change_y = self.dy * MOVE_SPEED
-                self.change_x = self.dx * MOVE_SPEED
+                    self.stop_move = False
+                    self.target_x = self.center_x
+                    self.target_y = self.center_y
+                    self.change_y = self.dy * MOVE_SPEED
+                    self.change_x = self.dx * MOVE_SPEED
+        except:
+            pass
 
     def do_turn(self):
         print("do_turn ", self.name)
