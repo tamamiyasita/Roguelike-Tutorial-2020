@@ -61,7 +61,7 @@ class BasicDungeon:
 
                 rooms.append(new_room)
                 num_rooms += 1
-                # self.place_entities(new_room, max_monsters_poer_room=4)
+                self.place_entities(new_room, max_monsters_poer_room=4)
 
     def create_room(self, room):
         for x in range(room.x1 + 1, room.x2):
@@ -96,7 +96,7 @@ class BasicDungeon:
                     print(x, y)
                     ai_component = Basicmonster()
                     monster = Actor(image=demi_human1[11], name="orc", x=x, y=y, scale=1,
-                                    blocks=True,  speed=5, ticker=self.ticker, fighter=fighter_component, ai=ai_component, sub_img=False, map_tile=self.tiles)
+                                    blocks=True,  speed=10, ticker=self.ticker, fighter=fighter_component, ai=ai_component, sub_img=False, map_tile=self.tiles)
                     print(monster.x, monster.y)
                     print("spown!")
                     ACTOR_LIST.append(monster)

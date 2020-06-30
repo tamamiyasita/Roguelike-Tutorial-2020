@@ -24,6 +24,7 @@ class Actor(arcade.Sprite):
         self.visible_color = visible_color
         self.not_visible_color = not_visible_color
         self.is_visible = False
+        self.cost = 0
 
         self.speed = speed
         self.ticker = ticker
@@ -32,7 +33,7 @@ class Actor(arcade.Sprite):
 
         self.my_state = my_state
 
-        self.state = State.TICK
+        self.state = State.PLAYER
 
         self.fighter = fighter
         if self.fighter:
@@ -75,11 +76,6 @@ class Actor(arcade.Sprite):
                     self.change_x = self.dx * MOVE_SPEED
         except:
             pass
-
-    def do_turn(self):
-        print("do_turn ", self.name)
-        self.state = self.my_state
-        self.ticker.schedule_turn(self.speed, self)
 
     def distance_to(self, other):
         dx = other.x - self.x
@@ -125,8 +121,6 @@ class Actor(arcade.Sprite):
                     self.center_y = self.target_y - grid
                     self.y += self.dy
                 self.stop_move = True
-            if self.stop_move:
-                self.state = State.TICK
 
     def left_image(self, image, m_anime=None):
         left, right = arcade.load_texture_pair(image)
@@ -148,3 +142,4 @@ class Actor(arcade.Sprite):
 
         if not get_blocking_entity(self.x + dx, self.y + dy, ENTITY_LIST):
             self.move((dx, dy))
+            # pass

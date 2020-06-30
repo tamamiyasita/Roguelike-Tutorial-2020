@@ -10,7 +10,7 @@ from util import map_position, pixel_position
 from actor import Actor
 from dungeon_select import dungeon_select
 from map_sprite_set import MapSpriteSet
-from fov_functions import initialize_fov, recompute_fov
+from fov_functions import initialize_fov, recompute_fov, fov_get
 from viewport import viewport
 from fighter import Fighter
 from ai import Basicmonster
@@ -64,67 +64,14 @@ class MG(arcade.Window):
     def on_update(self, delta_time):
         self.actor_list.update_animation()
         self.actor_list.update()
-        self.game_state = self.player.state
 
-        if QUEUE:
-            print(QUEUE, "QQQ")
-        if self.game_state == State.TICK:
-            self.ticker.ticks += 1
-            self.ticker.next_turn()
-
-            for actor in self.actor_list:
-                if actor.state == State.PLAYER:
-                    self.game_state = State.PLAYER
-                if actor.state == State.NPC:
-                    self.game_state = State.NPC
-
-        self.queue_process()
-
-        if self.game_state == State.PLAYER and not self.player.stop_move:
-            viewport(self.player)
-
+        """fov"""
         if self.player.stop_move and self.fov_recompute:
             recompute_fov(self.fov_map, self.player.x, self.player.y,
                           FOV_RADIUS, FOV_LIGHT_WALL, FOV_ALGO)
-
-            for y in range(self.game_map.height):
-                for x in range(self.game_map.width):
-                    visible = tcod.map_is_in_fov(self.fov_map, x, y)
-                    if not visible:
-                        point = pixel_position(x, y)
-                        sprite_point = arcade.get_sprites_at_exact_point(
-                            point, self.map_list)
-                        for sprite in sprite_point:
-                            sprite.is_visible = False
-
-                    elif visible:
-                        point = pixel_position(x, y)
-                        sprite_point = arcade.get_sprites_at_exact_point(
-                            point, self.map_list)
-                        for sprite in sprite_point:
-                            sprite.is_visible = True
-                            sprite.alpha = 255
-                    for sprite in self.actor_list:
-                        if not tcod.map_is_in_fov(self.fov_map, sprite.x, sprite.y):
-                            sprite.alpha = 0
-                        else:
-                            sprite.alpha = 255
-
-            for sprite in chain(self.map_list, self.actor_list):
-                if sprite.is_visible:
-                    sprite.color = sprite.visible_color
-
-                else:
-                    sprite.color = sprite.not_visible_color
-
+            fov_get(self.game_map, self.fov_map)
             self.fov_recompute = False
-        if self.game_state == State.NPC:
-            results = [{"NPC_turn": True}]
-            QUEUE.extend(results)
-        if self.game_state == State.PLAYER and self.dist:
-            results = [{"player_go": self.player}]
-            QUEUE.extend(results)
-            self.fov_recompute = True
+        ##########
 
     def on_draw(self):
         arcade.start_render()
@@ -132,30 +79,16 @@ class MG(arcade.Window):
         self.map_list.draw(filter=gl.GL_NEAREST)
         self.actor_list.draw(filter=gl.GL_NEAREST)
 
-    def queue_process(self):
-        global QUEUE
-        new_queue = []
-        for action in QUEUE:
-            print(action, " Action")
-            if "NPC_turn" in action:
-                self.move_enemies()
-            if "player_go" in action:
-                action.get("player_go").move(self.dist)
-
-        QUEUE = new_queue
-
     def move_enemies(self):
         for actor in ACTOR_LIST:
             if actor.ai:
                 actor.ai.take_turn(
                     target=self.player, game_map=self.game_map, sprite_lists=ENTITY_LIST)
+        self.game_state = State.PLAYER
 
     def on_key_press(self, key, modifiers):
-        # if self.game_state == State.PLAYER:
         if key == arcade.key.ESCAPE:
             arcade.close_window()
-
-        # if self.player.stop_move:
 
         if key == arcade.key.UP:
             self.dist = (0, 1)
@@ -173,19 +106,15 @@ class MG(arcade.Window):
             self.dist = (1, 1)
         elif key == arcade.key.PAGEDOWN:
             self.dist = (1, -1)
-            # if self.dist:
-            #     results = [{"player_go": self.player}]
-            #     QUEUE.extend(results)
-            #     self.fov_recompute = True
-            # self.player.move(self.dist)
-            # if self.game_state == PLAYER_TURN:
-            #     self.game_state = ENEMY_TURN
-            # if self.game_state == ENEMY_TURN:
-            #     self.move_enemies()
-            #     self.game_state = PLAYER_TURN
-            # if self.state == State.NPC:
-            #     results = [{"NPC_turn": True}]
-            #     QUEUE.extend(results)
+        if self.dist:
+            self.player.move(self.dist)
+            self.fov_recompute = True
+            self.game_state = State.NPC
+
+        if self.game_state == State.NPC:
+            self.move_enemies()
+
+        # if self.game_state == State.PLAYER and self.dist and self.player.stop_move:
 
     def on_key_release(self, key, modifiers):
         self.dist = None
@@ -194,7 +123,7 @@ class MG(arcade.Window):
 def main():
     window = MG(SCREEN_WIDTH, SCREEN_HEIGHT, TITLE)
     window.setup()
-    window.set_location(20, 200)
+    # window.set_location(20, 200)
 
     arcade.run()
 

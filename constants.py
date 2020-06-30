@@ -5,7 +5,7 @@ from enum import Enum, auto
 TITLE = "Roguelike tutorial 2020"
 
 SPRITE_SIZE = 32
-SPRITE_SCALE = 2
+SPRITE_SCALE = 1
 MAP_WIDTH = 45
 MAP_HEIGHT = 25
 
@@ -14,7 +14,7 @@ SCREEN_HEIGHT = int(SPRITE_SIZE * MAP_HEIGHT * SPRITE_SCALE)//SPRITE_SCALE
 
 VIEWPORT_MARGIN = 300
 
-MOVE_SPEED = 5
+MOVE_SPEED = 7.5
 
 MAX_ROOM = 25
 ROOM_MIN_SIZE = 4
@@ -35,10 +35,8 @@ COLORS = {
 LEFT_FACE = 1
 RIGHT_FACE = 2
 
-QUEUE = []
 
 class State(Enum):
-    TICK = auto()
     PLAYER = auto()
     NPC = auto()
 
