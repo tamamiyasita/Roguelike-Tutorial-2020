@@ -16,9 +16,9 @@ class Actor(arcade.Sprite):
             self.texture = image
 
         self.name = name
-        self.x, self.y = x, y
         self.dx, self.dy = 0, 0
-        self.center_x, self.center_y = pixel_position(self.x, self.y)
+        self.center_x, self.center_y = pixel_position(x, y)
+        self.x, self.y = map_position(self.center_x, self.center_y)
         self.blocks = blocks
         self.color = color
         self.visible_color = visible_color

@@ -27,7 +27,7 @@ def fov_get(game_map, fov_map):
             if not visible:
                 point = pixel_position(x, y)
                 sprite_point = arcade.get_sprites_at_exact_point(
-                    point, MAP_LIST)
+                    point, ENTITY_LIST)
                 for sprite in sprite_point:
                     sprite.is_visible = False
 

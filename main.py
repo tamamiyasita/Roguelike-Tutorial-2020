@@ -42,7 +42,7 @@ class MG(arcade.Window):
         fighter_component = Fighter(hp=30, defense=2, power=5)
         ai_component = Basicmonster()
         self.player = Actor(image["player"], "player", self.game_map.player_pos[0], self.game_map.player_pos[1],
-                            blocks=True, speed=5, ticker=self.ticker, my_state=State.PLAYER,
+                            blocks=False, speed=5, ticker=self.ticker, my_state=State.PLAYER,
                             fighter=fighter_component,
                             sub_img=image.get("player_move"), map_tile=self.game_map)
 
@@ -64,6 +64,7 @@ class MG(arcade.Window):
     def on_update(self, delta_time):
         self.actor_list.update_animation()
         self.actor_list.update()
+        self.move_enemies()
 
         """fov"""
         if self.player.stop_move and self.fov_recompute:
@@ -72,6 +73,8 @@ class MG(arcade.Window):
             fov_get(self.game_map, self.fov_map)
             self.fov_recompute = False
         ##########
+
+            # if self.game_state == State.NPC and self.player.stop_move:
 
     def on_draw(self):
         arcade.start_render()
@@ -83,7 +86,7 @@ class MG(arcade.Window):
         for actor in ACTOR_LIST:
             if actor.ai:
                 actor.ai.take_turn(
-                    target=self.player, game_map=self.game_map, sprite_lists=ENTITY_LIST)
+                    target=self.player, game_map=self.game_map, sprite_lists=[ACTOR_LIST, MAP_LIST])
         self.game_state = State.PLAYER
 
     def on_key_press(self, key, modifiers):
@@ -108,11 +111,8 @@ class MG(arcade.Window):
             self.dist = (1, -1)
         if self.dist:
             self.player.move(self.dist)
-            self.fov_recompute = True
             self.game_state = State.NPC
-
-        if self.game_state == State.NPC:
-            self.move_enemies()
+            self.fov_recompute = True
 
         # if self.game_state == State.PLAYER and self.dist and self.player.stop_move:
 
