@@ -41,6 +41,12 @@ class State(Enum):
     NPC = auto()
 
 
+class state(Enum):
+    READY = auto()
+    DELAY = auto()
+    MOVE_END = auto()
+
+
 ACTOR_LIST = arcade.SpriteList(
     use_spatial_hash=True, spatial_hash_cell_size=32)
 MAP_LIST = arcade.SpriteList(

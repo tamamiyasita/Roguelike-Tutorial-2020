@@ -10,7 +10,7 @@ class Actor(arcade.Sprite):
     def __init__(self, image=None, name=None, x=None, y=None, blocks=False,
                  scale=SPRITE_SCALE, color=arcade.color.WHITE, fighter=None, ai=None,
                  visible_color=arcade.color.WHITE, not_visible_color=arcade.color.WHITE,
-                 speed=None, ticker=None, my_state=None, map_tile=None, sub_img=None):
+                 speed=None, ticker=None, state=None, map_tile=None, sub_img=None):
         super().__init__(image, scale)
         if isinstance(image, arcade.texture.Texture):
             self.texture = image
@@ -27,19 +27,11 @@ class Actor(arcade.Sprite):
         self.cost = 0
 
         self.speed = speed
-        self.ticker = ticker
-        if ticker:
-            self.ticker.schedule_turn(self.speed, self)
-
-        self.my_state = my_state
-
-        self.state = State.PLAYER
 
         self.fighter = fighter
         if self.fighter:
             self.fighter.owner = self
-            if not self.my_state:
-                self.my_state = State.NPC
+            self.state = state
 
         self.ai = ai
         if self.ai:
@@ -57,6 +49,23 @@ class Actor(arcade.Sprite):
                 self.left_image(image)
 
         ENTITY_LIST.append(self)
+
+    def t_move(self, dxy):
+        # TODO 移動システムを見直したい
+        try:
+            self.dx, self.dy = dxy
+            if self.dx == -1:
+                self.left_face = True
+            if self.dx == 1:
+                self.left_face = False
+
+            if not get_blocking_entity(self.x + self.dx, self.y + self.dy, ENTITY_LIST):
+                self.x += self.dx
+                self.y += self.dy
+                self.center_x, self.center_y = pixel_position(self.x, self.y)
+                self.state = state.MOVE_END
+        except:
+            pass
 
     def move(self, dxy):
         try:
@@ -76,6 +85,34 @@ class Actor(arcade.Sprite):
                     self.change_x = self.dx * MOVE_SPEED
         except:
             pass
+
+    def update(self):
+        super().update()
+        grid = SPRITE_SCALE * SPRITE_SIZE
+        if not self.stop_move:
+            if abs(self.target_x - self.center_x) >= grid and self.dx:
+                self.change_x = 0
+                if self.dx == 1:
+                    self.center_x = self.target_x + grid
+                    self.x += self.dx
+                    self.state = state.MOVE_END
+                if self.dx == -1:
+                    self.center_x = self.target_x - grid
+                    self.x += self.dx
+                    self.state = state.MOVE_END
+                self.stop_move = True
+
+            if abs(self.target_y - self.center_y) >= grid and self.dy:
+                self.change_y = 0
+                if self.dy == 1:
+                    self.center_y = self.target_y + grid
+                    self.y += self.dy
+                    self.state = state.MOVE_END
+                if self.dy == -1:
+                    self.center_y = self.target_y - grid
+                    self.y += self.dy
+                    self.state = state.MOVE_END
+                self.stop_move = True
 
     def distance_to(self, other):
         dx = other.x - self.x
@@ -97,30 +134,6 @@ class Actor(arcade.Sprite):
                 self.texture = self.textures.get("left")
             if self.stop_move and self.dx == -1:
                 self.texture = self.textures.get("right")
-
-    def update(self):
-        super().update()
-        grid = SPRITE_SCALE * SPRITE_SIZE
-        if not self.stop_move:
-            if abs(self.target_x - self.center_x) >= grid and self.dx:
-                self.change_x = 0
-                if self.dx == 1:
-                    self.center_x = self.target_x + grid
-                    self.x += self.dx
-                if self.dx == -1:
-                    self.center_x = self.target_x - grid
-                    self.x += self.dx
-                self.stop_move = True
-
-            if abs(self.target_y - self.center_y) >= grid and self.dy:
-                self.change_y = 0
-                if self.dy == 1:
-                    self.center_y = self.target_y + grid
-                    self.y += self.dy
-                if self.dy == -1:
-                    self.center_y = self.target_y - grid
-                    self.y += self.dy
-                self.stop_move = True
 
     def left_image(self, image, m_anime=None):
         left, right = arcade.load_texture_pair(image)

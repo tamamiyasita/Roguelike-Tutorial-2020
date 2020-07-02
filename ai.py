@@ -27,7 +27,8 @@ class Basicmonster:
                     x, y = point
                     dx = x - monster.x
                     dy = y - monster.y
-                    monster.move((dx, dy))
+
+                    monster.t_move((dx, dy))
                     print(f"Move to ({dx}, {dy})")
 
             elif target.fighter.hp > 0:

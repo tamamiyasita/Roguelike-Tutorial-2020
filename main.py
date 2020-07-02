@@ -42,12 +42,13 @@ class MG(arcade.Window):
         fighter_component = Fighter(hp=30, defense=2, power=5)
         ai_component = Basicmonster()
         self.player = Actor(image["player"], "player", self.game_map.player_pos[0], self.game_map.player_pos[1],
-                            blocks=False, speed=5, ticker=self.ticker, my_state=State.PLAYER,
+                            blocks=False, speed=5,
                             fighter=fighter_component,
                             sub_img=image.get("player_move"), map_tile=self.game_map)
+        self.player.state = state.READY
 
         self.crab = Actor(image["crab"], "crab", self.player.x+2, self.player.y,
-                          blocks=True, speed=15, ticker=self.ticker, my_state=State.NPC, fighter=fighter_component, ai=ai_component,
+                          blocks=True, speed=15, fighter=fighter_component, ai=ai_component,
                           scale=0.5, sub_img=True, map_tile=self.game_map)
 
         self.actor_list.append(self.crab)
@@ -64,7 +65,8 @@ class MG(arcade.Window):
     def on_update(self, delta_time):
         self.actor_list.update_animation()
         self.actor_list.update()
-        self.move_enemies()
+        if self.game_state == State.NPC:
+            self.move_enemies()
 
         """fov"""
         if self.player.stop_move and self.fov_recompute:
@@ -75,6 +77,12 @@ class MG(arcade.Window):
         ##########
 
             # if self.game_state == State.NPC and self.player.stop_move:
+        if self.player.state == state.MOVE_END:
+            self.game_state = State.NPC
+
+        if self.dist and self.player.state == state.READY:
+            self.player.move(self.dist)
+            self.fov_recompute = True
 
     def on_draw(self):
         arcade.start_render()
@@ -86,35 +94,35 @@ class MG(arcade.Window):
         for actor in ACTOR_LIST:
             if actor.ai:
                 actor.ai.take_turn(
-                    target=self.player, game_map=self.game_map, sprite_lists=[ACTOR_LIST, MAP_LIST])
+                    target=self.player, game_map=self.game_map, sprite_lists=[MAP_LIST])
         self.game_state = State.PLAYER
+        self.player.state = state.READY
 
     def on_key_press(self, key, modifiers):
         if key == arcade.key.ESCAPE:
             arcade.close_window()
+        if self.player.state == state.MOVE_END and self.dist:
+            self.dist = self.dist
 
-        if key == arcade.key.UP:
-            self.dist = (0, 1)
-        elif key == arcade.key.DOWN:
-            self.dist = (0, -1)
-        elif key == arcade.key.LEFT:
-            self.dist = (-1, 0)
-        elif key == arcade.key.RIGHT:
-            self.dist = (1, 0)
-        elif key == arcade.key.HOME:
-            self.dist = (-1, 1)
-        elif key == arcade.key.END:
-            self.dist = (-1, -1)
-        elif key == arcade.key.PAGEUP:
-            self.dist = (1, 1)
-        elif key == arcade.key.PAGEDOWN:
-            self.dist = (1, -1)
-        if self.dist:
-            self.player.move(self.dist)
-            self.game_state = State.NPC
-            self.fov_recompute = True
-
-        # if self.game_state == State.PLAYER and self.dist and self.player.stop_move:
+        elif self.game_state == State.PLAYER and self.player.state == state.READY:
+            if key == arcade.key.UP:
+                dist = (0, 1)
+            elif key == arcade.key.DOWN:
+                dist = (0, -1)
+            elif key == arcade.key.LEFT:
+                dist = (-1, 0)
+            elif key == arcade.key.RIGHT:
+                dist = (1, 0)
+            elif key == arcade.key.HOME:
+                dist = (-1, 1)
+            elif key == arcade.key.END:
+                dist = (-1, -1)
+            elif key == arcade.key.PAGEUP:
+                dist = (1, 1)
+            elif key == arcade.key.PAGEDOWN:
+                dist = (1, -1)
+            if self.player.stop_move:
+                self.dist = dist
 
     def on_key_release(self, key, modifiers):
         self.dist = None
