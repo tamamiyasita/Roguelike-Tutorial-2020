@@ -27,8 +27,8 @@ class MG(arcade.Window):
         self.crab = None
         self.actor_list = None
         self.game_map = None
-        self.dist = None
-        self.queue = deque()
+        self.start = None
+        self.action_queue = []
 
     def setup(self):
         arcade.set_background_color(arcade.color.BLACK)
@@ -72,16 +72,24 @@ class MG(arcade.Window):
             fov_get(self.game_map, self.fov_map)
             self.fov_recompute = False
         ##########
-
-        if self.game_state == State.NPC:
-            self.move_enemies()
-
         if self.player.state == state.MOVE_END:
             self.game_state = State.NPC
 
-        if self.dist and self.player.state == state.READY:
+        if self.game_state == State.NPC:
+            print("enemy_turn")
+            self.move_enemies()
+
+        if self.start and self.player.state == state.READY:
             self.player.move(self.dist)
             self.fov_recompute = True
+
+        new_action_queue = []
+        for action in self.action_queue:
+            if "player_turn" in action:
+                print("player_turn")
+                self.start = self.dist
+
+        self.action_queue = new_action_queue
 
     def on_draw(self):
         arcade.start_render()
@@ -122,6 +130,7 @@ class MG(arcade.Window):
                 dist = (1, -1)
             if self.player.stop_move:
                 self.dist = dist
+            self.action_queue.append({"player_turn": True})
 
     def on_key_release(self, key, modifiers):
         self.dist = None
