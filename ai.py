@@ -18,8 +18,8 @@ class Basicmonster:
             if monster.distance_to(target) >= 2:
                 results = astar(
                     sprite_lists, (monster.x, monster.y), (target.x, target.y))
-                print(
-                    f"Path from ({monster.x},{monster.y}) to {target.x},{target.y}", results)
+                # print(
+                #     f"Path from ({monster.x},{monster.y}) to {target.x},{target.y}", results)
                 # monster.move_towards(target.x, target.y, sprite_lists)
                 # monster.move((randint(-1, 1), randint(-1, 1)))
                 if results:
@@ -29,10 +29,8 @@ class Basicmonster:
                     dy = y - monster.y
 
                     monster.t_move((dx, dy))
-                    print(f"Move to ({dx}, {dy})")
 
             elif target.fighter.hp > 0:
-                # print(f"the {monster.name} dance")
                 attack_results = monster.fighter.attack(target)
                 results.extend(attack_results)
 

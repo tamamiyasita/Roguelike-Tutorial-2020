@@ -27,7 +27,7 @@ class MG(arcade.Window):
         self.crab = None
         self.actor_list = None
         self.game_map = None
-        self.start = None
+        self.dist = None
         self.action_queue = []
 
     def setup(self):
@@ -41,13 +41,13 @@ class MG(arcade.Window):
         fighter_component2 = Fighter(hp=3, defense=2, power=5)
         ai_component = Basicmonster()
         self.player = Actor(image["player"], "player", self.game_map.player_pos[0], self.game_map.player_pos[1],
-                            blocks=False, speed=5,
+                            blocks=False,
                             fighter=fighter_component,
                             sub_img=image.get("player_move"), map_tile=self.game_map)
         self.player.state = state.READY
 
         self.crab = Actor(image["crab"], "crab", self.player.x+2, self.player.y,
-                          blocks=True, speed=15, fighter=fighter_component2, ai=ai_component,
+                          blocks=True, fighter=fighter_component2, ai=ai_component,
                           scale=0.5, sub_img=True, map_tile=self.game_map)
 
         self.actor_list.append(self.player)
@@ -77,18 +77,10 @@ class MG(arcade.Window):
             print("enemy_turn")
             self.move_enemies()
 
-        if self.start and self.player.state == state.READY:
-            attack = self.player.move(self.dist)
-            if attack:
-                self.action_queue.extend(attack)
-
-            self.fov_recompute = True
-
         new_action_queue = []
         for action in self.action_queue:
             if "player_turn" in action:
                 print("player_turn")
-                self.start = self.dist
 
             if "message" in action:
                 print("Message")
@@ -96,9 +88,37 @@ class MG(arcade.Window):
 
             if "dead" in action:
                 print("Death")
-                action["dead"].kill()
+                target = action["dead"]
+                target.color = arcade.color.GRAY_BLUE
+                target.is_dead = True
+                if target is self.player:
+                    new_action_queue.extend([{"message": "player has died!"}])
+                else:
+                    new_action_queue.extend(
+                        [{"delay": {"time": DEATH_DELAY, "action": {"remove": target}}}])
+            if "remove" in action:
+                target = action["remove"]
+                target.remove_from_sprite_lists()
+
+            if "delay" in action:
+                target = action["delay"]
+                target["time"] -= delta_time
+                if target["time"] > 0:
+                    new_action_queue.extend([{"delay": target}])
+                else:
+                    new_action_queue.extend([target["action"]])
 
         self.action_queue = new_action_queue
+
+        if self.player.state == state.READY and self.dist:
+            if self.player.is_dead:
+                return
+            attack = self.player.move(self.dist)
+            if attack:
+                self.action_queue.extend(attack)
+
+            self.fov_recompute = True
+            self.action_queue.append({"player_turn": True})
 
     def on_draw(self):
         arcade.start_render()
@@ -106,39 +126,44 @@ class MG(arcade.Window):
         self.map_list.draw(filter=gl.GL_NEAREST)
         self.actor_list.draw(filter=gl.GL_NEAREST)
 
+        text = f"HP: {self.player.fighter.hp}/{self.player.fighter.max_hp}"
+        arcade.draw_text(text, 10, 5, arcade.color.WHITE, font_size=14)
+
     def move_enemies(self):
         for actor in ACTOR_LIST:
             if actor.ai:
-                actor.ai.take_turn(
+                results = actor.ai.take_turn(
                     target=self.player, game_map=self.game_map, sprite_lists=[MAP_LIST])
+        self.action_queue.extend(results)
         self.player.state = state.READY
 
     def on_key_press(self, key, modifiers):
         if key == arcade.key.ESCAPE:
             arcade.close_window()
-        if self.player.state == state.MOVE_END and self.dist:
+
+        elif self.player.state == state.MOVE_END:
             self.dist = self.dist
 
         elif self.player.state == state.READY:
-            if key == arcade.key.UP:
+            if key in KEYMAP_UP:
                 dist = (0, 1)
-            elif key == arcade.key.DOWN:
+            elif key in KEYMAP_DOWN:
                 dist = (0, -1)
-            elif key == arcade.key.LEFT:
+            elif key in KEYMAP_LEFT:
                 dist = (-1, 0)
-            elif key == arcade.key.RIGHT:
+            elif key in KEYMAP_RIGHT:
                 dist = (1, 0)
-            elif key == arcade.key.HOME:
+            elif key in KEYMAP_UP_LEFT:
                 dist = (-1, 1)
-            elif key == arcade.key.END:
+            elif key in KEYMAP_DOWN_LEFT:
                 dist = (-1, -1)
-            elif key == arcade.key.PAGEUP:
+            elif key in KEYMAP_UP_RIGHT:
                 dist = (1, 1)
-            elif key == arcade.key.PAGEDOWN:
+            elif key in KEYMAP_DOWN_RIGHT:
                 dist = (1, -1)
+
             if self.player.stop_move:
                 self.dist = dist
-        self.action_queue.append({"player_turn": True})
 
     def on_key_release(self, key, modifiers):
         self.dist = None

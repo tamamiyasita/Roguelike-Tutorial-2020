@@ -10,7 +10,7 @@ class Actor(arcade.Sprite):
     def __init__(self, image=None, name=None, x=None, y=None, blocks=False,
                  scale=SPRITE_SCALE, color=arcade.color.WHITE, fighter=None, ai=None,
                  visible_color=arcade.color.WHITE, not_visible_color=arcade.color.WHITE,
-                 speed=None, state=None, map_tile=None, sub_img=None):
+                 state=None, map_tile=None, sub_img=None):
         super().__init__(image, scale)
         if isinstance(image, arcade.texture.Texture):
             self.texture = image
@@ -24,6 +24,7 @@ class Actor(arcade.Sprite):
         self.visible_color = visible_color
         self.not_visible_color = not_visible_color
         self.is_visible = False
+        self.is_dead = False
 
         self.fighter = fighter
         if self.fighter:
@@ -77,6 +78,8 @@ class Actor(arcade.Sprite):
             if blocking_actor:
                 target = blocking_actor[0]
                 attack_results = self.fighter.attack(target)
+                self.state = state.MOVE_END
+
                 return attack_results
 
             elif not get_blocking_entity(self.x+self.dx, self.y+self.dy, ENTITY_LIST):
