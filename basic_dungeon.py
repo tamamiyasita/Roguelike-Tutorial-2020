@@ -91,7 +91,7 @@ class BasicDungeon:
 
             if not any([actor for actor in actor_list if actor.x == x and actor.y == y]):
                 if randint(0, 100) < 80:
-                    fighter_component = Fighter(hp=10, defense=0, power=3)
+                    fighter_component = Fighter(hp=10, defense=1, power=3)
                     ai_component = Basicmonster()
                     monster = Actor(image=demi_human1[11], name="orc", x=x, y=y, scale=SPRITE_SCALE,
                                     blocks=True, fighter=fighter_component, ai=ai_component, sub_img=False, map_tile=self.tiles)

@@ -163,8 +163,11 @@ class MG(arcade.Window):
         for actor in ACTOR_LIST:
             if actor.ai:
                 results = actor.ai.take_turn(
-                    target=self.player, game_map=self.game_map, sprite_lists=[MAP_LIST])
-        self.action_queue.extend(results)
+                    target=self.player, game_map=self.game_map, sprite_lists=[MAP_LIST, ACTOR_LIST])
+                if not results:
+                    results = actor.ai.take_turn(
+                        target=self.player, game_map=self.game_map, sprite_lists=[MAP_LIST])
+            self.action_queue.extend(results)
         self.player.state = state.READY
 
     def on_key_press(self, key, modifiers):

@@ -12,7 +12,6 @@ class Basicmonster:
 
         monster = self.owner
         if monster.is_visible:
-            print(monster.name, " visible ", monster.is_visible)
             # if monster.alpha == 255:
 
             if monster.distance_to(target) >= 2:
