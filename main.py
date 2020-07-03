@@ -2,6 +2,7 @@ import arcade
 import random
 import pyglet.gl as gl
 import tcod
+from collections import deque
 
 from constants import *
 from data import *
@@ -27,6 +28,7 @@ class MG(arcade.Window):
         self.actor_list = None
         self.game_map = None
         self.dist = None
+        self.queue = deque()
 
     def setup(self):
         arcade.set_background_color(arcade.color.BLACK)
@@ -62,8 +64,6 @@ class MG(arcade.Window):
     def on_update(self, delta_time):
         self.actor_list.update_animation()
         self.actor_list.update()
-        if self.game_state == State.NPC:
-            self.move_enemies()
 
         """fov"""
         if self.player.stop_move and self.fov_recompute:
@@ -73,7 +73,9 @@ class MG(arcade.Window):
             self.fov_recompute = False
         ##########
 
-            # if self.game_state == State.NPC and self.player.stop_move:
+        if self.game_state == State.NPC:
+            self.move_enemies()
+
         if self.player.state == state.MOVE_END:
             self.game_state = State.NPC
 
