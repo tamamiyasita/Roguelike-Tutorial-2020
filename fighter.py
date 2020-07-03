@@ -23,7 +23,7 @@ class Fighter:
 
         if damege > 0:
             results.append(
-                {"message": f"{target} attacks {self.owner.name.capitalize()} for {str(damege)} hit points."})
+                {"message": f"{self.owner.name.capitalize()} attacks {target.name} for {str(damege)} hit points."})
             results.extend(target.fighter.take_damege(damege))
 
         else:

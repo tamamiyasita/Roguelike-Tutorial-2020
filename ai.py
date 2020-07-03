@@ -32,7 +32,9 @@ class Basicmonster:
                     print(f"Move to ({dx}, {dy})")
 
             elif target.fighter.hp > 0:
-                print(f"the {monster.name} dance")
+                # print(f"the {monster.name} dance")
+                attack_results = monster.fighter.attack(target)
+                results.extend(attack_results)
 
         return results
 

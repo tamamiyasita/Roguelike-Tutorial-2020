@@ -72,7 +72,14 @@ class Actor(arcade.Sprite):
             if self.dx == 1:
                 self.left_face = False
 
-            if not get_blocking_entity(self.x+self.dx, self.y+self.dy, ENTITY_LIST):
+            blocking_actor = get_blocking_entity(
+                self.x+self.dx, self.y+self.dy, ACTOR_LIST)
+            if blocking_actor:
+                target = blocking_actor[0]
+                attack_results = self.fighter.attack(target)
+                return attack_results
+
+            elif not get_blocking_entity(self.x+self.dx, self.y+self.dy, ENTITY_LIST):
                 if self.stop_move == True:
 
                     self.stop_move = False

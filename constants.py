@@ -14,7 +14,7 @@ SCREEN_HEIGHT = int(SPRITE_SIZE * MAP_HEIGHT * SPRITE_SCALE)//SPRITE_SCALE
 
 VIEWPORT_MARGIN = 300
 
-MOVE_SPEED = 7
+MOVE_SPEED = 6
 
 MAX_ROOM = 25
 ROOM_MIN_SIZE = 4
@@ -34,11 +34,6 @@ COLORS = {
 
 LEFT_FACE = 1
 RIGHT_FACE = 2
-
-
-class State(Enum):
-    PLAYER = auto()
-    NPC = auto()
 
 
 class state(Enum):
