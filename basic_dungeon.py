@@ -13,7 +13,7 @@ from ai import Basicmonster
 
 class BasicDungeon:
     def __init__(self, width, height, max_rooms=MAX_ROOM, room_min_size=ROOM_MIN_SIZE,
-                 room_max_size=ROOM_MAX_SIZE, ticker=None):
+                 room_max_size=ROOM_MAX_SIZE):
         self.width = width
         self.height = height
         self.max_rooms = max_rooms
@@ -21,7 +21,6 @@ class BasicDungeon:
         self.room_max_size = room_max_size
         self.tiles = initialize_tiles(self.width, self.height)
         self.player_pos = 0
-        self.ticker = ticker
         self.make_map()
 
     def make_map(self):
@@ -96,7 +95,7 @@ class BasicDungeon:
                     print(x, y)
                     ai_component = Basicmonster()
                     monster = Actor(image=demi_human1[11], name="orc", x=x, y=y, scale=1,
-                                    blocks=True,  speed=10, ticker=self.ticker, fighter=fighter_component, ai=ai_component, sub_img=False, map_tile=self.tiles)
+                                    blocks=True, fighter=fighter_component, ai=ai_component, sub_img=False, map_tile=self.tiles)
                     print(monster.x, monster.y)
                     print("spown!")
                     ACTOR_LIST.append(monster)

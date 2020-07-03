@@ -10,7 +10,7 @@ class Actor(arcade.Sprite):
     def __init__(self, image=None, name=None, x=None, y=None, blocks=False,
                  scale=SPRITE_SCALE, color=arcade.color.WHITE, fighter=None, ai=None,
                  visible_color=arcade.color.WHITE, not_visible_color=arcade.color.WHITE,
-                 speed=None, ticker=None, state=None, map_tile=None, sub_img=None):
+                 speed=None, state=None, map_tile=None, sub_img=None):
         super().__init__(image, scale)
         if isinstance(image, arcade.texture.Texture):
             self.texture = image
@@ -24,9 +24,6 @@ class Actor(arcade.Sprite):
         self.visible_color = visible_color
         self.not_visible_color = not_visible_color
         self.is_visible = False
-        self.cost = 0
-
-        self.speed = speed
 
         self.fighter = fighter
         if self.fighter:

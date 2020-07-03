@@ -2,7 +2,6 @@ import arcade
 import random
 import pyglet.gl as gl
 import tcod
-from itertools import chain
 
 from constants import *
 from data import *
@@ -14,7 +13,6 @@ from fov_functions import initialize_fov, recompute_fov, fov_get
 from viewport import viewport
 from fighter import Fighter
 from ai import Basicmonster
-from tick_sys import Ticker
 
 from basic_dungeon import BasicDungeon
 from caves_dungeon import CavesDungeon
@@ -33,10 +31,9 @@ class MG(arcade.Window):
     def setup(self):
         arcade.set_background_color(arcade.color.BLACK)
         self.game_state = State.PLAYER
-        self.ticker = Ticker()
         self.actor_list = ACTOR_LIST
         self.map_list = MAP_LIST
-        self.game_map = BasicDungeon(MAP_WIDTH, MAP_HEIGHT, ticker=self.ticker)
+        self.game_map = BasicDungeon(MAP_WIDTH, MAP_HEIGHT)
 
         self.fov_recompute = True
         fighter_component = Fighter(hp=30, defense=2, power=5)
