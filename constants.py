@@ -9,8 +9,11 @@ SPRITE_SCALE = 1
 MAP_WIDTH = 45
 MAP_HEIGHT = 25
 
+STATES_PANEL_HEIGHT = 60
+
 SCREEN_WIDTH = int(SPRITE_SIZE * MAP_WIDTH * SPRITE_SCALE)//SPRITE_SCALE
-SCREEN_HEIGHT = int(SPRITE_SIZE * MAP_HEIGHT * SPRITE_SCALE)//SPRITE_SCALE
+SCREEN_HEIGHT = int(SPRITE_SIZE * MAP_HEIGHT *
+                    SPRITE_SCALE)//SPRITE_SCALE + STATES_PANEL_HEIGHT
 
 VIEWPORT_MARGIN = 300
 
@@ -30,7 +33,11 @@ COLORS = {
     "dark_wall": arcade.color.PURPLE_TAUPE,
     "dark_ground": arcade.color.PURPLE_NAVY,
     "light_wall": arcade.color.WHITE,
-    "light_ground": arcade.color.WHITE
+    "light_ground": arcade.color.WHITE,
+    "status_panel_background": arcade.color.ALMOND,
+    "status_panel_text": arcade.color.BLACK,
+    "status_bar_background": arcade.color.PINK_LACE,
+    "status_bar_foreground": arcade.color.RED_DEVIL
 }
 
 LEFT_FACE = 1

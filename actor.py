@@ -3,22 +3,22 @@ import math
 from constants import *
 from data import *
 from util import map_position, pixel_position, get_blocking_entity
-# from tick_sys import Ticker
 
 
 class Actor(arcade.Sprite):
-    def __init__(self, image=None, name=None, x=None, y=None, blocks=False,
+    def __init__(self, image=None, name=None, x=0, y=0, blocks=False,
                  scale=SPRITE_SCALE, color=arcade.color.WHITE, fighter=None, ai=None,
                  visible_color=arcade.color.WHITE, not_visible_color=arcade.color.WHITE,
                  state=None, map_tile=None, sub_img=None):
         super().__init__(image, scale)
         if isinstance(image, arcade.texture.Texture):
-            self.texture = image
-
+            self.texture_ = image
         self.name = name
         self.dx, self.dy = 0, 0
         self.center_x, self.center_y = pixel_position(x, y)
         self.x, self.y = map_position(self.center_x, self.center_y)
+        self.x = x
+        self.y = y
         self.blocks = blocks
         self.color = color
         self.visible_color = visible_color
@@ -162,4 +162,12 @@ class Actor(arcade.Sprite):
 
         if not get_blocking_entity(self.x + dx, self.y + dy, ENTITY_LIST):
             self.move((dx, dy))
-            # pass
+
+    @property
+    def texture_(self):
+        return self._texture_
+
+    @texture_.setter
+    def texture_(self, value):
+        self._texture_ = value
+        self.texture = self._texture_

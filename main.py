@@ -12,6 +12,7 @@ from dungeon_select import dungeon_select
 from map_sprite_set import MapSpriteSet
 from fov_functions import initialize_fov, recompute_fov, fov_get
 from viewport import viewport
+from status_bar import draw_status_bar
 from fighter import Fighter
 from ai import Basicmonster
 
@@ -29,6 +30,9 @@ class MG(arcade.Window):
         self.game_map = None
         self.dist = None
         self.action_queue = []
+        self.messages = deque(maxlen=3)
+        self.mouse_over_text = None
+        self.mouse_position = None
 
     def setup(self):
         arcade.set_background_color(arcade.color.BLACK)
@@ -48,7 +52,7 @@ class MG(arcade.Window):
 
         self.crab = Actor(image["crab"], "crab", self.player.x+2, self.player.y,
                           blocks=True, fighter=fighter_component2, ai=ai_component,
-                          scale=0.5, sub_img=True, map_tile=self.game_map)
+                          scale=SPRITE_SCALE*0.5, sub_img=True, map_tile=self.game_map)
 
         self.actor_list.append(self.player)
         self.actor_list.append(self.crab)
@@ -64,6 +68,7 @@ class MG(arcade.Window):
     def on_update(self, delta_time):
         self.actor_list.update_animation()
         self.actor_list.update()
+        viewport(self.player)
 
         """fov"""
         if self.player.stop_move and self.fov_recompute:
@@ -84,7 +89,7 @@ class MG(arcade.Window):
 
             if "message" in action:
                 print("Message")
-                print(action["message"])
+                self.messages.append(action["message"])
 
             if "dead" in action:
                 print("Death")
@@ -94,6 +99,8 @@ class MG(arcade.Window):
                 if target is self.player:
                     new_action_queue.extend([{"message": "player has died!"}])
                 else:
+                    new_action_queue.extend(
+                        [{"message": f"{target.name} has been killed!"}])
                     new_action_queue.extend(
                         [{"delay": {"time": DEATH_DELAY, "action": {"remove": target}}}])
             if "remove" in action:
@@ -110,9 +117,9 @@ class MG(arcade.Window):
 
         self.action_queue = new_action_queue
 
+        if self.player.is_dead:
+            return
         if self.player.state == state.READY and self.dist:
-            if self.player.is_dead:
-                return
             attack = self.player.move(self.dist)
             if attack:
                 self.action_queue.extend(attack)
@@ -126,8 +133,31 @@ class MG(arcade.Window):
         self.map_list.draw(filter=gl.GL_NEAREST)
         self.actor_list.draw(filter=gl.GL_NEAREST)
 
+        size = 65
+        margin = 10
+        gx = arcade.get_viewport()[0]
+        gy = arcade.get_viewport()[2]
+
+        arcade.draw_xywh_rectangle_filled(
+            gx, gy, SCREEN_WIDTH, STATES_PANEL_HEIGHT, COLORS["status_panel_background"])
+
         text = f"HP: {self.player.fighter.hp}/{self.player.fighter.max_hp}"
-        arcade.draw_text(text, 10, 5, arcade.color.WHITE, font_size=14)
+        arcade.draw_text(
+            text, margin+gx, STATES_PANEL_HEIGHT-30+gy, color=COLORS["status_panel_text"], font_size=14)
+        draw_status_bar(size / 2 + margin+gx, STATES_PANEL_HEIGHT-8+gy, size, 10,
+                        self.player.fighter.hp, self.player.fighter.max_hp)
+
+        y = STATES_PANEL_HEIGHT-14
+        for message in self.messages:
+            arcade.draw_text(
+                message, 200+gx, y+gy, color=COLORS["status_panel_text"])
+            y -= 20
+
+        if self.mouse_over_text:
+            x, y = self.mouse_position
+            arcade.draw_xywh_rectangle_filled(
+                x, y, 100, 16, arcade.color.BLACK)
+            arcade.draw_text(self.mouse_over_text, x, y, arcade.color.WHITE)
 
     def move_enemies(self):
         for actor in ACTOR_LIST:
@@ -138,6 +168,7 @@ class MG(arcade.Window):
         self.player.state = state.READY
 
     def on_key_press(self, key, modifiers):
+        print(arcade.get_viewport())
         if key == arcade.key.ESCAPE:
             arcade.close_window()
 
@@ -167,6 +198,14 @@ class MG(arcade.Window):
 
     def on_key_release(self, key, modifiers):
         self.dist = None
+
+    def on_mouse_motion(self, x, y, dx, dy):
+        self.mouse_position = x, y
+        actor_list = arcade.get_sprites_at_point((x, y), self.actor_list)
+        self.mouse_over_text = None
+        for actor in actor_list:
+            if actor.fighter and actor.is_visible:
+                self.mouse_over_text = f"{actor.name} {actor.fighter.hp}/{actor.fighter.max_hp}"
 
 
 def main():
