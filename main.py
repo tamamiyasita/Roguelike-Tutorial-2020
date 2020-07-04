@@ -79,6 +79,7 @@ class MG(arcade.Window):
         ##########
         if self.player.state == state.MOVE_END:
             self.player.state = state.DELAY
+
             print("enemy_turn")
             self.move_enemies()
 
@@ -99,6 +100,7 @@ class MG(arcade.Window):
                 if target is self.player:
                     new_action_queue.extend([{"message": "player has died!"}])
                 else:
+                    self.game_map.tiles[target.x][target.y].blocked = False
                     new_action_queue.extend(
                         [{"message": f"{target.name} has been killed!"}])
                     new_action_queue.extend(
@@ -119,13 +121,6 @@ class MG(arcade.Window):
 
         if self.player.is_dead:
             return
-        if self.player.state == state.READY and self.dist:
-            attack = self.player.move(self.dist)
-            if attack:
-                self.action_queue.extend(attack)
-
-            self.fov_recompute = True
-            self.action_queue.append({"player_turn": True})
 
     def on_draw(self):
         arcade.start_render()
@@ -167,16 +162,14 @@ class MG(arcade.Window):
                 if not results:
                     results = actor.ai.take_turn(
                         target=self.player, game_map=self.game_map, sprite_lists=[MAP_LIST])
-            self.action_queue.extend(results)
-        self.player.state = state.READY
+                    if results:
+                        self.action_queue.extend(results)
+            self.player.state = state.READY
 
     def on_key_press(self, key, modifiers):
         print(arcade.get_viewport())
         if key == arcade.key.ESCAPE:
             arcade.close_window()
-
-        elif self.player.state == state.MOVE_END:
-            self.dist = self.dist
 
         elif self.player.state == state.READY:
             if key in KEYMAP_UP:
@@ -198,6 +191,13 @@ class MG(arcade.Window):
 
             if self.player.stop_move:
                 self.dist = dist
+            if self.player.state == state.READY and self.dist:
+                attack = self.player.move(self.dist)
+                if attack:
+                    self.action_queue.extend(attack)
+
+                self.fov_recompute = True
+                self.action_queue.append({"player_turn": True})
 
     def on_key_release(self, key, modifiers):
         self.dist = None

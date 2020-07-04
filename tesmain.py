@@ -18,6 +18,7 @@ class MG(arcade.Window):
         self.list.append(self.enm)
         self.mouse_over_text = None
         self.log = []
+        self.a = False
 
         self.hp = 45
         self.messages = deque(maxlen=3)
@@ -57,6 +58,10 @@ class MG(arcade.Window):
             x, y = self.mouse_position
             arcade.draw_rectangle_filled(x, y+8, 160, 16, arcade.color.BLACK_BEAN)
             arcade.draw_text(self.mouse_over_text, x, y, arcade.color.WHITE, anchor_x="center")
+    def on_update(self, delta_time):
+        self.list.update()
+        if self.a:
+            self.attack()
 
         
 
@@ -77,8 +82,18 @@ class MG(arcade.Window):
             self.messages.appendleft("def text")
         if key == arcade.key.ESCAPE:
             arcade.close_window()
+        if key == arcade.key.A:
+            self.dist = self.pc.center_x+32
+            self.a = True
         print(self.messages)
-        print("LOG:",self.log)
+        # print("LOG:",self.log)
+
+    def attack(self):
+        self.pc.change_x += 5 
+        if self.dist < self.pc.center_x:
+            self.pc.center_x = self.dist-32
+            self.pc.change_x = 0
+            self.a = False
 
     def on_mouse_motion(self, x, y, dx, dy):
         self.mouse_position = x, y

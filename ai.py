@@ -27,7 +27,7 @@ class Basicmonster:
                     dx = x - monster.x
                     dy = y - monster.y
 
-                    monster.t_move((dx, dy))
+                    monster.move((dx, dy))
 
             elif target.fighter.hp > 0:
                 attack_results = monster.fighter.attack(target)
