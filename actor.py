@@ -36,7 +36,7 @@ class Actor(arcade.Sprite):
             self.ai.owner = self
 
         self.game_map = map_tile
-        self.stop_move = True
+        # self.stop_move = True
         self.sub_img = sub_img
         if sub_img:
             self.left_face = False
@@ -60,25 +60,22 @@ class Actor(arcade.Sprite):
                 self.x += self.dx
                 self.y += self.dy
                 self.center_x, self.center_y = pixel_position(self.x, self.y)
-                self.state = state.MOVE_END
+                self.state = state.TURN_END
         except:
             pass
 
     def attack(self):
         super().update()
         step = SPRITE_SCALE * (SPRITE_SIZE / 2)
-        if self.stop_move:
-            self.change_x += 1
-            if abs(self.target_x - self.center_x) >= step and self.dx:
-                self.change_x = 0
-                if self.dx == 1:
-                    self.center_x = self.target_x 
-                    self.state = state.MOVE_END
-                if self.dx == -1:
-                    self.center_x = self.target_x
-                    self.state = state.MOVE_END
-                self.stop_move = True
-
+        self.change_x += 1
+        if abs(self.target_x - self.center_x) >= step and self.dx:
+            self.change_x = 0
+            if self.dx == 1:
+                self.center_x = self.target_x
+                self.state = state.TURN_END
+            if self.dx == -1:
+                self.center_x = self.target_x
+                self.state = state.TURN_END
 
     def move(self, dxy):
         try:
@@ -93,54 +90,55 @@ class Actor(arcade.Sprite):
             if blocking_actor:
                 target = blocking_actor[0]
                 attack_results = self.fighter.attack(target)
-                self.state = state.MOVE_END
+                self.state = state.TURN_END
                 # self.attack()
 
                 return attack_results
 
             elif not get_blocking_entity(self.x + self.dx, self.y + self.dy, ENTITY_LIST) and\
-                            self.game_map.tiles[self.x+self.dx][self.y+self.dy].blocked == False:
-                if self.stop_move == True:
-                    self.game_map.tiles[self.x+self.dx][self.y+self.dy].blocked = True
-                    self.stop_move = False
-                    self.target_x = self.center_x
-                    self.target_y = self.center_y
-                    self.change_y = self.dy * MOVE_SPEED
-                    self.change_x = self.dx * MOVE_SPEED
+                    self.game_map.tiles[self.x+self.dx][self.y+self.dy].blocked == False:
+                # if self.stop_move == True:
+                self.game_map.tiles[self.x +
+                                    self.dx][self.y+self.dy].blocked = True
+                # self.stop_move = False
+                self.state = state.ON_MOVE
+                self.target_x = self.center_x
+                self.target_y = self.center_y
+                self.change_y = self.dy * MOVE_SPEED
+                self.change_x = self.dx * MOVE_SPEED
         except:
             pass
 
     def update(self):
         super().update()
         grid = SPRITE_SCALE * SPRITE_SIZE
-        if not self.stop_move:
+        # if not self.stop_move:
+        if self.state == state.ON_MOVE:
             if abs(self.target_x - self.center_x) >= grid and self.dx:
                 self.change_x = 0
                 if self.dx == 1:
                     self.center_x = self.target_x + grid
                     self.x += self.dx
-                    self.state = state.MOVE_END
+                    self.state = state.TURN_END
                 if self.dx == -1:
                     self.center_x = self.target_x - grid
                     self.x += self.dx
-                    self.state = state.MOVE_END
+                    self.state = state.TURN_END
                 self.game_map.tiles[self.x-self.dx][self.y].blocked = False
-                self.stop_move = True
+                # self.stop_move = True
 
             if abs(self.target_y - self.center_y) >= grid and self.dy:
                 self.change_y = 0
                 if self.dy == 1:
                     self.center_y = self.target_y + grid
                     self.y += self.dy
-                    self.state = state.MOVE_END
+                    self.state = state.TURN_END
                 if self.dy == -1:
                     self.center_y = self.target_y - grid
                     self.y += self.dy
-                    self.state = state.MOVE_END
+                    self.state = state.TURN_END
                 self.game_map.tiles[self.x][self.y-self.dy].blocked = False
-                self.stop_move = True
-            
-
+                # self.stop_move = True
 
     def distance_to(self, other):
         dx = other.x - self.x
@@ -149,18 +147,18 @@ class Actor(arcade.Sprite):
 
     def update_animation(self, delta_time=1 / 60):
         if type(self.sub_img) != bool:
-            if not self.stop_move and not self.left_face:
+            if self.state == state.ON_MOVE and not self.left_face:
                 self.texture = self.textures.get("move_left")
-            if not self.stop_move and self.left_face:
+            if self.state == state.ON_MOVE and self.left_face:
                 self.texture = self.textures.get("move_right")
-            if self.stop_move and not self.left_face:
+            if self.state == state.READY and not self.left_face:
                 self.texture = self.textures.get("left")
-            if self.stop_move and self.left_face:
+            if self.state == state.READY and self.left_face:
                 self.texture = self.textures.get("right")
-        if self.sub_img:
-            if self.stop_move and self.dx == 1:
+        elif self.sub_img:
+            if self.state == state.ON_MOVE and self.dx == 1:
                 self.texture = self.textures.get("left")
-            if self.stop_move and self.dx == -1:
+            if self.state == state.ON_MOVE and self.dx == -1:
                 self.texture = self.textures.get("right")
 
     def left_image(self, image, m_anime=None):
@@ -192,4 +190,3 @@ class Actor(arcade.Sprite):
     def texture_(self, value):
         self._texture_ = value
         self.texture = self._texture_
-

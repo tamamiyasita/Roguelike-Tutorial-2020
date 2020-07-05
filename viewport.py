@@ -30,4 +30,4 @@ def viewport(player):
 
     if changed:
         arcade.set_viewport(view_left, SCREEN_WIDTH + view_left,
-                            view_bottom+STATES_PANEL_HEIGHT, SCREEN_HEIGHT + view_bottom)
+                            view_bottom, SCREEN_HEIGHT + view_bottom)

@@ -71,13 +71,13 @@ class MG(arcade.Window):
         viewport(self.player)
 
         """fov"""
-        if self.player.stop_move and self.fov_recompute:
+        if self.player.state == state.READY and self.fov_recompute:
             recompute_fov(self.fov_map, self.player.x, self.player.y,
                           FOV_RADIUS, FOV_LIGHT_WALL, FOV_ALGO)
             fov_get(self.game_map, self.fov_map)
             self.fov_recompute = False
         ##########
-        if self.player.state == state.MOVE_END:
+        if self.player.state == state.TURN_END:
             self.player.state = state.DELAY
 
             print("enemy_turn")
@@ -130,29 +130,31 @@ class MG(arcade.Window):
 
         size = 65
         margin = 10
-        gx = arcade.get_viewport()[0]
-        gy = arcade.get_viewport()[2]
+        self.vx = arcade.get_viewport()[0]
+        self.vy = arcade.get_viewport()[2]
 
         arcade.draw_xywh_rectangle_filled(
-            gx, gy, SCREEN_WIDTH, STATES_PANEL_HEIGHT, COLORS["status_panel_background"])
+            self.vx, self.vy, SCREEN_WIDTH, STATES_PANEL_HEIGHT, COLORS["status_panel_background"])
 
         text = f"HP: {self.player.fighter.hp}/{self.player.fighter.max_hp}"
         arcade.draw_text(
-            text, margin+gx, STATES_PANEL_HEIGHT-30+gy, color=COLORS["status_panel_text"], font_size=14)
-        draw_status_bar(size / 2 + margin+gx, STATES_PANEL_HEIGHT-8+gy, size, 10,
+            text, margin+self.vx, STATES_PANEL_HEIGHT-30+self.vy, color=COLORS["status_panel_text"], font_size=14)
+        draw_status_bar(size / 2 + margin+self.vx, STATES_PANEL_HEIGHT-8+self.vy, size, 10,
                         self.player.fighter.hp, self.player.fighter.max_hp)
 
         y = STATES_PANEL_HEIGHT-14
         for message in self.messages:
             arcade.draw_text(
-                message, 200+gx, y+gy, color=COLORS["status_panel_text"])
+                message, 200+self.vx, y+self.vy, color=COLORS["status_panel_text"])
             y -= 20
 
         if self.mouse_over_text:
             x, y = self.mouse_position
             arcade.draw_xywh_rectangle_filled(
                 x, y, 100, 16, arcade.color.BLACK)
-            arcade.draw_text(self.mouse_over_text, x, y, arcade.color.WHITE)
+            arcade.draw_text(self.mouse_over_text, x,
+                             y, arcade.color.WHITE)
+            # print(self.mouse_over_text)
 
     def move_enemies(self):
         for actor in ACTOR_LIST:
@@ -189,8 +191,7 @@ class MG(arcade.Window):
             elif key in KEYMAP_DOWN_RIGHT:
                 dist = (1, -1)
 
-            if self.player.stop_move:
-                self.dist = dist
+            self.dist = dist
             if self.player.state == state.READY and self.dist:
                 attack = self.player.move(self.dist)
                 if attack:
@@ -203,12 +204,20 @@ class MG(arcade.Window):
         self.dist = None
 
     def on_mouse_motion(self, x, y, dx, dy):
-        self.mouse_position = x, y
-        actor_list = arcade.get_sprites_at_point((x, y), self.actor_list)
+        print(x, y, "M")
+        self.mouse_position = x+self.vx, y+self.vy
+        print(self.mouse_position, "mouseP")
+        print(arcade.get_viewport())
+        print(self.player.center_x, self.player.center_y)
+        # print(self.mouse_position)
+        actor_list = arcade.get_sprites_at_point(
+            (x+self.vx, y+self.vy), ACTOR_LIST)
+        print(actor_list)
         self.mouse_over_text = None
         for actor in actor_list:
             if actor.fighter and actor.is_visible:
                 self.mouse_over_text = f"{actor.name} {actor.fighter.hp}/{actor.fighter.max_hp}"
+                print(actor.name)
 
 
 def main():

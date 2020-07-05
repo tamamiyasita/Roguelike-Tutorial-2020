@@ -5,7 +5,7 @@ from enum import Enum, auto
 TITLE = "Roguelike tutorial 2020"
 
 SPRITE_SIZE = 32
-SPRITE_SCALE = 2
+SPRITE_SCALE = 1
 MAP_WIDTH = 35
 MAP_HEIGHT = 20
 
@@ -47,7 +47,8 @@ RIGHT_FACE = 2
 class state(Enum):
     READY = auto()
     DELAY = auto()
-    MOVE_END = auto()
+    ON_MOVE = auto()
+    TURN_END = auto()
 
 
 ACTOR_LIST = arcade.SpriteList(
