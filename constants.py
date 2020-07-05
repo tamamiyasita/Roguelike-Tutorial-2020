@@ -6,6 +6,7 @@ TITLE = "Roguelike tutorial 2020"
 
 SPRITE_SIZE = 32
 SPRITE_SCALE = 2
+
 MAP_WIDTH = 35
 MAP_HEIGHT = 20
 
@@ -68,3 +69,4 @@ KEYMAP_UP_LEFT = [arcade.key.Q, arcade.key.NUM_7, arcade.key.HOME]
 KEYMAP_UP_RIGHT = [arcade.key.E, arcade.key.NUM_9, arcade.key.PAGEUP]
 KEYMAP_DOWN_LEFT = [arcade.key.Z, arcade.key.NUM_1, arcade.key.END]
 KEYMAP_DOWN_RIGHT = [arcade.key.X, arcade.key.NUM_3, arcade.key.PAGEDOWN]
+KEYMAP_PICKUP = [arcade.key.G]

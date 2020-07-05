@@ -30,7 +30,8 @@ def get_blocking_entity(x, y, sprite_list):
         return sprite_list
     else:
         return None
-    
+
+
 def floor_move_lock(x, y, sprite_list):
     # TODO 移動先のfloorをロックしたり解除したりする
     px, py = pixel_position(x, y)
@@ -38,6 +39,7 @@ def floor_move_lock(x, y, sprite_list):
     for sprite in sprite_list:
         if not sprite.blocks:
             sprite.blocks = True
+
 
 def floor_move_open(x, y, sprite_list):
     # TODO 移動先のfloorをロックしたり解除したりする
@@ -104,7 +106,7 @@ class TileImageTest(arcade.Window):
 
 
 def main():
-    t = (r"image/demi_human1.png")
+    t = (r"image/Potion.png")
     tst = TileImageTest(textures=t)
 
     arcade.run()
@@ -112,5 +114,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-

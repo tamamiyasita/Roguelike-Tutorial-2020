@@ -8,6 +8,7 @@ from util import map_position, pixel_position, get_blocking_entity, floor_move_l
 class Actor(arcade.Sprite):
     def __init__(self, image=None, name=None, x=0, y=0, blocks=False,
                  scale=SPRITE_SCALE, color=arcade.color.WHITE, fighter=None, ai=None,
+                 inventory=None, item=None,
                  visible_color=arcade.color.WHITE, not_visible_color=arcade.color.WHITE,
                  state=None, map_tile=None, sub_img=None):
         super().__init__(image, scale)
@@ -25,11 +26,13 @@ class Actor(arcade.Sprite):
         self.not_visible_color = not_visible_color
         self.is_visible = False
         self.is_dead = False
+        self.inventory = inventory
+        self.item = item
 
         self.fighter = fighter
         if self.fighter:
             self.fighter.owner = self
-            self.state = state
+        self.state = state
 
         self.ai = ai
         if self.ai:
@@ -96,7 +99,7 @@ class Actor(arcade.Sprite):
 
                 return attack_results
 
-            elif not get_blocking_entity(self.x + self.dx, self.y + self.dy, ENTITY_LIST) and\
+            elif not get_blocking_entity(self.x + self.dx, self.y + self.dy, ACTOR_LIST) and\
                     self.game_map.tiles[self.x+self.dx][self.y+self.dy].blocked == False:
                 # if self.stop_move == True:
                 self.game_map.tiles[self.x +
@@ -155,7 +158,7 @@ class Actor(arcade.Sprite):
         return math.sqrt(dx ** 2 + dy ** 2)
 
     def update_animation(self, delta_time=1 / 60):
-        if type(self.sub_img) != bool:
+        if type(self.sub_img) != bool and self.state:
             if self.state == state.ON_MOVE and not self.left_face:
                 self.texture = self.textures.get("move_left")
             if self.state == state.ON_MOVE and self.left_face:

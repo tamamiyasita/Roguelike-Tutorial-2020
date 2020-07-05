@@ -15,6 +15,7 @@ walls_2 = (r"image/wall2.png")
 walls_3 = (r"image/wall3.png")
 
 d_floor = (r"image/Tile.png")
+d_potion = (r"image/Potion.png")
 
 d_human1 = (r"image/demi_human1.png")
 
@@ -32,6 +33,8 @@ ds_floor = get_tile_set(d_floor, tile_size=32)
 floor_len = len(ds_floor)
 floors = {k: ds_floor[v] for k, v in zip(range(floor_len), range(floor_len))}
 
+
+potion = get_tile_set(d_potion, tile_size=16)
 
 demi_human1 = get_tile_set(d_human1, tile_size=16)
 

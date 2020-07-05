@@ -9,6 +9,7 @@ from constants import *
 from data import *
 from fighter import Fighter
 from ai import Basicmonster
+from item import Item
 
 
 class BasicDungeon:
@@ -19,6 +20,9 @@ class BasicDungeon:
         self.max_rooms = max_rooms
         self.room_min_size = room_min_size
         self.room_max_size = room_max_size
+        self.max_monsters_per_room = 3
+        self.max_items_per_room = 2
+
         self.tiles = initialize_tiles(self.width, self.height)
         self.player_pos = 0
         self.make_map()
@@ -60,7 +64,9 @@ class BasicDungeon:
 
                 rooms.append(new_room)
                 num_rooms += 1
-                self.place_entities(new_room, max_monsters_poer_room=4)
+                self.place_entities(
+                    new_room, max_monsters_per_room=self.max_monsters_per_room,
+                    max_items_per_room=self.max_items_per_room)
 
     def create_room(self, room):
         for x in range(room.x1 + 1, room.x2):
@@ -81,8 +87,9 @@ class BasicDungeon:
     def is_blocked(self, x, y):
         return is_blocked(self.tiles, x, y)
 
-    def place_entities(self, room, max_monsters_poer_room):
-        number_of_monsters = randint(0, max_monsters_poer_room)
+    def place_entities(self, room, max_monsters_per_room, max_items_per_room):
+        number_of_monsters = randint(0, max_monsters_per_room)
+        number_of_items = randint(0, max_items_per_room)
         actor_list = MAP_LIST
 
         for i in range(number_of_monsters):
@@ -97,3 +104,14 @@ class BasicDungeon:
                                     blocks=True, fighter=fighter_component, ai=ai_component, sub_img=False, map_tile=self)
                     print("spown!")
                     ACTOR_LIST.append(monster)
+
+        # for i in range(number_of_items):
+        #     x = randint(room.x1 + 1, room.x2 - 1)
+        #     y = randint(room.y1 + 1, room.y2 - 1)
+
+        #     if not any([actor for actor in actor_list if actor.x == x and actor.y == y]):
+        #         self[x][y].blocked = False
+        #         item = Actor(
+        #             image=potion[0], x=x, y=y, blocks=False, color=COLORS.get("transparent"), visible_color=COLORS.get(
+        #                 "light_ground"), not_visible_color=COLORS.get("dark_ground"))
+        #         MAP_LIST.append(item)

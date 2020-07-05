@@ -13,6 +13,9 @@ from map_sprite_set import MapSpriteSet
 from fov_functions import initialize_fov, recompute_fov, fov_get
 from viewport import viewport
 from status_bar import draw_status_bar
+from inventory import Inventory
+from item import Item
+
 from fighter import Fighter
 from ai import Basicmonster
 
@@ -44,16 +47,23 @@ class MG(arcade.Window):
         fighter_component = Fighter(hp=30, defense=2, power=5)
         fighter_component2 = Fighter(hp=3, defense=2, power=5)
         ai_component = Basicmonster()
+
         self.player = Actor(image["player"], "player", self.game_map.player_pos[0], self.game_map.player_pos[1],
-                            blocks=False,
+                            blocks=False, inventory=Inventory(capacity=5),
                             fighter=fighter_component,
                             sub_img=image.get("player_move"), map_tile=self.game_map)
         self.player.state = state.READY
 
+        self.item = Actor(
+            image=potion[0], name="potion", x=self.player.x+1, y=self.player.y+1, blocks=False, color=COLORS.get("transparent"), visible_color=COLORS.get(
+                "light_ground"), not_visible_color=COLORS.get("dark_ground"), item=Item())
+        self.item.alpha = 0
+
         self.crab = Actor(image["crab"], "crab", self.player.x+2, self.player.y,
                           blocks=True, fighter=fighter_component2, ai=ai_component,
-                          scale=SPRITE_SCALE*0.5, sub_img=True, map_tile=self.game_map)
+                          scale=SPRITE_SCALE * 0.5, sub_img=True, map_tile=self.game_map)
 
+        self.actor_list.append(self.item)
         self.actor_list.append(self.player)
         self.actor_list.append(self.crab)
 
@@ -118,6 +128,18 @@ class MG(arcade.Window):
                 else:
                     new_action_queue.extend([target["action"]])
 
+            if "pickup" in action:
+                print("pic", (self.player.center_x, self.player.center_y),
+                      (self.item.center_x, self.item.center_y))
+                actors = arcade.get_sprites_at_exact_point(
+                    (self.player.center_x, self.player.center_y), self.actor_list)
+                # print(actors[0].name, actors[1].name)
+                for actor in actors:
+                    if actor.item:
+                        results = self.player.inventory.add_item(actor)
+                        if results:
+                            new_action_queue.extend(results)
+
         self.action_queue = new_action_queue
 
         if self.player.is_dead:
@@ -174,6 +196,7 @@ class MG(arcade.Window):
             arcade.close_window()
 
         elif self.player.state == state.READY:
+            dist = None
             if key in KEYMAP_UP:
                 dist = (0, 1)
             elif key in KEYMAP_DOWN:
@@ -190,8 +213,8 @@ class MG(arcade.Window):
                 dist = (1, 1)
             elif key in KEYMAP_DOWN_RIGHT:
                 dist = (1, -1)
-            elif key == arcade.key.R:
-                pass
+            elif key in KEYMAP_PICKUP:
+                self.action_queue.extend([{"pickup": True}])
 
             self.dist = dist
             if self.player.state == state.READY and self.dist:
@@ -209,7 +232,7 @@ class MG(arcade.Window):
         self.mouse_position = x + self.vx, y + self.vy
         # 忘れずにビューポートの座標を足す
         actor_list = arcade.get_sprites_at_point(
-            (x+self.vx, y+self.vy), ACTOR_LIST)
+            (x+self.vx, y+self.vy), ENTITY_LIST)
         print(actor_list)
         self.mouse_over_text = None
         for actor in actor_list:
