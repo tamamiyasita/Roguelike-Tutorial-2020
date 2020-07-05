@@ -64,20 +64,7 @@ class Actor(arcade.Sprite):
         except:
             pass
 
-    def attack(self):
-        super().update()
-        step = SPRITE_SCALE * (SPRITE_SIZE / 2)
-        self.change_x += 1
-        if abs(self.target_x - self.center_x) >= step and self.dx:
-            self.change_x = 0
-            if self.dx == 1:
-                self.center_x = self.target_x
-                self.state = state.TURN_END
-            if self.dx == -1:
-                self.center_x = self.target_x
-                self.state = state.TURN_END
-
-    def move(self, dxy):
+    def move(self, dxy, target=None):
         try:
             self.dx, self.dy = dxy
             if self.dx == -1:
@@ -85,13 +72,27 @@ class Actor(arcade.Sprite):
             if self.dx == 1:
                 self.left_face = False
 
+            self.target_x = self.center_x
+            self.target_y = self.center_y
+
             blocking_actor = get_blocking_entity(
                 self.x+self.dx, self.y+self.dy, ACTOR_LIST)
-            if blocking_actor:
+            if blocking_actor and not target:
                 target = blocking_actor[0]
                 attack_results = self.fighter.attack(target)
-                self.state = state.TURN_END
-                # self.attack()
+                if attack_results:
+                    self.state = state.ATTACK
+                    self.change_y = self.dy * MOVE_SPEED
+                    self.change_x = self.dx * MOVE_SPEED
+
+                return attack_results
+
+            elif target and self.distance_to(target) <= 1.5:
+                attack_results = self.fighter.attack(target)
+                if attack_results:
+                    self.state = state.ATTACK
+                    self.change_y = self.dy * MOVE_SPEED
+                    self.change_x = self.dx * MOVE_SPEED
 
                 return attack_results
 
@@ -102,16 +103,16 @@ class Actor(arcade.Sprite):
                                     self.dx][self.y+self.dy].blocked = True
                 # self.stop_move = False
                 self.state = state.ON_MOVE
-                self.target_x = self.center_x
-                self.target_y = self.center_y
                 self.change_y = self.dy * MOVE_SPEED
                 self.change_x = self.dx * MOVE_SPEED
+
         except:
             pass
 
     def update(self):
         super().update()
         grid = SPRITE_SCALE * SPRITE_SIZE
+        step = SPRITE_SCALE * SPRITE_SIZE // 2
         # if not self.stop_move:
         if self.state == state.ON_MOVE:
             if abs(self.target_x - self.center_x) >= grid and self.dx:
@@ -125,7 +126,6 @@ class Actor(arcade.Sprite):
                     self.x += self.dx
                     self.state = state.TURN_END
                 self.game_map.tiles[self.x-self.dx][self.y].blocked = False
-                # self.stop_move = True
 
             if abs(self.target_y - self.center_y) >= grid and self.dy:
                 self.change_y = 0
@@ -137,8 +137,17 @@ class Actor(arcade.Sprite):
                     self.center_y = self.target_y - grid
                     self.y += self.dy
                     self.state = state.TURN_END
-                self.game_map.tiles[self.x][self.y-self.dy].blocked = False
-                # self.stop_move = True
+                self.game_map.tiles[self.x][self.y - self.dy].blocked = False
+
+        if self.state == state.ATTACK:
+            if abs(self.target_x - self.center_x) >= step and self.dx:
+                self.change_x = 0
+                self.center_x = self.target_x
+                self.state = state.TURN_END
+            if abs(self.target_y - self.center_y) >= step and self.dy:
+                self.change_y = 0
+                self.center_y = self.target_y
+                self.state = state.TURN_END
 
     def distance_to(self, other):
         dx = other.x - self.x
@@ -150,6 +159,10 @@ class Actor(arcade.Sprite):
             if self.state == state.ON_MOVE and not self.left_face:
                 self.texture = self.textures.get("move_left")
             if self.state == state.ON_MOVE and self.left_face:
+                self.texture = self.textures.get("move_right")
+            if self.state == state.ATTACK and not self.left_face:
+                self.texture = self.textures.get("move_left")
+            if self.state == state.ATTACK and self.left_face:
                 self.texture = self.textures.get("move_right")
             if self.state == state.READY and not self.left_face:
                 self.texture = self.textures.get("left")

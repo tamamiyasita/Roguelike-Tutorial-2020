@@ -68,7 +68,8 @@ class MG(arcade.Window):
     def on_update(self, delta_time):
         self.actor_list.update_animation()
         self.actor_list.update()
-        viewport(self.player)
+        if not self.player.state == state.ATTACK:
+            viewport(self.player)
 
         """fov"""
         if self.player.state == state.READY and self.fov_recompute:
@@ -154,7 +155,6 @@ class MG(arcade.Window):
                 x, y, 100, 16, arcade.color.BLACK)
             arcade.draw_text(self.mouse_over_text, x,
                              y, arcade.color.WHITE)
-            # print(self.mouse_over_text)
 
     def move_enemies(self):
         for actor in ACTOR_LIST:
@@ -190,6 +190,8 @@ class MG(arcade.Window):
                 dist = (1, 1)
             elif key in KEYMAP_DOWN_RIGHT:
                 dist = (1, -1)
+            elif key == arcade.key.R:
+                pass
 
             self.dist = dist
             if self.player.state == state.READY and self.dist:

@@ -1,6 +1,7 @@
 import arcade
 from random import randint
 from astar import astar
+from constants import *
 
 
 class Basicmonster:
@@ -11,10 +12,10 @@ class Basicmonster:
         results = []
 
         monster = self.owner
-        if monster.is_visible:
+        if monster.is_visible and not monster.is_dead:
             # if monster.alpha == 255:
 
-            if monster.distance_to(target) >= 2:
+            if monster.distance_to(target) >= 1:
                 results = astar(
                     sprite_lists, (monster.x, monster.y), (target.x, target.y))
                 # print(
@@ -27,11 +28,7 @@ class Basicmonster:
                     dx = x - monster.x
                     dy = y - monster.y
 
-                    monster.move((dx, dy))
-
-            elif target.fighter.hp > 0:
-                attack_results = monster.fighter.attack(target)
-                results.extend(attack_results)
+                    monster.move((dx, dy), target)
 
         return results
 
