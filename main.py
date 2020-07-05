@@ -204,12 +204,8 @@ class MG(arcade.Window):
         self.dist = None
 
     def on_mouse_motion(self, x, y, dx, dy):
-        print(x, y, "M")
-        self.mouse_position = x+self.vx, y+self.vy
-        print(self.mouse_position, "mouseP")
-        print(arcade.get_viewport())
-        print(self.player.center_x, self.player.center_y)
-        # print(self.mouse_position)
+        self.mouse_position = x + self.vx, y + self.vy
+        # 忘れずにビューポートの座標を足す
         actor_list = arcade.get_sprites_at_point(
             (x+self.vx, y+self.vy), ACTOR_LIST)
         print(actor_list)
