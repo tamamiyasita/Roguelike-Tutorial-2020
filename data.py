@@ -38,6 +38,8 @@ potion = get_tile_set(d_potion, tile_size=16)
 
 demi_human1 = get_tile_set(d_human1, tile_size=16)
 
+pc_attack = arcade.load_texture_pair(r"image/rou6_a.png")
+
 
 # lname = "tile"
 # dtile = (r"image/d_tile.tmx")
