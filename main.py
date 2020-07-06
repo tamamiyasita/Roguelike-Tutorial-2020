@@ -81,19 +81,23 @@ class MG(arcade.Window):
         if not self.player.state == state.ATTACK:
             viewport(self.player)
 
-        """fov"""
+        ###fovを呼びます###
         if self.player.state == state.READY and self.fov_recompute:
             recompute_fov(self.fov_map, self.player.x, self.player.y,
                           FOV_RADIUS, FOV_LIGHT_WALL, FOV_ALGO)
             fov_get(self.game_map, self.fov_map)
             self.fov_recompute = False
-        ##########
+        ##################
+
+        ###ターンを切り替えます###
         if self.player.state == state.TURN_END:
             self.player.state = state.DELAY
 
             print("enemy_turn")
             self.move_enemies()
+        #########################
 
+        ###アクションキュー###
         new_action_queue = []
         for action in self.action_queue:
             if "player_turn" in action:
@@ -133,7 +137,6 @@ class MG(arcade.Window):
                       (self.item.center_x, self.item.center_y))
                 actors = arcade.get_sprites_at_exact_point(
                     (self.player.center_x, self.player.center_y), self.actor_list)
-                # print(actors[0].name, actors[1].name)
                 for actor in actors:
                     if actor.item:
                         results = self.player.inventory.add_item(actor)
@@ -151,9 +154,12 @@ class MG(arcade.Window):
                         self.player.inventory.remove_item_number(item_number)
 
         self.action_queue = new_action_queue
+        #####################
 
+        ###プレイヤーの死亡判定###
         if self.player.is_dead:
             return
+        #########################
 
     def on_draw(self):
         try:
@@ -282,7 +288,7 @@ class MG(arcade.Window):
         print(actor_list)
         self.mouse_over_text = None
         for actor in actor_list:
-            if actor.fighter and actor.is_visible:
+            if actor.fighter or actor.item and actor.is_visible:
                 self.mouse_over_text = f"{actor.name} {actor.fighter.hp}/{actor.fighter.max_hp}"
                 print(actor.name)
 
