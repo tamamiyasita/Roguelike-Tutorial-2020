@@ -10,9 +10,11 @@ from actor import Actor
 from basic_dungeon import BasicDungeon
 from fighter import Fighter
 from fov_functions import initialize_fov, recompute_fov, fov_get
+from viewport import viewport
 from map_sprite_set import MapSpriteSet
 from fighter import Fighter
 from ai import Basicmonster
+from item import Item
 
 
 class GameEngine:
@@ -24,6 +26,7 @@ class GameEngine:
         self.game_map = None
         self.action_queue = []
         self.messages = deque(maxlen=3)
+        self.selected_item = None
 
     def setup(self):
         arcade.set_background_color(arcade.color.BLACK)
@@ -60,18 +63,6 @@ class GameEngine:
         self.mapsprite = MapSpriteSet(
             MAP_WIDTH, MAP_HEIGHT, self.game_map.tiles, floors.get(0), wall_3)
         self.mapsprite.sprite_set()
-
-    def move_enemies(self):
-        for actor in ACTOR_LIST:
-            if actor.ai:
-                results = actor.ai.take_turn(
-                    target=self.player, game_map=self.game_map, sprite_lists=[MAP_LIST, ACTOR_LIST])
-                if not results:
-                    results = actor.ai.take_turn(
-                        target=self.player, game_map=self.game_map, sprite_lists=[MAP_LIST])
-                    if results:
-                        self.action_queue.extend(results)
-            self.player.state = state.READY
 
     ###アクションキュー###
     def process_action_queue(self, delta_time):
@@ -120,15 +111,74 @@ class GameEngine:
                         if results:
                             new_action_queue.extend(results)
 
+            if "select_item" in action:
+                item_number = action["select_item"]
+                if item_number >= 1 and item_number <= self.player.inventory.capacity:
+                    if self.selected_item != item_number - 1:
+                        self.selected_item = item_number - 1
+
             if "use_item" in action:
-                item_number = action["use_item"]
-                item = self.player.inventory.get_item_number(item_number)
-                if item:
-                    if item.name == "Healing Potion":
-                        self.player.fighter.hp += 5
-                        if self.player.fighter.hp > self.player.fighter.max_hp:
-                            self.player.fighter.hp = self.player.fighter.max_hp
+                item_number = self.selected_item
+                if item_number is not None:
+                    item = self.player.inventory.get_item_number(item_number)
+                    if item:
+                        if item.name == "Healing Potion":
+                            new_action_queue.extend(
+                                [{"message": f"You used the {item.name}"}])
+                            self.player.fighter.hp += 5
+                            self.player.state = state.TURN_END
+                            if self.player.fighter.hp > self.player.fighter.max_hp:
+                                self.player.fighter.hp = self.player.fighter.max_hp
+
+                            self.player.inventory.remove_item_number(
+                                item_number)
+
+            if "drop_item" in action:
+                item_number = self.selected_item
+                if item_number is not None:
+                    item = self.player.inventory.get_item_number(item_number)
+                    if item:
                         self.player.inventory.remove_item_number(item_number)
+                        ACTOR_LIST.append(item)
+                        item.center_x = self.player.center_x
+                        item.center_y = self.player.center_y
+                        new_action_queue.extend(
+                            [{"message": f"You dropped the {item.name}"}])
 
         self.action_queue = new_action_queue
     #####################
+
+    def move_enemies(self):
+        for actor in ACTOR_LIST:
+            if actor.ai:
+                results = actor.ai.take_turn(
+                    target=self.player, game_map=self.game_map, sprite_lists=[MAP_LIST, ACTOR_LIST])
+                if results:
+                    self.action_queue.extend(results)
+                else:
+                    results = actor.ai.take_turn(
+                        target=self.player, game_map=self.game_map, sprite_lists=[MAP_LIST])
+                    if results:
+                        self.action_queue.extend(results)
+
+        self.player.state = state.READY
+
+    def fov(self):
+        recompute_fov(self.fov_map, self.player.x, self.player.y,
+                      FOV_RADIUS, FOV_LIGHT_WALL, FOV_ALGO)
+        fov_get(self.game_map, self.fov_map)
+        self.fov_recompute = False
+        self.player.state = state.READY
+
+    def view(self):
+        if not self.player.state == state.ATTACK:
+            viewport(self.player)
+
+    def turn_change(self):
+
+        if self.player.state == state.TURN_END:
+            self.player.state = state.DELAY
+            self.fov()
+
+            print("enemy_turn")
+            self.move_enemies()

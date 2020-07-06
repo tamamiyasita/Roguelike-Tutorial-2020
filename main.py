@@ -1,204 +1,83 @@
 import arcade
-import random
 import pyglet.gl as gl
-import tcod
-from collections import deque
 
+from game_engine import GameEngine
 from constants import *
-from data import *
-from util import map_position, pixel_position
-from actor import Actor
-from dungeon_select import dungeon_select
-from map_sprite_set import MapSpriteSet
-from fov_functions import initialize_fov, recompute_fov, fov_get
-from viewport import viewport
 from status_bar import draw_status_bar
-from inventory import Inventory
-from item import Item
-
-from fighter import Fighter
-from ai import Basicmonster
-
-from basic_dungeon import BasicDungeon
-from caves_dungeon import CavesDungeon
-from dmap_dungeon import DmapDungeon
 
 
 class MG(arcade.Window):
     def __init__(self, width, height, title):
         super().__init__(width, height, title, antialiasing=False)
-        self.player = None
-        self.crab = None
-        self.actor_list = None
-        self.game_map = None
+
+        self.game_engine = GameEngine()
         self.dist = None
-        self.action_queue = []
-        self.messages = deque(maxlen=3)
         self.mouse_over_text = None
         self.mouse_position = None
 
     def setup(self):
-        arcade.set_background_color(arcade.color.BLACK)
-        self.actor_list = ACTOR_LIST
-        self.map_list = MAP_LIST
-        self.game_map = BasicDungeon(MAP_WIDTH, MAP_HEIGHT)
-
-        self.fov_recompute = True
-        fighter_component = Fighter(hp=30, defense=2, power=5)
-        fighter_component2 = Fighter(hp=3, defense=2, power=5)
-        ai_component = Basicmonster()
-
-        self.player = Actor(image["player"], "player", self.game_map.player_pos[0], self.game_map.player_pos[1],
-                            blocks=False, inventory=Inventory(capacity=5),
-                            fighter=fighter_component,
-                            sub_img=image.get("player_move"), map_tile=self.game_map)
-        self.player.state = state.READY
-
-        self.item = Actor(
-            image=potion[0], name="Healing Potion", x=self.player.x+1, y=self.player.y+1, blocks=False, color=COLORS.get("transparent"), visible_color=COLORS.get(
-                "light_ground"), not_visible_color=COLORS.get("dark_ground"), item=Item())
-        self.item.alpha = 0
-
-        self.crab = Actor(image["crab"], "crab", self.player.x+2, self.player.y,
-                          blocks=True, fighter=fighter_component2, ai=ai_component,
-                          scale=SPRITE_SCALE * 0.5, sub_img=True, map_tile=self.game_map)
-
-        self.actor_list.append(self.item)
-        self.actor_list.append(self.player)
-        self.actor_list.append(self.crab)
-
-        # self.game_map = DmapDungeon(MAP_WIDTH, MAP_HEIGHT)
-        # self.game_map = CavesDungeon(MAP_WIDTH, MAP_HEIGHT)
-        # self.game_map = dungeon_select(MAP_WIDTH, MAP_HEIGHT)
-        self.fov_map = initialize_fov(self.game_map)
-        self.mapsprite = MapSpriteSet(
-            MAP_WIDTH, MAP_HEIGHT, self.game_map.tiles, floors.get(0), wall_3)
-        self.mapsprite.sprite_set()
+        self.game_engine.setup()
+        self.game_engine.fov()
 
     def on_update(self, delta_time):
-        self.actor_list.update_animation()
-        self.actor_list.update()
-        if not self.player.state == state.ATTACK:
-            viewport(self.player)
+        self.game_engine.actor_list.update_animation()
+        self.game_engine.actor_list.update()
 
-        ###fovを呼びます###
-        if self.player.state == state.READY and self.fov_recompute:
-            recompute_fov(self.fov_map, self.player.x, self.player.y,
-                          FOV_RADIUS, FOV_LIGHT_WALL, FOV_ALGO)
-            fov_get(self.game_map, self.fov_map)
-            self.fov_recompute = False
-        ##################
-
-        ###ターンを切り替えます###
-        if self.player.state == state.TURN_END:
-            self.player.state = state.DELAY
-
-            print("enemy_turn")
-            self.move_enemies()
-        #########################
-
-        ###アクションキュー###
-        new_action_queue = []
-        for action in self.action_queue:
-            if "player_turn" in action:
-                print("player_turn")
-
-            if "message" in action:
-                print("Message")
-                self.messages.append(action["message"])
-
-            if "dead" in action:
-                print("Death")
-                target = action["dead"]
-                target.color = arcade.color.GRAY_BLUE
-                target.is_dead = True
-                if target is self.player:
-                    new_action_queue.extend([{"message": "player has died!"}])
-                else:
-                    self.game_map.tiles[target.x][target.y].blocked = False
-                    new_action_queue.extend(
-                        [{"message": f"{target.name} has been killed!"}])
-                    new_action_queue.extend(
-                        [{"delay": {"time": DEATH_DELAY, "action": {"remove": target}}}])
-            if "remove" in action:
-                target = action["remove"]
-                target.remove_from_sprite_lists()
-
-            if "delay" in action:
-                target = action["delay"]
-                target["time"] -= delta_time
-                if target["time"] > 0:
-                    new_action_queue.extend([{"delay": target}])
-                else:
-                    new_action_queue.extend([target["action"]])
-
-            if "pickup" in action:
-                print("pic", (self.player.center_x, self.player.center_y),
-                      (self.item.center_x, self.item.center_y))
-                actors = arcade.get_sprites_at_exact_point(
-                    (self.player.center_x, self.player.center_y), self.actor_list)
-                for actor in actors:
-                    if actor.item:
-                        results = self.player.inventory.add_item(actor)
-                        if results:
-                            new_action_queue.extend(results)
-
-            if "use_item" in action:
-                item_number = action["use_item"]
-                item = self.player.inventory.get_item_number(item_number)
-                if item:
-                    if item.name == "Healing Potion":
-                        self.player.fighter.hp += 5
-                        if self.player.fighter.hp > self.player.fighter.max_hp:
-                            self.player.fighter.hp = self.player.fighter.max_hp
-                        self.player.inventory.remove_item_number(item_number)
-
-        self.action_queue = new_action_queue
-        #####################
-
-        ###プレイヤーの死亡判定###
-        if self.player.is_dead:
-            return
-        #########################
+        self.game_engine.process_action_queue(delta_time)
+        self.game_engine.turn_change()
+        self.game_engine.view()
 
     def on_draw(self):
         try:
             arcade.start_render()
 
-            self.map_list.draw(filter=gl.GL_NEAREST)
-            self.actor_list.draw(filter=gl.GL_NEAREST)
+            self.game_engine.map_list.draw(filter=gl.GL_NEAREST)
+            self.game_engine.actor_list.draw(filter=gl.GL_NEAREST)
 
             size = 72
             margin = 15
             self.vx = arcade.get_viewport()[0]
             self.vy = arcade.get_viewport()[2]
 
+            # ステータスパネルサイズ
             arcade.draw_xywh_rectangle_filled(
                 self.vx, self.vy, SCREEN_WIDTH, STATES_PANEL_HEIGHT, COLORS["status_panel_background"])
 
-            text = f"HP: {self.player.fighter.hp}/{self.player.fighter.max_hp}"
+            # HP表示
+            text = f"HP: {self.game_engine.player.fighter.hp}/{self.game_engine.player.fighter.max_hp}"
             arcade.draw_text(
-                text, margin+self.vx, STATES_PANEL_HEIGHT-30+self.vy, color=COLORS["status_panel_text"], font_size=14)
+                text, margin + self.vx, STATES_PANEL_HEIGHT - 30 + self.vy, color=COLORS["status_panel_text"], font_size=14)
+
+            # HPバー
             draw_status_bar(size / 2 + margin+self.vx, STATES_PANEL_HEIGHT-8+self.vy, size, 10,
-                            self.player.fighter.hp, self.player.fighter.max_hp)
-            capacity = self.player.inventory.capacity
+                            self.game_engine.player.fighter.hp, self.game_engine.player.fighter.max_hp)
+
+            # 所持アイテム表示
+            capacity = self.game_engine.player.inventory.capacity
+            selected_item = self.game_engine.selected_item
+            field_width = SCREEN_WIDTH / (capacity + 1) / 1.5
             for i in range(capacity):
                 y = 38
-                x = i * SCREEN_WIDTH / (capacity + 1) / 1.5
-                if self.player.inventory.items[i]:
-                    item_name = self.player.inventory.items[i].name
+                x = i * field_width + 400
+                if i == selected_item:
+                    arcade.draw_lrtb_rectangle_outline(
+                        x+self.vx - 3, x+self.vx + field_width - 5, y+self.vy + 18, y+self.vy - 4, arcade.color.BLACK, 2)
+                if self.game_engine.player.inventory.items[i]:
+                    item_name = self.game_engine.player.inventory.items[i].name
                 else:
                     item_name = ""
                 text = f"{i+1}: {item_name}"
-                arcade.draw_text(text, x+self.vx+400, y+self.vy,
+                arcade.draw_text(text, x+self.vx, y+self.vy,
                                  color=COLORS["status_panel_text"])
 
+            # メッセージ表示
             y = STATES_PANEL_HEIGHT-14
-            for message in self.messages:
+            for message in self.game_engine.messages:
                 arcade.draw_text(
                     message, 130+self.vx, y+self.vy, color=COLORS["status_panel_text"])
                 y -= 20
 
+            # マウスオーバーテキスト
             if self.mouse_over_text:
                 x, y = self.mouse_position
                 arcade.draw_xywh_rectangle_filled(
@@ -209,24 +88,11 @@ class MG(arcade.Window):
         except Exception as e:
             print(e)
 
-    def move_enemies(self):
-        for actor in ACTOR_LIST:
-            if actor.ai:
-                results = actor.ai.take_turn(
-                    target=self.player, game_map=self.game_map, sprite_lists=[MAP_LIST, ACTOR_LIST])
-                if not results:
-                    results = actor.ai.take_turn(
-                        target=self.player, game_map=self.game_map, sprite_lists=[MAP_LIST])
-                    if results:
-                        self.action_queue.extend(results)
-            self.player.state = state.READY
-
     def on_key_press(self, key, modifiers):
-        print(arcade.get_viewport())
         if key == arcade.key.ESCAPE:
             arcade.close_window()
 
-        elif self.player.state == state.READY:
+        elif self.game_engine.player.state == state.READY:
             dist = None
             if key in KEYMAP_UP:
                 dist = (0, 1)
@@ -245,37 +111,40 @@ class MG(arcade.Window):
             elif key in KEYMAP_DOWN_RIGHT:
                 dist = (1, -1)
             elif key in KEYMAP_PICKUP:
-                self.action_queue.extend([{"pickup": True}])
+                self.game_engine.action_queue.extend([{"pickup": True}])
 
-            elif key in KEYMAP_USE_ITEM_1:
-                self.action_queue.extend([{"use_item": 0}])
-            elif key in KEYMAP_USE_ITEM_2:
-                self.action_queue.extend([{"use_item": 1}])
-            elif key in KEYMAP_USE_ITEM_3:
-                self.action_queue.extend([{"use_item": 2}])
-            elif key in KEYMAP_USE_ITEM_4:
-                self.action_queue.extend([{"use_item": 3}])
-            elif key in KEYMAP_USE_ITEM_5:
-                self.action_queue.extend([{"use_item": 4}])
-            elif key in KEYMAP_USE_ITEM_6:
-                self.action_queue.extend([{"use_item": 5}])
-            elif key in KEYMAP_USE_ITEM_7:
-                self.action_queue.extend([{"use_item": 6}])
-            elif key in KEYMAP_USE_ITEM_8:
-                self.action_queue.extend([{"use_item": 7}])
-            elif key in KEYMAP_USE_ITEM_9:
-                self.action_queue.extend([{"use_item": 8}])
-            elif key in KEYMAP_USE_ITEM_0:
-                self.action_queue.extend([{"use_item": 9}])
+            elif key in KEYMAP_SELECT_ITEM_1:
+                self.game_engine.action_queue.extend([{"select_item": 1}])
+            elif key in KEYMAP_SELECT_ITEM_2:
+                self.game_engine.action_queue.extend([{"select_item": 2}])
+            elif key in KEYMAP_SELECT_ITEM_3:
+                self.game_engine.action_queue.extend([{"select_item": 3}])
+            elif key in KEYMAP_SELECT_ITEM_4:
+                self.game_engine.action_queue.extend([{"select_item": 4}])
+            elif key in KEYMAP_SELECT_ITEM_5:
+                self.game_engine.action_queue.extend([{"select_item": 5}])
+            elif key in KEYMAP_SELECT_ITEM_6:
+                self.game_engine.action_queue.extend([{"select_item": 6}])
+            elif key in KEYMAP_SELECT_ITEM_7:
+                self.game_engine.action_queue.extend([{"select_item": 7}])
+            elif key in KEYMAP_SELECT_ITEM_8:
+                self.game_engine.action_queue.extend([{"select_item": 8}])
+            elif key in KEYMAP_SELECT_ITEM_9:
+                self.game_engine.action_queue.extend([{"select_item": 9}])
+            elif key in KEYMAP_SELECT_ITEM_0:
+                self.game_engine.action_queue.extend([{"select_item": 0}])
+            elif key in KEYMAP_USE_ITEM:
+                self.game_engine.action_queue.extend([{"use_item": True}])
+            elif key in KEYMAP_DROP_ITEM:
+                self.game_engine.action_queue.extend([{"drop_item": True}])
 
             self.dist = dist
-            if self.player.state == state.READY and self.dist:
-                attack = self.player.move(self.dist)
+            if self.game_engine.player.state == state.READY and self.dist:
+                attack = self.game_engine.player.move(self.dist)
                 if attack:
-                    self.action_queue.extend(attack)
+                    self.game_engine.action_queue.extend(attack)
 
-                self.fov_recompute = True
-                self.action_queue.append({"player_turn": True})
+                self.game_engine.action_queue.append({"player_turn": True})
 
     def on_key_release(self, key, modifiers):
         self.dist = None
@@ -285,7 +154,6 @@ class MG(arcade.Window):
         # 忘れずにビューポートの座標を足す
         actor_list = arcade.get_sprites_at_point(
             (x+self.vx, y+self.vy), ENTITY_LIST)
-        print(actor_list)
         self.mouse_over_text = None
         for actor in actor_list:
             if actor.fighter or actor.item and actor.is_visible:

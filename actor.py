@@ -2,7 +2,7 @@ import arcade
 import math
 from constants import *
 from data import *
-from util import map_position, pixel_position, get_blocking_entity, floor_move_lock, floor_move_open
+from util import map_position, pixel_position, get_blocking_entity
 
 
 class Actor(arcade.Sprite):
@@ -90,7 +90,7 @@ class Actor(arcade.Sprite):
 
                 return attack_results
 
-            elif target and self.distance_to(target) <= 1.5:
+            elif target and self.distance_to(target) <= 1.46:
                 attack_results = self.fighter.attack(target)
                 if attack_results:
                     self.state = state.ATTACK

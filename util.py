@@ -23,13 +23,21 @@ def map_position(x, y):
 def get_blocking_entity(x, y, sprite_list):
     px, py = pixel_position(x, y)
     sprite_list = arcade.get_sprites_at_exact_point((px, py), sprite_list)
+    blocking_sprite = arcade.SpriteList()
     for sprite in sprite_list:
-        if not sprite.blocks:
-            sprite_list.remove(sprite)
-    if len(sprite_list) > 0:
-        return sprite_list
+        if sprite.blocks:
+            blocking_sprite.append(sprite)
+
+    if len(blocking_sprite) > 0:
+        return blocking_sprite
     else:
         return None
+    #     if not sprite.blocks:
+    #         sprite_list.remove(sprite)
+    # if len(sprite_list) > 0:
+    #     return sprite_list
+    # else:
+    #     return None
 
 
 def floor_move_lock(x, y, sprite_list):

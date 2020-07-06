@@ -1,3 +1,6 @@
+from constants import *
+
+
 class Fighter:
     def __init__(self, hp, defense, power):
         self.max_hp = hp
@@ -13,6 +16,7 @@ class Fighter:
 
         if self.hp <= 0:
             results.append({"dead": self.owner})
+            print(f"{self.owner.name} is dead x!")
 
         return results
 

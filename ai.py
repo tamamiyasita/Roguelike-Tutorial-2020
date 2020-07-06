@@ -28,8 +28,9 @@ class Basicmonster:
                     dx = x - monster.x
                     dy = y - monster.y
 
-                    monster.move((dx, dy), target)
-
+                    attack = monster.move((dx, dy), target)
+                    if attack:
+                        results.extend(attack)
         return results
 
 
