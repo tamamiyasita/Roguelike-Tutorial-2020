@@ -55,7 +55,7 @@ class MG(arcade.Window):
         self.player.state = state.READY
 
         self.item = Actor(
-            image=potion[0], name="potion", x=self.player.x+1, y=self.player.y+1, blocks=False, color=COLORS.get("transparent"), visible_color=COLORS.get(
+            image=potion[0], name="Healing Potion", x=self.player.x+1, y=self.player.y+1, blocks=False, color=COLORS.get("transparent"), visible_color=COLORS.get(
                 "light_ground"), not_visible_color=COLORS.get("dark_ground"), item=Item())
         self.item.alpha = 0
 
@@ -140,43 +140,68 @@ class MG(arcade.Window):
                         if results:
                             new_action_queue.extend(results)
 
+            if "use_item" in action:
+                item_number = action["use_item"]
+                item = self.player.inventory.get_item_number(item_number)
+                if item:
+                    if item.name == "Healing Potion":
+                        self.player.fighter.hp += 5
+                        if self.player.fighter.hp > self.player.fighter.max_hp:
+                            self.player.fighter.hp = self.player.fighter.max_hp
+                        self.player.inventory.remove_item_number(item_number)
+
         self.action_queue = new_action_queue
 
         if self.player.is_dead:
             return
 
     def on_draw(self):
-        arcade.start_render()
+        try:
+            arcade.start_render()
 
-        self.map_list.draw(filter=gl.GL_NEAREST)
-        self.actor_list.draw(filter=gl.GL_NEAREST)
+            self.map_list.draw(filter=gl.GL_NEAREST)
+            self.actor_list.draw(filter=gl.GL_NEAREST)
 
-        size = 65
-        margin = 10
-        self.vx = arcade.get_viewport()[0]
-        self.vy = arcade.get_viewport()[2]
+            size = 72
+            margin = 15
+            self.vx = arcade.get_viewport()[0]
+            self.vy = arcade.get_viewport()[2]
 
-        arcade.draw_xywh_rectangle_filled(
-            self.vx, self.vy, SCREEN_WIDTH, STATES_PANEL_HEIGHT, COLORS["status_panel_background"])
-
-        text = f"HP: {self.player.fighter.hp}/{self.player.fighter.max_hp}"
-        arcade.draw_text(
-            text, margin+self.vx, STATES_PANEL_HEIGHT-30+self.vy, color=COLORS["status_panel_text"], font_size=14)
-        draw_status_bar(size / 2 + margin+self.vx, STATES_PANEL_HEIGHT-8+self.vy, size, 10,
-                        self.player.fighter.hp, self.player.fighter.max_hp)
-
-        y = STATES_PANEL_HEIGHT-14
-        for message in self.messages:
-            arcade.draw_text(
-                message, 200+self.vx, y+self.vy, color=COLORS["status_panel_text"])
-            y -= 20
-
-        if self.mouse_over_text:
-            x, y = self.mouse_position
             arcade.draw_xywh_rectangle_filled(
-                x, y, 100, 16, arcade.color.BLACK)
-            arcade.draw_text(self.mouse_over_text, x,
-                             y, arcade.color.WHITE)
+                self.vx, self.vy, SCREEN_WIDTH, STATES_PANEL_HEIGHT, COLORS["status_panel_background"])
+
+            text = f"HP: {self.player.fighter.hp}/{self.player.fighter.max_hp}"
+            arcade.draw_text(
+                text, margin+self.vx, STATES_PANEL_HEIGHT-30+self.vy, color=COLORS["status_panel_text"], font_size=14)
+            draw_status_bar(size / 2 + margin+self.vx, STATES_PANEL_HEIGHT-8+self.vy, size, 10,
+                            self.player.fighter.hp, self.player.fighter.max_hp)
+            capacity = self.player.inventory.capacity
+            for i in range(capacity):
+                y = 38
+                x = i * SCREEN_WIDTH / (capacity + 1) / 1.5
+                if self.player.inventory.items[i]:
+                    item_name = self.player.inventory.items[i].name
+                else:
+                    item_name = ""
+                text = f"{i+1}: {item_name}"
+                arcade.draw_text(text, x+self.vx+400, y+self.vy,
+                                 color=COLORS["status_panel_text"])
+
+            y = STATES_PANEL_HEIGHT-14
+            for message in self.messages:
+                arcade.draw_text(
+                    message, 130+self.vx, y+self.vy, color=COLORS["status_panel_text"])
+                y -= 20
+
+            if self.mouse_over_text:
+                x, y = self.mouse_position
+                arcade.draw_xywh_rectangle_filled(
+                    x, y, 100, 16, arcade.color.BLACK)
+                arcade.draw_text(self.mouse_over_text, x,
+                                 y, arcade.color.WHITE)
+
+        except Exception as e:
+            print(e)
 
     def move_enemies(self):
         for actor in ACTOR_LIST:
@@ -215,6 +240,27 @@ class MG(arcade.Window):
                 dist = (1, -1)
             elif key in KEYMAP_PICKUP:
                 self.action_queue.extend([{"pickup": True}])
+
+            elif key in KEYMAP_USE_ITEM_1:
+                self.action_queue.extend([{"use_item": 0}])
+            elif key in KEYMAP_USE_ITEM_2:
+                self.action_queue.extend([{"use_item": 1}])
+            elif key in KEYMAP_USE_ITEM_3:
+                self.action_queue.extend([{"use_item": 2}])
+            elif key in KEYMAP_USE_ITEM_4:
+                self.action_queue.extend([{"use_item": 3}])
+            elif key in KEYMAP_USE_ITEM_5:
+                self.action_queue.extend([{"use_item": 4}])
+            elif key in KEYMAP_USE_ITEM_6:
+                self.action_queue.extend([{"use_item": 5}])
+            elif key in KEYMAP_USE_ITEM_7:
+                self.action_queue.extend([{"use_item": 6}])
+            elif key in KEYMAP_USE_ITEM_8:
+                self.action_queue.extend([{"use_item": 7}])
+            elif key in KEYMAP_USE_ITEM_9:
+                self.action_queue.extend([{"use_item": 8}])
+            elif key in KEYMAP_USE_ITEM_0:
+                self.action_queue.extend([{"use_item": 9}])
 
             self.dist = dist
             if self.player.state == state.READY and self.dist:
