@@ -15,6 +15,7 @@ from map_sprite_set import MapSpriteSet
 from fighter import Fighter
 from ai import Basicmonster
 from item import Item
+from potion import Potion
 
 
 class GameEngine:
@@ -46,7 +47,7 @@ class GameEngine:
                             sub_img=image.get("player_move"), map_tile=self.game_map)
         self.player.state = state.READY
 
-        self.item = Actor(
+        self.item = Potion(
             image=potion[0], name="Healing Potion", x=self.player.x+1, y=self.player.y+1, blocks=False, color=COLORS.get("transparent"), visible_color=COLORS.get(
                 "light_ground"), not_visible_color=COLORS.get("dark_ground"), item=Item())
         self.item.alpha = 0
@@ -113,7 +114,8 @@ class GameEngine:
 
             if "select_item" in action:
                 item_number = action["select_item"]
-                if item_number >= 1 and item_number <= self.player.inventory.capacity:
+                # if item_number >= 1 and item_number <= self.player.inventory.capacity:
+                if 1 <= item_number <= self.player.inventory.capacity:
                     if self.selected_item != item_number - 1:
                         self.selected_item = item_number - 1
 
@@ -122,16 +124,18 @@ class GameEngine:
                 if item_number is not None:
                     item = self.player.inventory.get_item_number(item_number)
                     if item:
-                        if item.name == "Healing Potion":
-                            new_action_queue.extend(
-                                [{"message": f"You used the {item.name}"}])
-                            self.player.fighter.hp += 5
-                            self.player.state = state.TURN_END
-                            if self.player.fighter.hp > self.player.fighter.max_hp:
-                                self.player.fighter.hp = self.player.fighter.max_hp
+                        # if item.name == "Healing Potion":
+                        #     new_action_queue.extend(
+                        #         [{"message": f"You used the {item.name}"}])
+                        #     self.player.fighter.hp += 5
+                        #     self.player.state = state.TURN_END
+                        #     if self.player.fighter.hp > self.player.fighter.max_hp:
+                        #         self.player.fighter.hp = self.player.fighter.max_hp
 
-                            self.player.inventory.remove_item_number(
-                                item_number)
+                        #     self.player.inventory.remove_item_number(
+                        #         item_number)
+                        results = item.use(self)
+                        new_action_queue.extend(results)
 
             if "drop_item" in action:
                 item_number = self.selected_item
