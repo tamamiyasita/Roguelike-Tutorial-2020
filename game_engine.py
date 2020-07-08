@@ -56,9 +56,9 @@ class GameEngine:
                           blocks=True, fighter=fighter_component2, ai=ai_component,
                           scale=SPRITE_SCALE * 0.5, sub_img=True, map_tile=self.game_map)
 
-        self.actor_list.append(self.item)
         self.actor_list.append(self.player)
         self.actor_list.append(self.crab)
+        ITEM_LIST.append(self.item)
 
         self.fov_map = initialize_fov(self.game_map)
         self.mapsprite = MapSpriteSet(
@@ -105,7 +105,7 @@ class GameEngine:
                 print("pic", (self.player.center_x, self.player.center_y),
                       (self.item.center_x, self.item.center_y))
                 actors = arcade.get_sprites_at_exact_point(
-                    (self.player.center_x, self.player.center_y), self.actor_list)
+                    (self.player.center_x, self.player.center_y), ITEM_LIST)
                 for actor in actors:
                     if actor.item:
                         results = self.player.inventory.add_item(actor)
@@ -143,7 +143,7 @@ class GameEngine:
                     item = self.player.inventory.get_item_number(item_number)
                     if item:
                         self.player.inventory.remove_item_number(item_number)
-                        ACTOR_LIST.append(item)
+                        ITEM_LIST.append(item)
                         item.center_x = self.player.center_x
                         item.center_y = self.player.center_y
                         new_action_queue.extend(

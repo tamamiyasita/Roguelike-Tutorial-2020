@@ -32,6 +32,7 @@ class MG(arcade.Window):
             arcade.start_render()
 
             self.game_engine.map_list.draw(filter=gl.GL_NEAREST)
+            ITEM_LIST.draw(filter=gl.GL_NEAREST)
             self.game_engine.actor_list.draw(filter=gl.GL_NEAREST)
 
             size = 72

@@ -58,6 +58,8 @@ ACTOR_LIST = arcade.SpriteList(
     use_spatial_hash=True, spatial_hash_cell_size=32)
 MAP_LIST = arcade.SpriteList(
     use_spatial_hash=True, spatial_hash_cell_size=32)
+ITEM_LIST = arcade.SpriteList(
+    use_spatial_hash=True, spatial_hash_cell_size=32)
 ENTITY_LIST = arcade.SpriteList(
     use_spatial_hash=True, spatial_hash_cell_size=32)
 
