@@ -10,7 +10,7 @@ class Actor(arcade.Sprite):
                  scale=SPRITE_SCALE, color=arcade.color.WHITE, fighter=None, ai=None,
                  inventory=None, item=None,
                  visible_color=arcade.color.WHITE, not_visible_color=arcade.color.WHITE,
-                 state=None, map_tile=None, sub_img=None):
+                 state=state.TURN_END, map_tile=None, sub_img=None):
         super().__init__(image, scale)
         if isinstance(image, arcade.texture.Texture):
             self.texture_ = image
@@ -82,11 +82,12 @@ class Actor(arcade.Sprite):
                 self.x+self.dx, self.y+self.dy, ACTOR_LIST)
             if blocking_actor and not target:
                 target = blocking_actor[0]
-                attack_results = self.fighter.attack(target)
-                if attack_results:
-                    self.state = state.ATTACK
-                    self.change_y = self.dy * MOVE_SPEED
-                    self.change_x = self.dx * MOVE_SPEED
+                if not target.is_dead:
+                    attack_results = self.fighter.attack(target)
+                    if attack_results:
+                        self.state = state.ATTACK
+                        self.change_y = self.dy * MOVE_SPEED
+                        self.change_x = self.dx * MOVE_SPEED
 
                 return attack_results
 

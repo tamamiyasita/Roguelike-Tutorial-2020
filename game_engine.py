@@ -28,6 +28,7 @@ class GameEngine:
         self.action_queue = []
         self.messages = deque(maxlen=3)
         self.selected_item = None
+        self.turn_check = None
 
     def setup(self):
         arcade.set_background_color(arcade.color.BLACK)
@@ -153,8 +154,10 @@ class GameEngine:
     #####################
 
     def move_enemies(self):
+        turn_check = "next_turn"
         for actor in ACTOR_LIST:
             if actor.ai:
+                turn_check = actor
                 results = actor.ai.take_turn(
                     target=self.player, game_map=self.game_map, sprite_lists=[MAP_LIST, ACTOR_LIST])
                 if results:
@@ -165,24 +168,45 @@ class GameEngine:
                     if results:
                         self.action_queue.extend(results)
 
-        self.player.state = state.READY
+        # self.player.state = state.READY
+        return turn_check
 
     def fov(self):
         recompute_fov(self.fov_map, self.player.x, self.player.y,
                       FOV_RADIUS, FOV_LIGHT_WALL, FOV_ALGO)
         fov_get(self.game_map, self.fov_map)
         self.fov_recompute = False
-        self.player.state = state.READY
 
     def view(self):
         if not self.player.state == state.ATTACK:
             viewport(self.player)
 
     def turn_change(self):
+        # if self.turn_check:
+        #     print(self.turn_check.state, self.player.state)
+        #     if self.turn_check.state == state.TURN_END and self.player.state == state.TURN_END:
+        #         self.player.state = state.READY
+        #         self.turn_check = None
 
+        # elif self.player.state == state.TURN_END:
         if self.player.state == state.TURN_END:
             self.player.state = state.DELAY
-            self.fov()
+            self.turn_check = self.move_enemies()
+        elif self.turn_check:
+            if self.turn_check == "next_turn" or self.turn_check.state == state.TURN_END:
+                self.turn_check = None
+                self.player.state = state.READY
+                self.fov()
 
-            print("enemy_turn")
-            self.move_enemies()
+        elif self.player.state == state.TURN_END:
+            self.player.state = state.READY
+
+        # if self.player.state == state.DELAY:
+        #     if t.state == state.TURN_END:
+        #         self.player.state = state.READY
+        #         # self.player.state = state.DELAY
+        #         self.fov()
+
+        #         print("enemy_turn")
+        #     elif t.state == None:
+        #         self.player.state = state.READY
