@@ -89,19 +89,20 @@ class Actor(arcade.Sprite):
                         self.change_y = self.dy * MOVE_SPEED
                         self.change_x = self.dx * MOVE_SPEED
 
-                return attack_results
+                    return attack_results
 
             elif target and self.distance_to(target) <= 1.46:
                 attack_results = self.fighter.attack(target)
                 if attack_results:
+                    self.game_map.tiles[self.x][self.y].blocked = True
                     self.state = state.ATTACK
                     self.change_y = self.dy * MOVE_SPEED
                     self.change_x = self.dx * MOVE_SPEED
 
                 return attack_results
 
-            elif not get_blocking_entity(self.x + self.dx, self.y + self.dy, ACTOR_LIST) and\
-                    self.game_map.tiles[self.x+self.dx][self.y+self.dy].blocked == False:
+            # elif not get_blocking_entity(self.x + self.dx, self.y + self.dy, ACTOR_LIST) and\
+            elif self.game_map.tiles[self.x+self.dx][self.y+self.dy].blocked == False:
                 # if self.stop_move == True:
                 self.game_map.tiles[self.x +
                                     self.dx][self.y+self.dy].blocked = True

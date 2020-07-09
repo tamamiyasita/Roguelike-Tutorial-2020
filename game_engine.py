@@ -48,10 +48,10 @@ class GameEngine:
                             sub_img=image.get("player_move"), map_tile=self.game_map)
         self.player.state = state.READY
 
-        self.item = Potion(
-            image=potion[0], name="Healing Potion", x=self.player.x+1, y=self.player.y+1, blocks=False, color=COLORS.get("transparent"), visible_color=COLORS.get(
-                "light_ground"), not_visible_color=COLORS.get("dark_ground"), item=Item())
-        self.item.alpha = 0
+        # self.item = Potion(
+        #     image=potion[0], name="Healing Potion", x=self.player.x+1, y=self.player.y+1, blocks=False, color=COLORS.get("transparent"), visible_color=COLORS.get(
+        #         "light_ground"), not_visible_color=COLORS.get("dark_ground"), item=Item())
+        # self.item.alpha = 0
 
         self.crab = Actor(image["crab"], "crab", self.player.x+2, self.player.y,
                           blocks=True, fighter=fighter_component2, ai=ai_component,
@@ -59,19 +59,27 @@ class GameEngine:
 
         self.actor_list.append(self.player)
         self.actor_list.append(self.crab)
-        ITEM_LIST.append(self.item)
+        # ITEM_LIST.append(self.item)
 
         self.fov_map = initialize_fov(self.game_map)
         self.mapsprite = MapSpriteSet(
             MAP_WIDTH, MAP_HEIGHT, self.game_map.tiles, floors.get(0), wall_3)
         self.mapsprite.sprite_set()
 
+        viewport(self.player)
     ###アクションキュー###
+
     def process_action_queue(self, delta_time):
         new_action_queue = []
         for action in self.action_queue:
             if "player_turn" in action:
                 print("player_turn")
+                self.player.state = state.READY
+                self.fov()
+
+            if "enemy_turn" in action:
+                print("enemy_turn")
+                self.turn_check = self.move_enemies()
 
             if "message" in action:
                 print("Message")
@@ -103,8 +111,6 @@ class GameEngine:
                     new_action_queue.extend([target["action"]])
 
             if "pickup" in action:
-                print("pic", (self.player.center_x, self.player.center_y),
-                      (self.item.center_x, self.item.center_y))
                 actors = arcade.get_sprites_at_exact_point(
                     (self.player.center_x, self.player.center_y), ITEM_LIST)
                 for actor in actors:
@@ -115,7 +121,6 @@ class GameEngine:
 
             if "select_item" in action:
                 item_number = action["select_item"]
-                # if item_number >= 1 and item_number <= self.player.inventory.capacity:
                 if 1 <= item_number <= self.player.inventory.capacity:
                     if self.selected_item != item_number - 1:
                         self.selected_item = item_number - 1
@@ -125,18 +130,9 @@ class GameEngine:
                 if item_number is not None:
                     item = self.player.inventory.get_item_number(item_number)
                     if item:
-                        # if item.name == "Healing Potion":
-                        #     new_action_queue.extend(
-                        #         [{"message": f"You used the {item.name}"}])
-                        #     self.player.fighter.hp += 5
-                        #     self.player.state = state.TURN_END
-                        #     if self.player.fighter.hp > self.player.fighter.max_hp:
-                        #         self.player.fighter.hp = self.player.fighter.max_hp
-
-                        #     self.player.inventory.remove_item_number(
-                        #         item_number)
                         results = item.use(self)
                         new_action_queue.extend(results)
+                        self.player.state = state.TURN_END
 
             if "drop_item" in action:
                 item_number = self.selected_item
@@ -156,19 +152,18 @@ class GameEngine:
     def move_enemies(self):
         turn_check = "next_turn"
         for actor in ACTOR_LIST:
-            if actor.ai:
-                turn_check = actor
+            if actor.ai and not actor.is_dead:
                 results = actor.ai.take_turn(
-                    target=self.player, game_map=self.game_map, sprite_lists=[MAP_LIST, ACTOR_LIST])
+                    #     target=self.player, game_map=self.game_map, sprite_lists=[MAP_LIST, ACTOR_LIST])
+                    # if results:
+                    #     self.action_queue.extend(results)
+                    # else:
+                    #     results = actor.ai.take_turn(
+                    target=self.player, game_map=self.game_map, sprite_lists=[MAP_LIST])
                 if results:
                     self.action_queue.extend(results)
-                else:
-                    results = actor.ai.take_turn(
-                        target=self.player, game_map=self.game_map, sprite_lists=[MAP_LIST])
-                    if results:
-                        self.action_queue.extend(results)
 
-        # self.player.state = state.READY
+                turn_check = actor
         return turn_check
 
     def fov(self):
@@ -178,35 +173,17 @@ class GameEngine:
         self.fov_recompute = False
 
     def view(self):
-        if not self.player.state == state.ATTACK:
+        if self.player.state == state.ON_MOVE:
             viewport(self.player)
 
     def turn_change(self):
-        # if self.turn_check:
-        #     print(self.turn_check.state, self.player.state)
-        #     if self.turn_check.state == state.TURN_END and self.player.state == state.TURN_END:
-        #         self.player.state = state.READY
-        #         self.turn_check = None
-
-        # elif self.player.state == state.TURN_END:
         if self.player.state == state.TURN_END:
             self.player.state = state.DELAY
-            self.turn_check = self.move_enemies()
+            self.action_queue.extend([{"enemy_turn": True}])
+            # self.turn_check = self.move_enemies()
         elif self.turn_check:
             if self.turn_check == "next_turn" or self.turn_check.state == state.TURN_END:
                 self.turn_check = None
-                self.player.state = state.READY
-                self.fov()
-
-        elif self.player.state == state.TURN_END:
-            self.player.state = state.READY
-
-        # if self.player.state == state.DELAY:
-        #     if t.state == state.TURN_END:
-        #         self.player.state = state.READY
-        #         # self.player.state = state.DELAY
-        #         self.fov()
-
-        #         print("enemy_turn")
-        #     elif t.state == None:
-        #         self.player.state = state.READY
+                self.action_queue.extend([{"player_turn": True}])
+                # self.player.state = state.READY
+                # self.fov()

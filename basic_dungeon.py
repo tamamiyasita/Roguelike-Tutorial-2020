@@ -10,6 +10,8 @@ from data import *
 from fighter import Fighter
 from ai import Basicmonster
 from item import Item
+from lightning_scroll import LightningScroll
+from potion import Potion
 
 
 class BasicDungeon:
@@ -105,13 +107,20 @@ class BasicDungeon:
                     print("spown!")
                     ACTOR_LIST.append(monster)
 
-        # for i in range(number_of_items):
-        #     x = randint(room.x1 + 1, room.x2 - 1)
-        #     y = randint(room.y1 + 1, room.y2 - 1)
+        for i in range(number_of_items):
+            x = randint(room.x1 + 1, room.x2 - 1)
+            y = randint(room.y1 + 1, room.y2 - 1)
 
-        #     if not any([actor for actor in actor_list if actor.x == x and actor.y == y]):
+            if not any([actor for actor in actor_list if actor.x == x and actor.y == y]):
+                type = randint(0, 100)
+                if type < 30:
+                    item = Potion(x=x, y=y)
+                else:
+                    item = LightningScroll(x=x, y=y)
+                # ITEM_LIST.append(item)
+
         #         self[x][y].blocked = False
         #         item = Actor(
         #             image=potion[0], x=x, y=y, blocks=False, color=COLORS.get("transparent"), visible_color=COLORS.get(
         #                 "light_ground"), not_visible_color=COLORS.get("dark_ground"))
-        #         MAP_LIST.append(item)
+                ITEM_LIST.append(item)

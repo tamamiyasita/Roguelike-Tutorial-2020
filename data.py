@@ -15,9 +15,7 @@ walls_2 = (r"image/wall2.png")
 walls_3 = (r"image/wall3.png")
 
 d_floor = (r"image/Tile.png")
-d_potion = (r"image/Potion.png")
 
-d_human1 = (r"image/demi_human1.png")
 
 walls_1_tiles = get_tile_set(walls_1, tile_size=16)
 wall_1 = {k: walls_1_tiles[v] for k, v in zip(
@@ -34,8 +32,13 @@ floor_len = len(ds_floor)
 floors = {k: ds_floor[v] for k, v in zip(range(floor_len), range(floor_len))}
 
 
+d_potion = (r"image/Potion.png")
 potion = get_tile_set(d_potion, tile_size=16)
 
+d_lightnint_scroll = (r"image/Scroll.png")
+lightning_scroll = get_tile_set(d_lightnint_scroll, tile_size=16)
+
+d_human1 = (r"image/demi_human1.png")
 demi_human1 = get_tile_set(d_human1, tile_size=16)
 
 pc_attack = arcade.load_texture_pair(r"image/rou6_a.png")

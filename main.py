@@ -111,9 +111,11 @@ class MG(arcade.Window):
                 dist = (1, 1)
             elif key in KEYMAP_DOWN_RIGHT:
                 dist = (1, -1)
+            elif key in KEYMAP_REST:
+                self.game_engine.player.state = state.TURN_END
+
             elif key in KEYMAP_PICKUP:
                 self.game_engine.action_queue.extend([{"pickup": True}])
-
             elif key in KEYMAP_SELECT_ITEM_1:
                 self.game_engine.action_queue.extend([{"select_item": 1}])
             elif key in KEYMAP_SELECT_ITEM_2:
@@ -145,7 +147,7 @@ class MG(arcade.Window):
                 if attack:
                     self.game_engine.action_queue.extend(attack)
 
-                self.game_engine.action_queue.append({"player_turn": True})
+                # self.game_engine.action_queue.append({"player_turn": True})
 
     def on_key_release(self, key, modifiers):
         self.dist = None
