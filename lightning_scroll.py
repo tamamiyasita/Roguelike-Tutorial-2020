@@ -5,7 +5,7 @@ from constants import *
 from data import *
 from item import Item
 from actor import Actor
-from random import randint
+import random
 
 
 class LightningEfc(Actor):
@@ -13,17 +13,17 @@ class LightningEfc(Actor):
         super().__init__(x=x, y=y, image=effect1[87])
         self.alpha = 255
         EFFECT_LIST.append(self)
-        self.scale = 4.5
+        self.scale = 3.5
 
     def update(self):
         self.alpha -= 5
         print(self.alpha, "ALF")
         if self.alpha % 10 == 0:
-            self.scale -= 0.5
-            self.center_x += randint(1, 3)
+            self.scale -= random.random()
+            self.center_x += random.randint(1, 3)
         else:
-            self.scale += 0.5
-            self.center_x -= randint(1, 3)
+            self.scale += random.random()
+            self.center_x -= random.randint(1, 3)
 
         if self.alpha <= 50:
 
@@ -32,7 +32,7 @@ class LightningEfc(Actor):
 
 class LightningScroll(Actor):
     def __init__(self, x: int, y: int):
-        super().__init__(x=x, y=y, image=lightning_scroll[1], name="Lightning Scroll", color=COLORS["transparent"], visible_color=arcade.color.WHITE,
+        super().__init__(x=x, y=y, image=scroll[1], name="Lightning Scroll", color=COLORS["transparent"], visible_color=arcade.color.WHITE,
                          not_visible_color=COLORS.get("dark_ground"), item=Item())
         self.alpha = 0
         ITEM_LIST.append(self)

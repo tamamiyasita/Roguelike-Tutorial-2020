@@ -29,6 +29,8 @@ class GameEngine:
         self.messages = deque(maxlen=3)
         self.selected_item = None
         self.turn_check = None
+        self.game_state = GAME_STATE.NORMAL
+        self.grid_select_handlers = []
 
     def setup(self):
         arcade.set_background_color(arcade.color.BLACK)
@@ -131,8 +133,9 @@ class GameEngine:
                     item = self.player.inventory.get_item_number(item_number)
                     if item:
                         results = item.use(self)
-                        new_action_queue.extend(results)
-                        self.player.state = state.TURN_END
+                        if results:
+                            new_action_queue.extend(results)
+                            self.player.state = state.TURN_END
 
             if "drop_item" in action:
                 item_number = self.selected_item
@@ -148,6 +151,13 @@ class GameEngine:
 
         self.action_queue = new_action_queue
     #####################
+
+    def grid_click(self, grid_x, grid_y):
+        for f in self.grid_select_handlers:
+            results = f(grid_x, grid_y)
+            if results:
+                self.action_queue.extend(results)
+        self.grid_select_handlers = []
 
     def move_enemies(self):
         turn_check = "next_turn"

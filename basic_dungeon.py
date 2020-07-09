@@ -11,6 +11,7 @@ from fighter import Fighter
 from ai import Basicmonster
 from item import Item
 from lightning_scroll import LightningScroll
+from fireball_scroll import FireballScroll
 from potion import Potion
 
 
@@ -113,7 +114,9 @@ class BasicDungeon:
 
             if not any([actor for actor in actor_list if actor.x == x and actor.y == y]):
                 type = randint(0, 100)
-                if type < 30:
+                if type < 1:
                     item = Potion(x=x, y=y)
-                else:
+                elif type < 2:
                     item = LightningScroll(x=x, y=y)
+                else:
+                    item = FireballScroll(x=x, y=y)

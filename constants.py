@@ -45,6 +45,11 @@ LEFT_FACE = 1
 RIGHT_FACE = 2
 
 
+class GAME_STATE(Enum):
+    NORMAL = auto()
+    SELECT_LOCATION = auto()
+
+
 class state(Enum):
     READY = auto()
     DELAY = auto()

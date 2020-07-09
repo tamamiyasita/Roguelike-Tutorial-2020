@@ -4,6 +4,7 @@ import pyglet.gl as gl
 from game_engine import GameEngine
 from constants import *
 from status_bar import draw_status_bar
+from util import pixel_position, map_position
 
 
 class MG(arcade.Window):
@@ -46,47 +47,59 @@ class MG(arcade.Window):
             arcade.draw_xywh_rectangle_filled(
                 self.vx, self.vy, SCREEN_WIDTH, STATES_PANEL_HEIGHT, COLORS["status_panel_background"])
 
-            # HP表示
-            text = f"HP: {self.game_engine.player.fighter.hp}/{self.game_engine.player.fighter.max_hp}"
-            arcade.draw_text(
-                text, margin + self.vx, STATES_PANEL_HEIGHT - 30 + self.vy, color=COLORS["status_panel_text"], font_size=14)
+            if self.game_engine.game_state == GAME_STATE.NORMAL:
 
-            # HPバー
-            draw_status_bar(size / 2 + margin+self.vx, STATES_PANEL_HEIGHT-8+self.vy, size, 10,
-                            self.game_engine.player.fighter.hp, self.game_engine.player.fighter.max_hp)
-
-            # 所持アイテム表示
-            capacity = self.game_engine.player.inventory.capacity
-            selected_item = self.game_engine.selected_item
-            field_width = SCREEN_WIDTH / (capacity + 1) / 1.5
-            for i in range(capacity):
-                y = 38
-                x = i * field_width + 400
-                if i == selected_item:
-                    arcade.draw_lrtb_rectangle_outline(
-                        x+self.vx - 3, x+self.vx + field_width - 5, y+self.vy + 18, y+self.vy - 4, arcade.color.BLACK, 2)
-                if self.game_engine.player.inventory.items[i]:
-                    item_name = self.game_engine.player.inventory.items[i].name
-                else:
-                    item_name = ""
-                text = f"{i+1}: {item_name}"
-                arcade.draw_text(text, x+self.vx, y+self.vy,
-                                 color=COLORS["status_panel_text"])
-
-            # メッセージ表示
-            y = STATES_PANEL_HEIGHT-14
-            for message in self.game_engine.messages:
+                # HP表示
+                text = f"HP: {self.game_engine.player.fighter.hp}/{self.game_engine.player.fighter.max_hp}"
                 arcade.draw_text(
-                    message, 130+self.vx, y+self.vy, color=COLORS["status_panel_text"])
-                y -= 20
+                    text, margin + self.vx, STATES_PANEL_HEIGHT - 30 + self.vy, color=COLORS["status_panel_text"], font_size=14)
 
-            # マウスオーバーテキスト
-            if self.mouse_over_text:
-                x, y = self.mouse_position
-                arcade.draw_xywh_rectangle_filled(
-                    x, y, 100, 16, arcade.color.BLACK)
-                arcade.draw_text(self.mouse_over_text, x,
-                                 y, arcade.color.WHITE)
+                # HPバー
+                draw_status_bar(size / 2 + margin+self.vx, STATES_PANEL_HEIGHT-8+self.vy, size, 10,
+                                self.game_engine.player.fighter.hp, self.game_engine.player.fighter.max_hp)
+
+                # 所持アイテム表示
+                capacity = self.game_engine.player.inventory.capacity
+                selected_item = self.game_engine.selected_item
+                field_width = SCREEN_WIDTH / (capacity + 1) / 1.5
+                for i in range(capacity):
+                    y = 38
+                    x = i * field_width + 400
+                    if i == selected_item:
+                        arcade.draw_lrtb_rectangle_outline(
+                            x+self.vx - 3, x+self.vx + field_width - 5, y+self.vy + 18, y+self.vy - 4, arcade.color.BLACK, 2)
+                    if self.game_engine.player.inventory.items[i]:
+                        item_name = self.game_engine.player.inventory.items[i].name
+                    else:
+                        item_name = ""
+                    text = f"{i+1}: {item_name}"
+                    arcade.draw_text(text, x+self.vx, y+self.vy,
+                                     color=COLORS["status_panel_text"])
+
+                # メッセージ表示
+                y = STATES_PANEL_HEIGHT-14
+                for message in self.game_engine.messages:
+                    arcade.draw_text(
+                        message, 130+self.vx, y+self.vy, color=COLORS["status_panel_text"])
+                    y -= 20
+
+                # マウスオーバーテキスト
+                if self.mouse_over_text:
+                    x, y = self.mouse_position
+                    arcade.draw_xywh_rectangle_filled(
+                        x, y, 100, 16, arcade.color.BLACK)
+                    arcade.draw_text(self.mouse_over_text, x,
+                                     y, arcade.color.WHITE)
+
+            elif self.game_engine.game_state == GAME_STATE.SELECT_LOCATION:
+                mouse_x, mouse_y = map_position(
+                    self.mouse_position[0], self.mouse_position[1])
+                # center_x, center_y = map_position(mouse_x, mouse_y)
+                grid_x, grid_y = pixel_position(mouse_x, mouse_y)
+                # grid_x, grid_y = pixel_position(grid_x, grid_y)
+                print(grid_x, grid_y, "GRI")
+                arcade.draw_rectangle_outline(
+                    mouse_x, mouse_y+STATES_PANEL_HEIGHT, SPRITE_SIZE*SPRITE_SCALE, SPRITE_SIZE*SPRITE_SCALE, arcade.color.LIGHT_BLUE, 2)
 
         except Exception as e:
             print(e)
@@ -143,6 +156,11 @@ class MG(arcade.Window):
             elif key in KEYMAP_DROP_ITEM:
                 self.game_engine.action_queue.extend([{"drop_item": True}])
 
+            elif key == arcade.key.SPACE:
+                self.game_engine.game_state = GAME_STATE.SELECT_LOCATION
+            elif key == arcade.key.TAB:
+                self.game_engine.game_state = GAME_STATE.NORMAL
+
             self.dist = dist
             if self.game_engine.player.state == state.READY and self.dist:
                 attack = self.game_engine.player.move(self.dist)
@@ -156,14 +174,22 @@ class MG(arcade.Window):
 
     def on_mouse_motion(self, x, y, dx, dy):
         self.mouse_position = x + self.vx, y + self.vy
+        print(map_position(self.mouse_position[0], self.mouse_position[1]))
         # 忘れずにビューポートの座標を足す
         actor_list = arcade.get_sprites_at_point(
-            (x+self.vx, y+self.vy), ENTITY_LIST)
+            self.mouse_position, ENTITY_LIST)
         self.mouse_over_text = None
         for actor in actor_list:
             if actor.fighter or actor.item and actor.is_visible:
                 self.mouse_over_text = f"{actor.name} {actor.fighter.hp}/{actor.fighter.max_hp}"
                 print(actor.name)
+
+    def on_mouse_press(self, x, y, button, modifiers):
+        if self.game_engine.game_state == GAME_STATE.SELECT_LOCATION:
+            grid_x, grid_y = map_position(x + self.vx, y + self.vy)
+            print(grid_x, grid_y)
+            self.game_engine.grid_click(grid_x, grid_y)
+        self.game_engine.game_state = GAME_STATE.NORMAL
 
 
 def main():

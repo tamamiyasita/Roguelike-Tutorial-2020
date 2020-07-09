@@ -35,8 +35,8 @@ floors = {k: ds_floor[v] for k, v in zip(range(floor_len), range(floor_len))}
 d_potion = (r"image/Potion.png")
 potion = get_tile_set(d_potion, tile_size=16)
 
-d_lightnint_scroll = (r"image/Scroll.png")  # 2
-lightning_scroll = get_tile_set(d_lightnint_scroll, tile_size=16)
+d_scroll = (r"image/Scroll.png")  # 2
+scroll = get_tile_set(d_scroll, tile_size=16)
 
 d_effect = (r"image/Effect1.png")  # 83
 effect1 = get_tile_set(d_effect, tile_size=16)
