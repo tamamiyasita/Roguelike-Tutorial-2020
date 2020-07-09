@@ -5,17 +5,28 @@ from constants import *
 from data import *
 from item import Item
 from actor import Actor
+from random import randint
 
 
 class LightningEfc(Actor):
     def __init__(self, x, y):
-        super().__init__(x=x, y=y, image=lightning_efc[87])
+        super().__init__(x=x, y=y, image=effect1[87])
         self.alpha = 255
         EFFECT_LIST.append(self)
+        self.scale = 4.5
 
     def update(self):
         self.alpha -= 5
-        if self.alpha <= 1:
+        print(self.alpha, "ALF")
+        if self.alpha % 10 == 0:
+            self.scale -= 0.5
+            self.center_x += randint(1, 3)
+        else:
+            self.scale += 0.5
+            self.center_x -= randint(1, 3)
+
+        if self.alpha <= 50:
+
             EFFECT_LIST.remove(self)
 
 
@@ -29,6 +40,7 @@ class LightningScroll(Actor):
     def use(self, game_engine: "GameEngine"):
         closest_distance: Optional[float] = None
         closest_actor: Optional[Actor] = None
+        results = []
 
         for actor in game_engine.actor_list:
             if actor.is_visible and actor.fighter and not actor.is_dead and actor.ai:
@@ -43,7 +55,6 @@ class LightningScroll(Actor):
 
         if closest_actor:
             lightning = LightningEfc(closest_actor.x, closest_actor.y)
-            results = []
             damege = 10
             game_engine.player.inventory.remove_item(self)
             results.append(
@@ -52,4 +63,6 @@ class LightningScroll(Actor):
 
             return results
         else:
-            return None
+            results.extend([{"message": "not enemy"}])
+
+        return results
