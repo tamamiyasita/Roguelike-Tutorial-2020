@@ -26,6 +26,7 @@ class MG(arcade.Window):
         self.game_engine.process_action_queue(delta_time)
         self.game_engine.turn_change()
         self.game_engine.view()
+        EFFECT_LIST.update()
 
     def on_draw(self):
         try:
@@ -34,6 +35,7 @@ class MG(arcade.Window):
             self.game_engine.map_list.draw(filter=gl.GL_NEAREST)
             ITEM_LIST.draw(filter=gl.GL_NEAREST)
             self.game_engine.actor_list.draw(filter=gl.GL_NEAREST)
+            EFFECT_LIST.draw()
 
             size = 72
             margin = 15

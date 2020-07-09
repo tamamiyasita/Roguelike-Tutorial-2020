@@ -7,11 +7,24 @@ from item import Item
 from actor import Actor
 
 
+class LightningEfc(Actor):
+    def __init__(self, x, y):
+        super().__init__(x=x, y=y, image=lightning_efc[87])
+        self.alpha = 255
+        EFFECT_LIST.append(self)
+
+    def update(self):
+        self.alpha -= 5
+        if self.alpha <= 1:
+            EFFECT_LIST.remove(self)
+
+
 class LightningScroll(Actor):
     def __init__(self, x: int, y: int):
         super().__init__(x=x, y=y, image=lightning_scroll[1], name="Lightning Scroll", color=COLORS["transparent"], visible_color=arcade.color.WHITE,
                          not_visible_color=COLORS.get("dark_ground"), item=Item())
         self.alpha = 0
+        ITEM_LIST.append(self)
 
     def use(self, game_engine: "GameEngine"):
         closest_distance: Optional[float] = None
@@ -29,6 +42,7 @@ class LightningScroll(Actor):
                     closest_distance = distance
 
         if closest_actor:
+            lightning = LightningEfc(closest_actor.x, closest_actor.y)
             results = []
             damege = 10
             game_engine.player.inventory.remove_item(self)

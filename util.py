@@ -114,7 +114,7 @@ class TileImageTest(arcade.Window):
 
 
 def main():
-    t = (r"image/Potion.png")
+    t = (r"image/Effect1.png")
     tst = TileImageTest(textures=t)
 
     arcade.run()

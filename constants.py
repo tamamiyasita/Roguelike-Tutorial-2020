@@ -62,6 +62,8 @@ ITEM_LIST = arcade.SpriteList(
     use_spatial_hash=True, spatial_hash_cell_size=32)
 ENTITY_LIST = arcade.SpriteList(
     use_spatial_hash=True, spatial_hash_cell_size=32)
+EFFECT_LIST = arcade.SpriteList(
+    use_spatial_hash=True, spatial_hash_cell_size=32)
 
 
 KEYMAP_UP = [arcade.key.UP, arcade.key.W, arcade.key.NUM_8]

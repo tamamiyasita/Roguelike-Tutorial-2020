@@ -117,10 +117,3 @@ class BasicDungeon:
                     item = Potion(x=x, y=y)
                 else:
                     item = LightningScroll(x=x, y=y)
-                # ITEM_LIST.append(item)
-
-        #         self[x][y].blocked = False
-        #         item = Actor(
-        #             image=potion[0], x=x, y=y, blocks=False, color=COLORS.get("transparent"), visible_color=COLORS.get(
-        #                 "light_ground"), not_visible_color=COLORS.get("dark_ground"))
-                ITEM_LIST.append(item)

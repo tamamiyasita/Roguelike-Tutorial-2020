@@ -13,7 +13,6 @@ class Basicmonster:
 
         monster = self.owner
         if monster.is_visible and not monster.is_dead:
-            # if monster.alpha == 255:
 
             if monster.distance_to(target) >= 1:
                 results = astar(

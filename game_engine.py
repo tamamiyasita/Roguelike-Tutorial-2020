@@ -154,14 +154,14 @@ class GameEngine:
         for actor in ACTOR_LIST:
             if actor.ai and not actor.is_dead:
                 results = actor.ai.take_turn(
-                    #     target=self.player, game_map=self.game_map, sprite_lists=[MAP_LIST, ACTOR_LIST])
-                    # if results:
-                    #     self.action_queue.extend(results)
-                    # else:
-                    #     results = actor.ai.take_turn(
-                    target=self.player, game_map=self.game_map, sprite_lists=[MAP_LIST])
+                    target=self.player, game_map=self.game_map, sprite_lists=[MAP_LIST, ACTOR_LIST])
                 if results:
                     self.action_queue.extend(results)
+                else:
+                    results = actor.ai.take_turn(
+                        target=self.player, game_map=self.game_map, sprite_lists=[MAP_LIST])
+                    if results:
+                        self.action_queue.extend(results)
 
                 turn_check = actor
         return turn_check
