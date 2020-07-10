@@ -2,7 +2,7 @@ import arcade
 import math
 from constants import *
 from data import *
-from util import map_position, pixel_position, get_blocking_entity
+from util import pixel_to_grid, grid_to_pixel, get_blocking_entity
 
 
 class Actor(arcade.Sprite):
@@ -16,8 +16,8 @@ class Actor(arcade.Sprite):
             self.texture_ = image
         self.name = name
         self.dx, self.dy = 0, 0
-        self.center_x, self.center_y = pixel_position(x, y)
-        self.x, self.y = map_position(self.center_x, self.center_y)
+        self.center_x, self.center_y = grid_to_pixel(x, y)
+        self.x, self.y = pixel_to_grid(self.center_x, self.center_y)
         self.x = x
         self.y = y
         self.blocks = blocks
@@ -62,7 +62,7 @@ class Actor(arcade.Sprite):
             if not get_blocking_entity(self.x + self.dx, self.y + self.dy, ENTITY_LIST):
                 self.x += self.dx
                 self.y += self.dy
-                self.center_x, self.center_y = pixel_position(self.x, self.y)
+                self.center_x, self.center_y = grid_to_pixel(self.x, self.y)
                 self.state = state.TURN_END
         except:
             pass

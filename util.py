@@ -2,26 +2,26 @@ import arcade
 from constants import *
 
 
-def pixel_position(x, y):
+def grid_to_pixel(x, y):
     """tilepositionからsprite_sizeに変換する"""
-    px = x * SPRITE_SIZE * SPRITE_SCALE + SPRITE_SIZE // 2 * SPRITE_SCALE
-    py = (y * SPRITE_SIZE * SPRITE_SCALE + SPRITE_SIZE //
+    px = x * SPRITE_SIZE * SPRITE_SCALE + SPRITE_SIZE / 2 * SPRITE_SCALE
+    py = (y * SPRITE_SIZE * SPRITE_SCALE + SPRITE_SIZE /
           2 * SPRITE_SCALE) + STATES_PANEL_HEIGHT
     return px, py
 
 
-def map_position(x, y):
-    """sprite_sizeからtile_map_positionへの位置を指定する"""
-    px = x - SPRITE_SIZE // 2 * SPRITE_SCALE
-    px = round(px // (SPRITE_SIZE * SPRITE_SCALE))
+def pixel_to_grid(x, y):
+    """sprite_sizeからtile_pixel_to_gridへの位置を指定する"""
+    px = x - SPRITE_SIZE / 2 * SPRITE_SCALE
+    px = round(px / (SPRITE_SIZE * SPRITE_SCALE))
 
-    py = y - SPRITE_SIZE / 2 * SPRITE_SCALE
-    py = round(py // (SPRITE_SIZE * SPRITE_SCALE)) - STATES_PANEL_HEIGHT
+    py = y - SPRITE_SIZE / 2 * SPRITE_SCALE - STATES_PANEL_HEIGHT
+    py = round(py / SPRITE_SIZE * SPRITE_SCALE)
     return px, py
 
 
 def get_blocking_entity(x, y, sprite_list):
-    px, py = pixel_position(x, y)
+    px, py = grid_to_pixel(x, y)
     sprite_list = arcade.get_sprites_at_exact_point((px, py), sprite_list)
     blocking_sprite = arcade.SpriteList()
     for sprite in sprite_list:
@@ -42,7 +42,7 @@ def get_blocking_entity(x, y, sprite_list):
 
 def floor_move_lock(x, y, sprite_list):
     # TODO 移動先のfloorをロックしたり解除したりする
-    px, py = pixel_position(x, y)
+    px, py = grid_to_pixel(x, y)
     sprite_list = arcade.get_sprites_at_exact_point((px, py), sprite_list)
     for sprite in sprite_list:
         if not sprite.blocks:
@@ -51,7 +51,7 @@ def floor_move_lock(x, y, sprite_list):
 
 def floor_move_open(x, y, sprite_list):
     # TODO 移動先のfloorをロックしたり解除したりする
-    px, py = pixel_position(x, y)
+    px, py = grid_to_pixel(x, y)
     sprite_list = arcade.get_sprites_at_exact_point((px, py), sprite_list)
     for sprite in sprite_list:
         if sprite.blocks:

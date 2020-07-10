@@ -50,10 +50,6 @@ class GameEngine:
                             sub_img=image.get("player_move"), map_tile=self.game_map)
         self.player.state = state.READY
 
-        # self.item = Potion(
-        #     image=potion[0], name="Healing Potion", x=self.player.x+1, y=self.player.y+1, blocks=False, color=COLORS.get("transparent"), visible_color=COLORS.get(
-        #         "light_ground"), not_visible_color=COLORS.get("dark_ground"), item=Item())
-        # self.item.alpha = 0
 
         self.crab = Actor(image["crab"], "crab", self.player.x+2, self.player.y,
                           blocks=True, fighter=fighter_component2, ai=ai_component,
@@ -61,7 +57,6 @@ class GameEngine:
 
         self.actor_list.append(self.player)
         self.actor_list.append(self.crab)
-        # ITEM_LIST.append(self.item)
 
         self.fov_map = initialize_fov(self.game_map)
         self.mapsprite = MapSpriteSet(
@@ -81,6 +76,7 @@ class GameEngine:
 
             if "enemy_turn" in action:
                 print("enemy_turn")
+                # self.turn_checkにターン終了フラグを入れる
                 self.turn_check = self.move_enemies()
 
             if "message" in action:
@@ -190,10 +186,7 @@ class GameEngine:
         if self.player.state == state.TURN_END:
             self.player.state = state.DELAY
             self.action_queue.extend([{"enemy_turn": True}])
-            # self.turn_check = self.move_enemies()
         elif self.turn_check:
             if self.turn_check == "next_turn" or self.turn_check.state == state.TURN_END:
                 self.turn_check = None
                 self.action_queue.extend([{"player_turn": True}])
-                # self.player.state = state.READY
-                # self.fov()

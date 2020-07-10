@@ -4,7 +4,7 @@ import pyglet.gl as gl
 from game_engine import GameEngine
 from constants import *
 from status_bar import draw_status_bar
-from util import pixel_position, map_position
+from util import grid_to_pixel, pixel_to_grid
 
 
 class MG(arcade.Window):
@@ -92,20 +92,20 @@ class MG(arcade.Window):
                                      y, arcade.color.WHITE)
 
             elif self.game_engine.game_state == GAME_STATE.SELECT_LOCATION:
-                mouse_x, mouse_y = map_position(
-                    self.mouse_position[0], self.mouse_position[1])
-                # center_x, center_y = map_position(mouse_x, mouse_y)
-                grid_x, grid_y = pixel_position(mouse_x, mouse_y)
-                # grid_x, grid_y = pixel_position(grid_x, grid_y)
-                print(grid_x, grid_y, "GRI")
+                mouse_x, mouse_y = self.mouse_position
+                grid_x, grid_y = pixel_to_grid(mouse_x, mouse_y)
+                center_x, center_y = grid_to_pixel(grid_x, grid_y)
+                print(mouse_x, mouse_y, "MOUSE")
+                print(grid_x, grid_y, "GRID")
+                print(center_x, center_y, "RECT")
                 arcade.draw_rectangle_outline(
-                    mouse_x, mouse_y+STATES_PANEL_HEIGHT, SPRITE_SIZE*SPRITE_SCALE, SPRITE_SIZE*SPRITE_SCALE, arcade.color.LIGHT_BLUE, 2)
+                    center_x, center_y, SPRITE_SIZE, SPRITE_SIZE, arcade.color.LIGHT_BLUE, 2)
 
         except Exception as e:
             print(e)
 
     def on_key_press(self, key, modifiers):
-        if key == arcade.key.ESCAPE:
+        if key == arcade.key.BACKSPACE:
             arcade.close_window()
 
         elif self.game_engine.player.state == state.READY:
@@ -158,7 +158,7 @@ class MG(arcade.Window):
 
             elif key == arcade.key.SPACE:
                 self.game_engine.game_state = GAME_STATE.SELECT_LOCATION
-            elif key == arcade.key.TAB:
+            elif key == arcade.key.ESCAPE:
                 self.game_engine.game_state = GAME_STATE.NORMAL
 
             self.dist = dist
@@ -174,7 +174,8 @@ class MG(arcade.Window):
 
     def on_mouse_motion(self, x, y, dx, dy):
         self.mouse_position = x + self.vx, y + self.vy
-        print(map_position(self.mouse_position[0], self.mouse_position[1]))
+        print(self.mouse_position, "POS")
+        print(pixel_to_grid(self.mouse_position[0], self.mouse_position[1]))
         # 忘れずにビューポートの座標を足す
         actor_list = arcade.get_sprites_at_point(
             self.mouse_position, ENTITY_LIST)
@@ -186,8 +187,8 @@ class MG(arcade.Window):
 
     def on_mouse_press(self, x, y, button, modifiers):
         if self.game_engine.game_state == GAME_STATE.SELECT_LOCATION:
-            grid_x, grid_y = map_position(x + self.vx, y + self.vy)
-            print(grid_x, grid_y)
+            grid_x, grid_y = pixel_to_grid(x + self.vx, y + self.vy)
+            print(grid_x, grid_y, "mouse_press")
             self.game_engine.grid_click(grid_x, grid_y)
         self.game_engine.game_state = GAME_STATE.NORMAL
 

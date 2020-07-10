@@ -2,7 +2,7 @@ import arcade
 import tcod
 
 from constants import *
-from util import pixel_position
+from util import grid_to_pixel
 
 
 def initialize_fov(game_map):
@@ -25,14 +25,14 @@ def fov_get(game_map, fov_map):
         for x in range(game_map.width):
             visible = tcod.map_is_in_fov(fov_map, x, y)
             if not visible:
-                point = pixel_position(x, y)
+                point = grid_to_pixel(x, y)
                 sprite_point = arcade.get_sprites_at_exact_point(
                     point, ENTITY_LIST)
                 for sprite in sprite_point:
                     sprite.is_visible = False
 
             elif visible:
-                point = pixel_position(x, y)
+                point = grid_to_pixel(x, y)
                 sprite_point = arcade.get_sprites_at_exact_point(
                     point, ENTITY_LIST)
                 for sprite in sprite_point:

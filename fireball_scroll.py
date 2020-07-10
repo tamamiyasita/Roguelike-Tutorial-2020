@@ -5,7 +5,7 @@ from constants import *
 from data import *
 from item import Item
 from actor import Actor
-from util import get_blocking_entity, pixel_position, map_position
+from util import get_blocking_entity, grid_to_pixel, pixel_to_grid
 
 
 class FireballScroll(Actor):
@@ -23,9 +23,11 @@ class FireballScroll(Actor):
         return None
 
     def apply_damage(self, grid_x, grid_y, amount, results):
-        pixel_x, pixel_y = pixel_position(grid_x, grid_y)
+        pixel_x, pixel_y = grid_to_pixel(grid_x, grid_y)
+        print(f"{pixel_x}{pixel_y} apply pixel_x_y")
         sprites = arcade.get_sprites_at_point((pixel_x, pixel_y), ACTOR_LIST)
         for sprite in sprites:
+            print(sprite,"sprite")
             if sprite.fighter and not sprite.is_dead:
                 results.extend(
                     [{"message": f"{sprite.name} was struck by a fireball for {amount} points."}])
@@ -36,6 +38,7 @@ class FireballScroll(Actor):
     def click(self, x, y):
         print("Click!", x, y)
         results = []
+        print(results,"results")
         self.apply_damage(x, y, 10, results)
 
         self.apply_damage(x-1, y-1, 8, results)

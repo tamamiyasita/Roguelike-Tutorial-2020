@@ -1,5 +1,5 @@
 import arcade
-from util import map_position, pixel_position
+from util import pixel_to_grid, grid_to_pixel
 
 
 class Tile:
@@ -43,12 +43,12 @@ class SetMap:
         for x in range(self.width):
             for y in range(self.height):
                 if self.tiles[x][y].blocked:
-                    px, py = pixel_position(x, y)
+                    px, py = grid_to_pixel(x, y)
                     wall = arcade.Sprite(
                         r"image/wall.png", center_x=px, center_y=py)
                     self.sprite_list.append(wall)
                 elif not self.tiles[x][y].blocked:
-                    px, py = pixel_position(x, y)
+                    px, py = grid_to_pixel(x, y)
                     floor = arcade.Sprite(
                         r"image/floor.jpg", center_x=px, center_y=py)
                     self.sprite_list.append(floor)

@@ -3,7 +3,7 @@ from random import randint
 
 from map_tool import initialize_tiles, Rect, is_blocked
 from map_sprite_set import MapSpriteSet
-from util import map_position, pixel_position
+from util import pixel_to_grid, grid_to_pixel
 from actor import Actor
 from constants import *
 from data import *

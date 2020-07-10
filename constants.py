@@ -5,7 +5,7 @@ from enum import Enum, auto
 TITLE = "Roguelike tutorial 2020"
 
 SPRITE_SIZE = 32
-SPRITE_SCALE = 2
+SPRITE_SCALE = 1
 
 MAP_WIDTH = 35
 MAP_HEIGHT = 20

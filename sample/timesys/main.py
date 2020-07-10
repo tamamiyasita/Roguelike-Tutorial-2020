@@ -2,7 +2,7 @@ import arcade
 from constants import *
 from set_map import SetMap
 from data import *
-from util import map_position
+from util import pixel_to_grid
 import random
 # from ST import State
 from Tick_sys import Ticker
@@ -51,7 +51,7 @@ class Actor(arcade.Sprite):
 
     def move(self, dxy):
         dx, dy = dxy
-        self.x, self.y = map_position(self.center_x, self.center_y)
+        self.x, self.y = pixel_to_grid(self.center_x, self.center_y)
 
         if not self.map_tile.is_blocked(self.x + dx, self.y + dy):
             self.center_x += int(dx*SPRITE_SIZE)
