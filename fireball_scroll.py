@@ -22,7 +22,7 @@ class FireballScroll(Actor):
         game_engine.grid_select_handlers.append(self.click)
         return None
 
-    def apply_damege(self, grid_x, grid_y, amount, results):
+    def apply_damage(self, grid_x, grid_y, amount, results):
         pixel_x, pixel_y = pixel_position(grid_x, grid_y)
         sprites = arcade.get_sprites_at_point((pixel_x, pixel_y), ACTOR_LIST)
         for sprite in sprites:
@@ -36,18 +36,18 @@ class FireballScroll(Actor):
     def click(self, x, y):
         print("Click!", x, y)
         results = []
-        self.apply_damege(x, y, 10, results)
+        self.apply_damage(x, y, 10, results)
 
-        self.apply_damege(x-1, y-1, 8, results)
-        self.apply_damege(x, y-1, 8, results)
-        self.apply_damege(x+1, y-1, 8, results)
+        self.apply_damage(x-1, y-1, 8, results)
+        self.apply_damage(x, y-1, 8, results)
+        self.apply_damage(x+1, y-1, 8, results)
 
-        self.apply_damege(x-1, y, 8, results)
-        self.apply_damege(x+1, y, 8, results)
+        self.apply_damage(x-1, y, 8, results)
+        self.apply_damage(x+1, y, 8, results)
 
-        self.apply_damege(x-1, y+1, 8, results)
-        self.apply_damege(x, y+1, 8, results)
-        self.apply_damege(x + 1, y + 1, 8, results)
+        self.apply_damage(x-1, y+1, 8, results)
+        self.apply_damage(x, y+1, 8, results)
+        self.apply_damage(x + 1, y + 1, 8, results)
 
         self.game_engine.player.inventory.remove_item(self)
 

@@ -55,11 +55,11 @@ class LightningScroll(Actor):
 
         if closest_actor:
             lightning = LightningEfc(closest_actor.x, closest_actor.y)
-            damege = 10
+            damage = 10
             game_engine.player.inventory.remove_item(self)
             results.append(
-                {"message": f"{closest_actor.name} was struck by lighting for {damege} points."})
-            results.extend(closest_actor.fighter.take_damege(damege))
+                {"message": f"{closest_actor.name} was struck by lighting for {damage} points."})
+            results.extend(closest_actor.fighter.take_damage(damage))
 
             return results
         else:
