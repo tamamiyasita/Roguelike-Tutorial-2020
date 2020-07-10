@@ -46,7 +46,7 @@ def astar(sprite_lists, start, end):
     # 終わりが見つかるまでループする
     while len(open_list) > 0:
         loop_count += 1
-        if loop_count > 50:
+        if loop_count > 25:
             print("BREAK!")
             return None
 

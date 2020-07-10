@@ -77,6 +77,10 @@ class Actor(arcade.Sprite):
 
             self.target_x = self.center_x
             self.target_y = self.center_y
+            
+            # 行先を変数dst_tileに入れる
+            self.dst_tile = self.game_map.tiles[self.x +
+                                    self.dx][self.y+self.dy]
 
             blocking_actor = get_blocking_entity(
                 self.x+self.dx, self.y+self.dy, ACTOR_LIST)
@@ -88,6 +92,7 @@ class Actor(arcade.Sprite):
                         self.state = state.ATTACK
                         self.change_y = self.dy * MOVE_SPEED
                         self.change_x = self.dx * MOVE_SPEED
+                        self.dst_tile.blocked = True
 
                     return attack_results
 
@@ -101,9 +106,10 @@ class Actor(arcade.Sprite):
                 return attack_results
 
             elif not get_blocking_entity(self.x + self.dx, self.y + self.dy, ACTOR_LIST) and\
-                    self.game_map.tiles[self.x+self.dx][self.y+self.dy].blocked == False:
-                self.game_map.tiles[self.x +
-                                    self.dx][self.y+self.dy].blocked = True
+                    self.dst_tile.blocked == False:
+                    # self.game_map.tiles[self.x+self.dx][self.y+self.dy].blocked == False:
+                
+                self.dst_tile.blocked = True
                 self.state = state.ON_MOVE
                 self.change_y = self.dy * MOVE_SPEED
                 self.change_x = self.dx * MOVE_SPEED
@@ -115,31 +121,32 @@ class Actor(arcade.Sprite):
         super().update()
         grid = SPRITE_SCALE * SPRITE_SIZE
         step = SPRITE_SCALE * SPRITE_SIZE // 2
-        # if not self.stop_move:
         if self.state == state.ON_MOVE:
             if abs(self.target_x - self.center_x) >= grid and self.dx:
                 self.change_x = 0
                 if self.dx == 1:
                     self.center_x = self.target_x + grid
                     self.x += self.dx
+                    self.dst_tile.blocked = False
                     self.state = state.TURN_END
                 if self.dx == -1:
                     self.center_x = self.target_x - grid
                     self.x += self.dx
+                    self.dst_tile.blocked = False
                     self.state = state.TURN_END
-                self.game_map.tiles[self.x-self.dx][self.y].blocked = False
 
             if abs(self.target_y - self.center_y) >= grid and self.dy:
                 self.change_y = 0
                 if self.dy == 1:
                     self.center_y = self.target_y + grid
                     self.y += self.dy
+                    self.dst_tile.blocked = False
                     self.state = state.TURN_END
                 if self.dy == -1:
                     self.center_y = self.target_y - grid
                     self.y += self.dy
+                    self.dst_tile.blocked = False
                     self.state = state.TURN_END
-                self.game_map.tiles[self.x][self.y - self.dy].blocked = False
 
         if self.state == state.ATTACK:
             if abs(self.target_x - self.center_x) >= step and self.dx:

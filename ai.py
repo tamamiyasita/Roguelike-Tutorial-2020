@@ -33,5 +33,4 @@ class Basicmonster:
         return results
 
 
-a = Basicmonster()
-print()
+

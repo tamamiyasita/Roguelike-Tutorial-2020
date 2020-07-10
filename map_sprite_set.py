@@ -16,7 +16,7 @@ class MapSpriteSet:
         self.sprite_list = MAP_LIST
         self.floor_img = floor_img
         self.wall_img = wall_img
-        if self.wall_img[0].width == 16:
+        if self.wall_img[0].width <= 17:
             self.scale = SPRITE_SCALE * 2
 
     def sprite_set(self):
