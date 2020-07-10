@@ -5,8 +5,7 @@ from constants import *
 def grid_to_pixel(x, y):
     """tilepositionからsprite_sizeに変換する"""
     px = x * SPRITE_SIZE * SPRITE_SCALE + SPRITE_SIZE / 2 * SPRITE_SCALE
-    py = (y * SPRITE_SIZE * SPRITE_SCALE + SPRITE_SIZE /
-          2 * SPRITE_SCALE) + STATES_PANEL_HEIGHT
+    py = (y * SPRITE_SIZE * SPRITE_SCALE + SPRITE_SIZE / 2 * SPRITE_SCALE) + STATES_PANEL_HEIGHT
     return px, py
 
 
@@ -16,7 +15,7 @@ def pixel_to_grid(x, y):
     px = round(px / (SPRITE_SIZE * SPRITE_SCALE))
 
     py = y - SPRITE_SIZE / 2 * SPRITE_SCALE - STATES_PANEL_HEIGHT
-    py = round(py / SPRITE_SIZE * SPRITE_SCALE)
+    py = round(py / (SPRITE_SIZE * SPRITE_SCALE))
     return px, py
 
 

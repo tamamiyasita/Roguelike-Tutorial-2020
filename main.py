@@ -99,7 +99,7 @@ class MG(arcade.Window):
                 print(grid_x, grid_y, "GRID")
                 print(center_x, center_y, "RECT")
                 arcade.draw_rectangle_outline(
-                    center_x, center_y, SPRITE_SIZE, SPRITE_SIZE, arcade.color.LIGHT_BLUE, 2)
+                    center_x, center_y, SPRITE_SIZE*SPRITE_SCALE, SPRITE_SIZE*SPRITE_SCALE, arcade.color.LIGHT_BLUE, 2)
 
         except Exception as e:
             print(e)
