@@ -3,8 +3,8 @@ import math
 from typing import Optional
 from constants import *
 from data import *
-from item import Item
-from actor import Actor
+from actor.item import Item
+from actor.actor import Actor
 import random
 
 
@@ -13,19 +13,19 @@ class LightningEfc(Actor):
         super().__init__(x=x, y=y, image=effect1[87])
         self.alpha = 255
         EFFECT_LIST.append(self)
-        self.scale = 3.5
+        self.scale = 3.6
 
     def update(self):
         self.alpha -= 5
         print(self.alpha, "ALF")
         if self.alpha % 10 == 0:
-            self.scale -= random.random()
+            self.scale += random.random()
             self.center_x += random.randint(1, 3)
         else:
-            self.scale += random.random()
+            # self.scale += random.random()
             self.center_x -= random.randint(1, 3)
 
-        if self.alpha <= 50:
+        if self.alpha <= 90:
 
             EFFECT_LIST.remove(self)
 

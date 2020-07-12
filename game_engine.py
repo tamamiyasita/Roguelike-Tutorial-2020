@@ -1,21 +1,23 @@
 
-import arcade
-import tcod
 from collections import deque
 
+import arcade
+import tcod
+
+from actor.actor import Actor
+from actor.inventory import Inventory
+from actor.ai import Basicmonster
 from constants import *
 from data import *
-from inventory import Inventory
-from actor import Actor
+from actor.fighter import Fighter
+from fov_functions import fov_get, initialize_fov, recompute_fov
 from game_map.basic_dungeon import BasicDungeon
-from fighter import Fighter
-from fov_functions import initialize_fov, recompute_fov, fov_get
-from viewport import viewport
 from game_map.map_sprite_set import MapSpriteSet
-from fighter import Fighter
-from ai import Basicmonster
-from item import Item
-from potion import Potion
+from actor.item import Item
+from actor.potion import Potion
+from viewport import viewport
+from actor.PC import Player, PC
+from util import grid_to_pixel, pixel_to_grid
 
 
 class GameEngine:
@@ -44,6 +46,17 @@ class GameEngine:
         fighter_component2 = Fighter(hp=3, defense=2, power=5)
         ai_component = Basicmonster()
 
+        self.player = Player()
+        self.player.game_map = self.game_map
+        # xx, yy = grid_to_pixel(
+        #     self.game_map.player_pos[0], self.game_map.player_pos[1])
+        # self.player.center_x = xx
+        # self.player.center_y = yy
+        # self.player.x = self.game_map.player_pos[0]
+        # self.player.y = self.game_map.player_pos[1]
+
+        # self.player.position = grid_to_pixel(
+        #     self.game_map.player_pos[0], self.game_map.player_pos[1])
         self.player = Actor(image["player"], "player", self.game_map.player_pos[0], self.game_map.player_pos[1],
                             blocks=False, inventory=Inventory(capacity=5),
                             fighter=fighter_component,

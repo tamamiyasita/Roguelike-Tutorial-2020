@@ -18,8 +18,6 @@ class Actor(arcade.Sprite):
         self.dx, self.dy = 0, 0
         self.center_x, self.center_y = grid_to_pixel(x, y)
         self.x, self.y = pixel_to_grid(self.center_x, self.center_y)
-        self.x = x
-        self.y = y
         self.blocks = blocks
         self.color = color
         self.visible_color = visible_color
@@ -50,6 +48,10 @@ class Actor(arcade.Sprite):
                 self.left_image(image)
 
         ENTITY_LIST.append(self)
+
+    def get_dict(self):
+        result = {}
+        result["image"] = self
 
     def t_move(self, dxy):
         try:

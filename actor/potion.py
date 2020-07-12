@@ -1,7 +1,7 @@
-from actor import Actor
+from actor.actor import Actor
 from constants import *
 from data import *
-from item import Item
+from actor.item import Item
 
 
 class Potion(Actor):

@@ -1,7 +1,7 @@
 import arcade
 from data import *
 from constants import *
-from actor import Actor
+from actor.actor import Actor
 
 test_wall = image.get("test_wall")
 test_floor = image.get("test_floor")

@@ -4,15 +4,15 @@ from random import randint
 from game_map.map_tool import initialize_tiles, Rect, is_blocked
 from game_map.map_sprite_set import MapSpriteSet
 from util import pixel_to_grid, grid_to_pixel
-from actor import Actor
+from actor.actor import Actor
 from constants import *
 from data import *
-from fighter import Fighter
-from ai import Basicmonster
-from item import Item
-from lightning_scroll import LightningScroll
-from fireball_scroll import FireballScroll
-from potion import Potion
+from actor.fighter import Fighter
+from actor.ai import Basicmonster
+from actor.item import Item
+from actor.lightning_scroll import LightningScroll
+from actor.fireball_scroll import FireballScroll
+from actor.potion import Potion
 
 
 class BasicDungeon:

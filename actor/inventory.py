@@ -1,4 +1,4 @@
-from actor import Actor
+from actor.actor import Actor
 
 
 class Inventory:
