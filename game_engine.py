@@ -7,11 +7,11 @@ from constants import *
 from data import *
 from inventory import Inventory
 from actor import Actor
-from basic_dungeon import BasicDungeon
+from game_map.basic_dungeon import BasicDungeon
 from fighter import Fighter
 from fov_functions import initialize_fov, recompute_fov, fov_get
 from viewport import viewport
-from map_sprite_set import MapSpriteSet
+from game_map.map_sprite_set import MapSpriteSet
 from fighter import Fighter
 from ai import Basicmonster
 from item import Item

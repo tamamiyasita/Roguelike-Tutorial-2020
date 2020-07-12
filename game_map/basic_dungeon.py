@@ -1,8 +1,8 @@
 import arcade
 from random import randint
 
-from map_tool import initialize_tiles, Rect, is_blocked
-from map_sprite_set import MapSpriteSet
+from game_map.map_tool import initialize_tiles, Rect, is_blocked
+from game_map.map_sprite_set import MapSpriteSet
 from util import pixel_to_grid, grid_to_pixel
 from actor import Actor
 from constants import *
@@ -108,15 +108,22 @@ class BasicDungeon:
                     print("spown!")
                     ACTOR_LIST.append(monster)
 
+                else:
+                    fighter_component = Fighter(hp=15, defense=2, power=5)
+                    ai_component = Basicmonster()
+                    monster = Actor(image=demi_human1[15], name="troll", x=x, y=y, scale=SPRITE_SCALE,
+                                    blocks=True, fighter=fighter_component, ai=ai_component, sub_img=False, map_tile=self)
+                    print("spown!")
+                    ACTOR_LIST.append(monster)
         for i in range(number_of_items):
             x = randint(room.x1 + 1, room.x2 - 1)
             y = randint(room.y1 + 1, room.y2 - 1)
 
             if not any([actor for actor in actor_list if actor.x == x and actor.y == y]):
                 type = randint(0, 100)
-                if type < 1:
+                if type < 40:
                     item = Potion(x=x, y=y)
-                elif type < 2:
+                elif type < 67:
                     item = LightningScroll(x=x, y=y)
                 else:
                     item = FireballScroll(x=x, y=y)

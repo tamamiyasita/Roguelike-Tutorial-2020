@@ -10,6 +10,7 @@ class Potion(Actor):
                          color=COLORS["transparent"], visible_color=COLORS["light_ground"], not_visible_color=COLORS["dark_ground"],
                          item=Item())
         self.alpha = 0
+        ITEM_LIST.append(self)
 
     def use(self, game_engine):
         game_engine.player.fighter.hp += 5

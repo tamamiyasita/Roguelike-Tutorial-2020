@@ -5,7 +5,8 @@ from constants import *
 def grid_to_pixel(x, y):
     """tilepositionからsprite_sizeに変換する"""
     px = x * SPRITE_SIZE * SPRITE_SCALE + SPRITE_SIZE / 2 * SPRITE_SCALE
-    py = (y * SPRITE_SIZE * SPRITE_SCALE + SPRITE_SIZE / 2 * SPRITE_SCALE) + STATES_PANEL_HEIGHT
+    py = (y * SPRITE_SIZE * SPRITE_SCALE + SPRITE_SIZE /
+          2 * SPRITE_SCALE) + STATES_PANEL_HEIGHT
     return px, py
 
 
@@ -113,7 +114,7 @@ class TileImageTest(arcade.Window):
 
 
 def main():
-    t = (r"image/Effect1.png")
+    t = (r"image/demi_human1.png")
     tst = TileImageTest(textures=t)
 
     arcade.run()
