@@ -50,7 +50,6 @@ class GameEngine:
                             sub_img=image.get("player_move"), map_tile=self.game_map)
         self.player.state = state.READY
 
-
         self.crab = Actor(image["crab"], "crab", self.player.x+2, self.player.y,
                           blocks=True, fighter=fighter_component2, ai=ai_component,
                           scale=SPRITE_SCALE * 0.5, sub_img=True, map_tile=self.game_map)
@@ -160,14 +159,14 @@ class GameEngine:
         for actor in ACTOR_LIST:
             if actor.ai and not actor.is_dead:
                 results = actor.ai.take_turn(
-                    target=self.player, game_map=self.game_map, sprite_lists=[MAP_LIST, ACTOR_LIST])
+                    target=self.player, game_map=self.game_map, sprite_lists=[ACTOR_LIST])
                 if results:
                     self.action_queue.extend(results)
-                else:
-                    results = actor.ai.take_turn(
-                        target=self.player, game_map=self.game_map, sprite_lists=[MAP_LIST])
-                    if results:
-                        self.action_queue.extend(results)
+                # else:
+                #     results = actor.ai.take_turn(
+                #         target=self.player, game_map=self.game_map, sprite_lists=[MAP_LIST])
+                #     if results:
+                #         self.action_queue.extend(results)
 
                 turn_check = actor
         return turn_check

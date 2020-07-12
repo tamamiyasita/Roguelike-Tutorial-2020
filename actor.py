@@ -77,10 +77,10 @@ class Actor(arcade.Sprite):
 
             self.target_x = self.center_x
             self.target_y = self.center_y
-            
+
             # 行先を変数dst_tileに入れる
             self.dst_tile = self.game_map.tiles[self.x +
-                                    self.dx][self.y+self.dy]
+                                                self.dx][self.y+self.dy]
 
             blocking_actor = get_blocking_entity(
                 self.x+self.dx, self.y+self.dy, ACTOR_LIST)
@@ -92,7 +92,6 @@ class Actor(arcade.Sprite):
                         self.state = state.ATTACK
                         self.change_y = self.dy * MOVE_SPEED
                         self.change_x = self.dx * MOVE_SPEED
-                        self.dst_tile.blocked = True
 
                     return attack_results
 
@@ -108,7 +107,7 @@ class Actor(arcade.Sprite):
             elif not get_blocking_entity(self.x + self.dx, self.y + self.dy, ACTOR_LIST) and\
                     self.dst_tile.blocked == False:
                     # self.game_map.tiles[self.x+self.dx][self.y+self.dy].blocked == False:
-                
+
                 self.dst_tile.blocked = True
                 self.state = state.ON_MOVE
                 self.change_y = self.dy * MOVE_SPEED
