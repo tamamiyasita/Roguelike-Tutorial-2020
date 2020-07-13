@@ -17,6 +17,7 @@ from actor.item import Item
 from actor.potion import Potion
 from viewport import viewport
 from actor.PC import Player
+from actor.Crab import Crab
 from util import grid_to_pixel, pixel_to_grid
 
 
@@ -61,13 +62,14 @@ class GameEngine:
         #                     fighter=fighter_component,
         #                     sub_img=image.get("player_move"), map_tile=self.game_map)
         self.player.state = state.READY
+        self.crab = Crab(self.player.x+2, self.player.y,self.game_map)
 
         # self.crab = Actor(image["crab"], "crab", self.player.x+2, self.player.y,
         #                   blocks=True, fighter=fighter_component2, ai=ai_component,
         #                   scale=SPRITE_SCALE * 0.5, sub_img=True, map_tile=self.game_map)
 
         self.actor_list.append(self.player)
-        # self.actor_list.append(self.crab)
+        self.actor_list.append(self.crab)
 
         self.fov_map = initialize_fov(self.game_map)
         self.mapsprite = MapSpriteSet(

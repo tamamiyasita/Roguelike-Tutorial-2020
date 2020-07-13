@@ -103,7 +103,7 @@ class BasicDungeon:
                 if randint(0, 100) < 80:
                     fighter_component = Fighter(hp=10, defense=1, power=3)
                     ai_component = Basicmonster()
-                    monster = Actor(texture=demi_human1[11], name="orc", x=x, y=y, scale=SPRITE_SCALE,
+                    monster = Actor(texture=demi_human1[11], name="orc", x=x, y=y, 
                                     blocks=True, fighter=fighter_component, ai=ai_component, sub_img=False, map_tile=self)
                     print("spown!")
                     ACTOR_LIST.append(monster)
@@ -111,7 +111,7 @@ class BasicDungeon:
                 else:
                     fighter_component = Fighter(hp=15, defense=2, power=5)
                     ai_component = Basicmonster()
-                    monster = Actor(texture=demi_human1[15], name="troll", x=x, y=y, scale=SPRITE_SCALE,
+                    monster = Actor(texture=demi_human1[15], name="troll", x=x, y=y,
                                     blocks=True, fighter=fighter_component, ai=ai_component, sub_img=False, map_tile=self)
                     print("spown!")
                     ACTOR_LIST.append(monster)

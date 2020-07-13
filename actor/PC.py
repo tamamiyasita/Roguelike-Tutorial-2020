@@ -31,10 +31,10 @@ class Player(Actor):
         if self.state == state.ON_MOVE and self.left_face:
             self.texture = player_move[1]
         if self.state == state.ATTACK and not self.left_face:
-            self.texture = player_attack[0]
+            self.texture = pc_attack[0]
             # self.texture = self.textures.get("move_left")
         if self.state == state.ATTACK and self.left_face:
-            self.texture = player_attack[1]
+            self.texture = pc_attack[1]
             # self.texture = self.textures.get("move_right")
         if self.state == state.READY and not self.left_face:
             self.texture = player[0]

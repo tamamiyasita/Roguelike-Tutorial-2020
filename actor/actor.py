@@ -13,7 +13,7 @@ class Actor(arcade.Sprite):
                  inventory=None, item=None,
                  visible_color=arcade.color.WHITE, not_visible_color=arcade.color.WHITE,
                  state=state.TURN_END, map_tile=None, sub_img=None):
-        super().__init__(scale=SPRITE_SCALE)
+        super().__init__(scale=scale)
         # if isinstance(image, arcade.texture.Texture):
         self.texture_ = texture
         self.name = name

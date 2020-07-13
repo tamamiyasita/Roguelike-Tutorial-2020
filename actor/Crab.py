@@ -1,4 +1,5 @@
 import arcade
+from arcade import texture
 from actor.actor import Actor
 from actor.fighter import Fighter
 from actor.ai import Basicmonster
@@ -9,9 +10,10 @@ from constants import *
 
 
 class Crab(Actor):
-    def __init__(self, x, y, game_map=None):
+    def __init__(self, x, y,  game_map=None):
         fighter_component = Fighter(hp=10, defense=2, power=4)
         ai_component = Basicmonster()
+        
 
         super().__init__(
             name="crab",
@@ -20,6 +22,11 @@ class Crab(Actor):
             y=y,
             fighter=fighter_component,
             ai=ai_component,
-            map_tile=game_map 
+            map_tile=game_map,
+            scale=1,
+            blocks =True
+            
         )
+        
         self.left_face = False
+
