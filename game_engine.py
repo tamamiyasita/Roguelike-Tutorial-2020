@@ -16,7 +16,7 @@ from game_map.map_sprite_set import MapSpriteSet
 from actor.item import Item
 from actor.potion import Potion
 from viewport import viewport
-from actor.PC import Player, PC
+from actor.PC import Player
 from util import grid_to_pixel, pixel_to_grid
 
 
@@ -46,8 +46,7 @@ class GameEngine:
         fighter_component2 = Fighter(hp=3, defense=2, power=5)
         ai_component = Basicmonster()
 
-        self.player = Player()
-        self.player.game_map = self.game_map
+        self.player = Player( self.game_map.player_pos[0], self.game_map.player_pos[1], self.game_map)
         # xx, yy = grid_to_pixel(
         #     self.game_map.player_pos[0], self.game_map.player_pos[1])
         # self.player.center_x = xx
@@ -57,18 +56,18 @@ class GameEngine:
 
         # self.player.position = grid_to_pixel(
         #     self.game_map.player_pos[0], self.game_map.player_pos[1])
-        self.player = Actor(image["player"], "player", self.game_map.player_pos[0], self.game_map.player_pos[1],
-                            blocks=False, inventory=Inventory(capacity=5),
-                            fighter=fighter_component,
-                            sub_img=image.get("player_move"), map_tile=self.game_map)
+        # self.player = Actor(image["player"], "player", self.game_map.player_pos[0], self.game_map.player_pos[1],
+        #                     blocks=False, inventory=Inventory(capacity=5),
+        #                     fighter=fighter_component,
+        #                     sub_img=image.get("player_move"), map_tile=self.game_map)
         self.player.state = state.READY
 
-        self.crab = Actor(image["crab"], "crab", self.player.x+2, self.player.y,
-                          blocks=True, fighter=fighter_component2, ai=ai_component,
-                          scale=SPRITE_SCALE * 0.5, sub_img=True, map_tile=self.game_map)
+        # self.crab = Actor(image["crab"], "crab", self.player.x+2, self.player.y,
+        #                   blocks=True, fighter=fighter_component2, ai=ai_component,
+        #                   scale=SPRITE_SCALE * 0.5, sub_img=True, map_tile=self.game_map)
 
         self.actor_list.append(self.player)
-        self.actor_list.append(self.crab)
+        # self.actor_list.append(self.crab)
 
         self.fov_map = initialize_fov(self.game_map)
         self.mapsprite = MapSpriteSet(

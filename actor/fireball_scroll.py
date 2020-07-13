@@ -10,7 +10,7 @@ from util import get_blocking_entity, grid_to_pixel, pixel_to_grid
 
 class FireballEfc(Actor):
     def __init__(self, x, y):
-        super().__init__(x=x, y=y, image=effect1[134])
+        super().__init__(x=x, y=y, texture=effect1[134])
         self.alpha = 255
         EFFECT_LIST.append(self)
         self.scale = 0.1
@@ -26,7 +26,7 @@ class FireballEfc(Actor):
 
 class FireballScroll(Actor):
     def __init__(self, x: int, y: int):
-        super().__init__(x=x, y=y, image=scroll[6], name="Fireball Scroll", color=COLORS["transparent"], visible_color=arcade.color.WHITE,
+        super().__init__(x=x, y=y, texture=scroll[6], name="Fireball Scroll", color=COLORS["transparent"], visible_color=arcade.color.WHITE,
                          not_visible_color=COLORS.get("dark_ground"), item=Item())
         self.alpha = 0
         ITEM_LIST.append(self)

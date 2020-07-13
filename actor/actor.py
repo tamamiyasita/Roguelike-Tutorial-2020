@@ -1,19 +1,21 @@
 import arcade
 import math
+
+from arcade import texture
 from constants import *
 from data import *
 from util import pixel_to_grid, grid_to_pixel, get_blocking_entity
 
 
 class Actor(arcade.Sprite):
-    def __init__(self, image=None, name=None, x=0, y=0, blocks=False,
+    def __init__(self, texture=None, name=None, x=0, y=0, blocks=False,
                  scale=SPRITE_SCALE, color=arcade.color.WHITE, fighter=None, ai=None,
                  inventory=None, item=None,
                  visible_color=arcade.color.WHITE, not_visible_color=arcade.color.WHITE,
                  state=state.TURN_END, map_tile=None, sub_img=None):
-        super().__init__(image, scale)
-        if isinstance(image, arcade.texture.Texture):
-            self.texture_ = image
+        super().__init__(scale=SPRITE_SCALE)
+        # if isinstance(image, arcade.texture.Texture):
+        self.texture_ = texture
         self.name = name
         self.dx, self.dy = 0, 0
         self.center_x, self.center_y = grid_to_pixel(x, y)
@@ -38,14 +40,14 @@ class Actor(arcade.Sprite):
 
         self.game_map = map_tile
         # self.stop_move = True
-        self.sub_img = sub_img
-        if sub_img:
-            self.left_face = False
-            if type(sub_img) != bool:
-                self.left_image(image, sub_img)
+        # self.sub_img = sub_img
+        # if sub_img:
+        #     self.left_face = False
+        #     if type(sub_img) != bool:
+        #         self.left_image(image, sub_img)
 
-            if type(sub_img) == bool:
-                self.left_image(image)
+        #     if type(sub_img) == bool:
+        #         self.left_image(image)
 
         ENTITY_LIST.append(self)
 
@@ -164,37 +166,37 @@ class Actor(arcade.Sprite):
         dy = other.y - self.y
         return math.sqrt(dx ** 2 + dy ** 2)
 
-    def update_animation(self, delta_time=1 / 60):
-        if type(self.sub_img) != bool and self.state:
-            if self.state == state.ON_MOVE and not self.left_face:
-                self.texture = self.textures.get("move_left")
-            if self.state == state.ON_MOVE and self.left_face:
-                self.texture = self.textures.get("move_right")
-            if self.state == state.ATTACK and not self.left_face:
-                self.texture = pc_attack[0]
-                # self.texture = self.textures.get("move_left")
-            if self.state == state.ATTACK and self.left_face:
-                self.texture = pc_attack[1]
-                # self.texture = self.textures.get("move_right")
-            if self.state == state.READY and not self.left_face:
-                self.texture = self.textures.get("left")
-            if self.state == state.READY and self.left_face:
-                self.texture = self.textures.get("right")
-        elif self.sub_img:
-            if self.state == state.ON_MOVE and self.dx == 1:
-                self.texture = self.textures.get("left")
-            if self.state == state.ON_MOVE and self.dx == -1:
-                self.texture = self.textures.get("right")
+    # def update_animation(self, delta_time=1 / 60):
+    #     if type(self.sub_img) != bool and self.state:
+    #         if self.state == state.ON_MOVE and not self.left_face:
+    #             self.texture = self.textures.get("move_left")
+    #         if self.state == state.ON_MOVE and self.left_face:
+    #             self.texture = self.textures.get("move_right")
+    #         if self.state == state.ATTACK and not self.left_face:
+    #             self.texture = pc_attack[0]
+    #             # self.texture = self.textures.get("move_left")
+    #         if self.state == state.ATTACK and self.left_face:
+    #             self.texture = pc_attack[1]
+    #             # self.texture = self.textures.get("move_right")
+    #         if self.state == state.READY and not self.left_face:
+    #             self.texture = self.textures.get("left")
+    #         if self.state == state.READY and self.left_face:
+    #             self.texture = self.textures.get("right")
+    #     elif self.sub_img:
+    #         if self.state == state.ON_MOVE and self.dx == 1:
+    #             self.texture = self.textures.get("left")
+    #         if self.state == state.ON_MOVE and self.dx == -1:
+    #             self.texture = self.textures.get("right")
 
-    def left_image(self, image, m_anime=None):
-        left, right = arcade.load_texture_pair(image)
-        self.textures = {"right": right, "left": left}
-        if m_anime:
-            move_left, move_right = arcade.load_texture_pair(
-                m_anime)
-            self.textures = {"right": right, "left": left,
-                             "move_right": move_right, "move_left": move_left}
-        return self.textures
+    # def left_image(self, image, m_anime=None):
+    #     left, right = arcade.load_texture_pair(image)
+    #     self.textures = {"right": right, "left": left}
+    #     if m_anime:
+    #         move_left, move_right = arcade.load_texture_pair(
+    #             m_anime)
+    #         self.textures = {"right": right, "left": left,
+    #                          "move_right": move_right, "move_left": move_left}
+    #     return self.textures
 
     def move_towards(self, target_x, target_y, sprite_list):
         dx = target_x - self.x

@@ -25,7 +25,7 @@ class MapSpriteSet:
                 if self.tiles[x][y].blocked:
                     wall_number = self.search_wall_number(x, y, self.tiles)
 
-                    self.wall = Actor(image=self.wall_img.get(wall_number), x=x, y=y, blocks=True, scale=self.scale, color=arcade.color.BLACK, visible_color=COLORS.get(
+                    self.wall = Actor(texture=self.wall_img.get(wall_number), x=x, y=y, blocks=True, scale=self.scale, color=arcade.color.BLACK, visible_color=COLORS.get(
                         "light_wall"), not_visible_color=COLORS.get("dark_wall"))
                     self.wall.alpha = 0
 

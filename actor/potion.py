@@ -6,7 +6,7 @@ from actor.item import Item
 
 class Potion(Actor):
     def __init__(self, x, y):
-        super().__init__(x=x, y=y, image=potion[0], name="Healing Potion",
+        super().__init__(x=x, y=y, texture=potion[0], name="Healing Potion",
                          color=COLORS["transparent"], visible_color=COLORS["light_ground"], not_visible_color=COLORS["dark_ground"],
                          item=Item())
         self.alpha = 0

@@ -10,7 +10,7 @@ import random
 
 class LightningEfc(Actor):
     def __init__(self, x, y):
-        super().__init__(x=x, y=y, image=effect1[87])
+        super().__init__(x=x, y=y, texture=effect1[87])
         self.alpha = 255
         EFFECT_LIST.append(self)
         self.scale = 3.6
@@ -32,7 +32,7 @@ class LightningEfc(Actor):
 
 class LightningScroll(Actor):
     def __init__(self, x: int, y: int):
-        super().__init__(x=x, y=y, image=scroll[1], name="Lightning Scroll", color=COLORS["transparent"], visible_color=arcade.color.WHITE,
+        super().__init__(x=x, y=y, texture=scroll[1], name="Lightning Scroll", color=COLORS["transparent"], visible_color=arcade.color.WHITE,
                          not_visible_color=COLORS.get("dark_ground"), item=Item())
         self.alpha = 0
         ITEM_LIST.append(self)
