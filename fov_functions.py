@@ -1,6 +1,7 @@
 import arcade
 import tcod
 
+from itertools import chain
 from constants import *
 from util import grid_to_pixel
 
@@ -38,7 +39,7 @@ def fov_get(game_map, fov_map):
                 for sprite in sprite_point:
                     sprite.is_visible = True
                     sprite.alpha = 255
-            for sprite in ACTOR_LIST:
+            for sprite in chain(ACTOR_LIST, EFFECT_LIST):
                 if not tcod.map_is_in_fov(fov_map, sprite.x, sprite.y):
                     sprite.alpha = 0
                 else:

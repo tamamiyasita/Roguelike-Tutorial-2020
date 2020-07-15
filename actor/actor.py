@@ -86,7 +86,6 @@ class Actor(arcade.Sprite):
 
             elif not get_blocking_entity(self.x + self.dx, self.y + self.dy, ACTOR_LIST) and\
                     self.dst_tile.blocked == False:
-                    # self.game_map.tiles[self.x+self.dx][self.y+self.dy].blocked == False:
 
                 self.dst_tile.blocked = True
                 self.state = state.ON_MOVE
@@ -96,7 +95,7 @@ class Actor(arcade.Sprite):
         except:
             pass
 
-    def update(self):
+    def update(self, delta_time=1/60):
         super().update()
         grid = SPRITE_SCALE * SPRITE_SIZE
         step = SPRITE_SCALE * SPRITE_SIZE // 2

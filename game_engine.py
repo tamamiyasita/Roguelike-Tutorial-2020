@@ -97,6 +97,10 @@ class GameEngine:
                 target = action["remove"]
                 target.remove_from_sprite_lists()
 
+            if "pass" in action:
+                target = action["pass"]
+                target.state = state.TURN_END
+
             if "delay" in action:
                 target = action["delay"]
                 target["time"] -= delta_time
@@ -180,10 +184,21 @@ class GameEngine:
             viewport(self.player)
 
     def turn_change(self, delta_time):
+        turn = 0
+
         if self.player.state == state.TURN_END:
             self.player.state = state.DELAY
             self.action_queue.extend([{"enemy_turn": True}])
+        # elif self.turn_check == "next_turn" or self.turn_check.state == state.TURN_END:
+        elif self.turn_check == "next_turn":
+            self.turn_check = None
+            self.action_queue.extend([{"player_turn": True}])
+
         elif self.turn_check:
-            if self.turn_check == "next_turn" or self.turn_check.state == state.TURN_END:
-                self.turn_check = None
-                self.action_queue.extend([{"player_turn": True}])
+            for actor in ACTOR_LIST:
+                if actor.ai:
+                    if actor.state == state.TURN_END:
+                        turn += 1
+                    if turn == len(ACTOR_LIST) - 1:
+                        self.action_queue.extend([{"player_turn": True}])
+                        self.turn_check = None

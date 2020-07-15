@@ -14,16 +14,20 @@ class ConfusionEfc(Actor):
 
         self.sprite = sprite
         self.com_ai = self.sprite.ai
-        self.alpha = 255
         self.count = self.sprite.ai.number_of_turns
+        self.time_num = 1
 
         EFFECT_LIST.append(self)
 
-    def update(self):
+    def update(self, delta_time=1/60):
+        super().update(delta_time)
         self.center_x, self.center_y = self.sprite.center_x, self.sprite.center_y
-        # if self.count > self.sprite.ai.number_of_turns:
-        #     self.alpha -= 20
-        if self.sprite.ai.number_of_turns == 0:
+        self.time_num -= delta_time
+        if self.time_num < 0:
+            self.angle += 90
+            self.time_num = 1
+
+        if self.sprite.ai.number_of_turns == 0 or not self.sprite in ACTOR_LIST:
             EFFECT_LIST.remove(self)
 
 

@@ -30,7 +30,10 @@ class Basicmonster:
                     attack = monster.move((dx, dy), target)
                     if attack:
                         results.extend(attack)
-        return results
+            return results
+
+        else:
+            results.append({"pass": monster})
 
 
 class ConfusedMonster:
