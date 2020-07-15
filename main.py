@@ -23,11 +23,16 @@ class MG(arcade.Window):
     def on_update(self, delta_time):
         self.game_engine.actor_list.update_animation()
         self.game_engine.actor_list.update()
+        EFFECT_LIST.update()
 
         self.game_engine.process_action_queue(delta_time)
         self.game_engine.turn_change(delta_time)
         self.game_engine.view()
-        EFFECT_LIST.update()
+
+        if self.game_engine.player.state == state.READY and self.dist:
+            attack = self.game_engine.player.move(self.dist)
+            if attack:
+                self.game_engine.action_queue.extend(attack)
 
     def on_draw(self):
         try:
@@ -95,9 +100,9 @@ class MG(arcade.Window):
                 mouse_x, mouse_y = self.mouse_position
                 grid_x, grid_y = pixel_to_grid(mouse_x, mouse_y)
                 center_x, center_y = grid_to_pixel(grid_x, grid_y)
-                print(mouse_x, mouse_y, "MOUSE")
-                print(grid_x, grid_y, "GRID")
-                print(center_x, center_y, "RECT")
+                # print(mouse_x, mouse_y, "MOUSE")
+                # print(grid_x, grid_y, "GRID")
+                # print(center_x, center_y, "RECT")
                 arcade.draw_rectangle_outline(
                     center_x, center_y, SPRITE_SIZE*SPRITE_SCALE, SPRITE_SIZE*SPRITE_SCALE, arcade.color.LIGHT_BLUE, 2)
 
@@ -162,12 +167,8 @@ class MG(arcade.Window):
                 self.game_engine.game_state = GAME_STATE.SELECT_LOCATION
 
             self.dist = dist
-            if self.game_engine.player.state == state.READY and self.dist:
-                attack = self.game_engine.player.move(self.dist)
-                if attack:
-                    self.game_engine.action_queue.extend(attack)
 
-                # self.game_engine.action_queue.append({"player_turn": True})
+            # self.game_engine.action_queue.append({"player_turn": True})
 
     def on_key_release(self, key, modifiers):
         self.dist = None
