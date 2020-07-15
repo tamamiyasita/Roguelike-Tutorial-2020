@@ -61,6 +61,16 @@ class GameEngine:
         self.mapsprite.sprite_set()
 
         viewport(self.player)
+
+    def get_actor_dict(self, actor):
+        name = actor.__class__.__name__
+        return {name: actor.get_dict()}
+
+    def get_dict(self):
+        player_dict = self.get_actor_dict(self.player)
+
+        dungeon_dict = []
+
     ###アクションキュー###
 
     def process_action_queue(self, delta_time):

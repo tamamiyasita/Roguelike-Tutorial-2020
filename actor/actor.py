@@ -43,7 +43,53 @@ class Actor(arcade.Sprite):
 
     def get_dict(self):
         result = {}
-        result["image"] = self
+        result["x"] = self.x
+        result["y"] = self.y
+        result["visible_color"] = self.visible_color
+        result["not_visible_color"] = self.not_visible_color
+        result["alpha"] = self.alpha
+        result["color"] = self.color
+        result["name"] = self.name
+        result["blocks"] = self.blocks
+        result["is_visible"] = self.is_visible
+        result["is_dead"] = self.is_dead
+        if self.ai:
+            result["ai"] = True
+        if self.fighter:
+            result["fighter"] = self.fighter.get_dict()
+        if self.item:
+            result["item"] = True
+        if self.inventory:
+            result["inventory"] = self.inventory.get_dict()
+
+        return result
+
+    def restore_from_dict(self, result):
+        from actor.fighter import Fighter
+        from actor.ai import Basicmonster
+        from actor.item import Item
+        from actor.inventory import Inventory
+
+        self.x = result["x"]
+        self.y = result["y"]
+        self.visible_color = result["visible_color"]
+        self.not_visible_color = result["not_visible_color"]
+        self.alpha = result["alpha"]
+        self.color = result["color"]
+        self.name = result["name"]
+        self.blocks = result["blocks"]
+        self.is_visible = result["is_visible"]
+        self.is_dead = result["is_dead"]
+        if "ai" in result:
+            self.ai = Basicmonster()
+        if "item" in result:
+            self.item = Item()
+        if "fighter" in result:
+            self.fighter = Fighter()
+            self.fighter.restore_from_dict(result["fighter"])
+        if "inventory" in result:
+            self.inventory = Inventory
+            self.inventory.restore_from_dict(result["inventory"])
 
     def move(self, dxy, target=None):
         try:

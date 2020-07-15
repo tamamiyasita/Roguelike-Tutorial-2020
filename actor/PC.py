@@ -4,7 +4,7 @@ from actor.fighter import Fighter
 from actor.inventory import Inventory
 from data import *
 from constants import *
-# from util import pixel_to_grid, grid_to_pixel
+from util import pixel_to_grid, grid_to_pixel
 
 
 class Player(Actor):
@@ -24,19 +24,36 @@ class Player(Actor):
         self.left_face = False
         self.state = state.READY
         ACTOR_LIST.append(self)
+        self.delay_time = 2.7
 
     def update_animation(self, delta_time=1 / 60):
+        super().update_animation(delta_time)
         if self.state == state.ON_MOVE and not self.left_face:
             self.texture = player_move[0]
         if self.state == state.ON_MOVE and self.left_face:
             self.texture = player_move[1]
+
         if self.state == state.ATTACK and not self.left_face:
+            print(self.dst_tile)
             self.texture = pc_attack[0]
-            # self.texture = self.textures.get("move_left")
         if self.state == state.ATTACK and self.left_face:
             self.texture = pc_attack[1]
-            # self.texture = self.textures.get("move_right")
+
         if self.state == state.READY and not self.left_face:
             self.texture = player[0]
+            self.delay_time -= delta_time
+            if self.delay_time < 0.7:
+                self.texture = pc_delay2[0]
+            if self.delay_time <= 0.5:
+                self.texture = pc_delay[0]
+            if self.delay_time < 0:
+                self.delay_time = 2.7
         if self.state == state.READY and self.left_face:
             self.texture = player[1]
+            self.delay_time -= delta_time
+            if self.delay_time < 0.7:
+                self.texture = pc_delay2[1]
+            if self.delay_time <= 0.5:
+                self.texture = pc_delay[1]
+            if self.delay_time < 0:
+                self.delay_time = 2.7

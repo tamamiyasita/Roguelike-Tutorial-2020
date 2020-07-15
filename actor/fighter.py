@@ -9,6 +9,20 @@ class Fighter:
         self.power = power
         self.owner = None
 
+    def get_dict(self):
+        result = {}
+        result["max_hp"] = self.max_hp
+        result["hp"] = self.hp
+        result["defense"] = self.defense
+        result["power"] = self.power
+        return result
+
+    def restore_from_dict(self, result):
+        self.max_hp = result["max_hp"]
+        self.hp = result["hp"]
+        self.defense = result["defense"]
+        self.power = result["power"]
+
     def take_damage(self, amount):
         results = []
 

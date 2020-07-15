@@ -10,6 +10,8 @@ image = {"player": r"image/rou6.png",
 player = arcade.load_texture_pair(image["player"])
 player_move = arcade.load_texture_pair(image["player_move"])
 pc_attack = arcade.load_texture_pair(r"image/rou6_a.png")
+pc_delay = arcade.load_texture_pair(r"image/rou6_d.png")
+pc_delay2 = arcade.load_texture_pair(r"image/rou6_d2.png")
 
 crab = arcade.load_texture_pair(image["crab"])
 

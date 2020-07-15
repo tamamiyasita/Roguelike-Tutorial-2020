@@ -6,6 +6,29 @@ class Inventory:
         self.capacity = capacity
         self.bag = [None for _ in range(self.capacity)]
 
+    def get_dict(self):
+        result = {}
+        result["capacity"] = self.capacity
+        item_dicts = []
+        for item in self.bag:
+            if item in self.bag:
+                if item is None:
+                    item_dicts.append(None)
+                else:
+                    name = item.__class__.__name__
+                    item_dicts.append({name: item.get_dict()})
+        result["items"] = item_dicts
+        return result
+
+    def restore_from_dict(self, result):
+        self.capacity = result["capacity"]
+        for item_dict in result["items"]:
+            if item_dict in None:
+                self.bag.append(None)
+            else:
+                item = restore_actor(item_dict)
+                self.bag.append(item)
+
     def add_item(self, item: Actor):
         results = []
 
