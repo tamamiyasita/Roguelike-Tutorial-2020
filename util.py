@@ -1,5 +1,6 @@
 import arcade
 from constants import *
+from data import *
 
 
 def grid_to_pixel(x, y):
@@ -114,7 +115,7 @@ class TileImageTest(arcade.Window):
 
 
 def main():
-    t = (r"image/demi_human1.png")
+    t = d_effect
     tst = TileImageTest(textures=t)
 
     arcade.run()

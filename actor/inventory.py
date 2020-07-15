@@ -4,15 +4,15 @@ from actor.actor import Actor
 class Inventory:
     def __init__(self, capacity):
         self.capacity = capacity
-        self.items = [None for _ in range(self.capacity)]
+        self.bag = [None for _ in range(self.capacity)]
 
     def add_item(self, item: Actor):
         results = []
 
         item_placed = False
         for i in range(self.capacity):
-            if self.items[i] is None:
-                self.items[i] = item
+            if self.bag[i] is None:
+                self.bag[i] = item
                 item_placed = True
                 break
 
@@ -25,21 +25,21 @@ class Inventory:
                 {"message": f"You pick up the {item.name}!"}
             )
             item.remove_from_sprite_lists()
-            self.items.append(item)
+            self.bag.append(item)
 
         return results
 
     def get_item_number(self, item_number: int):
-        return self.items[item_number]
+        return self.bag[item_number]
 
     def remove_item_number(self, item_number: int):
         results = []
-        self.items[item_number] = None
+        self.bag[item_number] = None
         return results
 
     def remove_item(self, item: int):
         results = []
         for i in range(self.capacity):
-            if self.items[i] is item:
-                self.items[i] = None
+            if self.bag[i] is item:
+                self.bag[i] = None
         return results

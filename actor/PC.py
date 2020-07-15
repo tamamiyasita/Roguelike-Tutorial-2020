@@ -8,7 +8,7 @@ from constants import *
 
 
 class Player(Actor):
-    def __init__(self,x, y,  game_map=None):
+    def __init__(self, x, y,  game_map=None):
         fighter_component = Fighter(hp=35, defense=3, power=5)
         super().__init__(
             name="player",
@@ -20,10 +20,10 @@ class Player(Actor):
             fighter=fighter_component,
             map_tile=game_map
         )
-        # self.center_x, self.center_y = grid_to_pixel(x, y)
-        # self.x, self.y = pixel_to_grid(self.center_x, self.center_y)
+
         self.left_face = False
-        # ACTOR_LIST.append(self)
+        self.state = state.READY
+        ACTOR_LIST.append(self)
 
     def update_animation(self, delta_time=1 / 60):
         if self.state == state.ON_MOVE and not self.left_face:
@@ -40,5 +40,3 @@ class Player(Actor):
             self.texture = player[0]
         if self.state == state.READY and self.left_face:
             self.texture = player[1]
-
-

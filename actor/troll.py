@@ -7,20 +7,19 @@ from data import *
 from constants import *
 
 
-class Crab(Actor):
+class Troll(Actor):
     def __init__(self, x, y,  game_map=None):
-        fighter_component = Fighter(hp=10, defense=2, power=4)
+        fighter_component = Fighter(hp=15, defense=2, power=5)
         ai_component = Basicmonster()
 
         super().__init__(
-            name="crab",
-            texture=crab[0],
+            name="troll",
+            texture=torll_l,
             x=x,
             y=y,
             fighter=fighter_component,
             ai=ai_component,
             map_tile=game_map,
-            scale=1,
             blocks=True
         )
         self.left_face = False
@@ -29,6 +28,6 @@ class Crab(Actor):
 
     def update_animation(self, delta_time=1 / 60):
         if self.left_face:
-            self.texture = crab[1]
+            self.texture = torll_l
         else:
-            self.texture = crab[0]
+            self.texture = torll_r

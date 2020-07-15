@@ -25,7 +25,7 @@ class MG(arcade.Window):
         self.game_engine.actor_list.update()
 
         self.game_engine.process_action_queue(delta_time)
-        self.game_engine.turn_change()
+        self.game_engine.turn_change(delta_time)
         self.game_engine.view()
         EFFECT_LIST.update()
 
@@ -68,8 +68,8 @@ class MG(arcade.Window):
                     if i == selected_item:
                         arcade.draw_lrtb_rectangle_outline(
                             x+self.vx - 3, x+self.vx + field_width - 5, y+self.vy + 18, y+self.vy - 4, arcade.color.BLACK, 2)
-                    if self.game_engine.player.inventory.items[i]:
-                        item_name = self.game_engine.player.inventory.items[i].name
+                    if self.game_engine.player.inventory.bag[i]:
+                        item_name = self.game_engine.player.inventory.bag[i].name
                     else:
                         item_name = ""
                     text = f"{i+1}: {item_name}"
@@ -107,8 +107,10 @@ class MG(arcade.Window):
     def on_key_press(self, key, modifiers):
         if key == arcade.key.BACKSPACE:
             arcade.close_window()
+        elif key == arcade.key.ESCAPE:
+            self.game_engine.game_state = GAME_STATE.NORMAL
 
-        elif self.game_engine.player.state == state.READY:
+        elif self.game_engine.player.state == state.READY and self.game_engine.game_state == GAME_STATE.NORMAL:
             dist = None
             if key in KEYMAP_UP:
                 dist = (0, 1)
@@ -158,8 +160,6 @@ class MG(arcade.Window):
 
             elif key == arcade.key.SPACE:
                 self.game_engine.game_state = GAME_STATE.SELECT_LOCATION
-            elif key == arcade.key.ESCAPE:
-                self.game_engine.game_state = GAME_STATE.NORMAL
 
             self.dist = dist
             if self.game_engine.player.state == state.READY and self.dist:

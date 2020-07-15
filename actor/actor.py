@@ -12,9 +12,8 @@ class Actor(arcade.Sprite):
                  scale=SPRITE_SCALE, color=arcade.color.WHITE, fighter=None, ai=None,
                  inventory=None, item=None,
                  visible_color=arcade.color.WHITE, not_visible_color=arcade.color.WHITE,
-                 state=state.TURN_END, map_tile=None, sub_img=None):
+                 state=state.TURN_END, map_tile=None):
         super().__init__(scale=scale)
-        # if isinstance(image, arcade.texture.Texture):
         self.texture_ = texture
         self.name = name
         self.dx, self.dy = 0, 0
@@ -39,37 +38,12 @@ class Actor(arcade.Sprite):
             self.ai.owner = self
 
         self.game_map = map_tile
-        # self.stop_move = True
-        # self.sub_img = sub_img
-        # if sub_img:
-        #     self.left_face = False
-        #     if type(sub_img) != bool:
-        #         self.left_image(image, sub_img)
-
-        #     if type(sub_img) == bool:
-        #         self.left_image(image)
 
         ENTITY_LIST.append(self)
 
     def get_dict(self):
         result = {}
         result["image"] = self
-
-    def t_move(self, dxy):
-        try:
-            self.dx, self.dy = dxy
-            if self.dx == -1:
-                self.left_face = True
-            if self.dx == 1:
-                self.left_face = False
-
-            if not get_blocking_entity(self.x + self.dx, self.y + self.dy, ENTITY_LIST):
-                self.x += self.dx
-                self.y += self.dy
-                self.center_x, self.center_y = grid_to_pixel(self.x, self.y)
-                self.state = state.TURN_END
-        except:
-            pass
 
     def move(self, dxy, target=None):
         try:
@@ -92,7 +66,9 @@ class Actor(arcade.Sprite):
                 target = blocking_actor[0]
                 if not target.is_dead:
                     attack_results = self.fighter.attack(target)
-                    if attack_results:
+                    if target == self:
+                        self.state = state.TURN_END
+                    elif attack_results:
                         self.state = state.ATTACK
                         self.change_y = self.dy * MOVE_SPEED
                         self.change_x = self.dx * MOVE_SPEED
@@ -165,38 +141,6 @@ class Actor(arcade.Sprite):
         dx = other.x - self.x
         dy = other.y - self.y
         return math.sqrt(dx ** 2 + dy ** 2)
-
-    # def update_animation(self, delta_time=1 / 60):
-    #     if type(self.sub_img) != bool and self.state:
-    #         if self.state == state.ON_MOVE and not self.left_face:
-    #             self.texture = self.textures.get("move_left")
-    #         if self.state == state.ON_MOVE and self.left_face:
-    #             self.texture = self.textures.get("move_right")
-    #         if self.state == state.ATTACK and not self.left_face:
-    #             self.texture = pc_attack[0]
-    #             # self.texture = self.textures.get("move_left")
-    #         if self.state == state.ATTACK and self.left_face:
-    #             self.texture = pc_attack[1]
-    #             # self.texture = self.textures.get("move_right")
-    #         if self.state == state.READY and not self.left_face:
-    #             self.texture = self.textures.get("left")
-    #         if self.state == state.READY and self.left_face:
-    #             self.texture = self.textures.get("right")
-    #     elif self.sub_img:
-    #         if self.state == state.ON_MOVE and self.dx == 1:
-    #             self.texture = self.textures.get("left")
-    #         if self.state == state.ON_MOVE and self.dx == -1:
-    #             self.texture = self.textures.get("right")
-
-    # def left_image(self, image, m_anime=None):
-    #     left, right = arcade.load_texture_pair(image)
-    #     self.textures = {"right": right, "left": left}
-    #     if m_anime:
-    #         move_left, move_right = arcade.load_texture_pair(
-    #             m_anime)
-    #         self.textures = {"right": right, "left": left,
-    #                          "move_right": move_right, "move_left": move_left}
-    #     return self.textures
 
     def move_towards(self, target_x, target_y, sprite_list):
         dx = target_x - self.x

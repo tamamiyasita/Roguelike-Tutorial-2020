@@ -33,4 +33,25 @@ class Basicmonster:
         return results
 
 
+class ConfusedMonster:
+    def __init__(self, pre_ai, number_of_turns=10):
+        self.pre_ai = pre_ai
+        self.number_of_turns = number_of_turns
 
+    def take_turn(self, target, game_map, sprite_lists):
+        results = []
+        monster = self.owner
+
+        if self.number_of_turns > 0:
+            attack = monster.move((randint(-1, 1), randint(-1, 1)))
+            if attack:
+                results.extend(attack)
+
+            self.number_of_turns -= 1
+
+        else:
+            monster.ai = self.pre_ai
+            results.append(
+                {"message": f"The {monster.name} is no longer confused"})
+
+        return results

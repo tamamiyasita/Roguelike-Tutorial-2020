@@ -33,7 +33,7 @@ walls_3_tiles = get_tile_set(walls_3, tile_size=16)
 wall_3 = {k: walls_3_tiles[v] for k, v in zip(
     range(16), [6, 6, 11, 11, 10, 10, 1, 12, 4, 5, 2, 5, 0, 5, 1, 8])}
 
-
+###items###
 d_potion = (r"image/Potion.png")
 potion = get_tile_set(d_potion, tile_size=16)
 
@@ -42,13 +42,38 @@ scroll = get_tile_set(d_scroll, tile_size=16)
 
 d_effect = (r"image/Effect1.png")  # 83
 effect1 = get_tile_set(d_effect, tile_size=16)
+#######
 
+###enemys###
 d_human1 = (r"image/demi_human1.png")
-demi_human1 = get_tile_set(d_human1, tile_size=16)
+size = 16
+orc_l = arcade.load_texture(
+    d_human1, x=0, y=size, width=size, height=size)
+orc_r = arcade.load_texture(
+    d_human1, x=0, y=size, width=size, height=size, mirrored=True)
+
+torll_l = arcade.load_texture(
+    d_human1, x=size*7, y=size, width=size, height=size)
+torll_r = arcade.load_texture(
+    d_human1, x=size*7, y=size, width=size, height=size, mirrored=True)
+#######
 
 
-# lname = "tile"
-# dtile = (r"image/d_tile.tmx")
-# mtile = arcade.tilemap.read_tmx(dtile)
-# wlist = arcade.tilemap.process_layer(mtile, lname)
-# print(wlist[1])
+class Testimg(arcade.Window):
+    def __init__(self):
+        size = 16
+        super().__init__(100, 100)
+        img = arcade.load_texture(
+            d_human1, x=0, y=size, width=size, height=size)
+        arcade.start_render()
+        arcade.draw_texture_rectangle(50, 50, 16, 16, img)
+
+
+def main():
+    test = Testimg()
+
+    arcade.run()
+
+
+if __name__ == "__main__":
+    main()

@@ -13,6 +13,9 @@ from actor.item import Item
 from actor.lightning_scroll import LightningScroll
 from actor.fireball_scroll import FireballScroll
 from actor.potion import Potion
+from actor.confusion_scroll import ConfusionScroll
+from actor.orc import Orc
+from actor.troll import Troll
 
 
 class BasicDungeon:
@@ -101,20 +104,10 @@ class BasicDungeon:
 
             if not any([actor for actor in actor_list if actor.x == x and actor.y == y]):
                 if randint(0, 100) < 80:
-                    fighter_component = Fighter(hp=10, defense=1, power=3)
-                    ai_component = Basicmonster()
-                    monster = Actor(texture=demi_human1[11], name="orc", x=x, y=y, 
-                                    blocks=True, fighter=fighter_component, ai=ai_component, sub_img=False, map_tile=self)
-                    print("spown!")
-                    ACTOR_LIST.append(monster)
+                    Orc(x, y, game_map=self)
 
                 else:
-                    fighter_component = Fighter(hp=15, defense=2, power=5)
-                    ai_component = Basicmonster()
-                    monster = Actor(texture=demi_human1[15], name="troll", x=x, y=y,
-                                    blocks=True, fighter=fighter_component, ai=ai_component, sub_img=False, map_tile=self)
-                    print("spown!")
-                    ACTOR_LIST.append(monster)
+                    Troll(x, y, game_map=self)
         for i in range(number_of_items):
             x = randint(room.x1 + 1, room.x2 - 1)
             y = randint(room.y1 + 1, room.y2 - 1)
@@ -122,8 +115,8 @@ class BasicDungeon:
             if not any([actor for actor in actor_list if actor.x == x and actor.y == y]):
                 type = randint(0, 100)
                 if type < 40:
-                    item = Potion(x=x, y=y)
+                    Potion(x=x, y=y)
                 elif type < 67:
-                    item = LightningScroll(x=x, y=y)
+                    LightningScroll(x=x, y=y)
                 else:
-                    item = FireballScroll(x=x, y=y)
+                    FireballScroll(x=x, y=y)
