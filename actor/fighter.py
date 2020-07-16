@@ -2,7 +2,7 @@ from constants import *
 
 
 class Fighter:
-    def __init__(self, hp, defense, power):
+    def __init__(self, hp=0, defense=0, power=0):
         self.max_hp = hp
         self.hp = hp
         self.defense = defense

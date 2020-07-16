@@ -1,8 +1,9 @@
-from actor.actor import Actor
+# from actor.actor import Actor
+from actor.restore_actor import restore_actor
 
 
 class Inventory:
-    def __init__(self, capacity):
+    def __init__(self, capacity=0):
         self.capacity = capacity
         self.bag = [None for _ in range(self.capacity)]
 
@@ -11,12 +12,11 @@ class Inventory:
         result["capacity"] = self.capacity
         item_dicts = []
         for item in self.bag:
-            if item in self.bag:
-                if item is None:
-                    item_dicts.append(None)
-                else:
-                    name = item.__class__.__name__
-                    item_dicts.append({name: item.get_dict()})
+            if item is None:
+                item_dicts.append(None)
+            else:
+                name = item.__class__.__name__
+                item_dicts.append({name: item.get_dict()})
         result["items"] = item_dicts
         return result
 
@@ -29,7 +29,7 @@ class Inventory:
                 item = restore_actor(item_dict)
                 self.bag.append(item)
 
-    def add_item(self, item: Actor):
+    def add_item(self, item):
         results = []
 
         item_placed = False

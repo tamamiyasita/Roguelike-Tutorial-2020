@@ -1,14 +1,13 @@
 import arcade
 from actor.actor import Actor
 from actor.fighter import Fighter
-from actor.inventory import Inventory
 from data import *
 from constants import *
-from util import pixel_to_grid, grid_to_pixel
+# from util import pixel_to_grid, grid_to_pixel
 
 
 class Player(Actor):
-    def __init__(self, x, y,  game_map=None):
+    def __init__(self, x, y,  game_map=None, inventory=0):
         fighter_component = Fighter(hp=35, defense=3, power=5)
         super().__init__(
             name="player",
@@ -16,7 +15,7 @@ class Player(Actor):
             x=x,
             y=y,
 
-            inventory=Inventory(capacity=5),
+            inventory=inventory,
             fighter=fighter_component,
             map_tile=game_map
         )
@@ -24,7 +23,7 @@ class Player(Actor):
         self.left_face = False
         self.state = state.READY
         ACTOR_LIST.append(self)
-        self.delay_time = 2.7
+        self.delay_time = 3.7
 
     def update_animation(self, delta_time=1 / 60):
         super().update_animation(delta_time)
@@ -47,7 +46,7 @@ class Player(Actor):
             if self.delay_time <= 0.5:
                 self.texture = pc_delay[0]
             if self.delay_time < 0:
-                self.delay_time = 2.7
+                self.delay_time = 3.7
         if self.state == state.READY and self.left_face:
             self.texture = player[1]
             self.delay_time -= delta_time

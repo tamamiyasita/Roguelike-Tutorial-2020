@@ -43,6 +43,7 @@ class Actor(arcade.Sprite):
 
     def get_dict(self):
         result = {}
+        # result["texture"] = self.texture
         result["x"] = self.x
         result["y"] = self.y
         result["visible_color"] = self.visible_color
@@ -88,7 +89,7 @@ class Actor(arcade.Sprite):
             self.fighter = Fighter()
             self.fighter.restore_from_dict(result["fighter"])
         if "inventory" in result:
-            self.inventory = Inventory
+            self.inventory = Inventory()
             self.inventory.restore_from_dict(result["inventory"])
 
     def move(self, dxy, target=None):

@@ -1,4 +1,6 @@
+from os import write
 import arcade
+import json
 import pyglet.gl as gl
 
 from game_engine import GameEngine
@@ -163,6 +165,11 @@ class MG(arcade.Window):
             elif key in KEYMAP_DROP_ITEM:
                 self.game_engine.action_queue.extend([{"drop_item": True}])
 
+            elif key == arcade.key.P:
+                self.save()
+            elif key == arcade.key.L:
+                self.load()
+
             elif key == arcade.key.SPACE:
                 self.game_engine.game_state = GAME_STATE.SELECT_LOCATION
 
@@ -192,6 +199,22 @@ class MG(arcade.Window):
             print(grid_x, grid_y, "mouse_press")
             self.game_engine.grid_click(grid_x, grid_y)
         self.game_engine.game_state = GAME_STATE.NORMAL
+
+    def save(self):
+        print("save")
+        game_dict = self.game_engine.get_dict()
+        print(game_dict)
+
+        with open("game_same.json", "w") as write_file:
+            json.dump(game_dict, write_file)
+        print("**save**")
+
+    def load(self):
+        with open("game_same.json", "r") as read_file:
+            data = json.load(read_file)
+
+        print(data)
+        self.game_engine.restore_from_dict(data)
 
 
 def main():
