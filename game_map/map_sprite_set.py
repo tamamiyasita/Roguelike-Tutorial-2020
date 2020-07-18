@@ -2,9 +2,11 @@ import arcade
 from data import *
 from constants import *
 from actor.actor import Actor
+from actor.wall import Wall
+from actor.floor import Floor
 
-test_wall = image.get("test_wall")
-test_floor = image.get("test_floor")
+# test_wall = image.get("test_wall")
+# test_floor = image.get("test_floor")
 
 
 class MapSpriteSet:
@@ -16,8 +18,8 @@ class MapSpriteSet:
         self.sprite_list = MAP_LIST
         self.floor_img = floor_img
         self.wall_img = wall_img
-        if self.wall_img[0].width <= 17:
-            self.scale = SPRITE_SCALE * 2
+        # if self.wall_img[0].width <= 17:
+        #     self.scale = SPRITE_SCALE * 2
 
     def sprite_set(self):
         for x in range(self.width):
@@ -25,16 +27,21 @@ class MapSpriteSet:
                 if self.tiles[x][y].blocked:
                     wall_number = self.search_wall_number(x, y, self.tiles)
 
-                    self.wall = Actor(texture=self.wall_img.get(wall_number), x=x, y=y,scale=4, blocks=True,  color=arcade.color.BLACK, visible_color=COLORS.get(
-                        "light_wall"), not_visible_color=COLORS.get("dark_wall"))
-                    self.wall.alpha = 0
+                    wall = Wall(x=x, y=y)
+                    wall.set_texture(wall_number)
 
-                    self.sprite_list.append(self.wall)
+                    # self.wall = Actor(texture=wall, x=x, y=y, scale=4, blocks=True,  color=arcade.color.BLACK, visible_color=COLORS.get(
+                    #     "light_wall"), not_visible_color=COLORS.get("dark_wall"))
+                    # self.wall.alpha = 0
+
+                    # self.sprite_list.append(wall)
                 elif not self.tiles[x][y].blocked:
-                    self.floor = Actor(self.floor_img, x=x, y=y, color=COLORS.get("transparent"), visible_color=COLORS.get(
-                        "light_ground"), not_visible_color=COLORS.get("dark_ground"))
-                    self.floor.alpha = 0
-                    self.sprite_list.append(self.floor)
+                    # self.floor = Actor(self.floor_img, x=x, y=y, color=COLORS.get("transparent"), visible_color=COLORS.get(
+                    #     "light_ground"), not_visible_color=COLORS.get("dark_ground"))
+                    # self.floor.alpha = 0
+                    # self.sprite_list.append(self.floor)
+                    floor = Floor(x=x, y=y)
+                    floor.set_texture(21)
 
     def search_wall_number(self, x, y, tiles):
 

@@ -23,7 +23,7 @@ class Inventory:
     def restore_from_dict(self, result):
         self.capacity = result["capacity"]
         for item_dict in result["items"]:
-            if item_dict in None:
+            if item_dict is None:
                 self.bag.append(None)
             else:
                 item = restore_actor(item_dict)

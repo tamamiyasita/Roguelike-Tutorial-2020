@@ -210,10 +210,12 @@ class MG(arcade.Window):
         print("**save**")
 
     def load(self):
+        print("load")
         with open("game_same.json", "r") as read_file:
             data = json.load(read_file)
 
         print(data)
+        print("**load**")
         self.game_engine.restore_from_dict(data)
 
 

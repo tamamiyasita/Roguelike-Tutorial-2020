@@ -47,17 +47,17 @@ class GameEngine:
 
         self.fov_recompute = True
 
-
         self.player = Player(
-            self.game_map.player_pos[0], self.game_map.player_pos[1], game_map=self.game_map, inventory=Inventory(capacity=5))
+            # self.game_map.player_pos[0], self.game_map.player_pos[1], game_map=self.game_map, inventory=Inventory(capacity=5))
+            10, 10, game_map=self.game_map, inventory=Inventory(capacity=5))
 
-        self.crab = Crab(self.player.x+2, self.player.y, self.game_map)
+        self.crab = Crab(self.player.x+5, self.player.y+4, self.game_map)
         self.cnf = ConfusionScroll(
             self.player.x+1, self.player.y)
 
         self.fov_map = initialize_fov(self.game_map)
         self.mapsprite = MapSpriteSet(
-            MAP_WIDTH, MAP_HEIGHT, self.game_map.tiles, floors.get(0), wall_3)
+            MAP_WIDTH, MAP_HEIGHT, self.game_map.tiles, "floor", "wall_3")
         self.mapsprite.sprite_set()
 
         viewport(self.player)
@@ -69,38 +69,41 @@ class GameEngine:
     def get_dict(self):
         # player_dict = self.get_actor_dict(self.player)
 
-        dungeon_dict = []
-        for sprite in MAP_LIST:
-            dungeon_dict.append(self.get_actor_dict(sprite))
+        # dungeon_dict = []
+        # for sprite in MAP_LIST:
+        #     dungeon_dict.append(self.get_actor_dict(sprite))
 
         actor_dict = []
-        for sprite in ACTOR_LIST:
+        for sprite in ENTITY_LIST:
             actor_dict.append(self.get_actor_dict(sprite))
 
-        result = {#"player": player_dict,
-                   "dungeon":dungeon_dict,
-                   "actor":actor_dict}
+        result = {"actor": actor_dict}  # {"Player": player_dict}
+        #    "dungeon":dungeon_dict,
+        # "actor": actor_dict}
 
         return result
 
     def restore_from_dict(self, data):
         # global MAP_LIST, ENTITY_LIST
 
-        self.map_list = arcade.SpriteList(use_spatial_hash=True, spatial_hash_cell_size=32)
-        self.actor_list = arcade.SpriteList(use_spatial_hash=True, spatial_hash_cell_size=32)
+        # self.map_list = arcade.SpriteList()
+        # self.actor_list = arcade.SpriteList()
         # player_dict = data["Player"]
         # self.player.restore_from_dict(player_dict["Player"])
 
-        for actor_dict in data["dungeon"]:
+        for actor_dict in data["actor"]:
             actor_name = list(actor_dict.keys())[0]
-            if actor_name == "Actor":
-                actor = Actor()
-                actor.restore_from_dict(actor_dict[actor_name])
-                self.map_list.append(actor)
+            # if actor_name == "Actor":
+            #     actor = Actor()
+            #     actor.restore_from_dict(actor_dict[actor_name])
+            #     self.map_list.append(actor)
+
+            # if actor_name == "Player":
+            #     actor = Player()
+            #     actor.restore_from_dict(actor_dict[actor_name])
+            #     ACTOR_LIST.append(actor)
 
             actor = restore_actor(actor_dict)
-
-        
 
     ###アクションキュー###
 

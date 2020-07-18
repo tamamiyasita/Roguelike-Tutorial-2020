@@ -14,7 +14,8 @@ class Actor(arcade.Sprite):
                  visible_color=arcade.color.WHITE, not_visible_color=arcade.color.WHITE,
                  state=state.TURN_END, map_tile=None):
         super().__init__(scale=scale)
-        self.texture_ = texture
+        self.textureID = texture
+        self.texture_ = self.textureID
         self.name = name
         self.dx, self.dy = 0, 0
         self.center_x, self.center_y = grid_to_pixel(x, y)
@@ -43,9 +44,11 @@ class Actor(arcade.Sprite):
 
     def get_dict(self):
         result = {}
-        # result["texture"] = self.texture
+        result["texture"] = self.textureID
         result["x"] = self.x
         result["y"] = self.y
+        result["center_x"] = self.center_x
+        result["center_y"] = self.center_y
         result["visible_color"] = self.visible_color
         result["not_visible_color"] = self.not_visible_color
         result["alpha"] = self.alpha
@@ -73,6 +76,10 @@ class Actor(arcade.Sprite):
 
         self.x = result["x"]
         self.y = result["y"]
+        self.center_x = result["center_x"]
+        self.center_y = result["center_y"]
+        self.textureID = result["texture"]
+        self.texture_ = self.textureID
         self.visible_color = result["visible_color"]
         self.not_visible_color = result["not_visible_color"]
         self.alpha = result["alpha"]
@@ -201,9 +208,11 @@ class Actor(arcade.Sprite):
 
     @property
     def texture_(self):
-        return self._texture_
+        return self.textures
 
     @texture_.setter
     def texture_(self, value):
-        self._texture_ = value
-        self.texture = self._texture_
+        self.textures = []
+        # TODO set
+        self.textures.extend(ID.get(value))
+        self.texture = self.textures[0]

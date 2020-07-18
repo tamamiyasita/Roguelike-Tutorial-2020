@@ -8,7 +8,7 @@ from constants import *
 
 
 class Troll(Actor):
-    def __init__(self, x, y,  game_map=None):
+    def __init__(self, x=0, y=0,  game_map=None):
         fighter_component = Fighter(hp=15, defense=2, power=5)
         ai_component = Basicmonster()
 

@@ -8,13 +8,13 @@ from constants import *
 
 
 class Crab(Actor):
-    def __init__(self, x, y,  game_map=None):
+    def __init__(self, x=0, y=0,  game_map=None):
         fighter_component = Fighter(hp=10, defense=2, power=4)
         ai_component = Basicmonster()
 
         super().__init__(
             name="crab",
-            texture=crab[0],
+            texture="crab",
             x=x,
             y=y,
             fighter=fighter_component,

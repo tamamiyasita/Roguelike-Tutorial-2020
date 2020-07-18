@@ -7,13 +7,14 @@ from constants import *
 
 
 class Player(Actor):
-    def __init__(self, x, y,  game_map=None, inventory=0):
+    def __init__(self, x=0, y=0,  game_map=None, inventory=0):
         fighter_component = Fighter(hp=35, defense=3, power=5)
         super().__init__(
             name="player",
-            texture=player[0],
+            texture="player",
             x=x,
             y=y,
+
 
             inventory=inventory,
             fighter=fighter_component,

@@ -70,9 +70,9 @@ class BasicDungeon:
 
                 rooms.append(new_room)
                 num_rooms += 1
-                self.place_entities(
-                    new_room, max_monsters_per_room=self.max_monsters_per_room,
-                    max_items_per_room=self.max_items_per_room)
+                # self.place_entities(
+                #     new_room, max_monsters_per_room=self.max_monsters_per_room,
+                #     max_items_per_room=self.max_items_per_room)
 
     def create_room(self, room):
         for x in range(room.x1 + 1, room.x2):
