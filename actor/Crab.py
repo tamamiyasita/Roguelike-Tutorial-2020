@@ -25,7 +25,7 @@ class Crab(Actor):
         )
         self.left_face = False
 
-        ACTOR_LIST.append(self)
+        # ACTOR_LIST.append(self)
 
     def update_animation(self, delta_time=1 / 60):
         if self.left_face:

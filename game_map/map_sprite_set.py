@@ -27,8 +27,8 @@ class MapSpriteSet:
                 if self.tiles[x][y].blocked:
                     wall_number = self.search_wall_number(x, y, self.tiles)
 
-                    wall = Wall(x=x, y=y)
-                    wall.set_texture(wall_number)
+                    wall = Wall(texture_number=wall_number, x=x, y=y,)
+                    # wall.set_texture(wall_number)
 
                     # self.wall = Actor(texture=wall, x=x, y=y, scale=4, blocks=True,  color=arcade.color.BLACK, visible_color=COLORS.get(
                     #     "light_wall"), not_visible_color=COLORS.get("dark_wall"))
@@ -40,8 +40,7 @@ class MapSpriteSet:
                     #     "light_ground"), not_visible_color=COLORS.get("dark_ground"))
                     # self.floor.alpha = 0
                     # self.sprite_list.append(self.floor)
-                    floor = Floor(x=x, y=y)
-                    floor.set_texture(21)
+                    floor = Floor(texture_number=21, x=x, y=y)
 
     def search_wall_number(self, x, y, tiles):
 

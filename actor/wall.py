@@ -6,8 +6,9 @@ from constants import *
 
 
 class Wall(Actor):
-    def __init__(self, x=0, y=0):
+    def __init__(self, texture_number=0, x=0, y=0):
         super().__init__(
+            texture_number=texture_number,
             texture="wall_C",
             x=x,
             y=y,
@@ -23,4 +24,4 @@ class Wall(Actor):
         MAP_LIST.append(self)
 
     def set_texture(self, texture_no):
-        return super().set_texture(texture_no)
+        return super().set_texture(self.texture_number)

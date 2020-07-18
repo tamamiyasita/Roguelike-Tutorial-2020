@@ -8,12 +8,13 @@ from util import pixel_to_grid, grid_to_pixel, get_blocking_entity
 
 
 class Actor(arcade.Sprite):
-    def __init__(self, texture=None, name=None, x=0, y=0, blocks=False,
+    def __init__(self, texture_number=0, texture=None, name=None, x=0, y=0, blocks=False,
                  scale=SPRITE_SCALE, color=arcade.color.WHITE, fighter=None, ai=None,
                  inventory=None, item=None,
                  visible_color=arcade.color.WHITE, not_visible_color=arcade.color.WHITE,
                  state=state.TURN_END, map_tile=None):
         super().__init__(scale=scale)
+        self.texture_number = texture_number
         self.textureID = texture
         self.texture_ = self.textureID
         self.name = name
@@ -44,6 +45,7 @@ class Actor(arcade.Sprite):
 
     def get_dict(self):
         result = {}
+        result["texture_number"] = self.texture_number
         result["texture"] = self.textureID
         result["x"] = self.x
         result["y"] = self.y
@@ -78,6 +80,7 @@ class Actor(arcade.Sprite):
         self.y = result["y"]
         self.center_x = result["center_x"]
         self.center_y = result["center_y"]
+        self.texture_number = result["texture_number"]
         self.textureID = result["texture"]
         self.texture_ = self.textureID
         self.visible_color = result["visible_color"]
@@ -215,4 +218,4 @@ class Actor(arcade.Sprite):
         self.textures = []
         # TODO set
         self.textures.extend(ID.get(value))
-        self.texture = self.textures[0]
+        self.texture = self.textures[self.texture_number]

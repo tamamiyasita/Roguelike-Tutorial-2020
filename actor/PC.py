@@ -12,6 +12,7 @@ class Player(Actor):
         super().__init__(
             name="player",
             texture="player",
+
             x=x,
             y=y,
 
@@ -23,7 +24,7 @@ class Player(Actor):
 
         self.left_face = False
         self.state = state.READY
-        ACTOR_LIST.append(self)
+        # ACTOR_LIST.append(self)
         self.delay_time = 3.7
 
     def update_animation(self, delta_time=1 / 60):
