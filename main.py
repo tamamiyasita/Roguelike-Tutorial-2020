@@ -13,37 +13,36 @@ class MG(arcade.Window):
     def __init__(self, width, height, title):
         super().__init__(width, height, title, antialiasing=False)
 
-        self.game_engine = GameEngine()
+        self.engine = GameEngine()
         self.dist = None
         self.mouse_over_text = None
         self.mouse_position = None
 
     def setup(self):
-        self.game_engine.setup()
-        self.game_engine.fov()
+        self.engine.setup()
+        self.engine.fov()
 
     def on_update(self, delta_time):
-        self.game_engine.actor_list.update_animation()
-        self.game_engine.actor_list.update()
-        EFFECT_LIST.update()
+        self.engine.chara_sprits.update_animation()
+        self.engine.chara_sprits.update()
+        self.engine.actor_sprits.update()
 
-        self.game_engine.process_action_queue(delta_time)
-        self.game_engine.turn_change(delta_time)
-        self.game_engine.view()
+        self.engine.process_action_queue(delta_time)
+        self.engine.turn_change(delta_time)
+        self.engine.view()
 
-        if self.game_engine.player.state == state.READY and self.dist:
-            attack = self.game_engine.player.move(self.dist)
+        if self.engine.player.state == state.READY and self.dist:
+            attack = self.engine.player.move(self.dist)
             if attack:
-                self.game_engine.action_queue.extend(attack)
+                self.engine.action_queue.extend(attack)
 
     def on_draw(self):
         try:
             arcade.start_render()
 
-            self.game_engine.map_list.draw(filter=gl.GL_NEAREST)
-            ITEM_LIST.draw(filter=gl.GL_NEAREST)
-            self.game_engine.actor_list.draw(filter=gl.GL_NEAREST)
-            EFFECT_LIST.draw()
+            self.engine.map_sprits.draw(filter=gl.GL_NEAREST)
+            self.engine.actor_sprits.draw(filter=gl.GL_NEAREST)
+            self.engine.chara_sprits.draw(filter=gl.GL_NEAREST)
 
             size = 72
             margin = 15
@@ -54,20 +53,20 @@ class MG(arcade.Window):
             arcade.draw_xywh_rectangle_filled(
                 self.vx, self.vy, SCREEN_WIDTH, STATES_PANEL_HEIGHT, COLORS["status_panel_background"])
 
-            if self.game_engine.game_state == GAME_STATE.NORMAL:
+            if self.engine.game_state == GAME_STATE.NORMAL:
 
                 # HP表示
-                text = f"HP: {self.game_engine.player.fighter.hp}/{self.game_engine.player.fighter.max_hp}"
+                text = f"HP: {self.engine.player.fighter.hp}/{self.engine.player.fighter.max_hp}"
                 arcade.draw_text(
                     text, margin + self.vx, STATES_PANEL_HEIGHT - 30 + self.vy, color=COLORS["status_panel_text"], font_size=14)
 
                 # HPバー
                 draw_status_bar(size / 2 + margin+self.vx, STATES_PANEL_HEIGHT-8+self.vy, size, 10,
-                                self.game_engine.player.fighter.hp, self.game_engine.player.fighter.max_hp)
+                                self.engine.player.fighter.hp, self.engine.player.fighter.max_hp)
 
                 # 所持アイテム表示
-                capacity = self.game_engine.player.inventory.capacity
-                selected_item = self.game_engine.selected_item
+                capacity = self.engine.player.inventory.capacity
+                selected_item = self.engine.selected_item
                 field_width = SCREEN_WIDTH / (capacity + 1) / 1.5
                 for i in range(capacity):
                     y = 38
@@ -75,8 +74,8 @@ class MG(arcade.Window):
                     if i == selected_item:
                         arcade.draw_lrtb_rectangle_outline(
                             x+self.vx - 3, x+self.vx + field_width - 5, y+self.vy + 18, y+self.vy - 4, arcade.color.BLACK, 2)
-                    if self.game_engine.player.inventory.bag[i]:
-                        item_name = self.game_engine.player.inventory.bag[i].name
+                    if self.engine.player.inventory.bag[i]:
+                        item_name = self.engine.player.inventory.bag[i].name
                     else:
                         item_name = ""
                     text = f"{i+1}: {item_name}"
@@ -85,7 +84,7 @@ class MG(arcade.Window):
 
                 # メッセージ表示
                 y = STATES_PANEL_HEIGHT-14
-                for message in self.game_engine.messages:
+                for message in self.engine.messages:
                     arcade.draw_text(
                         message, 130+self.vx, y+self.vy, color=COLORS["status_panel_text"])
                     y -= 20
@@ -98,7 +97,7 @@ class MG(arcade.Window):
                     arcade.draw_text(self.mouse_over_text, x,
                                      y, arcade.color.WHITE)
 
-            elif self.game_engine.game_state == GAME_STATE.SELECT_LOCATION:
+            elif self.engine.game_state == GAME_STATE.SELECT_LOCATION:
                 mouse_x, mouse_y = self.mouse_position
                 grid_x, grid_y = pixel_to_grid(mouse_x, mouse_y)
                 center_x, center_y = grid_to_pixel(grid_x, grid_y)
@@ -115,9 +114,9 @@ class MG(arcade.Window):
         if key == arcade.key.BACKSPACE:
             arcade.close_window()
         elif key == arcade.key.ESCAPE:
-            self.game_engine.game_state = GAME_STATE.NORMAL
+            self.engine.game_state = GAME_STATE.NORMAL
 
-        elif self.game_engine.player.state == state.READY and self.game_engine.game_state == GAME_STATE.NORMAL:
+        elif self.engine.player.state == state.READY and self.engine.game_state == GAME_STATE.NORMAL:
             dist = None
             if key in KEYMAP_UP:
                 dist = (0, 1)
@@ -136,34 +135,34 @@ class MG(arcade.Window):
             elif key in KEYMAP_DOWN_RIGHT:
                 dist = (1, -1)
             elif key in KEYMAP_REST:
-                self.game_engine.player.state = state.TURN_END
+                self.engine.player.state = state.TURN_END
 
             elif key in KEYMAP_PICKUP:
-                self.game_engine.action_queue.extend([{"pickup": True}])
+                self.engine.action_queue.extend([{"pickup": True}])
             elif key in KEYMAP_SELECT_ITEM_1:
-                self.game_engine.action_queue.extend([{"select_item": 1}])
+                self.engine.action_queue.extend([{"select_item": 1}])
             elif key in KEYMAP_SELECT_ITEM_2:
-                self.game_engine.action_queue.extend([{"select_item": 2}])
+                self.engine.action_queue.extend([{"select_item": 2}])
             elif key in KEYMAP_SELECT_ITEM_3:
-                self.game_engine.action_queue.extend([{"select_item": 3}])
+                self.engine.action_queue.extend([{"select_item": 3}])
             elif key in KEYMAP_SELECT_ITEM_4:
-                self.game_engine.action_queue.extend([{"select_item": 4}])
+                self.engine.action_queue.extend([{"select_item": 4}])
             elif key in KEYMAP_SELECT_ITEM_5:
-                self.game_engine.action_queue.extend([{"select_item": 5}])
+                self.engine.action_queue.extend([{"select_item": 5}])
             elif key in KEYMAP_SELECT_ITEM_6:
-                self.game_engine.action_queue.extend([{"select_item": 6}])
+                self.engine.action_queue.extend([{"select_item": 6}])
             elif key in KEYMAP_SELECT_ITEM_7:
-                self.game_engine.action_queue.extend([{"select_item": 7}])
+                self.engine.action_queue.extend([{"select_item": 7}])
             elif key in KEYMAP_SELECT_ITEM_8:
-                self.game_engine.action_queue.extend([{"select_item": 8}])
+                self.engine.action_queue.extend([{"select_item": 8}])
             elif key in KEYMAP_SELECT_ITEM_9:
-                self.game_engine.action_queue.extend([{"select_item": 9}])
+                self.engine.action_queue.extend([{"select_item": 9}])
             elif key in KEYMAP_SELECT_ITEM_0:
-                self.game_engine.action_queue.extend([{"select_item": 0}])
+                self.engine.action_queue.extend([{"select_item": 0}])
             elif key in KEYMAP_USE_ITEM:
-                self.game_engine.action_queue.extend([{"use_item": True}])
+                self.engine.action_queue.extend([{"use_item": True}])
             elif key in KEYMAP_DROP_ITEM:
-                self.game_engine.action_queue.extend([{"drop_item": True}])
+                self.engine.action_queue.extend([{"drop_item": True}])
 
             elif key == arcade.key.P:
                 self.save()
@@ -171,11 +170,13 @@ class MG(arcade.Window):
                 self.load()
 
             elif key == arcade.key.SPACE:
-                self.game_engine.game_state = GAME_STATE.SELECT_LOCATION
+                self.engine.game_state = GAME_STATE.SELECT_LOCATION
 
             self.dist = dist
+            self.engine.fov_recompute = True
 
-            # self.game_engine.action_queue.append({"player_turn": True})
+
+            # self.engine.action_queue.append({"player_turn": True})
 
     def on_key_release(self, key, modifiers):
         self.dist = None
@@ -186,7 +187,7 @@ class MG(arcade.Window):
         print(pixel_to_grid(self.mouse_position[0], self.mouse_position[1]))
         # 忘れずにビューポートの座標を足す
         actor_list = arcade.get_sprites_at_point(
-            self.mouse_position, ENTITY_LIST)
+            self.mouse_position, self.engine.actor_sprits)
         self.mouse_over_text = None
         for actor in actor_list:
             if actor.fighter or actor.item and actor.is_visible:
@@ -194,15 +195,15 @@ class MG(arcade.Window):
                 print(actor.name)
 
     def on_mouse_press(self, x, y, button, modifiers):
-        if self.game_engine.game_state == GAME_STATE.SELECT_LOCATION:
+        if self.engine.game_state == GAME_STATE.SELECT_LOCATION:
             grid_x, grid_y = pixel_to_grid(x + self.vx, y + self.vy)
             print(grid_x, grid_y, "mouse_press")
-            self.game_engine.grid_click(grid_x, grid_y)
-        self.game_engine.game_state = GAME_STATE.NORMAL
+            self.engine.grid_click(grid_x, grid_y)
+        self.engine.game_state = GAME_STATE.NORMAL
 
     def save(self):
         print("save")
-        game_dict = self.game_engine.get_dict()
+        game_dict = self.engine.get_dict()
         print(game_dict)
 
         with open("game_same.json", "w") as write_file:
@@ -216,7 +217,7 @@ class MG(arcade.Window):
 
         print(data)
         print("**load**")
-        self.game_engine.restore_from_dict(data)
+        self.engine.restore_from_dict(data)
 
 
 def main():

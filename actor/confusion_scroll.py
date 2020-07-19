@@ -37,7 +37,6 @@ class ConfusionScroll(Actor):
                          visible_color=arcade.color.WHITE,
                          not_visible_color=COLORS.get("dark_ground"), item=Item())
         self.alpha = 0
-        ITEM_LIST.append(self)
 
     def use(self, game_engine: "GameEngine"):
         print("use")

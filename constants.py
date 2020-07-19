@@ -7,8 +7,8 @@ TITLE = "Roguelike tutorial 2020"
 SPRITE_SIZE = 32
 SPRITE_SCALE = 2
 
-MAP_WIDTH = 35
-MAP_HEIGHT = 20
+MAP_WIDTH = 15
+MAP_HEIGHT = 15
 
 STATES_PANEL_HEIGHT = 60
 
@@ -66,17 +66,6 @@ class state(Enum):
     ATTACK = auto()
     FOV = auto()
 
-
-ACTOR_LIST = arcade.SpriteList(
-    use_spatial_hash=True, spatial_hash_cell_size=32)
-MAP_LIST = arcade.SpriteList(
-    use_spatial_hash=True, spatial_hash_cell_size=32)
-ITEM_LIST = arcade.SpriteList(
-    use_spatial_hash=True, spatial_hash_cell_size=32)
-ENTITY_LIST = arcade.SpriteList(
-    use_spatial_hash=True, spatial_hash_cell_size=32)
-EFFECT_LIST = arcade.SpriteList(
-    use_spatial_hash=True, spatial_hash_cell_size=32)
 
 
 KEYMAP_UP = [arcade.key.UP, arcade.key.W, arcade.key.NUM_8]

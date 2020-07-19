@@ -7,7 +7,7 @@ from constants import *
 
 
 class Player(Actor):
-    def __init__(self, x=0, y=0,  game_map=None, inventory=0):
+    def __init__(self, x=0, y=0, game_engine=None,  inventory=0):
         fighter_component = Fighter(hp=35, defense=3, power=5)
         super().__init__(
             name="player",
@@ -15,16 +15,15 @@ class Player(Actor):
 
             x=x,
             y=y,
-
+            game_engine = game_engine,
 
             inventory=inventory,
             fighter=fighter_component,
-            map_tile=game_map
+    
         )
 
         self.left_face = False
         self.state = state.READY
-        # ACTOR_LIST.append(self)
         self.delay_time = 3.7
 
     def update_animation(self, delta_time=1 / 60):

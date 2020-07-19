@@ -1,4 +1,5 @@
 import arcade
+from arcade.key import T
 from data import *
 from constants import *
 from actor.actor import Actor
@@ -10,37 +11,31 @@ from actor.floor import Floor
 
 
 class MapSpriteSet:
-    def __init__(self, width, height, tiles, floor_img, wall_img):
+    def __init__(self, tiles):
 
-        self.width = width
-        self.height = height
         self.tiles = tiles
-        self.sprite_list = MAP_LIST
-        self.floor_img = floor_img
-        self.wall_img = wall_img
+        self.width = len(tiles[0])
+        self.height = len(tiles)
+        self.map_sprits = arcade.SpriteList(use_spatial_hash=True, spatial_hash_cell_size=32)
         # if self.wall_img[0].width <= 17:
         #     self.scale = SPRITE_SCALE * 2
 
-    def sprite_set(self):
+    def actor_set(self):
         for x in range(self.width):
             for y in range(self.height):
                 if self.tiles[x][y].blocked:
                     wall_number = self.search_wall_number(x, y, self.tiles)
 
                     wall = Wall(texture_number=wall_number, x=x, y=y,)
-                    # wall.set_texture(wall_number)
+                    self.map_sprits.append(wall)
 
-                    # self.wall = Actor(texture=wall, x=x, y=y, scale=4, blocks=True,  color=arcade.color.BLACK, visible_color=COLORS.get(
-                    #     "light_wall"), not_visible_color=COLORS.get("dark_wall"))
-                    # self.wall.alpha = 0
-
-                    # self.sprite_list.append(wall)
                 elif not self.tiles[x][y].blocked:
-                    # self.floor = Actor(self.floor_img, x=x, y=y, color=COLORS.get("transparent"), visible_color=COLORS.get(
-                    #     "light_ground"), not_visible_color=COLORS.get("dark_ground"))
-                    # self.floor.alpha = 0
-                    # self.sprite_list.append(self.floor)
+      
                     floor = Floor(texture_number=21, x=x, y=y)
+                    self.map_sprits.append(floor)
+        
+        return self.map_sprits
+        
 
     def search_wall_number(self, x, y, tiles):
 

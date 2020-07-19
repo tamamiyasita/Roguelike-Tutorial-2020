@@ -12,7 +12,7 @@ class Actor(arcade.Sprite):
                  scale=SPRITE_SCALE, color=arcade.color.WHITE, fighter=None, ai=None,
                  inventory=None, item=None,
                  visible_color=arcade.color.WHITE, not_visible_color=arcade.color.WHITE,
-                 state=state.TURN_END, map_tile=None):
+                 state=state.TURN_END, game_engine=None):
         super().__init__(scale=scale)
         self.texture_number = texture_number
         self.textureID = texture
@@ -22,6 +22,7 @@ class Actor(arcade.Sprite):
         self.center_x, self.center_y = grid_to_pixel(x, y)
         self.x, self.y = pixel_to_grid(self.center_x, self.center_y)
         self.blocks = blocks
+        self.block_sight = False
         self.color = color
         self.visible_color = visible_color
         self.not_visible_color = not_visible_color
@@ -39,9 +40,8 @@ class Actor(arcade.Sprite):
         if self.ai:
             self.ai.owner = self
 
-        self.game_map = map_tile
+        self.game_engine = game_engine
 
-        ENTITY_LIST.append(self)
 
     def get_dict(self):
         result = {}
@@ -57,6 +57,7 @@ class Actor(arcade.Sprite):
         result["color"] = self.color
         result["name"] = self.name
         result["blocks"] = self.blocks
+        result["block_sight"] = self.block_sight
         result["is_visible"] = self.is_visible
         result["is_dead"] = self.is_dead
         if self.ai:
@@ -89,6 +90,7 @@ class Actor(arcade.Sprite):
         self.color = result["color"]
         self.name = result["name"]
         self.blocks = result["blocks"]
+        self.block_sight = result["block_sight"]
         self.is_visible = result["is_visible"]
         self.is_dead = result["is_dead"]
         if "ai" in result:
@@ -114,11 +116,11 @@ class Actor(arcade.Sprite):
             self.target_y = self.center_y
 
             # 行先を変数dst_tileに入れる
-            self.dst_tile = self.game_map.tiles[self.x +
+            self.dst_tile = self.game_engine.game_map.tiles[self.x +
                                                 self.dx][self.y+self.dy]
 
             blocking_actor = get_blocking_entity(
-                self.x+self.dx, self.y+self.dy, ACTOR_LIST)
+                self.x+self.dx, self.y+self.dy, self.game_engine.map_sprits)
             if blocking_actor and not target:
                 target = blocking_actor[0]
                 if not target.is_dead:
@@ -141,7 +143,7 @@ class Actor(arcade.Sprite):
 
                 return attack_results
 
-            elif not get_blocking_entity(self.x + self.dx, self.y + self.dy, ACTOR_LIST) and\
+            elif not get_blocking_entity(self.x + self.dx, self.y + self.dy, self.game_engine.map_sprits) and\
                     self.dst_tile.blocked == False:
 
                 self.dst_tile.blocked = True
@@ -198,16 +200,16 @@ class Actor(arcade.Sprite):
         dy = other.y - self.y
         return math.sqrt(dx ** 2 + dy ** 2)
 
-    def move_towards(self, target_x, target_y, sprite_list):
-        dx = target_x - self.x
-        dy = target_y - self.y
-        distance = math.sqrt(dx ** 2 + dy ** 2)
+    # def move_towards(self, target_x, target_y, sprite_list):
+    #     dx = target_x - self.x
+    #     dy = target_y - self.y
+    #     distance = math.sqrt(dx ** 2 + dy ** 2)
 
-        dx = int(round(dx / distance))
-        dy = int(round(dy / distance))
+    #     dx = int(round(dx / distance))
+    #     dy = int(round(dy / distance))
 
-        if not get_blocking_entity(self.x + dx, self.y + dy, ENTITY_LIST):
-            self.move((dx, dy))
+    #     if not get_blocking_entity(self.x + dx, self.y + dy, ENTITY_LIST):
+    #         self.move((dx, dy))
 
     @property
     def texture_(self):

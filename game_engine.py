@@ -12,6 +12,7 @@ from constants import *
 from data import *
 # from actor.fighter import Fighter
 from fov_functions import fov_get, initialize_fov, recompute_fov
+# from recalculate_fov import recalculate_fov
 from game_map.basic_dungeon import BasicDungeon
 from game_map.map_sprite_set import MapSpriteSet
 # from actor.item import Item
@@ -26,10 +27,10 @@ from actor.restore_actor import restore_actor
 
 class GameEngine:
     def __init__(self):
-        self.actor_list = None
+        self.chara_sprits = None
+        self.actor_sprits = None
+        self.map_sprits = None
         self.player = None
-        self.crab = None
-        self.actor_list = None
         self.game_map = None
         self.action_queue = []
         self.messages = deque(maxlen=3)
@@ -39,29 +40,30 @@ class GameEngine:
         self.grid_select_handlers = []
 
     def setup(self):
-        arcade.set_background_color(arcade.color.BLACK)
+        self.chara_sprits = arcade.SpriteList(use_spatial_hash=True, spatial_hash_cell_size=32)
+        self.actor_sprits = arcade.SpriteList(use_spatial_hash=True, spatial_hash_cell_size=32)
 
-        self.actor_list = ACTOR_LIST
-        self.map_list = MAP_LIST
         self.game_map = BasicDungeon(MAP_WIDTH, MAP_HEIGHT)
+        mapsprite = MapSpriteSet(self.game_map.tiles).actor_set()
+        self.map_sprits = mapsprite
+
+
 
         self.fov_recompute = True
 
         self.player = Player(
-            self.game_map.player_pos[0], self.game_map.player_pos[1], game_map=self.game_map, inventory=Inventory(capacity=5))
-        ACTOR_LIST.append(self.player)
-        self.crab = Crab(self.player.x + 1, self.player.y + 1, self.game_map)
-        ACTOR_LIST.append(self.crab)
+            self.game_map.player_pos[0], self.game_map.player_pos[1], game_engine=self, inventory=Inventory(capacity=5))
+        self.chara_sprits.append(self.player)
+        # self.crab = Crab(self.player.x + 1, self.player.y + 1, self)
+        # self.actor_sprits.append(self.crab)
         self.cnf = ConfusionScroll(
             self.player.x+1, self.player.y)
 
         self.fov_map = initialize_fov(self.game_map)
-        self.mapsprite = MapSpriteSet(
-            MAP_WIDTH, MAP_HEIGHT, self.game_map.tiles, "floor", "wall_3")
-        self.mapsprite.sprite_set()
 
         viewport(self.player)
 
+        arcade.set_background_color(arcade.color.BLACK)
     def get_actor_dict(self, actor):
         name = actor.__class__.__name__
         return {name: actor.get_dict()}
@@ -70,63 +72,40 @@ class GameEngine:
         player_dict = self.get_actor_dict(self.player)
 
         actor_dict = []
-        for sprite in ACTOR_LIST:
+        for sprite in self.actor_sprits:
             actor_dict.append(self.get_actor_dict(sprite))
 
         dungeon_dict = []
-        for sprite in MAP_LIST:
+        for sprite in self.map_sprits:
             dungeon_dict.append(self.get_actor_dict(sprite))
 
-        entity_dict = []
-        for sprite in ENTITY_LIST:
-            entity_dict.append(self.get_actor_dict(sprite))
 
         result = {"player": player_dict,
                   "actor": actor_dict,
-                  "dungeon": dungeon_dict,
-                  "entity": entity_dict}
+                  "dungeon": dungeon_dict}
         return result
 
     def restore_from_dict(self, data):
-        global ACTOR_LIST, MAP_LIST
-        global ENTITY_LIST
-        ACTOR_LIST = arcade.SpriteList(
+
+        self.actor_sprits = arcade.SpriteList(
             use_spatial_hash=True, spatial_hash_cell_size=32)
 
-        MAP_LIST = arcade.SpriteList(
+        self.map_sprits = arcade.SpriteList(
             use_spatial_hash=True, spatial_hash_cell_size=32)
 
-        ENTITY_LIST = arcade.SpriteList(
-            use_spatial_hash=True, spatial_hash_cell_size=32)
-
-        # self.map_list = arcade.SpriteList()
-        # self.actor_list = arcade.SpriteList()
         player_dict = data["player"]
         self.player.restore_from_dict(player_dict["Player"])
 
         for actor_dict in data["actor"]:
             actor = restore_actor(actor_dict)
-            ACTOR_LIST.append(actor)
+            self.actor_sprits.append(actor)
 
-        # if actor_name == "Player":
-        #     actor = Player()
-        #     actor.restore_from_dict(actor_dict[actor_name])
-        #     ACTOR_LIST.append(actor)
-        # actor_name = list(actor_dict.keys())[0]
+
         for actor_dict in data["dungeon"]:
-            # actor_name = list(actor_dict.keys())[0]
             actor = restore_actor(actor_dict)
-        for actor_dict in data["entity"]:
-            # actor_name = list(actor_dict.keys())[0]
-            actor = restore_actor(actor_dict)
-
-            # if actor_name == "Actor":
-            #     actor = Actor()
-            #     actor.restore_from_dict(actor_dict[actor_name])
-            #     self.map_list.append(actor)
+            self.map_sprits.append(actor)
 
     ###アクションキュー###
-
     def process_action_queue(self, delta_time):
         new_action_queue = []
         for action in self.action_queue:
@@ -175,7 +154,7 @@ class GameEngine:
 
             if "pickup" in action:
                 actors = arcade.get_sprites_at_exact_point(
-                    (self.player.center_x, self.player.center_y), ITEM_LIST)
+                    (self.player.center_x, self.player.center_y), self.actor_sprits)
                 for actor in actors:
                     if actor.item:
                         results = self.player.inventory.add_item(actor)
@@ -204,7 +183,7 @@ class GameEngine:
                     item = self.player.inventory.get_item_number(item_number)
                     if item:
                         self.player.inventory.remove_item_number(item_number)
-                        ITEM_LIST.append(item)
+                        self.actor_sprits.append(item)
                         item.center_x = self.player.center_x
                         item.center_y = self.player.center_y
                         new_action_queue.extend(
@@ -222,10 +201,10 @@ class GameEngine:
 
     def move_enemies(self):
         turn_check = "next_turn"
-        for actor in ACTOR_LIST:
+        for actor in self.actor_sprits:
             if actor.ai and not actor.is_dead:
                 results = actor.ai.take_turn(
-                    target=self.player, game_map=self.game_map, sprite_lists=[ACTOR_LIST])
+                    target=self.player, game_map=self.game_map, sprite_lists=[self.map_sprits])
                 if results:
                     self.action_queue.extend(results)
                 # else:
@@ -238,9 +217,11 @@ class GameEngine:
         return turn_check
 
     def fov(self):
-        recompute_fov(self.fov_map, self.player.x, self.player.y,
-                      FOV_RADIUS, FOV_LIGHT_WALL, FOV_ALGO)
-        fov_get(self.game_map, self.fov_map)
+        if self.fov_recompute == True:
+            # recalculate_fov(self.player.x, self.player.y, FOV_RADIUS,[self.map_sprits, self.actor_sprits])
+            recompute_fov(self.fov_map, self.player.x, self.player.y,
+                        FOV_RADIUS, FOV_LIGHT_WALL, FOV_ALGO)
+            fov_get(self.game_map, self.fov_map, self.actor_sprits, self.map_sprits)
         self.fov_recompute = False
 
     def view(self):
@@ -249,6 +230,7 @@ class GameEngine:
 
     def turn_change(self, delta_time):
         turn = 0
+        mons = 0
 
         if self.player.state == state.TURN_END:
             self.player.state = state.DELAY
@@ -259,10 +241,10 @@ class GameEngine:
             self.action_queue.extend([{"player_turn": True}])
 
         elif self.turn_check:
-            for actor in ACTOR_LIST:
+            for actor in self.actor_sprits:
                 if actor.ai:
                     if actor.state == state.TURN_END:
                         turn += 1
-                    if turn == len(ACTOR_LIST) - 1:
+                    if turn == len(self.actor_sprits):
                         self.action_queue.extend([{"player_turn": True}])
                         self.turn_check = None

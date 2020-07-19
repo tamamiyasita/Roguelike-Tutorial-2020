@@ -19,7 +19,7 @@ class Troll(Actor):
             y=y,
             fighter=fighter_component,
             ai=ai_component,
-            map_tile=game_map,
+            game_map=game_map,
             blocks=True
         )
         self.left_face = False

@@ -13,7 +13,7 @@ time_travelers = deque()
 
 
 class Actor(arcade.Sprite):
-    def __init__(self, image, name, center_x, center_y, actor_state, ticker, speed, dist=None, scale=SPRITE_SCALE, map_tile=None):
+    def __init__(self, image, name, center_x, center_y, actor_state, ticker, speed, dist=None, scale=SPRITE_SCALE, game_map=None):
         super().__init__(image, scale)
         self.name = name
         self.center_x = center_x
@@ -22,7 +22,7 @@ class Actor(arcade.Sprite):
         self.ticker = ticker
         self.speed = speed
         self.ticker.schedule_turn(self.speed, self)
-        self.map_tile = map_tile
+        self.game_map = game_map
         self.dist = 0
         # self.state = State.TICK
 
@@ -53,7 +53,7 @@ class Actor(arcade.Sprite):
         dx, dy = dxy
         self.x, self.y = pixel_to_grid(self.center_x, self.center_y)
 
-        if not self.map_tile.is_blocked(self.x + dx, self.y + dy):
+        if not self.game_map.is_blocked(self.x + dx, self.y + dy):
             self.center_x += int(dx*SPRITE_SIZE)
             self.center_y += int(dy * SPRITE_SIZE)
             self.dist = 0
@@ -66,7 +66,7 @@ class MG(arcade.Window):
         self.player = None
         self.crab = None
         self.actor_list = None
-        self.map_tile = None
+        self.game_map = None
         self.dist = 0
         self.ticker = Ticker()
         self.state = State.PC
@@ -77,12 +77,12 @@ class MG(arcade.Window):
         self.actor_list = arcade.SpriteList()
         self.map_list = arcade.SpriteList()
 
-        self.map_tile = SetMap(15, 15, self.map_list)
+        self.game_map = SetMap(15, 15, self.map_list)
 
         self.player = Actor(image["player"], "player", 20, 20,
-                            State.PC, self.ticker, 15, map_tile=self.map_tile)
+                            State.PC, self.ticker, 15, game_map=self.game_map)
         self.crab = Actor(image["crab"], "crab", 310, 210, State.ENM, self.ticker, 15,
-                          scale=0.5, map_tile=self.map_tile)
+                          scale=0.5, game_map=self.game_map)
         self.register(self.crab)
         self.register(self.player)
 

@@ -21,7 +21,6 @@ class Floor(Actor):
         )
         self.alpha = 0
 
-        MAP_LIST.append(self)
 
     def set_texture(self, texture_no):
         return super().set_texture(texture_no)

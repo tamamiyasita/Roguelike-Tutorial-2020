@@ -93,30 +93,29 @@ class BasicDungeon:
     def is_blocked(self, x, y):
         return is_blocked(self.tiles, x, y)
 
-    def place_entities(self, room, max_monsters_per_room, max_items_per_room):
-        number_of_monsters = randint(0, max_monsters_per_room)
-        number_of_items = randint(0, max_items_per_room)
-        actor_list = MAP_LIST
+    # def place_entities(self, room, max_monsters_per_room, max_items_per_room):
+    #     number_of_monsters = randint(0, max_monsters_per_room)
+    #     number_of_items = randint(0, max_items_per_room)
 
-        for i in range(number_of_monsters):
-            x = randint(room.x1 + 1, room.x2 - 1)
-            y = randint(room.y1 + 1, room.y2 - 1)
+    #     for i in range(number_of_monsters):
+    #         x = randint(room.x1 + 1, room.x2 - 1)
+    #         y = randint(room.y1 + 1, room.y2 - 1)
 
-            if not any([actor for actor in actor_list if actor.x == x and actor.y == y]):
-                if randint(0, 100) < 80:
-                    Orc(x, y, game_map=self)
+    #         if not any([actor for actor in actor_list if actor.x == x and actor.y == y]):
+    #             if randint(0, 100) < 80:
+    #                 Orc(x, y, game_map=self)
 
-                else:
-                    Troll(x, y, game_map=self)
-        for i in range(number_of_items):
-            x = randint(room.x1 + 1, room.x2 - 1)
-            y = randint(room.y1 + 1, room.y2 - 1)
+    #             else:
+    #                 Troll(x, y, game_map=self)
+    #     for i in range(number_of_items):
+    #         x = randint(room.x1 + 1, room.x2 - 1)
+    #         y = randint(room.y1 + 1, room.y2 - 1)
 
-            if not any([actor for actor in actor_list if actor.x == x and actor.y == y]):
-                type = randint(0, 100)
-                if type < 40:
-                    Potion(x=x, y=y)
-                elif type < 67:
-                    LightningScroll(x=x, y=y)
-                else:
-                    FireballScroll(x=x, y=y)
+    #         if not any([actor for actor in actor_list if actor.x == x and actor.y == y]):
+    #             type = randint(0, 100)
+    #             if type < 40:
+    #                 Potion(x=x, y=y)
+    #             elif type < 67:
+    #                 LightningScroll(x=x, y=y)
+    #             else:
+    #                 FireballScroll(x=x, y=y)
