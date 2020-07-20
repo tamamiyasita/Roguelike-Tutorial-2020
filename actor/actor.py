@@ -42,7 +42,6 @@ class Actor(arcade.Sprite):
 
         self.game_engine = game_engine
 
-
     def get_dict(self):
         result = {}
         result["texture_number"] = self.texture_number
@@ -117,10 +116,10 @@ class Actor(arcade.Sprite):
 
             # 行先を変数dst_tileに入れる
             self.dst_tile = self.game_engine.game_map.tiles[self.x +
-                                                self.dx][self.y+self.dy]
+                                                            self.dx][self.y+self.dy]
 
             blocking_actor = get_blocking_entity(
-                self.x+self.dx, self.y+self.dy, self.game_engine.map_sprits)
+                self.x+self.dx, self.y+self.dy, self.game_engine.actor_sprits)
             if blocking_actor and not target:
                 target = blocking_actor[0]
                 if not target.is_dead:

@@ -22,22 +22,26 @@ def recompute_fov(fov_map, x, y, radius, light_walls=True, algorithm=0):
 
 
 def fov_get(game_map, fov_map, actor_list, map_list):
-    
+
     for y in range(game_map.height):
         for x in range(game_map.width):
             visible = tcod.map_is_in_fov(fov_map, x, y)
             if not visible:
                 point = grid_to_pixel(x, y)
-                sprite_point = arcade.get_sprites_at_exact_point(
+                actor_point = arcade.get_sprites_at_exact_point(
+                    point, actor_list)
+                map_point = arcade.get_sprites_at_exact_point(
                     point, map_list)
-                for sprite in sprite_point:
+                for sprite in chain(map_point, actor_point):
                     sprite.is_visible = False
 
             elif visible:
                 point = grid_to_pixel(x, y)
-                sprite_point = arcade.get_sprites_at_exact_point(
+                actor_point = arcade.get_sprites_at_exact_point(
+                    point, actor_list)
+                map_point = arcade.get_sprites_at_exact_point(
                     point, map_list)
-                for sprite in sprite_point:
+                for sprite in chain(map_point, actor_point):
                     sprite.is_visible = True
                     sprite.alpha = 255
             for sprite in actor_list:

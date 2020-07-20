@@ -12,7 +12,9 @@ class Basicmonster:
         results = []
 
         monster = self.owner
+        print(monster.name)
         if monster.is_visible and not monster.is_dead:
+            print("kokomade?")
 
             if monster.distance_to(target) >= 1:
                 results = astar(

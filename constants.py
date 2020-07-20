@@ -7,8 +7,8 @@ TITLE = "Roguelike tutorial 2020"
 SPRITE_SIZE = 32
 SPRITE_SCALE = 2
 
-MAP_WIDTH = 15
-MAP_HEIGHT = 15
+MAP_WIDTH = 25
+MAP_HEIGHT = 25
 
 STATES_PANEL_HEIGHT = 60
 
@@ -65,7 +65,6 @@ class state(Enum):
     TURN_END = auto()
     ATTACK = auto()
     FOV = auto()
-
 
 
 KEYMAP_UP = [arcade.key.UP, arcade.key.W, arcade.key.NUM_8]
