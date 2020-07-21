@@ -8,6 +8,10 @@ def initialize_tiles(width, height):
     return tiles
 
 
+def actor_tiles(width, height):
+    actor_tiles = [[]]
+
+
 class Tile:
     def __init__(self, blocked, block_sight=None):
         self.blocked = blocked

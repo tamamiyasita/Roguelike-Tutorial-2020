@@ -32,7 +32,8 @@ class MG(arcade.Window):
         self.engine.view()
 
         if self.engine.player.state == state.READY and self.dist:
-            attack = self.engine.player.move(self.dist)
+            attack = self.engine.player.move(
+                self.dist)
             if attack:
                 self.engine.action_queue.extend(attack)
 
@@ -119,6 +120,7 @@ class MG(arcade.Window):
         elif self.engine.player.state == state.READY and self.engine.game_state == GAME_STATE.NORMAL:
             dist = None
             if key in KEYMAP_UP:
+                print(self.engine.player.name, "PLAYER")
                 dist = (0, 1)
             elif key in KEYMAP_DOWN:
                 dist = (0, -1)
@@ -175,7 +177,6 @@ class MG(arcade.Window):
             self.dist = dist
             self.engine.fov_recompute = True
 
-
             # self.engine.action_queue.append({"player_turn": True})
 
     def on_key_release(self, key, modifiers):
@@ -204,20 +205,21 @@ class MG(arcade.Window):
     def save(self):
         print("save")
         game_dict = self.engine.get_dict()
-        print(game_dict)
+        # print(game_dict)
 
-        with open("game_same.json", "w") as write_file:
+        with open("game_same3.json", "w") as write_file:
             json.dump(game_dict, write_file)
         print("**save**")
 
     def load(self):
         print("load")
-        with open("game_same.json", "r") as read_file:
+        with open("game_same3.json", "r") as read_file:
             data = json.load(read_file)
 
         print(data)
         print("**load**")
         self.engine.restore_from_dict(data)
+        self.engine.player.state = state.READY
 
 
 def main():

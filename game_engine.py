@@ -54,7 +54,7 @@ class GameEngine:
         self.player = Player(
             self.game_map.player_pos[0], self.game_map.player_pos[1], game_engine=self, inventory=Inventory(capacity=5))
         self.chara_sprits.append(self.player)
-        self.crab = Crab(self.player.x + 1, self.player.y +
+        self.crab = Crab(self.player.x + 2, self.player.y +
                          1, game_engine=self,)
         self.actor_sprits.append(self.crab)
         # self.cnf = ConfusionScroll(
@@ -72,14 +72,17 @@ class GameEngine:
 
     def get_dict(self):
         player_dict = self.get_actor_dict(self.player)
+        print(type(player_dict))
 
         actor_dict = []
         for sprite in self.actor_sprits:
             actor_dict.append(self.get_actor_dict(sprite))
+        print(type(actor_dict))
 
         dungeon_dict = []
         for sprite in self.map_sprits:
             dungeon_dict.append(self.get_actor_dict(sprite))
+        print(type(dungeon_dict))
 
         result = {"player": player_dict,
                   "actor": actor_dict,
@@ -87,6 +90,9 @@ class GameEngine:
         return result
 
     def restore_from_dict(self, data):
+
+        self.chara_sprits = arcade.SpriteList(
+            use_spatial_hash=True, spatial_hash_cell_size=32)
 
         self.actor_sprits = arcade.SpriteList(
             use_spatial_hash=True, spatial_hash_cell_size=32)
@@ -96,16 +102,20 @@ class GameEngine:
 
         player_dict = data["player"]
         self.player.restore_from_dict(player_dict["Player"])
+        # player = restore_actor(player_dict)
+        self.chara_sprits.append(self.player)
 
         for actor_dict in data["actor"]:
-            actor = restore_actor(actor_dict)
-            self.actor_sprits.append(actor)
+            # for actor in actor_dict:
+                # actor = restore_actor(actor_dict)
+            self.crab.restore_from_dict(actor_dict["Crab"])
+            self.actor_sprits.append(self.crab)
 
         for actor_dict in data["dungeon"]:
-            actor = restore_actor(actor_dict)
-            self.map_sprits.append(actor)
-
+            maps = restore_actor(actor_dict)
+            self.map_sprits.append(maps)
     ###アクションキュー###
+
     def process_action_queue(self, delta_time):
         new_action_queue = []
         for action in self.action_queue:
@@ -117,7 +127,7 @@ class GameEngine:
             if "enemy_turn" in action:
                 print("enemy_turn")
                 # self.turn_checkにターン終了フラグを入れる
-                self.turn_check = self.move_enemies()
+                self.turn_check = self.move_enemies(self.player)
 
             if "message" in action:
                 print("Message")
@@ -199,15 +209,18 @@ class GameEngine:
                 self.action_queue.extend(results)
         self.grid_select_handlers = []
 
-    def move_enemies(self):
+    def move_enemies(self, target):
         turn_check = "next_turn"
         for actor in self.actor_sprits:
             if actor.ai and not actor.is_dead:
-                print(actor.name)
+                print(actor.name, ": actor_name")
+                print(self.player.name)
                 results = actor.ai.take_turn(
-                    target=self.player, game_map=self.game_map, sprite_lists=[self.map_sprits, self.actor_sprits])
+                    target=target, game_map=self.game_map, sprite_lists=[self.map_sprits, self.actor_sprits])
                 if results:
+                    print("on_")
                     self.action_queue.extend(results)
+
                 # else:
                 #     results = actor.ai.take_turn(
                 #         target=self.player, game_map=self.game_map, sprite_lists=[MAP_LIST])
@@ -245,9 +258,11 @@ class GameEngine:
 
         elif self.turn_check:
             for actor in self.actor_sprits:
+                print("actor_?")
                 if actor.ai:
                     if actor.state == state.TURN_END:
                         turn += 1
+                        print(turn)
                     if turn == len(self.actor_sprits):
                         self.action_queue.extend([{"player_turn": True}])
                         self.turn_check = None

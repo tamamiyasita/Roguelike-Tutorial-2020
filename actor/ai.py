@@ -9,10 +9,12 @@ class Basicmonster:
         self.owner = None
 
     def take_turn(self, target, game_map, sprite_lists):
+        print("???")
         results = []
+        print(self.owner)
 
         monster = self.owner
-        print(monster.name)
+        print(monster.name, "MN")
         if monster.is_visible and not monster.is_dead:
             print("kokomade?")
 
@@ -23,11 +25,14 @@ class Basicmonster:
                 #     f"Path from ({monster.x},{monster.y}) to {target.x},{target.y}", results)
                 # monster.move_towards(target.x, target.y, sprite_lists)
                 # monster.move((randint(-1, 1), randint(-1, 1)))
+                print("results?", results)
                 if results:
                     point = results[1]
                     x, y = point
                     dx = x - monster.x
                     dy = y - monster.y
+                    print(
+                        f"{x}{y}{dx}{dy}, : {monster.x}{monster.y}, {target.name}")
 
                     attack = monster.move((dx, dy), target)
                     if attack:

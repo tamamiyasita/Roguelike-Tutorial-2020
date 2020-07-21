@@ -19,13 +19,13 @@ class Crab(Actor):
             y=y,
             fighter=fighter_component,
             ai=ai_component,
-            game_engine = game_engine,
+            game_engine=game_engine,
+            state=state.TURN_END,
 
             scale=1,
             blocks=True
         )
         self.left_face = False
-
 
     # def update_animation(self, delta_time=1 / 60):
     #     if self.left_face:
