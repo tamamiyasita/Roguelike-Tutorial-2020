@@ -25,6 +25,7 @@ class MG(arcade.Window):
     def on_update(self, delta_time):
         self.engine.chara_sprites.update_animation()
         self.engine.chara_sprites.update()
+        self.engine.actor_sprites.update_animation()
         self.engine.actor_sprites.update()
 
         self.engine.process_action_queue(delta_time)

@@ -16,7 +16,7 @@ class Basicmonster:
         monster = self.owner
         print(monster.name, "MN")
         if monster.is_visible and not monster.is_dead:
-            print("kokomade?")
+            actor_list = sprite_lists[1]
 
             if monster.distance_to(target) >= 1:
                 results = astar(
@@ -34,7 +34,8 @@ class Basicmonster:
                     print(
                         f"{x}{y}{dx}{dy}, : {monster.x}{monster.y}, {target.name}")
 
-                    attack = monster.move((dx, dy), target)
+                    attack = monster.move(
+                        (dx, dy), target, actor_list, game_map)
                     if attack:
                         results.extend(attack)
             return results

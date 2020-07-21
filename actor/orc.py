@@ -25,6 +25,6 @@ class Orc(Actor):
 
     def update_animation(self, delta_time=1 / 60):
         if self.left_face:
-            self.texture = orc_l
+            self.texture = orc[0]
         else:
-            self.texture = orc_r
+            self.texture = orc[1]
