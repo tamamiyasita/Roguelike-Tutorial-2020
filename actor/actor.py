@@ -120,7 +120,7 @@ class Actor(arcade.Sprite):
             print(self.dx, self.dy, self.name, ": dx, dy", self.state)
             print(self.x, self.y, "xy!!", self.name)
             print(self.center_x, self.center_y, "Cxy!!", self.name)
-            print(self.game_engine.actor_sprits)
+            print(self.game_engine.actor_sprites)
 
             if self.dx == -1:
                 self.left_face = True
@@ -137,7 +137,7 @@ class Actor(arcade.Sprite):
                 print("target ok", target)
 
             blocking_actor = get_blocking_entity(
-                self.x+self.dx, self.y+self.dy, self.game_engine.actor_sprits)
+                self.x+self.dx, self.y+self.dy, self.game_engine.actor_sprites)
             if blocking_actor and not target:
                 actor = blocking_actor[0]
                 if not actor.is_dead:
@@ -160,17 +160,17 @@ class Actor(arcade.Sprite):
 
                 return attack_results
 
-            # elif get_blocking_entity(self.x + self.dx, self.y + self.dy, self.game_engine.map_sprits):
+            # elif get_blocking_entity(self.x + self.dx, self.y + self.dy, self.game_engine.map_sprites):
             #     print("WHY_?")
             elif self.dst_tile.blocked == True:
                 print("WFDF")
 
-            elif not get_blocking_entity(self.x + self.dx, self.y + self.dy, self.game_engine.actor_sprits) and\
+            elif not get_blocking_entity(self.x + self.dx, self.y + self.dy, self.game_engine.actor_sprites) and\
                     self.dst_tile.blocked == False:
 
                 print(f"{self.name} AAAA!")
                 print(f"get block{self.name}", get_blocking_entity(self.x + self.dx,
-                                                                   self.y + self.dy, self.game_engine.map_sprits))
+                                                                   self.y + self.dy, self.game_engine.map_sprites))
 
                 self.dst_tile.blocked = True
                 self.state = state.ON_MOVE

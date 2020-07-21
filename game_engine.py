@@ -27,9 +27,9 @@ from actor.restore_actor import restore_actor
 
 class GameEngine:
     def __init__(self):
-        self.chara_sprits = None
-        self.actor_sprits = None
-        self.map_sprits = None
+        self.chara_sprites = None
+        self.actor_sprites = None
+        self.map_sprites = None
         self.player = None
         self.game_map = None
         self.action_queue = []
@@ -40,23 +40,23 @@ class GameEngine:
         self.grid_select_handlers = []
 
     def setup(self):
-        self.chara_sprits = arcade.SpriteList(
+        self.chara_sprites = arcade.SpriteList(
             use_spatial_hash=True, spatial_hash_cell_size=32)
-        self.actor_sprits = arcade.SpriteList(
+        self.actor_sprites = arcade.SpriteList(
             use_spatial_hash=True, spatial_hash_cell_size=32)
 
         self.game_map = BasicDungeon(MAP_WIDTH, MAP_HEIGHT)
         mapsprite = MapSpriteSet(self.game_map.tiles).actor_set()
-        self.map_sprits = mapsprite
+        self.map_sprites = mapsprite
 
         self.fov_recompute = True
 
         self.player = Player(
             self.game_map.player_pos[0], self.game_map.player_pos[1], game_engine=self, inventory=Inventory(capacity=5))
-        self.chara_sprits.append(self.player)
+        self.chara_sprites.append(self.player)
         self.crab = Crab(self.player.x + 2, self.player.y +
                          1, game_engine=self,)
-        self.actor_sprits.append(self.crab)
+        self.actor_sprites.append(self.crab)
         # self.cnf = ConfusionScroll(
         #     self.player.x+1, self.player.y)
 
@@ -75,12 +75,12 @@ class GameEngine:
         print(type(player_dict))
 
         actor_dict = []
-        for sprite in self.actor_sprits:
+        for sprite in self.actor_sprites:
             actor_dict.append(self.get_actor_dict(sprite))
         print(type(actor_dict))
 
         dungeon_dict = []
-        for sprite in self.map_sprits:
+        for sprite in self.map_sprites:
             dungeon_dict.append(self.get_actor_dict(sprite))
         print(type(dungeon_dict))
 
@@ -91,29 +91,29 @@ class GameEngine:
 
     def restore_from_dict(self, data):
 
-        self.chara_sprits = arcade.SpriteList(
+        self.chara_sprites = arcade.SpriteList(
             use_spatial_hash=True, spatial_hash_cell_size=32)
 
-        self.actor_sprits = arcade.SpriteList(
+        self.actor_sprites = arcade.SpriteList(
             use_spatial_hash=True, spatial_hash_cell_size=32)
 
-        self.map_sprits = arcade.SpriteList(
+        self.map_sprites = arcade.SpriteList(
             use_spatial_hash=True, spatial_hash_cell_size=32)
 
         player_dict = data["player"]
         self.player.restore_from_dict(player_dict["Player"])
         # player = restore_actor(player_dict)
-        self.chara_sprits.append(self.player)
+        self.chara_sprites.append(self.player)
 
         for actor_dict in data["actor"]:
             # for actor in actor_dict:
                 # actor = restore_actor(actor_dict)
             self.crab.restore_from_dict(actor_dict["Crab"])
-            self.actor_sprits.append(self.crab)
+            self.actor_sprites.append(self.crab)
 
         for actor_dict in data["dungeon"]:
             maps = restore_actor(actor_dict)
-            self.map_sprits.append(maps)
+            self.map_sprites.append(maps)
     ###アクションキュー###
 
     def process_action_queue(self, delta_time):
@@ -164,7 +164,7 @@ class GameEngine:
 
             if "pickup" in action:
                 actors = arcade.get_sprites_at_exact_point(
-                    (self.player.center_x, self.player.center_y), self.actor_sprits)
+                    (self.player.center_x, self.player.center_y), self.actor_sprites)
                 for actor in actors:
                     if actor.item:
                         results = self.player.inventory.add_item(actor)
@@ -193,7 +193,7 @@ class GameEngine:
                     item = self.player.inventory.get_item_number(item_number)
                     if item:
                         self.player.inventory.remove_item_number(item_number)
-                        self.actor_sprits.append(item)
+                        self.actor_sprites.append(item)
                         item.center_x = self.player.center_x
                         item.center_y = self.player.center_y
                         new_action_queue.extend(
@@ -211,12 +211,12 @@ class GameEngine:
 
     def move_enemies(self, target):
         turn_check = "next_turn"
-        for actor in self.actor_sprits:
+        for actor in self.actor_sprites:
             if actor.ai and not actor.is_dead:
                 print(actor.name, ": actor_name")
                 print(self.player.name)
                 results = actor.ai.take_turn(
-                    target=target, game_map=self.game_map, sprite_lists=[self.map_sprits, self.actor_sprits])
+                    target=target, game_map=self.game_map, sprite_lists=[self.map_sprites, self.actor_sprites])
                 if results:
                     print("on_")
                     self.action_queue.extend(results)
@@ -233,11 +233,11 @@ class GameEngine:
 
     def fov(self):
         if self.fov_recompute == True:
-            # recalculate_fov(self.player.x, self.player.y, FOV_RADIUS,[self.map_sprits, self.actor_sprits])
+            # recalculate_fov(self.player.x, self.player.y, FOV_RADIUS,[self.map_sprites, self.actor_sprites])
             recompute_fov(self.fov_map, self.player.x, self.player.y,
                           FOV_RADIUS, FOV_LIGHT_WALL, FOV_ALGO)
             fov_get(self.game_map, self.fov_map,
-                    self.actor_sprits, self.map_sprits)
+                    self.actor_sprites, self.map_sprites)
         self.fov_recompute = False
 
     def view(self):
@@ -257,12 +257,12 @@ class GameEngine:
             self.action_queue.extend([{"player_turn": True}])
 
         elif self.turn_check:
-            for actor in self.actor_sprits:
+            for actor in self.actor_sprites:
                 print("actor_?")
                 if actor.ai:
                     if actor.state == state.TURN_END:
                         turn += 1
                         print(turn)
-                    if turn == len(self.actor_sprits):
+                    if turn == len(self.actor_sprites):
                         self.action_queue.extend([{"player_turn": True}])
                         self.turn_check = None

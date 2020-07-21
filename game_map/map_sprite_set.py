@@ -16,7 +16,8 @@ class MapSpriteSet:
         self.tiles = tiles
         self.width = len(tiles[0])
         self.height = len(tiles)
-        self.map_sprits = arcade.SpriteList(use_spatial_hash=True, spatial_hash_cell_size=32)
+        self.map_sprites = arcade.SpriteList(
+            use_spatial_hash=True, spatial_hash_cell_size=32)
         # if self.wall_img[0].width <= 17:
         #     self.scale = SPRITE_SCALE * 2
 
@@ -27,15 +28,14 @@ class MapSpriteSet:
                     wall_number = self.search_wall_number(x, y, self.tiles)
 
                     wall = Wall(texture_number=wall_number, x=x, y=y,)
-                    self.map_sprits.append(wall)
+                    self.map_sprites.append(wall)
 
                 elif not self.tiles[x][y].blocked:
-      
+
                     floor = Floor(texture_number=21, x=x, y=y)
-                    self.map_sprits.append(floor)
-        
-        return self.map_sprits
-        
+                    self.map_sprites.append(floor)
+
+        return self.map_sprites
 
     def search_wall_number(self, x, y, tiles):
 

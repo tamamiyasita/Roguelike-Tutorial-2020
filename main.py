@@ -23,9 +23,9 @@ class MG(arcade.Window):
         self.engine.fov()
 
     def on_update(self, delta_time):
-        self.engine.chara_sprits.update_animation()
-        self.engine.chara_sprits.update()
-        self.engine.actor_sprits.update()
+        self.engine.chara_sprites.update_animation()
+        self.engine.chara_sprites.update()
+        self.engine.actor_sprites.update()
 
         self.engine.process_action_queue(delta_time)
         self.engine.turn_change(delta_time)
@@ -41,9 +41,9 @@ class MG(arcade.Window):
         try:
             arcade.start_render()
 
-            self.engine.map_sprits.draw(filter=gl.GL_NEAREST)
-            self.engine.actor_sprits.draw(filter=gl.GL_NEAREST)
-            self.engine.chara_sprits.draw(filter=gl.GL_NEAREST)
+            self.engine.map_sprites.draw(filter=gl.GL_NEAREST)
+            self.engine.actor_sprites.draw(filter=gl.GL_NEAREST)
+            self.engine.chara_sprites.draw(filter=gl.GL_NEAREST)
 
             size = 72
             margin = 15
@@ -188,7 +188,7 @@ class MG(arcade.Window):
         print(pixel_to_grid(self.mouse_position[0], self.mouse_position[1]))
         # 忘れずにビューポートの座標を足す
         actor_list = arcade.get_sprites_at_point(
-            self.mouse_position, self.engine.actor_sprits)
+            self.mouse_position, self.engine.actor_sprites)
         self.mouse_over_text = None
         for actor in actor_list:
             if actor.fighter or actor.item and actor.is_visible:
