@@ -9,6 +9,7 @@ from actor.orc import Orc
 from actor.troll import Troll
 from actor.potion import Potion
 from actor.lightning_scroll import LightningScroll
+from actor.fireball_scroll import FireballScroll
 
 # test_wall = image.get("test_wall")
 # test_floor = image.get("test_floor")
@@ -67,34 +68,11 @@ class MapobjPlacement:
                 elif self.actor_tiles[x][y] == TILE_LIGHTNING_SCROLL:
                     l_scroll = LightningScroll(x, y)
                     item_sprites.append(l_scroll)
+                elif self.actor_tiles[x][y] == TILE_FIREBALL_SCROOLL:
+                    f_scroll = FireballScroll(x, y)
+                    item_sprites.append(f_scroll)
 
         return item_sprites
-    # def place_entities(self, room, max_monsters_per_room, max_items_per_room):
-    #     number_of_monsters = randint(0, max_monsters_per_room)
-    #     number_of_items = randint(0, max_items_per_room)
-
-    #     for i in range(number_of_monsters):
-    #         x = randint(room.x1 + 1, room.x2 - 1)
-    #         y = randint(room.y1 + 1, room.y2 - 1)
-
-    #         if not any([actor for actor in actor_list if actor.x == x and actor.y == y]):
-    #             if randint(0, 100) < 80:
-    #                 Orc(x, y, game_map=self)
-
-    #             else:
-    #                 Troll(x, y, game_map=self)
-    #     for i in range(number_of_items):
-    #         x = randint(room.x1 + 1, room.x2 - 1)
-    #         y = randint(room.y1 + 1, room.y2 - 1)
-
-    #         if not any([actor for actor in actor_list if actor.x == x and actor.y == y]):
-    #             type = randint(0, 100)
-    #             if type < 40:
-    #                 Potion(x=x, y=y)
-    #             elif type < 67:
-    #                 LightningScroll(x=x, y=y)
-    #             else:
-    #                 FireballScroll(x=x, y=y)
 
     def search_wall_number(self, x, y, tiles):
 

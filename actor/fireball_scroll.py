@@ -9,10 +9,15 @@ from util import get_blocking_entity, grid_to_pixel, pixel_to_grid
 
 
 class FireballEfc(Actor):
-    def __init__(self, x=0, y=0):
-        super().__init__(x=x, y=y, texture=effect1[134])
+    def __init__(self, x=0, y=0, item_sprites=None):
+        super().__init__(
+            x=x,
+            y=y,
+            texture="fireball_effect"
+        )
+        self.item_sprites = item_sprites
         self.alpha = 255
-        EFFECT_LIST.append(self)
+        self.item_sprites.append(self)
         self.scale = 0.1
 
     def update(self):
@@ -21,16 +26,22 @@ class FireballEfc(Actor):
             self.scale += 0.6
             self.angle += 14
         if self.alpha < 220:
-            EFFECT_LIST.remove(self)
+            self.item_sprites.remove(self)
 
 
 class FireballScroll(Actor):
     def __init__(self, x: int = 0, y: int = 0):
-        super().__init__(x=x, y=y, texture=scroll[6], name="Fireball Scroll", color=COLORS["transparent"],
-                         visible_color=arcade.color.WHITE,
-                         not_visible_color=COLORS.get("dark_ground"), item=Item())
+        super().__init__(
+            x=x,
+            y=y,
+            texture="fireball_scroll",
+            name="fireball_scroll",
+            color=COLORS["transparent"],
+            visible_color=arcade.color.WHITE,
+            not_visible_color=COLORS.get("dark_ground"),
+            item=Item()
+        )
         self.alpha = 0
-        ITEM_LIST.append(self)
 
     def use(self, game_engine: "GameEngine"):
         print("use")
@@ -42,7 +53,11 @@ class FireballScroll(Actor):
     def apply_damage(self, grid_x, grid_y, amount, results):
         pixel_x, pixel_y = grid_to_pixel(grid_x, grid_y)
         print(f"{pixel_x}{pixel_y} apply pixel_x_y")
-        sprites = arcade.get_sprites_at_point((pixel_x, pixel_y), ACTOR_LIST)
+        sprites = arcade.get_sprites_at_point(
+            (pixel_x, pixel_y), self.game_engine.actor_sprites)
+        pc_check = arcade.get_sprites_at_point(
+            (pixel_x, pixel_y), self.game_engine.chara_sprites)
+        sprites.extend(pc_check)
         for sprite in sprites:
             print(sprite, "sprite")
             if sprite.fighter and not sprite.is_dead:
@@ -56,7 +71,7 @@ class FireballScroll(Actor):
         print("Click!", x, y)
         results = []
         print(results, "results")
-        fireball = FireballEfc(x, y)
+        fireball = FireballEfc(x, y, self.game_engine.item_sprites)
         self.apply_damage(x, y, 10, results)
 
         self.apply_damage(x-1, y-1, 8, results)

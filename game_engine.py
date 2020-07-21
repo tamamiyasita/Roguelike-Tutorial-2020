@@ -236,7 +236,7 @@ class GameEngine:
             recompute_fov(self.fov_map, self.player.x, self.player.y,
                           FOV_RADIUS, FOV_LIGHT_WALL, FOV_ALGO)
             fov_get(self.game_map, self.fov_map,
-                    self.actor_sprites, self.map_sprites)
+                    self.actor_sprites, self.map_sprites, self.item_sprites)
         self.fov_recompute = False
 
     def view(self):

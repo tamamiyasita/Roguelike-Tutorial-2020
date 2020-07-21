@@ -11,6 +11,7 @@ class Potion(Actor):
             y=y,
             texture="potion",
             name="potion",
+            not_visible_color=arcade.color.BLACK,
             item=Item())
         self.alpha = 255
 

@@ -73,8 +73,10 @@ ID = {"player": player,
       "potion": potion,
       "conf_scroll": [scroll[15]],
       "lightning_scroll": [scroll[2]],
+      "fireball_scroll": [scroll[6]],
 
       "lightning_effect": [effect1[87]],
+      "fireball_effect": [effect1[134]],
 
       "floor": floors,
       "wall_1": wall_1,

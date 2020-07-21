@@ -112,10 +112,12 @@ class BasicDungeon:
             y = randint(room.y1 + 1, room.y2 - 1)
 
             type = randint(0, 100)
-            if type < 40:
+            if type < 4:
                 actor_tiles[x][y] = TILE_HEALING_POTION
-            elif type < 67:
+            elif type < 5:
                 actor_tiles[x][y] = TILE_LIGHTNING_SCROLL
+            elif type < 100:
+                actor_tiles[x][y] = TILE_FIREBALL_SCROOLL
             # elif type < 87:
             #     actor_tiles[x][y] = TILE_
             # else:

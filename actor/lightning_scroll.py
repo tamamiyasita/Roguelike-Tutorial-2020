@@ -13,8 +13,7 @@ class LightningEfc(Actor):
         super().__init__(
             x=x,
             y=y,
-            texture="lightning_effect",
-            item_sprites=None
+            texture="lightning_effect"
         )
         self.item_sprites = item_sprites
         self.alpha = 255
@@ -30,9 +29,9 @@ class LightningEfc(Actor):
             # self.scale += random.random()
             self.center_x -= random.randint(1, 3)
 
-        if self.alpha <= 90:
+        if self.alpha <= 70:
 
-            self.actor_list.remove(self)
+            self.item_sprites.remove(self)
 
 
 class LightningScroll(Actor):
@@ -51,7 +50,7 @@ class LightningScroll(Actor):
         closest_actor: Optional[Actor] = None
         results = []
 
-        for actor in game_engine.actor_list:
+        for actor in game_engine.actor_sprites:
             if actor.is_visible and actor.fighter and not actor.is_dead and actor.ai:
                 x1 = game_engine.player.x
                 y1 = game_engine.player.y
