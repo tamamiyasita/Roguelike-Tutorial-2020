@@ -30,6 +30,7 @@ class GameEngine:
         self.chara_sprites = None
         self.actor_sprites = None
         self.map_sprites = None
+        self.item_sprites = None
         self.player = None
         self.game_map = None
         self.action_queue = []
@@ -42,14 +43,14 @@ class GameEngine:
     def setup(self):
         self.chara_sprites = arcade.SpriteList(
             use_spatial_hash=True, spatial_hash_cell_size=32)
-        self.actor_sprites = arcade.SpriteList(
-            use_spatial_hash=True, spatial_hash_cell_size=32)
 
         self.game_map = BasicDungeon(MAP_WIDTH, MAP_HEIGHT)
         mapsprite = MapobjPlacement(self.game_map, self).map_set()
         actorsprite = MapobjPlacement(self.game_map, self).actor_set()
+        itemsprite = MapobjPlacement(self.game_map, self).items_set()
         self.map_sprites = mapsprite
         self.actor_sprites = actorsprite
+        self.item_sprites = itemsprite
 
         self.fov_recompute = True
 
@@ -165,7 +166,7 @@ class GameEngine:
 
             if "pickup" in action:
                 actors = arcade.get_sprites_at_exact_point(
-                    (self.player.center_x, self.player.center_y), self.actor_sprites)
+                    (self.player.center_x, self.player.center_y), self.item_sprites)
                 for actor in actors:
                     if actor.item:
                         results = self.player.inventory.add_item(actor)

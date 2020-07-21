@@ -9,15 +9,20 @@ import random
 
 
 class LightningEfc(Actor):
-    def __init__(self, x, y):
-        super().__init__(x=x, y=y, texture=effect1[87])
+    def __init__(self, x, y, item_sprites):
+        super().__init__(
+            x=x,
+            y=y,
+            texture="lightning_effect",
+            item_sprites=None
+        )
+        self.item_sprites = item_sprites
         self.alpha = 255
-        EFFECT_LIST.append(self)
+        self.item_sprites.append(self)
         self.scale = 3.6
 
     def update(self):
         self.alpha -= 5
-        print(self.alpha, "ALF")
         if self.alpha % 10 == 0:
             self.scale += random.random()
             self.center_x += random.randint(1, 3)
@@ -27,15 +32,19 @@ class LightningEfc(Actor):
 
         if self.alpha <= 90:
 
-            EFFECT_LIST.remove(self)
+            self.actor_list.remove(self)
 
 
 class LightningScroll(Actor):
     def __init__(self, x: int = 0, y: int = 0):
-        super().__init__(x=x, y=y, texture=scroll[1], name="Lightning Scroll", color=COLORS["transparent"], visible_color=arcade.color.WHITE,
-                         not_visible_color=COLORS.get("dark_ground"), item=Item())
+        super().__init__(
+            x=x,
+            y=y,
+            texture="lightning_scroll",
+            name="lightning_scroll",
+            item=Item()
+        )
         self.alpha = 0
-        ITEM_LIST.append(self)
 
     def use(self, game_engine: "GameEngine"):
         closest_distance: Optional[float] = None
@@ -54,7 +63,8 @@ class LightningScroll(Actor):
                     closest_distance = distance
 
         if closest_actor:
-            lightning = LightningEfc(closest_actor.x, closest_actor.y)
+            lightning = LightningEfc(
+                closest_actor.x, closest_actor.y, game_engine.item_sprites)
             damage = 10
             game_engine.player.inventory.remove_item(self)
             results.append(

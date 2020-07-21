@@ -102,23 +102,21 @@ class BasicDungeon:
             x = randint(room.x1 + 1, room.x2 - 1)
             y = randint(room.y1 + 1, room.y2 - 1)
 
-            # if not actor_tiles[x][y]:
             if randint(0, 100) < 80:
-                # Orc(x, y, game_map=self)
                 actor_tiles[x][y] = TILE_ORC
 
             else:
-                # Troll(x, y, game_map=self)
                 actor_tiles[x][y] = TILE_TROLL
-        # for i in range(number_of_items):
-        #     x = randint(room.x1 + 1, room.x2 - 1)
-        #     y = randint(room.y1 + 1, room.y2 - 1)
+        for i in range(number_of_items):
+            x = randint(room.x1 + 1, room.x2 - 1)
+            y = randint(room.y1 + 1, room.y2 - 1)
 
-        #     if not any([actor for actor in actor_list if actor.x == x and actor.y == y]):
-        #         type = randint(0, 100)
-        #         if type < 40:
-        #             Potion(x=x, y=y)
-        #         elif type < 67:
-        #             LightningScroll(x=x, y=y)
-        #         else:
-        #             FireballScroll(x=x, y=y)
+            type = randint(0, 100)
+            if type < 40:
+                actor_tiles[x][y] = TILE_HEALING_POTION
+            elif type < 67:
+                actor_tiles[x][y] = TILE_LIGHTNING_SCROLL
+            # elif type < 87:
+            #     actor_tiles[x][y] = TILE_
+            # else:
+            #     actor_tiles[x][y] = TILE_FIREBALL_SCROOLL

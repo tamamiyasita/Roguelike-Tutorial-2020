@@ -18,11 +18,11 @@ orc_r = arcade.load_texture(
     d_human1, x=0, y=size, width=size, height=size, mirrored=True)
 orc = [orc_l, orc_r]
 
-torll_l = arcade.load_texture(
+troll_l = arcade.load_texture(
     d_human1, x=size*7, y=size, width=size, height=size)
-torll_r = arcade.load_texture(
+troll_r = arcade.load_texture(
     d_human1, x=size*7, y=size, width=size, height=size, mirrored=True)
-torll = [torll_l, torll_r]
+troll = [troll_l, troll_r]
 #######
 
 ###items###
@@ -68,12 +68,13 @@ ID = {"player": player,
       "crab": crab,
 
       "orc": orc,
-      "torll": torll,
+      "troll": troll,
 
       "potion": potion,
       "conf_scroll": [scroll[15]],
+      "lightning_scroll": [scroll[2]],
 
-      "effect1": effect1,
+      "lightning_effect": [effect1[87]],
 
       "floor": floors,
       "wall_1": wall_1,

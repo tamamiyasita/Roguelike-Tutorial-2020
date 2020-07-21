@@ -44,6 +44,7 @@ class MG(arcade.Window):
 
             self.engine.map_sprites.draw(filter=gl.GL_NEAREST)
             self.engine.actor_sprites.draw(filter=gl.GL_NEAREST)
+            self.engine.item_sprites.draw(filter=gl.GL_NEAREST)
             self.engine.chara_sprites.draw(filter=gl.GL_NEAREST)
 
             size = 72

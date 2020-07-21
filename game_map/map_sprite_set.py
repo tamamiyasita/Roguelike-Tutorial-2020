@@ -6,6 +6,9 @@ from actor.actor import Actor
 from actor.wall import Wall
 from actor.floor import Floor
 from actor.orc import Orc
+from actor.troll import Troll
+from actor.potion import Potion
+from actor.lightning_scroll import LightningScroll
 
 # test_wall = image.get("test_wall")
 # test_floor = image.get("test_floor")
@@ -45,11 +48,27 @@ class MapobjPlacement:
         for x in range(self.width):
             for y in range(self.height):
                 if self.actor_tiles[x][y] == TILE_ORC:
-                    orc = Orc(x, y, game_engine=self.game_engine)
+                    orc = Orc(x, y)
                     actor_sprites.append(orc)
+                elif self.actor_tiles[x][y] == TILE_TROLL:
+                    troll = Troll(x, y)
+                    actor_sprites.append(troll)
 
         return actor_sprites
 
+    def items_set(self):
+        item_sprites = arcade.SpriteList(
+            use_spatial_hash=True, spatial_hash_cell_size=32)
+        for x in range(self.width):
+            for y in range(self.height):
+                if self.actor_tiles[x][y] == TILE_HEALING_POTION:
+                    potion = Potion(x, y)
+                    item_sprites.append(potion)
+                elif self.actor_tiles[x][y] == TILE_LIGHTNING_SCROLL:
+                    l_scroll = LightningScroll(x, y)
+                    item_sprites.append(l_scroll)
+
+        return item_sprites
     # def place_entities(self, room, max_monsters_per_room, max_items_per_room):
     #     number_of_monsters = randint(0, max_monsters_per_room)
     #     number_of_items = randint(0, max_items_per_room)

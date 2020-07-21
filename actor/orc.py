@@ -8,7 +8,7 @@ from constants import *
 
 
 class Orc(Actor):
-    def __init__(self, x=0, y=0,  game_engine=None):
+    def __init__(self, x=0, y=0):
         fighter_component = Fighter(hp=8, defense=1, power=3)
         ai_component = Basicmonster()
 
