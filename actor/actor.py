@@ -12,7 +12,7 @@ class Actor(arcade.Sprite):
                  scale=SPRITE_SCALE, color=arcade.color.WHITE, fighter=None, ai=None,
                  inventory=None, item=None,
                  visible_color=arcade.color.WHITE, not_visible_color=arcade.color.WHITE,
-                 state=state.TURN_END, game_engine=None):
+                 state=state.TURN_END):
         super().__init__(scale=scale)
         self.texture_number = texture_number
         self.textureID = texture
@@ -41,8 +41,6 @@ class Actor(arcade.Sprite):
         self.ai = ai
         if self.ai:
             self.ai.owner = self
-
-        self.game_engine = game_engine
 
     def get_dict(self):
         result = {}
@@ -114,13 +112,9 @@ class Actor(arcade.Sprite):
             self.inventory = Inventory()
             self.inventory.restore_from_dict(result["inventory"])
 
-    def move(self, dxy, target=None):
+    def move(self, dxy, target=None, actor_sprites=None, game_map=None):
         try:
             self.dx, self.dy = dxy
-            print(self.dx, self.dy, self.name, ": dx, dy", self.state)
-            print(self.x, self.y, "xy!!", self.name)
-            print(self.center_x, self.center_y, "Cxy!!", self.name)
-            print(self.game_engine.actor_sprites)
 
             if self.dx == -1:
                 self.left_face = True
@@ -131,13 +125,12 @@ class Actor(arcade.Sprite):
             self.target_y = self.center_y
 
             # 行先を変数dst_tileに入れる
-            self.dst_tile = self.game_engine.game_map.tiles[self.x +
-                                                            self.dx][self.y + self.dy]
+            self.dst_tile = game_map.tiles[self.x + self.dx][self.y + self.dy]
             if target:
                 print("target ok", target)
 
             blocking_actor = get_blocking_entity(
-                self.x+self.dx, self.y+self.dy, self.game_engine.actor_sprites)
+                self.x+self.dx, self.y+self.dy, actor_sprites)
             if blocking_actor and not target:
                 actor = blocking_actor[0]
                 if not actor.is_dead:
@@ -160,23 +153,13 @@ class Actor(arcade.Sprite):
 
                 return attack_results
 
-            # elif get_blocking_entity(self.x + self.dx, self.y + self.dy, self.game_engine.map_sprites):
-            #     print("WHY_?")
-            elif self.dst_tile.blocked == True:
-                print("WFDF")
-
-            elif not get_blocking_entity(self.x + self.dx, self.y + self.dy, self.game_engine.actor_sprites) and\
+            elif not get_blocking_entity(self.x + self.dx, self.y + self.dy, actor_sprites) and\
                     self.dst_tile.blocked == False:
-
-                print(f"{self.name} AAAA!")
-                print(f"get block{self.name}", get_blocking_entity(self.x + self.dx,
-                                                                   self.y + self.dy, self.game_engine.map_sprites))
 
                 self.dst_tile.blocked = True
                 self.state = state.ON_MOVE
                 self.change_y = self.dy * MOVE_SPEED
                 self.change_x = self.dx * MOVE_SPEED
-                print(self.state, self.name)
 
         except:
             pass

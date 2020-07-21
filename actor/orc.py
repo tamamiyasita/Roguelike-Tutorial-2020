@@ -8,23 +8,20 @@ from constants import *
 
 
 class Orc(Actor):
-    def __init__(self, x=0, y=0,  game_map=None):
+    def __init__(self, x=0, y=0,  game_engine=None):
         fighter_component = Fighter(hp=8, defense=1, power=3)
         ai_component = Basicmonster()
 
         super().__init__(
             name="orc",
-            texture=orc_l,
+            texture="orc",
             x=x,
             y=y,
             fighter=fighter_component,
             ai=ai_component,
-            game_map=game_map,
             blocks=True
         )
         self.left_face = False
-
-        ACTOR_LIST.append(self)
 
     def update_animation(self, delta_time=1 / 60):
         if self.left_face:

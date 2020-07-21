@@ -14,7 +14,7 @@ from data import *
 from fov_functions import fov_get, initialize_fov, recompute_fov
 # from recalculate_fov import recalculate_fov
 from game_map.basic_dungeon import BasicDungeon
-from game_map.map_sprite_set import MapSpriteSet
+from game_map.map_sprite_set import MapobjPlacement
 # from actor.item import Item
 # from actor.potion import Potion
 from actor.confusion_scroll import ConfusionScroll
@@ -46,17 +46,19 @@ class GameEngine:
             use_spatial_hash=True, spatial_hash_cell_size=32)
 
         self.game_map = BasicDungeon(MAP_WIDTH, MAP_HEIGHT)
-        mapsprite = MapSpriteSet(self.game_map.tiles).actor_set()
+        mapsprite = MapobjPlacement(self.game_map, self).map_set()
+        actorsprite = MapobjPlacement(self.game_map, self).actor_set()
         self.map_sprites = mapsprite
+        self.actor_sprites = actorsprite
 
         self.fov_recompute = True
 
         self.player = Player(
-            self.game_map.player_pos[0], self.game_map.player_pos[1], game_engine=self, inventory=Inventory(capacity=5))
+            self.game_map.player_pos[0], self.game_map.player_pos[1], inventory=Inventory(capacity=5))
         self.chara_sprites.append(self.player)
-        self.crab = Crab(self.player.x + 2, self.player.y +
-                         1, game_engine=self,)
-        self.actor_sprites.append(self.crab)
+        # self.crab = Crab(self.player.x + 2, self.player.y +
+        #                  1, game_engine=self,)
+        # self.actor_sprites.append(self.crab)
         # self.cnf = ConfusionScroll(
         #     self.player.x+1, self.player.y)
 
@@ -72,17 +74,14 @@ class GameEngine:
 
     def get_dict(self):
         player_dict = self.get_actor_dict(self.player)
-        print(type(player_dict))
 
         actor_dict = []
         for sprite in self.actor_sprites:
             actor_dict.append(self.get_actor_dict(sprite))
-        print(type(actor_dict))
 
         dungeon_dict = []
         for sprite in self.map_sprites:
             dungeon_dict.append(self.get_actor_dict(sprite))
-        print(type(dungeon_dict))
 
         result = {"player": player_dict,
                   "actor": actor_dict,
@@ -105,14 +104,16 @@ class GameEngine:
         # player = restore_actor(player_dict)
         self.chara_sprites.append(self.player)
 
-        for actor_dict in data["actor"]:
-            # for actor in actor_dict:
-                # actor = restore_actor(actor_dict)
-            self.crab.restore_from_dict(actor_dict["Crab"])
-            self.actor_sprites.append(self.crab)
+        # for actor_dict in data["actor"]:
+        #     self.crab.restore_from_dict(actor_dict["Crab"])
+        #     self.actor_sprites.append(self.crab)
 
-        for actor_dict in data["dungeon"]:
-            maps = restore_actor(actor_dict)
+        for actor_dict in data["actor"]:
+            actor = restore_actor(actor_dict)
+            self.actor_sprites.append(actor)
+
+        for dungeon_dict in data["dungeon"]:
+            maps = restore_actor(dungeon_dict)
             self.map_sprites.append(maps)
     ###アクションキュー###
 

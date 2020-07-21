@@ -1,6 +1,6 @@
 import random
 from map_tool import initialize_tiles, is_blocked
-from map_sprite_set import MapSpriteSet
+from map_sprite_set import MapobjPlacement
 
 
 class CavesDungeon:

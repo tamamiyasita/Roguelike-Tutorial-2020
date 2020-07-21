@@ -1,15 +1,18 @@
 import arcade
+from constants import *
 
 
 def initialize_tiles(width, height):
-    tiles = [[Tile(True) for y in range(height)]
+    tiles = [[Tile(TILE_WALL) for y in range(height)]
              for x in range(width)]
 
     return tiles
 
 
 def actor_tiles(width, height):
-    actor_tiles = [[]]
+    actor_tiles = [[Tile(TILE_EMPTY) for y in range(height)]
+                   for x in range(width)]
+    return actor_tiles
 
 
 class Tile:

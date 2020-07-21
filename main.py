@@ -33,7 +33,7 @@ class MG(arcade.Window):
 
         if self.engine.player.state == state.READY and self.dist:
             attack = self.engine.player.move(
-                self.dist)
+                self.dist, None, self.engine.actor_sprites, self.engine.game_map)
             if attack:
                 self.engine.action_queue.extend(attack)
 

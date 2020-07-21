@@ -1,8 +1,8 @@
 import arcade
 from random import randint
 
-from game_map.map_tool import initialize_tiles, Rect, is_blocked
-from game_map.map_sprite_set import MapSpriteSet
+from game_map.map_tool import initialize_tiles, actor_tiles, Rect, is_blocked, Tile
+from game_map.map_sprite_set import MapobjPlacement
 from util import pixel_to_grid, grid_to_pixel
 from actor.actor import Actor
 from constants import *
@@ -30,13 +30,14 @@ class BasicDungeon:
         self.max_items_per_room = 2
 
         self.tiles = initialize_tiles(self.width, self.height)
+        self.actor_tiles = actor_tiles(self.width, self.height)
         self.player_pos = 0
         self.make_map()
 
     def make_map(self):
 
         rooms = []
-        num_rooms = 0
+        self.num_rooms = 0
 
         for _ in range(self.max_rooms):
             w = randint(self.room_min_size, self.room_max_size)
@@ -55,11 +56,11 @@ class BasicDungeon:
 
                 (new_x, new_y) = new_room.center()
 
-                if num_rooms == 0:
+                if self.num_rooms == 0:
                     self.player_pos = (new_x, new_y)
 
                 else:
-                    (prev_x, prev_y) = rooms[num_rooms - 1].center()
+                    (prev_x, prev_y) = rooms[self.num_rooms - 1].center()
 
                     if randint(0, 1) == 1:
                         self.create_h_tunnel(prev_x, new_x, prev_y)
@@ -69,53 +70,55 @@ class BasicDungeon:
                         self.create_h_tunnel(prev_x, new_x, prev_y)
 
                 rooms.append(new_room)
-                num_rooms += 1
-                # self.place_entities(
-                #     new_room, max_monsters_per_room=self.max_monsters_per_room,
-                #     max_items_per_room=self.max_items_per_room)
+                self.num_rooms += 1
+                self.place_entities(
+                    new_room, self.actor_tiles, max_monsters_per_room=self.max_monsters_per_room,
+                    max_items_per_room=self.max_items_per_room)
 
     def create_room(self, room):
         for x in range(room.x1 + 1, room.x2):
             for y in range(room.y1 + 1, room.y2):
-                self.tiles[x][y].blocked = False
-                self.tiles[x][y].block_sight = False
+                self.tiles[x][y].blocked = TILE_EMPTY
+                self.tiles[x][y].block_sight = TILE_EMPTY
 
     def create_h_tunnel(self, x1, x2, y):
         for x in range(min(x1, x2), max(x1, x2) + 1):
-            self.tiles[x][y].blocked = False
-            self.tiles[x][y].block_sight = False
+            self.tiles[x][y].blocked = TILE_EMPTY
+            self.tiles[x][y].block_sight = TILE_EMPTY
 
     def create_v_tunnel(self, y1, y2, x):
         for y in range(min(y1, y2), max(y1, y2) + 1):
-            self.tiles[x][y].blocked = False
-            self.tiles[x][y].block_sight = False
+            self.tiles[x][y].blocked = TILE_EMPTY
+            self.tiles[x][y].block_sight = TILE_EMPTY
 
     def is_blocked(self, x, y):
         return is_blocked(self.tiles, x, y)
 
-    # def place_entities(self, room, max_monsters_per_room, max_items_per_room):
-    #     number_of_monsters = randint(0, max_monsters_per_room)
-    #     number_of_items = randint(0, max_items_per_room)
+    def place_entities(self, room, actor_tiles, max_monsters_per_room, max_items_per_room):
+        number_of_monsters = randint(0, max_monsters_per_room)
+        number_of_items = randint(0, max_items_per_room)
 
-    #     for i in range(number_of_monsters):
-    #         x = randint(room.x1 + 1, room.x2 - 1)
-    #         y = randint(room.y1 + 1, room.y2 - 1)
+        for i in range(number_of_monsters):
+            x = randint(room.x1 + 1, room.x2 - 1)
+            y = randint(room.y1 + 1, room.y2 - 1)
 
-    #         if not any([actor for actor in actor_list if actor.x == x and actor.y == y]):
-    #             if randint(0, 100) < 80:
-    #                 Orc(x, y, game_map=self)
+            # if not actor_tiles[x][y]:
+            if randint(0, 100) < 80:
+                # Orc(x, y, game_map=self)
+                actor_tiles[x][y] = TILE_ORC
 
-    #             else:
-    #                 Troll(x, y, game_map=self)
-    #     for i in range(number_of_items):
-    #         x = randint(room.x1 + 1, room.x2 - 1)
-    #         y = randint(room.y1 + 1, room.y2 - 1)
+            else:
+                # Troll(x, y, game_map=self)
+                actor_tiles[x][y] = TILE_TROLL
+        # for i in range(number_of_items):
+        #     x = randint(room.x1 + 1, room.x2 - 1)
+        #     y = randint(room.y1 + 1, room.y2 - 1)
 
-    #         if not any([actor for actor in actor_list if actor.x == x and actor.y == y]):
-    #             type = randint(0, 100)
-    #             if type < 40:
-    #                 Potion(x=x, y=y)
-    #             elif type < 67:
-    #                 LightningScroll(x=x, y=y)
-    #             else:
-    #                 FireballScroll(x=x, y=y)
+        #     if not any([actor for actor in actor_list if actor.x == x and actor.y == y]):
+        #         type = randint(0, 100)
+        #         if type < 40:
+        #             Potion(x=x, y=y)
+        #         elif type < 67:
+        #             LightningScroll(x=x, y=y)
+        #         else:
+        #             FireballScroll(x=x, y=y)
