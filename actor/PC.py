@@ -11,7 +11,7 @@ class Player(Actor):
         fighter_component = Fighter(hp=35, defense=3, power=5)
         super().__init__(
             name="player",
-            texture="player",
+            # texture="player",
 
             x=x,
             y=y,
@@ -28,9 +28,9 @@ class Player(Actor):
     def update_animation(self, delta_time=1 / 60):
         super().update_animation(delta_time)
         if self.state == state.ON_MOVE and not self.left_face:
-            self.texture = player_move[0]
+            self.texture = pc_move[0]
         if self.state == state.ON_MOVE and self.left_face:
-            self.texture = player_move[1]
+            self.texture = pc_move[1]
 
         if self.state == state.ATTACK and not self.left_face:
             print(self.dst_tile)

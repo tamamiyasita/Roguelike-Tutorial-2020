@@ -13,7 +13,7 @@ class LightningEfc(Actor):
         super().__init__(
             x=x,
             y=y,
-            texture="lightning_effect"
+            name="lightning_effect"
         )
         self.item_sprites = item_sprites
         self.alpha = 255
@@ -26,7 +26,6 @@ class LightningEfc(Actor):
             self.scale += random.random()
             self.center_x += random.randint(1, 3)
         else:
-            # self.scale += random.random()
             self.center_x -= random.randint(1, 3)
 
         if self.alpha <= 70:
@@ -39,7 +38,6 @@ class LightningScroll(Actor):
         super().__init__(
             x=x,
             y=y,
-            texture="lightning_scroll",
             name="lightning_scroll",
             item=Item()
         )

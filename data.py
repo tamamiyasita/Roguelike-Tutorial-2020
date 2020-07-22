@@ -1,47 +1,54 @@
 import arcade
 from util import get_tile_set
 
+# playerテクスチャ生成
 player = arcade.load_texture_pair(r"image/rou6.png")
-player_move = arcade.load_texture_pair(r"image/rou6_m.png")
+pc_move = arcade.load_texture_pair(r"image/rou6_m.png")
 pc_attack = arcade.load_texture_pair(r"image/rou6_a.png")
 pc_delay = arcade.load_texture_pair(r"image/rou6_d.png")
 pc_delay2 = arcade.load_texture_pair(r"image/rou6_d2.png")
 
 ###enemys###
+size = 16  # テクスチャのサイズと位置情報も兼ねる
+orcs_tiles = (r"image/demi_human1.png")#orcタイルイメージ
+
+
+# crab pairで生成
 crab = arcade.load_texture_pair(r"image/crab.png")
 
-d_human1 = (r"image/demi_human1.png")
-size = 16  # ﾃｸｽﾁｬの位置情報も兼ねる
-orc_l = arcade.load_texture(
-    d_human1, x=0, y=size, width=size, height=size)
-orc_r = arcade.load_texture(
-    d_human1, x=0, y=size, width=size, height=size, mirrored=True)
-orc = [orc_l, orc_r]
+# orcテクスチャ生成
+orc_left = arcade.load_texture(
+    orcs_tiles, x=0, y=size, width=size, height=size)
+orc_right = arcade.load_texture(
+    orcs_tiles, x=0, y=size, width=size, height=size, mirrored=True)
+orc = [orc_left, orc_right]
 
-troll_l = arcade.load_texture(
-    d_human1, x=size*7, y=size, width=size, height=size)
-troll_r = arcade.load_texture(
-    d_human1, x=size*7, y=size, width=size, height=size, mirrored=True)
-troll = [troll_l, troll_r]
+# trollクスチャ生成
+troll_left = arcade.load_texture(
+    orcs_tiles, x=size*7, y=size, width=size, height=size)
+troll_right = arcade.load_texture(
+    orcs_tiles, x=size*7, y=size, width=size, height=size, mirrored=True)
+troll = [troll_left, troll_right]
 #######
 
 ###items###
-d_potion = (r"image/Potion.png")
-potion = get_tile_set(d_potion, tile_size=16)
+# potionテクスチャセット生成
+potion_tile_img = (r"image/Potion.png")
+potion_tile = get_tile_set(potion_tile_img, tile_size=16)
 
-d_scroll = (r"image/Scroll.png")  # 2
-scroll = get_tile_set(d_scroll, tile_size=16)
+scroll_tile_img = (r"image/Scroll.png")
+scroll_tile = get_tile_set(scroll_tile_img, tile_size=16)
 #######
 
 ###effect###
-d_effect = (r"image/Effect1.png")  # 83
-effect1 = get_tile_set(d_effect, tile_size=16)
+effect_img_1 = (r"image/Effect1.png")  # 83
+effect1_tile = get_tile_set(effect_img_1, tile_size=16)
 #######
 
-d_floor = (r"image/Tile.png")
-ds_floor = get_tile_set(d_floor, tile_size=32)
-floor_len = len(ds_floor)
-floors = [ds_floor[v] for v in range(floor_len)]
+floor_img = (r"image/Tile.png")
+floor_tile = get_tile_set(floor_img, tile_size=32)
+floor_len = len(floor_tile)
+floors = [floor_tile[v] for v in range(floor_len)]
 
 walls_1 = (r"image/wall1.png")
 walls_1_tiles = get_tile_set(walls_1, tile_size=16)
@@ -59,8 +66,8 @@ wall_C = [walls_3_tiles[w]
           for w in [6, 6, 11, 11, 10, 10, 1, 12, 4, 5, 2, 5, 0, 5, 1, 8]]
 
 # actorに渡す画像はリスト型にすること
-ID = {"player": player,
-      "player_move": player_move,
+IMAGE_ID = {"player": player,
+      "pc_move": pc_move,
       "pc_attack": pc_attack,
       "pc_delay": pc_delay,
       "pc_delay2": pc_delay2,
@@ -70,13 +77,13 @@ ID = {"player": player,
       "orc": orc,
       "troll": troll,
 
-      "potion": potion,
-      "conf_scroll": [scroll[15]],
-      "lightning_scroll": [scroll[2]],
-      "fireball_scroll": [scroll[6]],
+      "potion": potion_tile,
+      "conf_scroll": [scroll_tile[15]],
+      "lightning_scroll": [scroll_tile[2]],
+      "fireball_scroll": [scroll_tile[6]],
 
-      "lightning_effect": [effect1[87]],
-      "fireball_effect": [effect1[134]],
+      "lightning_effect": [effect1_tile[87]],
+      "fireball_effect": [effect1_tile[134]],
 
       "floor": floors,
       "wall_1": wall_1,

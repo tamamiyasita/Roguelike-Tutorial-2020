@@ -14,7 +14,6 @@ class Orc(Actor):
 
         super().__init__(
             name="orc",
-            texture="orc",
             x=x,
             y=y,
             fighter=fighter_component,

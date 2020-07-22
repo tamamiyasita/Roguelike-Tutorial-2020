@@ -9,16 +9,15 @@ from util import pixel_to_grid, grid_to_pixel, get_blocking_entity
 class Actor(arcade.Sprite):
     """ 全てのオブジェクトを作成する基礎となるクラス
     """
-    def __init__(self, texture_number=0, texture=None, name=None, x=0, y=0, blocks=False,
+    def __init__(self, texture_number=0, name=None, x=0, y=0, blocks=False,
                  scale=SPRITE_SCALE, color=arcade.color.WHITE, fighter=None, ai=None,
                  inventory=None, item=None,
                  visible_color=arcade.color.WHITE, not_visible_color=arcade.color.WHITE,
                  state=state.TURN_END):
         super().__init__(scale=scale)
-        self.texture_number = texture_number
-        self.textureID = texture
-        self.texture_ = self.textureID
         self.name = name
+        self.texture_number = texture_number
+        self.texture_ = self.name
         self.dx, self.dy = 0, 0
         self.center_x, self.center_y = grid_to_pixel(x, y)
         self.x, self.y = pixel_to_grid(self.center_x, self.center_y)
@@ -46,7 +45,8 @@ class Actor(arcade.Sprite):
     def get_dict(self):
         result = {}
         result["texture_number"] = self.texture_number
-        result["texture"] = self.textureID
+        result["name"] = self.name
+        result["texture"] = self.name
         result["x"] = self.x
         result["y"] = self.y
         result["center_x"] = self.center_x
@@ -55,7 +55,6 @@ class Actor(arcade.Sprite):
         result["not_visible_color"] = self.not_visible_color
         result["alpha"] = self.alpha
         result["color"] = self.color
-        result["name"] = self.name
         result["blocks"] = self.blocks
         result["block_sight"] = self.block_sight
         result["is_visible"] = self.is_visible
@@ -85,13 +84,12 @@ class Actor(arcade.Sprite):
         self.center_x = result["center_x"]
         self.center_y = result["center_y"]
         self.texture_number = result["texture_number"]
-        self.textureID = result["texture"]
-        self.texture_ = self.textureID
+        self.name = result["name"]
+        self.texture_ = self.name
         self.visible_color = result["visible_color"]
         self.not_visible_color = result["not_visible_color"]
         self.alpha = result["alpha"]
         self.color = result["color"]
-        self.name = result["name"]
         self.blocks = result["blocks"]
         self.block_sight = result["block_sight"]
         self.is_visible = result["is_visible"]
@@ -229,5 +227,5 @@ class Actor(arcade.Sprite):
     @texture_.setter
     def texture_(self, value):
         self.textures = []
-        self.textures.extend(ID.get(value))
+        self.textures.extend(IMAGE_ID.get(value))
         self.texture = self.textures[self.texture_number]

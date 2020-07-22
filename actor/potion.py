@@ -9,7 +9,6 @@ class Potion(Actor):
         super().__init__(
             x=x,
             y=y,
-            texture="potion",
             name="potion",
             not_visible_color=arcade.color.BLACK,
             item=Item())

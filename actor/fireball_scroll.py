@@ -13,7 +13,7 @@ class FireballEfc(Actor):
         super().__init__(
             x=x,
             y=y,
-            texture="fireball_effect"
+            name="fireball_effect"
         )
         self.item_sprites = item_sprites
         self.alpha = 255
@@ -34,7 +34,6 @@ class FireballScroll(Actor):
         super().__init__(
             x=x,
             y=y,
-            texture="fireball_scroll",
             name="fireball_scroll",
             color=COLORS["transparent"],
             visible_color=arcade.color.WHITE,

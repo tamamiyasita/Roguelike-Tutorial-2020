@@ -14,7 +14,6 @@ class Troll(Actor):
 
         super().__init__(
             name="troll",
-            texture="troll",
             x=x,
             y=y,
             fighter=fighter_component,
