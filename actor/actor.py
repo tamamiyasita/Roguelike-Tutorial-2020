@@ -209,16 +209,17 @@ class Actor(arcade.Sprite):
         dy = other.y - self.y
         return math.sqrt(dx ** 2 + dy ** 2)
 
-    # def move_towards(self, target_x, target_y, sprite_list):
-    #     dx = target_x - self.x
-    #     dy = target_y - self.y
-    #     distance = math.sqrt(dx ** 2 + dy ** 2)
+    def move_towards(self, target, actor_sprites, game_map):
+        
+        dx = target.x - self.x
+        dy = target.y - self.y
+        distance = math.sqrt(dx ** 2 + dy ** 2)
 
-    #     dx = int(round(dx / distance))
-    #     dy = int(round(dy / distance))
+        dx = int(round(dx / distance))
+        dy = int(round(dy / distance))
 
-    #     if not get_blocking_entity(self.x + dx, self.y + dy, ENTITY_LIST):
-    #         self.move((dx, dy))
+        if not get_blocking_entity(self.x + dx, self.y + dy, actor_sprites):
+            self.move((dx, dy), target, actor_sprites, game_map)
 
     @property
     def texture_(self):

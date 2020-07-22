@@ -16,7 +16,7 @@ class Basicmonster:
         monster = self.owner
         print(monster.name, "MN")
         if monster.is_visible and not monster.is_dead:
-            actor_list = sprite_lists[1]
+            actor_list = sprite_lists[0]
 
             if monster.distance_to(target) >= 1:
                 results = astar(

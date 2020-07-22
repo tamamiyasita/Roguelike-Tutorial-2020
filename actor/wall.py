@@ -14,7 +14,7 @@ class Wall(Actor):
             y=y,
             scale=4,
             blocks=True,
-            color=arcade.color.BLACK,
+            color=COLORS.get("transparent"),
             visible_color=COLORS.get("light_wall"),
             not_visible_color=COLORS.get("dark_wall")
 
