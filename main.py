@@ -48,15 +48,18 @@ class MG(arcade.Window):
             self.engine.item_sprites.draw(filter=gl.GL_NEAREST)
             self.engine.chara_sprites.draw(filter=gl.GL_NEAREST)
 
+            ######## ステータスパネル #######
+            # パネル用変数
             size = 72
             margin = 15
             self.vx = arcade.get_viewport()[0]
             self.vy = arcade.get_viewport()[2]
 
-            # ステータスパネルサイズ
+            # パネルサイズ
             arcade.draw_xywh_rectangle_filled(
                 self.vx, self.vy, SCREEN_WIDTH, STATES_PANEL_HEIGHT, COLORS["status_panel_background"])
 
+            ### ノーマルステート時の表示 ###
             if self.engine.game_state == GAME_STATE.NORMAL:
 
                 # HP表示
@@ -101,13 +104,11 @@ class MG(arcade.Window):
                     arcade.draw_text(self.mouse_over_text, x,
                                      y, arcade.color.WHITE)
 
+            ### マウス操作時の表示 ###
             elif self.engine.game_state == GAME_STATE.SELECT_LOCATION:
                 mouse_x, mouse_y = self.mouse_position
                 grid_x, grid_y = pixel_to_grid(mouse_x, mouse_y)
                 center_x, center_y = grid_to_pixel(grid_x, grid_y)
-                # print(mouse_x, mouse_y, "MOUSE")
-                # print(grid_x, grid_y, "GRID")
-                # print(center_x, center_y, "RECT")
                 arcade.draw_rectangle_outline(
                     center_x, center_y, SPRITE_SIZE*SPRITE_SCALE, SPRITE_SIZE*SPRITE_SCALE, arcade.color.LIGHT_BLUE, 2)
 
@@ -180,7 +181,6 @@ class MG(arcade.Window):
             self.dist = dist
             self.engine.fov_recompute = True
 
-            # self.engine.action_queue.append({"player_turn": True})
 
     def on_key_release(self, key, modifiers):
         self.dist = None
@@ -194,6 +194,7 @@ class MG(arcade.Window):
             self.mouse_position, self.engine.actor_sprites)
         self.mouse_over_text = None
         for actor in actor_list:
+            # TODO アイテム表示
             if actor.fighter or actor.item and actor.is_visible:
                 self.mouse_over_text = f"{actor.name} {actor.fighter.hp}/{actor.fighter.max_hp}"
                 print(actor.name)

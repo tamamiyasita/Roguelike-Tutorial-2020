@@ -27,6 +27,7 @@ from actor.restore_actor import restore_actor
 
 class GameEngine:
     def __init__(self):
+        """ 変数の初期化 """
         self.chara_sprites = None
         self.actor_sprites = None
         self.map_sprites = None
@@ -41,6 +42,7 @@ class GameEngine:
         self.grid_select_handlers = []
 
     def setup(self):
+        """ スプライトリストの初期化等 """
         self.chara_sprites = arcade.SpriteList(
             use_spatial_hash=True, spatial_hash_cell_size=32)
 
@@ -74,6 +76,8 @@ class GameEngine:
         return {name: actor.get_dict()}
 
     def get_dict(self):
+        """ オブジェクトをjsonにダンプする為の辞書を作る関数 """
+
         player_dict = self.get_actor_dict(self.player)
 
         actor_dict = []
@@ -90,6 +94,7 @@ class GameEngine:
         return result
 
     def restore_from_dict(self, data):
+        """ オブジェクトをjsonから復元する為の関数 """
 
         self.chara_sprites = arcade.SpriteList(
             use_spatial_hash=True, spatial_hash_cell_size=32)
@@ -116,9 +121,11 @@ class GameEngine:
         for dungeon_dict in data["dungeon"]:
             maps = restore_actor(dungeon_dict)
             self.map_sprites.append(maps)
-    ###アクションキュー###
+
 
     def process_action_queue(self, delta_time):
+        """アクターの基本的な行動を制御するアクションキュー
+        """
         new_action_queue = []
         for action in self.action_queue:
             if "player_turn" in action:
@@ -202,9 +209,11 @@ class GameEngine:
                             [{"message": f"You dropped the {item.name}"}])
 
         self.action_queue = new_action_queue
-    #####################
+
 
     def grid_click(self, grid_x, grid_y):
+        """ クリックしたグリッドをself.grid_select_handlersに格納する 
+        """
         for f in self.grid_select_handlers:
             results = f(grid_x, grid_y)
             if results:
@@ -212,6 +221,9 @@ class GameEngine:
         self.grid_select_handlers = []
 
     def move_enemies(self, target):
+        """ enemyの行動ターンを制御する
+            行動するenemyがいない場合"next_turn"を返す
+        """
         turn_check = "next_turn"
         for actor in self.actor_sprites:
             if actor.ai and not actor.is_dead:
@@ -231,8 +243,10 @@ class GameEngine:
         return turn_check
 
     def fov(self):
+        """recompute_fovでTCODによるFOVの計算を行い
+           fov_getで表示するスプライトを制御する
+        """
         if self.fov_recompute == True:
-            # recalculate_fov(self.player.x, self.player.y, FOV_RADIUS,[self.map_sprites, self.actor_sprites])
             recompute_fov(self.fov_map, self.player.x, self.player.y,
                           FOV_RADIUS, FOV_LIGHT_WALL, FOV_ALGO)
             fov_get(self.game_map, self.fov_map,
@@ -240,24 +254,31 @@ class GameEngine:
         self.fov_recompute = False
 
     def view(self):
+        """ playerがmove状態の時だけviewportを計算する
+        """
         if self.player.state == state.ON_MOVE:
             viewport(self.player)
 
     def turn_change(self, delta_time):
-        turn = 0
-        mons = 0
+        """ playerとenemyの行動ターンを切り替える
+        """
 
+        # enemyのTURN_ENDをカウントする変数
+        turn = 0 
+
+        # playerがTURN_END状態になるとキューに"enemy_turn"を送信する
         if self.player.state == state.TURN_END:
             self.player.state = state.DELAY
             self.action_queue.extend([{"enemy_turn": True}])
-        # elif self.turn_check == "next_turn" or self.turn_check.state == state.TURN_END:
+
+        # move_enemies関数が"next_turn"を返した場合キューに"player_turn"を送信する
         elif self.turn_check == "next_turn":
             self.turn_check = None
             self.action_queue.extend([{"player_turn": True}])
 
+        # 全てのenemyがTURN_END状態になった場合キューに"player_turn"を返す
         elif self.turn_check:
             for actor in self.actor_sprites:
-                print("actor_?")
                 if actor.ai:
                     if actor.state == state.TURN_END:
                         turn += 1

@@ -1,13 +1,14 @@
 import arcade
 import math
 
-from arcade import texture
 from constants import *
 from data import *
 from util import pixel_to_grid, grid_to_pixel, get_blocking_entity
 
 
 class Actor(arcade.Sprite):
+    """ 全てのオブジェクトを作成する基礎となるクラス
+    """
     def __init__(self, texture_number=0, texture=None, name=None, x=0, y=0, blocks=False,
                  scale=SPRITE_SCALE, color=arcade.color.WHITE, fighter=None, ai=None,
                  inventory=None, item=None,

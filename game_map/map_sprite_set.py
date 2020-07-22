@@ -1,8 +1,6 @@
 import arcade
-from arcade.key import T
 from data import *
 from constants import *
-from actor.actor import Actor
 from actor.wall import Wall
 from actor.floor import Floor
 from actor.orc import Orc
@@ -10,9 +8,6 @@ from actor.troll import Troll
 from actor.potion import Potion
 from actor.lightning_scroll import LightningScroll
 from actor.fireball_scroll import FireballScroll
-
-# test_wall = image.get("test_wall")
-# test_floor = image.get("test_floor")
 
 
 class MapobjPlacement:
@@ -25,6 +20,8 @@ class MapobjPlacement:
         self.height = len(self.tiles)
 
     def map_set(self):
+        """ 地形スプライトをgame_mapブロック情報から作成する
+        """
         map_sprites = arcade.SpriteList(
             use_spatial_hash=True, spatial_hash_cell_size=32)
 
@@ -44,6 +41,8 @@ class MapobjPlacement:
         return map_sprites
 
     def actor_set(self):
+        """actorをgame_mapタイル番号から設定する
+        """
         actor_sprites = arcade.SpriteList(
             use_spatial_hash=True, spatial_hash_cell_size=32)
         for x in range(self.width):
@@ -58,6 +57,8 @@ class MapobjPlacement:
         return actor_sprites
 
     def items_set(self):
+        """itemをgame_mapタイル番号から設定する
+        """
         item_sprites = arcade.SpriteList(
             use_spatial_hash=True, spatial_hash_cell_size=32)
         for x in range(self.width):
@@ -75,6 +76,8 @@ class MapobjPlacement:
         return item_sprites
 
     def search_wall_number(self, x, y, tiles):
+        """ 周りのブロック情報からwallテクスチャ番号を計算する関数
+        """
 
         tile_value = set()
         tile_value.add(0)
