@@ -2,6 +2,7 @@ from os import write
 import arcade
 import json
 import pyglet.gl as gl
+from itertools import chain
 
 from game_engine import GameEngine
 from constants import *
@@ -124,7 +125,6 @@ class MG(arcade.Window):
         elif self.engine.player.state == state.READY and self.engine.game_state == GAME_STATE.NORMAL:
             dist = None
             if key in KEYMAP_UP:
-                print(self.engine.player.name, "PLAYER")
                 dist = (0, 1)
             elif key in KEYMAP_DOWN:
                 dist = (0, -1)
@@ -181,23 +181,24 @@ class MG(arcade.Window):
             self.dist = dist
             self.engine.fov_recompute = True
 
-
     def on_key_release(self, key, modifiers):
         self.dist = None
 
     def on_mouse_motion(self, x, y, dx, dy):
         self.mouse_position = x + self.vx, y + self.vy
         print(self.mouse_position, "POS")
-        print(pixel_to_grid(self.mouse_position[0], self.mouse_position[1]))
         # 忘れずにビューポートの座標を足す
         actor_list = arcade.get_sprites_at_point(
             self.mouse_position, self.engine.actor_sprites)
+        item_list = arcade.get_sprites_at_point(
+            self.mouse_position, self.engine.item_sprites)
         self.mouse_over_text = None
-        for actor in actor_list:
+        for actor in chain(actor_list, item_list):
             # TODO アイテム表示
-            if actor.fighter or actor.item and actor.is_visible:
+            if actor.fighter and actor.is_visible:
                 self.mouse_over_text = f"{actor.name} {actor.fighter.hp}/{actor.fighter.max_hp}"
-                print(actor.name)
+            elif actor.name:
+                self.mouse_over_text = f"{actor.name}"
 
     def on_mouse_press(self, x, y, button, modifiers):
         if self.engine.game_state == GAME_STATE.SELECT_LOCATION:

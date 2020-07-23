@@ -37,7 +37,7 @@ class GameEngine:
         self.action_queue = []
         self.messages = deque(maxlen=3)
         self.selected_item = None
-        self.turn_check = None
+        self.turn_check = []
         self.game_state = GAME_STATE.NORMAL
         self.grid_select_handlers = []
 
@@ -84,12 +84,17 @@ class GameEngine:
         for sprite in self.actor_sprites:
             actor_dict.append(self.get_actor_dict(sprite))
 
+        item_dict = []
+        for sprite in self.item_sprites:
+            actor_dict.append(self.get_actor_dict(sprite))
+
         dungeon_dict = []
         for sprite in self.map_sprites:
             dungeon_dict.append(self.get_actor_dict(sprite))
 
         result = {"player": player_dict,
                   "actor": actor_dict,
+                  "item": item_dict,
                   "dungeon": dungeon_dict}
         return result
 
@@ -105,9 +110,11 @@ class GameEngine:
         self.map_sprites = arcade.SpriteList(
             use_spatial_hash=True, spatial_hash_cell_size=32)
 
+        self.item_sprites = arcade.SpriteList(
+            use_spatial_hash=True, spatial_hash_cell_size=32)
+
         player_dict = data["player"]
         self.player.restore_from_dict(player_dict["Player"])
-        # player = restore_actor(player_dict)
         self.chara_sprites.append(self.player)
 
         # for actor_dict in data["actor"]:
@@ -118,10 +125,13 @@ class GameEngine:
             actor = restore_actor(actor_dict)
             self.actor_sprites.append(actor)
 
+        for item_dict in data["item"]:
+            item = restore_actor(item_dict)
+            self.actor_sprites.append(item)
+
         for dungeon_dict in data["dungeon"]:
             maps = restore_actor(dungeon_dict)
             self.map_sprites.append(maps)
-
 
     def process_action_queue(self, delta_time):
         """アクターの基本的な行動を制御するアクションキュー
@@ -210,7 +220,6 @@ class GameEngine:
 
         self.action_queue = new_action_queue
 
-
     def grid_click(self, grid_x, grid_y):
         """ クリックしたグリッドをself.grid_select_handlersに格納する 
         """
@@ -224,24 +233,29 @@ class GameEngine:
         """ enemyの行動ターンを制御する
             行動するenemyがいない場合"next_turn"を返す
         """
-        turn_check = "next_turn"
+        turn_check = []
+        results = []
         for actor in self.actor_sprites:
             if actor.ai and not actor.is_dead:
                 results = actor.ai.take_turn(
                     target=target, game_map=self.game_map, sprite_lists=[self.actor_sprites, self.map_sprites])
                 if results:
                     self.action_queue.extend(results)
-                else:
-                    actor.move_towards(target, self.actor_sprites, self.game_map)
- 
+                    turn_check.append(actor)
+                # else:
+                #     actor.move_towards(
+                #         target, self.actor_sprites, self.game_map)
+                #     turn_check.append(actor)
+
                 # else:
                 #     results = actor.ai.take_turn(
                 #         target=target, game_map=self.game_map, sprite_lists=[self.map_sprites])
                 #     if results:
                 #         self.action_queue.extend(results)
+        if not turn_check:
+            turn_check.append("next_turn")
 
-                turn_check = actor
-        print(turn_check)
+        print(turn_check, "turn_check")
         return turn_check
 
     def fov(self):
@@ -265,26 +279,25 @@ class GameEngine:
         """ playerとenemyの行動ターンを切り替える
         """
 
-        # enemyのTURN_ENDをカウントする変数
-        turn = 0 
-
         # playerがTURN_END状態になるとキューに"enemy_turn"を送信する
         if self.player.state == state.TURN_END:
             self.player.state = state.DELAY
             self.action_queue.extend([{"enemy_turn": True}])
 
         # move_enemies関数が"next_turn"を返した場合キューに"player_turn"を送信する
-        elif self.turn_check == "next_turn":
-            self.turn_check = None
+        elif "next_turn" in self.turn_check:
+            self.turn_check = []
             self.action_queue.extend([{"player_turn": True}])
 
         # 全てのenemyがTURN_END状態になった場合キューに"player_turn"を返す
         elif self.turn_check:
-            for actor in self.actor_sprites:
-                if actor.ai:
-                    if actor.state == state.TURN_END:
-                        turn += 1
-                        print(turn)
-                    if turn == len(self.actor_sprites):
-                        self.action_queue.extend([{"player_turn": True}])
-                        self.turn_check = None
+            # enemyのTURN_ENDをカウントする変数
+            turn_count = 0
+            for actor in self.turn_check:
+                if actor.state == state.TURN_END:
+                    turn_count += 1
+                    print(turn_count)
+                    print(len(self.actor_sprites))
+                if turn_count == len(self.turn_check):
+                    self.action_queue.extend([{"player_turn": True}])
+                    self.turn_check = []
