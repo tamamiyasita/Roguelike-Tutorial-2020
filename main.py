@@ -53,43 +53,54 @@ class MG(arcade.Window):
 
             ######## ステータスパネル #######
             # パネル用変数
-            size = 72
-            margin = 15
+            hp_bar_width = 72  # HPバーの幅
+            hp_bar_height = 10  # HPバーの太さ
+            hp_bar_margin = 8  # パネル上端からのHPバーの位置
+            left_margin = 15  # 画面左からのHPとバーの位置
+            top_hp_margin = 30  # パネル上端からのHPの位置
+
+            # ビューポートの画面左と下の現在位置を変数vx,vyに入れる、これはパネルを画面に固定する為に使います
             self.vx = arcade.get_viewport()[0]
             self.vy = arcade.get_viewport()[2]
 
-            # パネルサイズ
+            # 画面下のパネルをarcadeの四角形を描画する変数で作成
             arcade.draw_xywh_rectangle_filled(
                 self.vx, self.vy, SCREEN_WIDTH, STATES_PANEL_HEIGHT, COLORS["status_panel_background"])
 
-            ### ノーマルステート時の表示 ###
+            ### ノーマルステート時の画面表示 ###
             if self.engine.game_state == GAME_STATE.NORMAL:
 
-                # HP表示
+                # HP/MAXHPの表示
                 text = f"HP: {self.engine.player.fighter.hp}/{self.engine.player.fighter.max_hp}"
                 arcade.draw_text(
-                    text, margin + self.vx, STATES_PANEL_HEIGHT - 30 + self.vy, color=COLORS["status_panel_text"], font_size=14)
+                    text, left_margin + self.vx, STATES_PANEL_HEIGHT - top_hp_margin + self.vy, color=COLORS["status_panel_text"], font_size=14)
 
                 # HPバー
-                draw_status_bar(size / 2 + margin+self.vx, STATES_PANEL_HEIGHT-8+self.vy, size, 10,
+                draw_status_bar(hp_bar_width / 2 + left_margin + self.vx, STATES_PANEL_HEIGHT - hp_bar_margin + self.vy, hp_bar_width, hp_bar_height,
                                 self.engine.player.fighter.hp, self.engine.player.fighter.max_hp)
 
                 # 所持アイテム表示
+                item_left_position = 400  # パネル左からの所持アイテム表示位置の調整に使う変数
+                item_top_position = 38  # パネル下からの所持アイテム表示位置の調整に使う変数
+                separate_size = 1.5  # アイテム名の表示間隔の調整に使う変数
+                left_outline_margin = 3 # 選択したアイテムの左側のアウトライン線の調整に使う変数
+                right_outline_margin = 5 # 選択したアイテムの右側のアウトライン線の調整に使う変数
                 capacity = self.engine.player.inventory.capacity
-                selected_item = self.engine.selected_item
-                field_width = SCREEN_WIDTH / (capacity + 1) / 1.5
-                for i in range(capacity):
-                    y = 38
-                    x = i * field_width + 400
-                    if i == selected_item:
+                selected_item = self.engine.selected_item  # ボタン押下で選択したアイテムオブジェクト
+                field_width = SCREEN_WIDTH / (capacity + 1) / separate_size  # アイテム表示感覚を決める変数
+                for item in range(capacity):
+                    items_position = item * field_width + item_left_position  # パネル左からの所持アイテムの表示位置
+                    if item == selected_item:
                         arcade.draw_lrtb_rectangle_outline(
-                            x+self.vx - 3, x+self.vx + field_width - 5, y+self.vy + 18, y+self.vy - 4, arcade.color.BLACK, 2)
-                    if self.engine.player.inventory.bag[i]:
-                        item_name = self.engine.player.inventory.bag[i].name
+                            items_position + self.vx - left_outline_margin, items_position + self.vx + field_width - right_outline_margin,
+                            item_top_position + self.vy + 18, item_top_position + self.vy - 4, arcade.color.BLACK, 2
+                            )
+                    if self.engine.player.inventory.bag[item]:
+                        item_name = self.engine.player.inventory.bag[item].name
                     else:
                         item_name = ""
-                    text = f"{i+1}: {item_name}"
-                    arcade.draw_text(text, x+self.vx, y+self.vy,
+                    text = f"{item+1}: {item_name}"
+                    arcade.draw_text(text, items_position + self.vx, item_top_position + self.vy,
                                      color=COLORS["status_panel_text"])
 
                 # メッセージ表示

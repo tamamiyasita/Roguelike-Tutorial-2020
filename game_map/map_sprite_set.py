@@ -16,8 +16,8 @@ class ActorPlacement:
         self.tiles = game_map.tiles
         self.game_engine = game_engine
         self.actor_tiles = game_map.actor_tiles
-        self.width = len(self.tiles[0])
-        self.height = len(self.tiles)
+        self.width = len(self.tiles)
+        self.height = len(self.tiles[0])
 
     def map_set(self):
         """ 地形スプライトをgame_mapブロック情報から作成する
