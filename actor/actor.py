@@ -116,7 +116,7 @@ class Actor(arcade.Sprite):
         try:
             ai_move_speed = 0
             if self.ai:
-                ai_move_speed = MOVE_SPEED*2+1
+                ai_move_speed = MOVE_SPEED*3
             self.dx, self.dy = dxy
 
             if self.dx == -1:

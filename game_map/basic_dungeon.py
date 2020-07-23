@@ -78,18 +78,18 @@ class BasicDungeon:
     def create_room(self, room):
         for x in range(room.x1 + 1, room.x2):
             for y in range(room.y1 + 1, room.y2):
-                self.tiles[x][y].blocked = TILE_EMPTY
-                self.tiles[x][y].block_sight = TILE_EMPTY
+                self.tiles[x][y].blocked = TILE.EMPTY
+                self.tiles[x][y].block_sight = TILE.EMPTY
 
     def create_h_tunnel(self, x1, x2, y):
         for x in range(min(x1, x2), max(x1, x2) + 1):
-            self.tiles[x][y].blocked = TILE_EMPTY
-            self.tiles[x][y].block_sight = TILE_EMPTY
+            self.tiles[x][y].blocked = TILE.EMPTY
+            self.tiles[x][y].block_sight = TILE.EMPTY
 
     def create_v_tunnel(self, y1, y2, x):
         for y in range(min(y1, y2), max(y1, y2) + 1):
-            self.tiles[x][y].blocked = TILE_EMPTY
-            self.tiles[x][y].block_sight = TILE_EMPTY
+            self.tiles[x][y].blocked = TILE.EMPTY
+            self.tiles[x][y].block_sight = TILE.EMPTY
 
     def is_blocked(self, x, y):
         return is_blocked(self.tiles, x, y)
@@ -103,22 +103,20 @@ class BasicDungeon:
             y = randint(room.y1 + 1, room.y2 - 1)
 
             if randint(0, 100) < 80:
-                actor_tiles[x][y] = TILE_ORC
+                actor_tiles[x][y] = TILE.ORC
 
             else:
-                actor_tiles[x][y] = TILE_TROLL
+                actor_tiles[x][y] = TILE.TROLL
         for i in range(number_of_items):
             x = randint(room.x1 + 1, room.x2 - 1)
             y = randint(room.y1 + 1, room.y2 - 1)
 
             type = randint(0, 100)
             if type < 40:
-                actor_tiles[x][y] = TILE_HEALING_POTION
+                actor_tiles[x][y] = TILE.HEALING_POTION
             elif type < 60:
-                actor_tiles[x][y] = TILE_LIGHTNING_SCROLL
-            elif type < 100:
-                actor_tiles[x][y] = TILE_FIREBALL_SCROOLL
-            # elif type < 87:
-            #     actor_tiles[x][y] = TILE_
-            # else:
-            #     actor_tiles[x][y] = TILE_FIREBALL_SCROOLL
+                actor_tiles[x][y] = TILE.LIGHTNING_SCROLL
+            elif type < 80:
+                actor_tiles[x][y] = TILE.FIREBALL_SCROLL
+            else:
+                actor_tiles[x][y] = TILE.CONFUSION_SCROLL

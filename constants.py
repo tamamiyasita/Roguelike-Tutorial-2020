@@ -20,14 +20,6 @@ VIEWPORT_MARGIN = 300
 
 MOVE_SPEED = 6
 
-TILE_EMPTY = 0
-TILE_WALL = 1
-TILE_ORC = 2
-TILE_TROLL = 3
-TILE_LIGHTNING_SCROLL = 4
-TILE_FIREBALL_SCROOLL = 5
-TILE_HEALING_POTION = 6
-
 MAX_ROOM = 25
 ROOM_MIN_SIZE = 4
 ROOM_MAX_SIZE = 8
@@ -49,8 +41,16 @@ COLORS = {
     "status_bar_foreground": arcade.color.RED_DEVIL
 }
 
-LEFT_FACE = 1
-RIGHT_FACE = 2
+
+class TILE:
+    EMPTY = False
+    WALL = True
+    ORC = auto()
+    TROLL = auto()
+    HEALING_POTION = auto()
+    LIGHTNING_SCROLL = auto()
+    FIREBALL_SCROLL = auto()
+    CONFUSION_SCROLL = auto()
 
 
 class GAME_STATE(Enum):

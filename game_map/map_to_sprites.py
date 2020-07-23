@@ -18,7 +18,7 @@ def map_to_sprites(game_map):
     for y in range(len(game_map[0])):
         for x in range(len(game_map)):
             sprite = None
-            if game_map[x][y] == TILE_WALL:
+            if game_map[x][y] == TILE.WALL:
                 wall_number = search_wall_number()
                 sprite = Wall(texture_number=wall_number, x=x, y=y)
 
