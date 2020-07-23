@@ -10,7 +10,7 @@ pc_delay2 = arcade.load_texture_pair(r"image/rou6_d2.png")
 
 ###enemys###
 size = 16  # テクスチャのサイズと位置情報も兼ねる
-orcs_tiles = (r"image/demi_human1.png")#orcタイルイメージ
+orcs_tiles = (r"image/demi_human1.png")  # orcタイルイメージ
 
 
 # crab pairで生成
@@ -62,35 +62,36 @@ walls_3 = (r"image/wall3.png")
 walls_3_tiles = get_tile_set(walls_3, tile_size=16)
 # wall_C = {k: walls_3_tiles[v] for k, v in zip(
 # range(16), [6, 6, 11, 11, 10, 10, 1, 12, 4, 5, 2, 5, 0, 5, 1, 8])}
-wall_C = [walls_3_tiles[w]
+wall_3 = [walls_3_tiles[w]
           for w in [6, 6, 11, 11, 10, 10, 1, 12, 4, 5, 2, 5, 0, 5, 1, 8]]
 
 # actorに渡す画像はリスト型にすること
 IMAGE_ID = {"player": player,
-      "pc_move": pc_move,
-      "pc_attack": pc_attack,
-      "pc_delay": pc_delay,
-      "pc_delay2": pc_delay2,
+            "pc_move": pc_move,
+            "pc_attack": pc_attack,
+            "pc_delay": pc_delay,
+            "pc_delay2": pc_delay2,
 
-      "crab": crab,
+            "crab": crab,
 
-      "orc": orc,
-      "troll": troll,
+            "orc": orc,
+            "troll": troll,
 
-      "potion": potion_tile,
-      "conf_scroll": [scroll_tile[15]],
-      "lightning_scroll": [scroll_tile[2]],
-      "fireball_scroll": [scroll_tile[6]],
+            "potion": potion_tile,
+            "confusion_scroll": [scroll_tile[15]],
+            "lightning_scroll": [scroll_tile[2]],
+            "fireball_scroll": [scroll_tile[6]],
 
-      "lightning_effect": [effect1_tile[87]],
-      "fireball_effect": [effect1_tile[134]],
+            "lightning_effect": [effect1_tile[87]],
+            "confusion_effect": [effect1_tile[140]],
+            "fireball_effect": [effect1_tile[134]],
 
-      "floor": floors,
-      "wall_1": wall_1,
-      "wall_2": wall_2,
-      "wall_C": wall_C,
+            "floor": floors,
+            "wall_1": wall_1,
+            "wall_2": wall_2,
+            "wall_3": wall_3,
 
-      }
+            }
 
 
 class Testimg(arcade.Window):

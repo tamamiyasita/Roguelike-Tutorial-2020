@@ -9,7 +9,6 @@ class Basicmonster:
         self.owner = None
 
     def take_turn(self, target, game_map, sprite_lists):
-        print("???")
         results = []
         print(self.owner)
 
@@ -45,20 +44,22 @@ class Basicmonster:
 
 
 class ConfusedMonster:
-    def __init__(self, pre_ai, number_of_turns=10):
+    def __init__(self, pre_ai, confused_turn=10):
         self.pre_ai = pre_ai
-        self.number_of_turns = number_of_turns
+        self.confused_turn = confused_turn
 
     def take_turn(self, target, game_map, sprite_lists):
         results = []
         monster = self.owner
+        actor_list = sprite_lists[0]
 
-        if self.number_of_turns > 0:
-            attack = monster.move((randint(-1, 1), randint(-1, 1)))
+        if self.confused_turn > 0:
+            attack = monster.move(
+                (randint(-1, 1), randint(-1, 1)), None, actor_list, game_map)
             if attack:
                 results.extend(attack)
 
-            self.number_of_turns -= 1
+            self.confused_turn -= 1
 
         else:
             monster.ai = self.pre_ai

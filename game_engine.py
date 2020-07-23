@@ -14,7 +14,7 @@ from data import *
 from fov_functions import fov_get, initialize_fov, recompute_fov
 # from recalculate_fov import recalculate_fov
 from game_map.basic_dungeon import BasicDungeon
-from game_map.map_sprite_set import MapobjPlacement
+from game_map.map_sprite_set import ActorPlacement
 # from actor.item import Item
 # from actor.potion import Potion
 from actor.confusion_scroll import ConfusionScroll
@@ -45,11 +45,13 @@ class GameEngine:
         """ スプライトリストの初期化等 """
         self.chara_sprites = arcade.SpriteList(
             use_spatial_hash=True, spatial_hash_cell_size=32)
+        self.effect_sprites = arcade.SpriteList(
+            use_spatial_hash=True, spatial_hash_cell_size=16)
 
         self.game_map = BasicDungeon(MAP_WIDTH, MAP_HEIGHT)
-        mapsprite = MapobjPlacement(self.game_map, self).map_set()
-        actorsprite = MapobjPlacement(self.game_map, self).actor_set()
-        itemsprite = MapobjPlacement(self.game_map, self).items_set()
+        mapsprite = ActorPlacement(self.game_map, self).map_set()
+        actorsprite = ActorPlacement(self.game_map, self).actor_set()
+        itemsprite = ActorPlacement(self.game_map, self).items_set()
         self.map_sprites = mapsprite
         self.actor_sprites = actorsprite
         self.item_sprites = itemsprite
@@ -62,8 +64,9 @@ class GameEngine:
         # self.crab = Crab(self.player.x + 2, self.player.y +
         #                  1, game_engine=self,)
         # self.actor_sprites.append(self.crab)
-        # self.cnf = ConfusionScroll(
-        #     self.player.x+1, self.player.y)
+        self.cnf = ConfusionScroll(
+            self.player.x + 1, self.player.y)
+        self.item_sprites.append(self.cnf)
 
         self.fov_map = initialize_fov(self.game_map)
 
@@ -108,7 +111,7 @@ class GameEngine:
             use_spatial_hash=True, spatial_hash_cell_size=16)
 
         self.map_sprites = arcade.SpriteList(
-            use_spatial_hash=True, spatial_hash_cell_size=32)
+            use_spatial_hash=True, spatial_hash_cell_size=32, is_static=True)
 
         self.item_sprites = arcade.SpriteList(
             use_spatial_hash=True, spatial_hash_cell_size=32)

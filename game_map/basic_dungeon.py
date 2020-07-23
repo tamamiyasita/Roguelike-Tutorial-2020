@@ -2,7 +2,7 @@ import arcade
 from random import randint
 
 from game_map.map_tool import initialize_tiles, actor_tiles, Rect, is_blocked, Tile
-from game_map.map_sprite_set import MapobjPlacement
+from game_map.map_sprite_set import ActorPlacement
 from util import pixel_to_grid, grid_to_pixel
 from actor.actor import Actor
 from constants import *
@@ -112,9 +112,9 @@ class BasicDungeon:
             y = randint(room.y1 + 1, room.y2 - 1)
 
             type = randint(0, 100)
-            if type < 4:
+            if type < 40:
                 actor_tiles[x][y] = TILE_HEALING_POTION
-            elif type < 5:
+            elif type < 60:
                 actor_tiles[x][y] = TILE_LIGHTNING_SCROLL
             elif type < 100:
                 actor_tiles[x][y] = TILE_FIREBALL_SCROOLL

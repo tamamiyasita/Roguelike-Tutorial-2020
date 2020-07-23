@@ -8,55 +8,64 @@ from actor.actor import Actor
 from util import get_blocking_entity, grid_to_pixel, pixel_to_grid
 
 
-class ConfusionEfc(Actor):
-    def __init__(self, x=0, y=0, sprite=None):
-        super().__init__(x=x, y=y, texture=effect1[140])
+class ConfusionEffect(Actor):
+    def __init__(self, x=0, y=0, enemy=None, effect_sprites=None, actor_sprites=None):
+        super().__init__(
+            x=x,
+            y=y,
+            name="confusion_effect")
 
-        self.sprite = sprite
-        self.com_ai = self.sprite.ai
-        self.count = self.sprite.ai.number_of_turns
+        self.enemy = enemy
+        self.effect_sprites = effect_sprites
+        self.actor_sprites = actor_sprites
+
+        self.count = self.enemy.ai.confused_turn
         self.time_num = 1
 
-        EFFECT_LIST.append(self)
+        self.effect_sprites.append(self)
 
     def update(self, delta_time=1/60):
         super().update(delta_time)
-        self.center_x, self.center_y = self.sprite.center_x, self.sprite.center_y
+        self.center_x, self.center_y = self.enemy.center_x, self.enemy.center_y
         self.time_num -= delta_time
         if self.time_num < 0:
             self.angle += 90
             self.time_num = 1
 
-        if self.sprite.ai.number_of_turns == 0 or not self.sprite in ACTOR_LIST:
-            EFFECT_LIST.remove(self)
+        if self.enemy.ai.confused_turn == 0 or not self.enemy in self.actor_sprites:
+            self.effect_sprites.remove(self)
 
 
 class ConfusionScroll(Actor):
     def __init__(self, x: int = 0, y: int = 0):
-        super().__init__(x=x, y=y, texture="conf_scroll", name="Confuse Scroll", color=COLORS["transparent"],
-                         visible_color=arcade.color.WHITE,
-                         not_visible_color=COLORS.get("dark_ground"), item=Item())
-        self.alpha = 0
+        super().__init__(
+            x=x,
+            y=y,
+            name="confusion_scroll",
+            not_visible_color=COLORS["transparent"],
+
+            item=Item())
 
     def use(self, game_engine: "GameEngine"):
         print("use")
         self.game_engine = game_engine
-        game_engine.game_state = GAME_STATE.SELECT_LOCATION
-        game_engine.grid_select_handlers.append(self.click)
+        self.game_engine.game_state = GAME_STATE.SELECT_LOCATION
+        self.game_engine.grid_select_handlers.append(self.click)
         return None
 
     def confused(self, grid_x, grid_y, results):
         pixel_x, pixel_y = grid_to_pixel(grid_x, grid_y)
-        sprites = arcade.get_sprites_at_point((pixel_x, pixel_y), ACTOR_LIST)
+        sprites = arcade.get_sprites_at_point(
+            (pixel_x, pixel_y), self.game_engine.actor_sprites)
         for sprite in sprites:
             if sprite.fighter and not sprite.is_dead:
-                self.sprite = sprite
-                confused_ai = ConfusedMonster(sprite.ai, 3001)
-                confused_ai.owner = sprite
-                sprite.ai = confused_ai
+                self.enemy = sprite
+                confused_ai = ConfusedMonster(self.enemy.ai, 3001)
+                confused_ai.owner = self.enemy
+                self.enemy.ai = confused_ai
 
                 results.extend(
-                    [{"message": f"The eyes of the {sprite.name} look vacant, as he starts to stumble around! "}])
+                    [{"message": f"The eyes of the {self.enemy.name} look vacant, as he starts to stumble around! "}])
 
                 break
         else:
@@ -66,7 +75,8 @@ class ConfusionScroll(Actor):
     def click(self, x, y):
         results = []
         self.confused(x, y, results)
-        ConfusionEfc(x, y, self.sprite)
+        ConfusionEffect(
+            x, y, self.enemy, self.game_engine.effect_sprites, self.game_engine.actor_sprites)
         self.game_engine.player.inventory.remove_item(self)
 
         return results

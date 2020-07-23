@@ -9,6 +9,7 @@ from util import pixel_to_grid, grid_to_pixel, get_blocking_entity
 class Actor(arcade.Sprite):
     """ 全てのオブジェクトを作成する基礎となるクラス
     """
+
     def __init__(self, texture_number=0, name=None, x=0, y=0, blocks=False,
                  scale=SPRITE_SCALE, color=arcade.color.WHITE, fighter=None, ai=None,
                  inventory=None, item=None,
@@ -113,6 +114,9 @@ class Actor(arcade.Sprite):
 
     def move(self, dxy, target=None, actor_sprites=None, game_map=None):
         try:
+            ai_move_speed = 0
+            if self.ai:
+                ai_move_speed = MOVE_SPEED*2+1
             self.dx, self.dy = dxy
 
             if self.dx == -1:
@@ -138,8 +142,8 @@ class Actor(arcade.Sprite):
                         self.state = state.TURN_END
                     elif attack_results:
                         self.state = state.ATTACK
-                        self.change_y = self.dy * MOVE_SPEED
-                        self.change_x = self.dx * MOVE_SPEED
+                        self.change_y = self.dy * (MOVE_SPEED+ai_move_speed)
+                        self.change_x = self.dx * (MOVE_SPEED+ai_move_speed)
 
                     return attack_results
 
@@ -157,8 +161,8 @@ class Actor(arcade.Sprite):
 
                 self.dst_tile.blocked = True
                 self.state = state.ON_MOVE
-                self.change_y = self.dy * MOVE_SPEED
-                self.change_x = self.dx * MOVE_SPEED
+                self.change_y = self.dy * (MOVE_SPEED+ai_move_speed)
+                self.change_x = self.dx * (MOVE_SPEED+ai_move_speed)
 
         except:
             pass
@@ -210,7 +214,7 @@ class Actor(arcade.Sprite):
         return math.sqrt(dx ** 2 + dy ** 2)
 
     def move_towards(self, target, actor_sprites, game_map):
-        
+
         dx = target.x - self.x
         dy = target.y - self.y
         distance = math.sqrt(dx ** 2 + dy ** 2)

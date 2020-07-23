@@ -10,9 +10,9 @@ class Potion(Actor):
             x=x,
             y=y,
             name="potion",
-            not_visible_color=arcade.color.BLACK,
+            not_visible_color=COLORS["transparent"],
+
             item=Item())
-        self.alpha = 255
 
     def use(self, game_engine):
         game_engine.player.fighter.hp += 5

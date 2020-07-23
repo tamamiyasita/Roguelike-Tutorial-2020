@@ -10,7 +10,7 @@ from actor.lightning_scroll import LightningScroll
 from actor.fireball_scroll import FireballScroll
 
 
-class MapobjPlacement:
+class ActorPlacement:
     def __init__(self, game_map, game_engine):
         self.game_map = game_map
         self.tiles = game_map.tiles

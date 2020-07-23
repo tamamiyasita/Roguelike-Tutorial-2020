@@ -1,7 +1,7 @@
 from random import *
 from math import *
 from map_tool import Tile, initialize_tiles, is_blocked
-from map_sprite_set import MapobjPlacement
+from map_sprite_set import ActorPlacement
 from constants import *
 
 

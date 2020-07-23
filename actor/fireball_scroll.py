@@ -8,16 +8,16 @@ from actor.actor import Actor
 from util import get_blocking_entity, grid_to_pixel, pixel_to_grid
 
 
-class FireballEfc(Actor):
-    def __init__(self, x=0, y=0, item_sprites=None):
+class FireballEffect(Actor):
+    def __init__(self, x=0, y=0, effect_sprites=None):
         super().__init__(
             x=x,
             y=y,
             name="fireball_effect"
         )
-        self.item_sprites = item_sprites
-        self.alpha = 255
-        self.item_sprites.append(self)
+        self.effect_sprites = effect_sprites
+        self.alpha = 155
+        self.effect_sprites.append(self)
         self.scale = 0.1
 
     def update(self):
@@ -25,8 +25,8 @@ class FireballEfc(Actor):
         if self.alpha > 100:
             self.scale += 0.6
             self.angle += 14
-        if self.alpha < 220:
-            self.item_sprites.remove(self)
+        if self.alpha < 120:
+            self.effect_sprites.remove(self)
 
 
 class FireballScroll(Actor):
@@ -68,7 +68,7 @@ class FireballScroll(Actor):
         print("Click!", x, y)
         results = []
         print(results, "results")
-        fireball = FireballEfc(x, y, self.game_engine.item_sprites)
+        fireball = FireballEffect(x, y, self.game_engine.effect_sprites)
         self.apply_damage(x, y, 10, results)
 
         self.apply_damage(x-1, y-1, 8, results)
