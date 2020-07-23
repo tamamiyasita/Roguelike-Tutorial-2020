@@ -4,12 +4,12 @@ from data import *
 from actor.item import Item
 
 
-class Potion(Actor):
+class HealingPotion(Actor):
     def __init__(self, x=0, y=0):
         super().__init__(
             x=x,
             y=y,
-            name="potion",
+            name="healing_potion",
             not_visible_color=COLORS["transparent"],
 
             item=Item())

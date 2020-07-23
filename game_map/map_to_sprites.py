@@ -7,7 +7,7 @@ from actor.floor import Floor
 from actor.orc import Orc
 from actor.troll import Troll
 from actor.item import Item
-from actor.potion import Potion
+from actor.healing_potion import HealingPotion
 
 
 def map_to_sprites(game_map):

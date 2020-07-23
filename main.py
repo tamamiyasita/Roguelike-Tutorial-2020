@@ -38,6 +38,7 @@ class MG(arcade.Window):
             attack = self.engine.player.move(
                 self.dist, None, self.engine.actor_sprites, self.engine.game_map)
             self.engine.fov_recompute = True
+            # self.engine.fov_recompute = True
             if attack:
                 self.engine.action_queue.extend(attack)
 
@@ -81,7 +82,7 @@ class MG(arcade.Window):
                                 self.engine.player.fighter.hp, self.engine.player.fighter.max_hp)
 
                 # 所持アイテム表示
-                item_left_position = 400  # パネル左からの所持アイテム表示位置の調整に使う変数
+                item_left_position = SCREEN_WIDTH / 2.3 # パネル左からの所持アイテム表示位置の調整に使う変数
                 item_top_position = STATES_PANEL_HEIGHT - 22 # パネル上端からの所持アイテム表示位置の調整に使う変数
                 separate_size = 1.5  # アイテム名の表示間隔の調整に使う変数
                 margin = 3 # 選択したアイテムのアウトライン線の位置調整に使う変数
@@ -110,13 +111,15 @@ class MG(arcade.Window):
                                      color=COLORS["status_panel_text"], font_size=item_font_size)
 
                 # メッセージ表示領域
-                message_top_position = 18 # パネル上端からのメッセージ表示位置
+                message_top_position = 19 # パネル上端からのメッセージ表示位置
                 message_left_position = 125 # 画面左からのメッセージ表示位置
                 message_position = STATES_PANEL_HEIGHT - message_top_position
+                arcade.draw_xywh_rectangle_filled(self.viewport_x + message_left_position - margin, self.viewport_y, item_left_position - message_left_position - margin,
+                                                  STATES_PANEL_HEIGHT, arcade.color.SHAMPOO)
                 for message in self.engine.messages:
                     arcade.draw_text(
                         message, message_left_position + self.viewport_x, message_position + self.viewport_y, color=COLORS["status_panel_text"])
-                    message_position -= 20
+                    message_position -= message_top_position
 
                 # マウスオーバーテキスト
                 if self.mouse_over_text:
@@ -198,6 +201,7 @@ class MG(arcade.Window):
                 self.engine.game_state = GAME_STATE.SELECT_LOCATION
 
             self.dist = dist
+
 
     def on_key_release(self, key, modifiers):
         self.dist = None

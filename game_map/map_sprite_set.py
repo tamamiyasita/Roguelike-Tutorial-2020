@@ -5,7 +5,7 @@ from actor.wall import Wall
 from actor.floor import Floor
 from actor.orc import Orc
 from actor.troll import Troll
-from actor.potion import Potion
+from actor.healing_potion import HealingPotion
 from actor.lightning_scroll import LightningScroll
 from actor.fireball_scroll import FireballScroll
 
@@ -64,14 +64,14 @@ class ActorPlacement:
         for x in range(self.width):
             for y in range(self.height):
                 if self.actor_tiles[x][y] == TILE.HEALING_POTION:
-                    potion = Potion(x, y)
-                    item_sprites.append(potion)
+                    healing_potion = HealingPotion(x, y)
+                    item_sprites.append(healing_potion)
                 elif self.actor_tiles[x][y] == TILE.LIGHTNING_SCROLL:
-                    l_scroll = LightningScroll(x, y)
-                    item_sprites.append(l_scroll)
+                    lightning_scroll = LightningScroll(x, y)
+                    item_sprites.append(lightning_scroll)
                 elif self.actor_tiles[x][y] == TILE.FIREBALL_SCROLL:
-                    f_scroll = FireballScroll(x, y)
-                    item_sprites.append(f_scroll)
+                    fireball_scroll = FireballScroll(x, y)
+                    item_sprites.append(fireball_scroll)
 
         return item_sprites
 

@@ -32,9 +32,9 @@ troll = [troll_left, troll_right]
 #######
 
 ###items###
-# potionテクスチャセット生成
-potion_tile_img = (r"image/Potion.png")
-potion_tile = get_tile_set(potion_tile_img, tile_size=16)
+# healing_potionテクスチャセット生成
+healing_potion_tile_img = (r"image/HealingPotion.png")
+healing_potion_tile = get_tile_set(healing_potion_tile_img, tile_size=16)
 
 scroll_tile_img = (r"image/Scroll.png")
 scroll_tile = get_tile_set(scroll_tile_img, tile_size=16)
@@ -77,7 +77,7 @@ IMAGE_ID = {"player": player,
             "orc": orc,
             "troll": troll,
 
-            "potion": potion_tile,
+            "healing_potion": healing_potion_tile,
             "confusion_scroll": [scroll_tile[15]],
             "lightning_scroll": [scroll_tile[2]],
             "fireball_scroll": [scroll_tile[6]],

@@ -1,6 +1,6 @@
 from actor.actor import Actor
 from actor.PC import Player
-from actor.potion import Potion
+from actor.healing_potion import HealingPotion
 from actor.orc import Orc
 from actor.troll import Troll
 from actor.Crab import Crab
@@ -18,8 +18,8 @@ def restore_actor(actor_dict):
         actor = Actor()
     elif actor_name == "Player":
         actor = Player()
-    elif actor_name == "Potion":
-        actor = Potion()
+    elif actor_name == "HealingPotion":
+        actor = HealingPotion()
     elif actor_name == "FireballScroll":
         actor = FireballScroll()
     elif actor_name == "LightningScroll":

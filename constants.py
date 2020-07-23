@@ -35,7 +35,7 @@ COLORS = {
     "dark_ground": arcade.color.PURPLE_NAVY,
     "light_wall": arcade.color.WHITE,
     "light_ground": arcade.color.WHITE,
-    "status_panel_background": arcade.color.ORANGE_PEEL,
+    "status_panel_background": arcade.color.PINK_LACE,
     "status_panel_text": arcade.color.BLACK,
     "status_bar_background": arcade.color.PINK_LACE,
     "status_bar_foreground": arcade.color.RED_DEVIL

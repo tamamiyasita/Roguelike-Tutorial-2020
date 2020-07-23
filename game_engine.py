@@ -16,7 +16,7 @@ from fov_functions import fov_get, initialize_fov, recompute_fov
 from game_map.basic_dungeon import BasicDungeon
 from game_map.map_sprite_set import ActorPlacement
 # from actor.item import Item
-# from actor.potion import Potion
+# from actor.healing_potion import HealingPotion
 from actor.confusion_scroll import ConfusionScroll
 from viewport import viewport
 from actor.PC import Player
@@ -35,7 +35,7 @@ class GameEngine:
         self.player = None
         self.game_map = None
         self.action_queue = []
-        self.messages = deque(maxlen=3)
+        self.messages = deque(maxlen=4)
         self.selected_item = None
         self.turn_check = []
         self.game_state = GAME_STATE.NORMAL
@@ -111,10 +111,10 @@ class GameEngine:
             use_spatial_hash=True, spatial_hash_cell_size=16)
 
         self.map_sprites = arcade.SpriteList(
-            use_spatial_hash=True, spatial_hash_cell_size=32, is_static=True)
+            use_spatial_hash=True, spatial_hash_cell_size=32)
 
         self.item_sprites = arcade.SpriteList(
-            use_spatial_hash=True, spatial_hash_cell_size=32)
+            use_spatial_hash=True, spatial_hash_cell_size=16)
 
         player_dict = data["player"]
         self.player.restore_from_dict(player_dict["Player"])

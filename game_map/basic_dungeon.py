@@ -12,7 +12,7 @@ from actor.ai import Basicmonster
 from actor.item import Item
 from actor.lightning_scroll import LightningScroll
 from actor.fireball_scroll import FireballScroll
-from actor.potion import Potion
+from actor.healing_potion import HealingPotion
 from actor.confusion_scroll import ConfusionScroll
 from actor.orc import Orc
 from actor.troll import Troll
