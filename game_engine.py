@@ -86,7 +86,7 @@ class GameEngine:
 
         item_dict = []
         for sprite in self.item_sprites:
-            actor_dict.append(self.get_actor_dict(sprite))
+            item_dict.append(self.get_actor_dict(sprite))
 
         dungeon_dict = []
         for sprite in self.map_sprites:
@@ -105,7 +105,7 @@ class GameEngine:
             use_spatial_hash=True, spatial_hash_cell_size=32)
 
         self.actor_sprites = arcade.SpriteList(
-            use_spatial_hash=True, spatial_hash_cell_size=32)
+            use_spatial_hash=True, spatial_hash_cell_size=16)
 
         self.map_sprites = arcade.SpriteList(
             use_spatial_hash=True, spatial_hash_cell_size=32)
@@ -127,7 +127,7 @@ class GameEngine:
 
         for item_dict in data["item"]:
             item = restore_actor(item_dict)
-            self.actor_sprites.append(item)
+            self.item_sprites.append(item)
 
         for dungeon_dict in data["dungeon"]:
             maps = restore_actor(dungeon_dict)

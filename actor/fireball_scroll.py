@@ -35,12 +35,10 @@ class FireballScroll(Actor):
             x=x,
             y=y,
             name="fireball_scroll",
-            color=COLORS["transparent"],
-            visible_color=arcade.color.WHITE,
-            not_visible_color=COLORS.get("dark_ground"),
+            not_visible_color=COLORS["transparent"],
+
             item=Item()
         )
-        self.alpha = 0
 
     def use(self, game_engine: "GameEngine"):
         print("use")

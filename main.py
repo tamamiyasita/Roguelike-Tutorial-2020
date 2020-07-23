@@ -37,6 +37,7 @@ class MG(arcade.Window):
         if self.engine.player.state == state.READY and self.dist:
             attack = self.engine.player.move(
                 self.dist, None, self.engine.actor_sprites, self.engine.game_map)
+            self.engine.fov_recompute = True
             if attack:
                 self.engine.action_queue.extend(attack)
 
@@ -179,7 +180,6 @@ class MG(arcade.Window):
                 self.engine.game_state = GAME_STATE.SELECT_LOCATION
 
             self.dist = dist
-            self.engine.fov_recompute = True
 
     def on_key_release(self, key, modifiers):
         self.dist = None
