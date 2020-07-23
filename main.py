@@ -56,16 +56,17 @@ class MG(arcade.Window):
             hp_bar_width = 72  # HPバーの幅
             hp_bar_height = 10  # HPバーの太さ
             hp_bar_margin = 8  # パネル上端からのHPバーの位置
-            left_margin = 15  # 画面左からのHPとバーの位置
+            left_margin = 25  # 画面左からのHPとバーの位置
             top_hp_margin = 30  # パネル上端からのHPの位置
+            hp_font_size = 14
 
-            # ビューポートの画面左と下の現在位置を変数vx,vyに入れる、これはパネルを画面に固定する為に使います
-            self.vx = arcade.get_viewport()[0]
-            self.vy = arcade.get_viewport()[2]
+            # ビューポートの左と下の現在位置を変数に入れる、これはパネルを画面に固定する為に使います
+            self.viewport_x = arcade.get_viewport()[0]
+            self.viewport_y = arcade.get_viewport()[2]
 
             # 画面下のパネルをarcadeの四角形を描画する変数で作成
             arcade.draw_xywh_rectangle_filled(
-                self.vx, self.vy, SCREEN_WIDTH, STATES_PANEL_HEIGHT, COLORS["status_panel_background"])
+                self.viewport_x, self.viewport_y, SCREEN_WIDTH, STATES_PANEL_HEIGHT, COLORS["status_panel_background"])
 
             ### ノーマルステート時の画面表示 ###
             if self.engine.game_state == GAME_STATE.NORMAL:
@@ -73,50 +74,55 @@ class MG(arcade.Window):
                 # HP/MAXHPの表示
                 text = f"HP: {self.engine.player.fighter.hp}/{self.engine.player.fighter.max_hp}"
                 arcade.draw_text(
-                    text, left_margin + self.vx, STATES_PANEL_HEIGHT - top_hp_margin + self.vy, color=COLORS["status_panel_text"], font_size=14)
+                    text, left_margin + self.viewport_x, STATES_PANEL_HEIGHT - top_hp_margin + self.viewport_y, color=COLORS["status_panel_text"], font_size=hp_font_size)
 
                 # HPバー
-                draw_status_bar(hp_bar_width / 2 + left_margin + self.vx, STATES_PANEL_HEIGHT - hp_bar_margin + self.vy, hp_bar_width, hp_bar_height,
+                draw_status_bar(hp_bar_width / 2 + left_margin + self.viewport_x, STATES_PANEL_HEIGHT - hp_bar_margin + self.viewport_y, hp_bar_width, hp_bar_height,
                                 self.engine.player.fighter.hp, self.engine.player.fighter.max_hp)
 
                 # 所持アイテム表示
                 item_left_position = 400  # パネル左からの所持アイテム表示位置の調整に使う変数
-                item_top_position = 38  # パネル下からの所持アイテム表示位置の調整に使う変数
+                item_top_position = STATES_PANEL_HEIGHT - 22 # パネル上端からの所持アイテム表示位置の調整に使う変数
                 separate_size = 1.5  # アイテム名の表示間隔の調整に使う変数
-                left_outline_margin = 3 # 選択したアイテムの左側のアウトライン線の調整に使う変数
-                right_outline_margin = 5 # 選択したアイテムの右側のアウトライン線の調整に使う変数
+                margin = 3 # 選択したアイテムのアウトライン線の位置調整に使う変数
+                item_font_size = 12
+                outline_size = 2
                 capacity = self.engine.player.inventory.capacity
                 selected_item = self.engine.selected_item  # ボタン押下で選択したアイテムオブジェクト
                 field_width = SCREEN_WIDTH / (capacity + 1) / separate_size  # アイテム表示感覚を決める変数
+
+                # キャパシティ数をループし、インベントリのアイテム名とアウトラインを描画する
                 for item in range(capacity):
                     items_position = item * field_width + item_left_position  # パネル左からの所持アイテムの表示位置
                     if item == selected_item:
                         arcade.draw_lrtb_rectangle_outline(
-                            items_position + self.vx - left_outline_margin, items_position + self.vx + field_width - right_outline_margin,
-                            item_top_position + self.vy + 18, item_top_position + self.vy - 4, arcade.color.BLACK, 2
+                            items_position + self.viewport_x - margin, items_position + self.viewport_x + field_width - margin,
+                            item_top_position + item_font_size + self.viewport_y + margin*2, item_top_position + self.viewport_y - margin,
+                            arcade.color.BLACK, outline_size
                             )
                     if self.engine.player.inventory.bag[item]:
                         item_name = self.engine.player.inventory.bag[item].name
                     else:
                         item_name = ""
-                    text = f"{item+1}: {item_name}"
-                    arcade.draw_text(text, items_position + self.vx, item_top_position + self.vy,
-                                     color=COLORS["status_panel_text"])
 
-                # メッセージ表示
-                y = STATES_PANEL_HEIGHT-14
+                    text = f"{item+1}: {item_name}"
+                    arcade.draw_text(text, items_position + self.viewport_x, self.viewport_y + item_top_position,
+                                     color=COLORS["status_panel_text"], font_size=item_font_size)
+
+                # メッセージ表示領域
+                message_top_position = 18 # パネル上端からのメッセージ表示位置
+                message_left_position = 125 # 画面左からのメッセージ表示位置
+                message_position = STATES_PANEL_HEIGHT - message_top_position
                 for message in self.engine.messages:
                     arcade.draw_text(
-                        message, 130+self.vx, y+self.vy, color=COLORS["status_panel_text"])
-                    y -= 20
+                        message, message_left_position + self.viewport_x, message_position + self.viewport_y, color=COLORS["status_panel_text"])
+                    message_position -= 20
 
                 # マウスオーバーテキスト
                 if self.mouse_over_text:
                     x, y = self.mouse_position
-                    arcade.draw_xywh_rectangle_filled(
-                        x, y, 100, 16, arcade.color.BLACK)
-                    arcade.draw_text(self.mouse_over_text, x,
-                                     y, arcade.color.WHITE)
+                    arcade.draw_xywh_rectangle_filled(x, y, 100, 16, arcade.color.BLACK)
+                    arcade.draw_text(self.mouse_over_text, x, y, arcade.color.WHITE)
 
             ### マウス操作時の表示 ###
             elif self.engine.game_state == GAME_STATE.SELECT_LOCATION:
@@ -197,7 +203,7 @@ class MG(arcade.Window):
         self.dist = None
 
     def on_mouse_motion(self, x, y, dx, dy):
-        self.mouse_position = x + self.vx, y + self.vy
+        self.mouse_position = x + self.viewport_x, y + self.viewport_y
         print(self.mouse_position, "POS")
         # 忘れずにビューポートの座標を足す
         actor_list = arcade.get_sprites_at_point(
@@ -214,7 +220,7 @@ class MG(arcade.Window):
 
     def on_mouse_press(self, x, y, button, modifiers):
         if self.engine.game_state == GAME_STATE.SELECT_LOCATION:
-            grid_x, grid_y = pixel_to_grid(x + self.vx, y + self.vy)
+            grid_x, grid_y = pixel_to_grid(x + self.viewport_x, y + self.viewport_y)
             print(grid_x, grid_y, "mouse_press")
             self.engine.grid_click(grid_x, grid_y)
         self.engine.game_state = GAME_STATE.NORMAL
