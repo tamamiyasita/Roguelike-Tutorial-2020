@@ -8,6 +8,7 @@ from data import *
 from game_map.basic_dungeon import BasicDungeon
 from game_map.map_sprite_set import ActorPlacement
 from fov_functions import fov_get, initialize_fov, recompute_fov
+from recalculate_fov import recalculate_fov
 
 from actor.inventory import Inventory
 from actor.confusion_scroll import ConfusionScroll
@@ -58,9 +59,10 @@ class GameEngine:
             self.player.x + 1, self.player.y)
         self.item_sprites.append(self.cnf)
 
-        self.fov_map = initialize_fov(self.game_map)
+        # self.fov_map = initialize_fov(self.game_map)
 
         self.fov_recompute = True
+        self.fov()
 
         arcade.set_background_color(arcade.color.BLACK)
 
@@ -254,11 +256,10 @@ class GameEngine:
            fov_getで表示するスプライトを制御する
         """
         if self.fov_recompute == True:
-            recompute_fov(self.fov_map, self.player.x, self.player.y,
-                          FOV_RADIUS, FOV_LIGHT_WALL, FOV_ALGO)
-            fov_get(self.game_map, self.fov_map,
-                    self.actor_sprites, self.map_sprites, self.item_sprites)
-        self.fov_recompute = False
+            recalculate_fov(self.player.x, self.player.y, FOV_RADIUS,
+                            [self.map_sprites, self.actor_sprites, self.item_sprites])
+
+            self.fov_recompute = False
 
     def check_for_player_movement(self, dist):
         """プレイヤーの移動

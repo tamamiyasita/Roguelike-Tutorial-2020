@@ -10,10 +10,10 @@ class Actor(arcade.Sprite):
     """ 全てのオブジェクトを作成する基礎となるクラス
     """
 
-    def __init__(self, texture_number=0, name=None, x=0, y=0, blocks=False,
-                 scale=SPRITE_SCALE, color=arcade.color.WHITE, fighter=None, ai=None,
+    def __init__(self, texture_number=0, name=None, x=0, y=0, blocks=False, block_sight=False,
+                 scale=SPRITE_SCALE, color=arcade.color.BLACK, fighter=None, ai=None,
                  inventory=None, item=None,
-                 visible_color=arcade.color.WHITE, not_visible_color=arcade.color.WHITE,
+                 visible_color=arcade.color.WHITE, not_visible_color=arcade.color.BLACK,
                  state=state.TURN_END):
         super().__init__(scale=scale)
         self.name = name
@@ -23,7 +23,7 @@ class Actor(arcade.Sprite):
         self.center_x, self.center_y = grid_to_pixel(x, y)
         self.x, self.y = pixel_to_grid(self.center_x, self.center_y)
         self.blocks = blocks
-        self.block_sight = False
+        self.block_sight = block_sight
         self.color = color
         self.visible_color = visible_color
         self.not_visible_color = not_visible_color
@@ -123,17 +123,17 @@ class Actor(arcade.Sprite):
                 self.left_face = True
             if self.dx == 1:
                 self.left_face = False
+            
+            destination_x = self.dx + self.x
+            destination_y = self.dy + self.y
 
             self.target_x = self.center_x
             self.target_y = self.center_y
 
-            # 行先を変数dst_tileに入れる
-            # self.dst_tile = game_map.tiles[self.x + self.dx][self.y + self.dy]
-            
-            self.dst_tile = arcade.get_sprites_at_exact_point(grid_to_pixel(self.dx+self.x, self.dy+self.y), map_sprites)[0]
+            # 行先のfloorオブジェクトを変数booking_tileに入れる
+            self.booking_tile = arcade.get_sprites_at_exact_point(grid_to_pixel(destination_x, destination_y), map_sprites)[0]
 
-            blocking_actor = get_blocking_entity(
-                self.x+self.dx, self.y+self.dy, actor_sprites)
+            blocking_actor = get_blocking_entity(destination_x, destination_y, actor_sprites)
             if blocking_actor and not target:
                 actor = blocking_actor[0]
                 if not actor.is_dead:
@@ -156,11 +156,9 @@ class Actor(arcade.Sprite):
 
                 return attack_results
 
-            elif not get_blocking_entity(self.x + self.dx, self.y + self.dy, actor_sprites) and\
-                    self.dst_tile.blocks == False:
-
-                self.dst_tile.blocks = True
-                self.dst_tile.alpha = 10
+            elif not get_blocking_entity(destination_x, destination_y, actor_sprites) and self.booking_tile.blocks == False:
+                self.booking_tile.blocks = True
+                self.booking_tile.alpha = 10
                 self.state = state.ON_MOVE
                 self.change_y = self.dy * (MOVE_SPEED+ai_move_speed)
                 self.change_x = self.dx * (MOVE_SPEED+ai_move_speed)
@@ -178,12 +176,12 @@ class Actor(arcade.Sprite):
                 if self.dx == 1:
                     self.center_x = self.target_x + grid
                     self.x += self.dx
-                    self.dst_tile.blocks = False
+                    self.booking_tile.blocks = False
                     self.state = state.TURN_END
                 if self.dx == -1:
                     self.center_x = self.target_x - grid
                     self.x += self.dx
-                    self.dst_tile.blocks = False
+                    self.booking_tile.blocks = False
                     self.state = state.TURN_END
 
             if abs(self.target_y - self.center_y) >= grid and self.dy:
@@ -191,12 +189,12 @@ class Actor(arcade.Sprite):
                 if self.dy == 1:
                     self.center_y = self.target_y + grid
                     self.y += self.dy
-                    self.dst_tile.blocks = False
+                    self.booking_tile.blocks = False
                     self.state = state.TURN_END
                 if self.dy == -1:
                     self.center_y = self.target_y - grid
                     self.y += self.dy
-                    self.dst_tile.blocks = False
+                    self.booking_tile.blocks = False
                     self.state = state.TURN_END
 
         if self.state == state.ATTACK:

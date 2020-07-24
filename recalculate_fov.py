@@ -35,4 +35,25 @@ def recalculate_fov(char_x, char_y, radius, sprite_lists):
             v2 = x, y
             x2, y2 = arcade.lerp_vec(v1, v2, j / ray_checks)
             x2 = round(x2)
+            y2 = round(y2)
+
+            pixel_point = grid_to_pixel(x2, y2)
+
+            blocks = False
+            for sprite_list in sprite_lists:
+                sprites_at_point = arcade.get_sprites_at_exact_point(pixel_point, sprite_list)
+
+                for sprite in sprites_at_point:
+                    sprite.is_visible = True
+                    if sprite.block_sight:
+                        blocks = True
+
+            if blocks:
+                break
+
+    for sprite_list in sprite_lists:
+        for sprite in sprite_list:
+            if sprite.is_visible:
+                sprite.color = sprite.visible_color
+                sprite.alpha = 255
 

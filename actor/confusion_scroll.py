@@ -13,7 +13,9 @@ class ConfusionEffect(Actor):
         super().__init__(
             x=x,
             y=y,
-            name="confusion_effect")
+            color=arcade.color.WHITE,
+            not_visible_color=COLORS["transparent"],
+            name="confusion_effect"),
 
         self.enemy = enemy
         self.effect_sprites = effect_sprites

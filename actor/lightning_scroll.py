@@ -1,6 +1,8 @@
 import math
 
 from typing import Optional
+
+from arcade.color import WHITE
 from constants import *
 from data import *
 from actor.item import Item
@@ -13,7 +15,8 @@ class LightningEffect(Actor):
         super().__init__(
             x=x,
             y=y,
-            name="lightning_effect"
+            name="lightning_effect",
+            color = arcade.color.WHITE
         )
         self.effect_sprites = effect_sprites
         self.alpha = 255

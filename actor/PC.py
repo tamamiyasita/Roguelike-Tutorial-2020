@@ -11,10 +11,9 @@ class Player(Actor):
         fighter_component = Fighter(hp=35, defense=3, power=5)
         super().__init__(
             name="player",
-            # texture="player",
-
             x=x,
             y=y,
+            color=arcade.color.WHITE,
 
             inventory=inventory,
             fighter=fighter_component,

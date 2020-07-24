@@ -13,7 +13,8 @@ class FireballEffect(Actor):
         super().__init__(
             x=x,
             y=y,
-            name="fireball_effect"
+            name="fireball_effect",
+            color = arcade.color.WHITE
         )
         self.effect_sprites = effect_sprites
         self.alpha = 155
@@ -45,6 +46,7 @@ class FireballScroll(Actor):
         self.game_engine = game_engine
         game_engine.game_state = GAME_STATE.SELECT_LOCATION
         game_engine.grid_select_handlers.append(self.click)
+        # TODO ターンエンドさせたい
         return None
 
     def apply_damage(self, grid_x, grid_y, amount, results):
@@ -66,8 +68,7 @@ class FireballScroll(Actor):
     def click(self, x, y):
         print("Click!", x, y)
         results = []
-        print(results, "results")
-        fireball = FireballEffect(x, y, self.game_engine.effect_sprites)
+        FireballEffect(x, y, self.game_engine.effect_sprites)
         self.apply_damage(x, y, 10, results)
 
         self.apply_damage(x-1, y-1, 8, results)
@@ -83,4 +84,5 @@ class FireballScroll(Actor):
 
         self.game_engine.player.inventory.remove_item(self)
 
+        print(results, "results")
         return results

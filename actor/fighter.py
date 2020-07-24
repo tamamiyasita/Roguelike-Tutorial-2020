@@ -29,6 +29,7 @@ class Fighter:
         self.hp -= amount
 
         if self.hp <= 0:
+            self.owner.blocks = False
             results.append({"dead": self.owner})
             print(f"{self.owner.name} is dead x!")
 

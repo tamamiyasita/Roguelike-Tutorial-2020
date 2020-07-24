@@ -22,7 +22,7 @@ class MG(arcade.Window):
 
     def setup(self):
         self.engine.setup()
-        self.engine.fov()
+        # self.engine.fov()
         viewport(self.engine.player)
 
     def on_update(self, delta_time):

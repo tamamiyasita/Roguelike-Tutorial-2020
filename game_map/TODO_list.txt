@@ -2,6 +2,7 @@ TODO 保存と読み込みの完了
 TODO part11 levelupのコーディング
 TODO setを利用してtarn checkを効率化したい
 TODO actor等にコメントや変数名の整理
+TODO actorが多いとすぐ重くなるのなんとかしたい
 TODO potion effectの実装
 TODO arcadeのﾊﾟｰﾃｨｸﾙ効果を試したい
 TODO ミニマップの実装
