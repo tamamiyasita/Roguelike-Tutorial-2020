@@ -33,7 +33,6 @@ class Player(Actor):
             self.texture = pc_move[1]
 
         if self.state == state.ATTACK and not self.left_face:
-            print(self.dst_tile)
             self.texture = pc_attack[0]
         if self.state == state.ATTACK and self.left_face:
             self.texture = pc_attack[1]

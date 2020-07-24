@@ -206,7 +206,6 @@ class MG(arcade.Window):
 
     def on_mouse_motion(self, x, y, dx, dy):
         self.mouse_position = x + self.viewport_x, y + self.viewport_y
-        print(self.mouse_position, "POS")
         # 忘れずにビューポートの座標を足す
         actor_list = arcade.get_sprites_at_point(
             self.mouse_position, self.engine.actor_sprites)
@@ -223,7 +222,6 @@ class MG(arcade.Window):
     def on_mouse_press(self, x, y, button, modifiers):
         if self.engine.game_state == GAME_STATE.SELECT_LOCATION:
             grid_x, grid_y = pixel_to_grid(x + self.viewport_x, y + self.viewport_y)
-            print(grid_x, grid_y, "mouse_press")
             self.engine.grid_click(grid_x, grid_y)
         self.engine.game_state = GAME_STATE.NORMAL
 
@@ -241,7 +239,7 @@ class MG(arcade.Window):
         with open("game_same3.json", "r") as read_file:
             data = json.load(read_file)
 
-        print(data)
+        # print(data)
         print("**load**")
         self.engine.restore_from_dict(data)
         self.engine.player.state = state.READY

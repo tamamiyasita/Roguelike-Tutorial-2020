@@ -56,7 +56,6 @@ class FireballScroll(Actor):
             (pixel_x, pixel_y), self.game_engine.chara_sprites)
         sprites.extend(pc_check)
         for sprite in sprites:
-            print(sprite, "sprite")
             if sprite.fighter and not sprite.is_dead:
                 results.extend(
                     [{"message": f"{sprite.name} was struck by a fireball for {amount} points."}])

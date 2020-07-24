@@ -46,7 +46,7 @@ class ConfusionScroll(Actor):
 
             item=Item())
 
-    def use(self, game_engine: "GameEngine"):
+    def use(self, game_engine):
         print("use")
         self.game_engine = game_engine
         self.game_engine.game_state = GAME_STATE.SELECT_LOCATION

@@ -34,7 +34,6 @@ def astar(sprite_lists, start, end):
     start_node.g = start_node.h = start_node.f = 0
     end_node = Node(None, end)
     end_node.g = end_node.h = end_node.f = 0
-    print("ASTTER!!!")
 
     # openとclosed両方のリストを初期化する
     open_list = []

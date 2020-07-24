@@ -142,7 +142,6 @@ class GameEngine:
                 self.turn_check = self.move_enemies(self.player)
 
             if "message" in action:
-                print("Message")
                 self.messages.append(action["message"])
 
             if "dead" in action:
@@ -248,7 +247,7 @@ class GameEngine:
         if not turn_check:
             turn_check.append("next_turn")
 
-        print(turn_check, "turn_check")
+        # print(turn_check, "turn_check")
         return turn_check
 
     def fov(self):
@@ -288,12 +287,11 @@ class GameEngine:
         # 全てのenemyがTURN_END状態になった場合キューに"player_turn"を返す
         elif self.turn_check:
             # enemyのTURN_ENDをカウントする変数
+            # TODO setを使って効率化したい
             turn_count = 0
             for actor in self.turn_check:
                 if actor.state == state.TURN_END:
                     turn_count += 1
-                    print(turn_count)
-                    print(len(self.actor_sprites))
                 if turn_count == len(self.turn_check):
                     self.action_queue.extend([{"player_turn": True}])
                     self.turn_check = []
