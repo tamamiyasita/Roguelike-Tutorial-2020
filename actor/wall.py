@@ -21,5 +21,3 @@ class Wall(Actor):
         )
         self.alpha = 0
 
-    def set_texture(self, texture_no):
-        return super().set_texture(self.texture_number)

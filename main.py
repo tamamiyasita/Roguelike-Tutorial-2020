@@ -8,6 +8,7 @@ from game_engine import GameEngine
 from constants import *
 from status_bar import draw_status_bar
 from util import grid_to_pixel, pixel_to_grid
+from viewport import viewport
 
 
 class MG(arcade.Window):
@@ -15,13 +16,14 @@ class MG(arcade.Window):
         super().__init__(width, height, title, antialiasing=False)
 
         self.engine = GameEngine()
-        self.dist = None
+        self.player_direction = None
         self.mouse_over_text = None
         self.mouse_position = None
 
     def setup(self):
         self.engine.setup()
         self.engine.fov()
+        viewport(self.engine.player)
 
     def on_update(self, delta_time):
         self.engine.chara_sprites.update_animation()
@@ -32,15 +34,11 @@ class MG(arcade.Window):
 
         self.engine.process_action_queue(delta_time)
         self.engine.turn_change(delta_time)
-        self.engine.view()
+        self.engine.check_for_player_movement(self.player_direction)
 
-        if self.engine.player.state == state.READY and self.dist:
-            attack = self.engine.player.move(
-                self.dist, None, self.engine.actor_sprites, self.engine.game_map)
-            self.engine.fov_recompute = True
-            # self.engine.fov_recompute = True
-            if attack:
-                self.engine.action_queue.extend(attack)
+        # playerがmove状態の時だけviewportを計算する
+        if self.engine.player.state == state.ON_MOVE:
+            viewport(self.engine.player)
 
     def on_draw(self):
         try:
@@ -145,23 +143,23 @@ class MG(arcade.Window):
             self.engine.game_state = GAME_STATE.NORMAL
 
         elif self.engine.player.state == state.READY and self.engine.game_state == GAME_STATE.NORMAL:
-            dist = None
+            direction = None
             if key in KEYMAP_UP:
-                dist = (0, 1)
+                direction = (0, 1)
             elif key in KEYMAP_DOWN:
-                dist = (0, -1)
+                direction = (0, -1)
             elif key in KEYMAP_LEFT:
-                dist = (-1, 0)
+                direction = (-1, 0)
             elif key in KEYMAP_RIGHT:
-                dist = (1, 0)
+                direction = (1, 0)
             elif key in KEYMAP_UP_LEFT:
-                dist = (-1, 1)
+                direction = (-1, 1)
             elif key in KEYMAP_DOWN_LEFT:
-                dist = (-1, -1)
+                direction = (-1, -1)
             elif key in KEYMAP_UP_RIGHT:
-                dist = (1, 1)
+                direction = (1, 1)
             elif key in KEYMAP_DOWN_RIGHT:
-                dist = (1, -1)
+                direction = (1, -1)
             elif key in KEYMAP_REST:
                 self.engine.player.state = state.TURN_END
 
@@ -200,11 +198,11 @@ class MG(arcade.Window):
             elif key == arcade.key.SPACE:
                 self.engine.game_state = GAME_STATE.SELECT_LOCATION
 
-            self.dist = dist
+            self.player_direction = direction
 
 
     def on_key_release(self, key, modifiers):
-        self.dist = None
+        self.player_direction = None
 
     def on_mouse_motion(self, x, y, dx, dy):
         self.mouse_position = x + self.viewport_x, y + self.viewport_y
@@ -247,6 +245,8 @@ class MG(arcade.Window):
         print("**load**")
         self.engine.restore_from_dict(data)
         self.engine.player.state = state.READY
+        self.engine.fov()
+        self.engine.viewport(self.engine.player)
 
 
 def main():

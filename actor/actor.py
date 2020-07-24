@@ -129,8 +129,6 @@ class Actor(arcade.Sprite):
 
             # 行先を変数dst_tileに入れる
             self.dst_tile = game_map.tiles[self.x + self.dx][self.y + self.dy]
-            if target:
-                print("target ok", target)
 
             blocking_actor = get_blocking_entity(
                 self.x+self.dx, self.y+self.dy, actor_sprites)

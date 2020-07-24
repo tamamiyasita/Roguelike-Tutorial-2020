@@ -1,27 +1,18 @@
 
-from actor.inventory import Inventory
+import arcade
 from collections import deque
 
-import arcade
-# import tcod
 
-from actor.actor import Actor
-from actor.inventory import Inventory
-# from actor.ai import Basicmonster
 from constants import *
 from data import *
-# from actor.fighter import Fighter
-from fov_functions import fov_get, initialize_fov, recompute_fov
-# from recalculate_fov import recalculate_fov
 from game_map.basic_dungeon import BasicDungeon
 from game_map.map_sprite_set import ActorPlacement
-# from actor.item import Item
-# from actor.healing_potion import HealingPotion
+from fov_functions import fov_get, initialize_fov, recompute_fov
+
+from actor.inventory import Inventory
 from actor.confusion_scroll import ConfusionScroll
-from viewport import viewport
 from actor.PC import Player
 from actor.Crab import Crab
-# from util import grid_to_pixel, pixel_to_grid
 from actor.restore_actor import restore_actor
 
 
@@ -56,7 +47,6 @@ class GameEngine:
         self.actor_sprites = actorsprite
         self.item_sprites = itemsprite
 
-        self.fov_recompute = True
 
         self.player = Player(
             self.game_map.player_pos[0], self.game_map.player_pos[1], inventory=Inventory(capacity=5))
@@ -70,7 +60,7 @@ class GameEngine:
 
         self.fov_map = initialize_fov(self.game_map)
 
-        viewport(self.player)
+        self.fov_recompute = True
 
         arcade.set_background_color(arcade.color.BLACK)
 
@@ -272,11 +262,13 @@ class GameEngine:
                     self.actor_sprites, self.map_sprites, self.item_sprites)
         self.fov_recompute = False
 
-    def view(self):
-        """ playerがmove状態の時だけviewportを計算する
+    def check_for_player_movement(self, dist):
+        """プレイヤーの移動
         """
-        if self.player.state == state.ON_MOVE:
-            viewport(self.player)
+        if self.player.state == state.READY and dist:
+            attack = self.player.move(dist, None, self.actor_sprites, self.game_map)
+            if attack:
+                self.action_queue.extend(attack)
 
     def turn_change(self, delta_time):
         """ playerとenemyの行動ターンを切り替える
@@ -284,6 +276,7 @@ class GameEngine:
 
         # playerがTURN_END状態になるとキューに"enemy_turn"を送信する
         if self.player.state == state.TURN_END:
+            self.fov_recompute = True
             self.player.state = state.DELAY
             self.action_queue.extend([{"enemy_turn": True}])
 
