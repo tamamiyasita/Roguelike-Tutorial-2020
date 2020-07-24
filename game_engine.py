@@ -152,7 +152,6 @@ class GameEngine:
                 if target is self.player:
                     new_action_queue.extend([{"message": "player has died!"}])
                 else:
-                    self.game_map.tiles[target.x][target.y].blocked = False
                     new_action_queue.extend(
                         [{"message": f"{target.name} has been killed!"}])
                     new_action_queue.extend(
@@ -230,7 +229,7 @@ class GameEngine:
         for actor in self.actor_sprites:
             if actor.ai and not actor.is_dead:
                 results = actor.ai.take_turn(
-                    target=target, game_map=self.game_map, sprite_lists=[self.actor_sprites, self.map_sprites])
+                    target=target, sprite_lists=[self.actor_sprites, self.map_sprites])
                 if results:
                     self.action_queue.extend(results)
                     turn_check.append(actor)
@@ -265,7 +264,7 @@ class GameEngine:
         """プレイヤーの移動
         """
         if self.player.state == state.READY and dist:
-            attack = self.player.move(dist, None, self.actor_sprites, self.game_map)
+            attack = self.player.move(dist, None, self.actor_sprites, self.map_sprites)
             if attack:
                 self.action_queue.extend(attack)
 

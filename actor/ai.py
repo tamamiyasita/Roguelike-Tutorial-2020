@@ -8,12 +8,13 @@ class Basicmonster:
     def __init__(self):
         self.owner = None
 
-    def take_turn(self, target, game_map, sprite_lists):
+    def take_turn(self, target, sprite_lists):
         results = []
 
         monster = self.owner
         if monster.is_visible and not monster.is_dead:
             actor_list = sprite_lists[0]
+            map_list = sprite_lists[1]
 
             if monster.distance_to(target) >= 1:
                 results = astar(
@@ -29,7 +30,7 @@ class Basicmonster:
                     dy = y - monster.y
 
                     attack = monster.move(
-                        (dx, dy), target, actor_list, game_map)
+                        (dx, dy), target, actor_list, map_list)
                     if attack:
                         results.extend(attack)
             return results
@@ -43,14 +44,15 @@ class ConfusedMonster:
         self.pre_ai = pre_ai
         self.confused_turn = confused_turn
 
-    def take_turn(self, target, game_map, sprite_lists):
+    def take_turn(self, target, sprite_lists):
         results = []
         monster = self.owner
         actor_list = sprite_lists[0]
+        map_list = sprite_lists[1]
 
         if self.confused_turn > 0:
             attack = monster.move(
-                (randint(-1, 1), randint(-1, 1)), None, actor_list, game_map)
+                (randint(-1, 1), randint(-1, 1)), None, actor_list, map_list)
             if attack:
                 results.extend(attack)
 

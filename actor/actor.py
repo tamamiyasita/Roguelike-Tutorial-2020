@@ -112,7 +112,7 @@ class Actor(arcade.Sprite):
             self.inventory = Inventory()
             self.inventory.restore_from_dict(result["inventory"])
 
-    def move(self, dxy, target=None, actor_sprites=None, game_map=None):
+    def move(self, dxy, target=None, actor_sprites=None, map_sprites=None):
         try:
             ai_move_speed = 0
             if self.ai:
@@ -128,7 +128,9 @@ class Actor(arcade.Sprite):
             self.target_y = self.center_y
 
             # 行先を変数dst_tileに入れる
-            self.dst_tile = game_map.tiles[self.x + self.dx][self.y + self.dy]
+            # self.dst_tile = game_map.tiles[self.x + self.dx][self.y + self.dy]
+            
+            self.dst_tile = arcade.get_sprites_at_exact_point(grid_to_pixel(self.dx+self.x, self.dy+self.y), map_sprites)[0]
 
             blocking_actor = get_blocking_entity(
                 self.x+self.dx, self.y+self.dy, actor_sprites)
@@ -155,9 +157,10 @@ class Actor(arcade.Sprite):
                 return attack_results
 
             elif not get_blocking_entity(self.x + self.dx, self.y + self.dy, actor_sprites) and\
-                    self.dst_tile.blocked == False:
+                    self.dst_tile.blocks == False:
 
-                self.dst_tile.blocked = True
+                self.dst_tile.blocks = True
+                self.dst_tile.alpha = 10
                 self.state = state.ON_MOVE
                 self.change_y = self.dy * (MOVE_SPEED+ai_move_speed)
                 self.change_x = self.dx * (MOVE_SPEED+ai_move_speed)
@@ -175,12 +178,12 @@ class Actor(arcade.Sprite):
                 if self.dx == 1:
                     self.center_x = self.target_x + grid
                     self.x += self.dx
-                    self.dst_tile.blocked = False
+                    self.dst_tile.blocks = False
                     self.state = state.TURN_END
                 if self.dx == -1:
                     self.center_x = self.target_x - grid
                     self.x += self.dx
-                    self.dst_tile.blocked = False
+                    self.dst_tile.blocks = False
                     self.state = state.TURN_END
 
             if abs(self.target_y - self.center_y) >= grid and self.dy:
@@ -188,12 +191,12 @@ class Actor(arcade.Sprite):
                 if self.dy == 1:
                     self.center_y = self.target_y + grid
                     self.y += self.dy
-                    self.dst_tile.blocked = False
+                    self.dst_tile.blocks = False
                     self.state = state.TURN_END
                 if self.dy == -1:
                     self.center_y = self.target_y - grid
                     self.y += self.dy
-                    self.dst_tile.blocked = False
+                    self.dst_tile.blocks = False
                     self.state = state.TURN_END
 
         if self.state == state.ATTACK:
@@ -211,7 +214,7 @@ class Actor(arcade.Sprite):
         dy = other.y - self.y
         return math.sqrt(dx ** 2 + dy ** 2)
 
-    def move_towards(self, target, actor_sprites, game_map):
+    def move_towards(self, target, actor_sprites, map_sprites):
 
         dx = target.x - self.x
         dy = target.y - self.y
@@ -221,7 +224,7 @@ class Actor(arcade.Sprite):
         dy = int(round(dy / distance))
 
         if not get_blocking_entity(self.x + dx, self.y + dy, actor_sprites):
-            self.move((dx, dy), target, actor_sprites, game_map)
+            self.move((dx, dy), target, actor_sprites, map_sprites)
 
     @property
     def texture_(self):
