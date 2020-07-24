@@ -33,30 +33,8 @@ def get_blocking_entity(x, y, sprite_list):
         return blocking_sprite
     else:
         return None
-    #     if not sprite.blocks:
-    #         sprite_list.remove(sprite)
-    # if len(sprite_list) > 0:
-    #     return sprite_list
-    # else:
-    #     return None
 
 
-def floor_move_lock(x, y, sprite_list):
-    # TODO 移動先のfloorをロックしたり解除したりする
-    px, py = grid_to_pixel(x, y)
-    sprite_list = arcade.get_sprites_at_exact_point((px, py), sprite_list)
-    for sprite in sprite_list:
-        if not sprite.blocks:
-            sprite.blocks = True
-
-
-def floor_move_open(x, y, sprite_list):
-    # TODO 移動先のfloorをロックしたり解除したりする
-    px, py = grid_to_pixel(x, y)
-    sprite_list = arcade.get_sprites_at_exact_point((px, py), sprite_list)
-    for sprite in sprite_list:
-        if sprite.blocks:
-            sprite.blocks = False
 
 
 def get_tile_set(img, tile_size):

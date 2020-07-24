@@ -213,7 +213,6 @@ class MG(arcade.Window):
             self.mouse_position, self.engine.item_sprites)
         self.mouse_over_text = None
         for actor in chain(actor_list, item_list):
-            # TODO アイテム表示
             if actor.fighter and actor.is_visible:
                 self.mouse_over_text = f"{actor.name} {actor.fighter.hp}/{actor.fighter.max_hp}"
             elif actor.name:
