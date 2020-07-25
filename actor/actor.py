@@ -116,7 +116,7 @@ class Actor(arcade.Sprite):
         try:
             ai_move_speed = 0
             if self.ai:
-                ai_move_speed = MOVE_SPEED*3
+                ai_move_speed = MOVE_SPEED*1.3
             self.dx, self.dy = dxy
 
             if self.dx == -1:
@@ -158,7 +158,6 @@ class Actor(arcade.Sprite):
 
             elif not get_blocking_entity(destination_x, destination_y, actor_sprites) and self.booking_tile.blocks == False:
                 self.booking_tile.blocks = True
-                self.booking_tile.alpha = 10
                 self.state = state.ON_MOVE
                 self.change_y = self.dy * (MOVE_SPEED+ai_move_speed)
                 self.change_x = self.dx * (MOVE_SPEED+ai_move_speed)
@@ -177,12 +176,12 @@ class Actor(arcade.Sprite):
                     self.center_x = self.target_x + grid
                     self.x += self.dx
                     self.booking_tile.blocks = False
-                    self.state = state.TURN_END
+                    # self.state = state.TURN_END
                 if self.dx == -1:
                     self.center_x = self.target_x - grid
                     self.x += self.dx
                     self.booking_tile.blocks = False
-                    self.state = state.TURN_END
+                self.state = state.TURN_END
 
             if abs(self.target_y - self.center_y) >= grid and self.dy:
                 self.change_y = 0
@@ -190,12 +189,12 @@ class Actor(arcade.Sprite):
                     self.center_y = self.target_y + grid
                     self.y += self.dy
                     self.booking_tile.blocks = False
-                    self.state = state.TURN_END
+                    # self.state = state.TURN_END
                 if self.dy == -1:
                     self.center_y = self.target_y - grid
                     self.y += self.dy
                     self.booking_tile.blocks = False
-                    self.state = state.TURN_END
+                self.state = state.TURN_END
 
         if self.state == state.ATTACK:
             if abs(self.target_x - self.center_x) >= step and self.dx:
@@ -222,7 +221,8 @@ class Actor(arcade.Sprite):
         dy = int(round(dy / distance))
 
         if not get_blocking_entity(self.x + dx, self.y + dy, actor_sprites):
-            self.move((dx, dy), target, actor_sprites, map_sprites)
+            move = self.move((dx, dy), target, actor_sprites, map_sprites)
+            return move
 
     @property
     def texture_(self):

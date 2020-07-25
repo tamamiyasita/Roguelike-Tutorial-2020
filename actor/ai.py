@@ -18,13 +18,6 @@ class Basicmonster:
         actor_sprites = sprite_lists[0]
         map_sprites = sprite_lists[1]
 
-        # ターゲットに隣接している場合パスは計算しない
-        if target and monster.distance_to(target) <= 1.46:
-            attack = monster.move((target.x, target.y), target, actor_sprites, map_sprites)
-            if attack:
-                results.extend(attack)
-                return results
-
 
         # 視野のチェック
         if monster.is_visible:
@@ -39,8 +32,16 @@ class Basicmonster:
             self.target_point = None 
             self.visible_check = False
 
-        if self.visible_check:
+        # ターゲットに隣接している場合パスは計算しない
+        if target and monster.distance_to(target) <= 1.46 and self.visible_check:
+            attack = monster.move_towards(target, actor_sprites, map_sprites)
+            if attack:
+                results.extend(attack)
+                print("move_towards attack")
+                return results
 
+
+        if self.visible_check:
             if monster.distance_to(target) >= 1:
                 results = astar(
                     sprite_lists, (monster.x, monster.y), (self.target_point))

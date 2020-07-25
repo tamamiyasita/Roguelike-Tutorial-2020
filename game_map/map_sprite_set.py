@@ -34,12 +34,12 @@ class ActorPlacement:
                     wall = Wall(texture_number=wall_number, x=x, y=y,)
                     map_sprites.append(wall)
 
-                elif self.tiles[x][y] == TILE.EMPTY:
+                elif self.tiles[x][y] == TILE.EMPTY or TILE.STAIRS_DOWN:
 
                     floor = Floor(texture_number=21, x=x, y=y)
                     map_sprites.append(floor)
 
-                elif self.tiles[x][y] == TILE.STAIRS_DOWN:
+                if self.tiles[x][y] == TILE.STAIRS_DOWN:
 
                     stairs = Stairs(x=x, y=y)
                     map_sprites.append(stairs)
@@ -89,15 +89,15 @@ class ActorPlacement:
         tile_value.add(0)
 
         if self.width - 1 > x:
-            if self.tiles[x + 1][y].blocked:
+            if self.tiles[x + 1][y] == TILE.WALL:
                 tile_value.add(4)
         if self.height - 1 > y:
-            if self.tiles[x][y + 1].blocked:
+            if self.tiles[x][y + 1] == TILE.WALL:
                 tile_value.add(1)
         if 0 < x:
-            if self.tiles[x - 1][y].blocked:
+            if self.tiles[x - 1][y] == TILE.WALL:
                 tile_value.add(2)
         if 0 < y:
-            if self.tiles[x][y - 1].blocked:
+            if self.tiles[x][y - 1] == TILE.WALL:
                 tile_value.add(8)
         return sum(tile_value)

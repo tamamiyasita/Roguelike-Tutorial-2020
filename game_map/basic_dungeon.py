@@ -1,7 +1,6 @@
 import arcade
 from random import randint
 
-from game_map.map_tool import initialize_tiles, actor_tiles, Rect, is_blocked, Tile
 from game_map.map_sprite_set import ActorPlacement
 from util import pixel_to_grid, grid_to_pixel
 from actor.actor import Actor
@@ -18,6 +17,27 @@ from actor.orc import Orc
 from actor.troll import Troll
 
 
+class Rect:
+    def __init__(self, x, y, w, h):
+        self.x1 = x
+        self.y1 = y
+        self.x2 = x + w
+        self.y2 = y + h
+
+    def center(self):
+        center_x = int((self.x1 + self.x2) / 2)
+        center_y = int((self.y1 + self.y2) / 2)
+        return (center_x, center_y)
+
+    def intersect(self, other):
+        return (
+            self.x1 <= other.x2
+            and self.x2 >= other.x1
+            and self.y1 <= other.y2
+            and self.y2 >= other.y1
+        )
+
+
 class BasicDungeon:
     def __init__(self, width, height, dungeon_level=1, max_rooms=MAX_ROOM, room_min_size=ROOM_MIN_SIZE,
                  room_max_size=ROOM_MAX_SIZE):
@@ -30,8 +50,8 @@ class BasicDungeon:
         self.max_monsters_per_room = 3
         self.max_items_per_room = 2
 
-        self.tiles = initialize_tiles(self.width, self.height)
-        self.actor_tiles = actor_tiles(self.width, self.height)
+        self.tiles = [[TILE.WALL for y in range(height)] for x in range(width)]
+        self.actor_tiles =  [[TILE.EMPTY for y in range(height)] for x in range(width)]
         self.player_pos = 0
         self.make_map()
 
@@ -84,18 +104,18 @@ class BasicDungeon:
     def create_room(self, room):
         for x in range(room.x1 + 1, room.x2):
             for y in range(room.y1 + 1, room.y2):
-                self.tiles[x][y].blocked = TILE.EMPTY
-                self.tiles[x][y].block_sight = TILE.EMPTY
+                self.tiles[x][y] = TILE.EMPTY
+                self.tiles[x][y] = TILE.EMPTY
 
     def create_h_tunnel(self, x1, x2, y):
         for x in range(min(x1, x2), max(x1, x2) + 1):
-            self.tiles[x][y].blocked = TILE.EMPTY
-            self.tiles[x][y].block_sight = TILE.EMPTY
+            self.tiles[x][y] = TILE.EMPTY
+            self.tiles[x][y] = TILE.EMPTY
 
     def create_v_tunnel(self, y1, y2, x):
         for y in range(min(y1, y2), max(y1, y2) + 1):
-            self.tiles[x][y].blocked = TILE.EMPTY
-            self.tiles[x][y].block_sight = TILE.EMPTY
+            self.tiles[x][y] = TILE.EMPTY
+            # self.tiles[x][y].block_sight = TILE.EMPTY
 
     def is_blocked(self, x, y):
         return is_blocked(self.tiles, x, y)

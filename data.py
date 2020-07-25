@@ -50,6 +50,8 @@ floor_tile = get_tile_set(floor_img, tile_size=32)
 floor_len = len(floor_tile)
 floors = [floor_tile[v] for v in range(floor_len)]
 
+stairs = floors
+
 walls_1 = (r"image/wall1.png")
 walls_1_tiles = get_tile_set(walls_1, tile_size=16)
 wall_1 = {k: walls_1_tiles[v] for k, v in zip(
@@ -90,6 +92,7 @@ IMAGE_ID = {"player": player,
             "wall_1": wall_1,
             "wall_2": wall_2,
             "wall_3": wall_3,
+            "stairs": stairs
 
             }
 
@@ -99,7 +102,7 @@ class Testimg(arcade.Window):
         size = 16
         super().__init__(100, 100)
         img = arcade.load_texture(
-            d_human1, x=0, y=size, width=size, height=size)
+            floors, x=0, y=size, width=size, height=size)
         arcade.start_render()
         arcade.draw_texture_rectangle(50, 50, 16, 16, img)
 

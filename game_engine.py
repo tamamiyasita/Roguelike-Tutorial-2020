@@ -7,7 +7,6 @@ from constants import *
 from data import *
 from game_map.basic_dungeon import BasicDungeon
 from game_map.map_sprite_set import ActorPlacement
-from fov_functions import fov_get, initialize_fov, recompute_fov
 from recalculate_fov import recalculate_fov
 
 from actor.inventory import Inventory

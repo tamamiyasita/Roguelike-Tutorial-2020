@@ -6,6 +6,7 @@ from actor.actor import Actor
 class Stairs(Actor):
     def __init__(self, x, y):
         super().__init__(
+            texture_number=29,
             name="stairs",
             x=x,
             y=y,
