@@ -1,3 +1,4 @@
+from actor.stairs import Stairs
 import arcade
 from data import *
 from constants import *
@@ -27,16 +28,21 @@ class ActorPlacement:
 
         for x in range(self.width):
             for y in range(self.height):
-                if self.tiles[x][y].blocked:
+                if self.tiles[x][y] == TILE.WALL:
                     wall_number = self.search_wall_number(x, y, self.tiles)
 
                     wall = Wall(texture_number=wall_number, x=x, y=y,)
                     map_sprites.append(wall)
 
-                elif not self.tiles[x][y].blocked:
+                elif self.tiles[x][y] == TILE.EMPTY:
 
                     floor = Floor(texture_number=21, x=x, y=y)
                     map_sprites.append(floor)
+
+                elif self.tiles[x][y] == TILE.STAIRS_DOWN:
+
+                    stairs = Stairs(x=x, y=y)
+                    map_sprites.append(stairs)
 
         return map_sprites
 

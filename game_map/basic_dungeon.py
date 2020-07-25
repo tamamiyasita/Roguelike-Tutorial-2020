@@ -19,10 +19,11 @@ from actor.troll import Troll
 
 
 class BasicDungeon:
-    def __init__(self, width, height, max_rooms=MAX_ROOM, room_min_size=ROOM_MIN_SIZE,
+    def __init__(self, width, height, dungeon_level=1, max_rooms=MAX_ROOM, room_min_size=ROOM_MIN_SIZE,
                  room_max_size=ROOM_MAX_SIZE):
         self.width = width
         self.height = height
+        self.dungeon_level = dungeon_level
         self.max_rooms = max_rooms
         self.room_min_size = room_min_size
         self.room_max_size = room_max_size
@@ -38,6 +39,8 @@ class BasicDungeon:
 
         rooms = []
         self.num_rooms = 0
+        last_room_center_x = None
+        last_room_center_y = None
 
         for _ in range(self.max_rooms):
             w = randint(self.room_min_size, self.room_max_size)
@@ -61,6 +64,8 @@ class BasicDungeon:
 
                 else:
                     (prev_x, prev_y) = rooms[self.num_rooms - 1].center()
+                    last_room_center_x = new_x
+                    last_room_center_y = new_y
 
                     if randint(0, 1) == 1:
                         self.create_h_tunnel(prev_x, new_x, prev_y)
@@ -74,6 +79,7 @@ class BasicDungeon:
                 self.place_entities(
                     new_room, self.actor_tiles, max_monsters_per_room=self.max_monsters_per_room,
                     max_items_per_room=self.max_items_per_room)
+        self.tiles[last_room_center_x][last_room_center_y] = TILE.STAIRS_DOWN
 
     def create_room(self, room):
         for x in range(room.x1 + 1, room.x2):

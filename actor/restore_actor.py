@@ -9,6 +9,7 @@ from actor.lightning_scroll import LightningScroll
 from actor.confusion_scroll import ConfusionScroll
 from actor.wall import Wall
 from actor.floor import Floor
+from actor.stairs import Stairs
 
 
 def restore_actor(actor_dict):
@@ -36,6 +37,8 @@ def restore_actor(actor_dict):
         actor = Wall()
     elif actor_name == "Floor":
         actor = Floor()
+    elif actor_name == "Stairs":
+        actor = Stairs()
     else:
         raise ValueError(f"Error, don't know how to restore {actor_name}.")
 

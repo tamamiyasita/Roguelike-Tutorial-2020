@@ -45,8 +45,11 @@ COLORS = {
 class TILE:
     EMPTY = False
     WALL = True
+    STAIRS_DOWN = auto()
+
     ORC = auto()
     TROLL = auto()
+    
     HEALING_POTION = auto()
     LIGHTNING_SCROLL = auto()
     FIREBALL_SCROLL = auto()
@@ -89,3 +92,5 @@ KEYMAP_SELECT_ITEM_9 = [arcade.key.KEY_9]
 KEYMAP_SELECT_ITEM_0 = [arcade.key.KEY_0]
 KEYMAP_USE_ITEM = [arcade.key.U]
 KEYMAP_DROP_ITEM = [arcade.key.H]
+KEYMAP_USE_STAIRS = [arcade.key.ENTER]
+

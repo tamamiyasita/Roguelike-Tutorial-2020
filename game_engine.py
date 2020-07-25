@@ -14,6 +14,7 @@ from actor.inventory import Inventory
 from actor.confusion_scroll import ConfusionScroll
 from actor.PC import Player
 from actor.Crab import Crab
+from actor.stairs import Stairs
 from actor.restore_actor import restore_actor
 
 
@@ -62,7 +63,6 @@ class GameEngine:
         # self.fov_map = initialize_fov(self.game_map)
 
         self.fov_recompute = True
-        self.fov()
 
         arcade.set_background_color(arcade.color.BLACK)
 
@@ -136,7 +136,6 @@ class GameEngine:
             if "player_turn" in action:
                 print("player_turn")
                 self.player.state = state.READY
-                self.fov()
 
             if "enemy_turn" in action:
                 print("enemy_turn")
@@ -210,6 +209,11 @@ class GameEngine:
                         item.center_y = self.player.center_y
                         new_action_queue.extend(
                             [{"message": f"You dropped the {item.name}"}])
+
+            if "use_stairs" in action:
+                result = self.use_stairs()
+                if result:
+                    new_action_queue.extend(result)
 
         self.action_queue = new_action_queue
 
@@ -295,3 +299,13 @@ class GameEngine:
                 if turn_count == len(self.turn_check):
                     self.action_queue.extend([{"player_turn": True}])
                     self.turn_check = []
+
+    def use_stairs(self):
+        """階段及びplayerの位置の判定
+        """
+        get_stairs = arcade.get_sprites_at_exact_point(self.player.position, self.map_sprites)
+
+        for stairs in get_stairs:
+            if isinstance(stairs, Stairs):
+                return [{"message": "You haven't learned how to take the stairs yet."}]
+        return [{"message": "There are no stairs here"}]

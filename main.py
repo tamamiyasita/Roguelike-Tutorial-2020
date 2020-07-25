@@ -50,6 +50,7 @@ class MG(arcade.Window):
             self.engine.chara_sprites.draw(filter=gl.GL_NEAREST)
             self.engine.effect_sprites.draw()
 
+
             ######## ステータスパネル #######
             # パネル用変数
             hp_bar_width = 72  # HPバーの幅
@@ -132,6 +133,9 @@ class MG(arcade.Window):
                 center_x, center_y = grid_to_pixel(grid_x, grid_y)
                 arcade.draw_rectangle_outline(
                     center_x, center_y, SPRITE_SIZE*SPRITE_SCALE, SPRITE_SIZE*SPRITE_SCALE, arcade.color.LIGHT_BLUE, 2)
+                    
+            if self.engine.fov_recompute:
+                self.engine.fov()
 
         except Exception as e:
             print(e)
@@ -189,6 +193,8 @@ class MG(arcade.Window):
                 self.engine.action_queue.extend([{"use_item": True}])
             elif key in KEYMAP_DROP_ITEM:
                 self.engine.action_queue.extend([{"drop_item": True}])
+            elif key in KEYMAP_USE_STAIRS:
+                self.engine.action_queue.extend([{"use_stairs": True}])
 
             elif key == arcade.key.P:
                 self.save()
@@ -242,7 +248,7 @@ class MG(arcade.Window):
         print("**load**")
         self.engine.restore_from_dict(data)
         self.engine.player.state = state.READY
-        self.engine.fov()
+        self.engine.fov_recompute = True
         self.engine.viewport(self.engine.player)
 
 
