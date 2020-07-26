@@ -57,6 +57,7 @@ class MG(arcade.Window):
                          color=arcade.color.BAZAAR
                          )
 
+        # レベルの表示
         level_text = f"Level:{self.engine.player.fighter.level}"
 
         arcade.draw_text(level_text,
