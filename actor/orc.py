@@ -9,7 +9,7 @@ from constants import *
 
 class Orc(Actor):
     def __init__(self, x=0, y=0):
-        fighter_component = Fighter(hp=8, defense=1, power=3)
+        fighter_component = Fighter(hp=8, defense=1, power=3, xp_reward=35)
         ai_component = Basicmonster()
 
         super().__init__(

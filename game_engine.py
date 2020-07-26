@@ -39,10 +39,22 @@ class GameEngine:
         """ スプライトリストの初期化 """
         self.chara_sprites = arcade.SpriteList(
             use_spatial_hash=True, spatial_hash_cell_size=32)
+        self.actor_sprites = arcade.SpriteList(
+            use_spatial_hash=True, spatial_hash_cell_size=32)
+        self.map_sprites = arcade.SpriteList(
+            use_spatial_hash=True, spatial_hash_cell_size=32)
+        self.item_sprites = arcade.SpriteList(
+            use_spatial_hash=True, spatial_hash_cell_size=32)        
         self.effect_sprites = arcade.SpriteList(
             use_spatial_hash=True, spatial_hash_cell_size=16)
 
-        self.game_map = BasicDungeon(MAP_WIDTH, MAP_HEIGHT)
+        arcade.set_background_color(arcade.color.BLACK)
+
+        self.setup_level()
+
+    def setup_level(self):
+
+        self.game_map = BasicDungeon(MAP_WIDTH, MAP_HEIGHT,self.player)
         mapsprite = ActorPlacement(self.game_map, self).map_set()
         actorsprite = ActorPlacement(self.game_map, self).actor_set()
         itemsprite = ActorPlacement(self.game_map, self).items_set()
@@ -50,9 +62,7 @@ class GameEngine:
         self.actor_sprites = actorsprite
         self.item_sprites = itemsprite
 
-
-        self.player = Player(
-            self.game_map.player_pos[0], self.game_map.player_pos[1], inventory=Inventory(capacity=5))
+        self.player = Player(self.game_map.player_position[0],self.game_map.player_position[1], inventory=Inventory(capacity=5))
         self.chara_sprites.append(self.player)
         # self.crab = Crab(self.player.x + 2, self.player.y +
         #                  1, game_engine=self,)
@@ -61,11 +71,12 @@ class GameEngine:
             self.player.x + 1, self.player.y)
         self.item_sprites.append(self.cnf)
 
-        # self.fov_map = initialize_fov(self.game_map)
-
         self.fov_recompute = True
 
-        arcade.set_background_color(arcade.color.BLACK)
+        
+
+
+
 
     def get_actor_dict(self, actor):
         name = actor.__class__.__name__

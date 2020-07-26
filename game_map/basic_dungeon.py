@@ -6,15 +6,15 @@ from util import pixel_to_grid, grid_to_pixel
 from actor.actor import Actor
 from constants import *
 from data import *
-from actor.fighter import Fighter
-from actor.ai import Basicmonster
-from actor.item import Item
-from actor.lightning_scroll import LightningScroll
-from actor.fireball_scroll import FireballScroll
-from actor.healing_potion import HealingPotion
-from actor.confusion_scroll import ConfusionScroll
-from actor.orc import Orc
-from actor.troll import Troll
+
+
+
+MAX_ROOMS = 25
+ROOM_MIN_SIZE = 4
+ROOM_MAX_SIZE = 8
+MAX_MONSTERS_PER_ROOM = 3
+MAX_ITEMS_PER_ROOM = 2
+
 
 
 class Rect:
@@ -39,32 +39,27 @@ class Rect:
 
 
 class BasicDungeon:
-    def __init__(self, width, height, dungeon_level=1, max_rooms=MAX_ROOM, room_min_size=ROOM_MIN_SIZE,
-                 room_max_size=ROOM_MAX_SIZE):
+    def __init__(self, width, height,player, dungeon_level=1):
         self.width = width
         self.height = height
         self.dungeon_level = dungeon_level
-        self.max_rooms = max_rooms
-        self.room_min_size = room_min_size
-        self.room_max_size = room_max_size
-        self.max_monsters_per_room = 3
-        self.max_items_per_room = 2
+
 
         self.tiles = [[TILE.WALL for y in range(height)] for x in range(width)]
         self.actor_tiles =  [[TILE.EMPTY for y in range(height)] for x in range(width)]
-        self.player_pos = 0
-        self.make_map()
+        self.player_position = 0
+        self.make_map(player)
 
-    def make_map(self):
+    def make_map(self, player):
 
         rooms = []
         self.num_rooms = 0
         last_room_center_x = None
         last_room_center_y = None
 
-        for _ in range(self.max_rooms):
-            w = randint(self.room_min_size, self.room_max_size)
-            h = randint(self.room_min_size, self.room_max_size)
+        for _ in range(MAX_ROOMS):
+            w = randint(ROOM_MIN_SIZE, ROOM_MAX_SIZE)
+            h = randint(ROOM_MIN_SIZE, ROOM_MAX_SIZE)
             x = randint(0, self.width - w - 1)
             y = randint(0, self.height - h - 1)
 
@@ -80,7 +75,8 @@ class BasicDungeon:
                 (new_x, new_y) = new_room.center()
 
                 if self.num_rooms == 0:
-                    self.player_pos = (new_x, new_y)
+                    self.player_position = (new_x, new_y)
+                    
 
                 else:
                     (prev_x, prev_y) = rooms[self.num_rooms - 1].center()
@@ -95,30 +91,29 @@ class BasicDungeon:
                         self.create_h_tunnel(prev_x, new_x, prev_y)
 
                 rooms.append(new_room)
+
                 self.num_rooms += 1
+
                 self.place_entities(
-                    new_room, self.actor_tiles, max_monsters_per_room=self.max_monsters_per_room,
-                    max_items_per_room=self.max_items_per_room)
+                    new_room, self.actor_tiles,
+                    max_monsters_per_room=MAX_MONSTERS_PER_ROOM,
+                    max_items_per_room=MAX_ITEMS_PER_ROOM
+                    )
+
         self.tiles[last_room_center_x][last_room_center_y] = TILE.STAIRS_DOWN
 
     def create_room(self, room):
         for x in range(room.x1 + 1, room.x2):
             for y in range(room.y1 + 1, room.y2):
                 self.tiles[x][y] = TILE.EMPTY
-                self.tiles[x][y] = TILE.EMPTY
 
     def create_h_tunnel(self, x1, x2, y):
         for x in range(min(x1, x2), max(x1, x2) + 1):
-            self.tiles[x][y] = TILE.EMPTY
             self.tiles[x][y] = TILE.EMPTY
 
     def create_v_tunnel(self, y1, y2, x):
         for y in range(min(y1, y2), max(y1, y2) + 1):
             self.tiles[x][y] = TILE.EMPTY
-            # self.tiles[x][y].block_sight = TILE.EMPTY
-
-    def is_blocked(self, x, y):
-        return is_blocked(self.tiles, x, y)
 
     def place_entities(self, room, actor_tiles, max_monsters_per_room, max_items_per_room):
         number_of_monsters = randint(0, max_monsters_per_room)

@@ -2,12 +2,14 @@ from constants import *
 
 
 class Fighter:
-    def __init__(self, hp=0, defense=0, power=0):
+    def __init__(self, hp=0, defense=0, power=0, xp_reward=0, current_xp=0):
         self.max_hp = hp
         self.hp = hp
         self.defense = defense
         self.power = power
         self.owner = None
+        self.xp_reward = xp_reward
+        self.current_xp = current_xp
 
     def get_dict(self):
         result = {}
@@ -15,6 +17,8 @@ class Fighter:
         result["hp"] = self.hp
         result["defense"] = self.defense
         result["power"] = self.power
+        result["xp_reward"] = self.xp_reward
+        result["current_xp"] = self.current_xp
         return result
 
     def restore_from_dict(self, result):
@@ -22,6 +26,8 @@ class Fighter:
         self.hp = result["hp"]
         self.defense = result["defense"]
         self.power = result["power"]
+        self.xp_reward = result["xp_reward"]
+        self.current_xp = result["current_xp"]
 
     def take_damage(self, amount):
         results = []
@@ -30,6 +36,7 @@ class Fighter:
 
         if self.hp <= 0:
             self.owner.blocks = False
+            self.owner.is_dead = True
             results.append({"dead": self.owner})
             print(f"{self.owner.name} is dead x!")
 
@@ -41,9 +48,13 @@ class Fighter:
         damage = self.power - target.fighter.defense
 
         if damage > 0:
-            results.append(
-                {"message": f"{self.owner.name.capitalize()} attacks {target.name} for {str(damage)} hit points."})
+            # damage表示メッセージを格納する
+            results.append({"message": f"{self.owner.name.capitalize()} attacks {target.name} for {str(damage)} hit points."})
             results.extend(target.fighter.take_damage(damage))
+
+            # xp獲得処理
+            if target.is_dead:
+                self.current_xp += target.fighter.xp_reward
 
         else:
             results.append(

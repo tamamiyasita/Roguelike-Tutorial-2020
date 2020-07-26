@@ -22,8 +22,164 @@ class MG(arcade.Window):
 
     def setup(self):
         self.engine.setup()
-        # self.engine.fov()
         viewport(self.engine.player)
+
+    def draw_hp_and_status_bar(self):
+        """ステータスパネルとHPバー"""
+        # パネル用変数
+        hp_bar_width = 72  # HPバーの幅
+        hp_bar_height = 10  # HPバーの太さ
+        hp_bar_margin = 8  # パネル上端からのHPバーの位置
+        left_margin = 25  # 画面左からのHPとバーの位置
+        top_hp_margin = 30  # パネル上端からのHPの位置
+        hp_font_size = 14
+
+        # HP/MAXHPの表示
+        text = f"HP: {self.engine.player.fighter.hp}/{self.engine.player.fighter.max_hp}"
+
+        arcade.draw_text(text,
+                         left_margin + self.viewport_x,
+                         STATES_PANEL_HEIGHT - top_hp_margin + self.viewport_y,
+                         color=COLORS["status_panel_text"],
+                         font_size=hp_font_size
+                         )
+
+        # HPバーの描画
+        draw_status_bar(hp_bar_width / 2 + left_margin + self.viewport_x,
+                        STATES_PANEL_HEIGHT - hp_bar_margin + self.viewport_y,
+                        hp_bar_width, hp_bar_height,
+                        self.engine.player.fighter.hp,
+                        self.engine.player.fighter.max_hp
+                        )
+    
+    def draw_inventory(self):
+        """インベントリの表示"""
+        item_left_position = SCREEN_WIDTH / 2.3 # パネル左からの所持アイテム表示位置の調整に使う変数
+        item_top_position = STATES_PANEL_HEIGHT - 22 # パネル上端からの所持アイテム表示位置の調整に使う変数
+        separate_size = 1.5  # アイテム名の表示間隔の調整に使う変数
+        margin = 3 # 選択したアイテムのアウトライン線の位置調整に使う変数
+        item_font_size = 12
+        outline_size = 2
+        capacity = self.engine.player.inventory.capacity
+        selected_item = self.engine.selected_item  # ボタン押下で選択したアイテムオブジェクト
+        field_width = SCREEN_WIDTH / (capacity + 1) / separate_size  # アイテム表示感覚を決める変数
+
+        # キャパシティ数をループし、インベントリのアイテム名とアウトラインを描画する
+        for item in range(capacity):
+            items_position = item * field_width + item_left_position  # パネル左からの所持アイテムの表示位置
+            if item == selected_item:
+                arcade.draw_lrtb_rectangle_outline(
+                    items_position + self.viewport_x - margin,
+                    items_position + self.viewport_x + field_width - margin,
+                    item_top_position + item_font_size + self.viewport_y + margin*2,
+                    item_top_position + self.viewport_y - margin,
+                    arcade.color.BLACK, outline_size
+                    )
+
+            if self.engine.player.inventory.bag[item]:
+                item_name = self.engine.player.inventory.bag[item].name
+            else:
+                item_name = ""
+
+            text = f"{item+1}: {item_name}"
+
+            arcade.draw_text(text,
+                             items_position + self.viewport_x,
+                             self.viewport_y + item_top_position,
+                             color=COLORS["status_panel_text"],
+                             font_size=item_font_size
+                             )
+
+    def draw_mouse_over_text(self):
+        """マウスオーバー時のテキスト表示"""
+        if self.mouse_over_text:
+            x, y = self.mouse_position
+            arcade.draw_xywh_rectangle_filled(x, y, 100, 16, arcade.color.BLACK)
+            arcade.draw_text(self.mouse_over_text, x, y, arcade.color.WHITE)
+
+    def draw_messages_handle(self):
+        """メッセージ表示領域"""
+        message_top_position = 19 # パネル上端からのメッセージ表示位置
+        message_left_position = 125 # 画面左からのメッセージ表示位置
+        left_position = SCREEN_WIDTH / 2.3
+        margin = 3
+
+        message_position = STATES_PANEL_HEIGHT - message_top_position
+        arcade.draw_xywh_rectangle_filled(self.viewport_x + message_left_position - margin,
+                                          self.viewport_y,
+                                          left_position - message_left_position - margin,
+                                          STATES_PANEL_HEIGHT,
+                                          arcade.color.SHAMPOO
+                                          )
+
+        for message in self.engine.messages:
+            arcade.draw_text(message,
+                             message_left_position + self.viewport_x,
+                             message_position + self.viewport_y,
+                             color=COLORS["status_panel_text"])
+
+            message_position -= message_top_position
+
+    def draw_sprites_and_status_panel(self):
+        """ 全てのスプライトリストとステータスパネルの表示 """
+        self.engine.map_sprites.draw(filter=gl.GL_NEAREST)
+        self.engine.item_sprites.draw(filter=gl.GL_NEAREST)
+        self.engine.actor_sprites.draw(filter=gl.GL_NEAREST)
+        self.engine.chara_sprites.draw(filter=gl.GL_NEAREST)
+        self.engine.effect_sprites.draw()
+
+        # 画面下のパネルをarcadeの四角形を描画する変数で作成
+        arcade.draw_xywh_rectangle_filled(self.viewport_x,
+                                          self.viewport_y,
+                                          SCREEN_WIDTH,
+                                          STATES_PANEL_HEIGHT,
+                                          COLORS["status_panel_background"]
+                                          )
+
+    def draw_in_normal_state(self):
+        """ノーマルステート時に描画する関数をまとめる"""
+        self.draw_hp_and_status_bar()
+        self.draw_inventory()
+        self.draw_mouse_over_text()
+        self.draw_messages_handle()
+
+    def draw_select_mouse_location(self):
+        """ マウス操作時のグリッド表示"""
+        if self.engine.game_state == GAME_STATE.SELECT_LOCATION:
+            mouse_x, mouse_y = self.mouse_position
+            grid_x, grid_y = pixel_to_grid(mouse_x, mouse_y)
+            center_x, center_y = grid_to_pixel(grid_x, grid_y)
+            arcade.draw_rectangle_outline(center_x,
+                                          center_y,
+                                          SPRITE_SIZE*SPRITE_SCALE,
+                                          SPRITE_SIZE*SPRITE_SCALE,
+                                          arcade.color.LIGHT_BLUE,
+                                          border_width=2
+                                          )
+
+    def on_draw(self):
+        try:
+            arcade.start_render()
+
+            # ビューポートの左と下の現在位置を変数に入れる、これはステータスパネルを画面に固定する為に使います
+            self.viewport_x = arcade.get_viewport()[0]
+            self.viewport_y = arcade.get_viewport()[2]
+
+            self.draw_sprites_and_status_panel()
+
+            # ノーマルステート時の画面表示
+            if self.engine.game_state == GAME_STATE.NORMAL:
+                self.draw_in_normal_state()
+            
+            # マウスセレクト時の画面表示
+            elif self.engine.game_state == GAME_STATE.SELECT_LOCATION:
+                self.draw_select_mouse_location()
+                    
+            if self.engine.fov_recompute:
+                self.engine.fov()
+
+        except Exception as e:
+            print(e)
 
     def on_update(self, delta_time):
         self.engine.chara_sprites.update_animation()
@@ -39,106 +195,6 @@ class MG(arcade.Window):
         # playerがmove状態の時だけviewportを計算する
         if self.engine.player.state == state.ON_MOVE:
             viewport(self.engine.player)
-
-    def on_draw(self):
-        try:
-            arcade.start_render()
-
-            self.engine.map_sprites.draw(filter=gl.GL_NEAREST)
-            self.engine.item_sprites.draw(filter=gl.GL_NEAREST)
-            self.engine.actor_sprites.draw(filter=gl.GL_NEAREST)
-            self.engine.chara_sprites.draw(filter=gl.GL_NEAREST)
-            self.engine.effect_sprites.draw()
-
-
-            ######## ステータスパネル #######
-            # パネル用変数
-            hp_bar_width = 72  # HPバーの幅
-            hp_bar_height = 10  # HPバーの太さ
-            hp_bar_margin = 8  # パネル上端からのHPバーの位置
-            left_margin = 25  # 画面左からのHPとバーの位置
-            top_hp_margin = 30  # パネル上端からのHPの位置
-            hp_font_size = 14
-
-            # ビューポートの左と下の現在位置を変数に入れる、これはパネルを画面に固定する為に使います
-            self.viewport_x = arcade.get_viewport()[0]
-            self.viewport_y = arcade.get_viewport()[2]
-
-            # 画面下のパネルをarcadeの四角形を描画する変数で作成
-            arcade.draw_xywh_rectangle_filled(
-                self.viewport_x, self.viewport_y, SCREEN_WIDTH, STATES_PANEL_HEIGHT, COLORS["status_panel_background"])
-
-            ### ノーマルステート時の画面表示 ###
-            if self.engine.game_state == GAME_STATE.NORMAL:
-
-                # HP/MAXHPの表示
-                text = f"HP: {self.engine.player.fighter.hp}/{self.engine.player.fighter.max_hp}"
-                arcade.draw_text(
-                    text, left_margin + self.viewport_x, STATES_PANEL_HEIGHT - top_hp_margin + self.viewport_y, color=COLORS["status_panel_text"], font_size=hp_font_size)
-
-                # HPバーの描画
-                draw_status_bar(hp_bar_width / 2 + left_margin + self.viewport_x, STATES_PANEL_HEIGHT - hp_bar_margin + self.viewport_y, hp_bar_width, hp_bar_height,
-                                self.engine.player.fighter.hp, self.engine.player.fighter.max_hp)
-
-                # 所持アイテム表示
-                item_left_position = SCREEN_WIDTH / 2.3 # パネル左からの所持アイテム表示位置の調整に使う変数
-                item_top_position = STATES_PANEL_HEIGHT - 22 # パネル上端からの所持アイテム表示位置の調整に使う変数
-                separate_size = 1.5  # アイテム名の表示間隔の調整に使う変数
-                margin = 3 # 選択したアイテムのアウトライン線の位置調整に使う変数
-                item_font_size = 12
-                outline_size = 2
-                capacity = self.engine.player.inventory.capacity
-                selected_item = self.engine.selected_item  # ボタン押下で選択したアイテムオブジェクト
-                field_width = SCREEN_WIDTH / (capacity + 1) / separate_size  # アイテム表示感覚を決める変数
-
-                # キャパシティ数をループし、インベントリのアイテム名とアウトラインを描画する
-                for item in range(capacity):
-                    items_position = item * field_width + item_left_position  # パネル左からの所持アイテムの表示位置
-                    if item == selected_item:
-                        arcade.draw_lrtb_rectangle_outline(
-                            items_position + self.viewport_x - margin, items_position + self.viewport_x + field_width - margin,
-                            item_top_position + item_font_size + self.viewport_y + margin*2, item_top_position + self.viewport_y - margin,
-                            arcade.color.BLACK, outline_size
-                            )
-                    if self.engine.player.inventory.bag[item]:
-                        item_name = self.engine.player.inventory.bag[item].name
-                    else:
-                        item_name = ""
-
-                    text = f"{item+1}: {item_name}"
-                    arcade.draw_text(text, items_position + self.viewport_x, self.viewport_y + item_top_position,
-                                     color=COLORS["status_panel_text"], font_size=item_font_size)
-
-                # メッセージ表示領域
-                message_top_position = 19 # パネル上端からのメッセージ表示位置
-                message_left_position = 125 # 画面左からのメッセージ表示位置
-                message_position = STATES_PANEL_HEIGHT - message_top_position
-                arcade.draw_xywh_rectangle_filled(self.viewport_x + message_left_position - margin, self.viewport_y, item_left_position - message_left_position - margin,
-                                                  STATES_PANEL_HEIGHT, arcade.color.SHAMPOO)
-                for message in self.engine.messages:
-                    arcade.draw_text(
-                        message, message_left_position + self.viewport_x, message_position + self.viewport_y, color=COLORS["status_panel_text"])
-                    message_position -= message_top_position
-
-                # マウスオーバーテキスト
-                if self.mouse_over_text:
-                    x, y = self.mouse_position
-                    arcade.draw_xywh_rectangle_filled(x, y, 100, 16, arcade.color.BLACK)
-                    arcade.draw_text(self.mouse_over_text, x, y, arcade.color.WHITE)
-
-            ### マウス操作時の表示 ###
-            elif self.engine.game_state == GAME_STATE.SELECT_LOCATION:
-                mouse_x, mouse_y = self.mouse_position
-                grid_x, grid_y = pixel_to_grid(mouse_x, mouse_y)
-                center_x, center_y = grid_to_pixel(grid_x, grid_y)
-                arcade.draw_rectangle_outline(
-                    center_x, center_y, SPRITE_SIZE*SPRITE_SCALE, SPRITE_SIZE*SPRITE_SCALE, arcade.color.LIGHT_BLUE, 2)
-                    
-            if self.engine.fov_recompute:
-                self.engine.fov()
-
-        except Exception as e:
-            print(e)
 
     def on_key_press(self, key, modifiers):
         if key == arcade.key.BACKSPACE:
@@ -235,13 +291,13 @@ class MG(arcade.Window):
         game_dict = self.engine.get_dict()
         # print(game_dict)
 
-        with open("game_same3.json", "w") as write_file:
-            json.dump(game_dict, write_file)
+        with open("game_save.json", "w") as write_file:
+            json.dump(game_dict, write_file, indent=4, sort_keys=True)
         print("**save**")
 
     def load(self):
         print("load")
-        with open("game_same3.json", "r") as read_file:
+        with open("game_save.json", "r") as read_file:
             data = json.load(read_file)
 
         # print(data)
