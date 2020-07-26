@@ -45,7 +45,11 @@ class MG(arcade.Window):
                          font_size=hp_font_size
                          )
         # EXPの表示
-        exp_text = f"XP: {self.engine.player.fighter.current_xp}"
+        if self.engine.player.fighter.level < len(EXPERIENCE_PER_LEVEL):
+            xp_to_next_level = EXPERIENCE_PER_LEVEL[self.engine.player.fighter.level - 1]
+            exp_text = f"XP: {self.engine.player.fighter.current_xp} / {xp_to_next_level}"
+        else:
+            exp_text = f"XP: {self.engine.player.fighter.current_xp}"
 
         arcade.draw_text(exp_text,
                          left_margin,
@@ -53,6 +57,13 @@ class MG(arcade.Window):
                          color=arcade.color.BAZAAR
                          )
 
+        level_text = f"Level:{self.engine.player.fighter.level}"
+
+        arcade.draw_text(level_text,
+                         left_margin,
+                         top_exp_margin - 20,
+                         color=arcade.color.BITTERSWEET
+                         )
         # HPバーの描画
         draw_status_bar(hp_bar_width / 2 + left_margin,
                         hp_bar_margin,
@@ -199,6 +210,7 @@ class MG(arcade.Window):
         self.engine.effect_sprites.update()
 
         self.engine.process_action_queue(delta_time)
+        self.engine.player.check_experience_level(self.engine)
         self.engine.turn_change(delta_time)
         self.engine.check_for_player_movement(self.player_direction)
 

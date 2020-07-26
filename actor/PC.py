@@ -3,12 +3,10 @@ from actor.actor import Actor
 from actor.fighter import Fighter
 from data import *
 from constants import *
-# from util import pixel_to_grid, grid_to_pixel
-
 
 class Player(Actor):
     def __init__(self, x=0, y=0, inventory=0):
-        fighter_component = Fighter(hp=35, defense=3, power=5)
+        fighter_component = Fighter(hp=35, defense=3, power=5, level=1)
         super().__init__(
             name="player",
             x=x,
@@ -23,6 +21,16 @@ class Player(Actor):
         self.left_face = False
         self.state = state.READY
         self.delay_time = 3.7
+
+    def check_experience_level(self, game_engine):
+        if self.fighter.level < len(EXPERIENCE_PER_LEVEL):
+            xp_to_next_level = EXPERIENCE_PER_LEVEL[self.fighter.level - 1]
+            if self.fighter.current_xp >= xp_to_next_level:
+                self.fighter.level += 1
+                self.fighter.max_hp += 5
+                self.fighter.hp += 5
+                # self.inventory.capacity += 1
+                game_engine.action_queue.extend([{"message":"Level up!!!"}])
 
     def update_animation(self, delta_time=1 / 60):
         super().update_animation(delta_time)
