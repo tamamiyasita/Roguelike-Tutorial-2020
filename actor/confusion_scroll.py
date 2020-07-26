@@ -62,7 +62,7 @@ class ConfusionScroll(Actor):
         for sprite in sprites:
             if sprite.fighter and not sprite.is_dead:
                 self.enemy = sprite
-                confused_ai = ConfusedMonster(self.enemy.ai, 3001)
+                confused_ai = ConfusedMonster(self.enemy.ai)
                 confused_ai.owner = self.enemy
                 self.enemy.ai = confused_ai
 

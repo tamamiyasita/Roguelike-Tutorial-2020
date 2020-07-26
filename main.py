@@ -76,7 +76,7 @@ class MG(arcade.Window):
                 arcade.draw_text(
                     text, left_margin + self.viewport_x, STATES_PANEL_HEIGHT - top_hp_margin + self.viewport_y, color=COLORS["status_panel_text"], font_size=hp_font_size)
 
-                # HPバー
+                # HPバーの描画
                 draw_status_bar(hp_bar_width / 2 + left_margin + self.viewport_x, STATES_PANEL_HEIGHT - hp_bar_margin + self.viewport_y, hp_bar_width, hp_bar_height,
                                 self.engine.player.fighter.hp, self.engine.player.fighter.max_hp)
 

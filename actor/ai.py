@@ -1,3 +1,4 @@
+from os import remove
 import arcade
 from random import randint
 from astar import astar
@@ -5,10 +6,10 @@ from constants import *
 
 
 class Basicmonster:
-    def __init__(self):
+    def __init__(self, target_point=None, visible_check=False):
         self.owner = None
-        self.target_point = None # targetの位置を格納する
-        self.visible_check = False # 視野に入った場合チェックされ,Trueなら移動する
+        self.target_point = target_point # targetの位置を格納する
+        self.visible_check = visible_check # 視野に入った場合チェックされ,Trueなら移動する
 
     def take_turn(self, target, sprite_lists):
         results = []
@@ -40,7 +41,6 @@ class Basicmonster:
                 print("move_towards attack")
                 return results
 
-
         if self.visible_check:
             if monster.distance_to(target) >= 1:
                 results = astar(
@@ -64,14 +64,26 @@ class Basicmonster:
             return results
 
         else:
-            results.append({"pass": monster})
+            results.extend([{"pass": monster}])
             return results
 
 
 class ConfusedMonster:
-    def __init__(self, pre_ai, confused_turn=10):
+    def __init__(self, pre_ai=None, confused_turn=10):
+        self.owner = None
         self.pre_ai = pre_ai
         self.confused_turn = confused_turn
+    
+    def get_dict(self):
+        result = {}
+        result["pre_ai"] = self.pre_ai.__class__.__name__
+        result["confused_turn"] = self.confused_turn
+        return result
+    
+    def restore_from_dict(self, result):
+        if result["pre_ai"] == "Basicmonster":
+            self.pre_ai = Basicmonster()
+        self.confused_turn = result["confused_turn"]
 
     def take_turn(self, target, sprite_lists):
         results = []
@@ -86,10 +98,13 @@ class ConfusedMonster:
                 results.extend(attack)
 
             self.confused_turn -= 1
+            print(f"confused_turn: {self.confused_turn}")
 
         else:
+            # self.ownerにselfを渡し忘れるとロードした時元のAIにselfが渡されず無限ループするので注意
             monster.ai = self.pre_ai
-            results.append(
-                {"message": f"The {monster.name} is no longer confused"})
+            monster.ai.owner = monster # self.owner.ai.owner = self.ownerというややこしい表現になる
+            results.append({"message": f"The {monster.name} is no longer confused"})
+            results.extend([{"pass":monster}])
 
         return results

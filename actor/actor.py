@@ -1,3 +1,4 @@
+from actor.ai import Basicmonster, ConfusedMonster
 import arcade
 import math
 
@@ -62,8 +63,12 @@ class Actor(arcade.Sprite):
         result["is_dead"] = self.is_dead
         if self.state:
             result["state"] = True
-        if self.ai:
+
+        if self.ai.__class__.__name__ == "Basicmonster":
             result["ai"] = True
+        if self.ai.__class__.__name__ == "ConfusedMonster":
+            result["confused_ai"] = self.ai.get_dict()
+            
         if self.fighter:
             result["fighter"] = self.fighter.get_dict()
         if self.item:
@@ -100,6 +105,10 @@ class Actor(arcade.Sprite):
         if "ai" in result:
             self.ai = Basicmonster()
             self.ai.owner = self
+        if "confused_ai" in result:
+            self.ai = ConfusedMonster()
+            self.ai.owner = self
+            self.ai.restore_from_dict(result["confused_ai"])
         if "item" in result:
             self.item = Item()
             print(f"Restore item {self.name}")

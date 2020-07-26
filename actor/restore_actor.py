@@ -4,9 +4,9 @@ from actor.healing_potion import HealingPotion
 from actor.orc import Orc
 from actor.troll import Troll
 from actor.Crab import Crab
-from actor.fireball_scroll import FireballScroll
-from actor.lightning_scroll import LightningScroll
-from actor.confusion_scroll import ConfusionScroll
+from actor.fireball_scroll import FireballScroll, FireballEffect
+from actor.lightning_scroll import LightningScroll, LightningEffect
+from actor.confusion_scroll import ConfusionScroll, ConfusionEffect
 from actor.wall import Wall
 from actor.floor import Floor
 from actor.stairs import Stairs
@@ -23,10 +23,16 @@ def restore_actor(actor_dict):
         actor = HealingPotion()
     elif actor_name == "FireballScroll":
         actor = FireballScroll()
+    elif actor_name == "FireballEffect":
+        actor = FireballEffect()
     elif actor_name == "LightningScroll":
         actor = LightningScroll()
+    elif actor_name == "LightningEffect":
+        actor = LightningEffect()
     elif actor_name == "ConfusionScroll":
         actor = ConfusionScroll()
+    elif actor_name == "ConfusionEffect":
+        actor = ConfusionEffect()
     elif actor_name == "Orc":
         actor = Orc()
     elif actor_name == "Troll":

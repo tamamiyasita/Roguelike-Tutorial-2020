@@ -2,6 +2,8 @@
 import arcade
 from collections import deque
 
+from arcade.window_commands import set_viewport
+
 
 from constants import *
 from data import *
@@ -34,7 +36,7 @@ class GameEngine:
         self.grid_select_handlers = []
 
     def setup(self):
-        """ スプライトリストの初期化等 """
+        """ スプライトリストの初期化 """
         self.chara_sprites = arcade.SpriteList(
             use_spatial_hash=True, spatial_hash_cell_size=32)
         self.effect_sprites = arcade.SpriteList(
@@ -78,22 +80,36 @@ class GameEngine:
         for sprite in self.actor_sprites:
             actor_dict.append(self.get_actor_dict(sprite))
 
-        item_dict = []
-        for sprite in self.item_sprites:
-            item_dict.append(self.get_actor_dict(sprite))
-
         dungeon_dict = []
         for sprite in self.map_sprites:
             dungeon_dict.append(self.get_actor_dict(sprite))
 
+        item_dict = []
+        for sprite in self.item_sprites:
+            item_dict.append(self.get_actor_dict(sprite))
+
+        effect_dict = []
+        for sprite in self.effect_sprites:
+            effect_dict.append(self.get_actor_dict(sprite))
+
+        # ビューポートの位置情報を保存
+        viewport = arcade.get_viewport()
+
         result = {"player": player_dict,
                   "actor": actor_dict,
+                  "dungeon": dungeon_dict,
                   "item": item_dict,
-                  "dungeon": dungeon_dict}
+                  "effect": effect_dict,
+                  "viewport": viewport}
+
+        self.action_queue.append({"message":"*save*"})
         return result
 
     def restore_from_dict(self, data):
         """ オブジェクトをjsonから復元する為の関数 """
+
+        # ビューポートを復元する
+        arcade.set_viewport(*data["viewport"])
 
         self.chara_sprites = arcade.SpriteList(
             use_spatial_hash=True, spatial_hash_cell_size=32)
@@ -105,6 +121,9 @@ class GameEngine:
             use_spatial_hash=True, spatial_hash_cell_size=32)
 
         self.item_sprites = arcade.SpriteList(
+            use_spatial_hash=True, spatial_hash_cell_size=16)
+
+        self.effect_sprites = arcade.SpriteList(
             use_spatial_hash=True, spatial_hash_cell_size=16)
 
         player_dict = data["player"]
@@ -119,16 +138,23 @@ class GameEngine:
             actor = restore_actor(actor_dict)
             self.actor_sprites.append(actor)
 
-        for item_dict in data["item"]:
-            item = restore_actor(item_dict)
-            self.item_sprites.append(item)
-
         for dungeon_dict in data["dungeon"]:
             maps = restore_actor(dungeon_dict)
             self.map_sprites.append(maps)
 
+        for item_dict in data["item"]:
+            item = restore_actor(item_dict)
+            self.item_sprites.append(item)
+
+        for effect_dict in data["effect"]:
+            effect = restore_actor(effect_dict)
+            self.effect_sprites.append(effect)
+
+        self.action_queue.append({"message":"*load*"})
+
     def process_action_queue(self, delta_time):
         """アクターの基本的な行動を制御するアクションキュー
+        　　ゲームエンジン内にある各メソッドの返り値(damage, message等)はここに送る
         """
         new_action_queue = []
         for action in self.action_queue:
@@ -229,7 +255,7 @@ class GameEngine:
         """ enemyの行動ターンを制御する
             行動するenemyがいない場合"next_turn"を返す
         """
-        turn_check = []
+        actor_check = []
         results = []
         for actor in self.actor_sprites:
             if actor.ai and not actor.is_dead:
@@ -237,22 +263,22 @@ class GameEngine:
                     target=target, sprite_lists=[self.actor_sprites, self.map_sprites])
                 if results:
                     self.action_queue.extend(results)
-                    turn_check.append(actor)
+                    actor_check.append(actor)
                 # else:
                 #     actor.move_towards(
                 #         target, self.actor_sprites, self.game_map)
-                #     turn_check.append(actor)
+                #     actor_check.append(actor)
 
                 # else:
                 #     results = actor.ai.take_turn(
                 #         target=target, game_map=self.game_map, sprite_lists=[self.map_sprites])
                 #     if results:
                 #         self.action_queue.extend(results)
-        if not turn_check:
-            turn_check.append("next_turn")
+        if not actor_check:
+            actor_check.append("next_turn")
 
-        # print(turn_check, "turn_check")
-        return turn_check
+        # print(actor_check, "actor_check")
+        return actor_check
 
     def fov(self):
         """recompute_fovでTCODによるFOVの計算を行い
@@ -295,7 +321,8 @@ class GameEngine:
             for actor in self.turn_check:
                 if actor.state == state.TURN_END:
                     turn_count += 1
-                if turn_count == len(self.turn_check):
+                print(len(self.turn_check), turn_count, "Trun check count")
+                if turn_count >= len(self.turn_check):
                     self.action_queue.extend([{"player_turn": True}])
                     self.turn_check = []
 

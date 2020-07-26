@@ -1,5 +1,3 @@
-import arcade
-from arcade import texture
 from actor.actor import Actor
 from data import *
 from constants import *
