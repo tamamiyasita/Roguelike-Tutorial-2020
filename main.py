@@ -27,27 +27,37 @@ class MG(arcade.Window):
     def draw_hp_and_status_bar(self):
         """ステータスパネルとHPバー"""
         # パネル用変数
-        hp_bar_width = 72  # HPバーの幅
-        hp_bar_height = 10  # HPバーの太さ
-        hp_bar_margin = 8  # パネル上端からのHPバーの位置
-        left_margin = 25  # 画面左からのHPとバーの位置
-        top_hp_margin = 30  # パネル上端からのHPの位置
-        hp_font_size = 14
+        hp_font_size = 13
+        hp_bar_width = hp_font_size * 5  # HPバーの幅
+        hp_bar_height = hp_font_size - 2  # HPバーの太さ
+        hp_bar_margin = self.viewport_y + STATES_PANEL_HEIGHT - 7  # パネル上端からのHPバーの位置
+        left_margin = self.viewport_x + 25  # 画面左からのHPとバーの位置
+        top_hp_margin = hp_bar_margin - 23  # パネル上端からのHPの位置
+        top_exp_margin = top_hp_margin - 15  # top_hp_marginからのEXPの位置
 
         # HP/MAXHPの表示
-        text = f"HP: {self.engine.player.fighter.hp}/{self.engine.player.fighter.max_hp}"
+        hp_text = f"HP: {self.engine.player.fighter.hp}/{self.engine.player.fighter.max_hp}"
 
-        arcade.draw_text(text,
-                         left_margin + self.viewport_x,
-                         STATES_PANEL_HEIGHT - top_hp_margin + self.viewport_y,
+        arcade.draw_text(hp_text,
+                         left_margin,
+                         top_hp_margin,
                          color=COLORS["status_panel_text"],
                          font_size=hp_font_size
                          )
+        # EXPの表示
+        exp_text = f"XP: {self.engine.player.fighter.current_xp}"
+
+        arcade.draw_text(exp_text,
+                         left_margin,
+                         top_exp_margin,
+                         color=arcade.color.BAZAAR
+                         )
 
         # HPバーの描画
-        draw_status_bar(hp_bar_width / 2 + left_margin + self.viewport_x,
-                        STATES_PANEL_HEIGHT - hp_bar_margin + self.viewport_y,
-                        hp_bar_width, hp_bar_height,
+        draw_status_bar(hp_bar_width / 2 + left_margin,
+                        hp_bar_margin,
+                        hp_bar_width,
+                        hp_bar_height,
                         self.engine.player.fighter.hp,
                         self.engine.player.fighter.max_hp
                         )
