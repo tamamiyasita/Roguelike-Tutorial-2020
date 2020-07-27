@@ -73,7 +73,7 @@ class MG(arcade.Window):
                         width=hp_bar_width,
                         height=hp_bar_height,
                         current_value=self.engine.player.fighter.hp,
-                        max_value=self.engine.player.fighter.max_hp
+                        matext_position_x=self.engine.player.fighter.max_hp
                         )
     
     def draw_inventory(self):
@@ -89,6 +89,7 @@ class MG(arcade.Window):
         field_width = SCREEN_WIDTH / (capacity + 1) / separate_size  # アイテム表示感覚を決める変数
 
         # キャパシティ数をループし、インベントリのアイテム名とアウトラインを描画する
+        # TODO 複数行にする処理を考える（５回ループしたら縦と横の変数に増減するなど）
         for item in range(capacity):
             items_position = self.viewport_x + item * field_width + item_left_position  # パネル左からの所持アイテムの表示位置
             if item == selected_item:
@@ -106,10 +107,10 @@ class MG(arcade.Window):
             else:
                 item_name = ""
 
-            text = f"{item+1}: {item_name}"
+            item_text = f"{item+1}: {item_name}"
 
             arcade.draw_text(
-                        text=text,
+                        text=item_text,
                         start_x=items_position,
                         start_y=item_top_position,
                         color=COLORS["status_panel_text"],
@@ -210,6 +211,70 @@ class MG(arcade.Window):
                         border_width=2
                         )
 
+    def draw_character_screen(self):
+        arcade.draw_xywh_rectangle_filled(
+                        bottom_left_x=0,
+                        bottom_left_y=0,
+                        width=SCREEN_WIDTH,
+                        height=SCREEN_HEIGHT,
+                        color=COLORS["status_panel_background"]
+                        )
+
+        spacing = 1.8
+        text_position_y = SCREEN_HEIGHT - 50
+        text_position_x = 10
+
+        text_size = 24
+        screen_title = "Character Screen"
+        arcade.draw_text(
+                        text=screen_title,
+                        start_x=text_position_x,
+                        start_y=text_position_y,
+                        color=COLORS["status_panel_text"],
+                        font_size=text_size
+                        )
+
+        text_position_y -= text_size * spacing
+        text_size = 20
+        states_text = f"Attack: {self.engine.player.fighter.power}"
+        arcade.draw_text(
+                        text=states_text,
+                        start_x=text_position_x,
+                        start_y=text_position_y,
+                        color=COLORS["states_panel_text"],
+                        font_size=text_size
+                        )
+
+        text_position_y -= text_size * spacing
+        states_text = f"Defense: {self.engine.player.fighter.defense}"
+        arcade.draw_text(
+                        text=states_text,
+                        start_x=text_position_x,
+                        start_y=text_position_y,
+                        color=COLORS["states_panel_text"],
+                        font_size=text_size
+                        )
+
+        text_position_y -= text_size * spacing
+        states_text = f"Level: {self.engine.player.fighter.level}"
+        arcade.draw_text(
+                        text=states_text,
+                        start_x=text_position_x,
+                        start_y=text_position_y,
+                        color=COLORS["states_panel_text"],
+                        font_size=text_size
+                        )
+
+        text_position_y -= text_size * spacing
+        states_text = f"HP: {self.engine.player.fighter.hp} / {self.engine.player.fighter.max_hp}"
+        arcade.draw_text(
+                        text=states_text,
+                        start_x=text_position_x,
+                        start_y=text_position_y,
+                        color=COLORS["states_panel_text"],
+                        font_size=text_size
+                        )
+
     def on_draw(self):
         try:
             arcade.start_render()
@@ -227,7 +292,12 @@ class MG(arcade.Window):
             # マウスセレクト時の画面表示
             elif self.engine.game_state == GAME_STATE.SELECT_LOCATION:
                 self.draw_select_mouse_location()
-                    
+
+            # Character_Screen表示
+            elif self.engine.game_state == GAME_STATE.CHARACTER_SCREEN:
+                self.draw_character_screen()
+            
+            # fov_recomputeがTruならfov計算
             if self.engine.fov_recompute:
                 self.engine.fov()
 
@@ -253,7 +323,11 @@ class MG(arcade.Window):
     def on_key_press(self, key, modifiers):
         if key == arcade.key.BACKSPACE:
             arcade.close_window()
-        elif key == arcade.key.ESCAPE:
+
+        elif key in KEYMAP_CHARACTER_SCREEN:
+            self.engine.game_state = GAME_STATE.CHARACTER_SCREEN
+
+        elif key in KEYMAP_CANCEL:
             self.engine.game_state = GAME_STATE.NORMAL
 
         elif self.engine.player.state == state.READY and self.engine.game_state == GAME_STATE.NORMAL:
@@ -311,8 +385,6 @@ class MG(arcade.Window):
             elif key == arcade.key.L:
                 self.load()
 
-            elif key == arcade.key.SPACE:
-                self.engine.game_state = GAME_STATE.SELECT_LOCATION
 
             self.player_direction = direction
 
@@ -321,12 +393,21 @@ class MG(arcade.Window):
         self.player_direction = None
 
     def on_mouse_motion(self, x, y, dx, dy):
-        self.mouse_position = x + self.viewport_x, y + self.viewport_y
+        """マウスオーバー処理"""
+
         # 忘れずにビューポートの座標を足す
+        self.mouse_position = x + self.viewport_x, y + self.viewport_y
+
+        # マウスオーバー時に表示するスプライトリストの取得
         actor_list = arcade.get_sprites_at_point(
-            self.mouse_position, self.engine.actor_sprites)
+                        point=self.mouse_position,
+                        sprite_list=self.engine.actor_sprites
+                        )
         item_list = arcade.get_sprites_at_point(
-            self.mouse_position, self.engine.item_sprites)
+                        point=self.mouse_position,
+                        sprite_list=self.engine.item_sprites
+                        )
+
         self.mouse_over_text = None
         for actor in chain(actor_list, item_list):
             if actor.fighter and actor.is_visible:
@@ -335,6 +416,7 @@ class MG(arcade.Window):
                 self.mouse_over_text = f"{actor.name}"
 
     def on_mouse_press(self, x, y, button, modifiers):
+        """engineのgrid_clickに渡されるマウスボタン処理"""
         if self.engine.game_state == GAME_STATE.SELECT_LOCATION:
             grid_x, grid_y = pixel_to_grid(x + self.viewport_x, y + self.viewport_y)
             self.engine.grid_click(grid_x, grid_y)
