@@ -165,7 +165,7 @@ class GameEngine:
 
     def process_action_queue(self, delta_time):
         """アクターの基本的な行動を制御するアクションキュー
-        　　ゲームエンジン内にある各メソッドの返り値(damage, message等)はここに送る
+        　　エンジン内にある各メソッドの返り値(damage, message等)はここに送る
         """
         new_action_queue = []
         for action in self.action_queue:
@@ -189,6 +189,8 @@ class GameEngine:
                 if target is self.player:
                     new_action_queue.extend([{"message": "player has died!"}])
                 else:
+                    self.player.fighter.current_xp += target.fighter.xp_reward
+                    
                     new_action_queue.extend(
                         [{"message": f"{target.name} has been killed!"}])
                     new_action_queue.extend(

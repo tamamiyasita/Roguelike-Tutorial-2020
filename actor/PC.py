@@ -1,4 +1,5 @@
 import arcade
+from pyglet import sprite
 from actor.actor import Actor
 from actor.fighter import Fighter
 from data import *
@@ -27,10 +28,9 @@ class Player(Actor):
             xp_to_next_level = EXPERIENCE_PER_LEVEL[self.fighter.level - 1]
             if self.fighter.current_xp >= xp_to_next_level:
                 self.fighter.level += 1
-                self.fighter.max_hp += 5
-                self.fighter.hp += 5
-                self.inventory.capacity += 1
+                self.fighter.ability_points += 1
                 game_engine.action_queue.extend([{"message":"Level up!!!"}])
+
 
     def update_animation(self, delta_time=1 / 60):
         super().update_animation(delta_time)

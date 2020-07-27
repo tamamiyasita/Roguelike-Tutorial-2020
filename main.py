@@ -1,6 +1,7 @@
 from os import write
 import arcade
 import json
+from arcade.arcade_types import Point
 import pyglet.gl as gl
 from itertools import chain
 
@@ -16,13 +17,48 @@ class MG(arcade.Window):
         super().__init__(width, height, title, antialiasing=False)
 
         self.engine = GameEngine()
+
         self.player_direction = None
         self.mouse_over_text = None
         self.mouse_position = None
+        self.viewport_x = 0
+        self.viewport_y = 0
+
+        self.character_sheet_buttons = arcade.SpriteList()
 
     def setup(self):
         self.engine.setup()
         viewport(self.engine.player)
+
+
+        spacing = 37
+        sheet_y = self.viewport_y + SCREEN_HEIGHT - 75
+        button = arcade.Sprite(r"image\plus_button.png")
+        button.center_x = self.viewport_x + 200
+        button.center_y = sheet_y
+        button.name = "Attack"
+        self.character_sheet_buttons.append(button)
+
+        sheet_y -= spacing
+        button = arcade.Sprite("image\plus_button.png")
+        button.center_x = self.viewport_x + 200
+        button.center_y = sheet_y
+        button.name = "Defense"
+        self.character_sheet_buttons.append(button)
+
+        sheet_y -= spacing
+        button = arcade.Sprite("image\plus_button.png")
+        button.center_x = self.viewport_x + 200
+        button.center_y = sheet_y
+        button.name = "HP"
+        self.character_sheet_buttons.append(button)
+
+        sheet_y -= spacing
+        button = arcade.Sprite("image\plus_button.png")
+        button.center_x = self.viewport_x + 200
+        button.center_y = sheet_y
+        button.name = "Capacity"
+        self.character_sheet_buttons.append(button)
 
     def draw_hp_and_status_bar(self):
         """ステータスパネルとHPバー"""
@@ -73,7 +109,7 @@ class MG(arcade.Window):
                         width=hp_bar_width,
                         height=hp_bar_height,
                         current_value=self.engine.player.fighter.hp,
-                        matext_position_x=self.engine.player.fighter.max_hp
+                        max_value=self.engine.player.fighter.max_hp
                         )
     
     def draw_inventory(self):
@@ -91,7 +127,7 @@ class MG(arcade.Window):
         # キャパシティ数をループし、インベントリのアイテム名とアウトラインを描画する
         # TODO 複数行にする処理を考える（５回ループしたら縦と横の変数に増減するなど）
         for item in range(capacity):
-            items_position = self.viewport_x + item * field_width + item_left_position  # パネル左からの所持アイテムの表示位置
+            items_position = item * field_width + item_left_position  # パネル左からの所持アイテムの表示位置
             if item == selected_item:
                 arcade.draw_lrtb_rectangle_outline(
                         left=items_position - margin,
@@ -141,11 +177,11 @@ class MG(arcade.Window):
     def draw_messages_handle(self):
         """メッセージ表示領域"""
         margin = 3
-        message_top_position = self.viewport_x + 19 # パネル上端からのメッセージ表示位置
-        message_left_position = self.viewport_y + margin + 125 # 画面左からのメッセージ表示位置
-        message_panel_width = (SCREEN_WIDTH / 2.3) - message_left_position - margin # メッセージパネル幅
+        message_top_position = 19 # パネル上端からのメッセージ表示位置
+        message_left_position = self.viewport_x -margin + 125 # 画面左からのメッセージ表示位置
+        message_panel_width = (SCREEN_WIDTH / 2.3) - 125 - margin # メッセージパネル幅
         message_panel_height = STATES_PANEL_HEIGHT # メッセージパネル高
-        message_first_position = STATES_PANEL_HEIGHT - message_top_position # 最初の行
+        message_first_position = self.viewport_y + STATES_PANEL_HEIGHT - message_top_position # 最初の行
         
         arcade.draw_xywh_rectangle_filled(
                         bottom_left_x=message_left_position,
@@ -183,6 +219,7 @@ class MG(arcade.Window):
                         color=COLORS["status_panel_background"]
                         )
 
+
     def draw_in_normal_state(self):
         """ノーマルステート時に描画する関数をまとめる"""
         self.draw_hp_and_status_bar()
@@ -211,18 +248,38 @@ class MG(arcade.Window):
                         border_width=2
                         )
 
+    def character_screen_click(self, x, y):
+        if self.engine.player.fighter.ability_points > 0:
+            buttons_clicked = arcade.get_sprites_at_point(
+                        point=(x, y),
+                        sprite_list=self.character_sheet_buttons
+                        )
+            for buttons in buttons_clicked:
+                if buttons.name == "Attack":
+                    self.engine.player.fighter.power += 1
+                    self.engine.player.fighter.ability_points -= 1
+                elif buttons.name == "Defense":
+                    self.engine.player.fighter.defense += 1
+                    self.engine.player.fighter.ability_points -= 1
+                elif buttons.name == "HP":
+                    self.engine.player.fighter.gp += 5
+                    self.engine.player.fighter.ability_points -= 1
+                elif buttons.name == "Capacity":
+                    self.engine.player.fighter.gp += 5
+                    self.engine.player.fighter.ability_points -= 1
+
     def draw_character_screen(self):
         arcade.draw_xywh_rectangle_filled(
-                        bottom_left_x=0,
-                        bottom_left_y=0,
-                        width=SCREEN_WIDTH,
-                        height=SCREEN_HEIGHT,
+                        bottom_left_x=0+self.viewport_x,
+                        bottom_left_y=0+self.viewport_y,
+                        width=SCREEN_WIDTH+self.viewport_x,
+                        height=SCREEN_HEIGHT+self.viewport_y,
                         color=COLORS["status_panel_background"]
                         )
 
         spacing = 1.8
-        text_position_y = SCREEN_HEIGHT - 50
-        text_position_x = 10
+        text_position_y = SCREEN_HEIGHT - 50 + self.viewport_y
+        text_position_x = 10 + self.viewport_x
 
         text_size = 24
         screen_title = "Character Screen"
@@ -230,7 +287,7 @@ class MG(arcade.Window):
                         text=screen_title,
                         start_x=text_position_x,
                         start_y=text_position_y,
-                        color=COLORS["status_panel_text"],
+                        color=arcade.color.AFRICAN_VIOLET,
                         font_size=text_size
                         )
 
@@ -241,7 +298,7 @@ class MG(arcade.Window):
                         text=states_text,
                         start_x=text_position_x,
                         start_y=text_position_y,
-                        color=COLORS["states_panel_text"],
+                        color=arcade.color.AFRICAN_VIOLET,
                         font_size=text_size
                         )
 
@@ -251,17 +308,7 @@ class MG(arcade.Window):
                         text=states_text,
                         start_x=text_position_x,
                         start_y=text_position_y,
-                        color=COLORS["states_panel_text"],
-                        font_size=text_size
-                        )
-
-        text_position_y -= text_size * spacing
-        states_text = f"Level: {self.engine.player.fighter.level}"
-        arcade.draw_text(
-                        text=states_text,
-                        start_x=text_position_x,
-                        start_y=text_position_y,
-                        color=COLORS["states_panel_text"],
+                        color=arcade.color.AFRICAN_VIOLET,
                         font_size=text_size
                         )
 
@@ -271,9 +318,33 @@ class MG(arcade.Window):
                         text=states_text,
                         start_x=text_position_x,
                         start_y=text_position_y,
-                        color=COLORS["states_panel_text"],
+                        color=arcade.color.AFRICAN_VIOLET,
                         font_size=text_size
                         )
+
+        text_position_y -= text_size * spacing
+        states_text = f"Max Inventory: {self.engine.player.inventory.capacity}"
+        arcade.draw_text(
+                        text=states_text,
+                        start_x=text_position_x,
+                        start_y=text_position_y,
+                        color=arcade.color.AFRICAN_VIOLET,
+                        font_size=text_size
+                        )
+
+        text_position_y -= text_size * spacing
+        states_text = f"Level: {self.engine.player.fighter.level}"
+        arcade.draw_text(
+                        text=states_text,
+                        start_x=text_position_x,
+                        start_y=text_position_y,
+                        color=arcade.color.AFRICAN_VIOLET,
+                        font_size=text_size
+                        )
+        
+        if self.engine.player.fighter.ability_points > 0:
+            self.character_sheet_buttons.draw()
+
 
     def on_draw(self):
         try:
@@ -420,7 +491,10 @@ class MG(arcade.Window):
         if self.engine.game_state == GAME_STATE.SELECT_LOCATION:
             grid_x, grid_y = pixel_to_grid(x + self.viewport_x, y + self.viewport_y)
             self.engine.grid_click(grid_x, grid_y)
-        self.engine.game_state = GAME_STATE.NORMAL
+            self.engine.game_state = GAME_STATE.NORMAL
+        
+        if self.engine.game_state == GAME_STATE.CHARACTER_SCREEN:
+            self.character_screen_click(x, y)
 
     def save(self):
         print("save")

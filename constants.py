@@ -95,5 +95,5 @@ KEYMAP_USE_ITEM = [arcade.key.U]
 KEYMAP_DROP_ITEM = [arcade.key.H]
 KEYMAP_CHARACTER_SCREEN = [arcade.key.C]
 KEYMAP_USE_STAIRS = [arcade.key.ENTER]
-KEYMAP_CANCEL =  = [arcade.key.ESCAPE]
+KEYMAP_CANCEL = [arcade.key.ESCAPE]
 

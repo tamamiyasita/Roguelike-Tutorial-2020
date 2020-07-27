@@ -2,7 +2,7 @@ from constants import *
 
 
 class Fighter:
-    def __init__(self, hp=0, defense=0, power=0, xp_reward=0, current_xp=0, level=0):
+    def __init__(self, hp=0, defense=0, power=0, xp_reward=0, current_xp=0, level=0, ability_points=0):
         self.max_hp = hp
         self.hp = hp
         self.defense = defense
@@ -11,6 +11,7 @@ class Fighter:
         self.xp_reward = xp_reward
         self.current_xp = current_xp
         self.level = level
+        self.ability_points = ability_points
 
     def get_dict(self):
         result = {}
@@ -20,7 +21,8 @@ class Fighter:
         result["power"] = self.power
         result["xp_reward"] = self.xp_reward
         result["current_xp"] = self.current_xp
-        result["level"] = self.level
+        result["level"] = self.level,
+        result["ability_points"] = self.ability_points
         return result
 
     def restore_from_dict(self, result):
@@ -31,6 +33,7 @@ class Fighter:
         self.xp_reward = result["xp_reward"]
         self.current_xp = result["current_xp"]
         self.level = result["level"]
+        self.ability_points = result["ability_points"]
 
     def take_damage(self, amount):
         results = []
