@@ -29,7 +29,7 @@ class Player(Actor):
                 self.fighter.level += 1
                 self.fighter.max_hp += 5
                 self.fighter.hp += 5
-                # self.inventory.capacity += 1
+                self.inventory.capacity += 1
                 game_engine.action_queue.extend([{"message":"Level up!!!"}])
 
     def update_animation(self, delta_time=1 / 60):

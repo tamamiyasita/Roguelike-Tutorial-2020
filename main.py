@@ -38,12 +38,13 @@ class MG(arcade.Window):
         # HP/MAXHPの表示
         hp_text = f"HP: {self.engine.player.fighter.hp}/{self.engine.player.fighter.max_hp}"
 
-        arcade.draw_text(hp_text,
-                         left_margin,
-                         top_hp_margin,
+        arcade.draw_text(text=hp_text,
+                         start_x=left_margin,
+                         start_y=top_hp_margin,
                          color=COLORS["status_panel_text"],
                          font_size=hp_font_size
                          )
+
         # EXPの表示
         if self.engine.player.fighter.level < len(EXPERIENCE_PER_LEVEL):
             xp_to_next_level = EXPERIENCE_PER_LEVEL[self.engine.player.fighter.level - 1]
@@ -51,33 +52,34 @@ class MG(arcade.Window):
         else:
             exp_text = f"XP: {self.engine.player.fighter.current_xp}"
 
-        arcade.draw_text(exp_text,
-                         left_margin,
-                         top_exp_margin,
+        arcade.draw_text(text=exp_text,
+                         start_x=left_margin,
+                         start_y=top_exp_margin,
                          color=arcade.color.BAZAAR
                          )
 
         # レベルの表示
         level_text = f"Level:{self.engine.player.fighter.level}"
 
-        arcade.draw_text(level_text,
-                         left_margin,
-                         top_exp_margin - 20,
+        arcade.draw_text(text=level_text,
+                         start_x=left_margin,
+                         start_y=top_exp_margin - 20,
                          color=arcade.color.BITTERSWEET
                          )
+
         # HPバーの描画
-        draw_status_bar(hp_bar_width / 2 + left_margin,
-                        hp_bar_margin,
-                        hp_bar_width,
-                        hp_bar_height,
-                        self.engine.player.fighter.hp,
-                        self.engine.player.fighter.max_hp
+        draw_status_bar(center_x=hp_bar_width / 2 + left_margin,
+                        center_y=hp_bar_margin,
+                        width=hp_bar_width,
+                        height=hp_bar_height,
+                        current_value=self.engine.player.fighter.hp,
+                        max_value=self.engine.player.fighter.max_hp
                         )
     
     def draw_inventory(self):
         """インベントリの表示"""
-        item_left_position = SCREEN_WIDTH / 2.3 # パネル左からの所持アイテム表示位置の調整に使う変数
-        item_top_position = STATES_PANEL_HEIGHT - 22 # パネル上端からの所持アイテム表示位置の調整に使う変数
+        item_left_position = self.viewport_x + SCREEN_WIDTH / 2.3 # パネル左からの所持アイテム表示位置の調整に使う変数
+        item_top_position = self.viewport_y + STATES_PANEL_HEIGHT - 22 # パネル上端からの所持アイテム表示位置の調整に使う変数
         separate_size = 1.5  # アイテム名の表示間隔の調整に使う変数
         margin = 3 # 選択したアイテムのアウトライン線の位置調整に使う変数
         item_font_size = 12
@@ -88,15 +90,16 @@ class MG(arcade.Window):
 
         # キャパシティ数をループし、インベントリのアイテム名とアウトラインを描画する
         for item in range(capacity):
-            items_position = item * field_width + item_left_position  # パネル左からの所持アイテムの表示位置
+            items_position = self.viewport_x + item * field_width + item_left_position  # パネル左からの所持アイテムの表示位置
             if item == selected_item:
                 arcade.draw_lrtb_rectangle_outline(
-                    items_position + self.viewport_x - margin,
-                    items_position + self.viewport_x + field_width - margin,
-                    item_top_position + item_font_size + self.viewport_y + margin*2,
-                    item_top_position + self.viewport_y - margin,
-                    arcade.color.BLACK, outline_size
-                    )
+                        left=items_position - margin,
+                        right=items_position + field_width - margin,
+                        top=item_top_position + item_font_size + margin*2,
+                        bottom=item_top_position - margin,
+                        color=arcade.color.BLACK,
+                        border_width=outline_size
+                        )
 
             if self.engine.player.inventory.bag[item]:
                 item_name = self.engine.player.inventory.bag[item].name
@@ -105,42 +108,62 @@ class MG(arcade.Window):
 
             text = f"{item+1}: {item_name}"
 
-            arcade.draw_text(text,
-                             items_position + self.viewport_x,
-                             self.viewport_y + item_top_position,
-                             color=COLORS["status_panel_text"],
-                             font_size=item_font_size
-                             )
+            arcade.draw_text(
+                        text=text,
+                        start_x=items_position,
+                        start_y=item_top_position,
+                        color=COLORS["status_panel_text"],
+                        font_size=item_font_size
+                        )
 
     def draw_mouse_over_text(self):
-        """マウスオーバー時のテキスト表示"""
+        """マウスオーバー時のオブジェクト名表示"""
         if self.mouse_over_text:
             x, y = self.mouse_position
-            arcade.draw_xywh_rectangle_filled(x, y, 100, 16, arcade.color.BLACK)
-            arcade.draw_text(self.mouse_over_text, x, y, arcade.color.WHITE)
+            back_ground_width = 100 # テキスト背景幅
+            back_ground_height = 16 # テキスト背景高
+
+            arcade.draw_xywh_rectangle_filled(
+                        bottom_left_x=x,
+                        bottom_left_y=y,
+                        width=back_ground_width,
+                        height=back_ground_height,
+                        color=arcade.color.BLACK
+                        )
+            arcade.draw_text(
+                        text=self.mouse_over_text,
+                        start_x=x,
+                        start_y=y,
+                        color=arcade.color.WHITE
+                        )
 
     def draw_messages_handle(self):
         """メッセージ表示領域"""
-        message_top_position = 19 # パネル上端からのメッセージ表示位置
-        message_left_position = 125 # 画面左からのメッセージ表示位置
-        left_position = SCREEN_WIDTH / 2.3
         margin = 3
-
-        message_position = STATES_PANEL_HEIGHT - message_top_position
-        arcade.draw_xywh_rectangle_filled(self.viewport_x + message_left_position - margin,
-                                          self.viewport_y,
-                                          left_position - message_left_position - margin,
-                                          STATES_PANEL_HEIGHT,
-                                          arcade.color.SHAMPOO
-                                          )
+        message_top_position = self.viewport_x + 19 # パネル上端からのメッセージ表示位置
+        message_left_position = self.viewport_y + margin + 125 # 画面左からのメッセージ表示位置
+        message_panel_width = (SCREEN_WIDTH / 2.3) - message_left_position - margin # メッセージパネル幅
+        message_panel_height = STATES_PANEL_HEIGHT # メッセージパネル高
+        message_first_position = STATES_PANEL_HEIGHT - message_top_position # 最初の行
+        
+        arcade.draw_xywh_rectangle_filled(
+                        bottom_left_x=message_left_position,
+                        bottom_left_y=self.viewport_y,
+                        width=message_panel_width,
+                        height=message_panel_height,
+                        color=arcade.color.SHAMPOO
+                        )
 
         for message in self.engine.messages:
-            arcade.draw_text(message,
-                             message_left_position + self.viewport_x,
-                             message_position + self.viewport_y,
-                             color=COLORS["status_panel_text"])
+            arcade.draw_text(
+                        text=message,
+                        start_x=message_left_position,
+                        start_y=message_first_position,
+                        color=COLORS["status_panel_text"]
+                        )
 
-            message_position -= message_top_position
+            # 文字送り
+            message_first_position -= message_top_position
 
     def draw_sprites_and_status_panel(self):
         """ 全てのスプライトリストとステータスパネルの表示 """
@@ -151,12 +174,13 @@ class MG(arcade.Window):
         self.engine.effect_sprites.draw()
 
         # 画面下のパネルをarcadeの四角形を描画する変数で作成
-        arcade.draw_xywh_rectangle_filled(self.viewport_x,
-                                          self.viewport_y,
-                                          SCREEN_WIDTH,
-                                          STATES_PANEL_HEIGHT,
-                                          COLORS["status_panel_background"]
-                                          )
+        arcade.draw_xywh_rectangle_filled(
+                        bottom_left_x=self.viewport_x,
+                        bottom_left_y=self.viewport_y,
+                        width=SCREEN_WIDTH,
+                        height=STATES_PANEL_HEIGHT,
+                        color=COLORS["status_panel_background"]
+                        )
 
     def draw_in_normal_state(self):
         """ノーマルステート時に描画する関数をまとめる"""
@@ -167,17 +191,24 @@ class MG(arcade.Window):
 
     def draw_select_mouse_location(self):
         """ マウス操作時のグリッド表示"""
+
+        # マウスが画面外ならNoneを返す
+        if self.mouse_position is None:
+            return
+
         if self.engine.game_state == GAME_STATE.SELECT_LOCATION:
             mouse_x, mouse_y = self.mouse_position
             grid_x, grid_y = pixel_to_grid(mouse_x, mouse_y)
             center_x, center_y = grid_to_pixel(grid_x, grid_y)
-            arcade.draw_rectangle_outline(center_x,
-                                          center_y,
-                                          SPRITE_SIZE*SPRITE_SCALE,
-                                          SPRITE_SIZE*SPRITE_SCALE,
-                                          arcade.color.LIGHT_BLUE,
-                                          border_width=2
-                                          )
+
+            arcade.draw_rectangle_outline(
+                        center_x=center_x,
+                        center_y=center_y,
+                        width=SPRITE_SIZE*SPRITE_SCALE,
+                        height=SPRITE_SIZE*SPRITE_SCALE,
+                        color=arcade.color.LIGHT_BLUE,
+                        border_width=2
+                        )
 
     def on_draw(self):
         try:
