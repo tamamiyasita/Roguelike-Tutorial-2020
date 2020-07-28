@@ -29,7 +29,7 @@ class GameEngine:
         self.player = None
         self.game_map = None
         self.action_queue = []
-        self.messages = deque(maxlen=4)
+        self.messages = deque(maxlen=5)
         self.selected_item = None
         self.turn_check = []
         self.game_state = GAME_STATE.NORMAL

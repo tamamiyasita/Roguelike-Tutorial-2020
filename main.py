@@ -60,8 +60,6 @@ class MG(arcade.Window):
         button.name = "Capacity"
         self.character_sheet_buttons.append(button)
 
-        if self.engine.player.fighter.ability_points > 0:
-            self.character_sheet_buttons.draw()
 
     def draw_hp_and_status_bar(self):
         """ステータスパネルとHPバー"""
@@ -271,12 +269,14 @@ class MG(arcade.Window):
                     self.engine.player.fighter.gp += 5
                     self.engine.player.fighter.ability_points -= 1
 
+
+
     def draw_character_screen(self):
         arcade.draw_xywh_rectangle_filled(
                         bottom_left_x=0+self.viewport_x,
                         bottom_left_y=0+self.viewport_y,
-                        width=SCREEN_WIDTH+self.viewport_x,
-                        height=SCREEN_HEIGHT+self.viewport_y,
+                        width=SCREEN_WIDTH,
+                        height=SCREEN_HEIGHT,
                         color=COLORS["status_panel_background"]
                         )
 
@@ -344,6 +344,40 @@ class MG(arcade.Window):
                         color=arcade.color.AFRICAN_VIOLET,
                         font_size=text_size
                         )
+    
+    def draw_button(self):
+        self.character_sheet_buttons = arcade.SpriteList()
+
+        spacing = 37
+        sheet_y = self.viewport_y + SCREEN_HEIGHT - 75
+        button = arcade.Sprite(r"image\plus_button.png")
+        button.center_x = self.viewport_x + 200
+        button.center_y = sheet_y
+        button.name = "Attack"
+        self.character_sheet_buttons.append(button)
+
+        sheet_y -= spacing
+        button = arcade.Sprite(r"image\plus_button.png")
+        button.center_x = self.viewport_x + 200
+        button.center_y = sheet_y
+        button.name = "Defense"
+        self.character_sheet_buttons.append(button)
+
+        sheet_y -= spacing
+        button = arcade.Sprite(r"image\plus_button.png")
+        button.center_x = self.viewport_x + 200
+        button.center_y = sheet_y
+        button.name = "HP"
+        self.character_sheet_buttons.append(button)
+
+        sheet_y -= spacing
+        button = arcade.Sprite(r"image\plus_button.png")
+        button.center_x = self.viewport_x + 200
+        button.center_y = sheet_y
+        button.name = "Capacity"
+        self.character_sheet_buttons.append(button)
+
+
         
         if self.engine.player.fighter.ability_points > 0:
             self.character_sheet_buttons.draw()
@@ -370,6 +404,7 @@ class MG(arcade.Window):
             # Character_Screen表示
             elif self.engine.game_state == GAME_STATE.CHARACTER_SCREEN:
                 self.draw_character_screen()
+                self.draw_button()
             
             # fov_recomputeがTruならfov計算
             if self.engine.fov_recompute:
@@ -497,7 +532,7 @@ class MG(arcade.Window):
             self.engine.game_state = GAME_STATE.NORMAL
         
         if self.engine.game_state == GAME_STATE.CHARACTER_SCREEN:
-            self.character_screen_click(x, y)
+            self.character_screen_click(x+self.viewport_x, y+self.viewport_y)
 
     def save(self):
         print("save")

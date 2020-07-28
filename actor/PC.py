@@ -24,6 +24,9 @@ class Player(Actor):
         self.delay_time = 3.7
 
     def check_experience_level(self, game_engine):
+        if isinstance(self.fighter.level, list):
+            self.fighter.level = self.fighter.level[0]
+
         if self.fighter.level < len(EXPERIENCE_PER_LEVEL):
             xp_to_next_level = EXPERIENCE_PER_LEVEL[self.fighter.level - 1]
             if self.fighter.current_xp >= xp_to_next_level:

@@ -4,24 +4,24 @@ from actor.restore_actor import restore_actor
 
 class Inventory:
     def __init__(self, capacity=0):
-        self._capacity = 0
+        # self._capacity = 0
         self.bag = []
         self.capacity = capacity
 
         self.bag = [None for _ in range(self.capacity)]
 
-    @property
-    def capacity(self):
-        """所持アイテム数"""
-        return self._capacity
+    # @property
+    # def capacity(self):
+    #     """所持アイテム数"""
+    #     return self._capacity
 
-    @capacity.setter
-    def capacity(self, value):
-        """bag拡張処理"""
-        self._capacity = value
-        # キャパシティに値が追加されたらbagにNoneを追加し拡張する
-        while len(self.bag) < self.capacity:
-            self.bag.append(None)
+    # @capacity.setter
+    # def capacity(self, value):
+    #     """bag拡張処理"""
+    #     self._capacity = value
+    #     # キャパシティに値が追加されたらbagにNoneを追加し拡張する
+    #     while len(self.bag) < self.capacity:
+    #         self.bag.append(None)
 
     def get_dict(self):
         result = {}
@@ -34,6 +34,7 @@ class Inventory:
                 name = item.__class__.__name__
                 item_dicts.append({name: item.get_dict()})
         result["items"] = item_dicts
+        print(item_dicts)
         return result
 
     def restore_from_dict(self, result):
