@@ -40,25 +40,28 @@ class MG(arcade.Window):
         self.character_sheet_buttons.append(button)
 
         sheet_y -= spacing
-        button = arcade.Sprite("image\plus_button.png")
+        button = arcade.Sprite(r"image\plus_button.png")
         button.center_x = self.viewport_x + 200
         button.center_y = sheet_y
         button.name = "Defense"
         self.character_sheet_buttons.append(button)
 
         sheet_y -= spacing
-        button = arcade.Sprite("image\plus_button.png")
+        button = arcade.Sprite(r"image\plus_button.png")
         button.center_x = self.viewport_x + 200
         button.center_y = sheet_y
         button.name = "HP"
         self.character_sheet_buttons.append(button)
 
         sheet_y -= spacing
-        button = arcade.Sprite("image\plus_button.png")
+        button = arcade.Sprite(r"image\plus_button.png")
         button.center_x = self.viewport_x + 200
         button.center_y = sheet_y
         button.name = "Capacity"
         self.character_sheet_buttons.append(button)
+
+        if self.engine.player.fighter.ability_points > 0:
+            self.character_sheet_buttons.draw()
 
     def draw_hp_and_status_bar(self):
         """ステータスパネルとHPバー"""
