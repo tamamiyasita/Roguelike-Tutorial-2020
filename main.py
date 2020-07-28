@@ -205,11 +205,11 @@ class MG(arcade.Window):
 
     def draw_sprites_and_status_panel(self):
         """ 全てのスプライトリストとステータスパネルの表示 """
-        self.engine.map_sprites.draw(filter=gl.GL_NEAREST)
-        self.engine.item_sprites.draw(filter=gl.GL_NEAREST)
-        self.engine.actor_sprites.draw(filter=gl.GL_NEAREST)
-        self.engine.chara_sprites.draw(filter=gl.GL_NEAREST)
-        self.engine.effect_sprites.draw()
+        self.engine.cur_level.map_sprites.draw(filter=gl.GL_NEAREST)
+        self.engine.cur_level.item_sprites.draw(filter=gl.GL_NEAREST)
+        self.engine.cur_level.actor_sprites.draw(filter=gl.GL_NEAREST)
+        self.engine.cur_level.chara_sprites.draw(filter=gl.GL_NEAREST)
+        self.engine.cur_level.effect_sprites.draw()
 
         # 画面下のパネルをarcadeの四角形を描画する変数で作成
         arcade.draw_xywh_rectangle_filled(
@@ -263,7 +263,8 @@ class MG(arcade.Window):
                     self.engine.player.fighter.defense += 1
                     self.engine.player.fighter.ability_points -= 1
                 elif buttons.name == "HP":
-                    self.engine.player.fighter.gp += 5
+                    self.engine.player.fighter.hp += 15
+                    self.engine.player.fighter.max_hp += 15
                     self.engine.player.fighter.ability_points -= 1
                 elif buttons.name == "Capacity":
                     self.engine.player.fighter.gp += 5
@@ -510,11 +511,11 @@ class MG(arcade.Window):
         # マウスオーバー時に表示するスプライトリストの取得
         actor_list = arcade.get_sprites_at_point(
                         point=self.mouse_position,
-                        sprite_list=self.engine.actor_sprites
+                        sprite_list=self.engine.cur_level.actor_sprites
                         )
         item_list = arcade.get_sprites_at_point(
                         point=self.mouse_position,
-                        sprite_list=self.engine.item_sprites
+                        sprite_list=self.engine.cur_level.item_sprites
                         )
 
         self.mouse_over_text = None

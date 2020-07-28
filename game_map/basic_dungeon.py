@@ -39,7 +39,7 @@ class Rect:
 
 
 class BasicDungeon:
-    def __init__(self, width, height,player, dungeon_level=1):
+    def __init__(self, width, height, level, dungeon_level=1):
         self.width = width
         self.height = height
         self.dungeon_level = dungeon_level
@@ -48,9 +48,9 @@ class BasicDungeon:
         self.tiles = [[TILE.WALL for y in range(height)] for x in range(width)]
         self.actor_tiles =  [[TILE.EMPTY for y in range(height)] for x in range(width)]
         self.player_position = 0
-        self.make_map(player)
+        self.make_map(level)
 
-    def make_map(self, player):
+    def make_map(self, level):
 
         rooms = []
         self.num_rooms = 0
@@ -96,8 +96,8 @@ class BasicDungeon:
 
                 self.place_entities(
                     new_room, self.actor_tiles,
-                    max_monsters_per_room=MAX_MONSTERS_PER_ROOM,
-                    max_items_per_room=MAX_ITEMS_PER_ROOM
+                    max_items_per_room=MAX_ITEMS_PER_ROOM,
+                    level=level
                     )
 
         self.tiles[last_room_center_x][last_room_center_y] = TILE.STAIRS_DOWN
@@ -115,12 +115,15 @@ class BasicDungeon:
         for y in range(min(y1, y2), max(y1, y2) + 1):
             self.tiles[x][y] = TILE.EMPTY
 
-    def place_entities(self, room, actor_tiles, max_monsters_per_room, max_items_per_room):
-        # number_of_monsters = randint(0, max_monsters_per_room)
+    def place_entities(self, room, actor_tiles, max_items_per_room, level):
         number_of_items = randint(0, max_items_per_room)
 
-        # for i in range(number_of_monsters):
-        combos = [[], [1], [1,1], [1,1,1], [2]]
+        if level == 1:
+            combos = [[], [1], [1,1], [1,1,1], [2]]
+        if level == 2:
+            combos = [[], [1,1], [1,1,1], [2], [1,2]]
+        else:
+            combos = [[], [1,1,1], [2], [1,2], [1,1,2]]
         monster_choice = choice(combos)
         for challenge_level in monster_choice:
             x = randint(room.x1 + 1, room.x2 - 1)
@@ -128,12 +131,6 @@ class BasicDungeon:
 
             if not self.actor_tiles[x][y]:
                 self.actor_tiles[x][y] = challenge_level
-
-            # if randint(0, 100) < 80:
-            #     actor_tiles[x][y] = TILE.ORC
-
-            # else:
-            #     actor_tiles[x][y] = TILE.TROLL
 
 
         for i in range(number_of_items):

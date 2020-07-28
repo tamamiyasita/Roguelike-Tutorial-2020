@@ -2,7 +2,6 @@ import math
 
 from typing import Optional
 
-from arcade.color import WHITE
 from constants import *
 from data import *
 from actor.item import Item
@@ -47,12 +46,12 @@ class LightningScroll(Actor):
             item=Item()
         )
 
-    def use(self, game_engine: "GameEngine"):
+    def use(self, game_engine):
         closest_distance: Optional[float] = None
         closest_actor: Optional[Actor] = None
         results = []
 
-        for actor in game_engine.actor_sprites:
+        for actor in game_engine.cur_level.actor_sprites:
             if actor.is_visible and actor.fighter and not actor.is_dead and actor.ai:
                 x1 = game_engine.player.x
                 y1 = game_engine.player.y
@@ -65,7 +64,7 @@ class LightningScroll(Actor):
 
         if closest_actor:
             lightning = LightningEffect(
-                closest_actor.x, closest_actor.y, game_engine.effect_sprites)
+                closest_actor.x, closest_actor.y, game_engine.cur_level.effect_sprites)
             damage = 10
             game_engine.player.inventory.remove_item(self)
             results.append(

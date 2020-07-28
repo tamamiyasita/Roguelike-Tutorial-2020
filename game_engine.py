@@ -19,13 +19,24 @@ from actor.stairs import Stairs
 from actor.restore_actor import restore_actor
 
 
-class GameEngine:
+class GameLevel:
     def __init__(self):
-        """ 変数の初期化 """
         self.chara_sprites = None
         self.actor_sprites = None
         self.map_sprites = None
         self.item_sprites = None
+        self.effect_sprites = None
+        self.level = 0
+        
+
+
+class GameEngine:
+    def __init__(self):
+        """ 変数の初期化 """
+        self.levels = []
+        self.cur_level_index = 0
+        self.cur_level = None
+
         self.player = None
         self.game_map = None
         self.action_queue = []
@@ -50,28 +61,34 @@ class GameEngine:
 
         arcade.set_background_color(arcade.color.BLACK)
 
-        self.setup_level()
+        self.cur_level = self.setup_level(1)
+        self.levels.append(self.cur_level)
 
-    def setup_level(self):
+    def setup_level(self, level_number):
 
-        self.game_map = BasicDungeon(MAP_WIDTH, MAP_HEIGHT,self.player)
+        map_width, map_height = MAP_WIDTH, MAP_HEIGHT
+        level = GameLevel()
+
+        self.game_map = BasicDungeon(map_width, map_height, level)
         mapsprite = ActorPlacement(self.game_map, self).map_set()
         actorsprite = ActorPlacement(self.game_map, self).actor_set()
         itemsprite = ActorPlacement(self.game_map, self).items_set()
-        self.map_sprites = mapsprite
-        self.actor_sprites = actorsprite
-        self.item_sprites = itemsprite
+        level.map_sprites = mapsprite
+        level.actor_sprites = actorsprite
+        level.item_sprites = itemsprite
 
         self.player = Player(self.game_map.player_position[0],self.game_map.player_position[1], inventory=Inventory(capacity=5))
-        self.chara_sprites.append(self.player)
+        level.chara_sprites.append(self.player)
         # self.crab = Crab(self.player.x + 2, self.player.y +
         #                  1, game_engine=self,)
         # self.actor_sprites.append(self.crab)
         self.cnf = ConfusionScroll(
             self.player.x + 1, self.player.y)
-        self.item_sprites.append(self.cnf)
+        level.item_sprites.append(self.cnf)
 
         self.fov_recompute = True
+
+        return level
 
         
 
@@ -87,31 +104,41 @@ class GameEngine:
 
         player_dict = self.get_actor_dict(self.player)
 
-        actor_dict = []
-        for sprite in self.actor_sprites:
-            actor_dict.append(self.get_actor_dict(sprite))
+        levels_dict = []
+        for level in self.levels:
 
-        dungeon_dict = []
-        for sprite in self.map_sprites:
-            dungeon_dict.append(self.get_actor_dict(sprite))
 
-        item_dict = []
-        for sprite in self.item_sprites:
-            item_dict.append(self.get_actor_dict(sprite))
+            actor_dict = []
+            for sprite in level.actor_sprites:
+                actor_dict.append(self.get_actor_dict(sprite))
 
-        effect_dict = []
-        for sprite in self.effect_sprites:
-            effect_dict.append(self.get_actor_dict(sprite))
+            dungeon_dict = []
+            for sprite in level.map_sprites:
+                dungeon_dict.append(self.get_actor_dict(sprite))
+
+            item_dict = []
+            for sprite in level.item_sprites:
+                item_dict.append(self.get_actor_dict(sprite))
+
+            effect_dict = []
+            for sprite in level.effect_sprites:
+                effect_dict.append(self.get_actor_dict(sprite))
+
+
+            level_dict = {
+                         "actor": actor_dict,
+                         "dungeon": dungeon_dict,
+                         "item": item_dict,
+                         "effect": effect_dict,
+                         }
+            levels_dict.append(level_dict)
 
         # ビューポートの位置情報を保存
         viewport = arcade.get_viewport()
 
-        result = {"player": player_dict,
-                  "actor": actor_dict,
-                  "dungeon": dungeon_dict,
-                  "item": item_dict,
-                  "effect": effect_dict,
-                  "viewport": viewport}
+        result = {"player":player_dict,
+                  "viewport": viewport,
+                  "levels": levels_dict}
 
         self.action_queue.append({"message":"*save*"})
         return result
@@ -122,44 +149,51 @@ class GameEngine:
         # ビューポートを復元する
         arcade.set_viewport(*data["viewport"])
 
-        self.chara_sprites = arcade.SpriteList(
-            use_spatial_hash=True, spatial_hash_cell_size=32)
-
-        self.actor_sprites = arcade.SpriteList(
-            use_spatial_hash=True, spatial_hash_cell_size=16)
-
-        self.map_sprites = arcade.SpriteList(
-            use_spatial_hash=True, spatial_hash_cell_size=32)
-
-        self.item_sprites = arcade.SpriteList(
-            use_spatial_hash=True, spatial_hash_cell_size=16)
-
-        self.effect_sprites = arcade.SpriteList(
-            use_spatial_hash=True, spatial_hash_cell_size=16)
-
         player_dict = data["player"]
         self.player.restore_from_dict(player_dict["Player"])
-        self.chara_sprites.append(self.player)
 
-        # for actor_dict in data["actor"]:
-        #     self.crab.restore_from_dict(actor_dict["Crab"])
-        #     self.actor_sprites.append(self.crab)
 
-        for actor_dict in data["actor"]:
-            actor = restore_actor(actor_dict)
-            self.actor_sprites.append(actor)
+        for level_dict in data["levels"]:
+            level = GameLevel()
 
-        for dungeon_dict in data["dungeon"]:
-            maps = restore_actor(dungeon_dict)
-            self.map_sprites.append(maps)
+            level.chara_sprites = arcade.SpriteList(
+                use_spatial_hash=True, spatial_hash_cell_size=32)
 
-        for item_dict in data["item"]:
-            item = restore_actor(item_dict)
-            self.item_sprites.append(item)
+            level.actor_sprites = arcade.SpriteList(
+                use_spatial_hash=True, spatial_hash_cell_size=16)
 
-        for effect_dict in data["effect"]:
-            effect = restore_actor(effect_dict)
-            self.effect_sprites.append(effect)
+            level.map_sprites = arcade.SpriteList(
+                use_spatial_hash=True, spatial_hash_cell_size=32)
+
+            level.item_sprites = arcade.SpriteList(
+                use_spatial_hash=True, spatial_hash_cell_size=16)
+
+            level.effect_sprites = arcade.SpriteList(
+                use_spatial_hash=True, spatial_hash_cell_size=16)
+
+
+
+            for actor_dict in level_dict["actor"]:
+                actor = restore_actor(actor_dict)
+                level.actor_sprites.append(actor)
+
+            for dungeon_dict in level_dict["dungeon"]:
+                maps = restore_actor(dungeon_dict)
+                level.map_sprites.append(maps)
+
+            for item_dict in level_dict["item"]:
+                item = restore_actor(item_dict)
+                level.item_sprites.append(item)
+
+            for effect_dict in level_dict["effect"]:
+                effect = restore_actor(effect_dict)
+                level.effect_sprites.append(effect)
+
+            level.chara_sprites.append(self.player)
+
+            self.levels.append(level)
+        
+        self.cur_level = self.levels[-1]
 
         self.action_queue.append({"message":"*load*"})
 
@@ -213,7 +247,7 @@ class GameEngine:
 
             if "pickup" in action:
                 actors = arcade.get_sprites_at_exact_point(
-                    (self.player.center_x, self.player.center_y), self.item_sprites)
+                    (self.player.center_x, self.player.center_y), self.cur_level.item_sprites)
                 for actor in actors:
                     if actor.item:
                         results = self.player.inventory.add_item(actor)
@@ -270,7 +304,7 @@ class GameEngine:
         """
         actor_check = []
         results = []
-        for actor in self.actor_sprites:
+        for actor in self.cur_level.actor_sprites:
             if actor.ai and not actor.is_dead:
                 results = actor.ai.take_turn(
                     target=target, sprite_lists=[self.actor_sprites, self.map_sprites])
@@ -299,7 +333,7 @@ class GameEngine:
         """
         if self.fov_recompute == True:
             recalculate_fov(self.player.x, self.player.y, FOV_RADIUS,
-                            [self.map_sprites, self.actor_sprites, self.item_sprites])
+                            [self.cur_level.map_sprites, self.cur_level.actor_sprites, self.cur_level.item_sprites])
 
             self.fov_recompute = False
 
@@ -342,9 +376,12 @@ class GameEngine:
     def use_stairs(self):
         """階段及びplayerの位置の判定
         """
-        get_stairs = arcade.get_sprites_at_exact_point(self.player.position, self.map_sprites)
+        get_stairs = arcade.get_sprites_at_exact_point(self.player.position, self.cur_level.map_sprites)
 
         for stairs in get_stairs:
             if isinstance(stairs, Stairs):
-                return [{"message": "You haven't learned how to take the stairs yet."}]
+                level = self.setup_level(self.cur_level.level + 1)
+                self.cur_level = level
+                self.levels.append(level)
+                return [{"message": "You went down a level."}]
         return [{"message": "There are no stairs here"}]

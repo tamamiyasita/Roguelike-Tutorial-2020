@@ -58,7 +58,7 @@ class ConfusionScroll(Actor):
     def confused(self, grid_x, grid_y, results):
         pixel_x, pixel_y = grid_to_pixel(grid_x, grid_y)
         sprites = arcade.get_sprites_at_point(
-            (pixel_x, pixel_y), self.game_engine.actor_sprites)
+            (pixel_x, pixel_y), self.game_engine.cur_level.actor_sprites)
         for sprite in sprites:
             if sprite.fighter and not sprite.is_dead:
                 self.enemy = sprite
@@ -78,7 +78,7 @@ class ConfusionScroll(Actor):
         results = []
         self.confused(x, y, results)
         ConfusionEffect(
-            x, y, self.enemy, self.game_engine.effect_sprites, self.game_engine.actor_sprites)
+            x, y, self.enemy, self.game_engine.cur_level.effect_sprites, self.game_engine.cur_level.actor_sprites)
         self.game_engine.player.inventory.remove_item(self)
 
         return results
