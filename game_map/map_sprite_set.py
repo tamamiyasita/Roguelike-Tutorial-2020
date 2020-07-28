@@ -1,9 +1,13 @@
+from pyglet import sprite
 from actor.stairs import Stairs
 import arcade
 from data import *
 from constants import *
+from util import grid_to_pixel
 from actor.wall import Wall
 from actor.floor import Floor
+from actor.entities_factory import get_random_monster_by_challenge
+from actor.entities_factory import make_monster_sprite
 from actor.orc import Orc
 from actor.troll import Troll
 from actor.healing_potion import HealingPotion
@@ -15,8 +19,8 @@ class ActorPlacement:
     def __init__(self, game_map, game_engine):
         self.game_map = game_map
         self.tiles = game_map.tiles
-        self.game_engine = game_engine
         self.actor_tiles = game_map.actor_tiles
+        self.game_engine = game_engine
         self.width = len(self.tiles)
         self.height = len(self.tiles[0])
 
@@ -53,12 +57,26 @@ class ActorPlacement:
             use_spatial_hash=True, spatial_hash_cell_size=32)
         for x in range(self.width):
             for y in range(self.height):
-                if self.actor_tiles[x][y] == TILE.ORC:
-                    orc = Orc(x, y)
-                    actor_sprites.append(orc)
-                elif self.actor_tiles[x][y] == TILE.TROLL:
-                    troll = Troll(x, y)
-                    actor_sprites.append(troll)
+                if type(self.actor_tiles[x][y]) == int:
+                    m = get_random_monster_by_challenge(self.actor_tiles[x][y])
+                    sprite = make_monster_sprite(m)
+                    sprite.x = x
+                    sprite.y = y
+                    cx, cy = grid_to_pixel(x,y)
+                    sprite.center_x = cx
+                    sprite.center_y = cy
+                    print(sprite.center_x)
+
+                    actor_sprites.append(sprite)
+
+        return actor_sprites
+
+                # if self.actor_tiles[x][y] == TILE.ORC:
+                #     orc = Orc(x, y)
+                #     actor_sprites.append(orc)
+                # elif self.actor_tiles[x][y] == TILE.TROLL:
+                #     troll = Troll(x, y)
+                #     actor_sprites.append(troll)
 
         return actor_sprites
 

@@ -19,7 +19,7 @@ class Player(Actor):
 
         )
 
-        self.left_face = False
+        # self.left_face = False
         self.state = state.READY
         self.delay_time = 3.7
 

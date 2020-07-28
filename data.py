@@ -21,14 +21,14 @@ orc_left = arcade.load_texture(
     orcs_tiles, x=0, y=size, width=size, height=size)
 orc_right = arcade.load_texture(
     orcs_tiles, x=0, y=size, width=size, height=size, mirrored=True)
-orc = [orc_left, orc_right]
+orc = [orc_right, orc_left]
 
 # trollクスチャ生成
 troll_left = arcade.load_texture(
     orcs_tiles, x=size*7, y=size, width=size, height=size)
 troll_right = arcade.load_texture(
     orcs_tiles, x=size*7, y=size, width=size, height=size, mirrored=True)
-troll = [troll_left, troll_right]
+troll = [troll_right, troll_left]
 #######
 
 ###items###

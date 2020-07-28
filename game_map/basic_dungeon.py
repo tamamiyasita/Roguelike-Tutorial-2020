@@ -1,5 +1,5 @@
 import arcade
-from random import randint
+from random import randint, choice
 
 from game_map.map_sprite_set import ActorPlacement
 from util import pixel_to_grid, grid_to_pixel
@@ -116,18 +116,26 @@ class BasicDungeon:
             self.tiles[x][y] = TILE.EMPTY
 
     def place_entities(self, room, actor_tiles, max_monsters_per_room, max_items_per_room):
-        number_of_monsters = randint(0, max_monsters_per_room)
+        # number_of_monsters = randint(0, max_monsters_per_room)
         number_of_items = randint(0, max_items_per_room)
 
-        for i in range(number_of_monsters):
+        # for i in range(number_of_monsters):
+        combos = [[], [1], [1,1], [1,1,1], [2]]
+        monster_choice = choice(combos)
+        for challenge_level in monster_choice:
             x = randint(room.x1 + 1, room.x2 - 1)
             y = randint(room.y1 + 1, room.y2 - 1)
 
-            if randint(0, 100) < 80:
-                actor_tiles[x][y] = TILE.ORC
+            if not self.actor_tiles[x][y]:
+                self.actor_tiles[x][y] = challenge_level
 
-            else:
-                actor_tiles[x][y] = TILE.TROLL
+            # if randint(0, 100) < 80:
+            #     actor_tiles[x][y] = TILE.ORC
+
+            # else:
+            #     actor_tiles[x][y] = TILE.TROLL
+
+
         for i in range(number_of_items):
             x = randint(room.x1 + 1, room.x2 - 1)
             y = randint(room.y1 + 1, room.y2 - 1)

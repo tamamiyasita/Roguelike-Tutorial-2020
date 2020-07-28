@@ -20,10 +20,4 @@ class Troll(Actor):
             ai=ai_component,
             blocks=True
         )
-        self.left_face = False
 
-    def update_animation(self, delta_time=1 / 60):
-        if self.left_face:
-            self.texture = troll[0]
-        else:
-            self.texture = troll[1]

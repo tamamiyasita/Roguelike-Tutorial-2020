@@ -20,10 +20,4 @@ class Orc(Actor):
             ai=ai_component,
             blocks=True
         )
-        self.left_face = False
 
-    def update_animation(self, delta_time=1 / 60):
-        if self.left_face:
-            self.texture = orc[0]
-        else:
-            self.texture = orc[1]

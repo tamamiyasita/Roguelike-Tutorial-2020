@@ -30,6 +30,8 @@ class Actor(arcade.Sprite):
         self.not_visible_color = not_visible_color
         self.is_visible = False
         self.is_dead = False
+        self.left_face = False
+
         self.inventory = inventory
         self.item = item
 
@@ -242,3 +244,9 @@ class Actor(arcade.Sprite):
         self.textures = []
         self.textures.extend(IMAGE_ID.get(value))
         self.texture = self.textures[self.texture_number]
+
+    def update_animation(self, delta_time=1 / 60):
+        if self.left_face:
+            self.texture = self.textures[1]
+        else:
+            self.texture = self.textures[0]
