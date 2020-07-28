@@ -17,9 +17,10 @@ class Actor(arcade.Sprite):
                  visible_color=arcade.color.WHITE, not_visible_color=arcade.color.BLACK,
                  state=state.TURN_END):
         super().__init__(scale=scale)
-        self.name = name
-        self.texture_number = texture_number
-        self.texture_ = self.name
+        if name:
+            self.name = name
+            self.texture_number = texture_number
+            self.texture_ = self.name
         self.dx, self.dy = 0, 0
         self.center_x, self.center_y = grid_to_pixel(x, y)
         self.x, self.y = pixel_to_grid(self.center_x, self.center_y)
@@ -93,7 +94,7 @@ class Actor(arcade.Sprite):
         self.center_y = result["center_y"]
         self.texture_number = result["texture_number"]
         self.name = result["name"]
-        self.texture_ = self.name
+        self.texture_ = result["name"]
         self.visible_color = result["visible_color"]
         self.not_visible_color = result["not_visible_color"]
         self.alpha = result["alpha"]
