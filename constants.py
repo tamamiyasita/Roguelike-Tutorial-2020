@@ -60,6 +60,7 @@ class GAME_STATE(Enum):
     NORMAL = auto()
     SELECT_LOCATION = auto()
     CHARACTER_SCREEN = auto()
+    DELAY_WINDOW = auto()
 
 
 class state(Enum):

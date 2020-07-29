@@ -10,6 +10,7 @@ from data import *
 from game_map.basic_dungeon import BasicDungeon
 from game_map.map_sprite_set import ActorPlacement
 from recalculate_fov import recalculate_fov
+from viewport import viewport
 
 from actor.inventory import Inventory
 from actor.confusion_scroll import ConfusionScroll
@@ -40,13 +41,12 @@ class GameEngine:
         self.player = None
         self.game_map = None
         self.action_queue = []
-        self.messages = deque(maxlen=5)
+        self.messages = deque(maxlen=4)
         self.selected_item = None
         self.turn_check = []
         self.game_state = GAME_STATE.NORMAL
         self.grid_select_handlers = []
 
-    def setup(self):
         """ スプライトリストの初期化 """
         self.chara_sprites = arcade.SpriteList(
             use_spatial_hash=True, spatial_hash_cell_size=32)
@@ -58,6 +58,8 @@ class GameEngine:
             use_spatial_hash=True, spatial_hash_cell_size=32)        
         self.effect_sprites = arcade.SpriteList(
             use_spatial_hash=True, spatial_hash_cell_size=16)
+
+    def setup(self):
 
         arcade.set_background_color(arcade.color.BLACK)
 
@@ -73,17 +75,21 @@ class GameEngine:
         mapsprite = ActorPlacement(self.game_map, self).map_set()
         actorsprite = ActorPlacement(self.game_map, self).actor_set()
         itemsprite = ActorPlacement(self.game_map, self).items_set()
+
         level.map_sprites = mapsprite
         level.actor_sprites = actorsprite
         level.item_sprites = itemsprite
+        level.level = level_number
+        level.effect_sprites = arcade.SpriteList(use_spatial_hash=True, spatial_hash_cell_size=16)
+        level.chara_sprites = arcade.SpriteList(use_spatial_hash=True, spatial_hash_cell_size=32)
+
 
         self.player = Player(self.game_map.player_position[0],self.game_map.player_position[1], inventory=Inventory(capacity=5))
         level.chara_sprites.append(self.player)
         # self.crab = Crab(self.player.x + 2, self.player.y +
         #                  1, game_engine=self,)
         # self.actor_sprites.append(self.crab)
-        self.cnf = ConfusionScroll(
-            self.player.x + 1, self.player.y)
+        self.cnf = ConfusionScroll(self.player.x + 1, self.player.y)
         level.item_sprites.append(self.cnf)
 
         self.fov_recompute = True
@@ -148,6 +154,7 @@ class GameEngine:
 
         # ビューポートを復元する
         arcade.set_viewport(*data["viewport"])
+
 
         player_dict = data["player"]
         self.player.restore_from_dict(player_dict["Player"])
@@ -276,16 +283,18 @@ class GameEngine:
                     item = self.player.inventory.get_item_number(item_number)
                     if item:
                         self.player.inventory.remove_item_number(item_number)
-                        self.actor_sprites.append(item)
+                        self.cur_level.actor_sprites.append(item)
                         item.center_x = self.player.center_x
                         item.center_y = self.player.center_y
                         new_action_queue.extend(
                             [{"message": f"You dropped the {item.name}"}])
 
             if "use_stairs" in action:
+
                 result = self.use_stairs()
                 if result:
                     new_action_queue.extend(result)
+                    self.game_state = GAME_STATE.NORMAL
 
         self.action_queue = new_action_queue
 
@@ -307,7 +316,7 @@ class GameEngine:
         for actor in self.cur_level.actor_sprites:
             if actor.ai and not actor.is_dead:
                 results = actor.ai.take_turn(
-                    target=target, sprite_lists=[self.actor_sprites, self.map_sprites])
+                    target=target, sprite_lists=[self.cur_level.actor_sprites, self.cur_level.map_sprites])
                 if results:
                     self.action_queue.extend(results)
                     actor_check.append(actor)
@@ -341,7 +350,7 @@ class GameEngine:
         """プレイヤーの移動
         """
         if self.player.state == state.READY and dist:
-            attack = self.player.move(dist, None, self.actor_sprites, self.map_sprites)
+            attack = self.player.move(dist, None, self.cur_level.actor_sprites, self.cur_level.map_sprites)
             if attack:
                 self.action_queue.extend(attack)
 
@@ -380,8 +389,23 @@ class GameEngine:
 
         for stairs in get_stairs:
             if isinstance(stairs, Stairs):
+                self.game_state = GAME_STATE.DELAY_WINDOW
+                self.player.state = state.DELAY
+                player_dict = self.get_actor_dict(self.player)
                 level = self.setup_level(self.cur_level.level + 1)
                 self.cur_level = level
                 self.levels.append(level)
+                tx, ty = self.player.x, self.player.y
+                tmp_x, tmp_y = self.player.center_x, self.player.center_y
+                self.player.restore_from_dict(player_dict["Player"])
+                self.player.x = tx
+                self.player.y = ty
+                self.player.center_x = tmp_x
+                self.player.center_y = tmp_y
+                self.player.state = state.READY
+                viewport(self.player)
+
+
+
                 return [{"message": "You went down a level."}]
         return [{"message": "There are no stairs here"}]

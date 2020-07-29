@@ -385,46 +385,44 @@ class MG(arcade.Window):
 
 
     def on_draw(self):
-        try:
-            arcade.start_render()
+        arcade.start_render()
 
-            # ビューポートの左と下の現在位置を変数に入れる、これはステータスパネルを画面に固定する為に使います
-            self.viewport_x = arcade.get_viewport()[0]
-            self.viewport_y = arcade.get_viewport()[2]
+        # ビューポートの左と下の現在位置を変数に入れる、これはステータスパネルを画面に固定する為に使います
+        self.viewport_x = arcade.get_viewport()[0]
+        self.viewport_y = arcade.get_viewport()[2]
 
-            self.draw_sprites_and_status_panel()
+        self.draw_sprites_and_status_panel()
 
-            # ノーマルステート時の画面表示
-            if self.engine.game_state == GAME_STATE.NORMAL:
-                self.draw_in_normal_state()
-            
-            # マウスセレクト時の画面表示
-            elif self.engine.game_state == GAME_STATE.SELECT_LOCATION:
-                self.draw_select_mouse_location()
+        # ノーマルステート時の画面表示
+        if self.engine.game_state == GAME_STATE.NORMAL:
+            self.draw_in_normal_state()
+        
+        # マウスセレクト時の画面表示
+        elif self.engine.game_state == GAME_STATE.SELECT_LOCATION:
+            self.draw_select_mouse_location()
 
-            # Character_Screen表示
-            elif self.engine.game_state == GAME_STATE.CHARACTER_SCREEN:
-                self.draw_character_screen()
-                self.draw_button()
-            
-            # fov_recomputeがTruならfov計算
-            if self.engine.fov_recompute:
-                self.engine.fov()
+        # Character_Screen表示
+        elif self.engine.game_state == GAME_STATE.CHARACTER_SCREEN:
+            self.draw_character_screen()
+            self.draw_button()
+        
+        # fov_recomputeがTruならfov計算
+        if self.engine.fov_recompute:
+            self.engine.fov()
 
-        except Exception as e:
-            print(e)
 
     def on_update(self, delta_time):
-        self.engine.chara_sprites.update_animation()
-        self.engine.chara_sprites.update()
-        self.engine.actor_sprites.update_animation()
-        self.engine.actor_sprites.update()
-        self.engine.effect_sprites.update()
+        self.engine.cur_level.chara_sprites.update_animation()
+        self.engine.cur_level.chara_sprites.update()
+        self.engine.cur_level.actor_sprites.update_animation()
+        self.engine.cur_level.actor_sprites.update()
+        self.engine.cur_level.effect_sprites.update()
 
         self.engine.process_action_queue(delta_time)
-        self.engine.player.check_experience_level(self.engine)
         self.engine.turn_change(delta_time)
         self.engine.check_for_player_movement(self.player_direction)
+
+        self.engine.player.check_experience_level(self.engine)
 
         # playerがmove状態の時だけviewportを計算する
         if self.engine.player.state == state.ON_MOVE:
