@@ -14,3 +14,6 @@ class SmallShield(Actor):
             y=y,
             equippable=equippable_component
         )
+
+s = SmallShield(0,0)
+print(s.equippable.slot.name,"DDDDDDDDDDDDDDDDD")

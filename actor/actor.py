@@ -34,8 +34,10 @@ class Actor(arcade.Sprite):
         self.is_dead = False
         self.left_face = False
 
-        self.inventory = inventory
         self.item = item
+        self.inventory = inventory
+        if self.inventory:
+            self.inventory.owner = self
 
         self.state = None
 
@@ -78,6 +80,7 @@ class Actor(arcade.Sprite):
         result["block_sight"] = self.block_sight
         result["is_visible"] = self.is_visible
         result["is_dead"] = self.is_dead
+
         if self.state:
             result["state"] = True
 
@@ -92,7 +95,10 @@ class Actor(arcade.Sprite):
             result["item"] = True
         if self.inventory:
             result["inventory"] = self.inventory.get_dict()
-
+  
+        if self.equippable:
+            result["equippable"] = self.equippable.get_dict()
+        
         return result
 
     def restore_from_dict(self, result):
@@ -100,6 +106,8 @@ class Actor(arcade.Sprite):
         from actor.ai import Basicmonster
         from actor.inventory import Inventory
         from constants import state
+        from actor.equip import Equippable
+        from actor.equipment import Equipment
 
         self.x = result["x"]
         self.y = result["y"]
@@ -116,6 +124,7 @@ class Actor(arcade.Sprite):
         self.block_sight = result["block_sight"]
         self.is_visible = result["is_visible"]
         self.is_dead = result["is_dead"]
+
         if "state" in result:
             self.state = state.TURN_END
         if "ai" in result:
@@ -127,15 +136,28 @@ class Actor(arcade.Sprite):
             self.ai.restore_from_dict(result["confused_ai"])
         if "item" in result:
             self.item = Item()
-            print(f"Restore item {self.name}")
+            # print(f"Restore item {self.name}")        
+
+        if self.equippable in result:
+            self.equippable = Equippable()
+            self.equippable.owner = self
+            self.equippable.restore_from_dict(result["equippable"])
+            if not self.item:
+                item = Item()
+                self.item = item
+                self.item.owner = self
+        
         self.inventory = None
+        if "inventory" in result:
+            self.inventory = Inventory()
+            self.inventory.owner = self
+            self.inventory.restore_from_dict(result["inventory"])
+
         if "fighter" in result:
             self.fighter = Fighter()
             self.fighter.owner = self
             self.fighter.restore_from_dict(result["fighter"])
-        if "inventory" in result:
-            self.inventory = Inventory()
-            self.inventory.restore_from_dict(result["inventory"])
+
 
     def move(self, dxy, target=None, actor_sprites=None, map_sprites=None):
         try:

@@ -55,6 +55,7 @@ class Equipment:
                 self.main_hand = None
                 results.append({"dequipped": equippable_item})
             else:
+                # 
                 # equippable_itemがメインハンドと別のアイテムなら装備を解除しequippable_itemを装備
                 if self.main_hand:
                     results.append({"dequipped": self.main_hand})

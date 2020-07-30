@@ -36,6 +36,7 @@ class Fighter:
         self.ability_points = result["ability_points"]
 
 
+
     @property
     def max_hp(self):
         if self.owner and self.owner.equipment:

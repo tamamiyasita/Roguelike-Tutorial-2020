@@ -82,7 +82,7 @@ class GameEngine:
         level.effect_sprites = arcade.SpriteList(use_spatial_hash=True, spatial_hash_cell_size=16)
         level.chara_sprites = arcade.SpriteList(use_spatial_hash=True, spatial_hash_cell_size=32)
 
-        self.player = Player(self.game_map.player_position[0],self.game_map.player_position[1], inventory=Inventory(capacity=5))
+        self.player = Player(self.game_map.player_position[0],self.game_map.player_position[1], inventory=Inventory(capacity=4))
         level.chara_sprites.append(self.player)
 
         self.short_sword = ShortSword(self.player.x, self.player.y +1)
@@ -294,6 +294,13 @@ class GameEngine:
 
                             if equipped:
                                 new_action_queue.extend([{"message":f"You equipped the {equipped.name}"}])
+                                if equipped.equippable.slot.name == "MAIN_HAND":
+                                    self.player.inventory.on_equip_name["main_hand"] = equipped.name
+                                    print(self.player.inventory.on_equip_name)
+                                elif equipped.equippable.slot.name == "OFF_HAND":
+                                    self.player.inventory.on_equip_name["off_hand"] = equipped.name
+                                    print(self.player.inventory.on_equip_name)
+
                             elif dequipped:
                                 new_action_queue.extend([{"message":f"You dequipped the {dequipped.name}"}])
                             break

@@ -543,6 +543,7 @@ class MG(arcade.Window):
         with open("game_save.json", "w") as write_file:
             json.dump(game_dict, write_file, indent=4, sort_keys=True)
         print("**save**")
+        print(self.engine.player.equipment.main_hand)
 
     def load(self):
         print("load")
@@ -550,6 +551,7 @@ class MG(arcade.Window):
             data = json.load(read_file)
 
         # print(data)
+        print(self.engine.player.equipment.main_hand,"??")
         print("**load**")
         self.engine.restore_from_dict(data)
         self.engine.player.state = state.READY

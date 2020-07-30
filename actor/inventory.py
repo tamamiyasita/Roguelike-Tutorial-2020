@@ -1,31 +1,19 @@
 # from actor.actor import Actor
 from actor.restore_actor import restore_actor
-
+from actor.equipment import Equipment
 
 class Inventory:
     def __init__(self, capacity=0):
-        # self._capacity = 0
         self.bag = []
         self.capacity = capacity
+        self.on_equip_name = {"main_hand":None, "off_hand":None}
 
         self.bag = [None for _ in range(self.capacity)]
-
-    # @property
-    # def capacity(self):
-    #     """所持アイテム数"""
-    #     return self._capacity
-
-    # @capacity.setter
-    # def capacity(self, value):
-    #     """bag拡張処理"""
-    #     self._capacity = value
-    #     # キャパシティに値が追加されたらbagにNoneを追加し拡張する
-    #     while len(self.bag) < self.capacity:
-    #         self.bag.append(None)
 
     def get_dict(self):
         result = {}
         result["capacity"] = self.capacity
+        result["on_equip_name"] = self.on_equip_name
         item_dicts = []
         for item in self.bag:
             if item is None:
@@ -34,17 +22,22 @@ class Inventory:
                 name = item.__class__.__name__
                 item_dicts.append({name: item.get_dict()})
         result["items"] = item_dicts
-        print(item_dicts)
+        print(item_dicts, "item_dicts")
         return result
 
     def restore_from_dict(self, result):
         self.capacity = result["capacity"]
+        self.on_equip_name = result["on_equip_name"]
         for item_dict in result["items"]:
             if item_dict is None:
                 self.bag.append(None)
             else:
                 item = restore_actor(item_dict)
                 self.bag.append(item)
+                if item.name in self.on_equip_name.values():
+                    self.owner.equipment.toggle_equip(item)
+            print(self.bag, "rest")
+                
 
     def add_item(self, item):
         results = []
@@ -65,7 +58,6 @@ class Inventory:
                 {"message": f"You pick up the {item.name}!"}
             )
             item.remove_from_sprite_lists()
-            self.bag.append(item)
 
         return results
 
