@@ -4,10 +4,13 @@ from actor.actor import Actor
 from actor.fighter import Fighter
 from data import *
 from constants import *
+from actor.equipment import Equipment
+
 
 class Player(Actor):
     def __init__(self, x=0, y=0, inventory=0):
         fighter_component = Fighter(hp=35, defense=3, power=5, level=1)
+        equip_component = Equipment()
         super().__init__(
             name="player",
             x=x,
@@ -16,12 +19,13 @@ class Player(Actor):
 
             inventory=inventory,
             fighter=fighter_component,
+            equipment=equip_component
 
         )
 
         # self.left_face = False
         self.state = state.READY
-        self.delay_time = 3.7
+        self.delay_time = 2
 
     def check_experience_level(self, game_engine):
         if isinstance(self.fighter.level, list):
@@ -55,7 +59,7 @@ class Player(Actor):
             if self.delay_time <= 0.5:
                 self.texture = pc_delay[0]
             if self.delay_time < 0:
-                self.delay_time = 3.7
+                self.delay_time = 2.7
         if self.state == state.READY and self.left_face:
             self.texture = player[1]
             self.delay_time -= delta_time

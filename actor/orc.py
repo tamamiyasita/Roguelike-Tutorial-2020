@@ -1,5 +1,3 @@
-import arcade
-from arcade import texture
 from actor.actor import Actor
 from actor.fighter import Fighter
 from actor.ai import Basicmonster

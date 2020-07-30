@@ -257,13 +257,13 @@ class MG(arcade.Window):
                         )
             for buttons in buttons_clicked:
                 if buttons.name == "Attack":
-                    self.engine.player.fighter.power += 1
+                    self.engine.player.fighter.base_power += 1
                     self.engine.player.fighter.ability_points -= 1
                 elif buttons.name == "Defense":
-                    self.engine.player.fighter.defense += 1
+                    self.engine.player.fighter.base_defense += 1
                     self.engine.player.fighter.ability_points -= 1
                 elif buttons.name == "HP":
-                    self.engine.player.fighter.hp += 15
+                    self.engine.player.fighter.base_max_hp += 15
                     self.engine.player.fighter.max_hp += 15
                     self.engine.player.fighter.ability_points -= 1
                 elif buttons.name == "Capacity":
@@ -483,6 +483,8 @@ class MG(arcade.Window):
                 self.engine.action_queue.extend([{"select_item": 0}])
             elif key in KEYMAP_USE_ITEM:
                 self.engine.action_queue.extend([{"use_item": True}])
+            elif key in KEYMAP_EQUIP_ITEM:
+                self.engine.action_queue.extend([{"equip_item": True}])
             elif key in KEYMAP_DROP_ITEM:
                 self.engine.action_queue.extend([{"drop_item": True}])
             elif key in KEYMAP_USE_STAIRS:

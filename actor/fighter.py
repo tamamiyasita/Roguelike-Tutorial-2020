@@ -3,10 +3,10 @@ from constants import *
 
 class Fighter:
     def __init__(self, hp=0, defense=0, power=0, xp_reward=0, current_xp=0, level=1, ability_points=0):
-        self.max_hp = hp
         self.hp = hp
-        self.defense = defense
-        self.power = power
+        self.base_defense = defense
+        self.base_power = power
+        self.base_max_hp = hp
         self.owner = None
         self.xp_reward = xp_reward
         self.current_xp = current_xp
@@ -15,10 +15,10 @@ class Fighter:
 
     def get_dict(self):
         result = {}
-        result["max_hp"] = self.max_hp
+        result["max_hp"] = self.base_max_hp
+        result["defense"] = self.base_defense
+        result["power"] = self.base_power
         result["hp"] = self.hp
-        result["defense"] = self.defense
-        result["power"] = self.power
         result["xp_reward"] = self.xp_reward
         result["current_xp"] = self.current_xp
         result["level"] = self.level
@@ -26,14 +26,39 @@ class Fighter:
         return result
 
     def restore_from_dict(self, result):
-        self.max_hp = result["max_hp"]
+        self.base_max_hp = result["max_hp"]
+        self.base_defense = result["defense"]
+        self.base_power = result["power"]
         self.hp = result["hp"]
-        self.defense = result["defense"]
-        self.power = result["power"]
         self.xp_reward = result["xp_reward"]
         self.current_xp = result["current_xp"]
         self.level = result["level"]
         self.ability_points = result["ability_points"]
+
+
+    @property
+    def max_hp(self):
+        if self.owner and self.owner.equipment:
+            bonus = self.owner.equipment.max_hp_bonus
+        else:
+            bonus = 0
+        return self.base_max_hp + bonus
+
+    @property
+    def power(self):
+        if self.owner and self.owner.equipment:
+            bonus = self.owner.equipment.power_bonus
+        else:
+            bonus = 0
+        return self.base_power + bonus
+
+    @property
+    def defense(self):
+        if self.owner and self.owner.equipment:
+            bonus = self.owner.equipment.defense_bonus
+        else:
+            bonus = 0
+        return self.base_defense + bonus
 
     def take_damage(self, amount):
         results = []

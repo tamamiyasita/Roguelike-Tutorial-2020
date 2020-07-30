@@ -5,6 +5,7 @@ import math
 from constants import *
 from data import *
 from util import pixel_to_grid, grid_to_pixel, get_blocking_entity
+from actor.item import Item
 
 
 class Actor(arcade.Sprite):
@@ -13,7 +14,7 @@ class Actor(arcade.Sprite):
 
     def __init__(self, texture_number=0, name=None, x=0, y=0, blocks=False, block_sight=False,
                  scale=SPRITE_SCALE, color=arcade.color.BLACK, fighter=None, ai=None,
-                 inventory=None, item=None,
+                 inventory=None, item=None, equipment=None, equippable=None,
                  visible_color=arcade.color.WHITE, not_visible_color=arcade.color.BLACK,
                  state=state.TURN_END):
         super().__init__(scale=scale)
@@ -46,6 +47,19 @@ class Actor(arcade.Sprite):
         self.ai = ai
         if self.ai:
             self.ai.owner = self
+
+        self.equipment = equipment
+        if self.equipment:
+            self.equipment.owner = self
+
+        self.equippable = equippable
+        if self.equippable:
+            self.equippable.owner = self
+            if not self.item:
+                item = Item()
+                self.item = item
+                self.item.owner =self
+    
 
     def get_dict(self):
         result = {}
@@ -84,7 +98,6 @@ class Actor(arcade.Sprite):
     def restore_from_dict(self, result):
         from actor.fighter import Fighter
         from actor.ai import Basicmonster
-        from actor.item import Item
         from actor.inventory import Inventory
         from constants import state
 

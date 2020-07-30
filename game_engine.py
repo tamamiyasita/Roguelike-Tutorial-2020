@@ -2,9 +2,6 @@
 import arcade
 from collections import deque
 
-from arcade.window_commands import set_viewport
-
-
 from constants import *
 from data import *
 from game_map.basic_dungeon import BasicDungeon
@@ -18,6 +15,8 @@ from actor.PC import Player
 from actor.Crab import Crab
 from actor.stairs import Stairs
 from actor.restore_actor import restore_actor
+from actor.short_sword import ShortSword
+from actor.small_shield import SmallShield
 
 
 class GameLevel:
@@ -83,12 +82,15 @@ class GameEngine:
         level.effect_sprites = arcade.SpriteList(use_spatial_hash=True, spatial_hash_cell_size=16)
         level.chara_sprites = arcade.SpriteList(use_spatial_hash=True, spatial_hash_cell_size=32)
 
-
         self.player = Player(self.game_map.player_position[0],self.game_map.player_position[1], inventory=Inventory(capacity=5))
         level.chara_sprites.append(self.player)
-        # self.crab = Crab(self.player.x + 2, self.player.y +
-        #                  1, game_engine=self,)
-        # self.actor_sprites.append(self.crab)
+
+        self.short_sword = ShortSword(self.player.x, self.player.y +1)
+        level.item_sprites.append(self.short_sword)
+
+        self.small_shield = SmallShield(self.player.x + 1 , self.player.y+1)
+        level.item_sprites.append(self.small_shield)
+
         self.cnf = ConfusionScroll(self.player.x + 1, self.player.y)
         level.item_sprites.append(self.cnf)
 
@@ -234,6 +236,7 @@ class GameEngine:
                     
                     new_action_queue.extend(
                         [{"message": f"{target.name} has been killed!"}])
+
                     new_action_queue.extend(
                         [{"delay": {"time": DEATH_DELAY, "action": {"remove": target}}}])
             if "remove" in action:
@@ -277,17 +280,39 @@ class GameEngine:
                             new_action_queue.extend(results)
                             self.player.state = state.TURN_END
 
+            if "equip_item" in action:
+                item_number = self.selected_item
+                if item_number is not None:
+                    equip_item = self.player.inventory.get_item_number(item_number)
+                    if equip_item and equip_item.equippable:
+                        equip_results = self.player.equipment.toggle_equip(equip_item)
+
+                        for equip in equip_results:
+                            equipped = equip.get("equipped")
+                            dequipped = equip.get("dequipped")
+                     
+
+                            if equipped:
+                                new_action_queue.extend([{"message":f"You equipped the {equipped.name}"}])
+                            elif dequipped:
+                                new_action_queue.extend([{"message":f"You dequipped the {dequipped.name}"}])
+                            break
+
+
             if "drop_item" in action:
                 item_number = self.selected_item
                 if item_number is not None:
                     item = self.player.inventory.get_item_number(item_number)
                     if item:
                         self.player.inventory.remove_item_number(item_number)
-                        self.cur_level.actor_sprites.append(item)
+                        self.cur_level.item_sprites.append(item)
                         item.center_x = self.player.center_x
                         item.center_y = self.player.center_y
-                        new_action_queue.extend(
-                            [{"message": f"You dropped the {item.name}"}])
+                        new_action_queue.extend([{"message": f"You dropped the {item.name}"}])
+
+                        if self.player.equipment.main_hand == item or self.player.equipment.off_hand == item:
+                            dequipped = self.player.equipment.toggle_equip(item)
+                            new_action_queue.extend(dequipped)
 
             if "use_stairs" in action:
 

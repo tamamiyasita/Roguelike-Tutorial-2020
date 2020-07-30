@@ -50,6 +50,8 @@ class TILE:
     ORC = auto()
     TROLL = auto()
     
+    SWORD = auto()
+
     HEALING_POTION = auto()
     LIGHTNING_SCROLL = auto()
     FIREBALL_SCROLL = auto()
@@ -93,6 +95,7 @@ KEYMAP_SELECT_ITEM_8 = [arcade.key.KEY_8]
 KEYMAP_SELECT_ITEM_9 = [arcade.key.KEY_9]
 KEYMAP_SELECT_ITEM_0 = [arcade.key.KEY_0]
 KEYMAP_USE_ITEM = [arcade.key.U]
+KEYMAP_EQUIP_ITEM = [arcade.key.K]
 KEYMAP_DROP_ITEM = [arcade.key.H]
 KEYMAP_CHARACTER_SCREEN = [arcade.key.C]
 KEYMAP_USE_STAIRS = [arcade.key.ENTER]
