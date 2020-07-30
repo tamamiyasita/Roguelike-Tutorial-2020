@@ -297,7 +297,7 @@ class MG(arcade.Window):
 
         text_position_y -= text_size * spacing
         text_size = 20
-        states_text = f"Attack: {self.engine.player.fighter.power}"
+        states_text = f"Attack: {self.engine.player.fighter.base_power} + {self.engine.player.equipment.power_bonus}"
         arcade.draw_text(
                         text=states_text,
                         start_x=text_position_x,
@@ -307,7 +307,7 @@ class MG(arcade.Window):
                         )
 
         text_position_y -= text_size * spacing
-        states_text = f"Defense: {self.engine.player.fighter.defense}"
+        states_text = f"Defense: {self.engine.player.fighter.base_defense} + {self.engine.player.equipment.defense_bonus}"
         arcade.draw_text(
                         text=states_text,
                         start_x=text_position_x,

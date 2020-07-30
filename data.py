@@ -42,6 +42,9 @@ scroll_tile = get_tile_set(scroll_tile_img, tile_size=16)
 short_weppon_img =(r"image/ShortWep.png")
 short_weppon_tile = get_tile_set(short_weppon_img, tile_size=16)
 
+med_weppon_img =(r"image/MedWep.png")
+med_weppon_tile = get_tile_set(med_weppon_img, tile_size=16)
+
 shield_img = (r"image\Shield.png")
 shield_tile = get_tile_set(shield_img, tile_size=16)
 #######
@@ -85,8 +88,10 @@ IMAGE_ID = {"player": player,
             "orc": orc,
             "troll": troll,
 
-            "short_sword":[short_weppon_tile[1]],
+            "short_sword":[short_weppon_tile[0]],
+            "long_sword":[med_weppon_tile[0]],
             "small_shield":[shield_tile[0]],
+            "wood_buckler":[shield_tile[5]],
 
             "healing_potion": healing_potion_tile,
             "confusion_scroll": [scroll_tile[15]],

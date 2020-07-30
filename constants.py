@@ -50,7 +50,8 @@ class TILE:
     ORC = auto()
     TROLL = auto()
     
-    SWORD = auto()
+    LONG_SWORD = auto()
+    WOOD_BUCKLER = auto()
 
     HEALING_POTION = auto()
     LIGHTNING_SCROLL = auto()
