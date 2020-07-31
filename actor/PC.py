@@ -27,6 +27,9 @@ class Player(Actor):
         self.state = state.READY
         self.delay_time = 2
 
+
+
+
     def check_experience_level(self, game_engine):
         if isinstance(self.fighter.level, list):
             self.fighter.level = self.fighter.level[0]
@@ -45,6 +48,7 @@ class Player(Actor):
             self.texture = pc_move[0]
         if self.state == state.ON_MOVE and self.left_face:
             self.texture = pc_move[1]
+            print(self.equipment.main_hand.texture)
 
         if self.state == state.ATTACK and not self.left_face:
             self.texture = pc_attack[0]

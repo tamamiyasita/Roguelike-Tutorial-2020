@@ -414,7 +414,7 @@ class GameEngine:
             for actor in self.turn_check:
                 if actor.state == state.TURN_END:
                     turn_count += 1
-                print(len(self.turn_check), turn_count, "Trun check count")
+                # print(len(self.turn_check), turn_count, "Trun check count")
                 if turn_count >= len(self.turn_check):
                     self.action_queue.extend([{"player_turn": True}])
                     self.turn_check = []

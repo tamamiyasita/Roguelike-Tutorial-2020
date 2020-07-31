@@ -7,3 +7,4 @@ TODO potion effectの実装
 TODO arcadeのﾊﾟｰﾃｨｸﾙ効果を試したい
 TODO ミニマップの実装
 TODO 他のダンジョンジェネレータの実装
+TODO ダメージ表記
