@@ -20,6 +20,8 @@ from actor.small_shield import SmallShield
 
 
 class GameLevel:
+    """現マップのレベルを設定する
+    """
     def __init__(self):
         self.chara_sprites = None
         self.actor_sprites = None
@@ -46,17 +48,16 @@ class GameEngine:
         self.game_state = GAME_STATE.NORMAL
         self.grid_select_handlers = []
 
-        """ スプライトリストの初期化 """
-        self.chara_sprites = arcade.SpriteList(
-            use_spatial_hash=True, spatial_hash_cell_size=32)
-        self.actor_sprites = arcade.SpriteList(
-            use_spatial_hash=True, spatial_hash_cell_size=32)
-        self.map_sprites = arcade.SpriteList(
-            use_spatial_hash=True, spatial_hash_cell_size=32)
-        self.item_sprites = arcade.SpriteList(
-            use_spatial_hash=True, spatial_hash_cell_size=32)        
-        self.effect_sprites = arcade.SpriteList(
-            use_spatial_hash=True, spatial_hash_cell_size=16)
+        # self.chara_sprites = arcade.SpriteList(
+        #     use_spatial_hash=True, spatial_hash_cell_size=32)
+        # self.actor_sprites = arcade.SpriteList(
+        #     use_spatial_hash=True, spatial_hash_cell_size=32)
+        # self.map_sprites = arcade.SpriteList(
+        #     use_spatial_hash=True, spatial_hash_cell_size=32)
+        # self.item_sprites = arcade.SpriteList(
+        #     use_spatial_hash=True, spatial_hash_cell_size=32)        
+        # self.effect_sprites = arcade.SpriteList(
+        #     use_spatial_hash=True, spatial_hash_cell_size=16)
 
     def setup(self):
 
@@ -71,6 +72,8 @@ class GameEngine:
         level = GameLevel()
 
         self.game_map = BasicDungeon(map_width, map_height, level)
+
+        """ スプライトリストの初期化 """
         mapsprite = ActorPlacement(self.game_map, self).map_set()
         actorsprite = ActorPlacement(self.game_map, self).actor_set()
         itemsprite = ActorPlacement(self.game_map, self).items_set()
@@ -78,9 +81,10 @@ class GameEngine:
         level.map_sprites = mapsprite
         level.actor_sprites = actorsprite
         level.item_sprites = itemsprite
-        level.level = level_number
         level.effect_sprites = arcade.SpriteList(use_spatial_hash=True, spatial_hash_cell_size=16)
         level.chara_sprites = arcade.SpriteList(use_spatial_hash=True, spatial_hash_cell_size=32)
+
+        level.level = level_number
 
         self.player = Player(self.game_map.player_position[0],self.game_map.player_position[1], inventory=Inventory(capacity=4))
         level.chara_sprites.append(self.player)
@@ -297,6 +301,7 @@ class GameEngine:
                                 if equipped.equippable.slot.name == "MAIN_HAND":
                                     self.player.inventory.on_equip_name["main_hand"] = equipped.name
                                     print(self.player.inventory.on_equip_name)
+                                    
                                 elif equipped.equippable.slot.name == "OFF_HAND":
                                     self.player.inventory.on_equip_name["off_hand"] = equipped.name
                                     print(self.player.inventory.on_equip_name)

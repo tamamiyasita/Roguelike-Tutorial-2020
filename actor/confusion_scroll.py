@@ -82,3 +82,7 @@ class ConfusionScroll(Actor):
         self.game_engine.player.inventory.remove_item(self)
 
         return results
+
+    @staticmethod
+    def challenge():
+        return 2

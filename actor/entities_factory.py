@@ -1,3 +1,4 @@
+from actor.confusion_scroll import ConfusionScroll
 import random
 import csv
 from arcade import load_texture
@@ -5,6 +6,13 @@ from actor.actor import Actor
 from actor.ai import Basicmonster
 from actor.fighter import Fighter
 from data import *
+from actor.long_sword import LongSword
+from actor.short_sword import ShortSword
+from actor.small_shield import SmallShield
+from actor.healing_potion import HealingPotion
+from actor.lightning_scroll import LightningScroll
+from actor.fireball_scroll import FireballScroll
+
 
 
 
@@ -19,18 +27,6 @@ def load_entities(filename):
 
 entities = load_entities(r"actor/actors.csv")
 
-# def convert_to_restore_dict(monster):
-#     converted = {}
-#     converted["texture"] = int(monster["texture"])
-#     converted["name"] = monster["name"]
-#     converted["fighter"] = {
-#                             "hp": int(monster["HP"]),
-#                             "max_hp": int(monster["HP"]),
-#                             "power": int(monster["Attack"]),
-#                             "defence": int(monster["Defense"]),
-#                             "xp_reward": int(monster["XP"])
-#                             }
-#     return converted
 
 def get_random_monster_by_challenge(challenge):
     if challenge:
@@ -39,6 +35,19 @@ def get_random_monster_by_challenge(challenge):
             raise ValueError(f"Error, no entities for challenge level {challenge}.")
         m1 = random.choice(filtered_monsters)
         return m1
+
+item_list = [
+            ShortSword(),SmallShield(), LongSword(),LightningScroll(),
+            FireballScroll(),ConfusionScroll()
+            ]
+
+def get_random_items_by_challenge(challenge):
+    if challenge:
+        filtered_items = [item for item in item_list if item.challenge() == challenge]
+        if len(filtered_items) == 0:
+            raise ValueError(f"Error, no entities for challenge level {challenge}.")
+        i1 = random.choice(filtered_items)
+        return i1
 
 def make_monster_sprite(monster_dict):
     sprite = Actor(
@@ -57,6 +66,3 @@ def make_monster_sprite(monster_dict):
     sprite.blocks = True
     print(f"Made a {sprite.name}.")
     return sprite
-
-# m = get_random_monster_by_challenge(1)
-# print(m)

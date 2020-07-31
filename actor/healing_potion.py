@@ -21,3 +21,7 @@ class HealingPotion(Actor):
         game_engine.player.inventory.remove_item(self)
 
         return [{"message": f"You used the {self.name}"}]
+        
+    @staticmethod
+    def challenge():
+        return 1

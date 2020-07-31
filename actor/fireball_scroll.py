@@ -85,3 +85,7 @@ class FireballScroll(Actor):
 
         print(results, "results")
         return results
+
+    @staticmethod
+    def challenge():
+        return 2

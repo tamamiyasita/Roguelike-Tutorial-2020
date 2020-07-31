@@ -76,3 +76,7 @@ class LightningScroll(Actor):
             results.extend([{"message": "not enemy"}])
 
         return results
+
+    @staticmethod
+    def challenge():
+        return 1

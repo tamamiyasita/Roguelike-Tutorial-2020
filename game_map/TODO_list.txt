@@ -1,9 +1,8 @@
 TODO 保存と読み込みの完了(終了させてからロードすると真っ暗になるバグが直らない)(直った！)
-TODO part11 levelupのコーディング
-TODO エフェクト効果のロード
-TODO setを利用してtarn checkを効率化したい
+TODO part11 levelupのコーディング(DONE!)
+TODO エフェクト効果のロード(DONE!)
 TODO actor等にコメントや変数名の整理
-TODO actorが多いとすぐ重くなるのなんとかしたい
+TODO actorが多いとすぐ重くなるのなんとかしたい(ある程度なんとかなった気がする)
 TODO potion effectの実装
 TODO arcadeのﾊﾟｰﾃｨｸﾙ効果を試したい
 TODO ミニマップの実装

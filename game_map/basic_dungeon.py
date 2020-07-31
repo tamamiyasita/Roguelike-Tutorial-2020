@@ -47,6 +47,8 @@ class BasicDungeon:
 
         self.tiles = [[TILE.WALL for y in range(height)] for x in range(width)]
         self.actor_tiles =  [[TILE.EMPTY for y in range(height)] for x in range(width)]
+        self.item_tiles =  [[TILE.EMPTY for y in range(height)] for x in range(width)]
+
         self.player_position = 0
         self.make_map(level)
 
@@ -132,17 +134,30 @@ class BasicDungeon:
             if not self.actor_tiles[x][y]:
                 self.actor_tiles[x][y] = challenge_level
 
-
-        for i in range(number_of_items):
+        if level == 1:
+            combos = [[], [1], [1], [1], []]
+        if level == 2:
+            combos = [[], [1], [], [2], [1]]
+        else:
+            combos = [[], [1], [2], [1], [1]]
+        item_choice = choice(combos)
+        for challenge_level in item_choice:
             x = randint(room.x1 + 1, room.x2 - 1)
             y = randint(room.y1 + 1, room.y2 - 1)
 
-            type = randint(0, 100)
-            if type < 40:
-                actor_tiles[x][y] = TILE.HEALING_POTION
-            elif type < 60:
-                actor_tiles[x][y] = TILE.LIGHTNING_SCROLL
-            elif type < 80:
-                actor_tiles[x][y] = TILE.FIREBALL_SCROLL
-            else:
-                actor_tiles[x][y] = TILE.CONFUSION_SCROLL
+            if not self.item_tiles[x][y]:
+                self.item_tiles[x][y] = challenge_level
+
+        # for i in range(number_of_items):
+        #     x = randint(room.x1 + 1, room.x2 - 1)
+        #     y = randint(room.y1 + 1, room.y2 - 1)
+
+        #     type = randint(0, 100)
+        #     if type < 40:
+        #         actor_tiles[x][y] = TILE.HEALING_POTION
+        #     elif type < 60:
+        #         actor_tiles[x][y] = TILE.LIGHTNING_SCROLL
+        #     elif type < 80:
+        #         actor_tiles[x][y] = TILE.FIREBALL_SCROLL
+        #     else:
+        #         actor_tiles[x][y] = TILE.CONFUSION_SCROLL

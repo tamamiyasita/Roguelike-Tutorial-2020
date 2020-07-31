@@ -14,3 +14,7 @@ class LongSword(Actor):
             y=y,
             equippable=equippable_component
         )
+
+    @staticmethod
+    def challenge():
+        return 2

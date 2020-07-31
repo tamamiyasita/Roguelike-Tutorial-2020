@@ -1,19 +1,25 @@
 from actor.equip import EquipmentSlots
 
 class Equipment:
+    """装備部位とそこからの追加bonusを返す
+       bonusはEquippable関数で設定する
+    """
     def __init__(self, main_hand=None, off_hand=None):
         self.main_hand = main_hand
         self.off_hand = off_hand
 
     @property
+    # 現在の部位の状態を返す
+    def body_equip(self):
+        return [self.main_hand, self.off_hand]
+
+    @property
     def max_hp_bonus(self):
         bonus = 0
 
-        if self.main_hand and self.main_hand.equippable:
-            bonus += self.main_hand.equippable.max_hp_bonus
-
-        if self.off_hand and self.off_hand.equippable:
-            bonus += self.off_hand.equippable.max_hp_bonus
+        for parts in self.body_equip:
+            if parts and parts.equippable:
+                bonus += parts.equippable.max_hp_bonus
 
         return bonus
 
@@ -21,11 +27,9 @@ class Equipment:
     def power_bonus(self):
         bonus = 0
 
-        if self.main_hand and self.main_hand.equippable:
-            bonus += self.main_hand.equippable.power_bonus
-
-        if self.off_hand and self.off_hand.equippable:
-            bonus += self.off_hand.equippable.power_bonus
+        for parts in self.body_equip:
+            if parts and parts.equippable:
+                bonus += parts.equippable.power_bonus
 
         return bonus
 
@@ -33,11 +37,9 @@ class Equipment:
     def defense_bonus(self):
         bonus = 0
 
-        if self.main_hand and self.main_hand.equippable:
-            bonus += self.main_hand.equippable.defense_bonus
-
-        if self.off_hand and self.off_hand.equippable:
-            bonus += self.off_hand.equippable.defense_bonus
+        for parts in self.body_equip:
+            if parts and parts.equippable:
+                bonus += parts.equippable.defense_bonus
 
         return bonus
 
