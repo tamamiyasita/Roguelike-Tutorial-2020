@@ -25,7 +25,7 @@ class Player(Actor):
 
         # self.left_face = False
         self.state = state.READY
-        self.delay_time = 2
+        self.delay_time = 5
 
 
 
@@ -48,7 +48,6 @@ class Player(Actor):
             self.texture = pc_move[0]
         if self.state == state.ON_MOVE and self.left_face:
             self.texture = pc_move[1]
-            print(self.equipment.main_hand.texture)
 
         if self.state == state.ATTACK and not self.left_face:
             self.texture = pc_attack[0]
@@ -63,7 +62,7 @@ class Player(Actor):
             if self.delay_time <= 0.5:
                 self.texture = pc_delay[0]
             if self.delay_time < 0:
-                self.delay_time = 2.7
+                self.delay_time = 5
         if self.state == state.READY and self.left_face:
             self.texture = player[1]
             self.delay_time -= delta_time
@@ -72,4 +71,4 @@ class Player(Actor):
             if self.delay_time <= 0.5:
                 self.texture = pc_delay[1]
             if self.delay_time < 0:
-                self.delay_time = 2.7
+                self.delay_time = 5

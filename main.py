@@ -1,3 +1,4 @@
+from data import IMAGE_ID
 from os import write
 import arcade
 import json
@@ -210,6 +211,7 @@ class MG(arcade.Window):
         self.engine.cur_level.actor_sprites.draw(filter=gl.GL_NEAREST)
         self.engine.cur_level.chara_sprites.draw(filter=gl.GL_NEAREST)
         self.engine.cur_level.effect_sprites.draw()
+        self.engine.cur_level.equip_sprites.draw(filter=gl.GL_NEAREST)
 
         # 画面下のパネルをarcadeの四角形を描画する変数で作成
         arcade.draw_xywh_rectangle_filled(
@@ -417,6 +419,8 @@ class MG(arcade.Window):
         self.engine.cur_level.actor_sprites.update_animation()
         self.engine.cur_level.actor_sprites.update()
         self.engine.cur_level.effect_sprites.update()
+        self.engine.cur_level.equip_sprites.update()
+        self.engine.cur_level.equip_sprites.update_animation()
 
         self.engine.process_action_queue(delta_time)
         self.engine.turn_change(delta_time)

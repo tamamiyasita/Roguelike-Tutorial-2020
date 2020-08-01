@@ -5,6 +5,7 @@ from actor.orc import Orc
 from actor.troll import Troll
 from actor.Crab import Crab
 from actor.short_sword import ShortSword
+from actor.long_sword import LongSword
 from actor.small_shield import SmallShield
 from actor.fireball_scroll import FireballScroll, FireballEffect
 from actor.lightning_scroll import LightningScroll, LightningEffect
@@ -24,6 +25,8 @@ def restore_actor(actor_dict):
 
     elif actor_name == "ShortSword":
         actor = ShortSword()
+    elif actor_name == "LongSword":
+        actor = LongSword()
     elif actor_name == "SmallShield":
         actor = SmallShield()
 

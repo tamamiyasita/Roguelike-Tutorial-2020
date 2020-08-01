@@ -12,8 +12,12 @@ class LongSword(Actor):
             name="long_sword",
             x=x,
             y=y,
-            equippable=equippable_component
+            # scale=1.7,
+            equippable=equippable_component,
         )
+
+        self.item_margin_x = 18
+        self.item_margin_y = 0
 
     @staticmethod
     def challenge():

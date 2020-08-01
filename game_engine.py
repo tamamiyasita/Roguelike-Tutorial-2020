@@ -16,6 +16,7 @@ from actor.Crab import Crab
 from actor.stairs import Stairs
 from actor.restore_actor import restore_actor
 from actor.short_sword import ShortSword
+from actor.long_sword import LongSword
 from actor.small_shield import SmallShield
 
 
@@ -27,6 +28,7 @@ class GameLevel:
         self.actor_sprites = None
         self.map_sprites = None
         self.item_sprites = None
+        self.equip_sprites = None
         self.effect_sprites = None
         self.level = 0
         
@@ -81,15 +83,18 @@ class GameEngine:
         level.map_sprites = mapsprite
         level.actor_sprites = actorsprite
         level.item_sprites = itemsprite
+        level.equip_sprites = arcade.SpriteList(use_spatial_hash=True, spatial_hash_cell_size=32)
         level.effect_sprites = arcade.SpriteList(use_spatial_hash=True, spatial_hash_cell_size=16)
         level.chara_sprites = arcade.SpriteList(use_spatial_hash=True, spatial_hash_cell_size=32)
 
         level.level = level_number
 
-        self.player = Player(self.game_map.player_position[0],self.game_map.player_position[1], inventory=Inventory(capacity=4))
+        self.player = Player(self.game_map.player_position[0],self.game_map.player_position[1], inventory=Inventory(capacity=5))
         level.chara_sprites.append(self.player)
 
-        self.short_sword = ShortSword(self.player.x, self.player.y +1)
+        self.long_sword = LongSword(self.player.x, self.player.y +1)
+        level.item_sprites.append(self.long_sword)
+        self.short_sword = ShortSword(self.player.x+1, self.player.y +1)
         level.item_sprites.append(self.short_sword)
 
         self.small_shield = SmallShield(self.player.x + 1 , self.player.y+1)
@@ -179,6 +184,9 @@ class GameEngine:
                 use_spatial_hash=True, spatial_hash_cell_size=32)
 
             level.item_sprites = arcade.SpriteList(
+                use_spatial_hash=True, spatial_hash_cell_size=16)
+
+            level.eqip_sprites = arcade.SpriteList(
                 use_spatial_hash=True, spatial_hash_cell_size=16)
 
             level.effect_sprites = arcade.SpriteList(
@@ -289,7 +297,7 @@ class GameEngine:
                 if item_number is not None:
                     equip_item = self.player.inventory.get_item_number(item_number)
                     if equip_item and equip_item.equippable:
-                        equip_results = self.player.equipment.toggle_equip(equip_item)
+                        equip_results = self.player.equipment.toggle_equip(equip_item, self.cur_level.equip_sprites)
 
                         for equip in equip_results:
                             equipped = equip.get("equipped")
@@ -298,9 +306,12 @@ class GameEngine:
 
                             if equipped:
                                 new_action_queue.extend([{"message":f"You equipped the {equipped.name}"}])
+
                                 if equipped.equippable.slot.name == "MAIN_HAND":
                                     self.player.inventory.on_equip_name["main_hand"] = equipped.name
                                     print(self.player.inventory.on_equip_name)
+                                    # self.cur_level.equip_sprites.append(equipped)
+                                    
                                     
                                 elif equipped.equippable.slot.name == "OFF_HAND":
                                     self.player.inventory.on_equip_name["off_hand"] = equipped.name
@@ -308,6 +319,7 @@ class GameEngine:
 
                             elif dequipped:
                                 new_action_queue.extend([{"message":f"You dequipped the {dequipped.name}"}])
+                                # self.cur_level.equip_sprites.remove(dequipped)
                             break
 
 

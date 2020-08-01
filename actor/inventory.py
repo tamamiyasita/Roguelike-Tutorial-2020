@@ -3,7 +3,7 @@ from actor.restore_actor import restore_actor
 from actor.equipment import Equipment
 
 class Inventory:
-    def __init__(self, capacity=0):
+    def __init__(self, capacity=5):
         self.bag = []
         self.capacity = capacity
         self.on_equip_name = {"main_hand":None, "off_hand":None}
@@ -28,12 +28,12 @@ class Inventory:
     def restore_from_dict(self, result):
         self.capacity = result["capacity"]
         self.on_equip_name = result["on_equip_name"]
-        for item_dict in result["items"]:
+        for  i, item_dict in enumerate(result["items"]):
             if item_dict is None:
-                self.bag.append(None)
+                self.bag[i] = None
             else:
                 item = restore_actor(item_dict)
-                self.bag.append(item)
+                self.bag[i] = item
                 if item.name in self.on_equip_name.values():
                     self.owner.equipment.toggle_equip(item)
             print(self.bag, "rest")

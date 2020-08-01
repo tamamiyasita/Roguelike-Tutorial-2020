@@ -33,6 +33,8 @@ class Actor(arcade.Sprite):
         self.is_visible = False
         self.is_dead = False
         self.left_face = False
+        self._owner_ship = None
+
 
         self.item = item
         self.inventory = inventory
@@ -98,6 +100,9 @@ class Actor(arcade.Sprite):
   
         if self.equippable:
             result["equippable"] = self.equippable.get_dict()
+
+        if self.equipment:
+            result["equipment"] = True
         
         return result
 
@@ -138,14 +143,19 @@ class Actor(arcade.Sprite):
             self.item = Item()
             # print(f"Restore item {self.name}")        
 
-        if self.equippable in result:
-            self.equippable = Equippable()
-            self.equippable.owner = self
-            self.equippable.restore_from_dict(result["equippable"])
-            if not self.item:
-                item = Item()
-                self.item = item
-                self.item.owner = self
+        if "equipment" in result:
+            self.equipment = Equipment()
+
+        # if "equippable" in result:
+        #     self.equippable = Equippable()
+        #     self.equippable.owner = self
+        #     self.equippable.restore_from_dict(result["equippable"])
+        #     if not self.item:
+        #         item = Item()
+        #         self.item = item
+        #         self.item.owner = self
+
+        
         
         self.inventory = None
         if "inventory" in result:
@@ -271,6 +281,7 @@ class Actor(arcade.Sprite):
             move = self.move((dx, dy), target, actor_sprites, map_sprites)
             return move
 
+
     @property
     def texture_(self):
         return self.textures
@@ -286,3 +297,29 @@ class Actor(arcade.Sprite):
             self.texture = self.textures[1]
         else:
             self.texture = self.textures[0]
+
+        if self.owner_ship:
+            self.color = arcade.color.WHITE
+            self.alpha = 255
+            x = self.owner_ship.center_x
+            if self.owner_ship.left_face:
+                self.left_face = True
+                self.center_y = self.owner_ship.center_y - self.item_margin_y
+                self.center_x = x - self.item_margin_x
+            if self.owner_ship.left_face == False:
+                self.left_face = False
+                self.center_y = self.owner_ship.center_y - self.item_margin_y
+                self.center_x = x + self.item_margin_x
+
+
+    @property
+    def owner_ship(self):
+        return self._owner_ship
+
+    @owner_ship.setter
+    def owner_ship(self, my):
+        self._owner_ship = my
+    
+    @owner_ship.deleter
+    def owner_ship(self):
+        self._owner_ship = None

@@ -31,6 +31,19 @@ troll_right = arcade.load_texture(
 troll = [troll_right, troll_left]
 #######
 
+# short wepponテクスチャ生成
+short_weppon_tiles =(r"image/ShortWep.png")
+
+short_sword_left = arcade.load_texture(short_weppon_tiles, x=0, y=0, width=size, height=size)
+short_sword_right = arcade.load_texture(short_weppon_tiles, x=0, y=0, width=size, height=size, mirrored=True)
+short_sword = [short_sword_right, short_sword_left]
+######
+
+# mid wepponテクスチャ生成
+med_weppon_tiles =(r"image/MedWep.png")
+long_sword_left = arcade.load_texture(med_weppon_tiles, x=0, y=0, width=size, height=size)
+long_sword_right = arcade.load_texture(med_weppon_tiles, x=0, y=0, width=size, height=size, mirrored=True)
+long_sword = [long_sword_right, long_sword_left]
 ###items###
 # healing_potionテクスチャセット生成
 healing_potion_tile_img = (r"image/HealingPotion.png")
@@ -39,11 +52,7 @@ healing_potion_tile = get_tile_set(healing_potion_tile_img, tile_size=16)
 scroll_tile_img = (r"image/Scroll.png")
 scroll_tile = get_tile_set(scroll_tile_img, tile_size=16)
 
-short_weppon_img =(r"image/ShortWep.png")
-short_weppon_tile = get_tile_set(short_weppon_img, tile_size=16)
 
-med_weppon_img =(r"image/MedWep.png")
-med_weppon_tile = get_tile_set(med_weppon_img, tile_size=16)
 
 shield_img = (r"image\Shield.png")
 shield_tile = get_tile_set(shield_img, tile_size=16)
@@ -88,8 +97,8 @@ IMAGE_ID = {"player": player,
             "orc": orc,
             "troll": troll,
 
-            "short_sword":[short_weppon_tile[0]],
-            "long_sword":[med_weppon_tile[0]],
+            "short_sword": short_sword,
+            "long_sword": long_sword,
             "small_shield":[shield_tile[0]],
             "wood_buckler":[shield_tile[5]],
 

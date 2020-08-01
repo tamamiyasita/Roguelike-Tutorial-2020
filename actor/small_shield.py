@@ -15,6 +15,8 @@ class SmallShield(Actor):
             equippable=equippable_component
         )
 
+        self.item_margin_x = -5
+
     @staticmethod
     def challenge():
         return 1
