@@ -102,7 +102,7 @@ class Actor(arcade.Sprite):
             result["equippable"] = self.equippable.get_dict()
 
         if self.equipment:
-            result["equipment"] = True
+            result["equipment"] = self.equipment.get_dict()
         
         return result
 
@@ -146,15 +146,16 @@ class Actor(arcade.Sprite):
         if "equipment" in result:
             self.equipment = Equipment()
             self.equipment.owner = self
+            self.equipment.restore_from_dict(result["equipment"])
 
-        # if "equippable" in result:
-        #     self.equippable = Equippable()
-        #     self.equippable.owner = self
-        #     self.equippable.restore_from_dict(result["equippable"])
-        #     if not self.item:
-        #         item = Item()
-        #         self.item = item
-        #         self.item.owner = self
+        if "equippable" in result:
+            self.equippable = Equippable()
+            self.equippable.owner = self
+            self.equippable.restore_from_dict(result["equippable"])
+            if not self.item:
+                item = Item()
+                self.item = item
+                self.item.owner = self
 
         
         

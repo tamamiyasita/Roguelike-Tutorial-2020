@@ -8,6 +8,18 @@ class Equipment:
         self.main_hand = main_hand
         self.off_hand = off_hand
 
+
+    def get_dict(self):
+        result = {}
+        result["main_hand"] = self.main_hand.get_dict()
+        result["off_hand"] = self.off_hand.get_dict()
+
+        return result
+
+    def restore_from_dict(self, result):
+        self.main_hand = result["main_hand"]
+        # self.off_hand = result["off_hand"]
+
     @property
     # 現在の部位の状態を返す
     def body_equip(self):
