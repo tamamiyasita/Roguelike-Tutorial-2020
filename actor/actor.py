@@ -145,6 +145,7 @@ class Actor(arcade.Sprite):
 
         if "equipment" in result:
             self.equipment = Equipment()
+            self.equipment.owner = self
 
         # if "equippable" in result:
         #     self.equippable = Equippable()
@@ -293,10 +294,11 @@ class Actor(arcade.Sprite):
         self.texture = self.textures[self.texture_number]
 
     def update_animation(self, delta_time=1 / 60):
-        if self.left_face:
-            self.texture = self.textures[1]
-        else:
-            self.texture = self.textures[0]
+        if len(self.textures) >= 2:
+            if self.left_face:
+                self.texture = self.textures[1]
+            else:
+                self.texture = self.textures[0]
 
         if self.owner_ship:
             self.color = arcade.color.WHITE

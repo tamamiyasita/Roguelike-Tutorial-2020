@@ -13,6 +13,7 @@ class Equipment:
     def body_equip(self):
         return [self.main_hand, self.off_hand]
 
+
     @property
     def max_hp_bonus(self):
         bonus = 0
@@ -43,10 +44,6 @@ class Equipment:
 
         return bonus
 
-    
-    def item_slot(self, slot):
-        if slot == EquipmentSlots.MAIN_HAND:
-            return self.main_hand
 
     def toggle_equip(self, equip_item, equip_sprites=None):
         """装備アイテムの付け外しを行うメソッド
@@ -76,30 +73,28 @@ class Equipment:
 
                 results.append({"equipped": equip_item})     
 
-        # elif item_slot == EquipmentSlots.OFF_HAND:
+        elif item_slot == EquipmentSlots.OFF_HAND:
 
-        #     if self.off_hand == equip_item:
-        #         # オフハンドにequippable_itemが装備されてたら解除
-        #         del self.off_hand.owner_ship
-        #         equip_sprites.remove(equip_item)
-        #         self.off_hand = None
-        #         results.append({"dequipped": equip_item})
-        #     else:
-        #         # equippable_itemがオフハンドと別のアイテムなら装備を解除しequippable_itemを装備
-        #         if self.off_hand:
-        #             del self.off_hand.owner_ship
-        #             equip_sprites.remove(self.off_hand)
-        #             self.off_hand = None
+            if self.off_hand == equip_item:
+                # オフハンドにequippable_itemが装備されてたら解除
+                del self.off_hand.owner_ship
+                equip_sprites.remove(equip_item)
+                self.off_hand = None
+                results.append({"dequipped": equip_item})
+            else:
+                # equippable_itemがオフハンドと別のアイテムなら装備を解除しequippable_itemを装備
+                if self.off_hand:
+                    del self.off_hand.owner_ship
+                    equip_sprites.remove(self.off_hand)
+                    self.off_hand = None
                 
-        #         self.off_hand = equip_item
-        #         self.off_hand.owner_ship = self.owner
-        #         equip_sprites.append(equip_item)
+                self.off_hand = equip_item
+                self.off_hand.owner_ship = self.owner
+                equip_sprites.append(equip_item)
 
-        #         results.append({"equipped": equip_item})   
+                results.append({"equipped": equip_item})   
 
 
         return results
-
-        
 
 

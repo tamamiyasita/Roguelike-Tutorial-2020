@@ -27,6 +27,7 @@ class Inventory:
 
     def restore_from_dict(self, result):
         self.capacity = result["capacity"]
+        self.bag = [None for _ in range(self.capacity)]
         self.on_equip_name = result["on_equip_name"]
         for  i, item_dict in enumerate(result["items"]):
             if item_dict is None:

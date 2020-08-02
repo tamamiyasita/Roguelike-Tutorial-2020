@@ -12,10 +12,12 @@ class SmallShield(Actor):
             name="small_shield",
             x=x,
             y=y,
+            scale=1.5,
             equippable=equippable_component
         )
 
-        self.item_margin_x = -5
+        self.item_margin_x = -11
+        self.item_margin_y = 8
 
     @staticmethod
     def challenge():

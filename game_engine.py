@@ -97,7 +97,7 @@ class GameEngine:
         self.short_sword = ShortSword(self.player.x+1, self.player.y +1)
         level.item_sprites.append(self.short_sword)
 
-        self.small_shield = SmallShield(self.player.x + 1 , self.player.y+1)
+        self.small_shield = SmallShield(self.player.x + 2 , self.player.y+1)
         level.item_sprites.append(self.small_shield)
 
         self.cnf = ConfusionScroll(self.player.x + 1, self.player.y)
@@ -141,12 +141,16 @@ class GameEngine:
             for sprite in level.effect_sprites:
                 effect_dict.append(self.get_actor_dict(sprite))
 
+            equip_dict = []
+            for sprite in level.equip_sprites:
+                equip_dict.append(self.get_actor_dict(sprite))
 
             level_dict = {
                          "actor": actor_dict,
                          "dungeon": dungeon_dict,
                          "item": item_dict,
                          "effect": effect_dict,
+                         "equip": equip_dict
                          }
             levels_dict.append(level_dict)
 
@@ -209,6 +213,10 @@ class GameEngine:
             for effect_dict in level_dict["effect"]:
                 effect = restore_actor(effect_dict)
                 level.effect_sprites.append(effect)
+
+            for equip_dict in level_dict["equip"]:
+                equip = restore_actor(equip_dict)
+                level.equip_sprites.append(equip)
 
             level.chara_sprites.append(self.player)
 
