@@ -6,14 +6,14 @@ class Inventory:
     def __init__(self, capacity=5):
         self.bag = []
         self.capacity = capacity
-        self.on_equip_name = {"main_hand":None, "off_hand":None}
+        self.equip_slots = {"main_hand":None, "off_hand":None}
 
         self.bag = [None for _ in range(self.capacity)]
 
     def get_dict(self):
         result = {}
         result["capacity"] = self.capacity
-        result["on_equip_name"] = self.on_equip_name
+        result["equip_slots"] = self.equip_slots
         item_dicts = []
         for item in self.bag:
             if item is None:
@@ -28,14 +28,14 @@ class Inventory:
     def restore_from_dict(self, result):
         self.capacity = result["capacity"]
         self.bag = [None for _ in range(self.capacity)]
-        self.on_equip_name = result["on_equip_name"]
+        self.equip_slots = result["equip_slots"]
         for  i, item_dict in enumerate(result["items"]):
             if item_dict is None:
                 self.bag[i] = None
             else:
                 item = restore_actor(item_dict)
                 self.bag[i] = item
-                if item.name in self.on_equip_name.values():
+                if item.name in self.equip_slots.values():
                     self.owner.equipment.toggle_equip(item)
             print(self.bag, "rest")
                 

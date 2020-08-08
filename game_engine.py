@@ -304,15 +304,15 @@ class GameEngine:
                             if equipped:
                                 new_action_queue.extend([{"message":f"You equipped the {equipped.name}"}])
 
-                                if equipped.equippable.slot.name == "MAIN_HAND":
-                                    self.player.inventory.on_equip_name["main_hand"] = equipped.name
-                                    print(self.player.inventory.on_equip_name)
-                                    # self.cur_level.equip_sprites.append(equipped)
+                                # if equipped.equippable.slot.name == "MAIN_HAND":
+                                #     self.player.inventory.on_equip_name["main_hand"] = equipped.name
+                                #     print(self.player.inventory.on_equip_name)
+                                #     # self.cur_level.equip_sprites.append(equipped)
                                     
                                     
-                                elif equipped.equippable.slot.name == "OFF_HAND":
-                                    self.player.inventory.on_equip_name["off_hand"] = equipped.name
-                                    print(self.player.inventory.on_equip_name)
+                                # elif equipped.equippable.slot.name == "OFF_HAND":
+                                #     self.player.inventory.on_equip_name["off_hand"] = equipped.name
+                                #     print(self.player.inventory.on_equip_name)
 
                             elif dequipped:
                                 new_action_queue.extend([{"message":f"You dequipped the {dequipped.name}"}])

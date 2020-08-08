@@ -1,3 +1,4 @@
+from pyglet.gl import current_context
 from actor.equip import EquipmentSlots
 
 class Equipment:
@@ -62,49 +63,55 @@ class Equipment:
         """
         results = []
 
-        item_slot = equip_item.equippable.slot
+        item_slot = self.owner.inventory.equip_slots
+        for item_key, item_name in item_slot.items():
 
-        if item_slot == EquipmentSlots.MAIN_HAND:
-
-            if self.main_hand == equip_item:
+            if item_name == equip_item.name:
                 # メインハンドにequippable_itemが装備されてたら解除
                 del self.main_hand.owner_ship
                 equip_sprites.remove(equip_item)
                 self.main_hand = None
+                item_slot[item_key] = None
                 results.append({"dequipped": equip_item})
+                break
+
+
             else:
                 # equippable_itemがメインハンドと別のアイテムなら装備を解除しequippable_itemを装備
-                if self.main_hand:
+                if item_name:
+                    item_slot[item_key] = None
                     del self.main_hand.owner_ship
                     equip_sprites.remove(self.main_hand)
                     self.main_hand = None
-                
+                    
                 self.main_hand = equip_item
+                item_slot[item_key] = equip_item.name
                 self.main_hand.owner_ship = self.owner
                 equip_sprites.append(equip_item)
 
-                results.append({"equipped": equip_item})     
+                results.append({"equipped": equip_item})
+                break     
 
-        elif item_slot == EquipmentSlots.OFF_HAND:
+        # elif item_slot == EquipmentSlots.OFF_HAND:
 
-            if self.off_hand == equip_item:
-                # オフハンドにequippable_itemが装備されてたら解除
-                del self.off_hand.owner_ship
-                equip_sprites.remove(equip_item)
-                self.off_hand = None
-                results.append({"dequipped": equip_item})
-            else:
-                # equippable_itemがオフハンドと別のアイテムなら装備を解除しequippable_itemを装備
-                if self.off_hand:
-                    del self.off_hand.owner_ship
-                    equip_sprites.remove(self.off_hand)
-                    self.off_hand = None
+        #     if self.off_hand == equip_item:
+        #         # オフハンドにequippable_itemが装備されてたら解除
+        #         del self.off_hand.owner_ship
+        #         equip_sprites.remove(equip_item)
+        #         self.off_hand = None
+        #         results.append({"dequipped": equip_item})
+        #     else:
+        #         # equippable_itemがオフハンドと別のアイテムなら装備を解除しequippable_itemを装備
+        #         if self.off_hand:
+        #             del self.off_hand.owner_ship
+        #             equip_sprites.remove(self.off_hand)
+        #             self.off_hand = None
                 
-                self.off_hand = equip_item
-                self.off_hand.owner_ship = self.owner
-                equip_sprites.append(equip_item)
+        #         self.off_hand = equip_item
+        #         self.off_hand.owner_ship = self.owner
+        #         equip_sprites.append(equip_item)
 
-                results.append({"equipped": equip_item})   
+        #         results.append({"equipped": equip_item})   
 
 
         return results

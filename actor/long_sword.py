@@ -7,7 +7,7 @@ from constants import *
 
 class LongSword(Actor):
     def __init__(self, x=0, y=0):
-        equippable_component = Equippable(EquipmentSlots.MAIN_HAND, power_bonus=5)
+        equippable_component = Equippable("main_hand", power_bonus=5)
         super().__init__(
             name="long_sword",
             x=x,
