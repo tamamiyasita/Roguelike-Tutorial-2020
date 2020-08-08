@@ -1,6 +1,4 @@
-import arcade
 from constants import *
-
 
 def keymap(key, engine):
 

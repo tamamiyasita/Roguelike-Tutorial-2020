@@ -1,19 +1,17 @@
-from data import IMAGE_ID
-from os import write
 import arcade
 import json
-from arcade.arcade_types import Point
 import pyglet.gl as gl
-from itertools import chain
 
 from game_engine import GameEngine
 from constants import *
 from keymap import keymap
+
+from ui.all_state_ui import all_state_ui
 from ui.normal_ui import NormalUI
 from ui.mouse_ui import MouseUI
 from ui.character_screen_ui import CharacterScreen
 
-from util import grid_to_pixel, pixel_to_grid
+from util import pixel_to_grid
 from viewport import viewport
 
 
@@ -29,31 +27,20 @@ class MG(arcade.Window):
         self.viewport_x = 0
         self.viewport_y = 0
 
-        self.character_sheet_buttons = arcade.SpriteList()
-
     def setup(self):
         self.engine.setup()
         viewport(self.engine.player)
         self.character_screen = CharacterScreen(self.engine.player)
 
 
-    def draw_sprites_and_status_panel(self):
-        """ 全てのスプライトリストとステータスパネルの表示 """
+    def draw_sprites(self):
+        """ 全てのスプライトリストをここで描画する """
         self.engine.cur_level.map_sprites.draw(filter=gl.GL_NEAREST)
         self.engine.cur_level.item_sprites.draw(filter=gl.GL_NEAREST)
         self.engine.cur_level.actor_sprites.draw(filter=gl.GL_NEAREST)
         self.engine.cur_level.chara_sprites.draw(filter=gl.GL_NEAREST)
         self.engine.cur_level.effect_sprites.draw()
         self.engine.cur_level.equip_sprites.draw(filter=gl.GL_NEAREST)
-
-        # 画面下のパネルをarcadeの四角形を描画する変数で作成
-        arcade.draw_xywh_rectangle_filled(
-                        bottom_left_x=self.viewport_x,
-                        bottom_left_y=self.viewport_y,
-                        width=SCREEN_WIDTH,
-                        height=STATES_PANEL_HEIGHT,
-                        color=COLORS["status_panel_background"]
-                        )
 
 
     def on_draw(self):
@@ -63,7 +50,10 @@ class MG(arcade.Window):
         self.viewport_x = arcade.get_viewport()[0]
         self.viewport_y = arcade.get_viewport()[2]
 
-        self.draw_sprites_and_status_panel()
+        self.draw_sprites()
+
+        # どのstateで表示されてもいいパネルの描画
+        all_state_ui(self.viewport_x, self.viewport_y)
 
         # ノーマルステート時の画面表示
         if self.engine.game_state == GAME_STATE.NORMAL:
@@ -87,6 +77,9 @@ class MG(arcade.Window):
 
 
     def on_update(self, delta_time):
+        """全てのスプライトリストのアップデートを行う
+           他にactionqueue、ターンチェンジ、pcの移動とviewport、expのチェック
+        """
         self.engine.cur_level.chara_sprites.update_animation()
         self.engine.cur_level.chara_sprites.update()
         self.engine.cur_level.actor_sprites.update_animation()
@@ -105,20 +98,17 @@ class MG(arcade.Window):
         if self.engine.player.state == state.ON_MOVE:
             viewport(self.engine.player)
 
+
     def on_key_press(self, key, modifiers):
         if key == arcade.key.BACKSPACE:
             arcade.close_window()
 
-        direction = keymap(key, self.engine)
-
-        self.player_direction = direction
+        self.player_direction = keymap(key, self.engine)
 
         if key == arcade.key.P:
             self.save()
         elif key == arcade.key.L:
             self.load()
-
-
 
 
     def on_key_release(self, key, modifiers):
@@ -141,6 +131,7 @@ class MG(arcade.Window):
             self.engine.grid_click(grid_x, grid_y)
             self.engine.game_state = GAME_STATE.NORMAL
         
+        """ステータスボタン処理"""
         if self.engine.game_state == GAME_STATE.CHARACTER_SCREEN:
             self.character_screen.buttons_click(x+self.viewport_x, y+self.viewport_y)
 
