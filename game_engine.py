@@ -50,17 +50,6 @@ class GameEngine:
         self.game_state = GAME_STATE.NORMAL
         self.grid_select_handlers = []
 
-        # self.chara_sprites = arcade.SpriteList(
-        #     use_spatial_hash=True, spatial_hash_cell_size=32)
-        # self.actor_sprites = arcade.SpriteList(
-        #     use_spatial_hash=True, spatial_hash_cell_size=32)
-        # self.map_sprites = arcade.SpriteList(
-        #     use_spatial_hash=True, spatial_hash_cell_size=32)
-        # self.item_sprites = arcade.SpriteList(
-        #     use_spatial_hash=True, spatial_hash_cell_size=32)        
-        # self.effect_sprites = arcade.SpriteList(
-        #     use_spatial_hash=True, spatial_hash_cell_size=16)
-
     def setup(self):
 
         arcade.set_background_color(arcade.color.BLACK)

@@ -39,10 +39,11 @@ class Fighter:
 
     @property
     def max_hp(self):
+        bonus = 0
+        
         if self.owner and self.owner.equipment:
             bonus = self.owner.equipment.max_hp_bonus
-        else:
-            bonus = 0
+        
         return self.base_max_hp + bonus
 
     @property
