@@ -3,26 +3,17 @@ from actor.equip import EquipmentSlots
 
 class Equipment:
     """装備部位とそこからの追加bonusを返す
+       装備の切り替えもここで行う
        bonusはEquippable関数で設定する
     """
-    def __init__(self, main_hand=None, off_hand=None):
-        self.main_hand = main_hand
-        self.off_hand = off_hand
+    def __getattr__(self, main_hand=None, off_hand=None):
+        self.item_slot = self.owner.inventory.equip_slots
+        self.main_hand = self.item_slot["main_hand"]
+        self.off_hand = self.item_slot["off_hand"]
 
-
-    def get_dict(self):
-        result = {}
-        result["main_hand"] = self.main_hand.get_dict()
-        result["off_hand"] = self.off_hand.get_dict()
-
-        return result
-
-    def restore_from_dict(self, result):
-        self.main_hand = result["main_hand"]
-        # self.off_hand = result["off_hand"]
 
     @property
-    # 現在の部位の状態を返す
+    # 部位をリストにして返す
     def body_equip(self):
         return [self.main_hand, self.off_hand]
 
@@ -58,36 +49,29 @@ class Equipment:
         return bonus
 
 
-    def toggle_equip(self, equip_item, equip_sprites=None):
+    def toggle_equip(self, equip_item):
         """装備アイテムの付け外しを行うメソッド
         """
         results = []
 
-        item_slot = self.owner.inventory.equip_slots
-        for item_key, item_name in item_slot.items():
-
-            if item_name == equip_item.name:
-                # メインハンドにequippable_itemが装備されてたら解除
-                del self.main_hand.owner_ship
-                equip_sprites.remove(equip_item)
-                self.main_hand = None
-                item_slot[item_key] = None
-                results.append({"dequipped": equip_item})
+        for item_key, item in self.item_slot.items():
+            if item and item.name == equip_item.name:
+                del self.item_slot[item_key].owner_ship
+                self.item_slot[item_key] = None
+                results.append({"dequipped"})
                 break
+
 
 
             else:
                 # equippable_itemがメインハンドと別のアイテムなら装備を解除しequippable_itemを装備
-                if item_name:
-                    item_slot[item_key] = None
-                    del self.main_hand.owner_ship
-                    equip_sprites.remove(self.main_hand)
+                if item:
+                    self.item_slot[item_key] = None
+                    del self.item_slot[item_key].owner_ship
                     self.main_hand = None
                     
-                self.main_hand = equip_item
-                item_slot[item_key] = equip_item.name
-                self.main_hand.owner_ship = self.owner
-                equip_sprites.append(equip_item)
+                self.item_slot[item_key] = equip_item
+                self.item_slot[item_key].owner_ship = self.owner
 
                 results.append({"equipped": equip_item})
                 break     

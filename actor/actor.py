@@ -302,6 +302,7 @@ class Actor(arcade.Sprite):
                 self.texture = self.textures[0]
 
         if self.owner_ship:
+            # itemを装備した時のsprite表示
             self.color = arcade.color.WHITE
             self.alpha = 255
             x = self.owner_ship.center_x

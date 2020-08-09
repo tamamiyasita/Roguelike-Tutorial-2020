@@ -100,8 +100,8 @@ class NormalUI:
                         border_width=outline_size
                         )
 
-            if self.player.inventory.bag[item]:
-                item_name = self.player.inventory.bag[item].name
+            if self.player.inventory.item_bag[item]:
+                item_name = self.player.inventory.item_bag[item].name
             else:
                 item_name = ""
 

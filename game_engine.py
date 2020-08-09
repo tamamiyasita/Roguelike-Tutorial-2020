@@ -45,7 +45,7 @@ class GameEngine:
         self.game_map = None
         self.action_queue = []
         self.messages = deque(maxlen=4)
-        self.selected_item = None
+        self.selected_item = None # キー押下で直接選択したアイテム
         self.turn_check = []
         self.game_state = GAME_STATE.NORMAL
         self.grid_select_handlers = []
@@ -293,31 +293,12 @@ class GameEngine:
                 item_number = self.selected_item
                 if item_number is not None:
                     equip_item = self.player.inventory.get_item_number(item_number)
-                    if equip_item and equip_item.equippable:
-                        equip_results = self.player.equipment.toggle_equip(equip_item, self.cur_level.equip_sprites)
+                    if equip_item.equippable:
+                        equip_results = self.player.equipment.toggle_equip(equip_item)
+                        self.player.inventory.draw_equip_slots(self.cur_level.equip_sprites)
 
-                        for equip in equip_results:
-                            equipped = equip.get("equipped")
-                            dequipped = equip.get("dequipped")
+        
                      
-
-                            if equipped:
-                                new_action_queue.extend([{"message":f"You equipped the {equipped.name}"}])
-
-                                # if equipped.equippable.slot.name == "MAIN_HAND":
-                                #     self.player.inventory.on_equip_name["main_hand"] = equipped.name
-                                #     print(self.player.inventory.on_equip_name)
-                                #     # self.cur_level.equip_sprites.append(equipped)
-                                    
-                                    
-                                # elif equipped.equippable.slot.name == "OFF_HAND":
-                                #     self.player.inventory.on_equip_name["off_hand"] = equipped.name
-                                #     print(self.player.inventory.on_equip_name)
-
-                            elif dequipped:
-                                new_action_queue.extend([{"message":f"You dequipped the {dequipped.name}"}])
-                                # self.cur_level.equip_sprites.remove(dequipped)
-                            break
 
 
             if "drop_item" in action:

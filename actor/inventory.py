@@ -1,21 +1,27 @@
 # from actor.actor import Actor
+from os import remove
+
+import arcade
 from actor.restore_actor import restore_actor
 from actor.equipment import Equipment
 
 class Inventory:
     def __init__(self, capacity=5):
-        self.bag = []
+        self.item_bag = []
         self.capacity = capacity
-        self.equip_slots = {"main_hand":None, "off_hand":None}
+        self.item_bag = [None for _ in range(self.capacity)]
+        self.equip_slots = {
+            "main_hand":None,
+            "off_hand":None
+            }
 
-        self.bag = [None for _ in range(self.capacity)]
 
     def get_dict(self):
         result = {}
         result["capacity"] = self.capacity
-        result["equip_slots"] = self.equip_slots
+        result["equip_slots"] = {k:v for k, v in zip(self.equip_slots.keys(), self.equip_slots.values().name)}
         item_dicts = []
-        for item in self.bag:
+        for item in self.item_bag:
             if item is None:
                 item_dicts.append(None)
             else:
@@ -27,26 +33,30 @@ class Inventory:
 
     def restore_from_dict(self, result):
         self.capacity = result["capacity"]
-        self.bag = [None for _ in range(self.capacity)]
-        self.equip_slots = result["equip_slots"]
+        self.item_bag = [None for _ in range(self.capacity)]
         for  i, item_dict in enumerate(result["items"]):
             if item_dict is None:
-                self.bag[i] = None
+                self.item_bag[i] = None
             else:
                 item = restore_actor(item_dict)
-                self.bag[i] = item
+                self.item_bag[i] = item
                 if item.name in self.equip_slots.values():
                     self.owner.equipment.toggle_equip(item)
-            print(self.bag, "rest")
+            print(self.item_bag, "rest")
                 
+        self.equip_slots = result["equip_slots"]
+        for item in self.item_bag:
+            if item.name in self.equip_slots.values():
+                self.equip_slots[item.slot] = item
+                item.owner_ship = self.owner
 
     def add_item(self, item):
         results = []
 
         item_placed = False
         for i in range(self.capacity):
-            if self.bag[i] is None:
-                self.bag[i] = item
+            if self.item_bag[i] is None:
+                self.item_bag[i] = item
                 item_placed = True
                 break
 
@@ -63,16 +73,27 @@ class Inventory:
         return results
 
     def get_item_number(self, item_number: int):
-        return self.bag[item_number]
+        return self.item_bag[item_number]
 
     def remove_item_number(self, item_number: int):
         results = []
-        self.bag[item_number] = None
+        self.item_bag[item_number] = None
         return results
 
     def remove_item(self, item: int):
         results = []
         for i in range(self.capacity):
-            if self.bag[i] is item:
-                self.bag[i] = None
+            if self.item_bag[i] is item:
+                self.item_bag[i] = None
         return results
+
+    def draw_equip_slots(self, sprites):
+        for equip in self.equip_slots.values():
+            if equip:
+                sprites.append(equip)
+        
+        for sprite in sprites:
+            if sprite not in self.equip_slots.values():
+                sprites.remove(sprite)
+
+
