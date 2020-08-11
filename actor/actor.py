@@ -111,7 +111,7 @@ class Actor(arcade.Sprite):
         from actor.ai import Basicmonster
         from actor.inventory import Inventory
         from constants import state
-        from actor.equip import Equippable
+        from actor.equippable import Equippable
         from actor.equipment import Equipment
 
         self.x = result["x"]

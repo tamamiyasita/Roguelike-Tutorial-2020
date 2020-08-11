@@ -1,4 +1,3 @@
-from pyglet.gl import current_context
 
 class Equipment:
     """装備部位とそこからの追加bonusを返す
@@ -6,9 +5,10 @@ class Equipment:
        bonusはEquippable関数で設定する
     """
     def __init__(self):
-        self.item_slot = {"main_hand":None,
-                          "off_hand":None
-                          }
+        self.item_slot = {
+            "main_hand":None,
+            "off_hand":None
+          }
 
 
     @property

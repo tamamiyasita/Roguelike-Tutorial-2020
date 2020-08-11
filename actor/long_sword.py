@@ -1,5 +1,5 @@
 from actor.actor import Actor
-from actor.equip import Equippable
+from actor.equippable import Equippable
 from data import *
 from constants import *
 
