@@ -294,8 +294,8 @@ class GameEngine:
                 if item_number is not None:
                     equip_item = self.player.inventory.get_item_number(item_number)
                     if equip_item.equippable:
-                        equip_results = self.player.equipment.toggle_equip(equip_item)
-                        self.player.inventory.draw_equip_slots(self.cur_level.equip_sprites)
+                        results = self.player.equipment.toggle_equip(equip_item, self.cur_level.equip_sprites)
+                        new_action_queue.extend(results)
 
         
                      
@@ -305,16 +305,16 @@ class GameEngine:
                 item_number = self.selected_item
                 if item_number is not None:
                     item = self.player.inventory.get_item_number(item_number)
+
+                    if item in self.player.equipment.item_slot.values():
+                        self.player.equipment.toggle_equip(item, self.cur_level.equip_sprites)
+
                     if item:
                         self.player.inventory.remove_item_number(item_number)
                         self.cur_level.item_sprites.append(item)
                         item.center_x = self.player.center_x
                         item.center_y = self.player.center_y
                         new_action_queue.extend([{"message": f"You dropped the {item.name}"}])
-
-                        if self.player.equipment.main_hand == item or self.player.equipment.off_hand == item:
-                            dequipped = self.player.equipment.toggle_equip(item)
-                            new_action_queue.extend(dequipped)
 
             if "use_stairs" in action:
 

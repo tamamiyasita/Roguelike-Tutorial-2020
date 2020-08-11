@@ -172,57 +172,55 @@ class Actor(arcade.Sprite):
 
 
     def move(self, dxy, target=None, actor_sprites=None, map_sprites=None):
-        try:
-            ai_move_speed = 0
-            if self.ai:
-                ai_move_speed = MOVE_SPEED*1.3
-            self.dx, self.dy = dxy
+        ai_move_speed = 0
+        if self.ai:
+            ai_move_speed = MOVE_SPEED*1.3
+        self.dx, self.dy = dxy
 
-            if self.dx == -1:
-                self.left_face = True
-            if self.dx == 1:
-                self.left_face = False
-            
-            destination_x = self.dx + self.x
-            destination_y = self.dy + self.y
+        if self.dx == -1:
+            self.left_face = True
+        if self.dx == 1:
+            self.left_face = False
+        
+        destination_x = self.dx + self.x
+        destination_y = self.dy + self.y
 
-            self.target_x = self.center_x
-            self.target_y = self.center_y
+        self.target_x = self.center_x
+        self.target_y = self.center_y
 
-            # 行先のfloorオブジェクトを変数booking_tileに入れる
-            self.booking_tile = arcade.get_sprites_at_exact_point(grid_to_pixel(destination_x, destination_y), map_sprites)[0]
+        # 行先のfloorオブジェクトを変数booking_tileに入れる
+        self.booking_tile = arcade.get_sprites_at_exact_point(grid_to_pixel(destination_x, destination_y), map_sprites)[0]
 
-            blocking_actor = get_blocking_entity(destination_x, destination_y, actor_sprites)
-            if blocking_actor and not target:
-                actor = blocking_actor[0]
-                if not actor.is_dead:
-                    attack_results = self.fighter.attack(actor)
-                    if actor == self:
-                        self.state = state.TURN_END
-                    elif attack_results:
-                        self.state = state.ATTACK
-                        self.change_y = self.dy * (MOVE_SPEED+ai_move_speed)
-                        self.change_x = self.dx * (MOVE_SPEED+ai_move_speed)
-
-                    return attack_results
-
-            elif target and self.distance_to(target) <= 1.46:
-                attack_results = self.fighter.attack(target)
-                if attack_results:
+        blocking_actor = get_blocking_entity(destination_x, destination_y, actor_sprites)
+        if blocking_actor and not target:
+            actor = blocking_actor[0]
+            if not actor.is_dead:
+                attack_results = self.fighter.attack(actor)
+                if actor == self:
+                    self.state = state.TURN_END
+                elif attack_results:
                     self.state = state.ATTACK
-                    self.change_y = self.dy * MOVE_SPEED
-                    self.change_x = self.dx * MOVE_SPEED
+                    self.change_y = self.dy * (MOVE_SPEED+ai_move_speed)
+                    self.change_x = self.dx * (MOVE_SPEED+ai_move_speed)
 
                 return attack_results
 
-            elif not get_blocking_entity(destination_x, destination_y, actor_sprites) and self.booking_tile.blocks == False:
-                self.booking_tile.blocks = True
-                self.state = state.ON_MOVE
-                self.change_y = self.dy * (MOVE_SPEED+ai_move_speed)
-                self.change_x = self.dx * (MOVE_SPEED+ai_move_speed)
+        elif target and self.distance_to(target) <= 1.46:
+            attack_results = self.fighter.attack(target)
+            if attack_results:
+                self.state = state.ATTACK
+                self.change_y = self.dy * MOVE_SPEED
+                self.change_x = self.dx * MOVE_SPEED
 
-        except:
-            pass
+            return attack_results
+
+        elif not get_blocking_entity(destination_x, destination_y, actor_sprites) and self.booking_tile.blocks == False:
+            self.booking_tile.blocks = True
+            self.state = state.ON_MOVE
+            self.change_y = self.dy * (MOVE_SPEED+ai_move_speed)
+            self.change_x = self.dx * (MOVE_SPEED+ai_move_speed)
+
+
 
     def update(self, delta_time=1/60):
         super().update()

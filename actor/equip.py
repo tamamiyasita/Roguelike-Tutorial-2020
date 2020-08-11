@@ -1,11 +1,6 @@
 from enum import Enum
 
 from pyglet import resource
-class EquipmentSlots(Enum):
-    MAIN_HAND = 1
-    OFF_HAND = 2
-
-
 
 class Equippable:
     def __init__(self, slot=None, power_bonus=0, defense_bonus=0, max_hp_bonus=0):
@@ -24,7 +19,7 @@ class Equippable:
         return result
 
     def restore_from_dict(self, result):
-        self.slot = EquipmentSlots[result["slot"]]
+        # self.slot = EquipmentSlots[result["slot"]] #TODO get dict
         self.power_bonus = result["power_bonus"]
         self.defense_bonus = result["defense_bonus"]
         self.max_hp_bonus = result["max_hp_bonus"]

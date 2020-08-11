@@ -10,10 +10,6 @@ class Inventory:
         self.item_bag = []
         self.capacity = capacity
         self.item_bag = [None for _ in range(self.capacity)]
-        self.equip_slots = {
-            "main_hand":None,
-            "off_hand":None
-            }
 
 
     def get_dict(self):
@@ -87,13 +83,5 @@ class Inventory:
                 self.item_bag[i] = None
         return results
 
-    def draw_equip_slots(self, sprites):
-        for equip in self.equip_slots.values():
-            if equip:
-                sprites.append(equip)
-        
-        for sprite in sprites:
-            if sprite not in self.equip_slots.values():
-                sprites.remove(sprite)
 
 

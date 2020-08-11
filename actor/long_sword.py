@@ -1,6 +1,5 @@
 from actor.actor import Actor
 from actor.equip import Equippable
-from actor.equipment import EquipmentSlots
 from data import *
 from constants import *
 
@@ -12,7 +11,6 @@ class LongSword(Actor):
             name="long_sword",
             x=x,
             y=y,
-            # scale=1.7,
             equippable=equippable_component,
         )
 

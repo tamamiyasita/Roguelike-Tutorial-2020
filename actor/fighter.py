@@ -48,18 +48,20 @@ class Fighter:
 
     @property
     def power(self):
+        bonus = 0
+
         if self.owner and self.owner.equipment:
             bonus = self.owner.equipment.power_bonus
-        else:
-            bonus = 0
+        
         return self.base_power + bonus
 
     @property
     def defense(self):
+        bonus = 0
+
         if self.owner and self.owner.equipment:
             bonus = self.owner.equipment.defense_bonus
-        else:
-            bonus = 0
+
         return self.base_defense + bonus
 
     def take_damage(self, amount):
