@@ -44,7 +44,7 @@ class Inventory:
         for item in self.item_bag:
             if item.name in self.equip_slots.values():
                 self.equip_slots[item.slot] = item
-                item.owner_ship = self.owner
+                item.master = self.owner
 
     def add_item(self, item):
         results = []

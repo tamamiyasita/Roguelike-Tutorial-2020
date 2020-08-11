@@ -293,7 +293,7 @@ class GameEngine:
                 item_number = self.selected_item
                 if item_number is not None:
                     equip_item = self.player.inventory.get_item_number(item_number)
-                    if equip_item.equippable:
+                    if equip_item and equip_item.equippable:
                         results = self.player.equipment.toggle_equip(equip_item, self.cur_level.equip_sprites)
                         new_action_queue.extend(results)
 

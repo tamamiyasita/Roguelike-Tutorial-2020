@@ -15,36 +15,36 @@ class ShortSword(Actor):
             equippable=equippable_component
         )
 
-        # self._owner_ship = None
+        # self._master = None
 
         self.item_margin_x = 13
         self.item_margin_y = 5
 
     # def update(self):
-    #     if self._owner_ship:
+    #     if self._master:
     #         self.color = arcade.color.WHITE
     #         self.alpha = 255
-    #         x = self.owner_ship.center_x
-    #         if self.owner_ship.left_face:
+    #         x = self.master.center_x
+    #         if self.master.left_face:
     #             self.left_face = True
-    #             self.center_y = self.owner_ship.center_y - self.item_margin_y
+    #             self.center_y = self.master.center_y - self.item_margin_y
     #             self.center_x = x - self.item_margin_x
-    #         if self.owner_ship.left_face == False:
+    #         if self.master.left_face == False:
     #             self.left_face = False
-    #             self.center_y = self.owner_ship.center_y - self.item_margin_y
+    #             self.center_y = self.master.center_y - self.item_margin_y
     #             self.center_x = x + self.item_margin_x
 
     # @property
-    # def owner_ship(self):
-    #     return self._owner_ship
+    # def master(self):
+    #     return self._master
 
-    # @owner_ship.setter
-    # def owner_ship(self, my):
-    #     self._owner_ship = my
+    # @master.setter
+    # def master(self, my):
+    #     self._master = my
     
-    # @owner_ship.deleter
-    # def owner_ship(self):
-    #     self._owner_ship = None
+    # @master.deleter
+    # def master(self):
+    #     self._master = None
 
 
     @staticmethod

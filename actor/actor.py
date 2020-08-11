@@ -33,7 +33,7 @@ class Actor(arcade.Sprite):
         self.is_visible = False
         self.is_dead = False
         self.left_face = False
-        self._owner_ship = None
+        self._master = None
 
 
         self.item = item
@@ -299,29 +299,29 @@ class Actor(arcade.Sprite):
             else:
                 self.texture = self.textures[0]
 
-        if self.owner_ship:
+        if self.master:
             # itemを装備した時のsprite表示
             self.color = arcade.color.WHITE
             self.alpha = 255
-            x = self.owner_ship.center_x
-            if self.owner_ship.left_face:
+            x = self.master.center_x
+            if self.master.left_face:
                 self.left_face = True
-                self.center_y = self.owner_ship.center_y - self.item_margin_y
+                self.center_y = self.master.center_y - self.item_margin_y
                 self.center_x = x - self.item_margin_x
-            if self.owner_ship.left_face == False:
+            if self.master.left_face == False:
                 self.left_face = False
-                self.center_y = self.owner_ship.center_y - self.item_margin_y
+                self.center_y = self.master.center_y - self.item_margin_y
                 self.center_x = x + self.item_margin_x
 
 
     @property
-    def owner_ship(self):
-        return self._owner_ship
+    def master(self):
+        return self._master
 
-    @owner_ship.setter
-    def owner_ship(self, my):
-        self._owner_ship = my
+    @master.setter
+    def master(self, owner):
+        self._master = owner
     
-    @owner_ship.deleter
-    def owner_ship(self):
-        self._owner_ship = None
+    @master.deleter
+    def master(self):
+        self._master = None

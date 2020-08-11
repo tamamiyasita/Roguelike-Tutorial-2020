@@ -50,10 +50,8 @@ def get_random_items_by_challenge(challenge):
         return i1
 
 def make_monster_sprite(monster_dict):
-    sprite = Actor(
-        name=monster_dict["Name"],
-
-    )
+    sprite = Actor(name=monster_dict["Name"])
+    
     sprite.name = monster_dict["Name"]
     sprite.ai = Basicmonster()
     sprite.ai.owner = sprite
