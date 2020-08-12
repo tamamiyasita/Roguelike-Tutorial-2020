@@ -21,7 +21,7 @@ from actor.small_shield import SmallShield
 
 
 class GameLevel:
-    """現マップのレベルを設定する
+    """level毎のsprite_listの生成
     """
     def __init__(self):
         self.chara_sprites = None
@@ -37,7 +37,7 @@ class GameLevel:
 class GameEngine:
     def __init__(self):
         """ 変数の初期化 """
-        self.levels = []
+        self.stories = []
         self.cur_level_index = 0
         self.cur_level = None
 
@@ -49,13 +49,6 @@ class GameEngine:
         self.turn_check = []
         self.game_state = GAME_STATE.NORMAL
         self.grid_select_handlers = []
-
-    def setup(self):
-
-        arcade.set_background_color(arcade.color.BLACK)
-
-        self.cur_level = self.setup_level(1)
-        self.levels.append(self.cur_level)
 
     def setup_level(self, level_number):
 
@@ -81,6 +74,8 @@ class GameEngine:
         self.player = Player(self.game_map.player_position[0],self.game_map.player_position[1], inventory=Inventory(capacity=5))
         level.chara_sprites.append(self.player)
 
+
+        # test_items
         self.long_sword = LongSword(self.player.x, self.player.y +1)
         level.item_sprites.append(self.long_sword)
         self.short_sword = ShortSword(self.player.x+1, self.player.y +1)
@@ -92,10 +87,18 @@ class GameEngine:
         self.cnf = ConfusionScroll(self.player.x + 1, self.player.y)
         level.item_sprites.append(self.cnf)
 
+
         self.fov_recompute = True
 
         return level
 
+
+    def setup(self):
+
+        arcade.set_background_color(arcade.color.BLACK)
+
+        self.cur_level = self.setup_level(1)
+        self.stories.append(self.cur_level)
         
 
 
@@ -111,7 +114,7 @@ class GameEngine:
         player_dict = self.get_actor_dict(self.player)
 
         levels_dict = []
-        for level in self.levels:
+        for level in self.stories:
 
 
             actor_dict = []
@@ -179,7 +182,7 @@ class GameEngine:
             level.item_sprites = arcade.SpriteList(
                 use_spatial_hash=True, spatial_hash_cell_size=16)
 
-            level.eqip_sprites = arcade.SpriteList(
+            level.equip_sprites = arcade.SpriteList(
                 use_spatial_hash=True, spatial_hash_cell_size=16)
 
             level.effect_sprites = arcade.SpriteList(
@@ -209,9 +212,9 @@ class GameEngine:
 
             level.chara_sprites.append(self.player)
 
-            self.levels.append(level)
+            self.stories.append(level)
         
-        self.cur_level = self.levels[-1]
+        self.cur_level = self.stories[-1]
 
         self.action_queue.append({"message":"*load*"})
 
@@ -412,7 +415,9 @@ class GameEngine:
     def use_stairs(self):
         """階段及びplayerの位置の判定
         """
-        get_stairs = arcade.get_sprites_at_exact_point(self.player.position, self.cur_level.map_sprites)
+        get_stairs = arcade.get_sprites_at_exact_point(
+                                                point=self.player.position,
+                                                sprite_list=self.cur_level.map_sprites)
 
         for stairs in get_stairs:
             if isinstance(stairs, Stairs):
@@ -421,7 +426,7 @@ class GameEngine:
                 player_dict = self.get_actor_dict(self.player)
                 level = self.setup_level(self.cur_level.level + 1)
                 self.cur_level = level
-                self.levels.append(level)
+                self.stories.append(level)
                 tx, ty = self.player.x, self.player.y
                 tmp_x, tmp_y = self.player.center_x, self.player.center_y
                 self.player.restore_from_dict(player_dict["Player"])

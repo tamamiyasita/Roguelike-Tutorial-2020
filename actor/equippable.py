@@ -10,14 +10,14 @@ class Equippable:
 
     def get_dict(self):
         result = {}
-        result["slot"] = self.slot.name
+        result["slot"] = self.slot
         result["power_bonus"] = self.power_bonus
         result["defense_bonus"] = self.defense_bonus
         result["max_hp_bonus"] = self.max_hp_bonus
         return result
 
     def restore_from_dict(self, result):
-        # self.slot = EquipmentSlots[result["slot"]] #TODO get dict
+        self.slot = result["slot"]
         self.power_bonus = result["power_bonus"]
         self.defense_bonus = result["defense_bonus"]
         self.max_hp_bonus = result["max_hp_bonus"]

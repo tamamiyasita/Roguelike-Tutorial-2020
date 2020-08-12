@@ -15,7 +15,7 @@ class Inventory:
     def get_dict(self):
         result = {}
         result["capacity"] = self.capacity
-        result["equip_slots"] = {k:v for k, v in zip(self.equip_slots.keys(), self.equip_slots.values().name)}
+        # result["equip_slots"] = {k:v for k, v in zip(self.equip_slots.keys(), self.equip_slots.values().name)}
         item_dicts = []
         for item in self.item_bag:
             if item is None:
@@ -23,28 +23,26 @@ class Inventory:
             else:
                 name = item.__class__.__name__
                 item_dicts.append({name: item.get_dict()})
-        result["items"] = item_dicts
+        result["item_bag"] = item_dicts
         print(item_dicts, "item_dicts")
         return result
 
     def restore_from_dict(self, result):
         self.capacity = result["capacity"]
         self.item_bag = [None for _ in range(self.capacity)]
-        for  i, item_dict in enumerate(result["items"]):
+        for  i, item_dict in enumerate(result["item_bag"]):
             if item_dict is None:
                 self.item_bag[i] = None
             else:
                 item = restore_actor(item_dict)
                 self.item_bag[i] = item
-                if item.name in self.equip_slots.values():
-                    self.owner.equipment.toggle_equip(item)
-            print(self.item_bag, "rest")
+                print(self.item_bag, "rest")
                 
-        self.equip_slots = result["equip_slots"]
-        for item in self.item_bag:
-            if item.name in self.equip_slots.values():
-                self.equip_slots[item.slot] = item
-                item.master = self.owner
+        # self.equip_slots = result["equip_slots"]
+        # for item in self.item_bag:
+        #     if item.name in self.equip_slots.values():
+        #         self.equip_slots[item.slot] = item
+        #         item.master = self.owner
 
     def add_item(self, item):
         results = []

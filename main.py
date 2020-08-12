@@ -80,23 +80,25 @@ class MG(arcade.Window):
         """全てのスプライトリストのアップデートを行う
            他にactionqueue、ターンチェンジ、pcの移動とviewport、expのチェック
         """
-        self.engine.cur_level.chara_sprites.update_animation()
-        self.engine.cur_level.chara_sprites.update()
-        self.engine.cur_level.actor_sprites.update_animation()
-        self.engine.cur_level.actor_sprites.update()
-        self.engine.cur_level.effect_sprites.update()
-        self.engine.cur_level.equip_sprites.update()
-        self.engine.cur_level.equip_sprites.update_animation()
+        if self.engine.game_state == GAME_STATE.NORMAL:
+        
+            self.engine.cur_level.chara_sprites.update_animation()
+            self.engine.cur_level.chara_sprites.update()
+            self.engine.cur_level.actor_sprites.update_animation()
+            self.engine.cur_level.actor_sprites.update()
+            self.engine.cur_level.effect_sprites.update()
+            # self.engine.cur_level.equip_sprites.update()
+            self.engine.cur_level.equip_sprites.update_animation()
 
-        self.engine.process_action_queue(delta_time)
-        self.engine.turn_change(delta_time)
-        self.engine.check_for_player_movement(self.player_direction)
+            self.engine.process_action_queue(delta_time)
+            self.engine.turn_change(delta_time)
+            self.engine.check_for_player_movement(self.player_direction)
 
-        self.engine.player.check_experience_level(self.engine)
+            self.engine.player.check_experience_level(self.engine)
 
-        # playerがmove状態の時だけviewportを計算する
-        if self.engine.player.state == state.ON_MOVE:
-            viewport(self.engine.player)
+            # playerがmove状態の時だけviewportを計算する
+            if self.engine.player.state == state.ON_MOVE:
+                viewport(self.engine.player)
 
 
     def on_key_press(self, key, modifiers):
@@ -136,6 +138,7 @@ class MG(arcade.Window):
             self.character_screen.buttons_click(x+self.viewport_x, y+self.viewport_y)
 
     def save(self):
+        self.engine.game_state = GAME_STATE.DELAY_WINDOW
         print("save")
         game_dict = self.engine.get_dict()
         # print(game_dict)
@@ -143,20 +146,21 @@ class MG(arcade.Window):
         with open("game_save.json", "w") as write_file:
             json.dump(game_dict, write_file, indent=4, sort_keys=True)
         print("**save**")
-        print(self.engine.player.equipment.main_hand)
+        self.engine.game_state = GAME_STATE.NORMAL
 
     def load(self):
         print("load")
+        self.engine.game_state = GAME_STATE.DELAY_WINDOW
         with open("game_save.json", "r") as read_file:
             data = json.load(read_file)
 
         # print(data)
-        print(self.engine.player.equipment.main_hand,"??")
         print("**load**")
         self.engine.restore_from_dict(data)
         self.engine.player.state = state.READY
         self.engine.fov_recompute = True
-        self.engine.viewport(self.engine.player)
+        viewport(self.engine.player)
+        self.engine.game_state = GAME_STATE.NORMAL
 
 
 def main():

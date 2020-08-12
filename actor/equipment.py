@@ -5,10 +5,33 @@ class Equipment:
        bonusはEquippable関数で設定する
     """
     def __init__(self):
+        """equippableのslotと対応する属性
+        """
         self.item_slot = {
             "main_hand":None,
             "off_hand":None
           }
+    def get_dict(self):
+        result = {}
+        # result["item_slot"] = {k:v for k, v in self.item_slot.items() if v is not None v = v.name}
+        for item_key, item in self.item_slot.items():
+            if item is None:
+                result[item_key] = None
+            else:
+                result[item_key] = item.name
+
+        return result
+
+    def restore_from_dict(self, result):
+        self.item_slot = result
+        for item in self.owner.inventory.item_bag:
+            if item and item.name in self.item_slot:
+                self.toggle_equip(item)
+                # self.item_slot[item.equippable.slot] = item
+                # item.master = self.owner
+            
+
+        
 
 
     @property

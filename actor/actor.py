@@ -299,8 +299,8 @@ class Actor(arcade.Sprite):
             else:
                 self.texture = self.textures[0]
 
+        # itemを装備した時のsprite表示
         if self.master:
-            # itemを装備した時のsprite表示
             self.color = arcade.color.WHITE
             self.alpha = 255
             x = self.master.center_x
