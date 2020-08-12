@@ -1,5 +1,4 @@
 import arcade
-from pyglet import sprite
 from actor.actor import Actor
 from actor.fighter import Fighter
 from data import *

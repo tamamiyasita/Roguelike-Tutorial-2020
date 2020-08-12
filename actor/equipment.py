@@ -13,7 +13,6 @@ class Equipment:
           }
     def get_dict(self):
         result = {}
-        # result["item_slot"] = {k:v for k, v in self.item_slot.items() if v is not None v = v.name}
         for item_key, item in self.item_slot.items():
             if item is None:
                 result[item_key] = None
@@ -25,20 +24,16 @@ class Equipment:
     def restore_from_dict(self, result):
         self.item_slot = result
         for item in self.owner.inventory.item_bag:
-            if item and item.name in self.item_slot:
-                self.toggle_equip(item)
-                # self.item_slot[item.equippable.slot] = item
-                # item.master = self.owner
-            
-
-        
-
+            if item and item.name in self.item_slot.values():
+                self.item_slot[item.equippable.slot] = item
+                self.item.master = self.owner
+    
 
     @property
     def max_hp_bonus(self):
         bonus = 0
         for parts in self.item_slot.values():
-            if parts and parts.equippable.max_hp_bonus:
+            if parts and type(parts) != str and parts.equippable.max_hp_bonus:
                 bonus += parts.equippable.max_hp_bonus
 
         return bonus

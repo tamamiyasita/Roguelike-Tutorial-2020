@@ -87,7 +87,7 @@ class MG(arcade.Window):
             self.engine.cur_level.actor_sprites.update_animation()
             self.engine.cur_level.actor_sprites.update()
             self.engine.cur_level.effect_sprites.update()
-            # self.engine.cur_level.equip_sprites.update()
+            self.engine.cur_level.equip_sprites.update()
             self.engine.cur_level.equip_sprites.update_animation()
 
             self.engine.process_action_queue(delta_time)

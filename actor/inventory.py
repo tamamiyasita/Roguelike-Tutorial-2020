@@ -1,9 +1,5 @@
-# from actor.actor import Actor
-from os import remove
-
 import arcade
 from actor.restore_actor import restore_actor
-from actor.equipment import Equipment
 
 class Inventory:
     def __init__(self, capacity=5):
@@ -15,7 +11,6 @@ class Inventory:
     def get_dict(self):
         result = {}
         result["capacity"] = self.capacity
-        # result["equip_slots"] = {k:v for k, v in zip(self.equip_slots.keys(), self.equip_slots.values().name)}
         item_dicts = []
         for item in self.item_bag:
             if item is None:
@@ -38,11 +33,6 @@ class Inventory:
                 self.item_bag[i] = item
                 print(self.item_bag, "rest")
                 
-        # self.equip_slots = result["equip_slots"]
-        # for item in self.item_bag:
-        #     if item.name in self.equip_slots.values():
-        #         self.equip_slots[item.slot] = item
-        #         item.master = self.owner
 
     def add_item(self, item):
         results = []

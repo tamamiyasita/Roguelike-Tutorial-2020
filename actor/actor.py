@@ -141,7 +141,6 @@ class Actor(arcade.Sprite):
             self.ai.restore_from_dict(result["confused_ai"])
         if "item" in result:
             self.item = Item()
-            # print(f"Restore item {self.name}")        
 
         if "equipment" in result:
             self.equipment = Equipment()
