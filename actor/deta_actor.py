@@ -1,70 +1,74 @@
 from actor.ai import Basicmonster, ConfusedMonster
 import arcade
 import math
+from dataclasses import dataclass
 
 from constants import *
 from data import *
 from util import pixel_to_grid, grid_to_pixel, get_blocking_entity
 from actor.item import Item
 
-
+@dataclass
 class Actor(arcade.Sprite):
     """ 全てのオブジェクトを作成する基礎となるクラス
     """
 
-    def __init__(self, texture_number=0, name=None, x=0, y=0, blocks=False, block_sight=False,
-                 scale=SPRITE_SCALE, color=arcade.color.BLACK, fighter=None, ai=None,
-                 inventory=None, item=None, equipment=None, equippable=None,
-                 visible_color=arcade.color.WHITE, not_visible_color=arcade.color.BLACK,
-                 state=state.TURN_END):
-        super().__init__(scale=scale)
-        if name:
-            self.name = name
-            self.texture_number = texture_number
-            self.texture_ = self.name
-        self.dx, self.dy = 0, 0
-        self.center_x, self.center_y = grid_to_pixel(x, y)
+    # def __init__(self, texture_number=0, name=None, x=0, y=0, blocks=False, block_sight=False,
+    #              scale=SPRITE_SCALE, color=arcade.color.BLACK, fighter=None, ai=None,
+    #              inventory=None, item=None, equipment=None, equippable=None,
+    #              visible_color=arcade.color.WHITE, not_visible_color=arcade.color.BLACK,
+    #              state=state.TURN_END):
+    # super().__init__(scale=scale)
+    scale:float = SPRITE_SCALE
+    name:str = None
+    texture_number:int = 0
+    texture_:str = name
+    dx:float = 0
+    dy:float = 0
+    x:int = 0
+    y:int = 0
+    blocks:bool = False
+    block_sight:bool = False 
+    color:str = ""
+    visible_color:str = ""
+    not_visible_color:str = ""
+    is_visible:bool = False
+    is_dead:bool = False
+    left_face:bool = False
+    _master:any = None
+
+
+    item:any = None
+    inventory:any = None
+
+    state = None
+
+    self.fighter = fighter
+    if self.fighter:
+        self.fighter.owner = self
+        self.state = state
+
+    self.ai = ai
+    if self.ai:
+        self.ai.owner = self
+
+    self.equipment = equipment
+    if self.equipment:
+        self.equipment.owner = self
+
+    self.equippable = equippable
+    if self.equippable:
+        self.equippable.owner = self
+        if not self.item:
+            item = Item()
+            self.item = item
+            self.item.owner =self
+
+    def __post_init__(self):
+        self.center_x, self.center_y = grid_to_pixel(self.x, self.y)
         self.x, self.y = pixel_to_grid(self.center_x, self.center_y)
-        self.scale = scale
-        self.blocks = blocks
-        self.block_sight = block_sight
-        self.color = color
-        self.visible_color = visible_color
-        self.not_visible_color = not_visible_color
-        self.is_visible = False
-        self.is_dead = False
-        self.left_face = False
-        self._master = None
-
-
-        self.item = item
-        self.inventory = inventory
         if self.inventory:
             self.inventory.owner = self
-
-        self.state = None
-
-        self.fighter = fighter
-        if self.fighter:
-            self.fighter.owner = self
-            self.state = state
-
-        self.ai = ai
-        if self.ai:
-            self.ai.owner = self
-
-        self.equipment = equipment
-        if self.equipment:
-            self.equipment.owner = self
-
-        self.equippable = equippable
-        if self.equippable:
-            self.equippable.owner = self
-            if not self.item:
-                item = Item()
-                self.item = item
-                self.item.owner =self
-    
 
     def get_dict(self):
         result = {}
@@ -84,9 +88,6 @@ class Actor(arcade.Sprite):
         result["block_sight"] = self.block_sight
         result["is_visible"] = self.is_visible
         result["is_dead"] = self.is_dead
-
-        if self.state:
-            result["state"] = True
 
         if self.ai.__class__.__name__ == "Basicmonster":
             result["ai"] = True
@@ -133,8 +134,6 @@ class Actor(arcade.Sprite):
         self.is_visible = result["is_visible"]
         self.is_dead = result["is_dead"]
 
-        if "state" in result:
-            self.state = state.TURN_END
         if "ai" in result:
             self.ai = Basicmonster()
             self.ai.owner = self
