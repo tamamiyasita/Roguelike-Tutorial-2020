@@ -1,6 +1,7 @@
 from actor.ai import Basicmonster, ConfusedMonster
 import arcade
 import math
+from dataclasses import dataclass
 
 from constants import *
 from data import *
