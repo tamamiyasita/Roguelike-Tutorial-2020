@@ -1,3 +1,6 @@
+TODO データクラスへのリファクタリング
+TODO ドアの実装
+TODO スピードシステムの実装
 TODO actor等にコメントや変数名の整理
 TODO potion effectの実装
 TODO arcadeのﾊﾟｰﾃｨｸﾙ効果を試したい

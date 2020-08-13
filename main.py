@@ -50,13 +50,13 @@ class MG(arcade.Window):
         self.viewport_x = arcade.get_viewport()[0]
         self.viewport_y = arcade.get_viewport()[2]
 
-        self.draw_sprites()
 
         # どのstateで表示されてもいいパネルの描画
         all_state_ui(self.viewport_x, self.viewport_y)
 
         # ノーマルステート時の画面表示
         if self.engine.game_state == GAME_STATE.NORMAL:
+            self.draw_sprites()
             normal_UI = NormalUI(self.engine.player, self.viewport_x, self.viewport_y, self.engine.selected_item, self.engine.messages, self.mouse_position)
             normal_UI.draw_in_normal_state()
             if self.mouse_position:
@@ -95,6 +95,10 @@ class MG(arcade.Window):
             self.engine.check_for_player_movement(self.player_direction)
 
             self.engine.player.check_experience_level(self.engine)
+
+            # playerの装備状態のアップデート
+            if self.engine.player.state == state.READY:
+                self.engine.player.equipment.update(self.engine.cur_level.equip_sprites)
 
             # playerがmove状態の時だけviewportを計算する
             if self.engine.player.state == state.ON_MOVE:

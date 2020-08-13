@@ -145,6 +145,12 @@ class Actor(arcade.Sprite):
         if "item" in result:
             self.item = Item()
 
+        self.inventory = None
+        if "inventory" in result:
+            self.inventory = Inventory()
+            self.inventory.owner = self
+            self.inventory.restore_from_dict(result["inventory"])
+
         if "equipment" in result:
             self.equipment = Equipment()
             self.equipment.owner = self
@@ -158,14 +164,6 @@ class Actor(arcade.Sprite):
                 item = Item()
                 self.item = item
                 self.item.owner = self
-
-        
-        
-        self.inventory = None
-        if "inventory" in result:
-            self.inventory = Inventory()
-            self.inventory.owner = self
-            self.inventory.restore_from_dict(result["inventory"])
 
         if "fighter" in result:
             self.fighter = Fighter()
