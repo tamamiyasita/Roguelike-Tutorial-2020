@@ -6,6 +6,8 @@ from constants import *
 from util import grid_to_pixel
 from actor.wall import Wall
 from actor.floor import Floor
+from actor.door import Door
+
 from actor.entities_factory import get_random_monster_by_challenge, get_random_items_by_challenge
 from actor.entities_factory import make_monster_sprite
 
@@ -38,7 +40,7 @@ class ActorPlacement:
                     wall = Wall(texture_number=wall_number, x=x, y=y,)
                     map_sprites.append(wall)
 
-                elif self.tiles[x][y] == TILE.EMPTY or TILE.STAIRS_DOWN:
+                elif self.tiles[x][y] == TILE.EMPTY or TILE.STAIRS_DOWN or TILE.DOOR:
 
                     floor = Floor(texture_number=21, x=x, y=y)
                     map_sprites.append(floor)
@@ -47,6 +49,11 @@ class ActorPlacement:
 
                     stairs = Stairs(x=x, y=y)
                     map_sprites.append(stairs)
+
+                if self.tiles[x][y] == TILE.DOOR:
+
+                    door = Door(x=x, y=y)
+                    map_sprites.append(door)
 
         return map_sprites
 
@@ -67,7 +74,7 @@ class ActorPlacement:
                     monster.center_y = cy
                     print(monster.center_x)
 
-                    actor_sprites.append(monster)
+                    # actor_sprites.append(monster)
 
         return actor_sprites
 

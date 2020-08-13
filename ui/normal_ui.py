@@ -16,9 +16,21 @@ class NormalUI:
 
     def draw_in_normal_state(self):
         """mainに渡すメソッドをまとめる"""
+        self.buttom_ui()
         self.draw_hp_and_status_bar()
         self.draw_inventory()
         self.draw_messages_handle()
+
+    def buttom_ui(self):
+        #画面下のパネルをarcadeの四角形を描画する変数で作成
+        arcade.draw_xywh_rectangle_filled(
+                        bottom_left_x=self.viewport_x,
+                        bottom_left_y=self.viewport_y,
+                        width=SCREEN_WIDTH,
+                        height=STATES_PANEL_HEIGHT,
+                        color=COLORS["status_panel_background"]
+                        )
+
 
 
     def draw_hp_and_status_bar(self):

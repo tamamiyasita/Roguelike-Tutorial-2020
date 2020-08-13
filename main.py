@@ -6,7 +6,6 @@ from game_engine import GameEngine
 from constants import *
 from keymap import keymap
 
-from ui.all_state_ui import all_state_ui
 from ui.normal_ui import NormalUI
 from ui.mouse_ui import MouseUI
 from ui.character_screen_ui import CharacterScreen
@@ -51,12 +50,10 @@ class MG(arcade.Window):
         self.viewport_y = arcade.get_viewport()[2]
 
 
-        # どのstateで表示されてもいいパネルの描画
-        all_state_ui(self.viewport_x, self.viewport_y)
+        self.draw_sprites()
 
         # ノーマルステート時の画面表示
         if self.engine.game_state == GAME_STATE.NORMAL:
-            self.draw_sprites()
             normal_UI = NormalUI(self.engine.player, self.viewport_x, self.viewport_y, self.engine.selected_item, self.engine.messages, self.mouse_position)
             normal_UI.draw_in_normal_state()
             if self.mouse_position:

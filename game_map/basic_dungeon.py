@@ -3,7 +3,8 @@ from random import randint, choice
 
 from game_map.map_sprite_set import ActorPlacement
 from util import pixel_to_grid, grid_to_pixel
-from actor.actor import Actor
+
+from game_map.door_check import door_check
 from constants import *
 from data import *
 
@@ -111,11 +112,30 @@ class BasicDungeon:
 
     def create_h_tunnel(self, x1, x2, y):
         for x in range(min(x1, x2), max(x1, x2) + 1):
-            self.tiles[x][y] = TILE.EMPTY
+            if self.tiles[x][y] == TILE.WALL:
+                self.tiles[x][y] = TILE.EMPTY
+            if door_check(self.tiles, x-1, y):
+                self.tiles[x-1][y] = TILE.DOOR
+            if door_check(self.tiles, x+1, y):
+                self.tiles[x+1][y] = TILE.DOOR
+   
+            else:
+                self.tiles[x][y] = TILE.EMPTY
+
 
     def create_v_tunnel(self, y1, y2, x):
         for y in range(min(y1, y2), max(y1, y2) + 1):
-            self.tiles[x][y] = TILE.EMPTY
+            if self.tiles[x][y] == TILE.WALL:
+                self.tiles[x][y] = TILE.EMPTY
+            if door_check(self.tiles, x, y-1):
+                self.tiles[x][y-1] = TILE.DOOR
+            if door_check(self.tiles, x, y+1):
+                self.tiles[x][y+1] = TILE.DOOR 
+
+            else:
+                self.tiles[x][y] = TILE.EMPTY
+
+
 
     def place_entities(self, room, actor_tiles, max_items_per_room, level):
         number_of_items = randint(0, max_items_per_room)

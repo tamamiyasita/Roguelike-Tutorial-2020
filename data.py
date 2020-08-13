@@ -70,6 +70,11 @@ floors = [floor_tile[v] for v in range(floor_len)]
 
 stairs = floors
 
+door_img = (r"image/Door0.png")
+door_tile = get_tile_set(door_img, tile_size=16)
+door_len = len(door_tile)
+doors = [door_tile[v] for v in range(door_len)]
+
 walls_1 = (r"image/wall1.png")
 walls_1_tiles = get_tile_set(walls_1, tile_size=16)
 wall_1 = {k: walls_1_tiles[v] for k, v in zip(
@@ -115,7 +120,8 @@ IMAGE_ID = {"player": player,
             "wall_1": wall_1,
             "wall_2": wall_2,
             "wall_3": wall_3,
-            "stairs": stairs
+            "stairs": stairs,
+            "door":doors
 
             }
 
