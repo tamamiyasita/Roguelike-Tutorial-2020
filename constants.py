@@ -74,5 +74,6 @@ class state(Enum):
     TURN_END = auto()
     ATTACK = auto()
     FOV = auto()
+    DOOR = auto()
 
 

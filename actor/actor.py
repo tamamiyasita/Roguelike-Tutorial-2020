@@ -4,7 +4,7 @@ import math
 
 from constants import *
 from data import *
-from util import pixel_to_grid, grid_to_pixel, get_blocking_entity
+from util import pixel_to_grid, grid_to_pixel, get_blocking_entity, get_door
 from actor.item import Item
 
 
@@ -173,7 +173,12 @@ class Actor(arcade.Sprite):
             self.fighter.restore_from_dict(result["fighter"])
 
 
-    def move(self, dxy, target=None, actor_sprites=None, map_sprites=None):
+    def move(self, dxy, target=None, engine=None):
+        map_sprites = engine.cur_level.map_sprites
+        map_obj_sprites = engine.cur_level.map_obj_sprites
+        actor_sprites = engine.cur_level.actor_sprites
+
+
         ai_move_speed = 0
         if self.ai:
             ai_move_speed = MOVE_SPEED*1.3
@@ -194,12 +199,14 @@ class Actor(arcade.Sprite):
         self.booking_tile = arcade.get_sprites_at_exact_point(grid_to_pixel(destination_x, destination_y), map_sprites)[0]
 
         # ドアのチェック
-        door_actor = get_blocking_entity(destination_x, destination_y, map_sprites)
-        if door_actor:
-            door_actor = door_actor[0]
-        if door_actor and "door" in door_actor.name and door_actor.left_face == False:
-            door_actor.left_face = True
+        door_actor = get_door(destination_x, destination_y, map_obj_sprites)
+        if door_actor and door_actor[0].left_face == False:
+        #     door_actor = door_actor[0]
+        #     if door_actor and "door" in door_actor.name and door_actor.left_face == False:
+            door_actor[0].left_face = True
             self.state = state.TURN_END
+            engine.action_queue.extend([{"delay": {"time": 0.1, "action": {"None"}}}])
+
             print("open door")
             return
 
@@ -282,7 +289,9 @@ class Actor(arcade.Sprite):
         dy = other.y - self.y
         return math.sqrt(dx ** 2 + dy ** 2)
 
-    def move_towards(self, target, actor_sprites, map_sprites):
+    def move_towards(self, target, engine):
+
+        actor_sprites = engine.cur_level.actor_sprites
 
         dx = target.x - self.x
         dy = target.y - self.y
@@ -292,7 +301,7 @@ class Actor(arcade.Sprite):
         dy = int(round(dy / distance))
 
         if not get_blocking_entity(self.x + dx, self.y + dy, actor_sprites):
-            move = self.move((dx, dy), target, actor_sprites, map_sprites)
+            move = self.move((dx, dy), target, engine)
             return move
 
 

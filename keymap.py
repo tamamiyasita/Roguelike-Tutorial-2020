@@ -22,11 +22,12 @@ KEYMAP_SELECT_ITEM_8 = [arcade.key.KEY_8]
 KEYMAP_SELECT_ITEM_9 = [arcade.key.KEY_9]
 KEYMAP_SELECT_ITEM_0 = [arcade.key.KEY_0]
 KEYMAP_USE_ITEM = [arcade.key.U]
-KEYMAP_EQUIP_ITEM = [arcade.key.K]
+KEYMAP_EQUIP_ITEM = [arcade.key.J]
 KEYMAP_DROP_ITEM = [arcade.key.H]
 KEYMAP_CHARACTER_SCREEN = [arcade.key.C]
 KEYMAP_USE_STAIRS = [arcade.key.ENTER]
 KEYMAP_CANCEL = [arcade.key.ESCAPE]
+KEYMAP_CLOSE_DOOR = [arcade.key.L]
 
 
 def keymap(key, engine):
@@ -88,5 +89,27 @@ def keymap(key, engine):
             engine.action_queue.extend([{"drop_item": True}])
         elif key in KEYMAP_USE_STAIRS:
             engine.action_queue.extend([{"use_stairs": True}])
+        elif key in KEYMAP_CLOSE_DOOR:
+            engine.action_queue.extend([{"close_door": True}])
 
+        return direction
+
+    elif engine.player.state == state.DOOR and engine.game_state == GAME_STATE.NORMAL:
+        direction = None
+        if key in KEYMAP_UP:
+            direction = (0, 1)
+        elif key in KEYMAP_DOWN:
+            direction = (0, -1)
+        elif key in KEYMAP_LEFT:
+            direction = (-1, 0)
+        elif key in KEYMAP_RIGHT:
+            direction = (1, 0)
+        elif key in KEYMAP_UP_LEFT:
+            direction = (-1, 1)
+        elif key in KEYMAP_DOWN_LEFT:
+            direction = (-1, -1)
+        elif key in KEYMAP_UP_RIGHT:
+            direction = (1, 1)
+        elif key in KEYMAP_DOWN_RIGHT:
+            direction = (1, -1)
         return direction

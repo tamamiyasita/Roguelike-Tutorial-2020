@@ -11,13 +11,13 @@ class Basicmonster:
         self.target_point = target_point # targetの位置を格納する
         self.visible_check = visible_check # 視野に入った場合チェックされ,Trueなら移動する
 
-    def take_turn(self, target, sprite_lists):
+    def take_turn(self, target, engine):
         results = []
         monster = self.owner
 
         # sprite_listsのactor_spritesとmap_spritesを変数に格納
-        actor_sprites = sprite_lists[0]
-        map_sprites = sprite_lists[1]
+        actor_sprites = engine.cur_level.actor_sprites
+        map_sprites = engine.cur_level.map_sprites
 
 
         # 視野のチェック
@@ -35,7 +35,7 @@ class Basicmonster:
 
         # ターゲットに隣接している場合パスは計算しない
         if target and monster.distance_to(target) <= 1.46 and self.visible_check:
-            attack = monster.move_towards(target, actor_sprites, map_sprites)
+            attack = monster.move_towards(target, engine)
             if attack:
                 results.extend(attack)
                 print("move_towards attack")
@@ -44,7 +44,7 @@ class Basicmonster:
         if self.visible_check:
             if monster.distance_to(target) >= 1:
                 results = astar(
-                    sprite_lists, (monster.x, monster.y), (self.target_point))
+                    [actor_sprites, map_sprites], (monster.x, monster.y), (self.target_point))
                 # print(f"Path from ({monster.x},{monster.y}) to {target.x},{target.y}", results)
                 # monster.move_towards(target.x, target.y, sprite_lists)
                 # monster.move((randint(-1, 1), randint(-1, 1)))
@@ -58,7 +58,7 @@ class Basicmonster:
                     dy = y - monster.y
 
                     attack = monster.move(
-                        (dx, dy), target, actor_sprites, map_sprites)
+                        (dx, dy), target, engine)
                     if attack:
                         results.extend(attack)
             return results

@@ -27,7 +27,7 @@ class ActorPlacement:
         self.height = len(self.tiles[0])
 
     def map_set(self):
-        """ 地形スプライトをgame_mapブロック情報から作成する
+        """ 静的な地形スプライトをgame_mapブロック情報から作成する
         """
         map_sprites = arcade.SpriteList(
             use_spatial_hash=True, spatial_hash_cell_size=32)
@@ -50,12 +50,28 @@ class ActorPlacement:
                     stairs = Stairs(x=x, y=y)
                     map_sprites.append(stairs)
 
+                # if self.tiles[x][y] == TILE.DOOR:
+
+                #     door = Door(x=x, y=y)
+                #     map_sprites.append(door)
+
+        return map_sprites
+
+    def map_obj_set(self):
+        """ 動的な地形スプライトをgame_mapブロック情報から作成する
+        """
+        map_obj_sprites = arcade.SpriteList(
+            use_spatial_hash=True, spatial_hash_cell_size=32)
+
+        for x in range(self.width):
+            for y in range(self.height):
+
                 if self.tiles[x][y] == TILE.DOOR:
 
                     door = Door(x=x, y=y)
-                    map_sprites.append(door)
+                    map_obj_sprites.append(door)
 
-        return map_sprites
+        return map_obj_sprites
 
     def actor_set(self):
         """actorをgame_mapタイル番号から設定する
@@ -74,7 +90,7 @@ class ActorPlacement:
                     monster.center_y = cy
                     print(monster.center_x)
 
-                    # actor_sprites.append(monster)
+                    actor_sprites.append(monster)
 
         return actor_sprites
 

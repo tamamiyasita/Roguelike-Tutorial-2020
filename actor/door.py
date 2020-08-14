@@ -27,5 +27,7 @@ class Door(Actor):
             self.block_sight = False
         else:
             self.texture = self.textures[0]
+            self.blocks = True
+            self.block_sight = True
 
 

@@ -18,6 +18,7 @@ from actor.restore_actor import restore_actor
 from actor.short_sword import ShortSword
 from actor.long_sword import LongSword
 from actor.small_shield import SmallShield
+from util import get_door, get_blocking_entity
 
 
 class GameLevel:
@@ -30,6 +31,7 @@ class GameLevel:
         self.item_sprites = None
         self.equip_sprites = None
         self.effect_sprites = None
+        self.map_obj_sprites = None
         self.level = 0
         
 
@@ -37,7 +39,7 @@ class GameLevel:
 class GameEngine:
     def __init__(self):
         """ 変数の初期化 """
-        self.stories = []
+        self.stories = [] # 階層を格納する変数
         self.cur_level_index = 0
         self.cur_level = None
 
@@ -49,6 +51,7 @@ class GameEngine:
         self.turn_check = []
         self.game_state = GAME_STATE.NORMAL
         self.grid_select_handlers = []
+        self.door_dist = []
 
     def setup_level(self, level_number):
 
@@ -59,10 +62,12 @@ class GameEngine:
 
         """ スプライトリストの初期化 """
         mapsprite = ActorPlacement(self.game_map, self).map_set()
+        map_obj_sprite = ActorPlacement(self.game_map, self).map_obj_set()
         actorsprite = ActorPlacement(self.game_map, self).actor_set()
         itemsprite = ActorPlacement(self.game_map, self).items_set()
 
         level.map_sprites = mapsprite
+        level.map_obj_sprites = map_obj_sprite
         level.actor_sprites = actorsprite
         level.item_sprites = itemsprite
         level.equip_sprites = arcade.SpriteList(use_spatial_hash=True, spatial_hash_cell_size=32)
@@ -125,6 +130,10 @@ class GameEngine:
             for sprite in level.map_sprites:
                 dungeon_dict.append(self.get_actor_dict(sprite))
 
+            dungeon_obj_dict = []
+            for sprite in level.map_obj_sprites:
+                dungeon_obj_dict.append(self.get_actor_dict(sprite))
+
             item_dict = []
             for sprite in level.item_sprites:
                 item_dict.append(self.get_actor_dict(sprite))
@@ -140,6 +149,7 @@ class GameEngine:
             level_dict = {
                          "actor": actor_dict,
                          "dungeon": dungeon_dict,
+                         "dungeon_obj": dungeon_obj_dict,
                          "item": item_dict,
                          "effect": effect_dict,
                          "equip": equip_dict
@@ -179,6 +189,9 @@ class GameEngine:
             level.map_sprites = arcade.SpriteList(
                 use_spatial_hash=True, spatial_hash_cell_size=32)
 
+            level.map_obj_sprites = arcade.SpriteList(
+                use_spatial_hash=True, spatial_hash_cell_size=32)
+
             level.item_sprites = arcade.SpriteList(
                 use_spatial_hash=True, spatial_hash_cell_size=16)
 
@@ -197,6 +210,10 @@ class GameEngine:
             for dungeon_dict in level_dict["dungeon"]:
                 maps = restore_actor(dungeon_dict)
                 level.map_sprites.append(maps)
+
+            for dungeon_obj_dict in level_dict["dungeon_obj"]:
+                map_obj = restore_actor(dungeon_obj_dict)
+                level.map_obj_sprites.append(map_obj)
 
             for item_dict in level_dict["item"]:
                 item = restore_actor(item_dict)
@@ -227,6 +244,9 @@ class GameEngine:
             if "player_turn" in action:
                 print("player_turn")
                 self.player.state = state.READY
+            
+            if "None" in action:
+                pass
 
             if "enemy_turn" in action:
                 print("enemy_turn")
@@ -235,6 +255,14 @@ class GameEngine:
 
             if "message" in action:
                 self.messages.append(action["message"])
+
+            if "remove" in action:
+                target = action["remove"]
+                target.remove_from_sprite_lists()
+
+            if "pass" in action:
+                target = action["pass"]
+                target.state = state.TURN_END
 
             if "dead" in action:
                 print("Death")
@@ -251,13 +279,6 @@ class GameEngine:
 
                     new_action_queue.extend(
                         [{"delay": {"time": DEATH_DELAY, "action": {"remove": target}}}])
-            if "remove" in action:
-                target = action["remove"]
-                target.remove_from_sprite_lists()
-
-            if "pass" in action:
-                target = action["pass"]
-                target.state = state.TURN_END
 
             if "delay" in action:
                 target = action["delay"]
@@ -301,8 +322,6 @@ class GameEngine:
                         new_action_queue.extend(results)
 
         
-                     
-
 
             if "drop_item" in action:
                 item_number = self.selected_item
@@ -320,11 +339,43 @@ class GameEngine:
                         new_action_queue.extend([{"message": f"You dropped the {item.name}"}])
 
             if "use_stairs" in action:
-
                 result = self.use_stairs()
                 if result:
                     new_action_queue.extend(result)
                     self.game_state = GAME_STATE.NORMAL
+
+
+            if "close_door" in action:
+                self.player.state = state.DOOR
+                new_action_queue.extend([{"message":f"What direction do you want the door to close?"}])
+
+            if "use_door" in action:
+                if not self.door_dist is None:
+                    dx, dy = self.door_dist[0]
+                    dest_x = self.player.x + dx
+                    dest_y = self.player.y + dy
+                    door_actor = get_door(dest_x, dest_y, self.cur_level.map_obj_sprites)
+                    enemy_actor = get_blocking_entity(dest_x, dest_y, self.cur_level.actor_sprites)
+                    if door_actor and not enemy_actor:
+                        door_actor = door_actor[0]
+                        if door_actor.left_face:
+                            door_actor.left_face = False
+                        elif not door_actor.left_face:
+                            door_actor.left_face = True
+                        new_action_queue.extend([{"delay": {"time": 0.2, "action": "None"}}])
+                        self.player.state = state.TURN_END
+                        self.door_dist = []
+                    elif door_actor and enemy_actor:
+                        new_action_queue.extend([{"message":f"We can't close the door because of the {enemy_actor[0].name}."}])
+                        new_action_queue.extend([{"delay": {"time": 0.3, "action": {"player_turn"}}}])
+                        self.door_dist = []
+                    else:
+                        new_action_queue.extend([{"message":f"There is no door in that direction"}])
+                        new_action_queue.extend([{"delay": {"time": 0.3, "action": {"player_turn"}}}])
+                        self.door_dist = []
+
+                else:
+                    new_action_queue.extend([{"delay": {"time": 0.4, "action": {"use_door"}}}])
 
         self.action_queue = new_action_queue
 
@@ -346,7 +397,7 @@ class GameEngine:
         for actor in self.cur_level.actor_sprites:
             if actor.ai and not actor.is_dead:
                 results = actor.ai.take_turn(
-                    target=target, sprite_lists=[self.cur_level.actor_sprites, self.cur_level.map_sprites])
+                    target=target, engine=self)
                 if results:
                     self.action_queue.extend(results)
                     actor_check.append(actor)
@@ -372,7 +423,7 @@ class GameEngine:
         """
         if self.fov_recompute == True:
             recalculate_fov(self.player.x, self.player.y, FOV_RADIUS,
-                            [self.cur_level.map_sprites, self.cur_level.actor_sprites, self.cur_level.item_sprites])
+                            [self.cur_level.map_sprites, self.cur_level.actor_sprites, self.cur_level.item_sprites, self.cur_level.map_obj_sprites])
 
             self.fov_recompute = False
 
@@ -380,7 +431,7 @@ class GameEngine:
         """プレイヤーの移動
         """
         if self.player.state == state.READY and dist:
-            attack = self.player.move(dist, None, self.cur_level.actor_sprites, self.cur_level.map_sprites)
+            attack = self.player.move(dist, None, self)
             if attack:
                 self.action_queue.extend(attack)
 
