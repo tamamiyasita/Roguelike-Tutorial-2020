@@ -20,3 +20,6 @@ class Wall(Actor):
         )
         self.alpha = 0
 
+    def update_animation(self, delta_time: float):
+        pass
+

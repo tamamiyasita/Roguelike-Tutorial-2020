@@ -16,7 +16,7 @@ class Actor(arcade.Sprite):
                  scale=SPRITE_SCALE, color=arcade.color.BLACK, fighter=None, ai=None,
                  inventory=None, item=None, equipment=None, equippable=None,
                  visible_color=arcade.color.WHITE, not_visible_color=arcade.color.BLACK,
-                 state=state.TURN_END):
+                 state=state.TURN_END, left_face=False):
         super().__init__(scale=scale)
         if name:
             self.name = name
@@ -33,7 +33,7 @@ class Actor(arcade.Sprite):
         self.not_visible_color = not_visible_color
         self.is_visible = False
         self.is_dead = False
-        self.left_face = False
+        self.left_face = left_face
         self._master = None
 
 
@@ -84,6 +84,7 @@ class Actor(arcade.Sprite):
         result["block_sight"] = self.block_sight
         result["is_visible"] = self.is_visible
         result["is_dead"] = self.is_dead
+        result["left_face"] = self.left_face
 
         if self.state:
             result["state"] = True
@@ -132,6 +133,7 @@ class Actor(arcade.Sprite):
         self.block_sight = result["block_sight"]
         self.is_visible = result["is_visible"]
         self.is_dead = result["is_dead"]
+        self.left_face = result["left_face"]
 
         if "state" in result:
             self.state = state.TURN_END
@@ -190,6 +192,18 @@ class Actor(arcade.Sprite):
 
         # 行先のfloorオブジェクトを変数booking_tileに入れる
         self.booking_tile = arcade.get_sprites_at_exact_point(grid_to_pixel(destination_x, destination_y), map_sprites)[0]
+
+        # ドアのチェック
+        door_actor = get_blocking_entity(destination_x, destination_y, map_sprites)
+        if door_actor:
+            door_actor = door_actor[0]
+        if door_actor and "door" in door_actor.name and door_actor.left_face == False:
+            door_actor.left_face = True
+            self.state = state.TURN_END
+            print("open door")
+            return
+
+
 
         blocking_actor = get_blocking_entity(destination_x, destination_y, actor_sprites)
         if blocking_actor and not target:

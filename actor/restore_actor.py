@@ -13,6 +13,7 @@ from actor.confusion_scroll import ConfusionScroll, ConfusionEffect
 from actor.wall import Wall
 from actor.floor import Floor
 from actor.stairs import Stairs
+from actor.door import Door
 
 
 def restore_actor(actor_dict):
@@ -58,6 +59,8 @@ def restore_actor(actor_dict):
         actor = Floor()
     elif actor_name == "Stairs":
         actor = Stairs()
+    elif actor_name == "Door":
+        actor = Door()
     else:
         raise ValueError(f"Error, don't know how to restore {actor_name}.")
 

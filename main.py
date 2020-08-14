@@ -34,7 +34,7 @@ class MG(arcade.Window):
 
     def draw_sprites(self):
         """ 全てのスプライトリストをここで描画する """
-        self.engine.cur_level.map_sprites.draw(filter=gl.GL_NEAREST)
+        self.engine.cur_level.map_sprites.draw()
         self.engine.cur_level.item_sprites.draw(filter=gl.GL_NEAREST)
         self.engine.cur_level.actor_sprites.draw(filter=gl.GL_NEAREST)
         self.engine.cur_level.chara_sprites.draw(filter=gl.GL_NEAREST)
@@ -90,6 +90,7 @@ class MG(arcade.Window):
             self.engine.process_action_queue(delta_time)
             self.engine.turn_change(delta_time)
             self.engine.check_for_player_movement(self.player_direction)
+            self.engine.cur_level.map_sprites.update_animation()
 
             self.engine.player.check_experience_level(self.engine)
 
@@ -108,9 +109,9 @@ class MG(arcade.Window):
 
         self.player_direction = keymap(key, self.engine)
 
-        if key == arcade.key.P:
+        if key == arcade.key.F11:
             self.save()
-        elif key == arcade.key.L:
+        elif key == arcade.key.F12:
             self.load()
 
 
