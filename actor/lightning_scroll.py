@@ -15,7 +15,7 @@ class LightningEffect(Actor):
             x=x,
             y=y,
             name="lightning_effect",
-            color = arcade.color.WHITE
+            color = COLORS["white"]
         )
         self.effect_sprites = effect_sprites
         self.alpha = 255
@@ -41,7 +41,7 @@ class LightningScroll(Actor):
             x=x,
             y=y,
             name="lightning_scroll",
-            not_visible_color=COLORS["transparent"],
+            not_visible_color=COLORS["black"],
 
             item=Item()
         )

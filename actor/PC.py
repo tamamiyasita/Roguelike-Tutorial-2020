@@ -14,7 +14,7 @@ class Player(Actor):
             name="player",
             x=x,
             y=y,
-            color=arcade.color.WHITE,
+            color=COLORS["white"],
 
             inventory=inventory,
             fighter=fighter_component,

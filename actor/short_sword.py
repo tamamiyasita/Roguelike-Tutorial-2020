@@ -22,7 +22,7 @@ class ShortSword(Actor):
 
     # def update(self):
     #     if self._master:
-    #         self.color = arcade.color.WHITE
+    #         self.color = COLORS["white"]
     #         self.alpha = 255
     #         x = self.master.center_x
     #         if self.master.left_face:

@@ -100,7 +100,7 @@ class GameEngine:
 
     def setup(self):
 
-        arcade.set_background_color(arcade.color.BLACK)
+        arcade.set_background_color(COLORS["black"])
 
         self.cur_level = self.setup_level(1)
         self.stories.append(self.cur_level)
@@ -267,7 +267,7 @@ class GameEngine:
             if "dead" in action:
                 print("Death")
                 target = action["dead"]
-                target.color = arcade.color.GRAY_BLUE
+                target.color = COLORS["dead"]
                 target.is_dead = True
                 if target is self.player:
                     new_action_queue.extend([{"message": "player has died!"}])

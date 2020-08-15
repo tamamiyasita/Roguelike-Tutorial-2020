@@ -32,11 +32,12 @@ class CharacterScreen:
         text_position_x = 10 + self.viewport_x
         text_size = 24
         screen_title = "Character Screen"
+        text_color = arcade.color.AFRICAN_VIOLET
         arcade.draw_text(
                         text=screen_title,
                         start_x=text_position_x,
                         start_y=text_position_y,
-                        color=arcade.color.AFRICAN_VIOLET,
+                        color=text_color,
                         font_size=text_size
                         )
 
@@ -49,7 +50,7 @@ class CharacterScreen:
                         text=states_text,
                         start_x=text_position_x,
                         start_y=text_position_y,
-                        color=arcade.color.AFRICAN_VIOLET,
+                        color=text_color,
                         font_size=text_size
                         )
 
@@ -59,7 +60,7 @@ class CharacterScreen:
                         text=states_text,
                         start_x=text_position_x,
                         start_y=text_position_y,
-                        color=arcade.color.AFRICAN_VIOLET,
+                        color=text_color,
                         font_size=text_size
                         )
 
@@ -69,7 +70,7 @@ class CharacterScreen:
                         text=states_text,
                         start_x=text_position_x,
                         start_y=text_position_y,
-                        color=arcade.color.AFRICAN_VIOLET,
+                        color=text_color,
                         font_size=text_size
                         )
 
@@ -79,7 +80,7 @@ class CharacterScreen:
                         text=states_text,
                         start_x=text_position_x,
                         start_y=text_position_y,
-                        color=arcade.color.AFRICAN_VIOLET,
+                        color=text_color,
                         font_size=text_size
                         )
                         

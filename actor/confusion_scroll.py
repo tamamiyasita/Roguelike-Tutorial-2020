@@ -13,8 +13,8 @@ class ConfusionEffect(Actor):
         super().__init__(
             x=x,
             y=y,
-            color=arcade.color.WHITE,
-            not_visible_color=COLORS["transparent"],
+            color=COLORS["white"],
+            not_visible_color=COLORS["black"],
             name="confusion_effect"),
 
         self.enemy = enemy
@@ -44,7 +44,7 @@ class ConfusionScroll(Actor):
             x=x,
             y=y,
             name="confusion_scroll",
-            not_visible_color=COLORS["transparent"],
+            not_visible_color=COLORS["black"],
 
             item=Item())
 

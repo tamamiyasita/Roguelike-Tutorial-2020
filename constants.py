@@ -30,11 +30,13 @@ FOV_RADIUS = 8
 DEATH_DELAY = 0.5
 
 COLORS = {
-    "transparent": arcade.color.BLACK,
+    "black": arcade.color.BLACK,
+    "white": arcade.color.WHITE,
+    "dead": arcade.color.GRAY_BLUE,
     "dark_wall": arcade.color.PURPLE_TAUPE,
     "dark_ground": arcade.color.PURPLE_NAVY,
-    "light_wall": arcade.color.WHITE,
-    "light_ground": arcade.color.WHITE,
+    "light_wall": arcade.color.WHITE_SMOKE,
+    "light_ground": arcade.color.WHITE_SMOKE,
     "status_panel_background": arcade.color.PINK_LACE,
     "status_panel_text": arcade.color.BLACK,
     "status_bar_background": arcade.color.PINK_LACE,

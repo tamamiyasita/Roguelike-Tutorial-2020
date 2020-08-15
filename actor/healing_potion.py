@@ -10,7 +10,7 @@ class HealingPotion(Actor):
             x=x,
             y=y,
             name="healing_potion",
-            not_visible_color=COLORS["transparent"],
+            not_visible_color=COLORS["black"],
 
             item=Item())
 

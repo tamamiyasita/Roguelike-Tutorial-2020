@@ -51,7 +51,7 @@ class MouseUI:
                         text=self.mouse_over_text,
                         start_x=x,
                         start_y=y,
-                        color=arcade.color.WHITE
+                        color=COLORS["white"]
                         )
 
     def draw_select_mouse_location(self):

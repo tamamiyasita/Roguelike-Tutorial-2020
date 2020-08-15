@@ -10,7 +10,7 @@ class Door(Actor):
             scale=4,
             x=x,
             y=y,
-            color=COLORS.get("transparent"),
+            color=COLORS.get("black"),
             visible_color=COLORS.get("light_wall"),
             not_visible_color=COLORS.get("dark_wall"),
 

@@ -13,7 +13,7 @@ class Wall(Actor):
             scale=4,
             blocks=True,
             block_sight = True,
-            color=COLORS.get("transparent"),
+            color=COLORS.get("black"),
             visible_color=COLORS.get("light_wall"),
             not_visible_color=COLORS.get("dark_wall")
 

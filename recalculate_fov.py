@@ -11,12 +11,16 @@ from util import grid_to_pixel
 
 
 def recalculate_fov(char_x, char_y, radius, sprite_lists):
+    """ Fovの計算を行う
+    """
+
+    # 最初に渡された全てのスプライトリストをループし、is_visible等をFalseにして画面から隠す
     for sprite_list in sprite_lists:
         for sprite in sprite_list:
             if sprite.is_visible:
                 sprite.is_visible = False
                 sprite.color = sprite.not_visible_color
-                sprite.alpha = sprite.alpha / 2
+                sprite.alpha = 0
     
     resolution = 12
     circumference = 2 * math.pi * radius
@@ -50,7 +54,8 @@ def recalculate_fov(char_x, char_y, radius, sprite_lists):
 
             if blocks:
                 break
-
+    
+    # 全てのスプライトを再度ループし、is_visibleがTrueなら画面に表示する
     for sprite_list in sprite_lists:
         for sprite in sprite_list:
             if sprite.is_visible:

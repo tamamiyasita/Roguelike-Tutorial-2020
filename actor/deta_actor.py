@@ -16,7 +16,7 @@ class Actor(arcade.Sprite):
     # def __init__(self, texture_number=0, name=None, x=0, y=0, blocks=False, block_sight=False,
     #              scale=SPRITE_SCALE, color=arcade.color.BLACK, fighter=None, ai=None,
     #              inventory=None, item=None, equipment=None, equippable=None,
-    #              visible_color=arcade.color.WHITE, not_visible_color=arcade.color.BLACK,
+    #              visible_color=COLORS["white"], not_visible_color=arcade.color.BLACK,
     #              state=state.TURN_END):
     # super().__init__(scale=scale)
     scale:float = SPRITE_SCALE
@@ -302,7 +302,7 @@ class Actor(arcade.Sprite):
 
         # itemを装備した時のsprite表示
         if self.master:
-            self.color = arcade.color.WHITE
+            self.color = COLORS["white"]
             self.alpha = 255
             x = self.master.center_x
             if self.master.left_face:

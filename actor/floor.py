@@ -14,7 +14,7 @@ class Floor(Actor):
             y=y,
             scale=2,
             blocks=False,
-            color=COLORS.get("transparent"),
+            color=COLORS.get("black"),
             visible_color=COLORS.get("light_ground"),
             not_visible_color=COLORS.get("dark_ground")
 
