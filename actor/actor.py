@@ -13,8 +13,10 @@ class Actor(arcade.Sprite):
     """ 全てのオブジェクトを作成する基礎となるクラス
     """
 
-    def __init__(self, texture_number=0, name=None, x=0, y=0, blocks=False, block_sight=False,
-                 scale=SPRITE_SCALE, color=COLORS["black"], fighter=None, ai=None,
+    def __init__(self, texture_number=0, name=None, x=0, y=0,
+                 blocks=False, block_sight=False,
+                 scale=SPRITE_SCALE, color=COLORS["black"],
+                 fighter=None, ai=None, speed=DEFAULT_SPEED,
                  inventory=None, item=None, equipment=None, equippable=None,
                  visible_color=COLORS["white"], not_visible_color=COLORS["black"],
                  state=state.TURN_END, left_face=False):
@@ -34,8 +36,10 @@ class Actor(arcade.Sprite):
         self.not_visible_color = not_visible_color
         self.is_visible = False
         self.is_dead = False
+        self.state = state
         self.left_face = left_face
         self._master = None
+
 
 
         self.item = item
@@ -44,6 +48,9 @@ class Actor(arcade.Sprite):
             self.inventory.owner = self
 
         self.state = None
+
+        self.speed = speed
+        self.wait = self.speed
 
         self.fighter = fighter
         if self.fighter:
@@ -237,7 +244,7 @@ class Actor(arcade.Sprite):
             return attack_results
 
         elif not get_blocking_entity(destination_x, destination_y, actor_sprites) and self.booking_tile.blocks == False:
-            self.booking_tile.blocks = True
+            # self.booking_tile.blocks = True
             self.state = state.ON_MOVE
             self.change_y = self.dy * (MOVE_SPEED+ai_move_speed)
             self.change_x = self.dx * (MOVE_SPEED+ai_move_speed)
@@ -275,6 +282,8 @@ class Actor(arcade.Sprite):
                     self.booking_tile.blocks = False
                 self.state = state.TURN_END
 
+            self.wait = self.speed
+
         if self.state == state.ATTACK:
             if abs(self.target_x - self.center_x) >= step and self.dx:
                 self.change_x = 0
@@ -285,6 +294,8 @@ class Actor(arcade.Sprite):
                 self.center_y = self.target_y
                 self.state = state.TURN_END
 
+            self.wait = self.fighter.attack_speed
+            
     def distance_to(self, other):
         dx = other.x - self.x
         dy = other.y - self.y

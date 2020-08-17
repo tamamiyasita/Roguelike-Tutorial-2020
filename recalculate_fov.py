@@ -20,7 +20,8 @@ def recalculate_fov(char_x, char_y, radius, sprite_lists):
             if sprite.is_visible:
                 sprite.is_visible = False
                 sprite.color = sprite.not_visible_color
-                sprite.alpha = 0
+                if sprite.ai:
+                    sprite.alpha = 0
     
     resolution = 12
     circumference = 2 * math.pi * radius

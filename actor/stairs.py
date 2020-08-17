@@ -13,4 +13,3 @@ class Stairs(Actor):
             visible_color=COLORS.get("light_wall"),
             not_visible_color=COLORS.get("dark_wall")
         )
-        self.alpha = 0

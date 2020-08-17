@@ -58,6 +58,7 @@ def keymap(key, engine):
             direction = (1, -1)
         elif key in KEYMAP_REST:
             engine.player.state = state.TURN_END
+            engine.player.wait = engine.player.speed
 
         elif key in KEYMAP_PICKUP:
             engine.action_queue.extend([{"pickup": True}])

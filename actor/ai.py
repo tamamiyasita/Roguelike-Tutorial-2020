@@ -61,6 +61,11 @@ class Basicmonster:
                         (dx, dy), target, engine)
                     if attack:
                         results.extend(attack)
+
+                elif not results:
+                    monster.wait = monster.speed
+                    monster.state = state.TURN_END
+
             return results
 
         else:

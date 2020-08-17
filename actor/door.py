@@ -18,7 +18,6 @@ class Door(Actor):
             block_sight=True,
 
         )
-        self.alpha = 0
 
     def update_animation(self, delta_time=1 / 60):
         if self.left_face:

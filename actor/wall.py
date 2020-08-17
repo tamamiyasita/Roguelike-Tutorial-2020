@@ -18,7 +18,6 @@ class Wall(Actor):
             not_visible_color=COLORS.get("dark_wall")
 
         )
-        self.alpha = 0
 
     def update_animation(self, delta_time: float):
         pass

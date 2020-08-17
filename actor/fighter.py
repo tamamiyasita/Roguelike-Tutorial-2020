@@ -2,11 +2,13 @@ from constants import *
 
 
 class Fighter:
-    def __init__(self, hp=0, defense=0, power=0, xp_reward=0, current_xp=0, level=1, ability_points=0):
+    def __init__(self, hp=0, defense=0, power=0, attack_speed=DEFAULT_ATTACK_SPEED,
+                 xp_reward=0, current_xp=0, level=1, ability_points=0):
         self.hp = hp
         self.base_defense = defense
         self.base_power = power
         self.base_max_hp = hp
+        self.attack_speed = attack_speed
         self.owner = None
         self.xp_reward = xp_reward
         self.current_xp = current_xp

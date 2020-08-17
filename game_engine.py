@@ -19,6 +19,7 @@ from actor.short_sword import ShortSword
 from actor.long_sword import LongSword
 from actor.small_shield import SmallShield
 from util import get_door, get_blocking_entity
+from turn_loop import TurnLoop
 
 
 class GameLevel:
@@ -104,6 +105,7 @@ class GameEngine:
 
         self.cur_level = self.setup_level(1)
         self.stories.append(self.cur_level)
+        self.turn_loop = TurnLoop(self.player)
         
 
 
@@ -241,17 +243,17 @@ class GameEngine:
         """
         new_action_queue = []
         for action in self.action_queue:
-            if "player_turn" in action:
-                print("player_turn")
-                self.player.state = state.READY
+            # if "player_turn" in action:
+            #     print("player_turn")
+            #     self.player.state = state.READY
             
             if "None" in action:
                 pass
 
-            if "enemy_turn" in action:
-                print("enemy_turn")
-                # self.turn_checkにターン終了フラグを入れる
-                self.turn_check = self.move_enemies(self.player)
+            # if "enemy_turn" in action:
+            #     print("enemy_turn")
+            #     # self.turn_checkにターン終了フラグを入れる
+            #     self.turn_check = self.move_enemies(self.player)
 
             if "message" in action:
                 self.messages.append(action["message"])
@@ -388,34 +390,34 @@ class GameEngine:
                 self.action_queue.extend(results)
         self.grid_select_handlers = []
 
-    def move_enemies(self, target):
-        """ enemyの行動ターンを制御する
-            行動するenemyがいない場合"next_turn"を返す
-        """
-        actor_check = []
-        results = []
-        for actor in self.cur_level.actor_sprites:
-            if actor.ai and not actor.is_dead:
-                results = actor.ai.take_turn(
-                    target=target, engine=self)
-                if results:
-                    self.action_queue.extend(results)
-                    actor_check.append(actor)
-                # else:
-                #     actor.move_towards(
-                #         target, self.actor_sprites, self.game_map)
-                #     actor_check.append(actor)
+    # def move_enemies(self, target):
+    #     """ enemyの行動ターンを制御する
+    #         行動するenemyがいない場合"next_turn"を返す
+    #     """
+    #     actor_check = []
+    #     results = []
+    #     for actor in self.cur_level.actor_sprites:
+    #         if actor.ai and not actor.is_dead:
+    #             results = actor.ai.take_turn(
+    #                 target=target, engine=self)
+    #             if results:
+    #                 self.action_queue.extend(results)
+    #                 actor_check.append(actor)
+    #             # else:
+    #             #     actor.move_towards(
+    #             #         target, self.actor_sprites, self.game_map)
+    #             #     actor_check.append(actor)
 
-                # else:
-                #     results = actor.ai.take_turn(
-                #         target=target, game_map=self.game_map, sprite_lists=[self.map_sprites])
-                #     if results:
-                #         self.action_queue.extend(results)
-        if not actor_check:
-            actor_check.append("next_turn")
+    #             # else:
+    #             #     results = actor.ai.take_turn(
+    #             #         target=target, game_map=self.game_map, sprite_lists=[self.map_sprites])
+    #             #     if results:
+    #             #         self.action_queue.extend(results)
+    #     if not actor_check:
+    #         actor_check.append("next_turn")
 
-        # print(actor_check, "actor_check")
-        return actor_check
+    #     # print(actor_check, "actor_check")
+    #     return actor_check
 
     def fov(self):
         """recompute_fovでTCODによるFOVの計算を行い
@@ -435,33 +437,33 @@ class GameEngine:
             if attack:
                 self.action_queue.extend(attack)
 
-    def turn_change(self, delta_time):
-        """ playerとenemyの行動ターンを切り替える
-        """
+    # def turn_change(self, delta_time):
+    #     """ playerとenemyの行動ターンを切り替える
+    #     """
 
-        # playerがTURN_END状態になるとキューに"enemy_turn"を送信する
-        if self.player.state == state.TURN_END:
-            self.fov_recompute = True
-            self.player.state = state.DELAY
-            self.action_queue.extend([{"enemy_turn": True}])
+    #     # playerがTURN_END状態になるとキューに"enemy_turn"を送信する
+    #     if self.player.state == state.TURN_END:
+    #         self.fov_recompute = True
+    #         self.player.state = state.DELAY
+    #         self.action_queue.extend([{"enemy_turn": True}])
 
-        # move_enemies関数が"next_turn"を返した場合キューに"player_turn"を送信する
-        elif "next_turn" in self.turn_check:
-            self.turn_check = []
-            self.action_queue.extend([{"player_turn": True}])
+    #     # move_enemies関数が"next_turn"を返した場合キューに"player_turn"を送信する
+    #     elif "next_turn" in self.turn_check:
+    #         self.turn_check = []
+    #         self.action_queue.extend([{"player_turn": True}])
 
-        # 全てのenemyがTURN_END状態になった場合キューに"player_turn"を返す
-        elif self.turn_check:
-            # enemyのTURN_ENDをカウントする変数
-            # TODO setを使って効率化したい
-            turn_count = 0
-            for actor in self.turn_check:
-                if actor.state == state.TURN_END:
-                    turn_count += 1
-                # print(len(self.turn_check), turn_count, "Trun check count")
-                if turn_count >= len(self.turn_check):
-                    self.action_queue.extend([{"player_turn": True}])
-                    self.turn_check = []
+    #     # 全てのenemyがTURN_END状態になった場合キューに"player_turn"を返す
+    #     elif self.turn_check:
+    #         # enemyのTURN_ENDをカウントする変数
+    #         # TODO setを使って効率化したい
+    #         turn_count = 0
+    #         for actor in self.turn_check:
+    #             if actor.state == state.TURN_END:
+    #                 turn_count += 1
+    #             # print(len(self.turn_check), turn_count, "Trun check count")
+    #             if turn_count >= len(self.turn_check):
+    #                 self.action_queue.extend([{"player_turn": True}])
+    #                 self.turn_check = []
 
     def use_stairs(self):
         """階段及びplayerの位置の判定
@@ -487,6 +489,7 @@ class GameEngine:
                 self.player.center_y = tmp_y
                 self.player.state = state.READY
                 viewport(self.player)
+                self.turn_loop.loop_c()
 
 
 

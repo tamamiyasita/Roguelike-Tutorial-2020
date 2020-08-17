@@ -29,6 +29,10 @@ FOV_LIGHT_WALL = True
 FOV_RADIUS = 8
 DEATH_DELAY = 0.5
 
+DEFAULT_SPEED = 7
+DEFAULT_ATTACK_SPEED = 6
+
+
 COLORS = {
     "black": arcade.color.BLACK,
     "white": arcade.color.WHITE,

@@ -25,6 +25,7 @@ class Player(Actor):
         # self.left_face = False
         self.state = state.READY
         self.delay_time = 5
+        self.visible_check = False
 
 
 

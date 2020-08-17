@@ -89,7 +89,8 @@ class MG(arcade.Window):
             self.engine.cur_level.equip_sprites.update_animation()
 
             self.engine.process_action_queue(delta_time)
-            self.engine.turn_change(delta_time)
+            # self.engine.turn_change(delta_time)
+            self.engine.turn_loop.loop_on(self.engine)
             self.engine.check_for_player_movement(self.player_direction)
             self.engine.cur_level.map_obj_sprites.update_animation()
 
