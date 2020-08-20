@@ -50,7 +50,7 @@ class Actor(arcade.Sprite):
         self.state = None
 
         self.speed = speed
-        self.wait = self.speed
+        self.wait = speed//2
 
         self.fighter = fighter
         if self.fighter:
@@ -209,13 +209,12 @@ class Actor(arcade.Sprite):
         # ドアのチェック
         door_actor = get_door(destination_x, destination_y, map_obj_sprites)
         if door_actor and door_actor[0].left_face == False:
-        #     door_actor = door_actor[0]
-        #     if door_actor and "door" in door_actor.name and door_actor.left_face == False:
             door_actor[0].left_face = True
-            self.state = state.TURN_END
-            engine.action_queue.extend([{"delay": {"time": 0.1, "action": {"None"}}}])
-
+            self.state = state.DOOR
+            # engine.action_queue.extend([{"delay": {"time": 0.3, "action": {"turn_end"}}}])
+            # self.state = state.TURN_END
             print("open door")
+            engine.action_queue.extend([{"turn_end": self}])
             return
 
 
@@ -244,10 +243,14 @@ class Actor(arcade.Sprite):
             return attack_results
 
         elif not get_blocking_entity(destination_x, destination_y, actor_sprites) and self.booking_tile.blocks == False:
-            # self.booking_tile.blocks = True
             self.state = state.ON_MOVE
             self.change_y = self.dy * (MOVE_SPEED+ai_move_speed)
             self.change_x = self.dx * (MOVE_SPEED+ai_move_speed)
+
+        else:
+            # A*パスがBlockされたらturn_endを返す
+            print(f"actor {self.name} blocking pass!")
+            return [{"turn_end": self}]
 
 
 

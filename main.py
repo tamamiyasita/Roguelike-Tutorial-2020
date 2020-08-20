@@ -4,10 +4,11 @@ import pyglet.gl as gl
 
 from game_engine import GameEngine
 from constants import *
-from keymap import keymap
+from keymap import keymap, grid_move_key
 
 from ui.normal_ui import NormalUI
 from ui.mouse_ui import MouseUI
+from ui.select_ui import SelectUI
 from ui.character_screen_ui import CharacterScreen
 
 from util import pixel_to_grid
@@ -21,7 +22,7 @@ class MG(arcade.Window):
         self.engine = GameEngine()
 
         self.player_direction = None
-        self.mouse_over_text = None
+        self.grid_select = [0, 0]
         self.mouse_position = None
         self.viewport_x = 0
         self.viewport_y = 0
@@ -61,9 +62,22 @@ class MG(arcade.Window):
                 self.mouse_ui.draw_mouse_over_text()
             
         
+            self.grid_select = [0,0]
         # アイテム使用時マウス位置にグリッド表示
-        elif self.engine.game_state == GAME_STATE.SELECT_LOCATION and self.mouse_position:
-            self.mouse_ui.draw_select_mouse_location()
+        elif self.engine.game_state == GAME_STATE.SELECT_LOCATION:
+                
+            select_UI = SelectUI(engine=self.engine, viewport_x=self.viewport_x, viewport_y=self.viewport_y,sprite_list=[self.engine.cur_level.actor_sprites, self.engine.cur_level.item_sprites])
+            select_UI.grid_select(self.engine, grid=self.grid_select)
+
+
+            if self.mouse_position:
+                self.mouse_ui.draw_select_mouse_location()
+
+
+                
+
+
+
 
         # Character_Screen表示
         elif self.engine.game_state == GAME_STATE.CHARACTER_SCREEN:
@@ -89,7 +103,6 @@ class MG(arcade.Window):
             self.engine.cur_level.equip_sprites.update_animation()
 
             self.engine.process_action_queue(delta_time)
-            # self.engine.turn_change(delta_time)
             self.engine.turn_loop.loop_on(self.engine)
             self.engine.check_for_player_movement(self.player_direction)
             self.engine.cur_level.map_obj_sprites.update_animation()
@@ -111,9 +124,19 @@ class MG(arcade.Window):
 
         self.player_direction = keymap(key, self.engine)
 
+        # if self.engine.game_state == GAME_STATE.SELECT_LOCATION:
+        grid = grid_move_key(key, self.engine)
+        if grid:
+            self.grid_select[0] += grid[0]
+            self.grid_select[1] += grid[1]
+
+
         if self.engine.player.state == state.DOOR:
-            self.engine.door_dist.append(keymap(key, self.engine))
-            self.engine.action_queue.extend(["use_door"])
+            # self.engine.door_dist.append(keymap(key, self.engine))
+            door_check = keymap(key, self.engine)
+            if door_check:
+                self.engine.action_queue.extend([{"use_door": door_check}])
+
 
         if key == arcade.key.F11:
             self.save()
@@ -130,7 +153,7 @@ class MG(arcade.Window):
         self.mouse_position = x + self.viewport_x, y + self.viewport_y
 
         if self.mouse_position:
-            self.mouse_ui = MouseUI(mouse_over_text=self.mouse_over_text, mouse_position=self.mouse_position,
+            self.mouse_ui = MouseUI(mouse_position=self.mouse_position,
                                 viewport_x=self.viewport_x, viewport_y=self.viewport_y,
                                 sprite_lists=[self.engine.cur_level.actor_sprites, self.engine.cur_level.item_sprites])
 

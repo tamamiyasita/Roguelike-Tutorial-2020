@@ -43,15 +43,15 @@ class Basicmonster:
 
         if self.visible_check:
             if monster.distance_to(target) >= 1:
-                results = astar(
+                result_astar = astar(
                     [actor_sprites, map_sprites], (monster.x, monster.y), (self.target_point))
                 # print(f"Path from ({monster.x},{monster.y}) to {target.x},{target.y}", results)
                 # monster.move_towards(target.x, target.y, sprite_lists)
                 # monster.move((randint(-1, 1), randint(-1, 1)))
 
                 # results[1]がターゲットパスへの最初のタイル座標なので変数pointに格納
-                if results:
-                    point = results[1]
+                if result_astar:
+                    point = result_astar[1]
                     x, y = point
                     # ターゲット座標から自分の座標を引いたdx,dyをmoveに渡す
                     dx = x - monster.x
@@ -62,9 +62,23 @@ class Basicmonster:
                     if attack:
                         results.extend(attack)
 
-                elif not results:
-                    monster.wait = monster.speed
-                    monster.state = state.TURN_END
+                elif not result_astar:
+                    result_astar = astar(
+                        [map_sprites], (monster.x, monster.y), (self.target_point))
+                    if result_astar:
+                        point = result_astar[1]
+                        x, y = point
+                        # ターゲット座標から自分の座標を引いたdx,dyをmoveに渡す
+                        dx = x - monster.x
+                        dy = y - monster.y
+
+                        attack = monster.move(
+                            (dx, dy), target, engine)
+                        if attack:
+                            results.extend(attack)
+
+                    elif not result_astar:
+                        results.extend([{"turn_end": monster}])
 
             return results
 

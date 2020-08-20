@@ -5,6 +5,7 @@ from arcade import load_texture
 from actor.actor import Actor
 from actor.ai import Basicmonster
 from actor.fighter import Fighter
+from constants import *
 from data import *
 from actor.long_sword import LongSword
 from actor.short_sword import ShortSword
@@ -61,8 +62,10 @@ def make_monster_sprite(monster_dict):
     sprite.fighter.base_max_hp = int(monster_dict["HP"])
     sprite.fighter.base_power = int(monster_dict["Attack"])
     sprite.fighter.base_defense = int(monster_dict["Defense"])
+    sprite.speed = int(monster_dict["SPEED"])
     sprite.fighter.xp_reward = int(monster_dict["XP"])
     sprite.scale = int(monster_dict["scale"])
     sprite.blocks = True
+    sprite.state = state.TURN_END
     print(f"Made a {sprite.name}.")
     return sprite

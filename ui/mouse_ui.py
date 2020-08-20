@@ -6,8 +6,7 @@ from util import pixel_to_grid, grid_to_pixel
 
 
 class MouseUI:
-    def __init__(self, mouse_over_text, mouse_position, viewport_x, viewport_y, sprite_lists):
-        self.mouse_over_text = mouse_over_text
+    def __init__(self, mouse_position, viewport_x, viewport_y, sprite_lists):
         self.mouse_position = mouse_position
         self.viewport_x = viewport_x
         self.viewport_y = viewport_y
@@ -66,6 +65,6 @@ class MouseUI:
                     center_y=center_y,
                     width=SPRITE_SIZE*SPRITE_SCALE,
                     height=SPRITE_SIZE*SPRITE_SCALE,
-                    color=arcade.color.LIGHT_BLUE,
+                    color=arcade.color.RAJAH,
                     border_width=2
                     )

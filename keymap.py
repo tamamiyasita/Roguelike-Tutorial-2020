@@ -1,5 +1,6 @@
 import arcade
-from constants import GAME_STATE, state
+from constants import *
+from util import grid_to_pixel
 
 KEYMAP_UP = [arcade.key.UP, arcade.key.W, arcade.key.NUM_8]
 KEYMAP_DOWN = [arcade.key.DOWN, arcade.key.S, arcade.key.NUM_2]
@@ -27,7 +28,23 @@ KEYMAP_DROP_ITEM = [arcade.key.H]
 KEYMAP_CHARACTER_SCREEN = [arcade.key.C]
 KEYMAP_USE_STAIRS = [arcade.key.ENTER]
 KEYMAP_CANCEL = [arcade.key.ESCAPE]
-KEYMAP_CLOSE_DOOR = [arcade.key.L]
+KEYMAP_DOOR = [arcade.key.K]
+KEYMAP_GRID_SELECT = [arcade.key.L]
+
+
+def grid_move_key(key, engine):
+    direction = None
+
+    if key in KEYMAP_UP:
+        direction = (0, 1)
+    elif key in KEYMAP_DOWN:
+        direction = (0, -1)
+    elif key in KEYMAP_LEFT:
+        direction = (-1, 0)
+    elif key in KEYMAP_RIGHT:
+        direction = (1, 0)
+    
+    return direction
 
 
 def keymap(key, engine):
@@ -90,8 +107,10 @@ def keymap(key, engine):
             engine.action_queue.extend([{"drop_item": True}])
         elif key in KEYMAP_USE_STAIRS:
             engine.action_queue.extend([{"use_stairs": True}])
-        elif key in KEYMAP_CLOSE_DOOR:
+        elif key in KEYMAP_DOOR:
             engine.action_queue.extend([{"close_door": True}])
+        elif key in KEYMAP_GRID_SELECT:
+            engine.action_queue.extend([{"grid_select": True}])
 
         return direction
 

@@ -41,7 +41,6 @@ class GameEngine:
     def __init__(self):
         """ 変数の初期化 """
         self.stories = [] # 階層を格納する変数
-        self.cur_level_index = 0
         self.cur_level = None
 
         self.player = None
@@ -52,7 +51,6 @@ class GameEngine:
         self.turn_check = []
         self.game_state = GAME_STATE.NORMAL
         self.grid_select_handlers = []
-        self.door_dist = []
 
     def setup_level(self, level_number):
 
@@ -243,17 +241,13 @@ class GameEngine:
         """
         new_action_queue = []
         for action in self.action_queue:
-            # if "player_turn" in action:
-            #     print("player_turn")
-            #     self.player.state = state.READY
-            
+            if "player_turn" in action:
+                print("player_turn")
+                self.player.state = state.READY
+
+
             if "None" in action:
                 pass
-
-            # if "enemy_turn" in action:
-            #     print("enemy_turn")
-            #     # self.turn_checkにターン終了フラグを入れる
-            #     self.turn_check = self.move_enemies(self.player)
 
             if "message" in action:
                 self.messages.append(action["message"])
@@ -262,9 +256,11 @@ class GameEngine:
                 target = action["remove"]
                 target.remove_from_sprite_lists()
 
-            if "pass" in action:
-                target = action["pass"]
+            if "turn_end" in action:
+                target = action["turn_end"]
+                target.wait = target.speed
                 target.state = state.TURN_END
+                print(f"{target.name} is pass Turn_END")
 
             if "dead" in action:
                 print("Death")
@@ -347,38 +343,19 @@ class GameEngine:
                     self.game_state = GAME_STATE.NORMAL
                     self.turn_loop = TurnLoop(self.player)
 
+            if "grid_select" in action:
+                self.game_state = GAME_STATE.SELECT_LOCATION
+
 
             if "close_door" in action:
                 self.player.state = state.DOOR
                 new_action_queue.extend([{"message":f"What direction do you want the door to close?"}])
 
             if "use_door" in action:
-                if not self.door_dist is None:
-                    dx, dy = self.door_dist[0]
-                    dest_x = self.player.x + dx
-                    dest_y = self.player.y + dy
-                    door_actor = get_door(dest_x, dest_y, self.cur_level.map_obj_sprites)
-                    enemy_actor = get_blocking_entity(dest_x, dest_y, self.cur_level.actor_sprites)
-                    if door_actor and not enemy_actor:
-                        door_actor = door_actor[0]
-                        if door_actor.left_face:
-                            door_actor.left_face = False
-                        elif not door_actor.left_face:
-                            door_actor.left_face = True
-                        new_action_queue.extend([{"delay": {"time": 0.2, "action": "None"}}])
-                        self.player.state = state.TURN_END
-                        self.door_dist = []
-                    elif door_actor and enemy_actor:
-                        new_action_queue.extend([{"message":f"We can't close the door because of the {enemy_actor[0].name}."}])
-                        new_action_queue.extend([{"delay": {"time": 0.3, "action": {"player_turn"}}}])
-                        self.door_dist = []
-                    else:
-                        new_action_queue.extend([{"message":f"There is no door in that direction"}])
-                        new_action_queue.extend([{"delay": {"time": 0.3, "action": {"player_turn"}}}])
-                        self.door_dist = []
-
-                else:
-                    new_action_queue.extend([{"delay": {"time": 0.4, "action": {"use_door"}}}])
+                door_dist = (action["use_door"])
+                result = self.use_door(door_dist)
+                if result:
+                    new_action_queue.extend(result)
 
         self.action_queue = new_action_queue
 
@@ -391,34 +368,6 @@ class GameEngine:
                 self.action_queue.extend(results)
         self.grid_select_handlers = []
 
-    # def move_enemies(self, target):
-    #     """ enemyの行動ターンを制御する
-    #         行動するenemyがいない場合"next_turn"を返す
-    #     """
-    #     actor_check = []
-    #     results = []
-    #     for actor in self.cur_level.actor_sprites:
-    #         if actor.ai and not actor.is_dead:
-    #             results = actor.ai.take_turn(
-    #                 target=target, engine=self)
-    #             if results:
-    #                 self.action_queue.extend(results)
-    #                 actor_check.append(actor)
-    #             # else:
-    #             #     actor.move_towards(
-    #             #         target, self.actor_sprites, self.game_map)
-    #             #     actor_check.append(actor)
-
-    #             # else:
-    #             #     results = actor.ai.take_turn(
-    #             #         target=target, game_map=self.game_map, sprite_lists=[self.map_sprites])
-    #             #     if results:
-    #             #         self.action_queue.extend(results)
-    #     if not actor_check:
-    #         actor_check.append("next_turn")
-
-    #     # print(actor_check, "actor_check")
-    #     return actor_check
 
     def fov(self):
         """recompute_fovでTCODによるFOVの計算を行い
@@ -438,34 +387,6 @@ class GameEngine:
             if attack:
                 self.action_queue.extend(attack)
             dist = None
-
-    # def turn_change(self, delta_time):
-    #     """ playerとenemyの行動ターンを切り替える
-    #     """
-
-    #     # playerがTURN_END状態になるとキューに"enemy_turn"を送信する
-    #     if self.player.state == state.TURN_END:
-    #         self.fov_recompute = True
-    #         self.player.state = state.DELAY
-    #         self.action_queue.extend([{"enemy_turn": True}])
-
-    #     # move_enemies関数が"next_turn"を返した場合キューに"player_turn"を送信する
-    #     elif "next_turn" in self.turn_check:
-    #         self.turn_check = []
-    #         self.action_queue.extend([{"player_turn": True}])
-
-    #     # 全てのenemyがTURN_END状態になった場合キューに"player_turn"を返す
-    #     elif self.turn_check:
-    #         # enemyのTURN_ENDをカウントする変数
-    #         # TODO setを使って効率化したい
-    #         turn_count = 0
-    #         for actor in self.turn_check:
-    #             if actor.state == state.TURN_END:
-    #                 turn_count += 1
-    #             # print(len(self.turn_check), turn_count, "Trun check count")
-    #             if turn_count >= len(self.turn_check):
-    #                 self.action_queue.extend([{"player_turn": True}])
-    #                 self.turn_check = []
 
     def use_stairs(self):
         """階段及びplayerの位置の判定
@@ -496,3 +417,29 @@ class GameEngine:
 
                 return [{"message": "You went down a level."}]
         return [{"message": "There are no stairs here"}]
+
+
+    def use_door(self, door_dist):
+        result = []
+        dx, dy = door_dist
+        dest_x = self.player.x + dx
+        dest_y = self.player.y + dy
+        door_actor = get_door(dest_x, dest_y, self.cur_level.map_obj_sprites)
+        enemy_actor = get_blocking_entity(dest_x, dest_y, self.cur_level.actor_sprites)
+        if door_actor and not enemy_actor:
+            door_actor = door_actor[0]
+            if door_actor.left_face:
+                door_actor.left_face = False
+            elif not door_actor.left_face:
+                door_actor.left_face = True
+
+            
+            result.extend([{"delay": {"time": 0.2, "action": {"turn_end":self.player}}}])
+        elif door_actor and enemy_actor:
+            result.extend([{"message":f"We can't close the door because of the {enemy_actor[0].name}."}])
+            result.extend([{"delay": {"time": 0.2, "action": {"player_turn"}}}])
+        else:
+            result.extend([{"message":f"There is no door in that direction"}])
+            result.extend([{"delay": {"time": 0.2, "action": {"player_turn"}}}])
+        
+        return result

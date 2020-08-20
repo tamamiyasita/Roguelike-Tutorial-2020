@@ -31,8 +31,10 @@ class TurnLoop:
                         # print(sprite.wait)
 
             for actor in self.sprites:
-                print(actor.wait, " Actor Wait ", actor.name)
-                if actor.wait < 1:
+                print(" Actor Wait ",actor.wait,  actor.name)
+                if actor.is_dead:
+                    pass
+                if actor.wait < 1 and actor.state:
                     self.actor = actor
                     self.turn = Turn.OFF
                     break
@@ -44,10 +46,12 @@ class TurnLoop:
                 self.player.state = state.READY
                 self.turn = Turn.DELAY
             else:
-                self.actor.ai.take_turn(self.player, engine)
+                result = self.actor.ai.take_turn(self.player, engine)
+                if result:
+                    engine.action_queue.extend(result)
                 self.turn = Turn.DELAY
 
-        if self.turn == Turn.DELAY:
+        elif self.turn == Turn.DELAY:
             if self.actor.state == state.TURN_END:
                 self.turn = Turn.ON
             
