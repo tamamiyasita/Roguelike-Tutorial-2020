@@ -330,7 +330,7 @@ class GameEngine:
                 if item_number is not None:
                     item = self.player.inventory.get_item_number(item_number)
 
-                    if item in self.player.equipment.item_slot.values():
+                    if item and item in self.player.equipment.item_slot.values():
                         self.player.equipment.toggle_equip(item, self.cur_level.equip_sprites)
 
                     if item:
@@ -345,6 +345,7 @@ class GameEngine:
                 if result:
                     new_action_queue.extend(result)
                     self.game_state = GAME_STATE.NORMAL
+                    self.turn_loop = TurnLoop(self.player)
 
 
             if "close_door" in action:
@@ -436,6 +437,7 @@ class GameEngine:
             attack = self.player.move(dist, None, self)
             if attack:
                 self.action_queue.extend(attack)
+            dist = None
 
     # def turn_change(self, delta_time):
     #     """ playerとenemyの行動ターンを切り替える
@@ -489,7 +491,6 @@ class GameEngine:
                 self.player.center_y = tmp_y
                 self.player.state = state.READY
                 viewport(self.player)
-                self.turn_loop.loop_c()
 
 
 

@@ -10,7 +10,7 @@ from data import *
 
 
 
-MAX_ROOMS = 25
+MAX_ROOMS = 7
 ROOM_MIN_SIZE = 4
 ROOM_MAX_SIZE = 8
 MAX_MONSTERS_PER_ROOM = 3

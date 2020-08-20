@@ -54,7 +54,7 @@ class MG(arcade.Window):
         self.draw_sprites()
 
         # ノーマルステート時の画面表示
-        if self.engine.game_state == GAME_STATE.NORMAL:
+        if self.engine.game_state == GAME_STATE.NORMAL or self.engine.game_state == GAME_STATE.DELAY_WINDOW:
             normal_UI = NormalUI(self.engine.player, self.viewport_x, self.viewport_y, self.engine.selected_item, self.engine.messages, self.mouse_position)
             normal_UI.draw_in_normal_state()
             if self.mouse_position:

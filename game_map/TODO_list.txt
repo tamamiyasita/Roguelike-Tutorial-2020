@@ -1,7 +1,6 @@
-TODO スピードシステムの実装
 TODO actor等にコメントや変数名の整理
-TODO potion effectの実装
 TODO arcadeのﾊﾟｰﾃｨｸﾙ効果を試したい
+TODO potion effectの実装
 TODO ミニマップの実装
 TODO 他のダンジョンジェネレータの実装
 TODO ダメージ表記
@@ -9,6 +8,7 @@ TODO データクラスへのリファクタリング(思ったより難しい�
 
 
 # DONE
+TODO スピードシステムの実装
 TODO ドアの実装
 TODO 装備機能追加によるロードバグと階段バグの修正
 TODO UIのリファクタリングと装備機能の改善(装備の切替はうまくいったぽい)
