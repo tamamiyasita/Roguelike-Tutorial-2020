@@ -18,12 +18,13 @@ class TurnLoop:
         self.turn = Turn.ON
 
     def loop_on(self, engine):
+        """actor間のメインループ制御"""
 
-        # while self.active_turn is None:
         while self.turn == Turn.ON:
             self.sprites = {i for i in chain(engine.cur_level.chara_sprites, engine.cur_level.actor_sprites)}
 
             for sprite in self.sprites:
+                # playerもしくは他のactorの時はvisibleの場合のみwaitを減らす
                 if sprite == self.player or sprite.is_visible or sprite.ai and sprite.ai.visible_check:
 
                     if sprite.wait > 0:
@@ -52,17 +53,11 @@ class TurnLoop:
                 self.turn = Turn.DELAY
 
         elif self.turn == Turn.DELAY:
-            if self.actor.state == state.TURN_END:
-                self.turn = Turn.ON
-            
-            if self.actor.state == None:
+            print(f"actor.state={self.actor.state}")
+            print(f"actor.is_dead={self.actor.is_dead}")
+            if self.actor.state is state.TURN_END or self.actor.state is None or self.actor.is_dead:
                 self.turn = Turn.ON
 
-            # if self.actor and self.actor != self.player and not self.actor.ai.visible_check:
-            #     self.active_turn = None
-            
-            if self.actor and self.actor.is_dead:
-                self.turn = Turn.ON
 
     def loop_c(self):
         # self.sprites = None

@@ -2,6 +2,9 @@ import arcade
 import json
 import pyglet.gl as gl
 
+import logging
+import logging_config
+
 from game_engine import GameEngine
 from constants import *
 from keymap import keymap, grid_move_key
@@ -14,6 +17,7 @@ from ui.character_screen_ui import CharacterScreen
 from util import pixel_to_grid
 from viewport import viewport
 
+log = logging.getLogger("__main__")
 
 class MG(arcade.Window):
     def __init__(self, width, height, title):
@@ -50,6 +54,8 @@ class MG(arcade.Window):
         # ビューポートの左と下の現在位置を変数に入れる、これはステータスパネルを画面に固定する為に使います
         self.viewport_x = arcade.get_viewport()[0]
         self.viewport_y = arcade.get_viewport()[2]
+        log.debug(f"{self.viewport_x}")
+
 
 
         self.draw_sprites()
