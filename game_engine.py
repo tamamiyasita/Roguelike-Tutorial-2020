@@ -25,6 +25,7 @@ from turn_loop import TurnLoop
 class GameLevel:
     """level毎のsprite_listの生成
     """
+
     def __init__(self):
         self.chara_sprites = None
         self.actor_sprites = None
@@ -33,21 +34,20 @@ class GameLevel:
         self.equip_sprites = None
         self.effect_sprites = None
         self.map_obj_sprites = None
-        self.level = 0
-        
+        self.level = 1
 
 
 class GameEngine:
     def __init__(self):
         """ 変数の初期化 """
-        self.stories = [] # 階層を格納する変数
+        self.stories = []  # 階層を格納する変数
         self.cur_level = None
 
         self.player = None
         self.game_map = None
         self.action_queue = []
         self.messages = deque(maxlen=4)
-        self.selected_item = None # キー押下で直接選択したアイテム
+        self.selected_item = None  # キー押下で直接選択したアイテム
         self.turn_check = []
         self.game_state = GAME_STATE.NORMAL
         self.grid_select_handlers = []
@@ -57,7 +57,7 @@ class GameEngine:
         map_width, map_height = MAP_WIDTH, MAP_HEIGHT
         level = GameLevel()
 
-        self.game_map = BasicDungeon(map_width, map_height, level)
+        self.game_map = BasicDungeon(map_width, map_height, level_number)
 
         """ スプライトリストの初期化 """
         mapsprite = ActorPlacement(self.game_map, self).map_set()
@@ -69,33 +69,34 @@ class GameEngine:
         level.map_obj_sprites = map_obj_sprite
         level.actor_sprites = actorsprite
         level.item_sprites = itemsprite
-        level.equip_sprites = arcade.SpriteList(use_spatial_hash=True, spatial_hash_cell_size=32)
-        level.effect_sprites = arcade.SpriteList(use_spatial_hash=True, spatial_hash_cell_size=16)
-        level.chara_sprites = arcade.SpriteList(use_spatial_hash=True, spatial_hash_cell_size=32)
+        level.equip_sprites = arcade.SpriteList(
+            use_spatial_hash=True, spatial_hash_cell_size=32)
+        level.effect_sprites = arcade.SpriteList(
+            use_spatial_hash=True, spatial_hash_cell_size=16)
+        level.chara_sprites = arcade.SpriteList(
+            use_spatial_hash=True, spatial_hash_cell_size=32)
 
         level.level = level_number
 
-        self.player = Player(self.game_map.player_position[0],self.game_map.player_position[1], inventory=Inventory(capacity=5))
+        self.player = Player(
+            self.game_map.player_position[0], self.game_map.player_position[1], inventory=Inventory(capacity=5))
         level.chara_sprites.append(self.player)
 
-
         # test_items
-        self.long_sword = LongSword(self.player.x, self.player.y +1)
+        self.long_sword = LongSword(self.player.x, self.player.y + 1)
         level.item_sprites.append(self.long_sword)
-        self.short_sword = ShortSword(self.player.x+1, self.player.y +1)
+        self.short_sword = ShortSword(self.player.x+1, self.player.y + 1)
         level.item_sprites.append(self.short_sword)
 
-        self.small_shield = SmallShield(self.player.x + 2 , self.player.y+1)
+        self.small_shield = SmallShield(self.player.x + 2, self.player.y+1)
         level.item_sprites.append(self.small_shield)
 
         self.cnf = ConfusionScroll(self.player.x + 1, self.player.y)
         level.item_sprites.append(self.cnf)
 
-
         self.fov_recompute = True
 
         return level
-
 
     def setup(self):
 
@@ -104,10 +105,6 @@ class GameEngine:
         self.cur_level = self.setup_level(1)
         self.stories.append(self.cur_level)
         self.turn_loop = TurnLoop(self.player)
-        
-
-
-
 
     def get_actor_dict(self, actor):
         name = actor.__class__.__name__
@@ -120,7 +117,6 @@ class GameEngine:
 
         levels_dict = []
         for level in self.stories:
-
 
             actor_dict = []
             for sprite in level.actor_sprites:
@@ -147,23 +143,23 @@ class GameEngine:
                 equip_dict.append(self.get_actor_dict(sprite))
 
             level_dict = {
-                         "actor": actor_dict,
-                         "dungeon": dungeon_dict,
-                         "dungeon_obj": dungeon_obj_dict,
-                         "item": item_dict,
-                         "effect": effect_dict,
-                         "equip": equip_dict
-                         }
+                "actor": actor_dict,
+                "dungeon": dungeon_dict,
+                "dungeon_obj": dungeon_obj_dict,
+                "item": item_dict,
+                "effect": effect_dict,
+                "equip": equip_dict
+            }
             levels_dict.append(level_dict)
 
         # ビューポートの位置情報を保存
         viewport = arcade.get_viewport()
 
-        result = {"player":player_dict,
+        result = {"player": player_dict,
                   "viewport": viewport,
                   "levels": levels_dict}
 
-        self.action_queue.append({"message":"*save*"})
+        self.action_queue.append({"message": "*save*"})
         return result
 
     def restore_from_dict(self, data):
@@ -172,10 +168,8 @@ class GameEngine:
         # ビューポートを復元する
         arcade.set_viewport(*data["viewport"])
 
-
         player_dict = data["player"]
         self.player.restore_from_dict(player_dict["Player"])
-
 
         for level_dict in data["levels"]:
             level = GameLevel()
@@ -200,8 +194,6 @@ class GameEngine:
 
             level.effect_sprites = arcade.SpriteList(
                 use_spatial_hash=True, spatial_hash_cell_size=16)
-
-
 
             for actor_dict in level_dict["actor"]:
                 actor = restore_actor(actor_dict)
@@ -230,21 +222,20 @@ class GameEngine:
             level.chara_sprites.append(self.player)
 
             self.stories.append(level)
-        
+
         self.cur_level = self.stories[-1]
 
-        self.action_queue.append({"message":"*load*"})
+        self.action_queue.append({"message": "*load*"})
 
     def process_action_queue(self, delta_time):
         """アクターの基本的な行動を制御するアクションキュー
-        　　エンジン内にある各メソッドの返り値(damage, message等)はここに送る
+        　　　　　　　　エンジン内にある各メソッドの返り値(damage, message等)はここに送る
         """
         new_action_queue = []
         for action in self.action_queue:
             if "player_turn" in action:
                 print("player_turn")
                 self.player.state = state.READY
-
 
             if "None" in action:
                 pass
@@ -271,7 +262,7 @@ class GameEngine:
                     new_action_queue.extend([{"message": "player has died!"}])
                 else:
                     self.player.fighter.current_xp += target.fighter.xp_reward
-                    
+
                     new_action_queue.extend(
                         [{"message": f"{target.name} has been killed!"}])
 
@@ -314,12 +305,12 @@ class GameEngine:
             if "equip_item" in action:
                 item_number = self.selected_item
                 if item_number is not None:
-                    equip_item = self.player.inventory.get_item_number(item_number)
+                    equip_item = self.player.inventory.get_item_number(
+                        item_number)
                     if equip_item and equip_item.equippable:
-                        results = self.player.equipment.toggle_equip(equip_item, self.cur_level.equip_sprites)
+                        results = self.player.equipment.toggle_equip(
+                            equip_item, self.cur_level.equip_sprites)
                         new_action_queue.extend(results)
-
-        
 
             if "drop_item" in action:
                 item_number = self.selected_item
@@ -327,14 +318,16 @@ class GameEngine:
                     item = self.player.inventory.get_item_number(item_number)
 
                     if item and item in self.player.equipment.item_slot.values():
-                        self.player.equipment.toggle_equip(item, self.cur_level.equip_sprites)
+                        self.player.equipment.toggle_equip(
+                            item, self.cur_level.equip_sprites)
 
                     if item:
                         self.player.inventory.remove_item_number(item_number)
                         self.cur_level.item_sprites.append(item)
                         item.center_x = self.player.center_x
                         item.center_y = self.player.center_y
-                        new_action_queue.extend([{"message": f"You dropped the {item.name}"}])
+                        new_action_queue.extend(
+                            [{"message": f"You dropped the {item.name}"}])
 
             if "use_stairs" in action:
                 result = self.use_stairs()
@@ -346,10 +339,10 @@ class GameEngine:
             if "grid_select" in action:
                 self.game_state = GAME_STATE.SELECT_LOCATION
 
-
             if "close_door" in action:
                 self.player.state = state.DOOR
-                new_action_queue.extend([{"message":f"What direction do you want the door to close?"}])
+                new_action_queue.extend(
+                    [{"message": f"What direction do you want the door to close?"}])
 
             if "use_door" in action:
                 door_dist = (action["use_door"])
@@ -367,7 +360,6 @@ class GameEngine:
             if results:
                 self.action_queue.extend(results)
         self.grid_select_handlers = []
-
 
     def fov(self):
         """recompute_fovでTCODによるFOVの計算を行い
@@ -392,8 +384,8 @@ class GameEngine:
         """階段及びplayerの位置の判定
         """
         get_stairs = arcade.get_sprites_at_exact_point(
-                                                point=self.player.position,
-                                                sprite_list=self.cur_level.map_sprites)
+            point=self.player.position,
+            sprite_list=self.cur_level.map_sprites)
 
         for stairs in get_stairs:
             if isinstance(stairs, Stairs):
@@ -413,11 +405,8 @@ class GameEngine:
                 self.player.state = state.READY
                 viewport(self.player)
 
-
-
                 return [{"message": "You went down a level."}]
         return [{"message": "There are no stairs here"}]
-
 
     def use_door(self, door_dist):
         result = []
@@ -425,7 +414,8 @@ class GameEngine:
         dest_x = self.player.x + dx
         dest_y = self.player.y + dy
         door_actor = get_door(dest_x, dest_y, self.cur_level.map_obj_sprites)
-        enemy_actor = get_blocking_entity(dest_x, dest_y, self.cur_level.actor_sprites)
+        enemy_actor = get_blocking_entity(
+            dest_x, dest_y, self.cur_level.actor_sprites)
         if door_actor and not enemy_actor:
             door_actor = door_actor[0]
             if door_actor.left_face:
@@ -433,13 +423,16 @@ class GameEngine:
             elif not door_actor.left_face:
                 door_actor.left_face = True
 
-            
-            result.extend([{"delay": {"time": 0.2, "action": {"turn_end":self.player}}}])
+            result.extend(
+                [{"delay": {"time": 0.2, "action": {"turn_end": self.player}}}])
         elif door_actor and enemy_actor:
-            result.extend([{"message":f"We can't close the door because of the {enemy_actor[0].name}."}])
-            result.extend([{"delay": {"time": 0.2, "action": {"player_turn"}}}])
+            result.extend(
+                [{"message": f"We can't close the door because of the {enemy_actor[0].name}."}])
+            result.extend(
+                [{"delay": {"time": 0.2, "action": {"player_turn"}}}])
         else:
-            result.extend([{"message":f"There is no door in that direction"}])
-            result.extend([{"delay": {"time": 0.2, "action": {"player_turn"}}}])
-        
+            result.extend([{"message": f"There is no door in that direction"}])
+            result.extend(
+                [{"delay": {"time": 0.2, "action": {"player_turn"}}}])
+
         return result

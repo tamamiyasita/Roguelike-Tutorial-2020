@@ -15,8 +15,6 @@ from actor.lightning_scroll import LightningScroll
 from actor.fireball_scroll import FireballScroll
 
 
-
-
 def load_entities(filename):
     monsters = []
     with open(filename) as input_file:
@@ -26,33 +24,41 @@ def load_entities(filename):
 
     return monsters
 
+
 entities = load_entities(r"actor/actors.csv")
 
 
 def get_random_monster_by_challenge(challenge):
     if challenge:
-        filtered_monsters = [monster for monster in entities if int(monster["Challenge"]) == challenge]
+        filtered_monsters = [monster for monster in entities if int(
+            monster["Challenge"]) == challenge]
         if len(filtered_monsters) == 0:
-            raise ValueError(f"Error, no entities for challenge level {challenge}.")
+            raise ValueError(
+                f"Error, no entities for challenge level {challenge}.")
         m1 = random.choice(filtered_monsters)
         return m1
 
+
 item_list = [
-            ShortSword(),SmallShield(), LongSword(),LightningScroll(),
-            FireballScroll(),ConfusionScroll()
-            ]
+    HealingPotion(), ShortSword(), SmallShield(), LongSword(), LightningScroll(),
+    FireballScroll(), ConfusionScroll()
+]
+
 
 def get_random_items_by_challenge(challenge):
     if challenge:
-        filtered_items = [item for item in item_list if item.challenge() == challenge]
+        filtered_items = [
+            item for item in item_list if item.challenge() == challenge]
         if len(filtered_items) == 0:
-            raise ValueError(f"Error, no entities for challenge level {challenge}.")
+            raise ValueError(
+                f"Error, no entities for challenge level {challenge}.")
         i1 = random.choice(filtered_items)
         return i1
 
+
 def make_monster_sprite(monster_dict):
     sprite = Actor(name=monster_dict["Name"])
-    
+
     sprite.name = monster_dict["Name"]
     sprite.ai = Basicmonster()
     sprite.ai.owner = sprite

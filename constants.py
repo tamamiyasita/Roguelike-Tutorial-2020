@@ -9,12 +9,14 @@ TITLE = "Roguelike tutorial 2020"
 SPRITE_SIZE = 32
 SPRITE_SCALE = 2
 
-MAP_WIDTH = 25
+MAP_WIDTH = 40
 MAP_HEIGHT = 25
 
 STATES_PANEL_HEIGHT = 80
+STATES_PANEL_WIDTH = 120
 
-SCREEN_WIDTH = int(SPRITE_SIZE * MAP_WIDTH * SPRITE_SCALE)//SPRITE_SCALE
+SCREEN_WIDTH = int(SPRITE_SIZE * MAP_WIDTH *
+                   SPRITE_SCALE)//SPRITE_SCALE + STATES_PANEL_WIDTH
 SCREEN_HEIGHT = int(SPRITE_SIZE * MAP_HEIGHT *
                     SPRITE_SCALE)//SPRITE_SCALE + STATES_PANEL_HEIGHT
 
@@ -56,7 +58,7 @@ class TILE:
 
     ORC = auto()
     TROLL = auto()
-    
+
     LONG_SWORD = auto()
     WOOD_BUCKLER = auto()
 
@@ -81,5 +83,3 @@ class state(Enum):
     ATTACK = auto()
     FOV = auto()
     DOOR = auto()
-
-

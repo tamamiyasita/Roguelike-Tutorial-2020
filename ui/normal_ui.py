@@ -2,17 +2,18 @@
 import arcade
 from constants import *
 
+
 class NormalUI:
     """GameState=Normal時に描画するUI
     """
-    def __init__(self, player, viewport_x, viewport_y,selected_item, messages, mouse_position):
+
+    def __init__(self, player, viewport_x, viewport_y, selected_item, messages, mouse_position):
         self.player = player
         self.viewport_x = viewport_x
         self.viewport_y = viewport_y
         self.selected_item = selected_item
         self.messages = messages
         self.mouse_position = mouse_position
-
 
     def draw_in_normal_state(self):
         """mainに渡すメソッドをまとめる"""
@@ -22,16 +23,21 @@ class NormalUI:
         self.draw_messages_handle()
 
     def buttom_ui(self):
-        #画面下のパネルをarcadeの四角形を描画する変数で作成
+        # 画面下のパネルをarcadeの四角形を描画する変数で作成
         arcade.draw_xywh_rectangle_filled(
-                        bottom_left_x=self.viewport_x,
-                        bottom_left_y=self.viewport_y,
-                        width=SCREEN_WIDTH,
-                        height=STATES_PANEL_HEIGHT,
-                        color=COLORS["status_panel_background"]
-                        )
-
-
+            bottom_left_x=self.viewport_x,
+            bottom_left_y=self.viewport_y,
+            width=SCREEN_WIDTH,
+            height=STATES_PANEL_HEIGHT,
+            color=COLORS["status_panel_background"]
+        )
+        arcade.draw_xywh_rectangle_filled(
+            bottom_left_x=self.viewport_x + SCREEN_WIDTH - STATES_PANEL_WIDTH,
+            bottom_left_y=self.viewport_y,
+            width=STATES_PANEL_WIDTH,
+            height=SCREEN_HEIGHT,
+            color=COLORS["status_panel_background"]
+        )
 
     def draw_hp_and_status_bar(self):
         """ステータスパネルとHPバー"""
@@ -84,19 +90,21 @@ class NormalUI:
                         current_value=self.player.fighter.hp,
                         max_value=self.player.fighter.max_hp
                         )
-    
-    
+
     def draw_inventory(self):
         """インベントリの表示"""
-        item_left_position = self.viewport_x + SCREEN_WIDTH / 2.3 # パネル左からの所持アイテム表示位置の調整に使う変数
-        item_top_position = self.viewport_y + STATES_PANEL_HEIGHT - 22 # パネル上端からの所持アイテム表示位置の調整に使う変数
+        item_left_position = self.viewport_x + \
+            SCREEN_WIDTH / 2.3  # パネル左からの所持アイテム表示位置の調整に使う変数
+        item_top_position = self.viewport_y + \
+            STATES_PANEL_HEIGHT - 22  # パネル上端からの所持アイテム表示位置の調整に使う変数
         separate_size = 1.5  # アイテム名の表示間隔の調整に使う変数
-        margin = 3 # 選択したアイテムのアウトライン線の位置調整に使う変数
+        margin = 3  # 選択したアイテムのアウトライン線の位置調整に使う変数
         item_font_size = 12
         outline_size = 2
         capacity = self.player.inventory.capacity
         selected_item = self.selected_item  # ボタン押下で選択したアイテムオブジェクト
-        field_width = SCREEN_WIDTH / (capacity + 1) / separate_size  # アイテム表示感覚を決める変数
+        field_width = SCREEN_WIDTH / \
+            (capacity + 1) / separate_size  # アイテム表示感覚を決める変数
 
         # キャパシティ数をループし、インベントリのアイテム名とアウトラインを描画する
         # TODO 複数行にする処理を考える（５回ループしたら縦と横の変数に増減するなど）
@@ -104,13 +112,13 @@ class NormalUI:
             items_position = item * field_width + item_left_position  # パネル左からの所持アイテムの表示位置
             if item == selected_item:
                 arcade.draw_lrtb_rectangle_outline(
-                        left=items_position - margin,
-                        right=items_position + field_width - margin,
-                        top=item_top_position + item_font_size + margin*2,
-                        bottom=item_top_position - margin,
-                        color=arcade.color.BLACK,
-                        border_width=outline_size
-                        )
+                    left=items_position - margin,
+                    right=items_position + field_width - margin,
+                    top=item_top_position + item_font_size + margin*2,
+                    bottom=item_top_position - margin,
+                    color=arcade.color.BLACK,
+                    border_width=outline_size
+                )
 
             if self.player.inventory.item_bag[item]:
                 item_name = self.player.inventory.item_bag[item].name
@@ -120,38 +128,38 @@ class NormalUI:
             item_text = f"{item+1}: {item_name}"
 
             arcade.draw_text(
-                        text=item_text,
-                        start_x=items_position,
-                        start_y=item_top_position,
-                        color=COLORS["status_panel_text"],
-                        font_size=item_font_size
-                        )
-
+                text=item_text,
+                start_x=items_position,
+                start_y=item_top_position,
+                color=COLORS["status_panel_text"],
+                font_size=item_font_size
+            )
 
     def draw_messages_handle(self):
         """メッセージ表示領域"""
         margin = 3
-        message_top_position = 19 # パネル上端からのメッセージ表示位置
-        message_left_position = self.viewport_x -margin + 125 # 画面左からのメッセージ表示位置
-        message_panel_width = (SCREEN_WIDTH / 2.3) - 125 - margin # メッセージパネル幅
-        message_panel_height = STATES_PANEL_HEIGHT # メッセージパネル高
-        message_first_position = self.viewport_y + STATES_PANEL_HEIGHT - message_top_position # 最初の行
-        
+        message_top_position = 19  # パネル上端からのメッセージ表示位置
+        message_left_position = self.viewport_x - margin + 125  # 画面左からのメッセージ表示位置
+        message_panel_width = (SCREEN_WIDTH / 2.3) - 125 - margin  # メッセージパネル幅
+        message_panel_height = STATES_PANEL_HEIGHT  # メッセージパネル高
+        message_first_position = self.viewport_y + \
+            STATES_PANEL_HEIGHT - message_top_position  # 最初の行
+
         arcade.draw_xywh_rectangle_filled(
-                        bottom_left_x=message_left_position,
-                        bottom_left_y=self.viewport_y,
-                        width=message_panel_width,
-                        height=message_panel_height,
-                        color=arcade.color.SHAMPOO
-                        )
+            bottom_left_x=message_left_position,
+            bottom_left_y=self.viewport_y,
+            width=message_panel_width,
+            height=message_panel_height,
+            color=arcade.color.SHAMPOO
+        )
 
         for message in self.messages:
             arcade.draw_text(
-                        text=message,
-                        start_x=message_left_position,
-                        start_y=message_first_position,
-                        color=COLORS["status_panel_text"]
-                        )
+                text=message,
+                start_x=message_left_position,
+                start_y=message_first_position,
+                color=COLORS["status_panel_text"]
+            )
 
             # 文字送り
             message_first_position -= message_top_position

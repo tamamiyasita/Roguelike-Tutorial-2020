@@ -2,6 +2,7 @@ import arcade
 from constants import *
 from util import grid_to_pixel
 
+
 class SelectUI:
     def __init__(self, engine, viewport_x, viewport_y, sprite_list):
         self.viewport_x = viewport_x
@@ -9,11 +10,9 @@ class SelectUI:
         self.sprites = sprite_list
         self.dx, self.dy = engine.player.x, engine.player.y
 
-
     def grid_select(self, engine, grid):
         self.dx += grid[0]
         self.dy += grid[1]
-        
 
         self.x, self.y = grid_to_pixel(self.dx, self.dy)
 
@@ -25,3 +24,6 @@ class SelectUI:
             color=arcade.color.LIGHT_BLUE,
             border_width=2
         )
+        sprites_at_point = arcade.get_sprites_at_exact_point(
+            (self.x, self.y), self.sprites[1])
+        print(sprites_at_point)

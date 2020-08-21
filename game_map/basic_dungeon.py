@@ -9,13 +9,11 @@ from constants import *
 from data import *
 
 
-
 MAX_ROOMS = 7
 ROOM_MIN_SIZE = 4
 ROOM_MAX_SIZE = 8
 MAX_MONSTERS_PER_ROOM = 3
 MAX_ITEMS_PER_ROOM = 2
-
 
 
 class Rect:
@@ -40,20 +38,21 @@ class Rect:
 
 
 class BasicDungeon:
-    def __init__(self, width, height, level, dungeon_level=1):
+    def __init__(self, width, height, dungeon_level=1):
         self.width = width
         self.height = height
         self.dungeon_level = dungeon_level
 
-
         self.tiles = [[TILE.WALL for y in range(height)] for x in range(width)]
-        self.actor_tiles =  [[TILE.EMPTY for y in range(height)] for x in range(width)]
-        self.item_tiles =  [[TILE.EMPTY for y in range(height)] for x in range(width)]
+        self.actor_tiles = [
+            [TILE.EMPTY for y in range(height)] for x in range(width)]
+        self.item_tiles = [
+            [TILE.EMPTY for y in range(height)] for x in range(width)]
 
         self.player_position = 0
-        self.make_map(level)
+        self.make_map(dungeon_level)
 
-    def make_map(self, level):
+    def make_map(self, dungeon_level):
 
         rooms = []
         self.num_rooms = 0
@@ -79,7 +78,6 @@ class BasicDungeon:
 
                 if self.num_rooms == 0:
                     self.player_position = (new_x, new_y)
-                    
 
                 else:
                     (prev_x, prev_y) = rooms[self.num_rooms - 1].center()
@@ -98,10 +96,9 @@ class BasicDungeon:
                 self.num_rooms += 1
 
                 self.place_entities(
-                    new_room, self.actor_tiles,
-                    max_items_per_room=MAX_ITEMS_PER_ROOM,
-                    level=level
-                    )
+                    room=new_room,
+                    dungeon_level=dungeon_level
+                )
 
         self.tiles[last_room_center_x][last_room_center_y] = TILE.STAIRS_DOWN
 
@@ -118,10 +115,9 @@ class BasicDungeon:
                 self.tiles[x-1][y] = TILE.DOOR
             if door_check(self.tiles, x+1, y):
                 self.tiles[x+1][y] = TILE.DOOR
-   
+
             else:
                 self.tiles[x][y] = TILE.EMPTY
-
 
     def create_v_tunnel(self, y1, y2, x):
         for y in range(min(y1, y2), max(y1, y2) + 1):
@@ -130,22 +126,19 @@ class BasicDungeon:
             if door_check(self.tiles, x, y-1):
                 self.tiles[x][y-1] = TILE.DOOR
             if door_check(self.tiles, x, y+1):
-                self.tiles[x][y+1] = TILE.DOOR 
+                self.tiles[x][y+1] = TILE.DOOR
 
             else:
                 self.tiles[x][y] = TILE.EMPTY
 
+    def place_entities(self, room, dungeon_level):
 
-
-    def place_entities(self, room, actor_tiles, max_items_per_room, level):
-        number_of_items = randint(0, max_items_per_room)
-
-        if level == 1:
-            combos = [[], [1], [1,1], [1,1,1], [2]]
-        if level == 2:
-            combos = [[], [1,1], [1,1,1], [2], [1,2]]
+        if dungeon_level == 1:
+            combos = [[], [1], [1, 1], [1, 1, 1], []]
+        elif dungeon_level == 2:
+            combos = [[], [1, 1], [1, 1, 1], [2], [1, 2]]
         else:
-            combos = [[], [1,1,1], [2], [1,2], [1,1,2]]
+            combos = [[], [1, 1, 1], [2], [1, 2], [1, 1, 2]]
         monster_choice = choice(combos)
         for challenge_level in monster_choice:
             x = randint(room.x1 + 1, room.x2 - 1)
@@ -154,9 +147,9 @@ class BasicDungeon:
             if not self.actor_tiles[x][y]:
                 self.actor_tiles[x][y] = challenge_level
 
-        if level == 1:
+        if dungeon_level == 1:
             combos = [[], [1], [1], [1], []]
-        if level == 2:
+        if dungeon_level == 2:
             combos = [[], [1], [], [2], [1]]
         else:
             combos = [[], [1], [2], [1], [1]]
@@ -167,17 +160,3 @@ class BasicDungeon:
 
             if not self.item_tiles[x][y]:
                 self.item_tiles[x][y] = challenge_level
-
-        # for i in range(number_of_items):
-        #     x = randint(room.x1 + 1, room.x2 - 1)
-        #     y = randint(room.y1 + 1, room.y2 - 1)
-
-        #     type = randint(0, 100)
-        #     if type < 40:
-        #         actor_tiles[x][y] = TILE.HEALING_POTION
-        #     elif type < 60:
-        #         actor_tiles[x][y] = TILE.LIGHTNING_SCROLL
-        #     elif type < 80:
-        #         actor_tiles[x][y] = TILE.FIREBALL_SCROLL
-        #     else:
-        #         actor_tiles[x][y] = TILE.CONFUSION_SCROLL
