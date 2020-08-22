@@ -51,6 +51,7 @@ class GameEngine:
         self.turn_check = []
         self.game_state = GAME_STATE.NORMAL
         self.grid_select_handlers = []
+        self.move_switch = True
 
     def setup_level(self, level_number):
 
@@ -262,6 +263,7 @@ class GameEngine:
                     new_action_queue.extend([{"message": "player has died!"}])
                 else:
                     self.player.fighter.current_xp += target.fighter.xp_reward
+                    self.move_switch = False
 
                     new_action_queue.extend(
                         [{"message": f"{target.name} has been killed!"}])
@@ -335,6 +337,8 @@ class GameEngine:
                     new_action_queue.extend(result)
                     self.game_state = GAME_STATE.NORMAL
                     self.turn_loop = TurnLoop(self.player)
+                    viewport(self.player)
+                    self.fov_recompute = True
 
             if "grid_select" in action:
                 self.game_state = GAME_STATE.SELECT_LOCATION
@@ -374,10 +378,11 @@ class GameEngine:
     def check_for_player_movement(self, dist):
         """プレイヤーの移動
         """
-        if self.player.state == state.READY and dist:
+        if self.player.state == state.READY and dist and self.move_switch:
             attack = self.player.move(dist, None, self)
             if attack:
                 self.action_queue.extend(attack)
+                # self.move_switch = False
             dist = None
 
     def use_stairs(self):
@@ -403,7 +408,6 @@ class GameEngine:
                 self.player.center_x = tmp_x
                 self.player.center_y = tmp_y
                 self.player.state = state.READY
-                viewport(self.player)
 
                 return [{"message": "You went down a level."}]
         return [{"message": "There are no stairs here"}]

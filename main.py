@@ -119,6 +119,7 @@ class MG(arcade.Window):
             arcade.close_window()
 
         # playerの移動
+        self.engine.move_switch = True
         self.player_direction = keymap(key, self.engine)
 
         # カーソルのキー移動量

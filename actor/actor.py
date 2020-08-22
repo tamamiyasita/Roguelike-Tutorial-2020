@@ -229,7 +229,6 @@ class Actor(arcade.Sprite):
                 if actor == self:
                     self.state = state.TURN_END
                 elif attack_results:
-                    attack_results.extend([{"delay": {"time": 0.4, "action":"None"}}])
                     self.state = state.ATTACK
                     self.change_y = self.dy * MOVE_SPEED
                     self.change_x = self.dx * MOVE_SPEED
@@ -241,7 +240,6 @@ class Actor(arcade.Sprite):
             # monsterの移動チェック
             attack_results = self.fighter.attack(target)
             if attack_results:
-                attack_results.extend([{"delay": {"time": 0.4, "action":"None"}}])
                 self.state = state.ATTACK
                 self.change_y = self.dy * MOVE_SPEED
                 self.change_x = self.dx * MOVE_SPEED
