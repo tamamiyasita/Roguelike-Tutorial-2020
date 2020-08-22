@@ -209,33 +209,39 @@ class Actor(arcade.Sprite):
         # ドアのチェック
         door_actor = get_door(destination_x, destination_y, map_obj_sprites)
         if door_actor and door_actor[0].left_face == False:
+            engine.action_queue.extend([{"delay": {"time": 0.1, "action": {"turn_end": self}}}])
             door_actor[0].left_face = True
             self.state = state.DOOR
-            # engine.action_queue.extend([{"delay": {"time": 0.3, "action": {"turn_end"}}}])
             # self.state = state.TURN_END
             print("open door")
-            engine.action_queue.extend([{"turn_end": self}])
+            # engine.action_queue.extend([{"turn_end": self}])
             return
 
 
-
+        # 行き先がBlockされてるか調べる
         blocking_actor = get_blocking_entity(destination_x, destination_y, actor_sprites)
+
         if blocking_actor and not target:
+            # playerの移動チェック
             actor = blocking_actor[0]
             if not actor.is_dead:
                 attack_results = self.fighter.attack(actor)
                 if actor == self:
                     self.state = state.TURN_END
                 elif attack_results:
+                    attack_results.extend([{"delay": {"time": 0.4, "action":"None"}}])
                     self.state = state.ATTACK
-                    self.change_y = self.dy * (MOVE_SPEED+ai_move_speed)
-                    self.change_x = self.dx * (MOVE_SPEED+ai_move_speed)
+                    self.change_y = self.dy * MOVE_SPEED
+                    self.change_x = self.dx * MOVE_SPEED
+
 
                 return attack_results
 
         elif target and self.distance_to(target) <= 1.46:
+            # monsterの移動チェック
             attack_results = self.fighter.attack(target)
             if attack_results:
+                attack_results.extend([{"delay": {"time": 0.4, "action":"None"}}])
                 self.state = state.ATTACK
                 self.change_y = self.dy * MOVE_SPEED
                 self.change_x = self.dx * MOVE_SPEED

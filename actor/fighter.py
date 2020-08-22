@@ -97,4 +97,5 @@ class Fighter:
             results.append(
                 {"message": f"{self.owner.name.capitalize()} attacks {target.name} but no damage"})
 
+
         return results
