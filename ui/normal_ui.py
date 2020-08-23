@@ -1,5 +1,8 @@
 
 import arcade
+from arcade.gl import geometry
+from arcade.isometric import screen_to_isometric_grid
+from arcade.resources.shaders import fragment
 from constants import *
 
 
@@ -14,36 +17,80 @@ class NormalUI:
         self.selected_item = selected_item
         self.messages = messages
         self.mouse_position = mouse_position
+        self.buttom_panel_width = SCREEN_WIDTH-STATES_PANEL_WIDTH
+        self.panel_line_width = 4
+        
 
     def draw_in_normal_state(self):
         """mainに渡すメソッドをまとめる"""
-        self.buttom_ui()
+        self.panel_ui()
         self.draw_hp_and_status_bar()
         self.draw_inventory()
         self.draw_messages_handle()
 
-    def buttom_ui(self):
+    def panel_ui(self):
         # 画面下のパネルをarcadeの四角形を描画する変数で作成
         arcade.draw_xywh_rectangle_filled(
             bottom_left_x=self.viewport_x,
             bottom_left_y=self.viewport_y,
-            width=SCREEN_WIDTH,
+            width=self.buttom_panel_width,
             height=STATES_PANEL_HEIGHT,
             color=COLORS["status_panel_background"]
         )
+
+        # 下パネルの周りの線
+        arcade.draw_xywh_rectangle_outline(
+            bottom_left_x=self.viewport_x+self.panel_line_width*0.5,
+            bottom_left_y=self.viewport_y+self.panel_line_width*0.5,
+            width=self.buttom_panel_width-self.panel_line_width,
+            height=STATES_PANEL_HEIGHT,
+            color=arcade.color.ORANGE,
+            border_width=self.panel_line_width
+        )
+
+
+        
+        # 画面横のパネル
         arcade.draw_xywh_rectangle_filled(
             bottom_left_x=self.viewport_x + SCREEN_WIDTH - STATES_PANEL_WIDTH,
             bottom_left_y=self.viewport_y,
             width=STATES_PANEL_WIDTH,
             height=SCREEN_HEIGHT,
-            color=COLORS["status_panel_background"]
+            color=arcade.color.LIBERTY
         )
+
+        # 横パネルの周りの線
+        arcade.draw_xywh_rectangle_outline(
+            bottom_left_x=self.viewport_x + SCREEN_WIDTH - STATES_PANEL_WIDTH + self.panel_line_width*0.5,
+            bottom_left_y=self.viewport_y + self.panel_line_width*0.5,
+            width=STATES_PANEL_WIDTH - self.panel_line_width,
+            height=SCREEN_HEIGHT - self.panel_line_width,
+            color=arcade.color.LEMON_CHIFFON,
+            border_width=self.panel_line_width
+        )
+
+        
+        # ミニマップ囲い線
+        arcade.draw_xywh_rectangle_outline(
+            bottom_left_x=self.viewport_x + SCREEN_WIDTH - STATES_PANEL_WIDTH + self.panel_line_width*0.5,
+            bottom_left_y=self.viewport_y + SCREEN_HEIGHT - 227,
+            width=STATES_PANEL_WIDTH - self.panel_line_width,
+            height=225,
+            color=arcade.color.BABY_BLUE,
+            border_width=self.panel_line_width
+        )
+
+
+
+
+
+
 
     def draw_hp_and_status_bar(self):
         """ステータスパネルとHPバー"""
         # パネル用変数
         hp_font_size = 13
-        hp_bar_width = hp_font_size * 5  # HPバーの幅
+        hp_bar_width = hp_font_size * 6  # HPバーの幅
         hp_bar_height = hp_font_size - 2  # HPバーの太さ
         hp_bar_margin = self.viewport_y + STATES_PANEL_HEIGHT - 7  # パネル上端からのHPバーの位置
         left_margin = self.viewport_x + 25  # 画面左からのHPとバーの位置
@@ -93,11 +140,9 @@ class NormalUI:
 
     def draw_inventory(self):
         """インベントリの表示"""
-        item_left_position = self.viewport_x + \
-            SCREEN_WIDTH / 2.3  # パネル左からの所持アイテム表示位置の調整に使う変数
-        item_top_position = self.viewport_y + \
-            STATES_PANEL_HEIGHT - 22  # パネル上端からの所持アイテム表示位置の調整に使う変数
-        separate_size = 1.5  # アイテム名の表示間隔の調整に使う変数
+        item_left_position = self.viewport_x +  ((SCREEN_WIDTH-STATES_PANEL_WIDTH) / 2.8)   # パネル左からの所持アイテム表示位置の調整に使う変数
+        item_top_position = self.viewport_y + STATES_PANEL_HEIGHT - 22  # パネル上端からの所持アイテム表示位置の調整に使う変数
+        separate_size = 1.6  # アイテム名の表示間隔の調整に使う変数
         margin = 3  # 選択したアイテムのアウトライン線の位置調整に使う変数
         item_font_size = 12
         outline_size = 2
@@ -138,18 +183,18 @@ class NormalUI:
     def draw_messages_handle(self):
         """メッセージ表示領域"""
         margin = 3
-        message_top_position = 19  # パネル上端からのメッセージ表示位置
+        message_top_position = 20  # パネル上端からのメッセージ表示位置
         message_left_position = self.viewport_x - margin + 125  # 画面左からのメッセージ表示位置
-        message_panel_width = (SCREEN_WIDTH / 2.3) - 125 - margin  # メッセージパネル幅
+        message_panel_width = ((SCREEN_WIDTH-STATES_PANEL_WIDTH) / 2.8) - 125 - margin  # メッセージパネル幅
         message_panel_height = STATES_PANEL_HEIGHT  # メッセージパネル高
         message_first_position = self.viewport_y + \
             STATES_PANEL_HEIGHT - message_top_position  # 最初の行
 
         arcade.draw_xywh_rectangle_filled(
             bottom_left_x=message_left_position,
-            bottom_left_y=self.viewport_y,
+            bottom_left_y=self.viewport_y + self.panel_line_width,
             width=message_panel_width,
-            height=message_panel_height,
+            height=message_panel_height - self.panel_line_width,
             color=arcade.color.SHAMPOO
         )
 
@@ -167,8 +212,8 @@ class NormalUI:
 
 def draw_status_bar(center_x, center_y, width, height, current_value, max_value):
     """ステータスバーの実体"""
-    arcade.draw_rectangle_filled(
-        center_x, center_y, width, height, color=COLORS.get("status_bar_background"))
+    arcade.draw_rectangle_filled(center_x, center_y, width, height, color=arcade.color.WHITE)
+    
     states_width = (current_value / max_value) * width
-    arcade.draw_rectangle_filled(center_x - (width / 2 - states_width / 2),
-                                 center_y, states_width, height, COLORS["status_bar_foreground"])
+
+    arcade.draw_rectangle_filled(center_x - (width / 2 - states_width / 2),center_y, states_width, height, COLORS["status_bar_foreground"])

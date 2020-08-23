@@ -208,14 +208,19 @@ class Actor(arcade.Sprite):
 
         # ドアのチェック
         door_actor = get_door(destination_x, destination_y, map_obj_sprites)
-        if door_actor and door_actor[0].left_face == False:
-            engine.action_queue.extend([{"delay": {"time": 0.1, "action": {"turn_end": self}}}])
-            door_actor[0].left_face = True
+        
+        if door_actor:
             self.state = state.DOOR
-            # self.state = state.TURN_END
-            print("open door")
-            # engine.action_queue.extend([{"turn_end": self}])
-            return
+            door_actor = door_actor[0]
+            if door_actor.left_face == False:
+                # engine.action_queue.extend([{"delay": {"time": 0.2, "action": {"turn_end": self}}}])
+
+                door_actor.left_face = True
+                # self.state = state.TURN_END
+                print("open door")
+                self.state = state.TURN_END
+                # engine.action_queue.extend([{"turn_end": self}])
+                return [{"delay": {"time": 0.2, "action": "None"}}]
 
 
         # 行き先がBlockされてるか調べる
@@ -232,6 +237,7 @@ class Actor(arcade.Sprite):
                     self.state = state.ATTACK
                     self.change_y = self.dy * MOVE_SPEED
                     self.change_x = self.dx * MOVE_SPEED
+                    engine.action_queue.extend([{"delay": {"time": 0.2, "action": {"None": self}}}])
 
 
                 return attack_results

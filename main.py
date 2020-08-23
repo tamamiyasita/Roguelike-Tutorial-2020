@@ -1,4 +1,5 @@
 import arcade
+from arcade.gl import geometry
 import json
 import pyglet.gl as gl
 
@@ -37,6 +38,24 @@ class MG(arcade.Window):
         viewport(self.engine.player)
         self.character_screen = CharacterScreen(self.engine.player)
 
+        """minimap"""
+        # ミニマップの描画位置指定
+        screen_size = (3776, 1664)
+        self.program =self.ctx.load_program(
+            vertex_shader = arcade.resources.shaders.vertex.default_projection,
+            fragment_shader= arcade.resources.shaders.fragment.texture)
+
+        # ピクセルの色を保存するために色の添付ファイルを追加します
+        self.color_attachment = self.ctx.texture((screen_size), components=4)
+
+        # 必要な色を添付したフレームバッファを作成する
+        self.offscreen = self.ctx.framebuffer(color_attachments=[self.color_attachment])
+        self.quad_fs = geometry.quad_2d_fs()
+        self.mini_map_quad = geometry.quad_2d(size=(0.879, 0.86), pos=(1.094, 0.926))
+
+
+
+
     def draw_sprites(self):
         """ 全てのスプライトリストをここで描画する """
         self.engine.cur_level.map_sprites.draw(filter=gl.GL_NEAREST)
@@ -48,13 +67,39 @@ class MG(arcade.Window):
         self.engine.cur_level.equip_sprites.draw(filter=gl.GL_NEAREST)
 
     def on_draw(self):
-        arcade.start_render()
 
-        # ビューポートの左と下の現在位置を変数に入れる、これはステータスパネルを画面に固定する為に使います
+        # viewport(self.engine.player)
+
+        arcade.start_render()
+        """minimap draw"""
+        if self.engine.game_state == GAME_STATE.NORMAL or self.engine.game_state == GAME_STATE.DELAY_WINDOW:
+            self.offscreen.use()
+            self.offscreen.clear(arcade.color.AMAZON)
+
+            arcade.set_viewport(0, 3776, 0, 1664)
+            self.engine.cur_level.map_obj_sprites.draw()
+            self.engine.cur_level.map_sprites.draw()
+
+        self.use()
+
+        # arcade.set_viewport(588, 612, 906, 244)
+        viewport(self.engine.player)
         self.viewport_x = arcade.get_viewport()[0]
         self.viewport_y = arcade.get_viewport()[2]
-
         self.draw_sprites()
+
+
+        # if self.engine.player.state == state.ON_MOVE or self.engine.player.state == state.READY:
+        # viewport(self.engine.player)
+
+        # ビューポートの左と下の現在位置を変数に入れる、これはステータスパネルを画面に固定する為に使います
+
+        
+
+        # self.use()
+
+        # self.engine.cur_level.map_sprites.draw(filter=gl.GL_NEAREST)
+        # self.engine.cur_level.chara_sprites.draw(filter=gl.GL_NEAREST)
 
         # ノーマルステート時の画面表示
         if self.engine.game_state == GAME_STATE.NORMAL or self.engine.game_state == GAME_STATE.DELAY_WINDOW:
@@ -69,11 +114,10 @@ class MG(arcade.Window):
         elif self.engine.game_state == GAME_STATE.SELECT_LOCATION:
 
             select_UI = SelectUI(engine=self.engine, viewport_x=self.viewport_x, viewport_y=self.viewport_y, sprite_list=[
-                                 self.engine.cur_level.actor_sprites, self.engine.cur_level.item_sprites])
-            select_UI.grid_select(self.engine, grid=self.grid_select)
+                                 self.engine.cur_level.actor_sprites, self.engine.cur_level.item_sprites],
+                                 grid_select=self.grid_select, grid_press=self.grid_press)
+            select_UI.draw_in_select_ui()
 
-            if self.mouse_position:
-                self.mouse_ui.draw_select_mouse_location()
 
         # Character_Screen表示
         elif self.engine.game_state == GAME_STATE.CHARACTER_SCREEN:
@@ -83,6 +127,19 @@ class MG(arcade.Window):
         # fov_recomputeがTruならfov計算
         if self.engine.fov_recompute:
             self.engine.fov()
+
+
+        # self.use()
+
+        if self.engine.game_state == GAME_STATE.NORMAL or self.engine.game_state == GAME_STATE.DELAY_WINDOW:
+            """minimap_related"""
+            # draw the mini_map
+            self.color_attachment.use(0)
+            # self.quad_fs.render(self.program)
+
+
+            self.color_attachment.use(0)
+            self.mini_map_quad.render(self.program)
 
     def on_update(self, delta_time):
         """全てのスプライトリストのアップデートを行う
@@ -110,9 +167,9 @@ class MG(arcade.Window):
                 self.engine.player.equipment.update(
                     self.engine.cur_level.equip_sprites)
 
-            # playerがmove状態の時だけviewportを計算する
-            if self.engine.player.state == state.ON_MOVE:
-                viewport(self.engine.player)
+            # playerのviewportを計算する
+
+
 
     def on_key_press(self, key, modifiers):
         if key == arcade.key.BACKSPACE:
@@ -124,9 +181,11 @@ class MG(arcade.Window):
 
         # カーソルのキー移動量
         grid = grid_move_key(key, self.engine)
-        if grid:
+        if isinstance(grid, tuple):
             self.grid_select[0] += grid[0]
             self.grid_select[1] += grid[1]
+        else:
+            self.grid_press = grid
 
         # ドア開閉
         if self.engine.player.state == state.DOOR:

@@ -43,6 +43,9 @@ def grid_move_key(key, engine):
         direction = (-1, 0)
     elif key in KEYMAP_RIGHT:
         direction = (1, 0)
+    elif key == arcade.key.ENTER:
+        direction = "grid_press"
+        print(f"{direction=}")
     
     return direction
 

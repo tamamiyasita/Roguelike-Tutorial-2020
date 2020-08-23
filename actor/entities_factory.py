@@ -70,7 +70,7 @@ def make_monster_sprite(monster_dict):
     sprite.fighter.base_defense = int(monster_dict["Defense"])
     sprite.speed = int(monster_dict["SPEED"])
     sprite.fighter.xp_reward = int(monster_dict["XP"])
-    sprite.scale = int(monster_dict["scale"])
+    sprite.scale = float(monster_dict["scale"])
     sprite.blocks = True
     sprite.state = state.TURN_END
     print(f"Made a {sprite.name}.")

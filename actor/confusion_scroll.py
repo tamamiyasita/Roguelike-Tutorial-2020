@@ -22,17 +22,17 @@ class ConfusionEffect(Actor):
         self.actor_sprites = actor_sprites
 
         self.count = self.enemy.ai.confused_turn
-        self.time_num = 1
+        self.time_num = 2
 
         self.effect_sprites.append(self)
 
     def update(self, delta_time=1/60):
         super().update(delta_time)
         self.center_x, self.center_y = self.enemy.center_x, self.enemy.center_y
-        self.time_num -= delta_time
+        self.time_num -= 1
         if self.time_num < 0:
-            self.angle += 90
-            self.time_num = 1
+            self.angle += 1
+            self.time_num = 2
 
         if self.enemy.ai.confused_turn == 0 or not self.enemy in self.actor_sprites:
             self.effect_sprites.remove(self)

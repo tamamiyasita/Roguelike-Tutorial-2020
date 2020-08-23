@@ -10,13 +10,14 @@ from recalculate_fov import recalculate_fov
 from viewport import viewport
 
 from actor.inventory import Inventory
-from actor.confusion_scroll import ConfusionScroll
 from actor.PC import Player
 from actor.Crab import Crab
 from actor.stairs import Stairs
 from actor.restore_actor import restore_actor
 from actor.short_sword import ShortSword
 from actor.long_sword import LongSword
+from actor.confusion_scroll import ConfusionScroll
+from actor.fireball_scroll import FireballScroll
 from actor.small_shield import SmallShield
 from util import get_door, get_blocking_entity
 from turn_loop import TurnLoop
@@ -46,7 +47,7 @@ class GameEngine:
         self.player = None
         self.game_map = None
         self.action_queue = []
-        self.messages = deque(maxlen=4)
+        self.messages = deque(maxlen=6)
         self.selected_item = None  # キー押下で直接選択したアイテム
         self.turn_check = []
         self.game_state = GAME_STATE.NORMAL
@@ -94,6 +95,9 @@ class GameEngine:
 
         self.cnf = ConfusionScroll(self.player.x + 1, self.player.y)
         level.item_sprites.append(self.cnf)
+
+        self.fb = FireballScroll(self.player.x + 1, self.player.y)
+        level.item_sprites.append(self.fb)
 
         self.fov_recompute = True
 
@@ -276,8 +280,10 @@ class GameEngine:
                 target["time"] -= delta_time
                 if target["time"] > 0:
                     new_action_queue.extend([{"delay": target}])
+                    self.move_switch = False
                 else:
                     new_action_queue.extend([target["action"]])
+                    self.move_switch = True
 
             if "pickup" in action:
                 actors = arcade.get_sprites_at_exact_point(
@@ -337,7 +343,6 @@ class GameEngine:
                     new_action_queue.extend(result)
                     self.game_state = GAME_STATE.NORMAL
                     self.turn_loop = TurnLoop(self.player)
-                    viewport(self.player)
                     self.fov_recompute = True
 
             if "grid_select" in action:
