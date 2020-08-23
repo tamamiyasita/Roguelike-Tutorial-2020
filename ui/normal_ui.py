@@ -59,21 +59,20 @@ class NormalUI:
             color=arcade.color.LIBERTY
         )
 
-        # 横パネルの周りの線
+       # 横パネルの周りの線
         arcade.draw_xywh_rectangle_outline(
             bottom_left_x=self.viewport_x + SCREEN_WIDTH - STATES_PANEL_WIDTH + self.panel_line_width*0.5,
             bottom_left_y=self.viewport_y + self.panel_line_width*0.5,
             width=STATES_PANEL_WIDTH - self.panel_line_width,
-            height=SCREEN_HEIGHT - self.panel_line_width,
+            height=SCREEN_HEIGHT - self.panel_line_width-231,
             color=arcade.color.LEMON_CHIFFON,
             border_width=self.panel_line_width
         )
 
-        
         # ミニマップ囲い線
         arcade.draw_xywh_rectangle_outline(
             bottom_left_x=self.viewport_x + SCREEN_WIDTH - STATES_PANEL_WIDTH + self.panel_line_width*0.5,
-            bottom_left_y=self.viewport_y + SCREEN_HEIGHT - 227,
+            bottom_left_y=self.viewport_y + SCREEN_HEIGHT - 228,
             width=STATES_PANEL_WIDTH - self.panel_line_width,
             height=225,
             color=arcade.color.BABY_BLUE,

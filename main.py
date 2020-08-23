@@ -40,7 +40,7 @@ class MG(arcade.Window):
 
         """minimap"""
         # ミニマップの描画位置指定
-        screen_size = (3776, 1664)
+        screen_size = (GAME_GROUND_WIDTH, GAME_GROUND_HEIGHT)
         self.program =self.ctx.load_program(
             vertex_shader = arcade.resources.shaders.vertex.default_projection,
             fragment_shader= arcade.resources.shaders.fragment.texture)
@@ -50,8 +50,9 @@ class MG(arcade.Window):
 
         # 必要な色を添付したフレームバッファを作成する
         self.offscreen = self.ctx.framebuffer(color_attachments=[self.color_attachment])
-        self.quad_fs = geometry.quad_2d_fs()
-        self.mini_map_quad = geometry.quad_2d(size=(0.879, 0.86), pos=(1.094, 0.926))
+        self.mini_map_quad = geometry.quad_2d(size=(0.86, 0.855), pos=(1.088, 0.921))
+
+        # self.test_sprites = arcade.SpriteList(use_spatial_hash=True)
 
 
 
@@ -68,7 +69,6 @@ class MG(arcade.Window):
 
     def on_draw(self):
 
-        # viewport(self.engine.player)
 
         arcade.start_render()
         """minimap draw"""
@@ -76,30 +76,20 @@ class MG(arcade.Window):
             self.offscreen.use()
             self.offscreen.clear(arcade.color.AMAZON)
 
-            arcade.set_viewport(0, 3776, 0, 1664)
+            arcade.set_viewport(0, GAME_GROUND_WIDTH, 0, GAME_GROUND_HEIGHT)
+
+            self.engine.cur_level.map_sprites.draw(filter=gl.GL_NEAREST)
             self.engine.cur_level.map_obj_sprites.draw()
-            self.engine.cur_level.map_sprites.draw()
+            self.engine.cur_level.chara_sprites.draw()
 
         self.use()
 
-        # arcade.set_viewport(588, 612, 906, 244)
         viewport(self.engine.player)
+        # ビューポートの左と下の現在位置を変数に入れる、これはステータスパネルを画面に固定する為に使います
         self.viewport_x = arcade.get_viewport()[0]
         self.viewport_y = arcade.get_viewport()[2]
         self.draw_sprites()
 
-
-        # if self.engine.player.state == state.ON_MOVE or self.engine.player.state == state.READY:
-        # viewport(self.engine.player)
-
-        # ビューポートの左と下の現在位置を変数に入れる、これはステータスパネルを画面に固定する為に使います
-
-        
-
-        # self.use()
-
-        # self.engine.cur_level.map_sprites.draw(filter=gl.GL_NEAREST)
-        # self.engine.cur_level.chara_sprites.draw(filter=gl.GL_NEAREST)
 
         # ノーマルステート時の画面表示
         if self.engine.game_state == GAME_STATE.NORMAL or self.engine.game_state == GAME_STATE.DELAY_WINDOW:
@@ -129,15 +119,10 @@ class MG(arcade.Window):
             self.engine.fov()
 
 
-        # self.use()
 
         if self.engine.game_state == GAME_STATE.NORMAL or self.engine.game_state == GAME_STATE.DELAY_WINDOW:
             """minimap_related"""
             # draw the mini_map
-            self.color_attachment.use(0)
-            # self.quad_fs.render(self.program)
-
-
             self.color_attachment.use(0)
             self.mini_map_quad.render(self.program)
 
