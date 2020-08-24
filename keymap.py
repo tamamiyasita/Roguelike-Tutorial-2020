@@ -46,7 +46,7 @@ def grid_move_key(key, engine):
     elif key == arcade.key.ENTER:
         direction = "grid_press"
         print(f"{direction=}")
-    
+
     return direction
 
 
@@ -135,4 +135,7 @@ def keymap(key, engine):
             direction = (1, 1)
         elif key in KEYMAP_DOWN_RIGHT:
             direction = (1, -1)
+        elif key in KEYMAP_CANCEL:
+            engine.player.state = state.READY
+
         return direction

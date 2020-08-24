@@ -14,10 +14,10 @@ def grid_to_pixel(x, y):
 def pixel_to_grid(x, y):
     """sprite_sizeからtile_pixel_to_gridへの位置を指定する"""
     px = x - SPRITE_SIZE / 2 * SPRITE_SCALE
-    px = round(px / (SPRITE_SIZE * SPRITE_SCALE))
+    px = round(px / GRID_SIZE)
 
     py = y - SPRITE_SIZE / 2 * SPRITE_SCALE - STATES_PANEL_HEIGHT
-    py = round(py / (SPRITE_SIZE * SPRITE_SCALE))
+    py = round(py / GRID_SIZE)
     return px, py
 
 
@@ -34,6 +34,7 @@ def get_blocking_entity(x, y, sprite_list):
     else:
         return None
 
+
 def get_door(x, y, sprite_list):
     px, py = grid_to_pixel(x, y)
     sprite_list = arcade.get_sprites_at_exact_point((px, py), sprite_list)
@@ -45,7 +46,6 @@ def get_door(x, y, sprite_list):
         return door_sprite
     else:
         return None
-
 
 
 def get_tile_set(img, tile_size):

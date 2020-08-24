@@ -8,8 +8,8 @@ from util import pixel_to_grid, grid_to_pixel
 class MouseUI:
     def __init__(self, mouse_position, viewport_x, viewport_y, sprite_lists):
         self.mouse_position = mouse_position
-        self.viewport_x = viewport_x
-        self.viewport_y = viewport_y
+        self.viewport_left = viewport_x
+        self.viewport_bottom = viewport_y
         self.actor_sprites = sprite_lists[0]
         self.item_sprites = sprite_lists[1]
 
