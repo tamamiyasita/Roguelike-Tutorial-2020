@@ -52,7 +52,7 @@ class NormalUI:
             bottom_left_x=self.viewport_left + SCREEN_WIDTH - STATES_PANEL_WIDTH,
             bottom_left_y=self.viewport_bottom,
             width=STATES_PANEL_WIDTH,
-            height=SCREEN_HEIGHT,
+            height=SCREEN_HEIGHT - 231,
             color=arcade.color.LIBERTY
         )
 
@@ -65,6 +65,13 @@ class NormalUI:
             height=SCREEN_HEIGHT - self.panel_line_width-231,
             color=arcade.color.LEMON_CHIFFON,
             border_width=self.panel_line_width
+        )
+        arcade.draw_xywh_rectangle_filled(
+            bottom_left_x=self.viewport_left + SCREEN_WIDTH - STATES_PANEL_WIDTH,
+            bottom_left_y=self.viewport_bottom + SCREEN_HEIGHT - 231,
+            width=STATES_PANEL_WIDTH,
+            height=231,
+            color=arcade.color.BLACK
         )
 
         # ミニマップ囲い線

@@ -1,9 +1,12 @@
+from os import name
 from pyglet import sprite
 from actor.stairs import Stairs
 import arcade
 from data import *
 from constants import *
 from util import grid_to_pixel
+
+from actor.actor import Actor
 from actor.wall import Wall
 from actor.floor import Floor
 from actor.door import Door
@@ -50,12 +53,24 @@ class ActorPlacement:
                     stairs = Stairs(x=x, y=y)
                     map_sprites.append(stairs)
 
-                # if self.tiles[x][y] == TILE.DOOR:
-
-                #     door = Door(x=x, y=y)
-                #     map_sprites.append(door)
-
         return map_sprites
+
+    def map_point_set(self):
+        map_point_sprites = arcade.SpriteList(
+            use_spatial_hash=True, spatial_hash_cell_size=32)
+        for x in range(self.width):
+            for y in range(self.height):
+                if self.tiles[x][y] != TILE.WALL:# == TILE.EMPTY or TILE.STAIRS_DOWN or TILE.DOOR:
+
+                    point = Actor(name="floor_point",scale=2, x=x, y=y, color=COLORS["black"], visible_color=COLORS["light_ground"], not_visible_color=COLORS["light_ground"])
+                    map_point_sprites.append(point)
+
+                elif self.tiles[x][y] == TILE.WALL:
+                    point = Actor(name="wall_point", scale=2, x=x, y=y,color=COLORS["black"], visible_color=COLORS["light_ground"], not_visible_color=COLORS["light_ground"])
+                    map_point_sprites.append(point)
+
+        return map_point_sprites
+
 
     def map_obj_set(self):
         """ 動的な地形スプライトをgame_mapブロック情報から作成する
@@ -116,22 +131,6 @@ class ActorPlacement:
         return item_sprites
 
 
-
-        # item_sprites = arcade.SpriteList(
-        #     use_spatial_hash=True, spatial_hash_cell_size=32)
-        # for x in range(self.width):
-        #     for y in range(self.height):
-        #         if self.item_tiles[x][y] == TILE.HEALING_POTION:
-        #             healing_potion = HealingPotion(x, y)
-        #             item_sprites.append(healing_potion)
-        #         elif self.item_tiles[x][y] == TILE.LIGHTNING_SCROLL:
-        #             lightning_scroll = LightningScroll(x, y)
-        #             item_sprites.append(lightning_scroll)
-        #         elif self.item_tiles[x][y] == TILE.FIREBALL_SCROLL:
-        #             fireball_scroll = FireballScroll(x, y)
-        #             item_sprites.append(fireball_scroll)
-
-        # return item_sprites
 
     def search_wall_number(self, x, y, tiles):
         """ 周りのブロック情報からwallテクスチャ番号を計算する関数

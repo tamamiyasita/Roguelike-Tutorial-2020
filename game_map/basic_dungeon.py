@@ -9,7 +9,7 @@ from constants import *
 from data import *
 
 
-MAX_ROOMS = 25
+MAX_ROOMS = 40
 ROOM_MIN_SIZE = 3
 ROOM_MAX_SIZE = 8
 MAX_MONSTERS_PER_ROOM = 3

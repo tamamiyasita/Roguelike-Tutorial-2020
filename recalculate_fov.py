@@ -1,5 +1,6 @@
 """視野の計算"""
 
+from data import player
 from math import radians
 import arcade
 import math
@@ -13,6 +14,8 @@ from util import grid_to_pixel
 def recalculate_fov(char_x, char_y, radius, sprite_lists):
     """ Fovの計算を行う
     """
+
+
 
     # 最初に渡された全てのスプライトリストをループし、is_visible等をFalseにして画面から隠す
     for sprite_list in sprite_lists:
@@ -48,6 +51,7 @@ def recalculate_fov(char_x, char_y, radius, sprite_lists):
             for sprite_list in sprite_lists:
                 sprites_at_point = arcade.get_sprites_at_exact_point(pixel_point, sprite_list)
 
+                # 探索済みならis_visibleをTrueにする
                 for sprite in sprites_at_point:
                     sprite.is_visible = True
                     if sprite.block_sight:

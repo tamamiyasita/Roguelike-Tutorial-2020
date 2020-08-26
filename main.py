@@ -17,6 +17,7 @@ from ui.character_screen_ui import CharacterScreen
 
 from util import pixel_to_grid
 from viewport import viewport
+from mini_map_points import MinimapPoints
 
 # log = logging.getLogger("__main__")
 
@@ -53,7 +54,11 @@ class MG(arcade.Window):
         self.offscreen = self.ctx.framebuffer(
             color_attachments=[self.color_attachment])
         self.mini_map_quad = geometry.quad_2d(
-            size=(0.86, 0.855), pos=(1.088, 0.921))
+            size=(0.5792, 0.97), pos=(0.949, 1.022))
+
+        self.minimap = MinimapPoints(self.engine)
+
+        
 
         # self.test_sprites = arcade.SpriteList(use_spatial_hash=True)
 
@@ -73,16 +78,20 @@ class MG(arcade.Window):
         """minimap draw"""
         if self.engine.game_state == GAME_STATE.NORMAL or self.engine.game_state == GAME_STATE.DELAY_WINDOW:
             self.offscreen.use()
-            self.offscreen.clear()
+            self.offscreen.clear(arcade.color.BLACK)
 
             arcade.set_viewport(0, GAME_GROUND_WIDTH, 0, GAME_GROUND_HEIGHT)
 
-            self.engine.cur_level.map_sprites.draw(filter=gl.GL_NEAREST)
-            self.engine.cur_level.map_obj_sprites.draw()
-            self.engine.cur_level.chara_sprites.draw()
+            # self.minimap.draw()
+            self.engine.cur_level.map_point_sprites.draw()
+            arcade.draw_rectangle_filled(center_x=self.engine.player.center_x, center_y=self.engine.player.center_y, width=64, height=64, color=arcade.color.WHITE)
+
+            # self.engine.cur_level.map_sprites.draw(filter=gl.GL_NEAREST)
+            self.engine.cur_level.item_sprites.draw()
+            # self.engine.cur_level.chara_sprites.draw()
 
         self.use()
-
+        # TODOビューポートの適切な動作を考える
         viewport(self.engine.player)
         # ビューポートの左と下の現在位置を変数に入れる、これはステータスパネルを画面に固定する為に使います
         self.viewports = arcade.get_viewport()
@@ -148,7 +157,11 @@ class MG(arcade.Window):
                 self.engine.player.equipment.update(
                     self.engine.cur_level.equip_sprites)
 
-            # playerのviewportを計算する
+        
+
+            # if self.engine.player.state == state.TURN_END:
+            #     self.minimap.update()
+
 
     def on_key_press(self, key, modifiers):
         if key == arcade.key.BACKSPACE:

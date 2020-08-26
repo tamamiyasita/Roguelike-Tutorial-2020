@@ -63,6 +63,7 @@ effect_img_1 = (r"image/Effect1.png")  # 83
 effect1_tile = get_tile_set(effect_img_1, tile_size=16)
 #######
 
+floor_point = arcade.load_texture_pair(r"image/floor_point.png")
 floor_img = (r"image/Tile.png")
 floor_tile = get_tile_set(floor_img, tile_size=32)
 floor_len = len(floor_tile)
@@ -70,11 +71,7 @@ floors = [floor_tile[v] for v in range(floor_len)]
 
 stairs = floors
 
-door_img = (r"image/Door0.png")
-door_tile = get_tile_set(door_img, tile_size=16)
-door_len = len(door_tile)
-doors = [door_tile[v] for v in range(door_len)]
-
+wall_point = arcade.load_texture_pair(r"image/wall_point.png")
 walls_1 = (r"image/wall1.png")
 walls_1_tiles = get_tile_set(walls_1, tile_size=16)
 wall_1 = {k: walls_1_tiles[v] for k, v in zip(
@@ -89,6 +86,12 @@ walls_3_tiles = get_tile_set(walls_3, tile_size=16)
 # range(16), [6, 6, 11, 11, 10, 10, 1, 12, 4, 5, 2, 5, 0, 5, 1, 8])}
 wall_3 = [walls_3_tiles[w]
           for w in [6, 6, 11, 11, 10, 10, 1, 12, 4, 5, 2, 5, 0, 5, 1, 8]]
+
+door_img = (r"image/Door0.png")
+door_tile = get_tile_set(door_img, tile_size=16)
+door_len = len(door_tile)
+doors = [door_tile[v] for v in range(door_len)]
+
 
 # actorに渡す画像はリスト型にすること
 IMAGE_ID = {"player": player,
@@ -116,7 +119,9 @@ IMAGE_ID = {"player": player,
             "confusion_effect": [effect1_tile[140]],
             "fireball_effect": [effect1_tile[134]],
 
+            "floor_point": floor_point,
             "floor": floors,
+            "wall_point": wall_point,
             "wall_1": wall_1,
             "wall_2": wall_2,
             "wall_3": wall_3,

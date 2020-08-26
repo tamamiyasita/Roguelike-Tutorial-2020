@@ -63,11 +63,13 @@ class GameEngine:
 
         """ スプライトリストの初期化 """
         mapsprite = ActorPlacement(self.game_map, self).map_set()
+        map_point_sprite = ActorPlacement(self.game_map, self).map_point_set()
         map_obj_sprite = ActorPlacement(self.game_map, self).map_obj_set()
         actorsprite = ActorPlacement(self.game_map, self).actor_set()
         itemsprite = ActorPlacement(self.game_map, self).items_set()
 
         level.map_sprites = mapsprite
+        level.map_point_sprites = map_point_sprite
         level.map_obj_sprites = map_obj_sprite
         level.actor_sprites = actorsprite
         level.item_sprites = itemsprite
@@ -376,7 +378,7 @@ class GameEngine:
         """
         if self.fov_recompute == True:
             recalculate_fov(self.player.x, self.player.y, FOV_RADIUS,
-                            [self.cur_level.map_sprites, self.cur_level.actor_sprites, self.cur_level.item_sprites, self.cur_level.map_obj_sprites])
+                            [self.cur_level.map_sprites, self.cur_level.actor_sprites, self.cur_level.item_sprites, self.cur_level.map_obj_sprites,self.cur_level.map_point_sprites])
 
             self.fov_recompute = False
 
