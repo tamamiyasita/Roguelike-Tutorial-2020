@@ -1,12 +1,13 @@
 import arcade
 from actor.restore_actor import restore_actor
+from actor.item_point_check import ItemPoint
+
 
 class Inventory:
     def __init__(self, capacity=5):
         self.item_bag = []
         self.capacity = capacity
         self.item_bag = [None for _ in range(self.capacity)]
-
 
     def get_dict(self):
         result = {}
@@ -25,16 +26,15 @@ class Inventory:
     def restore_from_dict(self, result):
         self.capacity = result["capacity"]
         self.item_bag = [None for _ in range(self.capacity)]
-        for  i, item_dict in enumerate(result["item_bag"]):
+        for i, item_dict in enumerate(result["item_bag"]):
             if item_dict is None:
                 self.item_bag[i] = None
             else:
                 item = restore_actor(item_dict)
                 self.item_bag[i] = item
                 print(self.item_bag, "rest")
-                
 
-    def add_item(self, item):
+    def add_item(self, item, engine):
         results = []
 
         item_placed = False
@@ -70,6 +70,3 @@ class Inventory:
             if self.item_bag[i] is item:
                 self.item_bag[i] = None
         return results
-
-
-

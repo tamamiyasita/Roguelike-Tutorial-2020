@@ -58,19 +58,17 @@ class MG(arcade.Window):
 
         self.minimap = MinimapPoints(self.engine)
 
-        
-
         # self.test_sprites = arcade.SpriteList(use_spatial_hash=True)
 
     def draw_sprites(self):
         """ 全てのスプライトリストをここで描画する """
         self.engine.cur_level.map_sprites.draw()
-        self.engine.cur_level.map_obj_sprites.draw(filter=gl.GL_LO_BIAS_NV)
-        self.engine.cur_level.item_sprites.draw(filter=gl.GL_LO_BIAS_NV)
-        self.engine.cur_level.actor_sprites.draw(filter=gl.GL_NEAREST)
+        # self.engine.cur_level.map_obj_sprites.draw(filter=gl.GL_LO_BIAS_NV)
+        # self.engine.cur_level.item_sprites.draw(filter=gl.GL_LO_BIAS_NV)
+        # self.engine.cur_level.actor_sprites.draw(filter=gl.GL_NEAREST)
         self.engine.cur_level.chara_sprites.draw(filter=gl.GL_NEAREST)
-        self.engine.cur_level.effect_sprites.draw()
-        self.engine.cur_level.equip_sprites.draw(filter=gl.GL_NEAREST)
+        # self.engine.cur_level.effect_sprites.draw()
+        # self.engine.cur_level.equip_sprites.draw(filter=gl.GL_NEAREST)
 
     def on_draw(self):
 
@@ -84,10 +82,11 @@ class MG(arcade.Window):
 
             # self.minimap.draw()
             self.engine.cur_level.map_point_sprites.draw()
-            arcade.draw_rectangle_filled(center_x=self.engine.player.center_x, center_y=self.engine.player.center_y, width=64, height=64, color=arcade.color.WHITE)
+            arcade.draw_rectangle_filled(center_x=self.engine.player.center_x,
+                                         center_y=self.engine.player.center_y, width=64, height=64, color=arcade.color.WHITE)
 
             # self.engine.cur_level.map_sprites.draw(filter=gl.GL_NEAREST)
-            self.engine.cur_level.item_sprites.draw()
+            self.engine.cur_level.item_point_sprites.draw()
             # self.engine.cur_level.chara_sprites.draw()
 
         self.use()
@@ -157,11 +156,8 @@ class MG(arcade.Window):
                 self.engine.player.equipment.update(
                     self.engine.cur_level.equip_sprites)
 
-        
-
             # if self.engine.player.state == state.TURN_END:
             #     self.minimap.update()
-
 
     def on_key_press(self, key, modifiers):
         if key == arcade.key.BACKSPACE:

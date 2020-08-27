@@ -60,17 +60,19 @@ class ActorPlacement:
             use_spatial_hash=True, spatial_hash_cell_size=32)
         for x in range(self.width):
             for y in range(self.height):
-                if self.tiles[x][y] != TILE.WALL:# == TILE.EMPTY or TILE.STAIRS_DOWN or TILE.DOOR:
+                # == TILE.EMPTY or TILE.STAIRS_DOWN or TILE.DOOR:
+                if self.tiles[x][y] != TILE.WALL:
 
-                    point = Actor(name="floor_point",scale=2, x=x, y=y, color=COLORS["black"], visible_color=COLORS["light_ground"], not_visible_color=COLORS["light_ground"])
+                    point = Actor(name="floor_point", scale=2, x=x, y=y,
+                                  color=COLORS["black"], visible_color=COLORS["light_ground"], not_visible_color=COLORS["light_ground"])
                     map_point_sprites.append(point)
 
                 elif self.tiles[x][y] == TILE.WALL:
-                    point = Actor(name="wall_point", scale=2, x=x, y=y,color=COLORS["black"], visible_color=COLORS["light_ground"], not_visible_color=COLORS["light_ground"])
+                    point = Actor(name="wall_point", scale=2, x=x, y=y,
+                                  color=COLORS["black"], visible_color=COLORS["light_ground"], not_visible_color=COLORS["light_ground"])
                     map_point_sprites.append(point)
 
         return map_point_sprites
-
 
     def map_obj_set(self):
         """ 動的な地形スプライトをgame_mapブロック情報から作成する
@@ -96,11 +98,12 @@ class ActorPlacement:
         for x in range(self.width):
             for y in range(self.height):
                 if type(self.actor_tiles[x][y]) == int:
-                    monster_tile_number = get_random_monster_by_challenge(self.actor_tiles[x][y])
+                    monster_tile_number = get_random_monster_by_challenge(
+                        self.actor_tiles[x][y])
                     monster = make_monster_sprite(monster_tile_number)
                     monster.x = x
                     monster.y = y
-                    cx, cy = grid_to_pixel(x,y)
+                    cx, cy = grid_to_pixel(x, y)
                     monster.center_x = cx
                     monster.center_y = cy
                     print(monster.center_x)
@@ -108,7 +111,6 @@ class ActorPlacement:
                     # actor_sprites.append(monster)
 
         return actor_sprites
-
 
     def items_set(self):
         """itemをgame_mapタイル番号から設定する
@@ -121,16 +123,31 @@ class ActorPlacement:
                     item = get_random_items_by_challenge(self.item_tiles[x][y])
                     item.x = x
                     item.y = y
-                    cx, cy = grid_to_pixel(x,y)
+                    cx, cy = grid_to_pixel(x, y)
                     item.center_x = cx
                     item.center_y = cy
-                    print(item.center_x)
 
                     item_sprites.append(item)
 
         return item_sprites
 
+    def items_point_set(self):
+        items_point_sprites = arcade.SpriteList(
+            use_spatial_hash=True, spatial_hash_cell_size=32)
+        for x in range(self.width):
+            for y in range(self.height):
+                if type(self.item_tiles[x][y]) == int:
+                    item = Actor(name="items_point", scale=1, x=x, y=y,
+                                 color=COLORS["black"], visible_color=COLORS["light_ground"], not_visible_color=COLORS["light_ground"])
+                    item.x = x
+                    item.y = y
+                    cx, cy = grid_to_pixel(x, y)
+                    item.center_x = cx
+                    item.center_y = cy
 
+                    items_point_sprites.append(item)
+
+        return items_point_sprites
 
     def search_wall_number(self, x, y, tiles):
         """ 周りのブロック情報からwallテクスチャ番号を計算する関数

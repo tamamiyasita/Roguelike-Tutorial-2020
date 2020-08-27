@@ -11,6 +11,7 @@ class Player(Actor):
         fighter_component = Fighter(hp=35, defense=3, power=4, level=1)
         equip_component = Equipment()
         super().__init__(
+            scale=0.5,
             name="player",
             x=x,
             y=y,
@@ -27,9 +28,6 @@ class Player(Actor):
         self.delay_time = 5
         self.visible_check = False
 
-
-
-
     def check_experience_level(self, game_engine):
         if isinstance(self.fighter.level, list):
             self.fighter.level = self.fighter.level[0]
@@ -39,8 +37,7 @@ class Player(Actor):
             if self.fighter.current_xp >= xp_to_next_level:
                 self.fighter.level += 1
                 self.fighter.ability_points += 1
-                game_engine.action_queue.extend([{"message":"Level up!!!"}])
-
+                game_engine.action_queue.extend([{"message": "Level up!!!"}])
 
     def update_animation(self, delta_time=1 / 60):
         super().update_animation(delta_time)
