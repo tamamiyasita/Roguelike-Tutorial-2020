@@ -5,24 +5,35 @@ from itertools import chain
 
 
 class SelectUI:
-    def __init__(self, engine, viewports, sprite_list, grid_select, grid_press):
+    def __init__(self, engine):
         self.engine = engine
-        self.viewports = viewports
-        self.sprites = sprite_list
-        self.dx, self.dy = engine.player.x, engine.player.y
-        self.grid_select = grid_select
-        self.grid_press = grid_press
+        self.sprites = [engine.cur_level.actor_sprites,
+                        engine.cur_level.item_sprites]
         self.buttom_panel_width = SCREEN_WIDTH-STATES_PANEL_WIDTH
         self.panel_line_width = 4
 
+        self.grid_sprites = arcade.SpriteList()
+        self.d_time = 255
+        self.x, self.y = 0, 0
+
+    def draw_in_select_ui(self, viewports, grid_press, grid_select):
+        self.dx, self.dy = self.engine.player.x, self.engine.player.y
+        self.grid_select = grid_select
+        self.grid_press = grid_press
+        self.viewports = viewports
         self.viewport_left = self.viewports[0]
         self.viewport_righit = self.viewports[1]
         self.viewport_bottom = self.viewports[2]
         self.viewport_top = self.viewports[3]
 
-    def draw_in_select_ui(self):
         self.panel_ui()
         self.grid_cursor()
+
+    def update(self):
+
+        self.d_time -= 2
+        if -40 > self.d_time:
+            self.d_time = 120
 
     def panel_ui(self):
         # 画面下のパネルをarcadeの四角形を描画する変数で作成
@@ -104,6 +115,15 @@ class SelectUI:
             color=arcade.color.LIGHT_BLUE,
             border_width=2
         )
+
+        arcade.draw_rectangle_filled(
+            center_x=self.x,
+            center_y=self.y,
+            width=SPRITE_SIZE*SPRITE_SCALE-2,
+            height=SPRITE_SIZE*SPRITE_SCALE-2,
+            color=[255, 255, 255, self.d_time]
+        )
+
         # グリッド囲い線の中にあるオブジェクトの情報の表示
         actor_at_point = arcade.get_sprites_at_exact_point(
             (self.x, self.y), self.sprites[0])

@@ -2,18 +2,18 @@ import arcade
 from util import get_tile_set
 
 # playerテクスチャ生成
-# player = arcade.load_texture_pair(r"image/rou6.png")
-# pc_move = arcade.load_texture_pair(r"image/rou6_m.png")
-# pc_attack = arcade.load_texture_pair(r"image/rou6_a.png")
-# pc_delay = arcade.load_texture_pair(r"image/rou6_d.png")
-# pc_delay2 = arcade.load_texture_pair(r"image/rou6_d2.png")
+player = arcade.load_texture_pair(r"image/rou6.png")
+pc_move = arcade.load_texture_pair(r"image/rou6_m.png")
+pc_attack = arcade.load_texture_pair(r"image/rou6_a.png")
+pc_delay = arcade.load_texture_pair(r"image/rou6_d.png")
+pc_delay2 = arcade.load_texture_pair(r"image/rou6_d2.png")
 
 # test_texture
-player = arcade.load_texture_pair(r"t_image/rou6.png")
-pc_move = arcade.load_texture_pair(r"t_image/rou6_m.png")
-pc_attack = arcade.load_texture_pair(r"t_image/rou6_a.png")
-pc_delay = arcade.load_texture_pair(r"t_image/rou6_d.png")
-pc_delay2 = arcade.load_texture_pair(r"t_image/rou6_d2.png")
+# player = arcade.load_texture_pair(r"t_image/rou6.png")
+# pc_move = arcade.load_texture_pair(r"t_image/rou6_m.png")
+# pc_attack = arcade.load_texture_pair(r"t_image/rou6_a.png")
+# pc_delay = arcade.load_texture_pair(r"t_image/rou6_d.png")
+# pc_delay2 = arcade.load_texture_pair(r"t_image/rou6_d2.png")
 
 ###enemys###
 size = 16  # テクスチャのサイズと位置情報も兼ねる
@@ -75,8 +75,8 @@ effect1_tile = get_tile_set(effect_img_1, tile_size=16)
 
 items_point = arcade.load_texture_pair(r"image/items_point.png")
 floor_point = arcade.load_texture_pair(r"image/floor_point.png")
-floor_img = (r"t_image/Tile.png")  # test_texture
-# floor_img = (r"image/Tile.png")
+# floor_img = (r"t_image/Tile.png")  # test_texture
+floor_img = (r"image/Tile.png")
 floor_tile = get_tile_set(floor_img, tile_size=32)
 floor_len = len(floor_tile)
 floors = [floor_tile[v] for v in range(floor_len)]
@@ -92,8 +92,8 @@ walls_2 = (r"image/wall2.png")
 walls_2_tiles = get_tile_set(walls_2, tile_size=16)
 wall_2 = {k: walls_2_tiles[v] for k, v in zip(
     range(16), [6, 6, 11, 11, 10, 10, 1, 12, 4, 5, 2, 5, 0, 5, 1, 8])}
-# walls_3 = (r"image/wall3.png")
-walls_3 = (r"t_image/wall3.png")  # test_texture
+walls_3 = (r"image/wall3.png")
+# walls_3 = (r"t_image/wall3.png")  # test_texture
 walls_3_tiles = get_tile_set(walls_3, tile_size=16)
 # wall_C = {k: walls_3_tiles[v] for k, v in zip(
 # range(16), [6, 6, 11, 11, 10, 10, 1, 12, 4, 5, 2, 5, 0, 5, 1, 8])}

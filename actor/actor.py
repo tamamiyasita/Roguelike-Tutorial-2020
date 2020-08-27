@@ -40,8 +40,6 @@ class Actor(arcade.Sprite):
         self.left_face = left_face
         self._master = None
 
-
-
         self.item = item
         self.inventory = inventory
         if self.inventory:
@@ -71,8 +69,7 @@ class Actor(arcade.Sprite):
             if not self.item:
                 item = Item()
                 self.item = item
-                self.item.owner =self
-    
+                self.item.owner = self
 
     def get_dict(self):
         result = {}
@@ -101,20 +98,20 @@ class Actor(arcade.Sprite):
             result["ai"] = True
         if self.ai.__class__.__name__ == "ConfusedMonster":
             result["confused_ai"] = self.ai.get_dict()
-            
+
         if self.fighter:
             result["fighter"] = self.fighter.get_dict()
         if self.item:
             result["item"] = True
         if self.inventory:
             result["inventory"] = self.inventory.get_dict()
-  
+
         if self.equippable:
             result["equippable"] = self.equippable.get_dict()
 
         if self.equipment:
             result["equipment"] = self.equipment.get_dict()
-        
+
         return result
 
     def restore_from_dict(self, result):
@@ -180,12 +177,10 @@ class Actor(arcade.Sprite):
             self.fighter.owner = self
             self.fighter.restore_from_dict(result["fighter"])
 
-
     def move(self, dxy, target=None, engine=None):
         map_sprites = engine.cur_level.map_sprites
         map_obj_sprites = engine.cur_level.map_obj_sprites
         actor_sprites = engine.cur_level.actor_sprites
-
 
         ai_move_speed = 0
         if self.ai:
@@ -196,7 +191,7 @@ class Actor(arcade.Sprite):
             self.left_face = True
         if self.dx == 1:
             self.left_face = False
-        
+
         destination_x = self.dx + self.x
         destination_y = self.dy + self.y
 
@@ -204,11 +199,12 @@ class Actor(arcade.Sprite):
         self.target_y = self.center_y
 
         # 行先のfloorオブジェクトを変数booking_tileに入れる
-        self.booking_tile = arcade.get_sprites_at_exact_point(grid_to_pixel(destination_x, destination_y), map_sprites)[0]
+        self.booking_tile = arcade.get_sprites_at_exact_point(
+            grid_to_pixel(destination_x, destination_y), map_sprites)[0]
 
         # ドアのチェック
         door_actor = get_door(destination_x, destination_y, map_obj_sprites)
-        
+
         if door_actor:
             self.state = state.DOOR
             door_actor = door_actor[0]
@@ -222,9 +218,9 @@ class Actor(arcade.Sprite):
                 # engine.action_queue.extend([{"turn_end": self}])
                 return [{"delay": {"time": 0.2, "action": "None"}}]
 
-
         # 行き先がBlockされてるか調べる
-        blocking_actor = get_blocking_entity(destination_x, destination_y, actor_sprites)
+        blocking_actor = get_blocking_entity(
+            destination_x, destination_y, actor_sprites)
 
         if blocking_actor and not target:
             # playerの移動チェック
@@ -237,8 +233,8 @@ class Actor(arcade.Sprite):
                     self.state = state.ATTACK
                     self.change_y = self.dy * MOVE_SPEED
                     self.change_x = self.dx * MOVE_SPEED
-                    engine.action_queue.extend([{"delay": {"time": 0.2, "action": {"None": self}}}])
-
+                    engine.action_queue.extend(
+                        [{"delay": {"time": 0.2, "action": {"None": self}}}])
 
                 return attack_results
 
@@ -261,8 +257,6 @@ class Actor(arcade.Sprite):
             # A*パスがBlockされたらturn_endを返す
             print(f"actor {self.name} blocking pass!")
             return [{"turn_end": self}]
-
-
 
     def update(self, delta_time=1/60):
         super().update()
@@ -308,7 +302,7 @@ class Actor(arcade.Sprite):
                 self.state = state.TURN_END
 
             self.wait = self.fighter.attack_speed
-            
+
     def distance_to(self, other):
         dx = other.x - self.x
         dy = other.y - self.y
@@ -328,7 +322,6 @@ class Actor(arcade.Sprite):
         if not get_blocking_entity(self.x + dx, self.y + dy, actor_sprites):
             move = self.move((dx, dy), target, engine)
             return move
-
 
     @property
     def texture_(self):
@@ -361,7 +354,6 @@ class Actor(arcade.Sprite):
                 self.center_y = self.master.center_y - self.item_margin_y
                 self.center_x = x + self.item_margin_x
 
-
     @property
     def master(self):
         return self._master
@@ -369,7 +361,7 @@ class Actor(arcade.Sprite):
     @master.setter
     def master(self, owner):
         self._master = owner
-    
+
     @master.deleter
     def master(self):
         self._master = None

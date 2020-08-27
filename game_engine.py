@@ -301,7 +301,6 @@ class GameEngine:
 
                         if results:
                             new_action_queue.extend(results)
-
                             # mapからPOINTを消す
                             if "You pick up" in "".join(list(*results[0].values())):
                                 self.item_point.remove_point(actor)

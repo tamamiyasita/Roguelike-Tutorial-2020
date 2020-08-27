@@ -61,10 +61,13 @@ class MyGame(arcade.Window):
         self.program = self.ctx.load_program(
             vertex_shader=arcade.resources.shaders.vertex.default_projection,
             fragment_shader=arcade.resources.shaders.fragment.texture)
-        self.color_attachment = self.ctx.texture((SCREEN_WIDTH, SCREEN_HEIGHT), components=4)
-        self.offscreen = self.ctx.framebuffer(color_attachments=[self.color_attachment])
+        self.color_attachment = self.ctx.texture(
+            (SCREEN_WIDTH, SCREEN_HEIGHT), components=4)
+        self.offscreen = self.ctx.framebuffer(
+            color_attachments=[self.color_attachment])
         self.quad_fs = geometry.quad_2d_fs()
-        self.mini_map_quad = geometry.quad_2d(size=(0.4, 0.4), pos=(0.75, 0.75))
+        self.mini_map_quad = geometry.quad_2d(
+            size=(0.4, 0.4), pos=(0.75, 0.75))
 
         # Sprite lists
         self.player_list = arcade.SpriteList()
@@ -148,7 +151,8 @@ class MyGame(arcade.Window):
         self.coin_list.update()
 
         # Generate a list of all sprites that collided with the player.
-        coins_hit_list = arcade.check_for_collision_with_list(self.player_sprite, self.coin_list)
+        coins_hit_list = arcade.check_for_collision_with_list(
+            self.player_sprite, self.coin_list)
 
         # Loop through each colliding sprite, remove it, and add to the score.
         for coin in coins_hit_list:

@@ -108,7 +108,7 @@ class ActorPlacement:
                     monster.center_y = cy
                     print(monster.center_x)
 
-                    # actor_sprites.append(monster)
+                    actor_sprites.append(monster)
 
         return actor_sprites
 

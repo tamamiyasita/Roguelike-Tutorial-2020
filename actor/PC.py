@@ -11,7 +11,7 @@ class Player(Actor):
         fighter_component = Fighter(hp=35, defense=3, power=4, level=1)
         equip_component = Equipment()
         super().__init__(
-            scale=0.5,
+            # scale=0.5,
             name="player",
             x=x,
             y=y,

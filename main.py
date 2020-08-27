@@ -31,6 +31,8 @@ class MG(arcade.Window):
         self.player_direction = None
         self.grid_select = [0, 0]
         self.mouse_position = None
+        self.viewports = None
+        self.grid_press = None
         self.viewport_left = 0
         self.viewport_bottom = 0
 
@@ -56,19 +58,19 @@ class MG(arcade.Window):
         self.mini_map_quad = geometry.quad_2d(
             size=(0.5792, 0.97), pos=(0.949, 1.022))
 
-        self.minimap = MinimapPoints(self.engine)
+        # self.minimap = MinimapPoints(self.engine)
 
-        # self.test_sprites = arcade.SpriteList(use_spatial_hash=True)
+        self.select_UI = SelectUI(engine=self.engine)
 
     def draw_sprites(self):
         """ 全てのスプライトリストをここで描画する """
         self.engine.cur_level.map_sprites.draw()
-        # self.engine.cur_level.map_obj_sprites.draw(filter=gl.GL_LO_BIAS_NV)
-        # self.engine.cur_level.item_sprites.draw(filter=gl.GL_LO_BIAS_NV)
-        # self.engine.cur_level.actor_sprites.draw(filter=gl.GL_NEAREST)
+        self.engine.cur_level.map_obj_sprites.draw(filter=gl.GL_LO_BIAS_NV)
+        self.engine.cur_level.item_sprites.draw(filter=gl.GL_LO_BIAS_NV)
+        self.engine.cur_level.actor_sprites.draw(filter=gl.GL_NEAREST)
         self.engine.cur_level.chara_sprites.draw(filter=gl.GL_NEAREST)
-        # self.engine.cur_level.effect_sprites.draw()
-        # self.engine.cur_level.equip_sprites.draw(filter=gl.GL_NEAREST)
+        self.engine.cur_level.effect_sprites.draw()
+        self.engine.cur_level.equip_sprites.draw(filter=gl.GL_NEAREST)
 
     def on_draw(self):
 
@@ -80,7 +82,6 @@ class MG(arcade.Window):
 
             arcade.set_viewport(0, GAME_GROUND_WIDTH, 0, GAME_GROUND_HEIGHT)
 
-            # self.minimap.draw()
             self.engine.cur_level.map_point_sprites.draw()
             arcade.draw_rectangle_filled(center_x=self.engine.player.center_x,
                                          center_y=self.engine.player.center_y, width=64, height=64, color=arcade.color.WHITE)
@@ -109,11 +110,8 @@ class MG(arcade.Window):
             self.grid_select = [0, 0]
         # アイテム使用時マウス位置にグリッド表示
         elif self.engine.game_state == GAME_STATE.SELECT_LOCATION:
-
-            select_UI = SelectUI(engine=self.engine, viewports=self.viewports, sprite_list=[
-                self.engine.cur_level.actor_sprites, self.engine.cur_level.item_sprites],
-                grid_select=self.grid_select, grid_press=self.grid_press)
-            select_UI.draw_in_select_ui()
+            self.select_UI.draw_in_select_ui(
+                arcade.get_viewport(), self.grid_press, self.grid_select)
 
         # Character_Screen表示
         elif self.engine.game_state == GAME_STATE.CHARACTER_SCREEN:
@@ -156,8 +154,8 @@ class MG(arcade.Window):
                 self.engine.player.equipment.update(
                     self.engine.cur_level.equip_sprites)
 
-            # if self.engine.player.state == state.TURN_END:
-            #     self.minimap.update()
+        if self.engine.game_state == GAME_STATE.SELECT_LOCATION:
+            self.select_UI.update()
 
     def on_key_press(self, key, modifiers):
         if key == arcade.key.BACKSPACE:

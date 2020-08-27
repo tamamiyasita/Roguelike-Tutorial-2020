@@ -7,7 +7,7 @@ from arcade.key import ESCAPE
 TITLE = "Roguelike tutorial 2020"
 
 SPRITE_SIZE = 32
-SPRITE_SCALE = 1
+SPRITE_SCALE = 2
 
 GRID_SIZE = SPRITE_SIZE * SPRITE_SCALE
 
