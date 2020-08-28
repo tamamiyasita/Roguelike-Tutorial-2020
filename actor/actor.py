@@ -71,6 +71,7 @@ class Actor(arcade.Sprite):
                 self.item = item
                 self.item.owner = self
 
+
     def get_dict(self):
         result = {}
         result["texture_number"] = self.texture_number
@@ -223,7 +224,7 @@ class Actor(arcade.Sprite):
             destination_x, destination_y, actor_sprites)
 
         if blocking_actor and not target:
-            # playerの移動チェック
+            # playerの攻撃チェック
             actor = blocking_actor[0]
             if not actor.is_dead:
                 attack_results = self.fighter.attack(actor)
@@ -239,7 +240,7 @@ class Actor(arcade.Sprite):
                 return attack_results
 
         elif target and self.distance_to(target) <= 1.46:
-            # monsterの移動チェック
+            # monsterの攻撃チェック
             attack_results = self.fighter.attack(target)
             if attack_results:
                 self.state = state.ATTACK
@@ -249,6 +250,7 @@ class Actor(arcade.Sprite):
             return attack_results
 
         elif not get_blocking_entity(destination_x, destination_y, actor_sprites) and self.booking_tile.blocks == False:
+            # playerとmonsterの移動
             self.state = state.ON_MOVE
             self.change_y = self.dy * (MOVE_SPEED+ai_move_speed)
             self.change_x = self.dx * (MOVE_SPEED+ai_move_speed)
@@ -292,6 +294,8 @@ class Actor(arcade.Sprite):
             self.wait = self.speed
 
         if self.state == state.ATTACK:
+            # bullet = arcade.SpriteList()
+            
             if abs(self.target_x - self.center_x) >= step and self.dx:
                 self.change_x = 0
                 self.center_x = self.target_x

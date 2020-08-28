@@ -17,7 +17,6 @@ from ui.character_screen_ui import CharacterScreen
 
 from util import pixel_to_grid
 from viewport import viewport
-from mini_map_points import MinimapPoints
 
 # log = logging.getLogger("__main__")
 
@@ -58,7 +57,6 @@ class MG(arcade.Window):
         self.mini_map_quad = geometry.quad_2d(
             size=(0.5792, 0.97), pos=(0.949, 1.022))
 
-        # self.minimap = MinimapPoints(self.engine)
 
         self.select_UI = SelectUI(engine=self.engine)
 
@@ -92,6 +90,7 @@ class MG(arcade.Window):
 
         self.use()
         # TODOビューポートの適切な動作を考える
+
         viewport(self.engine.player)
         # ビューポートの左と下の現在位置を変数に入れる、これはステータスパネルを画面に固定する為に使います
         self.viewports = arcade.get_viewport()
