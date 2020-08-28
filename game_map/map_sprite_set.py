@@ -106,9 +106,8 @@ class ActorPlacement:
                     cx, cy = grid_to_pixel(x, y)
                     monster.center_x = cx
                     monster.center_y = cy
-                    print(monster.center_x)
 
-                    actor_sprites.append(monster)
+                    # actor_sprites.append(monster)
 
         return actor_sprites
 
@@ -119,8 +118,9 @@ class ActorPlacement:
             use_spatial_hash=True, spatial_hash_cell_size=32)
         for x in range(self.width):
             for y in range(self.height):
-                if type(self.item_tiles[x][y]) == int:
+                if type(self.item_tiles[x][y]) is int:
                     item = get_random_items_by_challenge(self.item_tiles[x][y])
+
                     item.x = x
                     item.y = y
                     cx, cy = grid_to_pixel(x, y)
@@ -133,12 +133,13 @@ class ActorPlacement:
 
     def items_point_set(self):
         items_point_sprites = arcade.SpriteList(
-            use_spatial_hash=True, spatial_hash_cell_size=32)
+            use_spatial_hash=False, spatial_hash_cell_size=32)
         for x in range(self.width):
             for y in range(self.height):
-                if type(self.item_tiles[x][y]) == int:
-                    item = Actor(name="items_point", scale=1, x=x, y=y,
-                                 color=COLORS["black"], visible_color=COLORS["light_ground"], not_visible_color=COLORS["light_ground"])
+                if type(self.item_tiles[x][y]) is int:
+
+                    item = Actor(name="items_point", scale=1.2, x=x, y=y,
+                                 color=COLORS["white"], visible_color=COLORS["light_ground"], not_visible_color=COLORS["light_ground"])
                     item.x = x
                     item.y = y
                     cx, cy = grid_to_pixel(x, y)

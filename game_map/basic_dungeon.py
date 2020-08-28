@@ -148,8 +148,8 @@ class BasicDungeon:
                 self.actor_tiles[x][y] = challenge_level
 
         if dungeon_level == 1:
-            combos = [[], [1], [1], [1], []]
-        if dungeon_level == 2:
+            combos = [[2]]
+        elif dungeon_level == 2:
             combos = [[], [1], [], [2], [1]]
         else:
             combos = [[], [1], [2], [1], [1]]

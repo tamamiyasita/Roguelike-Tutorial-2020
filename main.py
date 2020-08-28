@@ -37,7 +37,7 @@ class MG(arcade.Window):
 
     def setup(self):
         self.engine.setup()
-        viewport(self.engine.player)
+        viewport(self.engine.player.center_x, self.engine.player.center_y)
         self.character_screen = CharacterScreen(self.engine.player)
 
         """minimap"""
@@ -64,7 +64,7 @@ class MG(arcade.Window):
         """ 全てのスプライトリストをここで描画する """
         self.engine.cur_level.map_sprites.draw()
         self.engine.cur_level.map_obj_sprites.draw(filter=gl.GL_LO_BIAS_NV)
-        self.engine.cur_level.item_sprites.draw(filter=gl.GL_LO_BIAS_NV)
+        self.engine.cur_level.item_sprites.draw(filter=gl.GL_NEAREST)
         self.engine.cur_level.actor_sprites.draw(filter=gl.GL_NEAREST)
         self.engine.cur_level.chara_sprites.draw(filter=gl.GL_NEAREST)
         self.engine.cur_level.effect_sprites.draw()
@@ -82,16 +82,17 @@ class MG(arcade.Window):
 
             self.engine.cur_level.map_point_sprites.draw()
             arcade.draw_rectangle_filled(center_x=self.engine.player.center_x,
-                                         center_y=self.engine.player.center_y, width=64, height=64, color=arcade.color.WHITE)
+                                         center_y=self.engine.player.center_y, width=50, height=50, color=arcade.color.BLUE)
 
-            # self.engine.cur_level.map_sprites.draw(filter=gl.GL_NEAREST)
             self.engine.cur_level.item_point_sprites.draw()
-            # self.engine.cur_level.chara_sprites.draw()
 
         self.use()
         # TODOビューポートの適切な動作を考える
+        if self.engine.player.state == state.ATTACK:
+            viewport(self.engine.player.target_x, self.engine.player.target_y)
 
-        viewport(self.engine.player)
+        else:
+            viewport(self.engine.player.center_x, self.engine.player.center_y)
         # ビューポートの左と下の現在位置を変数に入れる、これはステータスパネルを画面に固定する為に使います
         self.viewports = arcade.get_viewport()
         self.viewport_left = self.viewports[0]

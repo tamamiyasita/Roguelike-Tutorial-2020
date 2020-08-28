@@ -60,6 +60,8 @@ class TurnLoop:
             if self.actor.state is state.TURN_END or self.actor.state is None or self.actor.is_dead:
                 self.turn = Turn.ON
 
+            
+
     def loop_c(self):
         # self.sprites = None
         self.turn = Turn.ON

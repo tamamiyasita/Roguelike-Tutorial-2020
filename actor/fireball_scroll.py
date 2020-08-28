@@ -1,5 +1,3 @@
-import math
-
 from constants import *
 from data import *
 from actor.item import Item

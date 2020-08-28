@@ -39,13 +39,13 @@ def get_random_monster_by_challenge(challenge):
         return m1
 
 
-item_list = [
-    HealingPotion(), ShortSword(), SmallShield(), LongSword(), LightningScroll(),
-    FireballScroll(), ConfusionScroll()
-]
 
 
 def get_random_items_by_challenge(challenge):
+    item_list = [
+        HealingPotion(), ShortSword(), SmallShield(), LongSword(), LightningScroll(),
+        FireballScroll(), ConfusionScroll()
+    ]
     if challenge:
         filtered_items = [
             item for item in item_list if item.challenge() == challenge]
