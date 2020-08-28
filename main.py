@@ -78,7 +78,7 @@ class MG(arcade.Window):
             self.offscreen.use()
             self.offscreen.clear(arcade.color.BLACK)
 
-            arcade.set_viewport(0, GAME_GROUND_WIDTH, 0, GAME_GROUND_HEIGHT)
+            arcade.set_viewport(0, GAME_GROUND_WIDTH, 0, GAME_GROUND_HEIGHT+GRID_SIZE*2)
 
             self.engine.cur_level.map_point_sprites.draw()
             arcade.draw_rectangle_filled(center_x=self.engine.player.center_x,

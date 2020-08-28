@@ -107,7 +107,7 @@ class ActorPlacement:
                     monster.center_x = cx
                     monster.center_y = cy
 
-                    # actor_sprites.append(monster)
+                    actor_sprites.append(monster)
 
         return actor_sprites
 
@@ -139,7 +139,7 @@ class ActorPlacement:
                 if type(self.item_tiles[x][y]) is int:
 
                     item = Actor(name="items_point", scale=1.2, x=x, y=y,
-                                 color=COLORS["white"], visible_color=COLORS["light_ground"], not_visible_color=COLORS["light_ground"])
+                                 color=COLORS["black"], visible_color=COLORS["light_ground"], not_visible_color=COLORS["light_ground"])
                     item.x = x
                     item.y = y
                     cx, cy = grid_to_pixel(x, y)

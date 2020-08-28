@@ -45,9 +45,9 @@ class TurnLoop:
         if self.turn == Turn.OFF:
 
             if self.actor == self.player:
-                engine.fov_recompute = True
                 self.player.state = state.READY
                 self.turn = Turn.DELAY
+                engine.fov_recompute = True
             else:
                 result = self.actor.ai.take_turn(self.player, engine)
                 if result:

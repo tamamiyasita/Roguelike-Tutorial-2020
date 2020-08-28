@@ -1,4 +1,4 @@
-from arcade.key import C
+from arcade import particle
 from actor.ai import Basicmonster, ConfusedMonster
 import arcade
 import math
@@ -7,6 +7,7 @@ from constants import *
 from data import *
 from util import pixel_to_grid, grid_to_pixel, get_blocking_entity, get_door
 from actor.item import Item
+from particle import AttackParticle, PARTICLE_COUNT
 
 
 class Actor(arcade.Sprite):
@@ -179,13 +180,15 @@ class Actor(arcade.Sprite):
             self.fighter.restore_from_dict(result["fighter"])
 
     def move(self, dxy, target=None, engine=None):
+        self.attack_delay = 7
         map_sprites = engine.cur_level.map_sprites
         map_obj_sprites = engine.cur_level.map_obj_sprites
         actor_sprites = engine.cur_level.actor_sprites
+        self.effect_sprites = engine.cur_level.effect_sprites
 
-        ai_move_speed = 0
+        ai_move_speed = 5
         if self.ai:
-            ai_move_speed = MOVE_SPEED*1.4
+            ai_move_speed = MOVE_SPEED*2
         self.dx, self.dy = dxy
 
         if self.dx == -1:
@@ -262,31 +265,29 @@ class Actor(arcade.Sprite):
 
     def update(self, delta_time=1/60):
         super().update()
-        grid = SPRITE_SCALE * SPRITE_SIZE
-        step = SPRITE_SCALE * SPRITE_SIZE // 2
         if self.state == state.ON_MOVE:
-            if abs(self.target_x - self.center_x) >= grid and self.dx:
+            if abs(self.target_x - self.center_x) >= GRID_SIZE and self.dx:
                 self.change_x = 0
                 if self.dx == 1:
-                    self.center_x = self.target_x + grid
+                    self.center_x = self.target_x + GRID_SIZE
                     self.x += self.dx
                     self.booking_tile.blocks = False
                     # self.state = state.TURN_END
                 if self.dx == -1:
-                    self.center_x = self.target_x - grid
+                    self.center_x = self.target_x - GRID_SIZE
                     self.x += self.dx
                     self.booking_tile.blocks = False
                 self.state = state.TURN_END
 
-            if abs(self.target_y - self.center_y) >= grid and self.dy:
+            if abs(self.target_y - self.center_y) >= GRID_SIZE and self.dy:
                 self.change_y = 0
                 if self.dy == 1:
-                    self.center_y = self.target_y + grid
+                    self.center_y = self.target_y + GRID_SIZE
                     self.y += self.dy
                     self.booking_tile.blocks = False
                     # self.state = state.TURN_END
                 if self.dy == -1:
-                    self.center_y = self.target_y - grid
+                    self.center_y = self.target_y - GRID_SIZE
                     self.y += self.dy
                     self.booking_tile.blocks = False
                 self.state = state.TURN_END
@@ -294,17 +295,40 @@ class Actor(arcade.Sprite):
             self.wait = self.speed
 
         if self.state == state.ATTACK:
-            # bullet = arcade.SpriteList()
+            self.attack()
             
-            if abs(self.target_x - self.center_x) >= step and self.dx:
-                self.change_x = 0
-                self.center_x = self.target_x
-                self.state = state.TURN_END
-            if abs(self.target_y - self.center_y) >= step and self.dy:
-                self.change_y = 0
+
+    def attack(self):
+        step = GRID_SIZE // 1.5
+
+
+        if abs(self.target_x - self.center_x) >= step and self.dx:
+            self.change_x = 0
+                # self.state = state.TURN_END
+        if abs(self.target_y - self.center_y) >= step and self.dy:
+            self.change_y = 0
+            # self.attack_delay -= 1
+            # if 0 > self.attack_delay:
+            #     self.state = state.TURN_END
+        if self.attack_delay == 6:
+            for i in range(PARTICLE_COUNT):
+                particle = AttackParticle()
+                particle.position = self.position
+                self.effect_sprites.append(particle)
+
+        if self.change_x == 0 and self.change_y == 0 and self.state != state.TURN_END:
+            self.attack_delay -= 1
+
+
+
+
+            if 0 > self.attack_delay:
                 self.center_y = self.target_y
+                self.center_x = self.target_x
+                self.change_x, self.change_y = 0, 0
                 self.state = state.TURN_END
 
+        if self.state == state.TURN_END:
             self.wait = self.fighter.attack_speed
 
     def distance_to(self, other):

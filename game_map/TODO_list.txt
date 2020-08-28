@@ -1,7 +1,7 @@
 １(困難)　～　５(易しい)
 
-TODO ３　アタックの仕様変更
 TODO ３　arcadeのﾊﾟｰﾃｨｸﾙ効果を試したい　
+TODO ３　投擲システム
 TODO １　タウンマップ
 TODO ２　スキルシステム
 TODO ２　NPC
