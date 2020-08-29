@@ -80,7 +80,7 @@ class GameEngine:
         game_level.equip_sprites = arcade.SpriteList(
             use_spatial_hash=True, spatial_hash_cell_size=32)
         game_level.effect_sprites = arcade.SpriteList(
-            use_spatial_hash=True, spatial_hash_cell_size=16)
+            use_spatial_hash=True, spatial_hash_cell_size=32)
         game_level.chara_sprites = arcade.SpriteList(
             use_spatial_hash=True, spatial_hash_cell_size=32)
 

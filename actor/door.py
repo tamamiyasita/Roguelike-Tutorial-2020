@@ -7,7 +7,6 @@ class Door(Actor):
         super().__init__(
             texture_number=0,
             name="door",
-            scale=4,
             x=x,
             y=y,
             color=COLORS.get("black"),

@@ -10,7 +10,6 @@ class Wall(Actor):
             name="wall_3",
             x=x,
             y=y,
-            scale=4,
             blocks=True,
             block_sight = True,
             color=COLORS.get("black"),
