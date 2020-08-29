@@ -2,9 +2,9 @@ import arcade
 import random
 import math
 
-PARTICLE_FADE_RATE = 15
+PARTICLE_FADE_RATE = 17
 
-PARTICLE_MIN_SPEED = 5.5
+PARTICLE_MIN_SPEED = 3.5
 PARTICLE_SPEED_RANGE = 2.5
 
 PARTICLE_COUNT = 7
@@ -16,7 +16,9 @@ PARTICLE_COLORS =[
     arcade.color.WHITE,
     arcade.color.LAVA,
     arcade.color.ORANGE_RED,
-    arcade.color.DARK_TANGERINE
+    arcade.color.DARK_TANGERINE,
+    arcade.color.BABY_BLUE,
+    arcade.color.ALMOND
 ]
 
 PARTICLE_SPARKLE_CHANCE = 0.02

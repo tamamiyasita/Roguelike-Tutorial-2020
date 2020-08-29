@@ -299,7 +299,7 @@ class Actor(arcade.Sprite):
             
 
     def attack(self):
-        step = GRID_SIZE // 1.5
+        step = GRID_SIZE // 2.5
 
 
         if abs(self.target_x - self.center_x) >= step and self.dx:
@@ -313,7 +313,7 @@ class Actor(arcade.Sprite):
         if self.attack_delay == 6:
             for i in range(PARTICLE_COUNT):
                 particle = AttackParticle()
-                particle.position = self.position
+                particle.position = (self.center_x + (self.dx*20), self.center_y + (self.dy*20))
                 self.effect_sprites.append(particle)
 
         if self.change_x == 0 and self.change_y == 0 and self.state != state.TURN_END:

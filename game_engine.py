@@ -90,7 +90,7 @@ class GameEngine:
             self.game_map.player_position[0], self.game_map.player_position[1], inventory=Inventory(capacity=5))
         level.chara_sprites.append(self.player)
 
-        # test_items
+        # テスト用エンティティ
         self.long_sword = LongSword(self.player.x, self.player.y + 1)
         level.item_sprites.append(self.long_sword)
         self.short_sword = ShortSword(self.player.x+1, self.player.y + 1)

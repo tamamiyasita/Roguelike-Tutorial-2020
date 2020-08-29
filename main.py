@@ -54,6 +54,9 @@ class MG(arcade.Window):
         # 必要な色を添付したフレームバッファを作成する
         self.offscreen = self.ctx.framebuffer(
             color_attachments=[self.color_attachment])
+
+        self.quad_fs = geometry.quad_2d_fs()
+
         self.mini_map_quad = geometry.quad_2d(
             size=(0.5792, 0.97), pos=(0.949, 1.022))
 
@@ -62,6 +65,7 @@ class MG(arcade.Window):
 
     def draw_sprites(self):
         """ 全てのスプライトリストをここで描画する """
+        arcade.draw_rectangle_filled(-1000, -1000, 10000,10000,color=arcade.color.BLACK)
         self.engine.cur_level.map_sprites.draw()
         self.engine.cur_level.map_obj_sprites.draw(filter=gl.GL_LO_BIAS_NV)
         self.engine.cur_level.item_sprites.draw(filter=gl.GL_NEAREST)
@@ -87,10 +91,12 @@ class MG(arcade.Window):
             self.engine.cur_level.item_point_sprites.draw()
 
         self.use()
-        # TODOビューポートの適切な動作を考える
+        self.color_attachment.use(0)
+        self.quad_fs.render(self.program)
+
+        # アタック時はビューポート固定する
         if self.engine.player.state == state.ATTACK:
             viewport(self.engine.player.target_x, self.engine.player.target_y)
-
         else:
             viewport(self.engine.player.center_x, self.engine.player.center_y)
         # ビューポートの左と下の現在位置を変数に入れる、これはステータスパネルを画面に固定する為に使います
@@ -98,6 +104,7 @@ class MG(arcade.Window):
         self.viewport_left = self.viewports[0]
         self.viewport_bottom = self.viewports[2]
         self.draw_sprites()
+        arcade.set_background_color(arcade.color.BLACK)
 
         # ノーマルステート時の画面表示
         if self.engine.game_state == GAME_STATE.NORMAL or self.engine.game_state == GAME_STATE.DELAY_WINDOW:

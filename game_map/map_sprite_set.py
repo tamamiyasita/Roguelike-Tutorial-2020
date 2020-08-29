@@ -69,7 +69,7 @@ class ActorPlacement:
 
                 elif self.tiles[x][y] == TILE.WALL:
                     point = Actor(name="wall_point", scale=2, x=x, y=y,
-                                  color=COLORS["black"], visible_color=COLORS["light_ground"], not_visible_color=COLORS["light_ground"])
+                                  color=COLORS["white"], visible_color=COLORS["light_ground"], not_visible_color=COLORS["light_ground"])
                     map_point_sprites.append(point)
 
         return map_point_sprites
