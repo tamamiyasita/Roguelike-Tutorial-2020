@@ -58,7 +58,7 @@ class GameEngine:
     def setup_level(self, level_number):
 
         map_width, map_height = MAP_WIDTH, MAP_HEIGHT
-        level = GameLevel()
+        game_level = GameLevel()
 
         self.game_map = BasicDungeon(map_width, map_height, level_number)
 
@@ -71,43 +71,43 @@ class GameEngine:
         items_point_sprite = ActorPlacement(
             self.game_map, self).items_point_set()
 
-        level.map_sprites = mapsprite
-        level.map_point_sprites = map_point_sprite
-        level.map_obj_sprites = map_obj_sprite
-        level.actor_sprites = actorsprite
-        level.item_sprites = itemsprite
-        level.item_point_sprites = items_point_sprite
-        level.equip_sprites = arcade.SpriteList(
+        game_level.map_sprites = mapsprite
+        game_level.map_point_sprites = map_point_sprite
+        game_level.map_obj_sprites = map_obj_sprite
+        game_level.actor_sprites = actorsprite
+        game_level.item_sprites = itemsprite
+        game_level.item_point_sprites = items_point_sprite
+        game_level.equip_sprites = arcade.SpriteList(
             use_spatial_hash=True, spatial_hash_cell_size=32)
-        level.effect_sprites = arcade.SpriteList(
+        game_level.effect_sprites = arcade.SpriteList(
             use_spatial_hash=True, spatial_hash_cell_size=16)
-        level.chara_sprites = arcade.SpriteList(
+        game_level.chara_sprites = arcade.SpriteList(
             use_spatial_hash=True, spatial_hash_cell_size=32)
 
-        level.level = level_number
+        game_level.level = level_number
 
         self.player = Player(
             self.game_map.player_position[0], self.game_map.player_position[1], inventory=Inventory(capacity=5))
-        level.chara_sprites.append(self.player)
+        game_level.chara_sprites.append(self.player)
 
         # テスト用エンティティ
         self.long_sword = LongSword(self.player.x, self.player.y + 1)
-        level.item_sprites.append(self.long_sword)
+        game_level.item_sprites.append(self.long_sword)
         self.short_sword = ShortSword(self.player.x+1, self.player.y + 1)
-        level.item_sprites.append(self.short_sword)
+        game_level.item_sprites.append(self.short_sword)
 
         self.small_shield = SmallShield(self.player.x + 2, self.player.y+1)
-        level.item_sprites.append(self.small_shield)
+        game_level.item_sprites.append(self.small_shield)
 
         self.cnf = ConfusionScroll(self.player.x + 1, self.player.y)
-        level.item_sprites.append(self.cnf)
+        game_level.item_sprites.append(self.cnf)
 
         self.fb = FireballScroll(self.player.x + 1, self.player.y)
-        level.item_sprites.append(self.fb)
+        game_level.item_sprites.append(self.fb)
 
         self.fov_recompute = True
 
-        return level
+        return game_level
 
     def setup(self):
 
