@@ -202,6 +202,9 @@ class Actor(arcade.Sprite):
         self.target_x = self.center_x
         self.target_y = self.center_y
 
+        # 行先のfloorオブジェクトを変数booking_tileに入れる
+        self.booking_tile = arcade.get_sprites_at_exact_point(
+            grid_to_pixel(destination_x, destination_y), map_sprites)[0]
 
         # ドアのチェック
         door_actor = get_door(destination_x, destination_y, map_obj_sprites)
@@ -249,7 +252,7 @@ class Actor(arcade.Sprite):
 
             return attack_results
 
-        elif not get_blocking_entity(destination_x, destination_y, actor_sprites):
+        elif not get_blocking_entity(destination_x, destination_y, actor_sprites) and self.booking_tile.blocks == False:
             # playerとmonsterの移動
             self.state = state.ON_MOVE
             self.change_y = self.dy * (MOVE_SPEED+ai_move_speed)
