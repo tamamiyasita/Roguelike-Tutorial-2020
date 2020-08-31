@@ -12,7 +12,10 @@ class HealingPotion(Actor):
             name="healing_potion",
             not_visible_color=COLORS["black"],
 
-            item=Item())
+            item=Item()
+            )
+        self.category = {ItemType.used}
+
 
     def use(self, game_engine):
         game_engine.player.fighter.hp += 5

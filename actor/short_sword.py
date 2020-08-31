@@ -14,6 +14,8 @@ class ShortSword(Actor):
             scale=1.4,
             equippable=equippable_component
         )
+        self.category = {ItemType.equip}
+
 
         # self._master = None
 

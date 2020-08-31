@@ -46,7 +46,10 @@ class ConfusionScroll(Actor):
             name="confusion_scroll",
             not_visible_color=COLORS["black"],
 
-            item=Item())
+            item=Item()
+            )
+        self.category = {ItemType.used}
+
 
     def use(self, game_engine):
         print("use")

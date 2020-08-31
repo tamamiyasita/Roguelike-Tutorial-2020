@@ -37,6 +37,7 @@ class FireballScroll(Actor):
 
             item=Item()
         )
+        self.category = {ItemType.used}
 
     def use(self, game_engine):
         print("use")

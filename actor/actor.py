@@ -202,9 +202,6 @@ class Actor(arcade.Sprite):
         self.target_x = self.center_x
         self.target_y = self.center_y
 
-        # 行先のfloorオブジェクトを変数booking_tileに入れる
-        self.booking_tile = arcade.get_sprites_at_exact_point(
-            grid_to_pixel(destination_x, destination_y), map_sprites)[0]
 
         # ドアのチェック
         door_actor = get_door(destination_x, destination_y, map_obj_sprites)
@@ -252,7 +249,7 @@ class Actor(arcade.Sprite):
 
             return attack_results
 
-        elif not get_blocking_entity(destination_x, destination_y, actor_sprites) and self.booking_tile.blocks == False:
+        elif not get_blocking_entity(destination_x, destination_y, actor_sprites):
             # playerとmonsterの移動
             self.state = state.ON_MOVE
             self.change_y = self.dy * (MOVE_SPEED+ai_move_speed)
@@ -271,12 +268,10 @@ class Actor(arcade.Sprite):
                 if self.dx == 1:
                     self.center_x = self.target_x + GRID_SIZE
                     self.x += self.dx
-                    self.booking_tile.blocks = False
                     # self.state = state.TURN_END
                 if self.dx == -1:
                     self.center_x = self.target_x - GRID_SIZE
                     self.x += self.dx
-                    self.booking_tile.blocks = False
                 self.state = state.TURN_END
 
             if abs(self.target_y - self.center_y) >= GRID_SIZE and self.dy:
@@ -284,12 +279,10 @@ class Actor(arcade.Sprite):
                 if self.dy == 1:
                     self.center_y = self.target_y + GRID_SIZE
                     self.y += self.dy
-                    self.booking_tile.blocks = False
                     # self.state = state.TURN_END
                 if self.dy == -1:
                     self.center_y = self.target_y - GRID_SIZE
                     self.y += self.dy
-                    self.booking_tile.blocks = False
                 self.state = state.TURN_END
 
             self.wait = self.speed

@@ -303,7 +303,7 @@ class GameEngine:
                 item_number = self.selected_item
                 if item_number is not None:
                     item = self.player.inventory.get_item_number(item_number)
-                    if item:
+                    if item and ItemType.used in item.category:
                         results = item.use(self)
                         if results:
                             new_action_queue.extend(results)
@@ -312,11 +312,11 @@ class GameEngine:
             if "equip_item" in action:
                 item_number = self.selected_item
                 if item_number is not None:
-                    equip_item = self.player.inventory.get_item_number(
+                    item = self.player.inventory.get_item_number(
                         item_number)
-                    if equip_item and equip_item.equippable:
+                    if item and ItemType.equip in item.category:
                         results = self.player.equipment.toggle_equip(
-                            equip_item, self.cur_level.equip_sprites)
+                            item, self.cur_level.equip_sprites)
                         new_action_queue.extend(results)
 
             if "pickup" in action:

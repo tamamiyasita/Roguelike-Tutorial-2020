@@ -14,6 +14,8 @@ class SmallShield(Actor):
             scale=1.75,
             equippable=equippable_component
         )
+        self.category = {ItemType.equip}
+
 
         self.item_margin_x = -5.5*SPRITE_SCALE
         self.item_margin_y = 4*SPRITE_SCALE

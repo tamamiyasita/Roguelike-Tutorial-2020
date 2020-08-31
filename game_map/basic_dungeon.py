@@ -51,6 +51,8 @@ class BasicDungeon:
 
         self.player_position = 0
         self.make_map(dungeon_level)
+        self.door_remove()
+
 
     def make_map(self, dungeon_level):
 
@@ -101,6 +103,16 @@ class BasicDungeon:
                 )
 
         self.tiles[last_room_center_x][last_room_center_y] = TILE.STAIRS_DOWN
+
+    def door_remove(self):
+        for y in range(len(self.tiles[0])):
+            for x in range(len(self.tiles)):
+                if self.tiles[x][y] == TILE.DOOR:
+                    if self.tiles[x+1][y] == TILE.EMPTY and self.tiles[x-1][y] == TILE.EMPTY and self.tiles[x][y+1] == TILE.EMPTY or\
+                       self.tiles[x+1][y] == TILE.EMPTY and self.tiles[x-1][y] == TILE.EMPTY and self.tiles[x][y-1] == TILE.EMPTY or\
+                       self.tiles[x+1][y] == TILE.EMPTY and self.tiles[x][y+1] == TILE.EMPTY and self.tiles[x][y-1] == TILE.EMPTY or\
+                       self.tiles[x-1][y] == TILE.EMPTY and self.tiles[x][y+1] == TILE.EMPTY and self.tiles[x][y-1] == TILE.EMPTY:
+                       self.tiles[x][y] = TILE.EMPTY
 
     def create_room(self, room):
         for x in range(room.x1 + 1, room.x2):

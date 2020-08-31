@@ -38,22 +38,22 @@ troll_right = arcade.load_texture(
 troll = [troll_right, troll_left]
 #######
 
-# short wepponテクスチャ生成
-short_weppon_tiles = (r"image/ShortWep.png")
+# short weaponテクスチャ生成
+short_weapon_tiles = (r"image/ShortWep.png")
 
 short_sword_left = arcade.load_texture(
-    short_weppon_tiles, x=0, y=0, width=size, height=size)
+    short_weapon_tiles, x=0, y=0, width=size, height=size)
 short_sword_right = arcade.load_texture(
-    short_weppon_tiles, x=0, y=0, width=size, height=size, mirrored=True)
+    short_weapon_tiles, x=0, y=0, width=size, height=size, mirrored=True)
 short_sword = [short_sword_right, short_sword_left]
 ######
 
-# mid wepponテクスチャ生成
-med_weppon_tiles = (r"image/MedWep.png")
+# mid weaponテクスチャ生成
+med_weapon_tiles = (r"image/MedWep.png")
 long_sword_left = arcade.load_texture(
-    med_weppon_tiles, x=0, y=0, width=size, height=size)
+    med_weapon_tiles, x=0, y=0, width=size, height=size)
 long_sword_right = arcade.load_texture(
-    med_weppon_tiles, x=0, y=0, width=size, height=size, mirrored=True)
+    med_weapon_tiles, x=0, y=0, width=size, height=size, mirrored=True)
 long_sword = [long_sword_right, long_sword_left]
 ###items###
 # healing_potionテクスチャセット生成
@@ -92,7 +92,7 @@ wall_point = arcade.load_texture_pair(r"image/wall_point.png")
 # walls_2_tiles = get_tile_set(walls_2, tile_size=16)
 # wall_2 = {k: walls_2_tiles[v] for k, v in zip(
 #     range(16), [6, 6, 11, 11, 10, 10, 1, 12, 4, 5, 2, 5, 0, 5, 1, 8])}
-walls_3 = (r"image/wall2.png")
+walls_3 = (r"image/wall3.png")
 # walls_3 = (r"t_image/wall3.png")  # test_texture
 walls_3_tiles = get_tile_set(walls_3, tile_size=16)
 

@@ -1,3 +1,7 @@
-class Item:
-    def __init__(self):
-        pass
+from actor.equipment import Equipment
+
+class Item():
+    pass
+
+
+

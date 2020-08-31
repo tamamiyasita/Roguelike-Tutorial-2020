@@ -13,8 +13,7 @@ class LongSword(Actor):
             y=y,
             equippable=equippable_component,
         )
-        
-
+        self.category = {ItemType.equip}
         self.item_margin_x = 9 * SPRITE_SCALE
         self.item_margin_y = 0
 

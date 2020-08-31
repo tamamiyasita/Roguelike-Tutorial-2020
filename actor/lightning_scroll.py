@@ -45,6 +45,8 @@ class LightningScroll(Actor):
 
             item=Item()
         )
+        self.category = {ItemType.used}
+
 
     def use(self, game_engine):
         closest_distance: Optional[float] = None
