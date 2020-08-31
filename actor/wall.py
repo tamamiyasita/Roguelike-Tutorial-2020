@@ -10,6 +10,7 @@ class Wall(Actor):
             name="wall_3",
             x=x,
             y=y,
+            scale=SPRITE_SCALE*2,
             blocks=True,
             block_sight = True,
             color=COLORS.get("black"),

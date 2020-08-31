@@ -21,7 +21,7 @@ class FireballEffect(Actor):
     def update(self):
         self.alpha -= 1
         if self.alpha > 100:
-            self.scale += 0.6
+            self.scale += 0.3*SPRITE_SCALE
             self.angle += 14
         if self.alpha < 120:
             self.effect_sprites.remove(self)
