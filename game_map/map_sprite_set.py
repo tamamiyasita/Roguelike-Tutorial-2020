@@ -105,13 +105,13 @@ class ActorPlacement:
             use_spatial_hash=True, spatial_hash_cell_size=32)
         my_map = arcade.read_tmx("demo\m_test.tmx")
 
-        door = arcade.process_layer(my_map, "door", use_spatial_hash=True, hit_box_algorithm="None")
-        stairs = arcade.process_layer(my_map, "stairs", use_spatial_hash=True, hit_box_algorithm="None")
+        door = arcade.process_layer(my_map, "door",scaling=4, use_spatial_hash=True, hit_box_algorithm="None")
+        stairs = arcade.process_layer(my_map, "stairs",scaling=4, use_spatial_hash=True, hit_box_algorithm="None")
 
         for m in door:
             x, y = pixel_to_grid(m.center_x, m.center_y)
             obj = Door(x=x, y=y)
-            # obj.scale = 2
+            obj.scale = 4
             obj.texture = m.texture
             obj.blocks = True
             tiled_map_obj_sprite.append(obj)
@@ -119,7 +119,7 @@ class ActorPlacement:
         for m in stairs:
             x, y = pixel_to_grid(m.center_x, m.center_y)
             obj = Stairs(x=x, y=y)
-            # obj.scale = 2
+            obj.scale = 4
             obj.texture = m.texture
             obj.blocks = True
             tiled_map_obj_sprite.append(obj)
