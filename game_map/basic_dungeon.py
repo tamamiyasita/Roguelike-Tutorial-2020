@@ -1,8 +1,7 @@
 import arcade
 from random import randint, choice
 
-from game_map.map_sprite_set import ActorPlacement
-from util import pixel_to_grid, grid_to_pixel
+from util import grid_to_pixel
 
 from game_map.door_check import door_check
 from constants import *
@@ -38,7 +37,7 @@ class Rect:
 
 
 class BasicDungeon:
-    def __init__(self, width, height, dungeon_level=1):
+    def __init__(self, width, height, dungeon_level=1, player=None):
         self.width = width
         self.height = height
         self.dungeon_level = dungeon_level
@@ -49,7 +48,7 @@ class BasicDungeon:
         self.item_tiles = [
             [TILE.EMPTY for y in range(height)] for x in range(width)]
 
-        self.player_position = 0
+        self.player = player
         self.make_map(dungeon_level)
         self.door_remove()
 
@@ -79,7 +78,8 @@ class BasicDungeon:
                 (new_x, new_y) = new_room.center()
 
                 if self.num_rooms == 0:
-                    self.player_position = (new_x, new_y)
+                    self.player.x, self.player.y = (new_x, new_y)
+                    self.player.center_x, self.player.center_y = grid_to_pixel(new_x, new_y)
 
                 else:
                     (prev_x, prev_y) = rooms[self.num_rooms - 1].center()

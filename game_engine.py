@@ -5,6 +5,7 @@ from collections import deque
 from constants import *
 from data import *
 from game_map.basic_dungeon import BasicDungeon
+from game_map.town_map import TownMap
 from game_map.map_sprite_set import ActorPlacement
 from recalculate_fov import recalculate_fov
 from viewport import viewport
@@ -27,17 +28,19 @@ from turn_loop import TurnLoop
 class GameLevel:
     """level毎のsprite_listの生成
     """
-
     def __init__(self):
         self.chara_sprites = None
         self.actor_sprites = None
         self.floor_sprites = None
         self.wall_sprites = None
+        self.map_point_sprites = None
         self.item_sprites = None
+        self.item_pointe_sprites = None
         self.equip_sprites = None
         self.effect_sprites = None
         self.map_obj_sprites = None
-        self.level = 1
+
+        self.level = 0
 
 
 class GameEngine:
@@ -58,10 +61,58 @@ class GameEngine:
 
     def setup_level(self, level_number):
 
-        map_width, map_height = MAP_WIDTH, MAP_HEIGHT
-        game_level = GameLevel()
+        self.map_width, self.map_height = MAP_WIDTH, MAP_HEIGHT
+        self.game_level = GameLevel()
+        self.level = level_number
+        if self.level == 0:
+            return self.start_town_init()
+        if self.level >= 1:
+            return self.basic_dungeon_init(self.player)
 
-        self.game_map = BasicDungeon(map_width, map_height, level_number)
+    def start_town_init(self):
+        self.player = Player(
+             inventory=Inventory(capacity=5))
+        # self.town_map = [[TILE.EMPTY for y in range(MAP_HEIGHT)] for x in range(MAP_WIDTH)]
+        self.town_map = TownMap(self.map_width, self.map_height, self.level, self.player)
+        """ スプライトリストの初期化 """
+        floor_sprite = ActorPlacement(self.town_map, self).tiled_floor_set()
+        wall_sprite = ActorPlacement(self.town_map, self).tiled_wall_set()
+        map_point_sprite = ActorPlacement(self.town_map, self).map_point_set()
+        map_obj_sprite = ActorPlacement(self.town_map, self).tiled_map_obj_set()
+        actorsprite = arcade.SpriteList(
+            use_spatial_hash=True, spatial_hash_cell_size=32)
+        itemsprite = arcade.SpriteList(
+            use_spatial_hash=True, spatial_hash_cell_size=32)
+        items_point_sprite = arcade.SpriteList(
+            use_spatial_hash=True, spatial_hash_cell_size=32)
+
+        self.game_level.floor_sprites = floor_sprite
+        self.game_level.wall_sprites = wall_sprite
+        self.game_level.map_point_sprites = map_point_sprite
+        self.game_level.map_obj_sprites = map_obj_sprite
+        self.game_level.actor_sprites = actorsprite
+        self.game_level.item_sprites = itemsprite
+        self.game_level.item_point_sprites = items_point_sprite
+        self.game_level.equip_sprites = arcade.SpriteList(
+            use_spatial_hash=True, spatial_hash_cell_size=32)
+        self.game_level.effect_sprites = arcade.SpriteList(
+            use_spatial_hash=True, spatial_hash_cell_size=32)
+        self.game_level.chara_sprites = arcade.SpriteList(
+            use_spatial_hash=True, spatial_hash_cell_size=32)
+
+        self.game_level.chara_sprites.append(self.player)
+
+        self.short_sword = ShortSword(self.player.x+1, self.player.y + 1)
+        self.game_level.item_sprites.append(self.short_sword)
+
+        self.game_level.level = self.level
+
+        
+        return self.game_level
+
+    def basic_dungeon_init(self, player):
+
+        self.game_map = BasicDungeon(self.map_width, self.map_height, self.level, player)
 
         """ スプライトリストの初期化 """
         floor_sprite = ActorPlacement(self.game_map, self).floor_set()
@@ -73,50 +124,51 @@ class GameEngine:
         items_point_sprite = ActorPlacement(
             self.game_map, self).items_point_set()
 
-        game_level.floor_sprites = floor_sprite
-        game_level.wall_sprites = wall_sprite
-        game_level.map_point_sprites = map_point_sprite
-        game_level.map_obj_sprites = map_obj_sprite
-        game_level.actor_sprites = actorsprite
-        game_level.item_sprites = itemsprite
-        game_level.item_point_sprites = items_point_sprite
-        game_level.equip_sprites = arcade.SpriteList(
+        self.game_level.floor_sprites = floor_sprite
+        self.game_level.wall_sprites = wall_sprite
+        self.game_level.map_point_sprites = map_point_sprite
+        self.game_level.map_obj_sprites = map_obj_sprite
+        self.game_level.actor_sprites = actorsprite
+        self.game_level.item_sprites = itemsprite
+        self.game_level.item_point_sprites = items_point_sprite
+        self.game_level.equip_sprites = arcade.SpriteList(
             use_spatial_hash=True, spatial_hash_cell_size=32)
-        game_level.effect_sprites = arcade.SpriteList(
+        self.game_level.effect_sprites = arcade.SpriteList(
             use_spatial_hash=True, spatial_hash_cell_size=32)
-        game_level.chara_sprites = arcade.SpriteList(
+        self.game_level.chara_sprites = arcade.SpriteList(
             use_spatial_hash=True, spatial_hash_cell_size=32)
+        self.game_level.chara_sprites.append(player)
 
-        game_level.level = level_number
+        self.game_level.level = self.level
 
-        self.player = Player(
-            self.game_map.player_position[0], self.game_map.player_position[1], inventory=Inventory(capacity=5))
-        game_level.chara_sprites.append(self.player)
+        # self.player = Player(
+        #     self.game_map.player_position[0], self.game_map.player_position[1], inventory=Inventory(capacity=5))
+        # self.game_level.chara_sprites.append(self.player)
 
         # テスト用エンティティ
-        self.long_sword = LongSword(self.player.x, self.player.y + 1)
-        game_level.item_sprites.append(self.long_sword)
-        self.short_sword = ShortSword(self.player.x+1, self.player.y + 1)
-        game_level.item_sprites.append(self.short_sword)
+        # self.long_sword = LongSword(self.player.x, self.player.y + 1)
+        # self.game_level.item_sprites.append(self.long_sword)
+        # self.short_sword = ShortSword(self.player.x+1, self.player.y + 1)
+        # self.game_level.item_sprites.append(self.short_sword)
 
-        self.small_shield = SmallShield(self.player.x + 2, self.player.y+1)
-        game_level.item_sprites.append(self.small_shield)
+        # self.small_shield = SmallShield(self.player.x + 2, self.player.y+1)
+        # self.game_level.item_sprites.append(self.small_shield)
 
-        self.cnf = ConfusionScroll(self.player.x + 1, self.player.y)
-        game_level.item_sprites.append(self.cnf)
+        # self.cnf = ConfusionScroll(self.player.x + 1, self.player.y)
+        # self.game_level.item_sprites.append(self.cnf)
 
-        self.fb = FireballScroll(self.player.x + 1, self.player.y)
-        game_level.item_sprites.append(self.fb)
+        # self.fb = FireballScroll(self.player.x + 1, self.player.y)
+        # self.game_level.item_sprites.append(self.fb)
 
         self.fov_recompute = True
 
-        return game_level
+        return self.game_level
 
     def setup(self):
 
         arcade.set_background_color(COLORS["black"])
 
-        self.cur_level = self.setup_level(1)
+        self.cur_level = self.setup_level(level_number=0)
         self.stories.append(self.cur_level)
         self.turn_loop = TurnLoop(self.player)
         self.item_point = ItemPoint(self)

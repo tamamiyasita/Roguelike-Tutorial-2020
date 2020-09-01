@@ -9,6 +9,8 @@ class Door(Actor):
             name="door",
             x=x,
             y=y,
+            scale=SPRITE_SCALE*2,
+
             color=COLORS.get("black"),
             visible_color=COLORS.get("light_wall"),
             not_visible_color=COLORS.get("dark_wall"),

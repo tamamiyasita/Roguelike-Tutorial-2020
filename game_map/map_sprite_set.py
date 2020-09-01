@@ -4,7 +4,7 @@ from actor.stairs import Stairs
 import arcade
 from data import *
 from constants import *
-from util import grid_to_pixel
+from util import grid_to_pixel, pixel_to_grid
 
 from actor.actor import Actor
 from actor.wall import Wall
@@ -61,13 +61,83 @@ class ActorPlacement:
         return wall_sprites
 
 
+    def tiled_floor_set(self):
+        tiled_floor_sprite =  arcade.SpriteList(
+            use_spatial_hash=True, spatial_hash_cell_size=32)
+        my_map = arcade.read_tmx("demo\m_test.tmx")
+
+        floors = arcade.process_layer(my_map, "floor",scaling=4, use_spatial_hash=True, hit_box_algorithm="None")
+
+        for f in floors:
+            x, y = pixel_to_grid(f.center_x, f.center_y)
+            floor = Floor(x=x, y=y)
+            floor.scale = 4
+            floor.texture = f.texture
+            tiled_floor_sprite.append(floor)
+
+
+        return tiled_floor_sprite
+            
+
+
+    def tiled_wall_set(self):
+        tiled_wall_sprite =  arcade.SpriteList(
+            use_spatial_hash=True, spatial_hash_cell_size=32)
+        my_map = arcade.read_tmx("demo\m_test.tmx")
+
+        walls = arcade.process_layer(my_map, "wall",scaling=4, use_spatial_hash=True, hit_box_algorithm="None")
+
+        for w in walls:
+            x, y = pixel_to_grid(w.center_x, w.center_y)
+            wall = Wall(x=x, y=y)
+            wall.scale = 4
+            wall.texture = w.texture
+            wall.blocks = True
+            tiled_wall_sprite.append(wall)
+
+
+
+        return tiled_wall_sprite
+
+
+    def tiled_map_obj_set(self):
+        tiled_map_obj_sprite =  arcade.SpriteList(
+            use_spatial_hash=True, spatial_hash_cell_size=32)
+        my_map = arcade.read_tmx("demo\m_test.tmx")
+
+        door = arcade.process_layer(my_map, "door", use_spatial_hash=True, hit_box_algorithm="None")
+        stairs = arcade.process_layer(my_map, "stairs", use_spatial_hash=True, hit_box_algorithm="None")
+
+        for m in door:
+            x, y = pixel_to_grid(m.center_x, m.center_y)
+            obj = Door(x=x, y=y)
+            # obj.scale = 2
+            obj.texture = m.texture
+            obj.blocks = True
+            tiled_map_obj_sprite.append(obj)
+
+        for m in stairs:
+            x, y = pixel_to_grid(m.center_x, m.center_y)
+            obj = Stairs(x=x, y=y)
+            # obj.scale = 2
+            obj.texture = m.texture
+            obj.blocks = True
+            tiled_map_obj_sprite.append(obj)
+
+
+        return tiled_map_obj_sprite
+
+
+    
+
+
     def map_point_set(self):
         map_point_sprites = arcade.SpriteList(
             use_spatial_hash=True, spatial_hash_cell_size=32)
         for x in range(self.width):
             for y in range(self.height):
                 # == TILE.EMPTY or TILE.STAIRS_DOWN or TILE.DOOR:
-                if self.tiles[x][y] != TILE.WALL:
+                if self.tiles[x][y] != TILE.WALL and self.tiles[x][y] != TILE.STAIRS_DOWN:
 
                     point = Actor(name="floor_point", scale=2, x=x, y=y,
                                   color=COLORS["black"], visible_color=COLORS["light_ground"], not_visible_color=COLORS["light_ground"])
@@ -76,6 +146,11 @@ class ActorPlacement:
                 elif self.tiles[x][y] == TILE.WALL:
                     point = Actor(name="wall_point", scale=2, x=x, y=y,
                                   color=COLORS["white"], visible_color=COLORS["light_ground"], not_visible_color=COLORS["light_ground"])
+                    map_point_sprites.append(point)
+
+                elif self.tiles[x][y] == TILE.STAIRS_DOWN:
+                    point = Actor(name="stairs_down_point", scale=2, x=x, y=y,
+                                  color=COLORS["black"], visible_color=COLORS["light_ground"], not_visible_color=COLORS["light_ground"])
                     map_point_sprites.append(point)
 
         return map_point_sprites

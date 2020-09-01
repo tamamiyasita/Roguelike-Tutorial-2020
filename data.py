@@ -75,15 +75,17 @@ effect1_tile = get_tile_set(effect_img_1, tile_size=16)
 
 items_point = arcade.load_texture_pair(r"image/items_point.png")
 floor_point = arcade.load_texture_pair(r"image/floor_point.png")
+wall_point = arcade.load_texture_pair(r"image/wall_point.png")
+stairs_down_point =  arcade.load_texture_pair(r"image/stairs_down_point.png")
+
 # floor_img = (r"t_image/Tile.png")  # test_texture
 floor_img = (r"image/Tile.png")
-floor_tile = get_tile_set(floor_img, tile_size=32)
+floor_tile = get_tile_set(floor_img, tile_size=16)
 floor_len = len(floor_tile)
 floors = [floor_tile[v] for v in range(floor_len)]
 
 stairs = floors
 
-wall_point = arcade.load_texture_pair(r"image/wall_point.png")
 # walls_1 = (r"image/wall1.png")
 # walls_1_tiles = get_tile_set(walls_1, tile_size=16)
 # wall_1 = {k: walls_1_tiles[v] for k, v in zip(
@@ -100,7 +102,7 @@ wall_3 = [walls_3_tiles[w]
           for w in [6, 6, 11, 11, 10, 10, 1, 12, 4, 5, 2, 5, 0, 5, 1, 8]]
 
 door_img = (r"image/Door0.png")
-door_tile = get_tile_set(door_img, tile_size=32)
+door_tile = get_tile_set(door_img, tile_size=16)
 door_len = len(door_tile)
 doors = [door_tile[v] for v in range(door_len)]
 
@@ -133,8 +135,10 @@ IMAGE_ID = {"player": player,
 
             "floor_point": floor_point,
             "items_point": items_point,
-            "floor": floors,
             "wall_point": wall_point,
+            "stairs_down_point":stairs_down_point,
+
+            "floor": floors,
             # "wall_1": wall_1,
             # "wall_2": wall_2,
             "wall_3": wall_3,
