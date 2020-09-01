@@ -29,10 +29,25 @@ class ActorPlacement:
         self.width = len(self.tiles)
         self.height = len(self.tiles[0])
 
-    def map_set(self):
+
+    def floor_set(self):
+        wall_sprites = arcade.SpriteList(
+            use_spatial_hash=True, spatial_hash_cell_size=32)
+
+        for x in range(self.width):
+            for y in range(self.height):
+                if self.tiles[x][y] == TILE.EMPTY or TILE.STAIRS_DOWN or TILE.DOOR:
+
+                    floor = Floor(texture_number=21, x=x, y=y)
+                    wall_sprites.append(floor)
+
+
+        return wall_sprites
+
+    def wall_set(self):
         """ 静的な地形スプライトをgame_mapブロック情報から作成する
         """
-        map_sprites = arcade.SpriteList(
+        wall_sprites = arcade.SpriteList(
             use_spatial_hash=True, spatial_hash_cell_size=32)
 
         for x in range(self.width):
@@ -41,19 +56,10 @@ class ActorPlacement:
                     wall_number = self.search_wall_number(x, y, self.tiles)
 
                     wall = Wall(texture_number=wall_number, x=x, y=y,)
-                    map_sprites.append(wall)
+                    wall_sprites.append(wall)
 
-                elif self.tiles[x][y] == TILE.EMPTY or TILE.STAIRS_DOWN or TILE.DOOR:
+        return wall_sprites
 
-                    floor = Floor(texture_number=21, x=x, y=y)
-                    map_sprites.append(floor)
-
-                if self.tiles[x][y] == TILE.STAIRS_DOWN:
-
-                    stairs = Stairs(x=x, y=y)
-                    map_sprites.append(stairs)
-
-        return map_sprites
 
     def map_point_set(self):
         map_point_sprites = arcade.SpriteList(
@@ -87,6 +93,11 @@ class ActorPlacement:
 
                     door = Door(x=x, y=y)
                     map_obj_sprites.append(door)
+
+                if self.tiles[x][y] == TILE.STAIRS_DOWN:
+
+                    stairs = Stairs(x=x, y=y)
+                    map_obj_sprites.append(stairs)
 
         return map_obj_sprites
 

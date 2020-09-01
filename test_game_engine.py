@@ -31,7 +31,7 @@ class GameLevel:
     def __init__(self):
         self.chara_sprites = None
         self.actor_sprites = None
-        self.map_sprites = None
+        self.wall_sprites = None
         self.item_sprites = None
         self.equip_sprites = None
         self.effect_sprites = None
@@ -73,7 +73,7 @@ class GameEngine:
         items_point_sprite = ActorPlacement(
             self.game_map, self).items_point_set()
 
-        game_level.map_sprites = mapsprite
+        game_level.wall_sprites = mapsprite
         game_level.map_point_sprites = map_point_sprite
         game_level.map_obj_sprites = map_obj_sprite
         game_level.actor_sprites = actorsprite
@@ -137,7 +137,7 @@ class GameEngine:
                 actor_dict.append(self.get_actor_dict(sprite))
 
             dungeon_dict = []
-            for sprite in level.map_sprites:
+            for sprite in level.wall_sprites:
                 dungeon_dict.append(self.get_actor_dict(sprite))
 
             dungeon_obj_dict = []
@@ -194,7 +194,7 @@ class GameEngine:
             level.actor_sprites = arcade.SpriteList(
                 use_spatial_hash=True, spatial_hash_cell_size=16)
 
-            level.map_sprites = arcade.SpriteList(
+            level.wall_sprites = arcade.SpriteList(
                 use_spatial_hash=True, spatial_hash_cell_size=32)
 
             level.map_obj_sprites = arcade.SpriteList(
@@ -215,7 +215,7 @@ class GameEngine:
 
             for dungeon_dict in level_dict["dungeon"]:
                 maps = restore_actor(dungeon_dict)
-                level.map_sprites.append(maps)
+                level.wall_sprites.append(maps)
 
             for dungeon_obj_dict in level_dict["dungeon_obj"]:
                 map_obj = restore_actor(dungeon_obj_dict)
@@ -392,7 +392,7 @@ class GameEngine:
         """
         if self.fov_recompute == True:
             recalculate_fov(self.player.x, self.player.y, FOV_RADIUS,
-                            [self.cur_level.map_sprites, self.cur_level.actor_sprites, self.cur_level.item_sprites, self.cur_level.map_obj_sprites, self.cur_level.map_point_sprites, self.cur_level.item_point_sprites])
+                            [self.cur_level.wall_sprites, self.cur_level.actor_sprites, self.cur_level.item_sprites, self.cur_level.map_obj_sprites, self.cur_level.map_point_sprites, self.cur_level.item_point_sprites])
 
             self.fov_recompute = False
 
@@ -411,7 +411,7 @@ class GameEngine:
         """
         get_stairs = arcade.get_sprites_at_exact_point(
             point=self.player.position,
-            sprite_list=self.cur_level.map_sprites)
+            sprite_list=self.cur_level.wall_sprites)
 
         for stairs in get_stairs:
             if isinstance(stairs, Stairs):

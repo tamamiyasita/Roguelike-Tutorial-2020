@@ -21,7 +21,7 @@ def spot_is_blocked(x, y, sprite_lists):
         return True
 
     for sprite_list in sprite_lists:
-        if get_blocking_entity(x, y, sprite_list):
+        if get_blocking_entity(x, y, {sprite_list}):
             return True
     return False
 

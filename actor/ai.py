@@ -17,7 +17,7 @@ class Basicmonster:
 
         # sprite_listsのactor_spritesとmap_spritesを変数に格納
         actor_sprites = engine.cur_level.actor_sprites
-        map_sprites = engine.cur_level.map_sprites
+        wall_sprites = engine.cur_level.wall_sprites
 
 
         # 視野のチェック
@@ -44,7 +44,7 @@ class Basicmonster:
         if self.visible_check:
             if monster.distance_to(target) >= 1:
                 result_astar = astar(
-                    [actor_sprites, map_sprites], (monster.x, monster.y), (self.target_point))
+                    [actor_sprites, wall_sprites], (monster.x, monster.y), (self.target_point))
                 # print(f"Path from ({monster.x},{monster.y}) to {target.x},{target.y}", results)
                 # monster.move_towards(target.x, target.y, sprite_lists)
                 # monster.move((randint(-1, 1), randint(-1, 1)))
@@ -64,7 +64,7 @@ class Basicmonster:
 
                 elif not result_astar:
                     result_astar = astar(
-                        [map_sprites], (monster.x, monster.y), (self.target_point))
+                        [wall_sprites], (monster.x, monster.y), (self.target_point))
                     if result_astar:
                         point = result_astar[1]
                         x, y = point

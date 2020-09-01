@@ -66,7 +66,8 @@ class MG(arcade.Window):
     def draw_sprites(self):
         """ 全てのスプライトリストをここで描画する """
         arcade.draw_rectangle_filled(-1000, -1000, 10000,10000,color=arcade.color.BLACK)
-        self.engine.cur_level.map_sprites.draw()
+        self.engine.cur_level.floor_sprites.draw()
+        self.engine.cur_level.wall_sprites.draw()
         self.engine.cur_level.map_obj_sprites.draw(filter=gl.GL_LO_BIAS_NV)
         self.engine.cur_level.item_sprites.draw(filter=gl.GL_NEAREST)
         self.engine.cur_level.actor_sprites.draw(filter=gl.GL_NEAREST)

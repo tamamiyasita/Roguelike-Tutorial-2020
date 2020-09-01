@@ -181,7 +181,8 @@ class Actor(arcade.Sprite):
 
     def move(self, dxy, target=None, engine=None):
         self.attack_delay = 7
-        map_sprites = engine.cur_level.map_sprites
+        floor_sprites = engine.cur_level.floor_sprites
+        wall_sprites = engine.cur_level.wall_sprites
         map_obj_sprites = engine.cur_level.map_obj_sprites
         actor_sprites = engine.cur_level.actor_sprites
         self.effect_sprites = engine.cur_level.effect_sprites
@@ -202,9 +203,6 @@ class Actor(arcade.Sprite):
         self.target_x = self.center_x
         self.target_y = self.center_y
 
-        # 行先のfloorオブジェクトを変数booking_tileに入れる
-        self.booking_tile = arcade.get_sprites_at_exact_point(
-            grid_to_pixel(destination_x, destination_y), map_sprites)[0]
 
         # ドアのチェック
         door_actor = get_door(destination_x, destination_y, map_obj_sprites)
@@ -224,12 +222,15 @@ class Actor(arcade.Sprite):
 
         # 行き先がBlockされてるか調べる
         blocking_actor = get_blocking_entity(
-            destination_x, destination_y, actor_sprites)
+            destination_x, destination_y, {actor_sprites, wall_sprites})
 
         if blocking_actor and not target:
             # playerの攻撃チェック
             actor = blocking_actor[0]
-            if not actor.is_dead:
+            if actor in wall_sprites:
+                return [{"None": True}]
+                
+            elif not actor.is_dead:
                 attack_results = self.fighter.attack(actor)
                 if actor == self:
                     self.state = state.TURN_END
@@ -252,7 +253,7 @@ class Actor(arcade.Sprite):
 
             return attack_results
 
-        elif not get_blocking_entity(destination_x, destination_y, actor_sprites) and self.booking_tile.blocks == False:
+        elif not get_blocking_entity(destination_x, destination_y, {actor_sprites, wall_sprites}):
             # playerとmonsterの移動
             self.state = state.ON_MOVE
             self.change_y = self.dy * (MOVE_SPEED+ai_move_speed)
@@ -343,7 +344,7 @@ class Actor(arcade.Sprite):
         dx = int(round(dx / distance))
         dy = int(round(dy / distance))
 
-        if not get_blocking_entity(self.x + dx, self.y + dy, actor_sprites):
+        if not get_blocking_entity(self.x + dx, self.y + dy, {actor_sprites}):
             move = self.move((dx, dy), target, engine)
             return move
 

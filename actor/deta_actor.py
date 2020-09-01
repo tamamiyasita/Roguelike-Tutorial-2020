@@ -172,7 +172,7 @@ class Actor(arcade.Sprite):
             self.fighter.restore_from_dict(result["fighter"])
 
 
-    def move(self, dxy, target=None, actor_sprites=None, map_sprites=None):
+    def move(self, dxy, target=None, actor_sprites=None, wall_sprites=None):
         ai_move_speed = 0
         if self.ai:
             ai_move_speed = MOVE_SPEED*1.3
@@ -190,7 +190,7 @@ class Actor(arcade.Sprite):
         self.target_y = self.center_y
 
         # 行先のfloorオブジェクトを変数booking_tileに入れる
-        self.booking_tile = arcade.get_sprites_at_exact_point(grid_to_pixel(destination_x, destination_y), map_sprites)[0]
+        self.booking_tile = arcade.get_sprites_at_exact_point(grid_to_pixel(destination_x, destination_y), wall_sprites)[0]
 
         blocking_actor = get_blocking_entity(destination_x, destination_y, actor_sprites)
         if blocking_actor and not target:
@@ -269,7 +269,7 @@ class Actor(arcade.Sprite):
         dy = other.y - self.y
         return math.sqrt(dx ** 2 + dy ** 2)
 
-    def move_towards(self, target, actor_sprites, map_sprites):
+    def move_towards(self, target, actor_sprites, wall_sprites):
 
         dx = target.x - self.x
         dy = target.y - self.y
@@ -279,7 +279,7 @@ class Actor(arcade.Sprite):
         dy = int(round(dy / distance))
 
         if not get_blocking_entity(self.x + dx, self.y + dy, actor_sprites):
-            move = self.move((dx, dy), target, actor_sprites, map_sprites)
+            move = self.move((dx, dy), target, actor_sprites, wall_sprites)
             return move
 
 
