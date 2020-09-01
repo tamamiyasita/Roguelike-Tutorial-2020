@@ -4,8 +4,8 @@ from collections import deque
 
 from constants import *
 from data import *
-from game_map.basic_dungeon import BasicDungeon
-from game_map.map_sprite_set import ActorPlacement
+from game_map.test_basic_dungeon import TestMapA
+from game_map.test_map_sprite_set import ActorPlacement
 from recalculate_fov import recalculate_fov
 from viewport import viewport
 
@@ -60,13 +60,15 @@ class GameEngine:
         map_width, map_height = MAP_WIDTH, MAP_HEIGHT
         game_level = GameLevel()
 
-        self.game_map = BasicDungeon(map_width, map_height, level_number)
+        self.game_map = TestMapA(map_width, map_height, level_number)
 
         """ スプライトリストの初期化 """
-        mapsprite = ActorPlacement(self.game_map, self).map_set()
+        mapsprite = ActorPlacement(self.game_map, self).tiled_floor_set()
+        # mapsprite = ActorPlacement(self.game_map, self).map_set()
         map_point_sprite = ActorPlacement(self.game_map, self).map_point_set()
         map_obj_sprite = ActorPlacement(self.game_map, self).map_obj_set()
-        actorsprite = ActorPlacement(self.game_map, self).actor_set()
+        actorsprite = arcade.SpriteList(
+            use_spatial_hash=True, spatial_hash_cell_size=32)
         itemsprite = ActorPlacement(self.game_map, self).items_set()
         items_point_sprite = ActorPlacement(
             self.game_map, self).items_point_set()
@@ -87,7 +89,7 @@ class GameEngine:
         game_level.level = level_number
 
         self.player = Player(
-            self.game_map.player_position[0], self.game_map.player_position[1], inventory=Inventory(capacity=5))
+            MAP_WIDTH//2, MAP_HEIGHT//2, inventory=Inventory(capacity=5))
         game_level.chara_sprites.append(self.player)
 
         # テスト用エンティティ
