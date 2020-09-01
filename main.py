@@ -63,6 +63,7 @@ class MG(arcade.Window):
 
         self.select_UI = SelectUI(engine=self.engine)
 
+
     def draw_sprites(self):
         """ 全てのスプライトリストをここで描画する """
         arcade.draw_rectangle_filled(-1000, -1000, 10000,10000,color=arcade.color.BLACK)
@@ -129,6 +130,7 @@ class MG(arcade.Window):
         # fov_recomputeがTruならfov計算
         if self.engine.fov_recompute:
             self.engine.fov()
+
 
         if self.engine.game_state == GAME_STATE.NORMAL or self.engine.game_state == GAME_STATE.DELAY_WINDOW:
             """minimap_related"""
@@ -237,9 +239,9 @@ class MG(arcade.Window):
         print("**load**")
         self.engine.restore_from_dict(data)
         self.engine.player.state = state.READY
-        self.engine.fov_recompute = True
-        viewport(self.engine.player)
+        viewport(self.engine.player.center_x, self.engine.player.center_y)
         self.engine.game_state = GAME_STATE.NORMAL
+        self.engine.fov_recompute = True
 
 
 def main():

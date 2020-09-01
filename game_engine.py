@@ -137,9 +137,17 @@ class GameEngine:
             for sprite in level.actor_sprites:
                 actor_dict.append(self.get_actor_dict(sprite))
 
-            dungeon_dict = []
+            floor_dict = []
+            for sprite in level.floor_sprites:
+                floor_dict.append(self.get_actor_dict(sprite))
+
+            wall_dict = []
             for sprite in level.wall_sprites:
-                dungeon_dict.append(self.get_actor_dict(sprite))
+                wall_dict.append(self.get_actor_dict(sprite))
+
+            map_point_dict = []
+            for sprite in level.map_point_sprites:
+                map_point_dict.append(self.get_actor_dict(sprite))
 
             dungeon_obj_dict = []
             for sprite in level.map_obj_sprites:
@@ -148,6 +156,10 @@ class GameEngine:
             item_dict = []
             for sprite in level.item_sprites:
                 item_dict.append(self.get_actor_dict(sprite))
+
+            item_point_dict = []
+            for sprite in level.item_point_sprites:
+                item_point_dict.append(self.get_actor_dict(sprite))
 
             effect_dict = []
             for sprite in level.effect_sprites:
@@ -159,9 +171,12 @@ class GameEngine:
 
             level_dict = {
                 "actor": actor_dict,
-                "dungeon": dungeon_dict,
+                "floor": floor_dict,
+                "wall": wall_dict,
+                "map_point": map_point_dict,
                 "dungeon_obj": dungeon_obj_dict,
                 "item": item_dict,
+                "item_point":item_point_dict,
                 "effect": effect_dict,
                 "equip": equip_dict
             }
@@ -180,8 +195,6 @@ class GameEngine:
     def restore_from_dict(self, data):
         """ オブジェクトをjsonから復元する為の関数 """
 
-        # ビューポートを復元する
-        arcade.set_viewport(*data["viewport"])
 
         player_dict = data["player"]
         self.player.restore_from_dict(player_dict["Player"])
@@ -195,13 +208,22 @@ class GameEngine:
             level.actor_sprites = arcade.SpriteList(
                 use_spatial_hash=True, spatial_hash_cell_size=16)
 
+            level.floor_sprites = arcade.SpriteList(
+                use_spatial_hash=True, spatial_hash_cell_size=32)
+
             level.wall_sprites = arcade.SpriteList(
+                use_spatial_hash=True, spatial_hash_cell_size=32)
+
+            level.map_point_sprites = arcade.SpriteList(
                 use_spatial_hash=True, spatial_hash_cell_size=32)
 
             level.map_obj_sprites = arcade.SpriteList(
                 use_spatial_hash=True, spatial_hash_cell_size=32)
 
             level.item_sprites = arcade.SpriteList(
+                use_spatial_hash=True, spatial_hash_cell_size=16)
+
+            level.item_point_sprites = arcade.SpriteList(
                 use_spatial_hash=True, spatial_hash_cell_size=16)
 
             level.equip_sprites = arcade.SpriteList(
@@ -214,9 +236,17 @@ class GameEngine:
                 actor = restore_actor(actor_dict)
                 level.actor_sprites.append(actor)
 
-            for dungeon_dict in level_dict["dungeon"]:
-                maps = restore_actor(dungeon_dict)
-                level.wall_sprites.append(maps)
+            for floor_dict in level_dict["floor"]:
+                floors = restore_actor(floor_dict)
+                level.floor_sprites.append(floors)
+
+            for wall_dict in level_dict["wall"]:
+                walls = restore_actor(wall_dict)
+                level.wall_sprites.append(walls)
+
+            for map_point_dict in level_dict["map_point"]:
+                map_points = restore_actor(map_point_dict)
+                level.map_point_sprites.append(map_points)
 
             for dungeon_obj_dict in level_dict["dungeon_obj"]:
                 map_obj = restore_actor(dungeon_obj_dict)
@@ -225,6 +255,10 @@ class GameEngine:
             for item_dict in level_dict["item"]:
                 item = restore_actor(item_dict)
                 level.item_sprites.append(item)
+
+            for item_point_dict in level_dict["item_point"]:
+                item_point = restore_actor(item_point_dict)
+                level.item_point_sprites.append(item_point)
 
             for effect_dict in level_dict["effect"]:
                 effect = restore_actor(effect_dict)
@@ -239,6 +273,9 @@ class GameEngine:
             self.stories.append(level)
 
         self.cur_level = self.stories[-1]
+
+        # ビューポートを復元する
+        arcade.set_viewport(*data["viewport"])
 
         self.action_queue.append({"message": "*load*"})
 

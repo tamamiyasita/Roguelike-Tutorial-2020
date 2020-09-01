@@ -84,6 +84,7 @@ class GAME_STATE(Enum):
     SELECT_LOCATION = auto()
     CHARACTER_SCREEN = auto()
     DELAY_WINDOW = auto()
+    LOAD_WINDOW = auto()
 
 
 class state(Enum):

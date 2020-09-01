@@ -181,7 +181,6 @@ class Actor(arcade.Sprite):
 
     def move(self, dxy, target=None, engine=None):
         self.attack_delay = 7
-        floor_sprites = engine.cur_level.floor_sprites
         wall_sprites = engine.cur_level.wall_sprites
         map_obj_sprites = engine.cur_level.map_obj_sprites
         actor_sprites = engine.cur_level.actor_sprites
@@ -224,46 +223,61 @@ class Actor(arcade.Sprite):
         blocking_actor = get_blocking_entity(
             destination_x, destination_y, [actor_sprites, wall_sprites])
 
-        if blocking_actor and not target:
-            # playerの攻撃チェック
-            actor = blocking_actor[0]
-            if actor in wall_sprites:
-                return [{"None": True}]
-                
-            elif not actor.is_dead:
-                attack_results = self.fighter.attack(actor)
-                if actor == self:
-                    self.state = state.TURN_END
-                elif attack_results:
+
+        def player_move():
+
+            if blocking_actor and not target:
+                # playerの攻撃チェック
+                actor = blocking_actor[0]
+                if actor in wall_sprites:
+                    return [{"None": True}]
+                    
+                elif not actor.is_dead:
+                    attack_results = self.fighter.attack(actor)
+                    if actor == self:
+                        self.state = state.TURN_END
+                    elif attack_results:
+                        self.state = state.ATTACK
+                        self.change_y = self.dy * MOVE_SPEED
+                        self.change_x = self.dx * MOVE_SPEED
+                        engine.action_queue.extend(
+                            [{"delay": {"time": 0.2, "action": {"None": self}}}])
+
+                    return attack_results
+
+            else:
+                self.state = state.ON_MOVE
+                self.change_y = self.dy * (MOVE_SPEED+ai_move_speed)
+                self.change_x = self.dx * (MOVE_SPEED+ai_move_speed)
+
+        def monster_move(target):
+
+            if target and self.distance_to(target) <= 1.46:
+                # monsterの攻撃チェック
+                attack_results = self.fighter.attack(target)
+                if attack_results:
                     self.state = state.ATTACK
                     self.change_y = self.dy * MOVE_SPEED
                     self.change_x = self.dx * MOVE_SPEED
-                    engine.action_queue.extend(
-                        [{"delay": {"time": 0.2, "action": {"None": self}}}])
 
                 return attack_results
-                
 
-        elif target and self.distance_to(target) <= 1.46:
-            # monsterの攻撃チェック
-            attack_results = self.fighter.attack(target)
-            if attack_results:
-                self.state = state.ATTACK
-                self.change_y = self.dy * MOVE_SPEED
-                self.change_x = self.dx * MOVE_SPEED
+            elif not get_blocking_entity(destination_x, destination_y, [actor_sprites, wall_sprites]):
+                # playerとmonsterの移動
+                self.state = state.ON_MOVE
+                self.change_y = self.dy * (MOVE_SPEED+ai_move_speed)
+                self.change_x = self.dx * (MOVE_SPEED+ai_move_speed)
 
-            return attack_results
+            else:
+                # A*パスがBlockされたらturn_endを返す
+                print(f"actor {self.name} blocking pass!")
+                return [{"turn_end": self}]
 
-        elif not get_blocking_entity(destination_x, destination_y, [actor_sprites, wall_sprites]):
-            # playerとmonsterの移動
-            self.state = state.ON_MOVE
-            self.change_y = self.dy * (MOVE_SPEED+ai_move_speed)
-            self.change_x = self.dx * (MOVE_SPEED+ai_move_speed)
+        if self.ai:
+            return monster_move(target)
 
         else:
-            # A*パスがBlockされたらturn_endを返す
-            print(f"actor {self.name} blocking pass!")
-            return [{"turn_end": self}]
+            return player_move()
 
     def update(self, delta_time=1/60):
         super().update()
