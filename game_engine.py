@@ -441,7 +441,7 @@ class GameEngine:
         dest_y = self.player.y + dy
         door_actor = get_door(dest_x, dest_y, self.cur_level.map_obj_sprites)
         enemy_actor = get_blocking_entity(
-            dest_x, dest_y, {self.cur_level.actor_sprites})
+            dest_x, dest_y, [self.cur_level.actor_sprites])
         if door_actor and not enemy_actor:
             door_actor = door_actor[0]
             if door_actor.left_face:

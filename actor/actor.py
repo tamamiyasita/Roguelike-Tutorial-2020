@@ -222,7 +222,7 @@ class Actor(arcade.Sprite):
 
         # 行き先がBlockされてるか調べる
         blocking_actor = get_blocking_entity(
-            destination_x, destination_y, {actor_sprites, wall_sprites})
+            destination_x, destination_y, [actor_sprites, wall_sprites])
 
         if blocking_actor and not target:
             # playerの攻撃チェック
@@ -242,6 +242,7 @@ class Actor(arcade.Sprite):
                         [{"delay": {"time": 0.2, "action": {"None": self}}}])
 
                 return attack_results
+                
 
         elif target and self.distance_to(target) <= 1.46:
             # monsterの攻撃チェック
@@ -253,7 +254,7 @@ class Actor(arcade.Sprite):
 
             return attack_results
 
-        elif not get_blocking_entity(destination_x, destination_y, {actor_sprites, wall_sprites}):
+        elif not get_blocking_entity(destination_x, destination_y, [actor_sprites, wall_sprites]):
             # playerとmonsterの移動
             self.state = state.ON_MOVE
             self.change_y = self.dy * (MOVE_SPEED+ai_move_speed)
@@ -344,7 +345,7 @@ class Actor(arcade.Sprite):
         dx = int(round(dx / distance))
         dy = int(round(dy / distance))
 
-        if not get_blocking_entity(self.x + dx, self.y + dy, {actor_sprites}):
+        if not get_blocking_entity(self.x + dx, self.y + dy, [actor_sprites]):
             move = self.move((dx, dy), target, engine)
             return move
 

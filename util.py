@@ -25,15 +25,15 @@ def get_blocking_entity(x, y, sprite_lists):
     px, py = grid_to_pixel(x, y)
     blocking_sprite = arcade.SpriteList()
     for sprite_list in sprite_lists:
-        sprite_list = arcade.get_sprites_at_exact_point((px, py), sprite_list)
-        for sprite in sprite_list:
+        s_list = arcade.get_sprites_at_exact_point((px, py), sprite_list)
+        for sprite in s_list:
             if sprite.blocks:
                 blocking_sprite.append(sprite)
 
-        if len(blocking_sprite) > 0:
-            return blocking_sprite
-        else:
-            return None
+    if len(blocking_sprite) > 0:
+        return blocking_sprite
+    else:
+        return None
 
 
 def get_door(x, y, sprite_list):
