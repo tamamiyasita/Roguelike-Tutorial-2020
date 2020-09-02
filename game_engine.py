@@ -28,6 +28,7 @@ from turn_loop import TurnLoop
 class GameLevel:
     """level毎のsprite_listの生成
     """
+
     def __init__(self):
         self.chara_sprites = None
         self.actor_sprites = None
@@ -58,6 +59,8 @@ class GameEngine:
         self.game_state = GAME_STATE.NORMAL
         self.grid_select_handlers = []
         self.move_switch = True
+        self.player = Player(
+            inventory=Inventory(capacity=5))
 
     def setup_level(self, level_number):
 
@@ -70,15 +73,15 @@ class GameEngine:
             return self.basic_dungeon_init(self.player)
 
     def start_town_init(self):
-        self.player = Player(
-             inventory=Inventory(capacity=5))
         # self.town_map = [[TILE.EMPTY for y in range(MAP_HEIGHT)] for x in range(MAP_WIDTH)]
-        self.town_map = TownMap(self.map_width, self.map_height, self.level, self.player)
+        self.town_map = TownMap(
+            self.map_width, self.map_height, self.level, self.player)
         """ スプライトリストの初期化 """
         floor_sprite = ActorPlacement(self.town_map, self).tiled_floor_set()
         wall_sprite = ActorPlacement(self.town_map, self).tiled_wall_set()
         map_point_sprite = ActorPlacement(self.town_map, self).map_point_set()
-        map_obj_sprite = ActorPlacement(self.town_map, self).tiled_map_obj_set()
+        map_obj_sprite = ActorPlacement(
+            self.town_map, self).tiled_map_obj_set()
         actorsprite = arcade.SpriteList(
             use_spatial_hash=True, spatial_hash_cell_size=32)
         itemsprite = arcade.SpriteList(
@@ -107,12 +110,12 @@ class GameEngine:
 
         self.game_level.level = self.level
 
-        
         return self.game_level
 
     def basic_dungeon_init(self, player):
 
-        self.game_map = BasicDungeon(self.map_width, self.map_height, self.level, player)
+        self.game_map = BasicDungeon(
+            self.map_width, self.map_height, self.level, player)
 
         """ スプライトリストの初期化 """
         floor_sprite = ActorPlacement(self.game_map, self).floor_set()
@@ -168,7 +171,7 @@ class GameEngine:
 
         arcade.set_background_color(COLORS["black"])
 
-        self.cur_level = self.setup_level(level_number=0)
+        self.cur_level = self.setup_level(level_number=1)
         self.stories.append(self.cur_level)
         self.turn_loop = TurnLoop(self.player)
         self.item_point = ItemPoint(self)
@@ -228,7 +231,7 @@ class GameEngine:
                 "map_point": map_point_dict,
                 "dungeon_obj": dungeon_obj_dict,
                 "item": item_dict,
-                "item_point":item_point_dict,
+                "item_point": item_point_dict,
                 "effect": effect_dict,
                 "equip": equip_dict
             }
@@ -246,7 +249,6 @@ class GameEngine:
 
     def restore_from_dict(self, data):
         """ オブジェクトをjsonから復元する為の関数 """
-
 
         player_dict = data["player"]
         self.player.restore_from_dict(player_dict["Player"])
@@ -383,7 +385,6 @@ class GameEngine:
                 else:
                     new_action_queue.extend([target["action"]])
                     self.move_switch = True
-
 
             if "select_item" in action:
                 item_number = action["select_item"]

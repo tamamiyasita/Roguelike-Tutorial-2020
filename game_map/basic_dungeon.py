@@ -52,7 +52,6 @@ class BasicDungeon:
         self.make_map(dungeon_level)
         self.door_remove()
 
-
     def make_map(self, dungeon_level):
 
         rooms = []
@@ -79,7 +78,8 @@ class BasicDungeon:
 
                 if self.num_rooms == 0:
                     self.player.x, self.player.y = (new_x, new_y)
-                    self.player.center_x, self.player.center_y = grid_to_pixel(new_x, new_y)
+                    self.player.center_x, self.player.center_y = grid_to_pixel(
+                        new_x, new_y)
 
                 else:
                     (prev_x, prev_y) = rooms[self.num_rooms - 1].center()
@@ -112,7 +112,7 @@ class BasicDungeon:
                        self.tiles[x+1][y] == TILE.EMPTY and self.tiles[x-1][y] == TILE.EMPTY and self.tiles[x][y-1] == TILE.EMPTY or\
                        self.tiles[x+1][y] == TILE.EMPTY and self.tiles[x][y+1] == TILE.EMPTY and self.tiles[x][y-1] == TILE.EMPTY or\
                        self.tiles[x-1][y] == TILE.EMPTY and self.tiles[x][y+1] == TILE.EMPTY and self.tiles[x][y-1] == TILE.EMPTY:
-                       self.tiles[x][y] = TILE.EMPTY
+                        self.tiles[x][y] = TILE.EMPTY
 
     def create_room(self, room):
         for x in range(room.x1 + 1, room.x2):
@@ -144,19 +144,23 @@ class BasicDungeon:
                 self.tiles[x][y] = TILE.EMPTY
 
     def place_entities(self, room, dungeon_level):
+        random_place = randint(1, dungeon_level)
 
         if dungeon_level == 1:
             combos = [[], [1], [1, 1], [1, 1, 1], []]
         elif dungeon_level == 2:
             combos = [[], [1, 1], [1, 1, 1], [2], [1, 2]]
+        elif dungeon_level == 3:
+            combos = [[], [1, 1, 1], [2], [2, 2], [1, 2], [1, 1, 2]]
         else:
-            combos = [[], [1, 1, 1], [2], [1, 2], [1, 1, 2]]
+            combos = [[randint(1, dungeon_level) for i in range(
+                randint(1, 4))] for _ in range(self.num_rooms)]
         monster_choice = choice(combos)
         for challenge_level in monster_choice:
             x = randint(room.x1 + 1, room.x2 - 1)
             y = randint(room.y1 + 1, room.y2 - 1)
 
-            if not self.actor_tiles[x][y]:
+            if not self.actor_tiles[x][y] and self.num_rooms > 1:
                 self.actor_tiles[x][y] = challenge_level
 
         if dungeon_level == 1:

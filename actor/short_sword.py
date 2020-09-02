@@ -16,40 +16,9 @@ class ShortSword(Actor):
         )
         self.category = {ItemType.equip}
 
-
-        # self._master = None
-
         self.item_margin_x = 13
         self.item_margin_y = 5
-
-    # def update(self):
-    #     if self._master:
-    #         self.color = COLORS["white"]
-    #         self.alpha = 255
-    #         x = self.master.center_x
-    #         if self.master.left_face:
-    #             self.left_face = True
-    #             self.center_y = self.master.center_y - self.item_margin_y
-    #             self.center_x = x - self.item_margin_x
-    #         if self.master.left_face == False:
-    #             self.left_face = False
-    #             self.center_y = self.master.center_y - self.item_margin_y
-    #             self.center_x = x + self.item_margin_x
-
-    # @property
-    # def master(self):
-    #     return self._master
-
-    # @master.setter
-    # def master(self, my):
-    #     self._master = my
-    
-    # @master.deleter
-    # def master(self):
-    #     self._master = None
-
 
     @staticmethod
     def challenge():
         return 1
-
