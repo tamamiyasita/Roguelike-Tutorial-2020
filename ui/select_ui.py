@@ -7,8 +7,6 @@ from itertools import chain
 class SelectUI:
     def __init__(self, engine):
         self.engine = engine
-        self.sprites = [engine.cur_level.actor_sprites,
-                        engine.cur_level.item_sprites]
         self.buttom_panel_width = SCREEN_WIDTH-STATES_PANEL_WIDTH
         self.panel_line_width = 4
 
@@ -87,6 +85,8 @@ class SelectUI:
         )
 
     def grid_cursor(self):
+        self.sprites = [self.engine.cur_level.actor_sprites,
+                        self.engine.cur_level.item_sprites]
 
         self.dx += self.grid_select[0]
         self.dy += self.grid_select[1]
