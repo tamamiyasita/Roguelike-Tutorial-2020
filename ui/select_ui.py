@@ -152,4 +152,15 @@ class SelectUI:
                         color=arcade.color.GREEN_YELLOW,
                         font_size=20,
                     )
+                    y += 30
+
+                if actor.explanatory_text:
+                    arcade.draw_text(
+                        text=f"{actor.explanatory_text}",
+                        start_x=self.viewport_left + SCREEN_WIDTH - STATES_PANEL_WIDTH + 10,
+                        start_y=self.viewport_bottom + SCREEN_HEIGHT - 400 - y,
+                        color=arcade.color.WHITE,
+                        font_size=14,
+                    )
                     y += 20
+                    
