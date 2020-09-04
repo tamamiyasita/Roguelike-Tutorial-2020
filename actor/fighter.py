@@ -1,5 +1,5 @@
 from constants import *
-
+from util import dice
 
 class Fighter:
     def __init__(self, hp=0, defense=0, power=0, attack_speed=DEFAULT_ATTACK_SPEED,
@@ -44,7 +44,7 @@ class Fighter:
         bonus = 0
         
         if self.owner and self.owner.equipment:
-            bonus = self.owner.equipment.max_hp_bonus
+            bonus = self.owner.equipment.states_bonus["max_hp"]
         
         return self.base_max_hp + bonus
 
@@ -53,7 +53,7 @@ class Fighter:
         bonus = 0
 
         if self.owner and self.owner.equipment:
-            bonus = self.owner.equipment.power_bonus
+            bonus = self.owner.equipment.states_bonus["power"]
         
         return self.base_power + bonus
 
@@ -62,7 +62,7 @@ class Fighter:
         bonus = 0
 
         if self.owner and self.owner.equipment:
-            bonus = self.owner.equipment.defense_bonus
+            bonus = self.owner.equipment.states_bonus["defense"]
 
         return self.base_defense + bonus
 

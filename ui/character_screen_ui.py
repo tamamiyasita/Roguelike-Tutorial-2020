@@ -40,7 +40,7 @@ class CharacterScreen:
         """ステータス表示"""
         text_position_y -= text_size * spacing
         text_size = 20
-        states_text = f"Attack: {self.player.fighter.base_power} + {self.player.equipment.power_bonus}"
+        states_text = f"Attack: {self.player.fighter.base_power} + {self.player.equipment.states_bonus['power']}"
         arcade.draw_text(
             text=states_text,
             start_x=text_position_x,
@@ -49,8 +49,8 @@ class CharacterScreen:
             font_size=text_size
         )
 
-        text_position_y -= text_size * spacing
-        states_text = f"Defense: {self.player.fighter.base_defense} + {self.player.equipment.defense_bonus}"
+        text_position_y -= text_size * spacing# TODO ゼロならボーナス非表示にしよう
+        states_text = f"Defense: {self.player.fighter.base_defense} + {self.player.equipment.states_bonus['defense']}"
         arcade.draw_text(
             text=states_text,
             start_x=text_position_x,

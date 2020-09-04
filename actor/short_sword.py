@@ -7,21 +7,22 @@ from random import randint
 
 class ShortSword(Actor):
     def __init__(self, x=0, y=0):
-        damage = randint(1,4)
-        equippable_component = Equippable("main_hand", power_bonus=damage)
         super().__init__(
             name="short_sword",
             x=x,
             y=y,
             scale=1.4,
-            equippable=equippable_component
         )
+
+        self.slot = "main_hand"
+        self.states_bonus = {"power":1}
+
         self.category = {ItemType.equip}
 
-        self.explanatory_text = f"common short sword\nthat deals {damage} damage"
+        # self.explanatory_text = f"common short sword\nthat deals ? damage"
 
-        self.item_margin_x = 13
-        self.item_margin_y = 5
+        self.item_margin_x = 6.5*SPRITE_SCALE
+        self.item_margin_y = 2.5*SPRITE_SCALE
 
     @staticmethod
     def challenge():

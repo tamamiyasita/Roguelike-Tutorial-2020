@@ -149,19 +149,19 @@ class GameEngine:
         # self.game_level.chara_sprites.append(self.player)
 
         # テスト用エンティティ
-        # self.long_sword = LongSword(self.player.x, self.player.y + 1)
-        # self.game_level.item_sprites.append(self.long_sword)
-        # self.short_sword = ShortSword(self.player.x+1, self.player.y + 1)
-        # self.game_level.item_sprites.append(self.short_sword)
+        self.long_sword = LongSword(self.player.x, self.player.y + 1)
+        self.game_level.item_sprites.append(self.long_sword)
+        self.short_sword = ShortSword(self.player.x+1, self.player.y + 1)
+        self.game_level.item_sprites.append(self.short_sword)
 
-        # self.small_shield = SmallShield(self.player.x + 2, self.player.y+1)
-        # self.game_level.item_sprites.append(self.small_shield)
+        self.small_shield = SmallShield(self.player.x + 2, self.player.y+1)
+        self.game_level.item_sprites.append(self.small_shield)
 
-        # self.cnf = ConfusionScroll(self.player.x + 1, self.player.y)
-        # self.game_level.item_sprites.append(self.cnf)
+        self.cnf = ConfusionScroll(self.player.x + 1, self.player.y)
+        self.game_level.item_sprites.append(self.cnf)
 
-        # self.fb = FireballScroll(self.player.x + 1, self.player.y)
-        # self.game_level.item_sprites.append(self.fb)
+        self.fb = FireballScroll(self.player.x + 1, self.player.y)
+        self.game_level.item_sprites.append(self.fb)
 
         self.fov_recompute = True
 
@@ -171,7 +171,7 @@ class GameEngine:
 
         arcade.set_background_color(COLORS["black"])
 
-        self.cur_level = self.setup_level(level_number=0)
+        self.cur_level = self.setup_level(level_number=1)
         self.stories.append(self.cur_level)
         self.turn_loop = TurnLoop(self.player)
         self.item_point = ItemPoint(self)
@@ -413,17 +413,17 @@ class GameEngine:
                         new_action_queue.extend(results)
 
             if "pickup" in action:
-                actors = arcade.get_sprites_at_exact_point(
+                items = arcade.get_sprites_at_exact_point(
                     (self.player.center_x, self.player.center_y), self.cur_level.item_sprites)
-                for actor in actors:
-                    if actor.item:
-                        results = self.player.inventory.add_item(actor, self)
+                for item in items:
+                    if item.category:
+                        results = self.player.inventory.add_item(item, self)
 
                         if results:
                             new_action_queue.extend(results)
                             # mapからPOINTを消す
                             if "You pick up" in "".join(list(*results[0].values())):
-                                self.item_point.remove_point(actor)
+                                self.item_point.remove_point(item)
 
             if "drop_item" in action:
                 item_number = self.selected_item

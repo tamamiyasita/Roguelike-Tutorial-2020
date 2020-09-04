@@ -1,6 +1,8 @@
 import arcade
+from random import randint
 from constants import *
 from data import *
+
 
 
 def grid_to_pixel(x, y):
@@ -20,6 +22,9 @@ def pixel_to_grid(x, y):
     py = round(py / GRID_SIZE)
     return px, py
 
+
+def dice(D, min_d, max_d):
+    return D * randint(min_d, max_d)
 
 def get_blocking_entity(x, y, sprite_lists):
     px, py = grid_to_pixel(x, y)

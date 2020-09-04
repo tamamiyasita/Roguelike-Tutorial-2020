@@ -6,14 +6,17 @@ from constants import *
 
 class LongSword(Actor):
     def __init__(self, x=0, y=0):
-        equippable_component = Equippable("main_hand", power_bonus=5, defense_bonus=1)
         super().__init__(
             name="long_sword",
             x=x,
             y=y,
-            equippable=equippable_component,
         )
+
+        self.slot = "main_hand"
+        self.states_bonus = {"power":3, "defense":1}
+
         self.category = {ItemType.equip}
+
         self.item_margin_x = 9 * SPRITE_SCALE
         self.item_margin_y = 0
 

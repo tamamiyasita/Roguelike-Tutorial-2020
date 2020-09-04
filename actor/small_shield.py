@@ -6,14 +6,16 @@ from constants import *
 
 class SmallShield(Actor):
     def __init__(self, x=0, y=0):
-        equippable_component = Equippable("off_hand", defense_bonus=3)
         super().__init__(
             name="small_shield",
             x=x,
             y=y,
             scale=1.75,
-            equippable=equippable_component
         )
+        self.item = True
+        self.slot = "off_hand"
+        self.states_bonus = {"defense":2}
+
         self.category = {ItemType.equip}
 
 

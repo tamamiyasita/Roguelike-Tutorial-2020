@@ -1,3 +1,5 @@
+from collections import Counter
+
 
 class Equipment:
     """装備部位とそこからの追加bonusを返す
@@ -30,7 +32,7 @@ class Equipment:
         self.item_slot = result
         for item in self.owner.inventory.item_bag:
             if item and item.name in self.item_slot.values():
-                self.item_slot[item.equippable.slot] = item
+                self.item_slot[item.slot] = item
                 item.master = self.owner
                 self.equip_update_check = True
 
@@ -48,33 +50,44 @@ class Equipment:
             self.equip_update_check = False
 
     @property
-    def max_hp_bonus(self):
-        bonus = 0
+    def states_bonus(self):
+        """ステータスボーナスの計算"""
+
+        bonus = {"max_hp":0, "power":0, "defense":0}
         for parts in self.item_slot.values():
-            if parts and parts.equippable.max_hp_bonus:
-                bonus += parts.equippable.max_hp_bonus
+            if parts and parts.states_bonus:
+                bonus = Counter(bonus) + Counter(parts.states_bonus)
 
         return bonus
 
-    @property
-    def power_bonus(self):
-        bonus = 0
+    # @property
+    # def max_hp_bonus(self):
+    #     bonus = 0
+    #     for parts in self.item_slot.values():
+    #         if parts and parts.max_hp_bonus:
+    #             bonus += parts.max_hp_bonus
 
-        for parts in self.item_slot.values():
-            if parts and parts.equippable.power_bonus:
-                bonus += parts.equippable.power_bonus
+    #     return bonus
 
-        return bonus
+    # @property
+    # def power_bonus(self):
+    #     bonus = 0
 
-    @property
-    def defense_bonus(self):
-        bonus = 0
+    #     for parts in self.item_slot.values():
+    #         if parts and parts.power_bonus:
+    #             bonus += parts.power_bonus
 
-        for parts in self.item_slot.values():
-            if parts and parts.equippable.defense_bonus:
-                bonus += parts.equippable.defense_bonus
+    #     return bonus
 
-        return bonus
+    # @property
+    # def defense_bonus(self):
+    #     bonus = 0
+
+    #     for parts in self.item_slot.values():
+    #         if parts and parts.defense_bonus:
+    #             bonus += parts.defense_bonus
+
+    #     return bonus
 
     def toggle_equip(self, equip_item, sprites):
         """装備アイテムの付け外しを行うメソッド
@@ -82,7 +95,7 @@ class Equipment:
         results = []
 
         for item_key, item in self.item_slot.items():
-            if item_key == equip_item.equippable.slot:  # アイテムキーと装備するスロットが同じか判定
+            if item_key == equip_item.slot:  # アイテムキーと装備するスロットが同じか判定
 
                 if item and item.name == equip_item.name:  # equip_itemが装備アイテムと同じなら単に解除
                     del self.item_slot[item_key].master
