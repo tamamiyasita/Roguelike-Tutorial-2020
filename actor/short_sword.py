@@ -1,5 +1,4 @@
 from actor.actor import Actor
-from actor.equippable import Equippable
 from data import *
 from constants import *
 from random import randint

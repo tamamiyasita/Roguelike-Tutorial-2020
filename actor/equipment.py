@@ -8,7 +8,7 @@ class Equipment:
     """
 
     def __init__(self):
-        """equippableのslotと対応する属性
+        """アイテムスロット、及び装備するタイミングを決めるequip_update_check
         """
         self.item_slot = {
             "main_hand": None,
@@ -60,35 +60,7 @@ class Equipment:
 
         return bonus
 
-    # @property
-    # def max_hp_bonus(self):
-    #     bonus = 0
-    #     for parts in self.item_slot.values():
-    #         if parts and parts.max_hp_bonus:
-    #             bonus += parts.max_hp_bonus
-
-    #     return bonus
-
-    # @property
-    # def power_bonus(self):
-    #     bonus = 0
-
-    #     for parts in self.item_slot.values():
-    #         if parts and parts.power_bonus:
-    #             bonus += parts.power_bonus
-
-    #     return bonus
-
-    # @property
-    # def defense_bonus(self):
-    #     bonus = 0
-
-    #     for parts in self.item_slot.values():
-    #         if parts and parts.defense_bonus:
-    #             bonus += parts.defense_bonus
-
-    #     return bonus
-
+ 
     def toggle_equip(self, equip_item, sprites):
         """装備アイテムの付け外しを行うメソッド
         """

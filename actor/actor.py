@@ -18,7 +18,7 @@ class Actor(arcade.Sprite):
                  blocks=False, block_sight=False,
                  scale=SPRITE_SCALE, color=COLORS["black"],
                  fighter=None, ai=None, speed=DEFAULT_SPEED,
-                 inventory=None, item=None, equipment=None, equippable=None,
+                 inventory=None, item=None, equipment=None,
                  visible_color=COLORS["white"], not_visible_color=COLORS["black"],
                  state=state.TURN_END, left_face=False):
         super().__init__(scale=scale)
@@ -64,13 +64,6 @@ class Actor(arcade.Sprite):
         if self.equipment:
             self.equipment.owner = self
 
-        self.equippable = equippable
-        if self.equippable:
-            self.equippable.owner = self
-            if not self.item:
-                item = Item()
-                self.item = item
-                self.item.owner = self
 
 
     def get_dict(self):
@@ -108,9 +101,6 @@ class Actor(arcade.Sprite):
         if self.inventory:
             result["inventory"] = self.inventory.get_dict()
 
-        if self.equippable:
-            result["equippable"] = self.equippable.get_dict()
-
         if self.equipment:
             result["equipment"] = self.equipment.get_dict()
 
@@ -121,7 +111,6 @@ class Actor(arcade.Sprite):
         from actor.ai import Basicmonster
         from actor.inventory import Inventory
         from constants import state
-        from actor.equippable import Equippable
         from actor.equipment import Equipment
 
         self.x = result["x"]
@@ -164,15 +153,6 @@ class Actor(arcade.Sprite):
             self.equipment = Equipment()
             self.equipment.owner = self
             self.equipment.restore_from_dict(result["equipment"])
-
-        if "equippable" in result:
-            self.equippable = Equippable()
-            self.equippable.owner = self
-            self.equippable.restore_from_dict(result["equippable"])
-            if not self.item:
-                item = Item()
-                self.item = item
-                self.item.owner = self
 
         if "fighter" in result:
             self.fighter = Fighter()
