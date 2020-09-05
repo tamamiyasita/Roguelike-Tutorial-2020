@@ -14,12 +14,12 @@ class ShortSword(Actor):
         )
 
         self.slot = "main_hand"
-        self.states_bonus = {"power": 1}
+        self.states_bonus = {}
         self.attack_damage = (1, 1, 4)
 
         self.category = {ItemType.equip}
 
-        # self.explanatory_text = f"common short sword\nthat deals ? damage"
+        self.explanatory_text = f"common short sword\nthat deals {self.attack_damage[0]}D({self.attack_damage[1]} - {self.attack_damage[2]})damage"
 
         self.item_margin_x = 6.5*SPRITE_SCALE
         self.item_margin_y = 2.5*SPRITE_SCALE

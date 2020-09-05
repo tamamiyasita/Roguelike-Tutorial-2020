@@ -1,7 +1,6 @@
 from actor.actor import Actor
 from constants import *
 from data import *
-from actor.item import Item
 
 
 class HealingPotion(Actor):
@@ -12,10 +11,8 @@ class HealingPotion(Actor):
             name="healing_potion",
             not_visible_color=COLORS["black"],
 
-            item=Item()
-            )
+        )
         self.category = {ItemType.used}
-
 
     def use(self, game_engine):
         game_engine.player.fighter.hp += 5
@@ -24,7 +21,7 @@ class HealingPotion(Actor):
         game_engine.player.inventory.remove_item(self)
 
         return [{"message": f"You used the {self.name}"}]
-        
+
     @staticmethod
     def challenge():
         return 1

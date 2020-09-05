@@ -12,9 +12,12 @@ class LongSword(Actor):
         )
 
         self.slot = "main_hand"
-        self.states_bonus = {"power":3, "defense":1}
+        self.states_bonus = {"power": 1, "defense": 1}
+        self.attack_damage = (1, 2, 6)
 
         self.category = {ItemType.equip}
+
+        self.explanatory_text = f"common long sword\nthat deals {self.attack_damage[0]}D({self.attack_damage[1]} - {self.attack_damage[2]})damage"
 
         self.item_margin_x = 9 * SPRITE_SCALE
         self.item_margin_y = 0

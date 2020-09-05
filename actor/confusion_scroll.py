@@ -3,7 +3,6 @@ import arcade
 from actor.ai import ConfusedMonster
 from data import *
 from constants import *
-from actor.item import Item
 from actor.actor import Actor
 from util import get_blocking_entity, grid_to_pixel, pixel_to_grid
 
@@ -46,10 +45,8 @@ class ConfusionScroll(Actor):
             name="confusion_scroll",
             not_visible_color=COLORS["black"],
 
-            item=Item()
-            )
+        )
         self.category = {ItemType.used}
-
 
     def use(self, game_engine):
         print("use")

@@ -1,6 +1,5 @@
 from constants import *
 from data import *
-from actor.item import Item
 from actor.actor import Actor
 from util import grid_to_pixel
 
@@ -11,7 +10,7 @@ class FireballEffect(Actor):
             x=x,
             y=y,
             name="fireball_effect",
-            color = COLORS["white"]
+            color=COLORS["white"]
         )
         self.effect_sprites = effect_sprites
         self.alpha = 155
@@ -35,7 +34,6 @@ class FireballScroll(Actor):
             name="fireball_scroll",
             not_visible_color=COLORS["black"],
 
-            item=Item()
         )
         self.category = {ItemType.used}
 

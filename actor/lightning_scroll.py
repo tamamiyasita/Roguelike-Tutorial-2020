@@ -4,7 +4,6 @@ from typing import Optional
 
 from constants import *
 from data import *
-from actor.item import Item
 from actor.actor import Actor
 import random
 
@@ -15,7 +14,7 @@ class LightningEffect(Actor):
             x=x,
             y=y,
             name="lightning_effect",
-            color = COLORS["white"]
+            color=COLORS["white"]
         )
         self.effect_sprites = effect_sprites
         self.alpha = 255
@@ -43,10 +42,8 @@ class LightningScroll(Actor):
             name="lightning_scroll",
             not_visible_color=COLORS["black"],
 
-            item=Item()
         )
         self.category = {ItemType.used}
-
 
     def use(self, game_engine):
         closest_distance: Optional[float] = None

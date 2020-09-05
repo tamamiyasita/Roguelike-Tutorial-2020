@@ -13,10 +13,11 @@ class SmallShield(Actor):
         )
         self.item = True
         self.slot = "off_hand"
-        self.states_bonus = {"defense":2}
+        self.states_bonus = {"defense": 2}
 
         self.category = {ItemType.equip}
 
+        self.explanatory_text = f"common small shield\nthat defense bonus {self.states_bonus['defense']}"
 
         self.item_margin_x = -5.5*SPRITE_SCALE
         self.item_margin_y = 4*SPRITE_SCALE

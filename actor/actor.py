@@ -18,8 +18,9 @@ class Actor(arcade.Sprite):
                  blocks=False, block_sight=False,
                  scale=SPRITE_SCALE, color=COLORS["black"],
                  fighter=None, ai=None, speed=DEFAULT_SPEED,
-                 inventory=None, item=None, equipment=None,
+                 inventory=None, equipment=None,
                  visible_color=COLORS["white"], not_visible_color=COLORS["black"],
+                 explanatory_text="",
                  state=state.TURN_END, left_face=False):
         super().__init__(scale=scale)
         if name:
@@ -38,10 +39,10 @@ class Actor(arcade.Sprite):
         self.is_visible = False
         self.is_dead = False
         self.state = state
+        self.explanatory_text = explanatory_text
         self.left_face = left_face
         self._master = None
 
-        self.item = item
         self.inventory = inventory
         if self.inventory:
             self.inventory.owner = self
@@ -63,8 +64,6 @@ class Actor(arcade.Sprite):
         self.equipment = equipment
         if self.equipment:
             self.equipment.owner = self
-
-
 
     def get_dict(self):
         result = {}
@@ -182,7 +181,6 @@ class Actor(arcade.Sprite):
         self.target_x = self.center_x
         self.target_y = self.center_y
 
-
         # ドアのチェック
         door_actor = get_door(destination_x, destination_y, map_obj_sprites)
 
@@ -203,7 +201,6 @@ class Actor(arcade.Sprite):
         blocking_actor = get_blocking_entity(
             destination_x, destination_y, [actor_sprites, wall_sprites])
 
-
         def player_move():
 
             if blocking_actor and not target:
@@ -211,7 +208,7 @@ class Actor(arcade.Sprite):
                 actor = blocking_actor[0]
                 if actor in wall_sprites:
                     return [{"None": True}]
-                    
+
                 elif not actor.is_dead:
                     attack_results = self.fighter.attack(actor)
                     if actor == self:
@@ -288,15 +285,13 @@ class Actor(arcade.Sprite):
 
         if self.state == state.ATTACK:
             self.attack()
-            
 
     def attack(self):
         step = GRID_SIZE // 2.5
 
-
         if abs(self.target_x - self.center_x) >= step and self.dx:
             self.change_x = 0
-                # self.state = state.TURN_END
+            # self.state = state.TURN_END
         if abs(self.target_y - self.center_y) >= step and self.dy:
             self.change_y = 0
             # self.attack_delay -= 1
@@ -305,14 +300,12 @@ class Actor(arcade.Sprite):
         if self.attack_delay == 6:
             for i in range(PARTICLE_COUNT):
                 particle = AttackParticle()
-                particle.position = (self.center_x + (self.dx*20), self.center_y + (self.dy*20))
+                particle.position = (
+                    self.center_x + (self.dx*20), self.center_y + (self.dy*20))
                 self.effect_sprites.append(particle)
 
         if self.change_x == 0 and self.change_y == 0 and self.state != state.TURN_END:
             self.attack_delay -= 1
-
-
-
 
             if 0 > self.attack_delay:
                 self.center_y = self.target_y

@@ -8,12 +8,10 @@ from game_map.basic_dungeon import BasicDungeon
 from game_map.town_map import TownMap
 from game_map.map_sprite_set import ActorPlacement
 from recalculate_fov import recalculate_fov
-from viewport import viewport
 
 from actor.inventory import Inventory
 from actor.item_point_check import ItemPoint
 from actor.PC import Player
-from actor.crab import Crab
 from actor.stairs import Stairs
 from actor.restore_actor import restore_actor
 from actor.short_sword import ShortSword
