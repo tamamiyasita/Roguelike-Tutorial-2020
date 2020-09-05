@@ -1,14 +1,16 @@
 from constants import *
 from util import dice
 
+
 class Fighter:
-    def __init__(self, hp=0, defense=0, power=0, attack_speed=DEFAULT_ATTACK_SPEED,
+    def __init__(self, hp=0, defense=0, power=0, unarmed_attack=(1, 1, 1), attack_speed=DEFAULT_ATTACK_SPEED,
                  xp_reward=0, current_xp=0, level=1, ability_points=0):
         self.hp = hp
         self.base_defense = defense
         self.base_power = power
         self.base_max_hp = hp
         self.attack_speed = attack_speed
+        self.unarmed_attack = unarmed_attack
         self.owner = None
         self.xp_reward = xp_reward
         self.current_xp = current_xp
@@ -37,15 +39,24 @@ class Fighter:
         self.level = result["level"]
         self.ability_points = result["ability_points"]
 
+    @property
+    def attack_damage(self):
+        if self.owner.equipment and self.owner.equipment.main_weapon:
+            D, min_d, max_d = self.owner.equipment.main_weapon
+        else:
+            D, min_d, max_d = self.owner.fighter.unarmed_attack
 
+        attack_damage = dice(D, min_d, max_d+self.power)
+
+        return attack_damage
 
     @property
     def max_hp(self):
         bonus = 0
-        
+
         if self.owner and self.owner.equipment:
             bonus = self.owner.equipment.states_bonus["max_hp"]
-        
+
         return self.base_max_hp + bonus
 
     @property
@@ -54,7 +65,7 @@ class Fighter:
 
         if self.owner and self.owner.equipment:
             bonus = self.owner.equipment.states_bonus["power"]
-        
+
         return self.base_power + bonus
 
     @property
@@ -82,11 +93,12 @@ class Fighter:
     def attack(self, target):
         results = []
 
-        damage = self.power - target.fighter.defense
+        damage = self.attack_damage - target.fighter.defense
 
         if damage > 0:
             # damage表示メッセージを格納する
-            results.append({"message": f"{self.owner.name.capitalize()} attacks {target.name} for {str(damage)} hit points."})
+            results.append(
+                {"message": f"{self.owner.name.capitalize()} attacks {target.name} for {str(damage)} hit points."})
             results.extend(target.fighter.take_damage(damage))
 
             # xp獲得処理
@@ -96,6 +108,5 @@ class Fighter:
         else:
             results.append(
                 {"message": f"{self.owner.name.capitalize()} attacks {target.name} but no damage"})
-
 
         return results

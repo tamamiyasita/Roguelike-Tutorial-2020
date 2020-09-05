@@ -13,6 +13,8 @@ from actor.small_shield import SmallShield
 from actor.healing_potion import HealingPotion
 from actor.lightning_scroll import LightningScroll
 from actor.fireball_scroll import FireballScroll
+from actor.orcs import Orc, Troll
+from actor.crab import Crab
 
 
 def load_entities(filename):
@@ -28,17 +30,27 @@ def load_entities(filename):
 entities = load_entities(r"actor/actors.csv")
 
 
+# def get_random_monster_by_challenge(challenge):
+#     if challenge:
+#         filtered_monsters = [monster for monster in entities if int(
+#             monster["Challenge"]) == challenge]
+#         if len(filtered_monsters) == 0:
+#             raise ValueError(
+#                 f"Error, no entities for challenge level {challenge}.")
+#         m1 = random.choice(filtered_monsters)
+#         return m1
 def get_random_monster_by_challenge(challenge):
+    monster_list = [
+        Crab(), Orc(), Troll()
+    ]
     if challenge:
-        filtered_monsters = [monster for monster in entities if int(
-            monster["Challenge"]) == challenge]
+        filtered_monsters = [
+            monster for monster in monster_list if monster.challenge() == challenge]
         if len(filtered_monsters) == 0:
             raise ValueError(
                 f"Error, no entities for challenge level {challenge}.")
         m1 = random.choice(filtered_monsters)
         return m1
-
-
 
 
 def get_random_items_by_challenge(challenge):

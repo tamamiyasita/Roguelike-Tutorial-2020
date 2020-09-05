@@ -1,9 +1,9 @@
 from actor.actor import Actor
 from actor.PC import Player
 from actor.healing_potion import HealingPotion
-from actor.orc import Orc
+from actor.orcs import Orc
 from actor.troll import Troll
-from actor.Crab import Crab
+from actor.crab import Crab
 from actor.short_sword import ShortSword
 from actor.long_sword import LongSword
 from actor.small_shield import SmallShield
@@ -30,7 +30,6 @@ def restore_actor(actor_dict):
         actor = LongSword()
     elif actor_name == "SmallShield":
         actor = SmallShield()
-
 
     elif actor_name == "HealingPotion":
         actor = HealingPotion()

@@ -1,4 +1,3 @@
-import arcade
 from actor.actor import Actor
 from actor.fighter import Fighter
 from data import *
@@ -8,7 +7,9 @@ from actor.equipment import Equipment
 
 class Player(Actor):
     def __init__(self, x=0, y=0, inventory=0):
-        fighter_component = Fighter(hp=35, defense=3, power=4, level=1)
+        fighter_component = Fighter(hp=35, defense=3, power=4, level=1,
+                                    unarmed_attack=(1, 1, 2),
+                                    )
         equip_component = Equipment()
         super().__init__(
             # scale=0.5,

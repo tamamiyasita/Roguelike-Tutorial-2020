@@ -13,7 +13,7 @@ from viewport import viewport
 from actor.inventory import Inventory
 from actor.item_point_check import ItemPoint
 from actor.PC import Player
-from actor.Crab import Crab
+from actor.crab import Crab
 from actor.stairs import Stairs
 from actor.restore_actor import restore_actor
 from actor.short_sword import ShortSword

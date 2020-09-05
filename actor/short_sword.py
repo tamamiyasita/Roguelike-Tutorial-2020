@@ -14,7 +14,8 @@ class ShortSword(Actor):
         )
 
         self.slot = "main_hand"
-        self.states_bonus = {"power":1}
+        self.states_bonus = {"power": 1}
+        self.attack_damage = (1, 1, 4)
 
         self.category = {ItemType.equip}
 

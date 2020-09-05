@@ -1,5 +1,3 @@
-import arcade
-from arcade import texture
 from actor.actor import Actor
 from actor.fighter import Fighter
 from actor.ai import Basicmonster
@@ -9,26 +7,23 @@ from constants import *
 
 class Crab(Actor):
     def __init__(self, x=0, y=0, game_engine=None):
-        fighter_component = Fighter(hp=10, defense=2, power=4)
+        fighter_component = Fighter(hp=10, defense=2, power=2,
+                                    unarmed_attack=(2, 1, 3),
+                                    xp_reward=35
+                                    )
         ai_component = Basicmonster()
 
         super().__init__(
+            scale=1,
             name="crab",
-            texture="crab",
             x=x,
             y=y,
             fighter=fighter_component,
+            speed=12,
             ai=ai_component,
-            game_engine=game_engine,
-            state=state.TURN_END,
-
-            scale=1,
             blocks=True
         )
-        self.left_face = False
 
-    # def update_animation(self, delta_time=1 / 60):
-    #     if self.left_face:
-    #         self.texture = crab[1]
-    #     else:
-    #         self.texture = crab[0]
+    @staticmethod
+    def challenge():
+        return 1

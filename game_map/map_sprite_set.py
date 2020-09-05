@@ -29,7 +29,6 @@ class ActorPlacement:
         self.width = len(self.tiles)
         self.height = len(self.tiles[0])
 
-
     def floor_set(self):
         wall_sprites = arcade.SpriteList(
             use_spatial_hash=True, spatial_hash_cell_size=32)
@@ -40,7 +39,6 @@ class ActorPlacement:
 
                     floor = Floor(texture_number=21, x=x, y=y)
                     wall_sprites.append(floor)
-
 
         return wall_sprites
 
@@ -60,13 +58,13 @@ class ActorPlacement:
 
         return wall_sprites
 
-
     def tiled_floor_set(self):
-        tiled_floor_sprite =  arcade.SpriteList(
+        tiled_floor_sprite = arcade.SpriteList(
             use_spatial_hash=True, spatial_hash_cell_size=32)
         my_map = arcade.read_tmx("demo\m_test.tmx")
 
-        floors = arcade.process_layer(my_map, "floor",scaling=4, use_spatial_hash=True, hit_box_algorithm="None")
+        floors = arcade.process_layer(
+            my_map, "floor", scaling=4, use_spatial_hash=True, hit_box_algorithm="None")
 
         for f in floors:
             x, y = pixel_to_grid(f.center_x, f.center_y)
@@ -75,17 +73,15 @@ class ActorPlacement:
             floor.texture = f.texture
             tiled_floor_sprite.append(floor)
 
-
         return tiled_floor_sprite
-            
-
 
     def tiled_wall_set(self):
-        tiled_wall_sprite =  arcade.SpriteList(
+        tiled_wall_sprite = arcade.SpriteList(
             use_spatial_hash=True, spatial_hash_cell_size=32)
         my_map = arcade.read_tmx("demo\m_test.tmx")
 
-        walls = arcade.process_layer(my_map, "wall",scaling=4, use_spatial_hash=True, hit_box_algorithm="None")
+        walls = arcade.process_layer(
+            my_map, "wall", scaling=4, use_spatial_hash=True, hit_box_algorithm="None")
 
         for w in walls:
             x, y = pixel_to_grid(w.center_x, w.center_y)
@@ -95,18 +91,17 @@ class ActorPlacement:
             wall.blocks = True
             tiled_wall_sprite.append(wall)
 
-
-
         return tiled_wall_sprite
 
-
     def tiled_map_obj_set(self):
-        tiled_map_obj_sprite =  arcade.SpriteList(
+        tiled_map_obj_sprite = arcade.SpriteList(
             use_spatial_hash=True, spatial_hash_cell_size=32)
         my_map = arcade.read_tmx("demo\m_test.tmx")
 
-        door = arcade.process_layer(my_map, "door",scaling=4, use_spatial_hash=True, hit_box_algorithm="None")
-        stairs = arcade.process_layer(my_map, "stairs",scaling=4, use_spatial_hash=True, hit_box_algorithm="None")
+        door = arcade.process_layer(
+            my_map, "door", scaling=4, use_spatial_hash=True, hit_box_algorithm="None")
+        stairs = arcade.process_layer(
+            my_map, "stairs", scaling=4, use_spatial_hash=True, hit_box_algorithm="None")
 
         for m in door:
             x, y = pixel_to_grid(m.center_x, m.center_y)
@@ -124,12 +119,7 @@ class ActorPlacement:
             obj.blocks = True
             tiled_map_obj_sprite.append(obj)
 
-
         return tiled_map_obj_sprite
-
-
-    
-
 
     def map_point_set(self):
         map_point_sprites = arcade.SpriteList(
@@ -184,9 +174,9 @@ class ActorPlacement:
         for x in range(self.width):
             for y in range(self.height):
                 if type(self.actor_tiles[x][y]) == int:
-                    monster_tile_number = get_random_monster_by_challenge(
+                    monster = get_random_monster_by_challenge(
                         self.actor_tiles[x][y])
-                    monster = make_monster_sprite(monster_tile_number)
+                    # monster = make_monster_sprite(monster_tile_number)
                     monster.x = x
                     monster.y = y
                     cx, cy = grid_to_pixel(x, y)
