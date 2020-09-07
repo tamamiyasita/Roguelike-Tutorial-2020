@@ -7,8 +7,9 @@ from actor.equipment import Equipment
 
 class Player(Actor):
     def __init__(self, x=0, y=0, inventory=0):
-        fighter_component = Fighter(hp=35, defense=3, power=4, level=1,
-                                    unarmed_attack=(1, 1, 2),
+        fighter_component = Fighter(hp=35, defense=3, strength=4, dexterity=4,
+                                    unarmed_attack=(1, 1, 2), hit_rate=100,
+                                    level=1
                                     )
         equip_component = Equipment()
         super().__init__(

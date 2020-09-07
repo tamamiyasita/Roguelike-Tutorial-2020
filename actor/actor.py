@@ -52,10 +52,6 @@ class Actor(arcade.Sprite):
         self.speed = speed
         self.wait = speed//2
 
-        self.fighter = fighter
-        if self.fighter:
-            self.fighter.owner = self
-            self.state = state
 
         self.ai = ai
         if self.ai:
@@ -65,6 +61,11 @@ class Actor(arcade.Sprite):
         if self.equipment:
             self.equipment.owner = self
 
+        self.fighter = fighter
+        if self.fighter:
+            self.fighter.owner = self
+            self.state = state
+            
     def get_dict(self):
         result = {}
         result["texture_number"] = self.texture_number
@@ -95,8 +96,7 @@ class Actor(arcade.Sprite):
 
         if self.fighter:
             result["fighter"] = self.fighter.get_dict()
-        if self.item:
-            result["item"] = True
+
         if self.inventory:
             result["inventory"] = self.inventory.get_dict()
 
@@ -139,8 +139,6 @@ class Actor(arcade.Sprite):
             self.ai = ConfusedMonster()
             self.ai.owner = self
             self.ai.restore_from_dict(result["confused_ai"])
-        if "item" in result:
-            self.item = Item()
 
         self.inventory = None
         if "inventory" in result:

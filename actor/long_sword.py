@@ -12,7 +12,7 @@ class LongSword(Actor):
         )
 
         self.slot = "main_hand"
-        self.states_bonus = {"power": 1, "defense": 1}
+        self.states_bonus = {"strength": 1, "defense": 1}
         self.attack_damage = (1, 2, 6)
 
         self.category = {ItemType.equip}

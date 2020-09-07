@@ -9,7 +9,7 @@ from constants import *
 
 class Troll(Actor):
     def __init__(self, x=0, y=0):
-        fighter_component = Fighter(hp=35, defense=2, power=5,
+        fighter_component = Fighter(hp=35, defense=2, strength=5,
                                     unarmed_attack=(1, 1, 5),
                                     speed=9,
                                     xp_reward=75

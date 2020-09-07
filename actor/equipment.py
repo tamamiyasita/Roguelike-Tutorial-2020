@@ -53,7 +53,7 @@ class Equipment:
     def states_bonus(self):
         """ステータスボーナスの計算"""
 
-        bonus = {"max_hp": 0, "power": 0, "defense": 0}
+        bonus = {"max_hp": 0, "strength": 0, "defense": 0}
         for parts in self.item_slot.values():
             if parts and parts.states_bonus:
                 bonus = Counter(bonus) + Counter(parts.states_bonus)

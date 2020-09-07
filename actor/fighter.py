@@ -3,13 +3,17 @@ from util import dice
 
 
 class Fighter:
-    def __init__(self, hp=0, defense=0, power=0, unarmed_attack=(1, 1, 1), attack_speed=DEFAULT_ATTACK_SPEED,
-                 xp_reward=0, current_xp=0, level=1, ability_points=0):
+    def __init__(self, hp=0, defense=0, strength=0, dexterity=0, unarmed_attack=(1, 1, 1), attack_speed=DEFAULT_ATTACK_SPEED,
+                 hit_rate=0, xp_reward=0, current_xp=0, level=1, ability_points=0):
         self.hp = hp
         self.base_defense = defense
-        self.base_power = power
-        self.base_max_hp = hp
+        self.base_strength = strength
+        self.base_dexterity = dexterity
+        self.base_max_hp = self.hp
+
+            
         self.attack_speed = attack_speed
+        self.hit_rate = hit_rate
         self.unarmed_attack = unarmed_attack
         self.owner = None
         self.xp_reward = xp_reward
@@ -21,7 +25,7 @@ class Fighter:
         result = {}
         result["max_hp"] = self.base_max_hp
         result["defense"] = self.base_defense
-        result["power"] = self.base_power
+        result["strength"] = self.base_strength
         result["hp"] = self.hp
         result["xp_reward"] = self.xp_reward
         result["current_xp"] = self.current_xp
@@ -32,7 +36,7 @@ class Fighter:
     def restore_from_dict(self, result):
         self.base_max_hp = result["max_hp"]
         self.base_defense = result["defense"]
-        self.base_power = result["power"]
+        self.base_strength = result["strength"]
         self.hp = result["hp"]
         self.xp_reward = result["xp_reward"]
         self.current_xp = result["current_xp"]
@@ -46,7 +50,7 @@ class Fighter:
         else:
             D, min_d, max_d = self.owner.fighter.unarmed_attack
 
-        attack_damage = dice(D, min_d, max_d+self.power)
+        attack_damage = dice(D, min_d, max_d+self.strength)
 
         return attack_damage
 
@@ -55,18 +59,27 @@ class Fighter:
         bonus = 0
 
         if self.owner and self.owner.equipment:
-            bonus = self.owner.equipment.states_bonus["max_hp"]
+            bonus = self.owner.equipment.states_bonus["max_hp"] + (self.strength // 3)
 
         return self.base_max_hp + bonus
 
     @property
-    def power(self):
+    def strength(self):
         bonus = 0
 
         if self.owner and self.owner.equipment:
-            bonus = self.owner.equipment.states_bonus["power"]
+            bonus = self.owner.equipment.states_bonus["strength"]
 
-        return self.base_power + bonus
+        return self.base_strength + bonus
+
+    @property
+    def dexterity(self):
+        bonus = 0
+
+        if self.owner and self.owner.equipment:
+            bonus = self.owner.equipment.states_bonus["dexterity"]
+
+        return self.base_strength + bonus
 
     @property
     def defense(self):
@@ -93,7 +106,7 @@ class Fighter:
     def attack(self, target):
         results = []
 
-        damage = self.attack_damage - target.fighter.defense
+        damage = self.attack_damage // target.fighter.defense
 
         if damage > 0:
             # damage表示メッセージを格納する

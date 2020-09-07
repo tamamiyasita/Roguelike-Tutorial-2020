@@ -45,7 +45,7 @@ def get_random_monster_by_challenge(challenge):
     ]
     if challenge:
         filtered_monsters = [
-            monster for monster in monster_list if monster.challenge() == challenge]
+            monster for monster in monster_list if monster.fighter.level == challenge]
         if len(filtered_monsters) == 0:
             raise ValueError(
                 f"Error, no entities for challenge level {challenge}.")
@@ -78,7 +78,7 @@ def make_monster_sprite(monster_dict):
     sprite.fighter.owner = sprite
     sprite.fighter.hp = int(monster_dict["HP"])
     sprite.fighter.base_max_hp = int(monster_dict["HP"])
-    sprite.fighter.base_power = int(monster_dict["Attack"])
+    sprite.fighter.base_strength = int(monster_dict["Attack"])
     sprite.fighter.base_defense = int(monster_dict["Defense"])
     sprite.speed = int(monster_dict["SPEED"])
     sprite.fighter.xp_reward = int(monster_dict["XP"])

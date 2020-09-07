@@ -40,7 +40,7 @@ class CharacterScreen:
         """ステータス表示"""
         text_position_y -= text_size * spacing
         text_size = 20
-        states_text = f"Attack: {self.player.fighter.base_power} + {self.player.equipment.states_bonus['power']}"
+        states_text = f"Attack: {self.player.fighter.base_strength} + {self.player.equipment.states_bonus['strength']}"
         arcade.draw_text(
             text=states_text,
             start_x=text_position_x,
@@ -141,7 +141,7 @@ class CharacterScreen:
             )
             for buttons in buttons_clicked:
                 if buttons.name == "Attack":
-                    self.player.fighter.base_power += 1
+                    self.player.fighter.base_strength += 1
                     self.player.fighter.ability_points -= 1
                 elif buttons.name == "Defense":
                     self.player.fighter.base_defense += 1

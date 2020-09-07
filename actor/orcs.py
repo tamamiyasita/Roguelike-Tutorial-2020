@@ -7,9 +7,9 @@ from constants import *
 
 class Orc(Actor):
     def __init__(self, x=0, y=0):
-        fighter_component = Fighter(hp=8, defense=1, power=2,
+        fighter_component = Fighter(hp=8, defense=1, strength=2,
                                     unarmed_attack=(1, 1, 3),
-                                    xp_reward=35
+                                    xp_reward=35, level=1
                                     )
         ai_component = Basicmonster()
 
@@ -24,16 +24,13 @@ class Orc(Actor):
             blocks=True
         )
 
-    @staticmethod
-    def challenge():
-        return 1
 
 
 class Troll(Actor):
     def __init__(self, x=0, y=0):
-        fighter_component = Fighter(hp=35, defense=2, power=5,
+        fighter_component = Fighter(hp=35, defense=2, strength=5,
                                     unarmed_attack=(1, 1, 5),
-                                    xp_reward=75
+                                    xp_reward=75, level=2
                                     )
         ai_component = Basicmonster()
 
@@ -48,6 +45,3 @@ class Troll(Actor):
             blocks=True
         )
 
-    @staticmethod
-    def challenge():
-        return 2

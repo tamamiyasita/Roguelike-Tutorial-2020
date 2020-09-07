@@ -16,6 +16,7 @@ class ShortSword(Actor):
         self.slot = "main_hand"
         self.states_bonus = {}
         self.attack_damage = (1, 1, 4)
+        self.hit_rate = 90
 
         self.category = {ItemType.equip}
 
