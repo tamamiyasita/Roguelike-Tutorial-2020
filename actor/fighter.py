@@ -1,20 +1,26 @@
 from constants import *
 from util import dice
+import random
 
 
 class Fighter:
-    def __init__(self, hp=0, defense=0, strength=0, dexterity=0, unarmed_attack=(1, 1, 1), attack_speed=DEFAULT_ATTACK_SPEED,
-                 hit_rate=0, xp_reward=0, current_xp=0, level=1, ability_points=0):
+    def __init__(self, hp=0, mp=0, defense=0, str=0, dex=0, int=0, unarmed_attack=(1, 1, 1), attack_speed=DEFAULT_ATTACK_SPEED,
+                 evasion=0, hit_rate=100, xp_reward=0, current_xp=0, level=1, ability_points=0):
         self.hp = hp
-        self.base_defense = defense
-        self.base_strength = strength
-        self.base_dexterity = dexterity
         self.base_max_hp = self.hp
+        self.mp = mp
+        self.base_max_mp = self.mp
 
-            
-        self.attack_speed = attack_speed
-        self.hit_rate = hit_rate
+        self.base_strength = str
+        self.base_dexterity = dex
+        self.base_intelligence = int
+
         self.unarmed_attack = unarmed_attack
+        self.base_defense = defense
+        self.base_evasion = evasion
+        self.hit_rate = hit_rate
+        self.attack_speed = attack_speed
+
         self.owner = None
         self.xp_reward = xp_reward
         self.current_xp = current_xp
@@ -23,63 +29,93 @@ class Fighter:
 
     def get_dict(self):
         result = {}
-        result["max_hp"] = self.base_max_hp
-        result["defense"] = self.base_defense
-        result["strength"] = self.base_strength
         result["hp"] = self.hp
+        result["max_hp"] = self.base_max_hp
+        result["mp"] = self.mp
+        result["max_mp"] = self.base_max_mp
+
+        result["strength"] = self.base_strength
+        result["dexterity"] = self.base_dexterity
+        result["intelligence"] = self.base_intelligence
+
+        result["unarmed_attack"] = self.unarmed_attack
+        result["defense"] = self.base_defense
+        result["evasion"] = self.base_evasion
+        result["hit_rate"] = self.hit_rate
+        result["attack_speed"] = self.attack_speed
+
         result["xp_reward"] = self.xp_reward
         result["current_xp"] = self.current_xp
         result["level"] = self.level
         result["ability_points"] = self.ability_points
+
         return result
 
     def restore_from_dict(self, result):
-        self.base_max_hp = result["max_hp"]
-        self.base_defense = result["defense"]
-        self.base_strength = result["strength"]
         self.hp = result["hp"]
+        self.base_max_hp = result["max_hp"]
+        self.mp = result["mp"]
+        self.base_max_mp = result["max_mp"]
+
+        self.base_strength = result["strength"]
+        self.base_dexterity = result["dexterity"]
+        self.base_intelligence = result["intelligence"]
+
+        self.unarmed_attack = result["unarmed_attack"]
+        self.base_defense = result["defense"]
+        self.base_evasion = result["evasion"]
+        self.hit_rate = result["hit_rate"]
+        self.attack_speed = result["attack_speed"]
+
         self.xp_reward = result["xp_reward"]
         self.current_xp = result["current_xp"]
         self.level = result["level"]
         self.ability_points = result["ability_points"]
 
     @property
-    def attack_damage(self):
-        if self.owner.equipment and self.owner.equipment.main_weapon:
-            D, min_d, max_d = self.owner.equipment.main_weapon
-        else:
-            D, min_d, max_d = self.owner.fighter.unarmed_attack
-
-        attack_damage = dice(D, min_d, max_d+self.strength)
-
-        return attack_damage
-
-    @property
     def max_hp(self):
         bonus = 0
 
         if self.owner and self.owner.equipment:
-            bonus = self.owner.equipment.states_bonus["max_hp"] + (self.strength // 3)
+            bonus = self.owner.equipment.states_bonus["max_hp"]
 
         return self.base_max_hp + bonus
 
     @property
-    def strength(self):
+    def max_mp(self):
         bonus = 0
 
         if self.owner and self.owner.equipment:
-            bonus = self.owner.equipment.states_bonus["strength"]
+            bonus = self.owner.equipment.states_bonus["max_mp"]
+
+        return self.base_max_mp + bonus
+
+    @property
+    def str(self):
+        bonus = 0
+
+        if self.owner and self.owner.equipment:
+            bonus = self.owner.equipment.states_bonus["str"]
 
         return self.base_strength + bonus
 
     @property
-    def dexterity(self):
+    def dex(self):
         bonus = 0
 
         if self.owner and self.owner.equipment:
-            bonus = self.owner.equipment.states_bonus["dexterity"]
+            bonus = self.owner.equipment.states_bonus["dex"]
 
-        return self.base_strength + bonus
+        return self.base_dexterity + bonus
+
+    @property
+    def int(self):
+        bonus = 0
+
+        if self.owner and self.owner.equipment:
+            bonus = self.owner.equipment.states_bonus["int"]
+
+        return self.base_intelligence + bonus
 
     @property
     def defense(self):
@@ -90,8 +126,43 @@ class Fighter:
 
         return self.base_defense + bonus
 
+    @property
+    def evasion(self):
+        bonus = 0
+
+        if self.owner and self.owner.equipment:
+            bonus = self.owner.equipment.states_bonus["evasion"]
+
+        return self.base_evasion + bonus + (self.dex / 2)
+
+    @property
+    def attack_damage(self):
+        if self.owner.equipment and self.owner.equipment.weapon_damage:
+            D, min_d, max_d = self.owner.equipment.weapon_damage
+        else:
+            D, min_d, max_d = self.owner.fighter.unarmed_attack
+
+        attack_damage = dice(D, min_d+(self.str//3), max_d+self.str)
+
+        return attack_damage
+
+    @property
+    def hit_chance(self):
+        # (命中率)％ ＝（α／１００）＊（１ー （β ／ １００））＊ １００
+        # 命中率（α）＝９５、回避率（β）＝５
+        if self.owner.equipment and self.owner.equipment.weapon_hit_rate:
+            hit = self.owner.equipment.weapon_hit_rate
+        else:
+            hit = self.owner.fighter.hit_rate
+
+        hit_chance = (hit / 100) * (1 - (self.evasion / 100)) * 100
+
+        return hit_chance
+
     def take_damage(self, amount):
         results = []
+
+        hit_result = 6
 
         self.hp -= amount
 
@@ -105,21 +176,28 @@ class Fighter:
 
     def attack(self, target):
         results = []
+        if random.randrange(1, 100) <= self.hit_chance:
 
-        damage = self.attack_damage // target.fighter.defense
+            damage = self.attack_damage // target.fighter.defense
 
-        if damage > 0:
-            # damage表示メッセージを格納する
-            results.append(
-                {"message": f"{self.owner.name.capitalize()} attacks {target.name} for {str(damage)} hit points."})
-            results.extend(target.fighter.take_damage(damage))
+            if damage > 0:
+                # damage表示メッセージを格納する
+                results.append(
+                    {"message": f"{self.owner.name.capitalize()} attacks {target.name} for {str(damage)} hit points."})
+                results.extend(target.fighter.take_damage(damage))
 
-            # xp獲得処理
-            if target.is_dead:
-                self.current_xp += target.fighter.xp_reward
+                # xp獲得処理
+                if target.is_dead:
+                    self.current_xp += target.fighter.xp_reward
+
+            else:
+                results.append(
+                    {"message": f"{self.owner.name.capitalize()} attacks {target.name} but no damage"}
+                )
 
         else:
             results.append(
-                {"message": f"{self.owner.name.capitalize()} attacks {target.name} but no damage"})
+                {"message": f"{self.owner.name.capitalize()} attacks {target.name} Avoided"}
+            )
 
         return results

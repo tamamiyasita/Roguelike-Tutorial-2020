@@ -7,9 +7,13 @@ from constants import *
 
 class Crab(Actor):
     def __init__(self, x=0, y=0, game_engine=None):
-        fighter_component = Fighter(hp=10, defense=2, strength=4,
+        fighter_component = Fighter(hp=10, str=4, dex=2,
                                     unarmed_attack=(2, 1, 3),
-                                    xp_reward=35, level=1
+                                    hit_rate=95,
+                                    defense=2,
+                                    evasion=2,
+                                    xp_reward=35,
+                                    level=1
                                     )
         ai_component = Basicmonster()
 
@@ -23,5 +27,3 @@ class Crab(Actor):
             ai=ai_component,
             blocks=True
         )
-
-

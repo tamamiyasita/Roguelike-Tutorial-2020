@@ -60,7 +60,7 @@ def get_random_items_by_challenge(challenge):
     ]
     if challenge:
         filtered_items = [
-            item for item in item_list if item.challenge() == challenge]
+            item for item in item_list if item.level == challenge]
         if len(filtered_items) == 0:
             raise ValueError(
                 f"Error, no entities for challenge level {challenge}.")

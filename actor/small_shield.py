@@ -17,11 +17,9 @@ class SmallShield(Actor):
 
         self.category = {ItemType.equip}
 
+        self.level = 1
+
         self.explanatory_text = f"common small shield\nthat defense bonus {self.states_bonus['defense']}"
 
         self.item_margin_x = -5.5*SPRITE_SCALE
         self.item_margin_y = 4*SPRITE_SCALE
-
-    @staticmethod
-    def challenge():
-        return 1

@@ -53,7 +53,8 @@ class Equipment:
     def states_bonus(self):
         """ステータスボーナスの計算"""
 
-        bonus = {"max_hp": 0, "strength": 0, "defense": 0}
+        bonus = {"max_hp": 0, "max_mp": 0, "str": 0,
+                 "dex": 0, "int": 0, "defense": 0, "evasion": 0}
         for parts in self.item_slot.values():
             if parts and parts.states_bonus:
                 bonus = Counter(bonus) + Counter(parts.states_bonus)
@@ -61,9 +62,16 @@ class Equipment:
         return bonus
 
     @property
-    def main_weapon(self):
+    def weapon_damage(self):
         if self.item_slot["main_hand"]:
             return self.item_slot["main_hand"].attack_damage
+        else:
+            return None
+
+    @property
+    def weapon_hit_rate(self):
+        if self.item_slot["main_hand"]:
+            return self.item_slot["main_hand"].hit_rate
         else:
             return None
 

@@ -52,7 +52,6 @@ class Actor(arcade.Sprite):
         self.speed = speed
         self.wait = speed//2
 
-
         self.ai = ai
         if self.ai:
             self.ai.owner = self
@@ -65,7 +64,7 @@ class Actor(arcade.Sprite):
         if self.fighter:
             self.fighter.owner = self
             self.state = state
-            
+
     def get_dict(self):
         result = {}
         result["texture_number"] = self.texture_number
@@ -163,9 +162,6 @@ class Actor(arcade.Sprite):
         actor_sprites = engine.cur_level.actor_sprites
         self.effect_sprites = engine.cur_level.effect_sprites
 
-        ai_move_speed = 5
-        if self.ai:
-            ai_move_speed = MOVE_SPEED*2
         self.dx, self.dy = dxy
 
         if self.dx == -1:
@@ -222,10 +218,11 @@ class Actor(arcade.Sprite):
 
             else:
                 self.state = state.ON_MOVE
-                self.change_y = self.dy * (MOVE_SPEED+ai_move_speed)
-                self.change_x = self.dx * (MOVE_SPEED+ai_move_speed)
+                self.change_y = self.dy * (MOVE_SPEED)
+                self.change_x = self.dx * (MOVE_SPEED)
 
         def monster_move(target):
+            ai_move_speed = MOVE_SPEED*2
 
             if target and self.distance_to(target) <= 1.46:
                 # monsterの攻撃チェック
@@ -238,7 +235,7 @@ class Actor(arcade.Sprite):
                 return attack_results
 
             elif not get_blocking_entity(destination_x, destination_y, [actor_sprites, wall_sprites]):
-                # playerとmonsterの移動
+                # monsterの移動
                 self.state = state.ON_MOVE
                 self.change_y = self.dy * (MOVE_SPEED+ai_move_speed)
                 self.change_x = self.dx * (MOVE_SPEED+ai_move_speed)

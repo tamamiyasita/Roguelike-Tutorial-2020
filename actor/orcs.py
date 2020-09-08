@@ -7,9 +7,13 @@ from constants import *
 
 class Orc(Actor):
     def __init__(self, x=0, y=0):
-        fighter_component = Fighter(hp=8, defense=1, strength=2,
+        fighter_component = Fighter(hp=8, str=2, dex=1,
                                     unarmed_attack=(1, 1, 3),
-                                    xp_reward=35, level=1
+                                    hit_rate=90,
+                                    defense=1,
+                                    evasion=1,
+                                    xp_reward=35,
+                                    level=1
                                     )
         ai_component = Basicmonster()
 
@@ -25,12 +29,14 @@ class Orc(Actor):
         )
 
 
-
 class Troll(Actor):
     def __init__(self, x=0, y=0):
-        fighter_component = Fighter(hp=35, defense=2, strength=5,
-                                    unarmed_attack=(1, 1, 5),
-                                    xp_reward=75, level=2
+        fighter_component = Fighter(hp=35,  str=5, dex=1,
+                                    unarmed_attack=(1, 1, 6),
+                                    hit_rate=80,
+                                    defense=2,
+                                    xp_reward=75,
+                                    level=2
                                     )
         ai_component = Basicmonster()
 
@@ -44,4 +50,3 @@ class Troll(Actor):
             ai=ai_component,
             blocks=True
         )
-

@@ -12,16 +12,15 @@ class LongSword(Actor):
         )
 
         self.slot = "main_hand"
-        self.states_bonus = {"strength": 1, "defense": 1}
+        self.states_bonus = {"str": 1, "defense": 1}
         self.attack_damage = (1, 2, 6)
+        self.hit_rate = 93
 
         self.category = {ItemType.equip}
+
+        self.level = 2
 
         self.explanatory_text = f"common long sword\nthat deals {self.attack_damage[0]}D({self.attack_damage[1]} - {self.attack_damage[2]})damage"
 
         self.item_margin_x = 9 * SPRITE_SCALE
         self.item_margin_y = 0
-
-    @staticmethod
-    def challenge():
-        return 2

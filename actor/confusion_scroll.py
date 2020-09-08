@@ -48,6 +48,8 @@ class ConfusionScroll(Actor):
         )
         self.category = {ItemType.used}
 
+        self.level = 2
+
     def use(self, game_engine):
         print("use")
         self.game_engine = game_engine
@@ -82,7 +84,3 @@ class ConfusionScroll(Actor):
         self.game_engine.player.inventory.remove_item(self)
 
         return results
-
-    @staticmethod
-    def challenge():
-        return 2

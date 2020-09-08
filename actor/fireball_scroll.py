@@ -37,6 +37,8 @@ class FireballScroll(Actor):
         )
         self.category = {ItemType.used}
 
+        self.level = 2
+
     def use(self, game_engine):
         print("use")
         self.game_engine = game_engine
@@ -82,7 +84,3 @@ class FireballScroll(Actor):
 
         print(results, "results")
         return results
-
-    @staticmethod
-    def challenge():
-        return 2

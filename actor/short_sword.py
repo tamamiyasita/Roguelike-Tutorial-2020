@@ -16,7 +16,9 @@ class ShortSword(Actor):
         self.slot = "main_hand"
         self.states_bonus = {}
         self.attack_damage = (1, 1, 4)
-        self.hit_rate = 90
+        self.hit_rate = 97
+
+        self.level = 1
 
         self.category = {ItemType.equip}
 
@@ -24,7 +26,3 @@ class ShortSword(Actor):
 
         self.item_margin_x = 6.5*SPRITE_SCALE
         self.item_margin_y = 2.5*SPRITE_SCALE
-
-    @staticmethod
-    def challenge():
-        return 1

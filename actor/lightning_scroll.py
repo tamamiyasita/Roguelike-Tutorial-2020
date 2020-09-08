@@ -45,6 +45,8 @@ class LightningScroll(Actor):
         )
         self.category = {ItemType.used}
 
+        self.level = 1
+
     def use(self, game_engine):
         closest_distance: Optional[float] = None
         closest_actor: Optional[Actor] = None
@@ -75,7 +77,3 @@ class LightningScroll(Actor):
             results.extend([{"message": "not enemy"}])
 
         return results
-
-    @staticmethod
-    def challenge():
-        return 1
