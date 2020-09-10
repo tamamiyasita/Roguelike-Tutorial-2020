@@ -21,6 +21,7 @@ from actor.fireball_scroll import FireballScroll
 from actor.small_shield import SmallShield
 from util import get_door, get_blocking_entity
 from turn_loop import TurnLoop
+from fire import Fire
 
 
 class GameLevel:
@@ -464,7 +465,21 @@ class GameEngine:
                 if result:
                     new_action_queue.extend(result)
 
+
+            if "fire" in action:
+                shooter = action["fire"]
+                fire = Fire(self)
+                result = fire.shot(shooter=shooter)
+                if result:
+                    new_action_queue.extend(result)
+
+
+
         self.action_queue = new_action_queue
+
+
+
+
 
     def grid_click(self, grid_x, grid_y):
         """ クリックしたグリッドをself.grid_select_handlersに格納する 

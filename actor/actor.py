@@ -64,6 +64,7 @@ class Actor(arcade.Sprite):
         if self.fighter:
             self.fighter.owner = self
             self.state = state
+            self.d_time = 100
 
     def get_dict(self):
         result = {}
@@ -342,11 +343,26 @@ class Actor(arcade.Sprite):
         self.texture = self.textures[self.texture_number]
 
     def update_animation(self, delta_time=1 / 60):
+        # 左右を向く
         if len(self.textures) >= 2:
             if self.left_face:
                 self.texture = self.textures[1]
             else:
                 self.texture = self.textures[0]
+        # NPC待機モーション
+        if len(self.textures) >= 4 and self.ai:
+            self.d_time -= 1
+            if 50 > self.d_time and self.left_face:
+                self.texture = self.textures[1]
+            if 50 < self.d_time and self.left_face:
+                self.texture = self.textures[3]
+            if 50 > self.d_time and not self.left_face:
+                self.texture = self.textures[0]
+            if 50 < self.d_time and not self.left_face:
+                self.texture = self.textures[2]
+            if self.d_time < 0:
+                self.d_time = 100
+
 
         # itemを装備した時のsprite表示
         if self.master:

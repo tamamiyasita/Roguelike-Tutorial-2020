@@ -10,6 +10,8 @@ KEYMAP_UP_LEFT = [arcade.key.Q, arcade.key.NUM_7, arcade.key.HOME]
 KEYMAP_UP_RIGHT = [arcade.key.E, arcade.key.NUM_9, arcade.key.PAGEUP]
 KEYMAP_DOWN_LEFT = [arcade.key.Z, arcade.key.NUM_1, arcade.key.END]
 KEYMAP_DOWN_RIGHT = [arcade.key.X, arcade.key.NUM_3, arcade.key.PAGEDOWN]
+
+KEYMAP_FIRE = [arcade.key.F]
 KEYMAP_REST = [arcade.key.R]
 KEYMAP_PICKUP = [arcade.key.G, arcade.key.NUM_5]
 KEYMAP_SELECT_ITEM_1 = [arcade.key.KEY_1]
@@ -77,8 +79,10 @@ def keymap(key, engine):
         elif key in KEYMAP_DOWN_RIGHT:
             direction = (1, -1)
         elif key in KEYMAP_REST:
-            engine.player.state = state.TURN_END
-            engine.player.wait = engine.player.speed
+            engine.action_queue.extend([{"turn_end":engine.player}])
+            
+        elif key in KEYMAP_FIRE:
+            engine.action_queue.extend([{"fire":engine.player}])
 
         elif key in KEYMAP_PICKUP:
             engine.action_queue.extend([{"pickup": True}])

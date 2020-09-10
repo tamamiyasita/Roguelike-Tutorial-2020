@@ -7,6 +7,7 @@ pc_move = arcade.load_texture_pair(r"image/rou6_m.png")
 pc_attack = arcade.load_texture_pair(r"image/rou6_a.png")
 pc_delay = arcade.load_texture_pair(r"image/rou6_d.png")
 pc_delay2 = arcade.load_texture_pair(r"image/rou6_d2.png")
+pc_delay3 = arcade.load_texture_pair(r"image/rou6t.png")
 
 # test_texture
 # player = arcade.load_texture_pair(r"t_image/rou6.png")
@@ -16,26 +17,38 @@ pc_delay2 = arcade.load_texture_pair(r"image/rou6_d2.png")
 # pc_delay2 = arcade.load_texture_pair(r"t_image/rou6_d2.png")
 
 ###enemys###
-size = 16  # テクスチャのサイズと位置情報も兼ねる
-orcs_tiles = (r"image/demi_human1.png")  # orcタイルイメージ
-
-
 # crab pairで生成
-crab = arcade.load_texture_pair(r"image/crab.png")
+crab_0 = arcade.load_texture_pair(r"image/crab0.png")
+crab_1 = arcade.load_texture_pair(r"image/crab1.png")
+crab = [*crab_0, *crab_1]
+
+size = 16  # テクスチャのサイズと位置情報も兼ねる
+orcs_tiles_0 = (r"image\Characters\Player0.png")  # orcタイルイメージ
+orcs_tiles_1 = (r"image\Characters\Player1.png")  # orcタイルイメージ
+
+
 
 # orcテクスチャ生成
-orc_left = arcade.load_texture(
-    orcs_tiles, x=0, y=12*size, width=size, height=size)
-orc_right = arcade.load_texture(
-    orcs_tiles, x=0, y=12*size, width=size, height=size, mirrored=True)
-orc = [orc_right, orc_left]
+orc_right_0 = arcade.load_texture(
+    orcs_tiles_0, x=0, y=12*size, width=size, height=size, mirrored=True)
+orc_left_0 = arcade.load_texture(
+    orcs_tiles_0, x=0, y=12*size, width=size, height=size)
+orc_right_1 = arcade.load_texture(
+    orcs_tiles_1, x=0, y=12*size, width=size, height=size, mirrored=True)
+orc_left_1 = arcade.load_texture(
+    orcs_tiles_1, x=0, y=12*size, width=size, height=size)
+orc = [orc_right_0, orc_left_0, orc_right_1, orc_left_1]
 
 # trollクスチャ生成
-troll_left = arcade.load_texture(
-    orcs_tiles, x=size*7, y=12*size, width=size, height=size)
-troll_right = arcade.load_texture(
-    orcs_tiles, x=size*7, y=12*size, width=size, height=size, mirrored=True)
-troll = [troll_right, troll_left]
+troll_right_0 = arcade.load_texture(
+    orcs_tiles_0, x=size*7, y=12*size, width=size, height=size, mirrored=True)
+troll_left_0 = arcade.load_texture(
+    orcs_tiles_0, x=size*7, y=12*size, width=size, height=size)
+troll_right_1 = arcade.load_texture(
+    orcs_tiles_1, x=size*7, y=12*size, width=size, height=size, mirrored=True)
+troll_left_1 = arcade.load_texture(
+    orcs_tiles_1, x=size*7, y=12*size, width=size, height=size)
+troll = [troll_right_0, troll_left_0, troll_right_1, troll_left_1]
 #######
 
 # short weaponテクスチャ生成
@@ -146,23 +159,3 @@ IMAGE_ID = {"player": player,
             "door": doors
 
             }
-
-
-class Testimg(arcade.Window):
-    def __init__(self):
-        size = 16
-        super().__init__(100, 100)
-        img = arcade.load_texture(
-            floors, x=0, y=size, width=size, height=size)
-        arcade.start_render()
-        arcade.draw_texture_rectangle(50, 50, 16, 16, img)
-
-
-def main():
-    test = Testimg()
-
-    arcade.run()
-
-
-if __name__ == "__main__":
-    main()

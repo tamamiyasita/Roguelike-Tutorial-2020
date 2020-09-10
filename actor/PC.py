@@ -62,7 +62,7 @@ class Player(Actor):
             if self.delay_time < 0.7:
                 self.texture = pc_delay2[0]
             if self.delay_time <= 0.5:
-                self.texture = pc_delay[0]
+                self.texture = pc_delay3[0]
             if self.delay_time < 0:
                 self.delay_time = 5
         if self.state == state.READY and self.left_face:
@@ -71,6 +71,6 @@ class Player(Actor):
             if self.delay_time < 0.7:
                 self.texture = pc_delay2[1]
             if self.delay_time <= 0.5:
-                self.texture = pc_delay[1]
+                self.texture = pc_delay3[1]
             if self.delay_time < 0:
                 self.delay_time = 5

@@ -136,18 +136,26 @@ class Fighter:
         return self.base_evasion + bonus + (self.dex / 2)
 
     @property
-    def attack_damage(self):
-        if self.owner.equipment and self.owner.equipment.weapon_damage:
-            D, min_d, max_d = self.owner.equipment.weapon_damage
+    def melee_attack_damage(self):
+        if self.owner.equipment and self.owner.equipment.melee_weapon_damage:
+            D, min_d, max_d = self.owner.equipment.melee_weapon_damage
         else:
             D, min_d, max_d = self.owner.fighter.unarmed_attack
 
-        attack_damage = dice(D, min_d+(self.str//3), max_d+self.str)
+        melee_attack_damage = dice(D, min_d+(self.str//3), max_d+self.str)
 
-        return attack_damage
+        return melee_attack_damage
 
     @property
-    def hit_chance(self):
+    def ranged_attack_damage(self):
+        if self.owner.equipment and self.owner.equipment.ranged_attack_damage:
+            D, min_d, max_d = self.owner.equipment.ranged_attack_damage
+
+            ranged_attack_damage = dice(D, min_d+(self.dex//3), max_d+self.dex)
+
+            return ranged_attack_damage
+
+    def hit_chance(self, target, ranged=False):
         # (命中率)％ ＝（α／１００）＊（１ー （β ／ １００））＊ １００
         # 命中率（α）＝９５、回避率（β）＝５
         if self.owner.equipment and self.owner.equipment.weapon_hit_rate:
@@ -155,14 +163,12 @@ class Fighter:
         else:
             hit = self.owner.fighter.hit_rate
 
-        hit_chance = (hit / 100) * (1 - (self.evasion / 100)) * 100
+        hit_chance = (hit / 100) * (1 - (target.evasion / 100)) * 100
 
         return hit_chance
 
     def take_damage(self, amount):
         results = []
-
-        hit_result = 6
 
         self.hp -= amount
 
@@ -174,11 +180,11 @@ class Fighter:
 
         return results
 
-    def attack(self, target):
+    def attack(self, target, ranged=False):
         results = []
-        if random.randrange(1, 100) <= self.hit_chance:
+        if random.randrange(1, 100) <= self.hit_chance(target):
 
-            damage = self.attack_damage // target.fighter.defense
+            damage = self.melee_attack_damage // target.fighter.defense
 
             if damage > 0:
                 # damage表示メッセージを格納する

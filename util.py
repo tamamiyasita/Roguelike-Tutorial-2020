@@ -110,7 +110,7 @@ class TileImageTest(arcade.Window):
 
 
 def main():
-    t = d_effect
+    t = door_img
     tst = TileImageTest(textures=t)
 
     arcade.run()

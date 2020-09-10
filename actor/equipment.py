@@ -13,6 +13,7 @@ class Equipment:
         self.item_slot = {
             "main_hand": None,
             "off_hand": None,
+            "ranged_weapon": None
         }
 
         # 装備変更によるスプライト更新のチェックに使う変数
@@ -62,9 +63,16 @@ class Equipment:
         return bonus
 
     @property
-    def weapon_damage(self):
+    def melee_weapon_damage(self):
         if self.item_slot["main_hand"]:
             return self.item_slot["main_hand"].attack_damage
+        else:
+            return None
+
+    @property
+    def ranged_weapon_damage(self):
+        if self.item_slot["ranged_weapon"]:
+            return self.item_slot["ranged_weapon"].attack_damage
         else:
             return None
 
