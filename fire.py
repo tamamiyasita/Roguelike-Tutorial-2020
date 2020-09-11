@@ -1,4 +1,5 @@
-import imp
+import arcade
+from data import *
 
 import math
 from actor.actor import Actor
@@ -12,14 +13,33 @@ class Fire:
         self.amm = None
         self.effect_sprites = engine.cur_level.effect_sprites
         self.actor_sprites = engine.cur_level.actor_sprites
-        self.trigger = False
+        self.trigger = None
+        self.amm_sprite = arcade.Sprite()
+        self.amm_speed = 10
 
-    # def update(self):
-    #     if self.trigger:
+    def update(self):
+        if self.trigger:
+            if arcade.check_for_collision(self.amm_sprite, self.target):
+                self.trigger = None
+                self.effect_sprites.remove(self.amm_sprite)
+
+    def trigger_pull(self):
+        self.amm_sprite.texture = self.shooter.equipment.item_slot["ranged_weapon"].texture
+        self.amm_sprite.center_x = self.shooter.center_x
+        self.amm_sprite.center_y = self.shooter.center_y
+        x_diff = self.target.center_x - self.amm_sprite.center_x
+        y_diff = self.target.center_y - self.amm_sprite.center_y
+        angle = math.atan2(y_diff, x_diff)
+
+        self.amm_sprite.angle = math.degrees(angle)
+        print(f"amm angle:{self.amm_sprite.angle:.2f}")
+        self.amm_sprite.change_x = math.cos(angle) * self.amm_speed
+        self.amm_sprite.change_y = math.sin(angle) * self.amm_speed
+
+        self.effect_sprites.append(self.amm_sprite)
 
     def shot(self):
         amm = self.shooter.equipment.item_slot["ranged_weapon"]
-        self.target = None
         target_distance = None
         results = []
 
@@ -35,15 +55,16 @@ class Fire:
                 if self.target is None or distance < target_distance:
                     self.target = actor
                     target_distance = distance
-                    self.trigger = True
+                    break
 
         if self.target:
             results.append(
                 {"message": f"{self.shooter.name} shot {self.target.name}"})
-            results.extend(self.target.fighter.attack(
+            results.extend(self.shooter.fighter.attack(
                 target=self.target, ranged=True))
             results.extend([{"turn_end": self.shooter}])
-            self.effect_sprites.append(self)
+            self.trigger_pull()
+            self.trigger = True
 
             return results
 

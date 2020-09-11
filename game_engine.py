@@ -22,6 +22,7 @@ from actor.small_shield import SmallShield
 from util import get_door, get_blocking_entity
 from turn_loop import TurnLoop
 from fire import Fire
+from actor.darts import Darts
 
 
 class GameLevel:
@@ -60,6 +61,7 @@ class GameEngine:
         self.move_switch = True
         self.player = Player(
             inventory=Inventory(capacity=5))
+        # self.player.equipment.item_slot["ranged_weapon"] = Darts()
 
     def setup_level(self, level_number):
 

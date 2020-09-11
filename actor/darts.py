@@ -6,7 +6,7 @@ from constants import *
 class Darts(Actor):
     def __init__(self, x=0, y=0):
         super().__init__(
-            name="darts",
+            name="player",
             x=x,
             y=y,
             scale=1.7

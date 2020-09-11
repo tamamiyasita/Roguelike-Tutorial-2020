@@ -7,6 +7,7 @@ from actor.crab import Crab
 from actor.short_sword import ShortSword
 from actor.long_sword import LongSword
 from actor.small_shield import SmallShield
+from actor.darts import Darts
 from actor.fireball_scroll import FireballScroll, FireballEffect
 from actor.lightning_scroll import LightningScroll, LightningEffect
 from actor.confusion_scroll import ConfusionScroll, ConfusionEffect
@@ -30,6 +31,8 @@ def restore_actor(actor_dict):
         actor = LongSword()
     elif actor_name == "SmallShield":
         actor = SmallShield()
+    elif actor_name == "Darts":
+        actor = Darts()
 
     elif actor_name == "HealingPotion":
         actor = HealingPotion()

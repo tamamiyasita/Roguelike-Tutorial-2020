@@ -148,14 +148,14 @@ class Fighter:
 
     @property
     def ranged_attack_damage(self):
-        if self.owner.equipment and self.owner.equipment.ranged_attack_damage:
-            D, min_d, max_d = self.owner.equipment.ranged_attack_damage
+        if self.owner.equipment and self.owner.equipment.ranged_weapon_damage:
+            D, min_d, max_d = self.owner.equipment.ranged_weapon_damage
 
             ranged_attack_damage = dice(D, min_d+(self.str//3), max_d+self.dex)
 
             return ranged_attack_damage
 
-    def hit_chance(self, target, ranged=False):
+    def hit_chance(self, target, ranged=None):
         # (命中率)％ ＝（α／１００）＊（１ー （β ／ １００））＊ １００
         # 命中率（α）＝９５、回避率（β）＝５
         hit = None
@@ -167,12 +167,14 @@ class Fighter:
                 hit = self.owner.fighter.hit_rate
 
         elif ranged:
-            if self.owner.equipment and self.owner.equipment.weapon_hit_rate(ranged=True):
-                hit = self.owner.equipment.weapon_hit_rate(ranged=True)
+            if self.owner.equipment and self.owner.equipment.ranged_hit_rate:
+                hit = self.owner.equipment.ranged_hit_rate
+        if hit:
 
-        hit_chance = (hit / 100) * (1 - (target.fighter.evasion / 100)) * 100
+            hit_chance = (hit / 100) * \
+                (1 - (target.fighter.evasion / 100)) * 100
 
-        return hit_chance
+            return hit_chance
 
     def take_damage(self, amount):
         results = []
@@ -187,7 +189,7 @@ class Fighter:
 
         return results
 
-    def attack(self, target, ranged=False):
+    def attack(self, target, ranged=None):
         results = []
         damage = None
 
