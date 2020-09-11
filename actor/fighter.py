@@ -142,7 +142,7 @@ class Fighter:
         else:
             D, min_d, max_d = self.owner.fighter.unarmed_attack
 
-        melee_attack_damage = dice(D, min_d+(self.str//3), max_d+self.str)
+        melee_attack_damage = dice(D, min_d+(self.dex//3), max_d+self.str)
 
         return melee_attack_damage
 
@@ -151,17 +151,24 @@ class Fighter:
         if self.owner.equipment and self.owner.equipment.ranged_attack_damage:
             D, min_d, max_d = self.owner.equipment.ranged_attack_damage
 
-            ranged_attack_damage = dice(D, min_d+(self.dex//3), max_d+self.dex)
+            ranged_attack_damage = dice(D, min_d+(self.str//3), max_d+self.dex)
 
             return ranged_attack_damage
 
     def hit_chance(self, target, ranged=False):
         # (命中率)％ ＝（α／１００）＊（１ー （β ／ １００））＊ １００
         # 命中率（α）＝９５、回避率（β）＝５
-        if self.owner.equipment and self.owner.equipment.weapon_hit_rate:
-            hit = self.owner.equipment.weapon_hit_rate
-        else:
-            hit = self.owner.fighter.hit_rate
+        hit = None
+
+        if not ranged:
+            if self.owner.equipment and self.owner.equipment.weapon_hit_rate:
+                hit = self.owner.equipment.weapon_hit_rate
+            else:
+                hit = self.owner.fighter.hit_rate
+
+        elif ranged:
+            if self.owner.equipment and self.owner.equipment.weapon_hit_rate(ranged=True):
+                hit = self.owner.equipment.weapon_hit_rate(ranged=True)
 
         hit_chance = (hit / 100) * (1 - (target.fighter.evasion / 100)) * 100
 
@@ -182,11 +189,18 @@ class Fighter:
 
     def attack(self, target, ranged=False):
         results = []
-        if random.randrange(1, 100) <= self.hit_chance(target):
+        damage = None
 
-            damage = self.melee_attack_damage // target.fighter.defense
+        if ranged:
+            if random.randrange(1, 100) <= self.hit_chance(target, ranged=True):
+                damage = self.ranged_attack_damage // target.fighter.defense
 
-            if damage > 0:
+        elif not ranged:
+            if random.randrange(1, 100) <= self.hit_chance(target):
+                damage = self.melee_attack_damage // target.fighter.defense
+
+        if damage:
+            if damage >= 0:
                 # damage表示メッセージを格納する
                 results.append(
                     {"message": f"{self.owner.name.capitalize()} attacks {target.name} for {str(damage)} hit points."})

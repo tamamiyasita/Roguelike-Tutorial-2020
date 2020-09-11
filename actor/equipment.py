@@ -77,11 +77,17 @@ class Equipment:
             return None
 
     @property
-    def weapon_hit_rate(self):
-        if self.item_slot["main_hand"]:
-            return self.item_slot["main_hand"].hit_rate
-        else:
-            return None
+    def weapon_hit_rate(self, ranged=False):
+        if not ranged:
+            if self.item_slot["main_hand"]:
+                return self.item_slot["main_hand"].hit_rate
+            else:
+                return None
+        elif ranged:
+            if self.item_slot["ranged_weapon"]:
+                return self.item_slot["ranged_weapon"].hit_rate
+            else:
+                return None
 
     def toggle_equip(self, equip_item, sprites):
         """装備アイテムの付け外しを行うメソッド
