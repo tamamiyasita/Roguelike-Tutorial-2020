@@ -3,25 +3,25 @@ from data import *
 from constants import *
 
 
-class ShortSword(Actor):
+class ShortBow(Actor):
     def __init__(self, x=0, y=0):
         super().__init__(
-            name="short_sword",
+            name="short_bow",
             x=x,
             y=y,
-            scale=1.4,
+            scale=1.7
         )
 
-        self.slot = "main_hand"
+        self.slot = "ranged_weapon"
         self.states_bonus = {}
-        self.attack_damage = (1, 1, 4)
-        self.hit_rate = 97
+        self.attack_damage = (1, 1, 3)
+        self.hit_rate = 75
 
         self.level = 1
 
         self.category = {ItemType.equip}
 
-        self.explanatory_text = f"common short sword\nthat deals {self.attack_damage[0]}D({self.attack_damage[1]} - {self.attack_damage[2]})damage"
+        self.explanatory_text = f"common short bow\nthat deals {self.attack_damage[0]}D({self.attack_damage[1]} - {self.attack_damage[2]})damage"
 
         self.item_margin_x = 6.5*SPRITE_SCALE
         self.item_margin_y = 2.5*SPRITE_SCALE
