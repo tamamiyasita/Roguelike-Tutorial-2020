@@ -163,7 +163,7 @@ class Fighter:
         else:
             hit = self.owner.fighter.hit_rate
 
-        hit_chance = (hit / 100) * (1 - (target.evasion / 100)) * 100
+        hit_chance = (hit / 100) * (1 - (target.fighter.evasion / 100)) * 100
 
         return hit_chance
 
