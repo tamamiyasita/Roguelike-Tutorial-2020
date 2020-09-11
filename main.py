@@ -60,13 +60,12 @@ class MG(arcade.Window):
         self.mini_map_quad = geometry.quad_2d(
             size=(0.5792, 0.97), pos=(0.949, 1.022))
 
-
         self.select_UI = SelectUI(engine=self.engine)
-
 
     def draw_sprites(self):
         """ 全てのスプライトリストをここで描画する """
-        arcade.draw_rectangle_filled(-1000, -1000, 10000,10000,color=arcade.color.BLACK)
+        arcade.draw_rectangle_filled(-1000, -1000,
+                                     10000, 10000, color=arcade.color.BLACK)
         self.engine.cur_level.floor_sprites.draw()
         self.engine.cur_level.wall_sprites.draw()
         self.engine.cur_level.map_obj_sprites.draw(filter=gl.GL_LO_BIAS_NV)
@@ -84,7 +83,8 @@ class MG(arcade.Window):
             self.offscreen.use()
             self.offscreen.clear(arcade.color.BLACK)
 
-            arcade.set_viewport(0, GAME_GROUND_WIDTH, 0, GAME_GROUND_HEIGHT+GRID_SIZE*2)
+            arcade.set_viewport(0, GAME_GROUND_WIDTH, 0,
+                                GAME_GROUND_HEIGHT+GRID_SIZE*2)
 
             self.engine.cur_level.map_point_sprites.draw()
             arcade.draw_rectangle_filled(center_x=self.engine.player.center_x,
@@ -130,7 +130,6 @@ class MG(arcade.Window):
         # fov_recomputeがTruならfov計算
         if self.engine.fov_recompute:
             self.engine.fov()
-
 
         if self.engine.game_state == GAME_STATE.NORMAL or self.engine.game_state == GAME_STATE.DELAY_WINDOW:
             """minimap_related"""

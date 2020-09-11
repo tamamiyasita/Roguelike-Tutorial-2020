@@ -465,21 +465,14 @@ class GameEngine:
                 if result:
                     new_action_queue.extend(result)
 
-
             if "fire" in action:
                 shooter = action["fire"]
-                fire = Fire(self)
-                result = fire.shot(shooter=shooter)
+                fire = Fire(self, shooter=shooter)
+                result = fire.shot()
                 if result:
                     new_action_queue.extend(result)
 
-
-
         self.action_queue = new_action_queue
-
-
-
-
 
     def grid_click(self, grid_x, grid_y):
         """ クリックしたグリッドをself.grid_select_handlersに格納する 
