@@ -61,7 +61,7 @@ class GameEngine:
         self.move_switch = True
         self.player = Player(
             inventory=Inventory(capacity=5))
-        # self.player.equipment.item_slot["ranged_weapon"] = Darts()
+        self.player.equipment.item_slot["ranged_weapon"] = Darts()
 
     def setup_level(self, level_number):
 

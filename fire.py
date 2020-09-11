@@ -1,8 +1,44 @@
 import arcade
 from data import *
+from constants import COLORS
 
 import math
 from actor.actor import Actor
+
+
+class TriggerPull(Actor):
+    def __init__(self, shooter, target, effect_sprites):
+        super().__init__(
+            name="player",
+            color=COLORS["white"]
+        )
+        self.center_x = shooter.center_x,
+        self.center_y = shooter.center_y,
+        self.shooter = shooter
+        self.target = target
+        self.effect_sprites = effect_sprites
+
+        self.amm_speed = 10
+        # self.amm_sprite = arcade.Sprite()
+        # self.amm_sprite.texture = self.shooter.equipment.item_slot["ranged_weapon"].texture
+        # self.amm_sprite.center_x = self.shooter.center_x
+        # self.amm_sprite.center_y = self.shooter.center_y
+
+        x_diff = self.target.center_x - self.center_x
+        y_diff = self.target.center_y - self.center_y
+        angle = math.atan2(y_diff, x_diff)
+
+        self.amm_sprite.angle = math.degrees(angle)
+        print(f"amm angle:{self.amm_sprite.angle:.2f}")
+
+        self.change_x = math.cos(angle) * self.amm_speed
+        self.change_y = math.sin(angle) * self.amm_speed
+        self.effect_sprites.append(self)
+
+    def update(self):
+        if arcade.check_for_collision(self.amm_sprite, self.target):
+            self.trigger = None
+            self.effect_sprites.remove(self.amm_sprite)
 
 
 class Fire:
@@ -14,29 +50,6 @@ class Fire:
         self.effect_sprites = engine.cur_level.effect_sprites
         self.actor_sprites = engine.cur_level.actor_sprites
         self.trigger = None
-        self.amm_sprite = arcade.Sprite()
-        self.amm_speed = 10
-
-    def update(self):
-        if self.trigger:
-            if arcade.check_for_collision(self.amm_sprite, self.target):
-                self.trigger = None
-                self.effect_sprites.remove(self.amm_sprite)
-
-    def trigger_pull(self):
-        self.amm_sprite.texture = self.shooter.equipment.item_slot["ranged_weapon"].texture
-        self.amm_sprite.center_x = self.shooter.center_x
-        self.amm_sprite.center_y = self.shooter.center_y
-        x_diff = self.target.center_x - self.amm_sprite.center_x
-        y_diff = self.target.center_y - self.amm_sprite.center_y
-        angle = math.atan2(y_diff, x_diff)
-
-        self.amm_sprite.angle = math.degrees(angle)
-        print(f"amm angle:{self.amm_sprite.angle:.2f}")
-        self.amm_sprite.change_x = math.cos(angle) * self.amm_speed
-        self.amm_sprite.change_y = math.sin(angle) * self.amm_speed
-
-        self.effect_sprites.append(self.amm_sprite)
 
     def shot(self):
         amm = self.shooter.equipment.item_slot["ranged_weapon"]
@@ -63,7 +76,8 @@ class Fire:
             results.extend(self.shooter.fighter.attack(
                 target=self.target, ranged=True))
             results.extend([{"turn_end": self.shooter}])
-            self.trigger_pull()
+            TriggerPull(shooter=self.shooter, target=self.target,
+                        effect_sprites=self.effect_sprites)
             self.trigger = True
 
             return results
