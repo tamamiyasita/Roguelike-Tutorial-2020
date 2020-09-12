@@ -7,42 +7,51 @@ from actor.actor import Actor
 
 
 class TriggerPull(Actor):
-    def __init__(self, shooter, target, effect_sprites):
+    def __init__(self, shooter, target, engine):
         super().__init__(
             name="player",
             color=COLORS["white"]
         )
-        self.center_x = shooter.center_x,
-        self.center_y = shooter.center_y,
+        self.engine = engine
+        self.center_x = shooter.center_x
+        self.center_y = shooter.center_y
         self.shooter = shooter
         self.target = target
-        self.effect_sprites = effect_sprites
+        self.effect_sprites = self.engine.cur_level.effect_sprites
 
-        self.amm_speed = 10
+
+        self.amm_speed = 35
         # self.amm_sprite = arcade.Sprite()
         # self.amm_sprite.texture = self.shooter.equipment.item_slot["ranged_weapon"].texture
         # self.amm_sprite.center_x = self.shooter.center_x
         # self.amm_sprite.center_y = self.shooter.center_y
 
+        self.effect_sprites.append(self)
+
         x_diff = self.target.center_x - self.center_x
         y_diff = self.target.center_y - self.center_y
         angle = math.atan2(y_diff, x_diff)
 
-        self.amm_sprite.angle = math.degrees(angle)
-        print(f"amm angle:{self.amm_sprite.angle:.2f}")
-
+        self.angle = math.degrees(angle)
         self.change_x = math.cos(angle) * self.amm_speed
         self.change_y = math.sin(angle) * self.amm_speed
-        self.effect_sprites.append(self)
+        print(f"amm angle:{self.angle:.2f}")
+        self.trigger = True
+
 
     def update(self):
-        if arcade.check_for_collision(self.amm_sprite, self.target):
-            self.trigger = None
-            self.effect_sprites.remove(self.amm_sprite)
+        super().update()
+        if self.trigger:
+
+            if arcade.check_for_collision(self, self.target):
+                self.trigger = None
+                self.effect_sprites.remove(self)
+                self.engine.action_queue.extend([{"turn_end": self.shooter}])
 
 
 class Fire:
     def __init__(self, engine, shooter):
+        self.engine = engine
         self.shooter = shooter
         self.x, self.y = self.shooter.x, self.shooter.y
         self.target = None
@@ -75,9 +84,8 @@ class Fire:
                 {"message": f"{self.shooter.name} shot {self.target.name}"})
             results.extend(self.shooter.fighter.attack(
                 target=self.target, ranged=True))
-            results.extend([{"turn_end": self.shooter}])
             TriggerPull(shooter=self.shooter, target=self.target,
-                        effect_sprites=self.effect_sprites)
+                        engine=self.engine)
             self.trigger = True
 
             return results
