@@ -9,8 +9,8 @@ from actor.actor import Actor
 class TriggerPull(Actor):
     def __init__(self, shooter, target, engine):
         super().__init__(
-            name="player",
-            color=COLORS["white"]
+            name=shooter.equipment.item_slot["ranged_weapon"].name,
+            color=COLORS["white"],
         )
         self.engine = engine
         self.center_x = shooter.center_x
@@ -42,6 +42,7 @@ class TriggerPull(Actor):
     def update(self):
         super().update()
         if self.trigger:
+            self.angle += 20
 
             if arcade.check_for_collision(self, self.target):
                 self.trigger = None

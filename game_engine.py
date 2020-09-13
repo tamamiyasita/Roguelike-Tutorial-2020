@@ -164,6 +164,9 @@ class GameEngine:
         self.fb = FireballScroll(self.player.x + 1, self.player.y)
         self.game_level.item_sprites.append(self.fb)
 
+        self.darts = Darts(self.player.x-1, self.player.y + 1)
+        self.game_level.item_sprites.append(self.darts)
+
         self.fov_recompute = True
 
         return self.game_level

@@ -79,6 +79,10 @@ scroll_tile = get_tile_set(scroll_tile_img, tile_size=16)
 
 shield_img = (r"image\Shield.png")
 shield_tile = get_tile_set(shield_img, tile_size=16)
+
+
+ammo_img = (r"image\Items\Ammo.png")
+ammo_tile = get_tile_set(ammo_img, tile_size=16)
 #######
 
 ###effect###
@@ -136,6 +140,7 @@ IMAGE_ID = {"player": player,
             "long_sword": long_sword,
             "small_shield": [shield_tile[0]],
             "wood_buckler": [shield_tile[5]],
+            "darts": [ammo_tile[20]],
 
             "healing_potion": healing_potion_tile,
             "confusion_scroll": [scroll_tile[15]],

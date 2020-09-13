@@ -42,7 +42,7 @@ class Equipment:
         if self.equip_update_check:
 
             for item in self.item_slot.values():
-                if item and item not in sprites:
+                if item and item not in sprites and not item.slot == "ranged_weapon":
                     sprites.append(item)
             for sprite in sprites:
                 if sprite not in self.item_slot.values():
