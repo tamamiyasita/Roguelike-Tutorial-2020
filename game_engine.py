@@ -23,6 +23,7 @@ from util import get_door, get_blocking_entity
 from turn_loop import TurnLoop
 from fire import Fire
 from actor.darts import Darts
+from actor.damage_pop import Damagepop
 
 
 class GameLevel:
@@ -476,6 +477,15 @@ class GameEngine:
                 result = fire.shot()
                 if result:
                     new_action_queue.extend(result)
+
+            if "damage_pop" in action:
+                target = action["damage_pop"]
+                damage = action["damage"]
+                # d = Damagepop(target, damage, self)
+                # d = damage_pop(target.center_x, target.center_y,
+                #                damage, delta_time)
+                # self.cur_level.effect_sprites.append(d)
+                # print("damage pop true ok")
 
         self.action_queue = new_action_queue
 

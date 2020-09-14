@@ -217,6 +217,8 @@ class Fighter:
                     {"message": f"{self.owner.name.capitalize()} attacks {target.name} but no damage"}
                 )
 
+            results.extend([{"damage_pop": target, "damage": damage}])
+
         else:
             results.append(
                 {"message": f"{self.owner.name.capitalize()} attacks {target.name} Avoided"}
