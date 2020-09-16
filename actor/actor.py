@@ -1,4 +1,5 @@
 from arcade import particle
+from arcade.text import draw_text
 from actor.ai import Basicmonster, ConfusedMonster
 import arcade
 import math
@@ -206,9 +207,7 @@ class Actor(arcade.Sprite):
 
                 elif not actor.is_dead:
                     attack_results = self.fighter.attack(actor)
-                    if actor == self:
-                        self.state = state.TURN_END
-                    elif attack_results:
+                    if attack_results:
                         self.state = state.ATTACK
                         self.change_y = self.dy * MOVE_SPEED
                         self.change_x = self.dx * MOVE_SPEED
@@ -260,7 +259,6 @@ class Actor(arcade.Sprite):
                 if self.dx == 1:
                     self.center_x = self.target_x + GRID_SIZE
                     self.x += self.dx
-                    # self.state = state.TURN_END
                 if self.dx == -1:
                     self.center_x = self.target_x - GRID_SIZE
                     self.x += self.dx
@@ -271,7 +269,6 @@ class Actor(arcade.Sprite):
                 if self.dy == 1:
                     self.center_y = self.target_y + GRID_SIZE
                     self.y += self.dy
-                    # self.state = state.TURN_END
                 if self.dy == -1:
                     self.center_y = self.target_y - GRID_SIZE
                     self.y += self.dy
@@ -287,18 +284,16 @@ class Actor(arcade.Sprite):
 
         if abs(self.target_x - self.center_x) >= step and self.dx:
             self.change_x = 0
-            # self.state = state.TURN_END
         if abs(self.target_y - self.center_y) >= step and self.dy:
             self.change_y = 0
-            # self.attack_delay -= 1
-            # if 0 > self.attack_delay:
-            #     self.state = state.TURN_END
+
         if self.attack_delay == 6:
             for i in range(PARTICLE_COUNT):
                 particle = AttackParticle()
                 particle.position = (
                     self.center_x + (self.dx*20), self.center_y + (self.dy*20))
                 self.effect_sprites.append(particle)
+                
 
         if self.change_x == 0 and self.change_y == 0 and self.state != state.TURN_END:
             self.attack_delay -= 1

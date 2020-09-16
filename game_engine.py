@@ -60,6 +60,8 @@ class GameEngine:
         self.game_state = GAME_STATE.NORMAL
         self.grid_select_handlers = []
         self.move_switch = True
+        self.damage_pop = []
+
         self.player = Player(
             inventory=Inventory(capacity=5))
         # self.player.equipment.item_slot["ranged_weapon"] = Darts()
@@ -481,11 +483,12 @@ class GameEngine:
             if "damage_pop" in action:
                 target = action["damage_pop"]
                 damage = action["damage"]
-                # d = Damagepop(target, damage, self)
-                # d = damage_pop(target.center_x, target.center_y,
-                #                damage, delta_time)
-                # self.cur_level.effect_sprites.append(d)
-                # print("damage pop true ok")
+
+                # self.damage_pop = {"target":target, "damage":damage}
+                d = Damagepop(engine=self, target=target, damage=damage)
+                self.damage_pop.append(d)
+
+
 
         self.action_queue = new_action_queue
 

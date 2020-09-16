@@ -91,6 +91,7 @@ class ConfusedMonster:
     def __init__(self, pre_ai=None, confused_turn=50):
         self.owner = None
         self.pre_ai = pre_ai
+        self.visible_check = None
         self.confused_turn = confused_turn
     
     def get_dict(self):

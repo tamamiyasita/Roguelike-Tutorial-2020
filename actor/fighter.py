@@ -27,6 +27,8 @@ class Fighter:
         self.level = level
         self.ability_points = ability_points
 
+        self.damage = None
+
     def get_dict(self):
         result = {}
         result["hp"] = self.hp
@@ -191,22 +193,21 @@ class Fighter:
 
     def attack(self, target, ranged=None):
         results = []
-        damage = None
 
         if ranged:
             if random.randrange(1, 100) <= self.hit_chance(target, ranged=True):
-                damage = self.ranged_attack_damage // target.fighter.defense
+                self.damage = self.ranged_attack_damage // target.fighter.defense
 
         elif not ranged:
             if random.randrange(1, 100) <= self.hit_chance(target):
-                damage = self.melee_attack_damage // target.fighter.defense
+                self.damage = self.melee_attack_damage // target.fighter.defense
 
-        if damage:
-            if damage >= 0:
+        if self.damage:
+            if self.damage >= 0:
                 # damage表示メッセージを格納する
                 results.append(
-                    {"message": f"{self.owner.name.capitalize()} attacks {target.name} for {str(damage)} hit points."})
-                results.extend(target.fighter.take_damage(damage))
+                    {"message": f"{self.owner.name.capitalize()} attacks {target.name} for {str(self.damage)} hit points."})
+                results.extend(target.fighter.take_damage(self.damage))
 
                 # xp獲得処理
                 if target.is_dead:
@@ -214,10 +215,10 @@ class Fighter:
 
             else:
                 results.append(
-                    {"message": f"{self.owner.name.capitalize()} attacks {target.name} but no damage"}
+                    {"message": f"{self.owner.name.capitalize()} attacks {target.name} but no self.damage"}
                 )
 
-            results.extend([{"damage_pop": target, "damage": damage}])
+            results.extend([{"damage_pop": target, "damage": self.damage}])
 
         else:
             results.append(
