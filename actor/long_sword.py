@@ -18,7 +18,7 @@ class LongSword(Actor):
 
         self.level = 2
 
-        self.category = {ItemType.equip}
+        self.tag = {Tag.item, Tag.equip}
 
         self.explanatory_text = f"common long sword\nthat deals {self.attack_damage[0]}D({self.attack_damage[1]} - {self.attack_damage[2]})damage"
 

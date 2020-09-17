@@ -42,9 +42,18 @@ DEFAULT_SPEED = 7
 DEFAULT_ATTACK_SPEED = 6
 
 
-class ItemType(Enum):
+class Tag(Enum):
+    # items
+    item = auto()
     used = auto()
     equip = auto()
+
+    # chara
+    player = auto()
+    npc = auto()
+    enemy = auto()
+    pet = auto()
+    friendly = auto()
 
 
 COLORS = {

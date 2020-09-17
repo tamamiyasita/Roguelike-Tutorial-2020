@@ -294,7 +294,6 @@ class GameEngine:
                     new_action_queue.extend([target["action"]])
                     self.move_switch = True
 
-
             if "select_item" in action:
                 item_number = action["select_item"]
                 if 1 <= item_number <= self.player.inventory.capacity:
@@ -305,7 +304,7 @@ class GameEngine:
                 item_number = self.selected_item
                 if item_number is not None:
                     item = self.player.inventory.get_item_number(item_number)
-                    if item and ItemType.used in item.category:
+                    if item and Tag.item in item.tag:
                         results = item.use(self)
                         if results:
                             new_action_queue.extend(results)
@@ -316,7 +315,7 @@ class GameEngine:
                 if item_number is not None:
                     item = self.player.inventory.get_item_number(
                         item_number)
-                    if item and ItemType.equip in item.category:
+                    if item and Tag.equip in item.tag:
                         results = self.player.equipment.toggle_equip(
                             item, self.cur_level.equip_sprites)
                         new_action_queue.extend(results)

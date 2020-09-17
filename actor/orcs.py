@@ -27,6 +27,7 @@ class Orc(Actor):
             ai=ai_component,
             blocks=True
         )
+        self.tag = {Tag.npc, Tag.enemy}
 
 
 class Troll(Actor):
@@ -50,3 +51,4 @@ class Troll(Actor):
             ai=ai_component,
             blocks=True
         )
+        self.tag = {Tag.npc, Tag.enemy}

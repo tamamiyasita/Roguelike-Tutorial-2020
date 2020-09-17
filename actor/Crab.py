@@ -27,3 +27,4 @@ class Crab(Actor):
             ai=ai_component,
             blocks=True
         )
+        self.tag = {Tag.npc, Tag.enemy}

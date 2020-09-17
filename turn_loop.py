@@ -48,7 +48,7 @@ class TurnLoop:
                 self.player.state = state.READY
                 self.turn = Turn.DELAY
                 engine.fov_recompute = True
-            else:
+            elif Tag.enemy in self.actor.tag:
                 result = self.actor.ai.take_turn(self.player, engine)
                 if result:
                     engine.action_queue.extend(result)
@@ -59,9 +59,3 @@ class TurnLoop:
             #     f"{self.actor.name=}, {self.actor.wait=}, {self.actor.state=}, {self.actor.is_dead=}")
             if self.actor.state is state.TURN_END or self.actor.state is None or self.actor.is_dead:
                 self.turn = Turn.ON
-
-            
-
-    def loop_c(self):
-        # self.sprites = None
-        self.turn = Turn.ON

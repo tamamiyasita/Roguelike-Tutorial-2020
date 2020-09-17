@@ -27,8 +27,8 @@ class Player(Actor):
             equipment=equip_component
 
         )
+        self.tag = {Tag.player}
 
-        # self.left_face = False
         self.state = state.READY
         self.delay_time = 5
         self.visible_check = False

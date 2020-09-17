@@ -403,7 +403,7 @@ class GameEngine:
                 item_number = self.selected_item
                 if item_number is not None:
                     item = self.player.inventory.get_item_number(item_number)
-                    if item and ItemType.used in item.category:
+                    if item and Tag.item in item.tag:
                         results = item.use(self)
                         if results:
                             new_action_queue.extend(results)
@@ -414,7 +414,7 @@ class GameEngine:
                 if item_number is not None:
                     item = self.player.inventory.get_item_number(
                         item_number)
-                    if item and ItemType.equip in item.category:
+                    if item and Tag.equip in item.tag:
                         results = self.player.equipment.toggle_equip(
                             item, self.cur_level.equip_sprites)
                         new_action_queue.extend(results)
@@ -423,7 +423,7 @@ class GameEngine:
                 items = arcade.get_sprites_at_exact_point(
                     (self.player.center_x, self.player.center_y), self.cur_level.item_sprites)
                 for item in items:
-                    if item.category:
+                    if Tag.item in item.tag:
                         results = self.player.inventory.add_item(item, self)
 
                         if results:
@@ -442,6 +442,7 @@ class GameEngine:
                         self.player.equipment.toggle_equip(
                             item, self.cur_level.equip_sprites)
 
+                    # ここでドロップ
                     if item:
                         self.player.inventory.remove_item_number(item_number)
                         self.cur_level.item_sprites.append(item)

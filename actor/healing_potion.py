@@ -12,7 +12,7 @@ class HealingPotion(Actor):
             not_visible_color=COLORS["black"],
 
         )
-        self.category = {ItemType.used}
+        self.tag = {Tag.item, Tag.used}
 
         self.level = 1
 

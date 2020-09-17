@@ -15,7 +15,7 @@ class SmallShield(Actor):
         self.slot = "off_hand"
         self.states_bonus = {"defense": 2}
 
-        self.category = {ItemType.equip}
+        self.tag = {Tag.item, Tag.equip}
 
         self.level = 1
 
