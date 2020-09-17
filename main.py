@@ -36,6 +36,7 @@ class MG(arcade.Window):
         self.viewport_bottom = 0
 
         self.p = True
+
     def setup(self):
         self.engine.setup()
         viewport(self.engine.player.center_x, self.engine.player.center_y)
@@ -116,22 +117,6 @@ class MG(arcade.Window):
             if self.mouse_position:
                 self.mouse_ui.draw_mouse_over_text()
             self.grid_select = [0, 0]
-                    # if pop.d_time < 0:
-                    #     self.engine.cur_level.effect_sprites.remove(pop.text)
-                    #     self.engine.damage_pop.remove(pop)
-                    #     break
-
-                #     self.engine.cur_level.effect_sprites.remove(pop.text)
-                        
-            # if self.engine.damage_pop and self.engine.damage_pop.d_time < 0:
-            #     self.engine.damage_pop = None
-            """
-            if self.p:
-                self.d.start()
-                if self.d.p == None:
-                    self.p = None
-                    arcade.Sprite.remove_from_sprite_lists(self.d.text)
-            """
 
         # アイテム使用時マウス位置にグリッド表示
         elif self.engine.game_state == GAME_STATE.SELECT_LOCATION:
@@ -174,9 +159,11 @@ class MG(arcade.Window):
 
             self.engine.player.check_experience_level(self.engine)
 
+            # ここでdamageのポップアップを行う
             if self.engine.damage_pop:
                 for pop in self.engine.damage_pop:
-                    pop.start(delta_time)
+                    pop.start()
+
             # playerの装備状態のアップデート
             if self.engine.player.state == state.READY:
                 self.engine.player.equipment.update(

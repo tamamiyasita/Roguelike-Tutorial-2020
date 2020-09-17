@@ -1,4 +1,5 @@
 import arcade
+from actor.actor import Actor
 
 
 # def damage_pop(x, y, damage, delta_time):
@@ -10,42 +11,40 @@ import arcade
 # def update(txt, delta_time):
 #     txt.start_x += delta_time
 
-class Damagepop():
-    def __init__(self, engine, target, damage):
-        # super().__init__(
-        #     text=str(damage),
-        #     start_x=target.center_x,
-        #     start_y=target.center_y,
-        # )
+class Damagepop(Actor):
+    def __init__(self, engine, target):
+        super().__init__(
+            color=arcade.color.WHITE
+            # x=target.center_x,
+            # y=target.center_y,
+        )
         self.engine = engine
-        self.damage = str(damage)
-        self.x = target.center_x
-        self.y = target.center_y
-        self.font_color = arcade.color.YELLOW_ORANGE
-        # self.effect_sprites = engine.cur_level.effect_sprites
-        self.font_size = 30
-        self.d_time = 40
+        self.target = target
+        # self.damage = str(damage)
+        self.center_x = target.center_x
+        self.center_y = target.center_y
+        self.color = arcade.color.YELLOW_ORANGE
+        self.effect_sprites = engine.cur_level.effect_sprites
+        # self.font_size = 30
+        self.d_time = 15
 
-        self.text = arcade.draw_text(
-            self.damage, self.x, self.y, self.font_color, self.font_size, anchor_x="center")
-        self.engine.cur_level.effect_sprites.append(self.text)
-        self.text.alpha = 100
-        self.text.change_y = 1
+        # self.text = arcade.draw_text(
+        #     self.damage, self.x, self.y, self.font_color, self.font_size, anchor_x="center")
+        self.alpha = 100
+        self.change_y = 2
 
+    def set(self, t):
+        self.texture = t
+        self.effect_sprites.append(self)
 
-    def start(self, delta_time):
-        self.text.center_y * delta_time
+    def start(self):
         self.d_time -= 1
-        if self.d_time < 1:
-            self.engine.cur_level.effect_sprites.remove(self.text)
+        if self.d_time < -5:
+            self.engine.cur_level.effect_sprites.remove(self)
             self.engine.damage_pop.remove(self)
-            # TODO テクスチャのコピーでいけないか
-        elif self.text.alpha < 240:
-            self.text.alpha += 5
-        elif self.text.alpha >= 250:
-            self.text.alpha = 255
-        elif self.d_time <= 30:
-            self.text.change_y = 0
-
-        
-     
+        elif self.alpha < 240:
+            self.alpha += 5
+        elif self.alpha >= 250:
+            self.alpha = 255
+        elif self.d_time <= 3:
+            self.change_y = 0

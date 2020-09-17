@@ -41,6 +41,7 @@ DEATH_DELAY = 0.5
 DEFAULT_SPEED = 7
 DEFAULT_ATTACK_SPEED = 6
 
+
 class ItemType(Enum):
     used = auto()
     equip = auto()
