@@ -15,3 +15,4 @@ class Stairs(Actor):
             visible_color=COLORS.get("light_wall"),
             not_visible_color=COLORS.get("dark_wall")
         )
+        self.tag = {Tag.map_obj, Tag.stairs}

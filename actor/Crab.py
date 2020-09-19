@@ -6,7 +6,7 @@ from constants import *
 
 
 class Crab(Actor):
-    def __init__(self, x=0, y=0, game_engine=None):
+    def __init__(self, x=0, y=0):
         fighter_component = Fighter(hp=10, str=4, dex=2,
                                     unarmed_attack=(2, 1, 3),
                                     hit_rate=95,

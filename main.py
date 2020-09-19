@@ -35,7 +35,6 @@ class MG(arcade.Window):
         self.viewport_left = 0
         self.viewport_bottom = 0
 
-        self.p = True
 
     def setup(self):
         self.engine.setup()
@@ -157,7 +156,8 @@ class MG(arcade.Window):
             self.engine.check_for_player_movement(self.player_direction)
             self.engine.cur_level.map_obj_sprites.update_animation()
 
-            self.engine.player.check_experience_level(self.engine)
+            if self.engine.player.state == state.READY:
+                self.engine.player.check_experience_level(self.engine)
 
             # ここでdamageのポップアップを行う
             if self.engine.damage_pop:

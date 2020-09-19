@@ -18,6 +18,7 @@ class Wall(Actor):
             not_visible_color=COLORS.get("dark_wall")
 
         )
+        self.tag = {Tag.map_obj, Tag.wall}
 
     def update_animation(self, delta_time: float):
         pass

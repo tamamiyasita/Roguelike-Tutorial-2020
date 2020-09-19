@@ -23,7 +23,7 @@ def recalculate_fov(char_x, char_y, radius, sprite_lists):
             if sprite.is_visible:
                 sprite.is_visible = False
                 sprite.color = sprite.not_visible_color
-                if sprite.ai:
+                if Tag.npc in sprite.tag:
                     sprite.alpha = 0
     
     resolution = 12

@@ -55,6 +55,14 @@ class Tag(Enum):
     pet = auto()
     friendly = auto()
 
+    # obj
+    map_obj = auto()
+    wall = auto()
+    floor = auto()
+    door = auto()
+    stairs = auto()
+    ui = auto()
+
 
 COLORS = {
     "black": arcade.color.BLACK,

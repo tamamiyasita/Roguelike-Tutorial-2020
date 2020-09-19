@@ -30,7 +30,7 @@ class ActorPlacement:
         self.height = len(self.tiles[0])
 
     def floor_set(self):
-        wall_sprites = arcade.SpriteList(
+        floor_sprites = arcade.SpriteList(
             use_spatial_hash=True, spatial_hash_cell_size=32)
 
         for x in range(self.width):
@@ -38,9 +38,9 @@ class ActorPlacement:
                 if self.tiles[x][y] == TILE.EMPTY or TILE.STAIRS_DOWN or TILE.DOOR:
 
                     floor = Floor(texture_number=21, x=x, y=y)
-                    wall_sprites.append(floor)
+                    floor_sprites.append(floor)
 
-        return wall_sprites
+        return floor_sprites
 
     def wall_set(self):
         """ 静的な地形スプライトをgame_mapブロック情報から作成する
@@ -131,16 +131,21 @@ class ActorPlacement:
 
                     point = Actor(name="floor_point", scale=2, x=x, y=y,
                                   color=COLORS["black"], visible_color=COLORS["light_ground"], not_visible_color=COLORS["light_ground"])
+                    point.tag = {Tag.ui}
+
                     map_point_sprites.append(point)
 
                 elif self.tiles[x][y] == TILE.WALL:
                     point = Actor(name="wall_point", scale=2, x=x, y=y,
                                   color=COLORS["white"], visible_color=COLORS["light_ground"], not_visible_color=COLORS["light_ground"])
+                    point.tag = {Tag.ui}
+
                     map_point_sprites.append(point)
 
                 elif self.tiles[x][y] == TILE.STAIRS_DOWN:
                     point = Actor(name="stairs_down_point", scale=2, x=x, y=y,
                                   color=COLORS["black"], visible_color=COLORS["light_ground"], not_visible_color=COLORS["light_ground"])
+                    point.tag = {Tag.ui}
                     map_point_sprites.append(point)
 
         return map_point_sprites
@@ -221,6 +226,7 @@ class ActorPlacement:
                     cx, cy = grid_to_pixel(x, y)
                     item.center_x = cx
                     item.center_y = cy
+                    item.tag = {Tag.ui}
 
                     items_point_sprites.append(item)
 

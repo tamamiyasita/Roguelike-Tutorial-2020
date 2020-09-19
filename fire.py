@@ -1,6 +1,6 @@
 import arcade
 from data import *
-from constants import COLORS
+from constants import COLORS, Tag
 
 import math
 from actor.actor import Actor
@@ -71,7 +71,7 @@ class Fire:
             return results
 
         for actor in self.actor_sprites:
-            if actor.is_visible and actor.fighter and not actor.is_dead and actor.ai:
+            if actor.is_visible and Tag.enemy in actor.tag:
                 x1, y1 = self.shooter.x, self.shooter.y
                 x2, y2 = actor.x, actor.y
                 distance = math.sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2)
