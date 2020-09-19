@@ -46,6 +46,7 @@ class Actor(arcade.Sprite):
         self.tag = tag
         self.left_face = left_face
         self._master = None
+        self.d_time = 100
 
         self.inventory = inventory
         if self.inventory:
@@ -59,6 +60,7 @@ class Actor(arcade.Sprite):
         self.ai = ai
         if self.ai:
             self.ai.owner = self
+            self.state = state
 
         self.equipment = equipment
         if self.equipment:
@@ -67,8 +69,6 @@ class Actor(arcade.Sprite):
         self.fighter = fighter
         if self.fighter:
             self.fighter.owner = self
-            self.state = state
-            self.d_time = 100
 
     def get_dict(self):
         result = {}

@@ -84,10 +84,8 @@ class GameEngine:
         floor_sprite = ActorPlacement(self.town_map, self).tiled_floor_set()
         wall_sprite = ActorPlacement(self.town_map, self).tiled_wall_set()
         map_point_sprite = ActorPlacement(self.town_map, self).map_point_set()
-        map_obj_sprite = ActorPlacement(
-            self.town_map, self).tiled_map_obj_set()
-        actorsprite = arcade.SpriteList(
-            use_spatial_hash=True, spatial_hash_cell_size=32)
+        map_obj_sprite = ActorPlacement(self.town_map, self).tiled_map_obj_set()
+        actorsprite = ActorPlacement(self.town_map, self).tiled_npc_set()
         itemsprite = arcade.SpriteList(
             use_spatial_hash=True, spatial_hash_cell_size=32)
         items_point_sprite = arcade.SpriteList(
@@ -178,7 +176,7 @@ class GameEngine:
 
         arcade.set_background_color(COLORS["black"])
 
-        self.cur_level = self.setup_level(level_number=1)
+        self.cur_level = self.setup_level(level_number=0)
         self.stories.append(self.cur_level)
         self.turn_loop = TurnLoop(self.player)
         self.item_point = ItemPoint(self)

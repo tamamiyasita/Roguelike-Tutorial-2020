@@ -53,6 +53,11 @@ class TurnLoop:
                 if result:
                     engine.action_queue.extend(result)
                 self.turn = Turn.DELAY
+            elif Tag.friendly in self.actor.tag:
+                result = self.actor.ai.take_turn(engine)
+                if result:
+                    engine.action_queue.extend(result)
+                self.turn = Turn.DELAY
 
         elif self.turn == Turn.DELAY:
             # log.debug(

@@ -26,7 +26,8 @@ size = 16  # テクスチャのサイズと位置情報も兼ねる
 orcs_tiles_0 = (r"image\Characters\Player0.png")  # orcタイルイメージ
 orcs_tiles_1 = (r"image\Characters\Player1.png")  # orcタイルイメージ
 
-
+humanoid_tiles_0 =(r"image\Characters\Humanoid0.png")
+humanoid_tiles_1 =(r"image\Characters\Humanoid1.png")
 
 # orcテクスチャ生成
 orc_right_0 = arcade.load_texture(
@@ -39,7 +40,7 @@ orc_left_1 = arcade.load_texture(
     orcs_tiles_1, x=0, y=12*size, width=size, height=size)
 orc = [orc_right_0, orc_left_0, orc_right_1, orc_left_1]
 
-# trollクスチャ生成
+# trollテクスチャ生成
 troll_right_0 = arcade.load_texture(
     orcs_tiles_0, x=size*7, y=12*size, width=size, height=size, mirrored=True)
 troll_left_0 = arcade.load_texture(
@@ -50,6 +51,18 @@ troll_left_1 = arcade.load_texture(
     orcs_tiles_1, x=size*7, y=12*size, width=size, height=size)
 troll = [troll_right_0, troll_left_0, troll_right_1, troll_left_1]
 #######
+
+# npcテクスチャ生成
+villager_right_0 = arcade.load_texture(
+    humanoid_tiles_0, x=size*1, y=size*3, width=size, height=size, mirrored=True)
+villager_left_0 = arcade.load_texture(
+    humanoid_tiles_0, x=size*1, y=size*3, width=size, height=size)
+villager_right_1 = arcade.load_texture(
+    humanoid_tiles_1, x=size*1, y=size*3, width=size, height=size, mirrored=True)
+villager_left_1 = arcade.load_texture(
+    humanoid_tiles_1, x=size*1, y=size*3, width=size, height=size)
+villager = [villager_right_0,villager_left_0, villager_right_1, villager_left_1]
+
 
 # short weaponテクスチャ生成
 short_weapon_tiles = (r"image/ShortWep.png")
@@ -135,6 +148,7 @@ IMAGE_ID = {"player": player,
 
             "orc": orc,
             "troll": troll,
+            "villager":villager,
 
             "short_sword": short_sword,
             "long_sword": long_sword,

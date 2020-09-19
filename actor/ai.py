@@ -1,8 +1,22 @@
 from os import remove
 import arcade
-from random import randint
+from random import randint, choice
 from astar import astar
 from constants import *
+
+class RandomMove:
+    def __init__(self):
+        self.owner = None
+        self.visible_check = None
+    
+    def take_turn(self, engine):
+        results = []
+        self.owner.move((randint(-1, 1), randint(-1, 1)),engine=engine)
+        message = choice(self.owner.message)
+        results.append(message)
+
+        return results
+
 
 
 class Basicmonster:
