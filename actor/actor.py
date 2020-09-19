@@ -10,6 +10,8 @@ from util import pixel_to_grid, grid_to_pixel, get_blocking_entity, get_door
 from actor.item import Item
 from particle import AttackParticle, PARTICLE_COUNT
 
+import inspect
+
 
 class Actor(arcade.Sprite):
     """ 全てのオブジェクトを作成する基礎となるクラス
@@ -21,7 +23,7 @@ class Actor(arcade.Sprite):
                  fighter=None, ai=None, speed=DEFAULT_SPEED,
                  inventory=None, equipment=None,
                  visible_color=COLORS["white"], not_visible_color=COLORS["black"],
-                 explanatory_text="",
+                 explanatory_text="", tag={Tag.free},
                  state=state.TURN_END, left_face=False):
         super().__init__(scale=scale)
         if name:
@@ -41,6 +43,7 @@ class Actor(arcade.Sprite):
         self.is_dead = False
         self.state = state
         self.explanatory_text = explanatory_text
+        self.tag = tag
         self.left_face = left_face
         self._master = None
 
@@ -90,10 +93,10 @@ class Actor(arcade.Sprite):
         if self.state:
             result["state"] = True
 
-        if self.ai.__class__.__name__ == "Basicmonster":
-            result["ai"] = True
         if self.ai.__class__.__name__ == "ConfusedMonster":
             result["confused_ai"] = self.ai.get_dict()
+        elif self.ai:
+            result["ai"] = self.ai.__class__.__name__
 
         if self.fighter:
             result["fighter"] = self.fighter.get_dict()
@@ -134,7 +137,7 @@ class Actor(arcade.Sprite):
         if "state" in result:
             self.state = state.TURN_END
         if "ai" in result:
-            self.ai = Basicmonster()
+            self.ai = eval(result["ai"])()
             self.ai.owner = self
         if "confused_ai" in result:
             self.ai = ConfusedMonster()

@@ -131,21 +131,18 @@ class ActorPlacement:
 
                     point = Actor(name="floor_point", scale=2, x=x, y=y,
                                   color=COLORS["black"], visible_color=COLORS["light_ground"], not_visible_color=COLORS["light_ground"])
-                    point.tag = {Tag.ui}
 
                     map_point_sprites.append(point)
 
                 elif self.tiles[x][y] == TILE.WALL:
                     point = Actor(name="wall_point", scale=2, x=x, y=y,
                                   color=COLORS["white"], visible_color=COLORS["light_ground"], not_visible_color=COLORS["light_ground"])
-                    point.tag = {Tag.ui}
 
                     map_point_sprites.append(point)
 
                 elif self.tiles[x][y] == TILE.STAIRS_DOWN:
                     point = Actor(name="stairs_down_point", scale=2, x=x, y=y,
                                   color=COLORS["black"], visible_color=COLORS["light_ground"], not_visible_color=COLORS["light_ground"])
-                    point.tag = {Tag.ui}
                     map_point_sprites.append(point)
 
         return map_point_sprites
@@ -226,7 +223,6 @@ class ActorPlacement:
                     cx, cy = grid_to_pixel(x, y)
                     item.center_x = cx
                     item.center_y = cy
-                    item.tag = {Tag.ui}
 
                     items_point_sprites.append(item)
 

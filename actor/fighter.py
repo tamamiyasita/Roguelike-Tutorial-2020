@@ -31,48 +31,58 @@ class Fighter:
 
     def get_dict(self):
         result = {}
-        result["hp"] = self.hp
-        result["max_hp"] = self.base_max_hp
-        result["mp"] = self.mp
-        result["max_mp"] = self.base_max_mp
+        print(type(self.owner), self.owner, "owner")
+        # result["hp"] = self.hp
+        # result["max_hp"] = self.base_max_hp
+        # result["mp"] = self.mp
+        # result["max_mp"] = self.base_max_mp
 
-        result["strength"] = self.base_strength
-        result["dexterity"] = self.base_dexterity
-        result["intelligence"] = self.base_intelligence
+        # result["strength"] = self.base_strength
+        # result["dexterity"] = self.base_dexterity
+        # result["intelligence"] = self.base_intelligence
 
-        result["unarmed_attack"] = self.unarmed_attack
-        result["defense"] = self.base_defense
-        result["evasion"] = self.base_evasion
-        result["hit_rate"] = self.hit_rate
-        result["attack_speed"] = self.attack_speed
+        # result["unarmed_attack"] = self.unarmed_attack
+        # result["defense"] = self.base_defense
+        # result["evasion"] = self.base_evasion
+        # result["hit_rate"] = self.hit_rate
+        # result["attack_speed"] = self.attack_speed
 
-        result["xp_reward"] = self.xp_reward
-        result["current_xp"] = self.current_xp
-        result["level"] = self.level
-        result["ability_points"] = self.ability_points
+        # result["xp_reward"] = self.xp_reward
+        # result["current_xp"] = self.current_xp
+        # result["level"] = self.level
+        # result["ability_points"] = self.ability_points
+        for key, val in self.__dict__.items():
+            if "owner" in str(key):
+                continue
+            # print(key, val)
+            result[str(key)] = val
+
 
         return result
 
     def restore_from_dict(self, result):
-        self.hp = result["hp"]
-        self.base_max_hp = result["max_hp"]
-        self.mp = result["mp"]
-        self.base_max_mp = result["max_mp"]
+        for key, val in result.items():
+            exec(f"self.{key} = {val}")
 
-        self.base_strength = result["strength"]
-        self.base_dexterity = result["dexterity"]
-        self.base_intelligence = result["intelligence"]
+        # self.hp = result["hp"]
+        # self.base_max_hp = result["max_hp"]
+        # self.mp = result["mp"]
+        # self.base_max_mp = result["max_mp"]
 
-        self.unarmed_attack = result["unarmed_attack"]
-        self.base_defense = result["defense"]
-        self.base_evasion = result["evasion"]
-        self.hit_rate = result["hit_rate"]
-        self.attack_speed = result["attack_speed"]
+        # self.base_strength = result["strength"]
+        # self.base_dexterity = result["dexterity"]
+        # self.base_intelligence = result["intelligence"]
 
-        self.xp_reward = result["xp_reward"]
-        self.current_xp = result["current_xp"]
-        self.level = result["level"]
-        self.ability_points = result["ability_points"]
+        # self.unarmed_attack = result["unarmed_attack"]
+        # self.base_defense = result["defense"]
+        # self.base_evasion = result["evasion"]
+        # self.hit_rate = result["hit_rate"]
+        # self.attack_speed = result["attack_speed"]
+
+        # self.xp_reward = result["xp_reward"]
+        # self.current_xp = result["current_xp"]
+        # self.level = result["level"]
+        # self.ability_points = result["ability_points"]
 
     @property
     def max_hp(self):

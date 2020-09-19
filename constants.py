@@ -61,7 +61,8 @@ class Tag(Enum):
     floor = auto()
     door = auto()
     stairs = auto()
-    ui = auto()
+    
+    free = auto()
 
 
 COLORS = {
