@@ -14,6 +14,7 @@ from ui.normal_ui import NormalUI
 from ui.mouse_ui import MouseUI
 from ui.select_ui import SelectUI
 from ui.character_screen_ui import CharacterScreen
+from ui.message_window import MessageWindow
 
 from util import pixel_to_grid
 from viewport import viewport
@@ -34,7 +35,6 @@ class MG(arcade.Window):
         self.grid_press = None
         self.viewport_left = 0
         self.viewport_bottom = 0
-
 
     def setup(self):
         self.engine.setup()
@@ -62,6 +62,8 @@ class MG(arcade.Window):
             size=(0.5792, 0.97), pos=(0.949, 1.022))
 
         self.select_UI = SelectUI(engine=self.engine)
+
+        self.massage_window = MessageWindow(self.engine)
 
     def draw_sprites(self):
         """ 全てのスプライトリストをここで描画する """
@@ -126,6 +128,9 @@ class MG(arcade.Window):
         elif self.engine.game_state == GAME_STATE.CHARACTER_SCREEN:
             self.character_screen.draw_character_screen(
                 self.viewport_left, self.viewport_bottom)
+
+        elif self.engine.game_state == GAME_STATE.MESSAGE_WINDOW:
+            self.massage_window()
 
         # fov_recomputeがTruならfov計算
         if self.engine.fov_recompute:

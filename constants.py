@@ -61,7 +61,7 @@ class Tag(Enum):
     floor = auto()
     door = auto()
     stairs = auto()
-    
+
     free = auto()
 
 
@@ -102,6 +102,7 @@ class GAME_STATE(Enum):
     NORMAL = auto()
     SELECT_LOCATION = auto()
     CHARACTER_SCREEN = auto()
+    MESSAGE_WINDOW = auto()
     DELAY_WINDOW = auto()
     LOAD_WINDOW = auto()
 

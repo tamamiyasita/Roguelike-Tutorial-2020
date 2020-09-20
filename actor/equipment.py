@@ -1,4 +1,5 @@
 from collections import Counter
+from functools import cached_property
 
 
 class Equipment:
@@ -50,7 +51,7 @@ class Equipment:
 
             self.equip_update_check = False
 
-    @property
+    @cached_property
     def states_bonus(self):
         """ステータスボーナスの計算"""
 
@@ -62,28 +63,28 @@ class Equipment:
 
         return bonus
 
-    @property
+    @cached_property
     def melee_weapon_damage(self):
         if self.item_slot["main_hand"]:
             return self.item_slot["main_hand"].attack_damage
         else:
             return None
 
-    @property
+    @cached_property
     def ranged_weapon_damage(self):
         if self.item_slot["ranged_weapon"]:
             return self.item_slot["ranged_weapon"].attack_damage
         else:
             return None
 
-    @property
+    @cached_property
     def weapon_hit_rate(self):
         if self.item_slot["main_hand"]:
             return self.item_slot["main_hand"].hit_rate
         else:
             return None
 
-    @property
+    @cached_property
     def ranged_hit_rate(self):
         if self.item_slot["ranged_weapon"]:
             return self.item_slot["ranged_weapon"].hit_rate

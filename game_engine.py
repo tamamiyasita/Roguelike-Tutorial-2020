@@ -61,6 +61,7 @@ class GameEngine:
         self.grid_select_handlers = []
         self.move_switch = True
         self.damage_pop = []
+        self.message_event = None
 
         self.player = Player(
             inventory=Inventory(capacity=5))
@@ -84,7 +85,8 @@ class GameEngine:
         floor_sprite = ActorPlacement(self.town_map, self).tiled_floor_set()
         wall_sprite = ActorPlacement(self.town_map, self).tiled_wall_set()
         map_point_sprite = ActorPlacement(self.town_map, self).map_point_set()
-        map_obj_sprite = ActorPlacement(self.town_map, self).tiled_map_obj_set()
+        map_obj_sprite = ActorPlacement(
+            self.town_map, self).tiled_map_obj_set()
         actorsprite = ActorPlacement(self.town_map, self).tiled_npc_set()
         itemsprite = arcade.SpriteList(
             use_spatial_hash=True, spatial_hash_cell_size=32)
@@ -176,7 +178,7 @@ class GameEngine:
 
         arcade.set_background_color(COLORS["black"])
 
-        self.cur_level = self.setup_level(level_number=0)
+        self.cur_level = self.setup_level(level_number=1)
         self.stories.append(self.cur_level)
         self.turn_loop = TurnLoop(self.player)
         self.item_point = ItemPoint(self)
@@ -489,6 +491,15 @@ class GameEngine:
                 dmg = Damagepop(engine=self, target=target)
                 dmg.set(txt.texture)
                 self.damage_pop.append(dmg)
+
+            if "talk" in action:
+                actor = action["talk"]
+                self.game_state = GAME_STATE.MESSAGE_WINDOW
+                if hasattr(actor.message_event):
+                    self.message_event = actor.message_event
+                else:
+                    actor.center_x, actor.center_y = self.player.center_x, self.player.center_y
+                    actor.x, actor.y = self.player.x, self.player.y
 
         self.action_queue = new_action_queue
 

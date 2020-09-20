@@ -4,7 +4,6 @@ from constants import *
 from data import *
 
 
-
 def grid_to_pixel(x, y):
     """tilepositionからsprite_sizeに変換する"""
     px = x * SPRITE_SIZE * SPRITE_SCALE + SPRITE_SIZE / 2 * SPRITE_SCALE
@@ -25,6 +24,17 @@ def pixel_to_grid(x, y):
 
 def dice(D, min_d, max_d):
     return D * randint(min_d, max_d)
+
+
+def get_entity(x, y, sprite_lists):
+    px, py = grid_to_pixel(x, y)
+    get_sprite = arcade.SpriteList()
+    for sprite_list in sprite_lists:
+        s_list = arcade.get_sprites_at_exact_point((px, py), sprite_list)
+        for sprite in s_list:
+            if sprite.blocks:
+                get_sprite.append(sprite)
+
 
 def get_blocking_entity(x, y, sprite_lists):
     px, py = grid_to_pixel(x, y)

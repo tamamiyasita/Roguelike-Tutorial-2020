@@ -10,7 +10,7 @@ from util import pixel_to_grid, grid_to_pixel, get_blocking_entity, get_door
 from actor.item import Item
 from particle import AttackParticle, PARTICLE_COUNT
 
-import inspect
+from functools import lru_cache
 
 
 class Actor(arcade.Sprite):
@@ -70,11 +70,11 @@ class Actor(arcade.Sprite):
         if self.fighter:
             self.fighter.owner = self
 
-
     def get_dict(self):
-        def get_d(**kwargs):
-            print(kwargs)
-        get_d(name=self.name)
+        # def get_d(**kwargs):
+        #     print(kwargs)
+        # get_d(vars(self))
+        print(vars(self))
         result = {}
         result["texture_number"] = self.texture_number
         result["name"] = self.name
@@ -212,6 +212,9 @@ class Actor(arcade.Sprite):
                 if actor in wall_sprites:
                     return [{"None": True}]
 
+                if Tag.friendly in actor.tag:
+                    return [{"talk": actor}]
+
                 elif not actor.is_dead:
                     attack_results = self.fighter.attack(actor)
                     if attack_results:
@@ -300,7 +303,6 @@ class Actor(arcade.Sprite):
                 particle.position = (
                     self.center_x + (self.dx*20), self.center_y + (self.dy*20))
                 self.effect_sprites.append(particle)
-                
 
         if self.change_x == 0 and self.change_y == 0 and self.state != state.TURN_END:
             self.attack_delay -= 1
@@ -364,7 +366,6 @@ class Actor(arcade.Sprite):
                 self.texture = self.textures[2]
             if self.d_time < 0:
                 self.d_time = 100
-
 
         # itemを装備した時のsprite表示
         if self.master:
