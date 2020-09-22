@@ -1,3 +1,4 @@
+from random import choice
 import arcade
 from arcade.gl import geometry
 import json
@@ -8,7 +9,7 @@ import pyglet.gl as gl
 
 from game_engine import GameEngine
 from constants import *
-from keymap import keymap, grid_move_key
+from keymap import keymap, grid_move_key, choices_key
 
 from ui.normal_ui import NormalUI
 from ui.mouse_ui import MouseUI
@@ -35,6 +36,7 @@ class MG(arcade.Window):
         self.grid_press = None
         self.viewport_left = 0
         self.viewport_bottom = 0
+        self.choice = 0
 
     def setup(self):
         self.engine.setup()
@@ -130,7 +132,8 @@ class MG(arcade.Window):
                 self.viewport_left, self.viewport_bottom)
 
         elif self.engine.game_state == GAME_STATE.MESSAGE_WINDOW:
-            self.massage_window()
+            self.massage_window.window_pop(arcade.get_viewport(), self.choice)
+
 
         # fov_recomputeがTruならfov計算
         if self.engine.fov_recompute:
@@ -198,6 +201,25 @@ class MG(arcade.Window):
             door_check = keymap(key, self.engine)
             if door_check:
                 self.engine.action_queue.extend([{"use_door": door_check}])
+        
+        # 会話画面表示
+        if self.engine.game_state == GAME_STATE.MESSAGE_WINDOW:
+            choice = choices_key(key, self.engine)
+            if isinstance(choice, int):
+                self.choice += choice
+                if self.choice >= len(self.massage_window.player_message):
+                    self.choice = 0
+                if self.choice == -1:
+                    self.choice = len(self.massage_window.player_message)-1
+            elif choice == "select":
+                if self.engine.messenger.npc_state == NPC_state.WAITING:
+                    self.engine.game_state = GAME_STATE.NORMAL
+                if self.choice == 0:
+                    self.engine.messenger.npc_state = NPC_state.WAITING
+                elif self.choice != 0:
+                    self.engine.game_state = GAME_STATE.NORMAL
+
+        
 
         if key == arcade.key.F11:
             self.save()

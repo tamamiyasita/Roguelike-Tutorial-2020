@@ -1,3 +1,4 @@
+from random import choice
 import arcade
 from constants import *
 from util import grid_to_pixel
@@ -32,6 +33,24 @@ KEYMAP_USE_STAIRS = [arcade.key.ENTER]
 KEYMAP_CANCEL = [arcade.key.ESCAPE]
 KEYMAP_DOOR = [arcade.key.K]
 KEYMAP_GRID_SELECT = [arcade.key.L]
+
+
+def choices_key(key, engine):
+    choice_point = 0
+    # if key in KEYMAP_CANCEL:
+    #     engine.game_state = GAME_STATE.NORMAL
+    #     engine.player.state = state.READY
+    #     return
+
+    if key in KEYMAP_UP:
+        choice_point += 1
+        return choice_point
+    elif key in KEYMAP_DOWN:
+        choice_point -= 1
+        return choice_point
+    elif key == arcade.key.ENTER:
+        return "select"
+    
 
 
 def grid_move_key(key, engine):

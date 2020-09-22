@@ -61,7 +61,7 @@ class GameEngine:
         self.grid_select_handlers = []
         self.move_switch = True
         self.damage_pop = []
-        self.message_event = None
+        self.messenger = None
 
         self.player = Player(
             inventory=Inventory(capacity=5))
@@ -178,7 +178,7 @@ class GameEngine:
 
         arcade.set_background_color(COLORS["black"])
 
-        self.cur_level = self.setup_level(level_number=1)
+        self.cur_level = self.setup_level(level_number=0)
         self.stories.append(self.cur_level)
         self.turn_loop = TurnLoop(self.player)
         self.item_point = ItemPoint(self)
@@ -493,13 +493,14 @@ class GameEngine:
                 self.damage_pop.append(dmg)
 
             if "talk" in action:
-                actor = action["talk"]
-                self.game_state = GAME_STATE.MESSAGE_WINDOW
-                if hasattr(actor.message_event):
-                    self.message_event = actor.message_event
+                actor = action.pop("talk")
+                if hasattr(actor, "message_event"):
+                    self.game_state = GAME_STATE.MESSAGE_WINDOW
+                    self.messenger = actor
                 else:
                     actor.center_x, actor.center_y = self.player.center_x, self.player.center_y
                     actor.x, actor.y = self.player.x, self.player.y
+                action = None
 
         self.action_queue = new_action_queue
 

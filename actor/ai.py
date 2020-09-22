@@ -4,6 +4,20 @@ from random import randint, choice
 from astar import astar
 from constants import *
 
+class Wait:
+    def __init__(self):
+        self.owner = None
+        self.visible_check = None
+    
+    def take_turn(self, engine):
+        results = []
+        # self.owner.move((0, 0), engine=engine)
+        message = choice(self.owner.message)
+        results.append(message)
+        results.extend([{"turn_end": self.owner}])
+
+        return results
+
 class RandomMove:
     def __init__(self):
         self.owner = None

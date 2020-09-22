@@ -63,6 +63,15 @@ villager_left_1 = arcade.load_texture(
     humanoid_tiles_1, x=size*1, y=size*3, width=size, height=size)
 villager = [villager_right_0,villager_left_0, villager_right_1, villager_left_1]
 
+citizen_right_0 = arcade.load_texture(
+    humanoid_tiles_0, x=size*3, y=size*4, width=size, height=size, mirrored=True)
+citizen_left_0 = arcade.load_texture(
+    humanoid_tiles_0, x=size*3, y=size*4, width=size, height=size)
+citizen_right_1 = arcade.load_texture(
+    humanoid_tiles_1, x=size*3, y=size*4, width=size, height=size, mirrored=True)
+citizen_left_1 = arcade.load_texture(
+    humanoid_tiles_1, x=size*3, y=size*4, width=size, height=size)
+citizen = [citizen_right_0,citizen_left_0, citizen_right_1, citizen_left_1]
 
 # short weaponテクスチャ生成
 short_weapon_tiles = (r"image/ShortWep.png")
@@ -149,6 +158,7 @@ IMAGE_ID = {"player": player,
             "orc": orc,
             "troll": troll,
             "villager":villager,
+            "citizen":citizen,
 
             "short_sword": short_sword,
             "long_sword": long_sword,

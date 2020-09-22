@@ -2,7 +2,7 @@
 from actor.actor import Actor
 from data import *
 from constants import *
-from actor.ai import RandomMove
+from actor.ai import RandomMove, Wait
 
 
 class Villager(Actor):
@@ -14,9 +14,9 @@ class Villager(Actor):
             name="villager",
             x=x,
             y=y,
-            speed=5,
+            speed=15,
             ai=ai_component,
-            blocks=False
+            blocks=True
         )
         self.tag = {Tag.npc, Tag.friendly}
 
@@ -25,22 +25,31 @@ class Villager(Actor):
         ]
 
 
-class Villager(Actor):
+class Citizen(Actor):
     def __init__(self, x=0, y=0):
-        ai_component = RandomMove()
+        ai_component = Wait()
 
         super().__init__(
             scale=2.5,
-            name="villager",
+            name="citizen",
             x=x,
             y=y,
-            speed=5,
+            speed=45,
             ai=ai_component,
-            blocks=False
+            blocks=True
         )
         self.tag = {Tag.npc, Tag.friendly}
+
+        self.npc_state = NPC_state.REQUEST
 
         self.message = [
             {"message": "test CDEF"}, {"message": "false_test"}
         ]
-        self.message_event = [{1: "test", 2: "testtest", 3: "testes___tes"}]
+        self.message_event = {
+                            "request": ["I'm worried", "I'm really coming", "Please help me"],
+                            "reply":["Yes", "No", "uum...", "fumm..."],
+                            "waiting":["Then please"],
+                            "accepted":["understood"],
+                            "reward":["Thank you"],
+                            "ok":["Gonna be good"]
+                            }
