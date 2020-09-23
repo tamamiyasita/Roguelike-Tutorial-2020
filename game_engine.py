@@ -27,8 +27,7 @@ from actor.damage_pop import Damagepop
 
 
 class GameLevel:
-    """level毎のsprite_listの生成
-    """
+    """dungeon階層毎にsprite_listを生成する"""
 
     def __init__(self):
         self.chara_sprites = None
@@ -47,7 +46,6 @@ class GameLevel:
 
 class GameEngine:
     def __init__(self):
-        """ 変数の初期化 """
         self.stories = []  # 階層を格納する変数
         self.cur_level = None
 

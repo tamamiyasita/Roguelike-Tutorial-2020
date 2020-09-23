@@ -24,7 +24,16 @@ from viewport import viewport
 
 
 class MG(arcade.Window):
+    """メインウィンドウを表示し、キーボードとマウスの操作を行います"""
+
     def __init__(self, width, height, title):
+        """
+        Args:
+            width = 画面の幅
+            height = 画面の高さ
+            title = タイトル
+            antialiasing = 画像にアンチエイリアスを掛けるかどうか
+        """
         super().__init__(width, height, title, antialiasing=False)
 
         self.engine = GameEngine()
@@ -39,11 +48,13 @@ class MG(arcade.Window):
         self.choice = 0
 
     def setup(self):
+        """変数に値を設定する、ミニマップ作成の情報もここで渡す"""
         self.engine.setup()
         viewport(self.engine.player.center_x, self.engine.player.center_y)
         self.character_screen = CharacterScreen(self.engine.player)
 
-        """minimap"""
+        # ここでminimapの作成を行う
+        # ----------------------
         # ミニマップの描画位置指定
         screen_size = (GAME_GROUND_WIDTH, GAME_GROUND_HEIGHT)
         self.program = self.ctx.load_program(
@@ -62,15 +73,20 @@ class MG(arcade.Window):
 
         self.mini_map_quad = geometry.quad_2d(
             size=(0.5792, 0.97), pos=(0.949, 1.022))
+        # ----------------------
 
+        # Lコマンドで呼び出すlook機能
         self.select_UI = SelectUI(engine=self.engine)
 
+        # 会話画面の初期化はここで行う
         self.massage_window = MessageWindow(self.engine)
 
     def draw_sprites(self):
         """ 全てのスプライトリストをここで描画する """
+        # 背景が表示されないように最初に黒で塗りつぶす、他の方法を考えないと…
         arcade.draw_rectangle_filled(-1000, -1000,
                                      10000, 10000, color=arcade.color.BLACK)
+        # 以下スプライトリスト
         self.engine.cur_level.floor_sprites.draw()
         self.engine.cur_level.wall_sprites.draw()
         self.engine.cur_level.map_obj_sprites.draw(filter=gl.GL_LO_BIAS_NV)
@@ -81,6 +97,7 @@ class MG(arcade.Window):
         self.engine.cur_level.equip_sprites.draw(filter=gl.GL_NEAREST)
 
     def on_draw(self):
+        """全画像の表示"""
 
         arcade.start_render()
         """minimap draw"""
@@ -131,23 +148,22 @@ class MG(arcade.Window):
             self.character_screen.draw_character_screen(
                 self.viewport_left, self.viewport_bottom)
 
+        # 会話画面の表示
         elif self.engine.game_state == GAME_STATE.MESSAGE_WINDOW:
             self.massage_window.window_pop(arcade.get_viewport(), self.choice)
-
 
         # fov_recomputeがTruならfov計算
         if self.engine.fov_recompute:
             self.engine.fov()
 
+        # draw the mini_map
         if self.engine.game_state == GAME_STATE.NORMAL or self.engine.game_state == GAME_STATE.DELAY_WINDOW:
-            """minimap_related"""
-            # draw the mini_map
             self.color_attachment.use(0)
             self.mini_map_quad.render(self.program)
 
     def on_update(self, delta_time):
         """全てのスプライトリストのアップデートを行う
-           他にactionqueue、ターンチェンジ、pcの移動とviewport、expのチェック
+           他にアクションキュー、ターンチェンジ、pcの移動とviewport、expのチェック
         """
         if self.engine.game_state == GAME_STATE.NORMAL:
 
@@ -164,6 +180,7 @@ class MG(arcade.Window):
             self.engine.check_for_player_movement(self.player_direction)
             self.engine.cur_level.map_obj_sprites.update_animation()
 
+            # EXPのチェック
             if self.engine.player.state == state.READY:
                 self.engine.player.check_experience_level(self.engine)
 
@@ -177,6 +194,7 @@ class MG(arcade.Window):
                 self.engine.player.equipment.update(
                     self.engine.cur_level.equip_sprites)
 
+        # look機能のアップデート
         if self.engine.game_state == GAME_STATE.SELECT_LOCATION:
             self.select_UI.update()
 
@@ -201,11 +219,12 @@ class MG(arcade.Window):
             door_check = keymap(key, self.engine)
             if door_check:
                 self.engine.action_queue.extend([{"use_door": door_check}])
-        
-        # 会話画面表示
+
+        # 会話画面の返答
         if self.engine.game_state == GAME_STATE.MESSAGE_WINDOW:
             choice = choices_key(key, self.engine)
             if isinstance(choice, int):
+                # TODO 関数に切り分ける
                 self.choice += choice
                 if self.choice >= len(self.massage_window.player_message):
                     self.choice = 0
@@ -218,8 +237,6 @@ class MG(arcade.Window):
                     self.engine.messenger.npc_state = NPC_state.WAITING
                 elif self.choice != 0:
                     self.engine.game_state = GAME_STATE.NORMAL
-
-        
 
         if key == arcade.key.F11:
             self.save()
@@ -240,14 +257,14 @@ class MG(arcade.Window):
                                     sprite_lists=[self.engine.cur_level.actor_sprites, self.engine.cur_level.item_sprites])
 
     def on_mouse_press(self, x, y, button, modifiers):
-        """engineのgrid_clickに渡されるマウスボタン処理"""
+        # engineのgrid_clickに渡されるマウスボタン処理
         if self.engine.game_state == GAME_STATE.SELECT_LOCATION:
             grid_x, grid_y = pixel_to_grid(
                 x + self.viewport_left, y + self.viewport_bottom)
             self.engine.grid_click(grid_x, grid_y)
             self.engine.game_state = GAME_STATE.NORMAL
 
-        """ステータスボタン処理"""
+        # ステータスボタン処理
         if self.engine.game_state == GAME_STATE.CHARACTER_SCREEN:
             self.character_screen.buttons_click(
                 x+self.viewport_left, y+self.viewport_bottom)

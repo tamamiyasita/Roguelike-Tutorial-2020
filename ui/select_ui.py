@@ -11,7 +11,7 @@ class SelectUI:
         self.panel_line_width = 4
 
         self.grid_sprites = arcade.SpriteList()
-        self.d_time = 255
+        self.d_time = 120
         self.x, self.y = 0, 0
 
     def draw_in_select_ui(self, viewports, grid_press, grid_select):
@@ -163,4 +163,3 @@ class SelectUI:
                         font_size=14,
                     )
                     y += 20
-                    

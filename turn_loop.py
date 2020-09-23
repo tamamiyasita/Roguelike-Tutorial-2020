@@ -34,6 +34,7 @@ class TurnLoop:
                     if sprite.wait > 0:
                         sprite.wait -= 1
 
+            # waitが0になったactorに行動権を与えてループ終了
             for actor in self.sprites:
                 if actor.is_dead:
                     continue
