@@ -122,7 +122,7 @@ class MG(arcade.Window):
         self.color_attachment.use(0)
         self.quad_fs.render(self.program)
         # アタック時はビューポート固定する
-        if self.engine.player.state == state.ATTACK:
+        if self.engine.player.state == state.ATTACK or self.engine.player.state == state.AMOUNT:
             viewport(self.engine.player.target_x, self.engine.player.target_y)
         else:
             viewport(self.engine.player.center_x, self.engine.player.center_y)

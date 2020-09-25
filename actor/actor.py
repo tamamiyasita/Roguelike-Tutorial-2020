@@ -1,3 +1,4 @@
+from random import random, randint, uniform
 from arcade import particle
 from arcade.text import draw_text
 from actor.ai import Basicmonster, ConfusedMonster
@@ -191,6 +192,8 @@ class Actor(arcade.Sprite):
         self.effect_sprites = engine.cur_level.effect_sprites
 
         self.dx, self.dy = dxy
+        self.tmp = None
+        self.tmp2 = None
 
         if self.dx == -1:
             self.left_face = True
@@ -239,6 +242,10 @@ class Actor(arcade.Sprite):
 
                 elif not actor.is_dead:
                     attack_results = self.fighter.attack(actor)
+                    if actor.state == state.TURN_END:
+                        actor.state = state.AMOUNT
+                    self.tmp = actor
+                    self.tmp2 = (actor.center_x, actor.center_y)
                     if attack_results:
                         self.state = state.ATTACK
                         self.change_y = self.dy * MOVE_SPEED
@@ -259,6 +266,10 @@ class Actor(arcade.Sprite):
             if target and self.distance_to(target) <= 1.46:
                 # monsterの攻撃チェック
                 attack_results = self.fighter.attack(target)
+                if target.state == state.TURN_END:
+                    target.state = state.AMOUNT
+                self.tmp = target
+                self.tmp2 = (target.center_x, target.center_y)
                 if attack_results:
                     self.state = state.ATTACK
                     self.change_y = self.dy * MOVE_SPEED
@@ -293,9 +304,9 @@ class Actor(arcade.Sprite):
                 self.change_y = 0
                 self.x += self.dx
                 self.y += self.dy
+                self.wait = self.speed
                 self.state = state.TURN_END
 
-            self.wait = self.speed
 
         if self.state == state.ATTACK:
             self.attack()
@@ -309,11 +320,18 @@ class Actor(arcade.Sprite):
             self.change_y = 0
 
         if self.attack_delay == 6:
+            self.tmp.state = state.AMOUNT
             for i in range(PARTICLE_COUNT):
                 particle = AttackParticle()
                 particle.position = (
                     self.center_x + (self.dx*20), self.center_y + (self.dy*20))
                 self.effect_sprites.append(particle)
+                self.tmp.change_x += uniform(-0.5, 0.5)
+
+        if self.attack_delay % 2 == 0:
+            self.tmp.alpha = 10
+        else:
+            self.tmp.alpha = 155
 
         if self.change_x == 0 and self.change_y == 0 and self.state != state.TURN_END:
             self.attack_delay -= 1
@@ -322,6 +340,9 @@ class Actor(arcade.Sprite):
                 self.center_y = self.target_y
                 self.center_x = self.target_x
                 self.change_x, self.change_y = 0, 0
+                self.tmp.alpha = 255
+                self.tmp.change_x = 0
+                self.tmp.center_x = self.tmp2[0]
                 self.state = state.TURN_END
 
         if self.state == state.TURN_END:
@@ -335,6 +356,8 @@ class Actor(arcade.Sprite):
     def move_towards(self, target, engine):
 
         actor_sprites = engine.cur_level.actor_sprites
+        if target.state == state.TURN_END:
+            target.state = state.AMOUNT
 
         dx = target.x - self.x
         dy = target.y - self.y

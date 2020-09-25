@@ -116,6 +116,7 @@ class state(Enum):
     ATTACK = auto()
     FOV = auto()
     DOOR = auto()
+    AMOUNT = auto()
 
 class NPC_state(Enum):
     REQUEST = auto()
