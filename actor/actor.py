@@ -213,7 +213,10 @@ class Actor(arcade.Sprite):
                     return [{"None": True}]
 
                 if Tag.friendly in actor.tag:
-                    return [{"talk": actor}, {"turn_end":self}]
+                    result = [{"talk": actor}]
+                    if Tag.quest in actor.tag:
+                        result.extend([{"turn_end":self}])
+                    return result
 
                 elif not actor.is_dead:
                     attack_results = self.fighter.attack(actor)

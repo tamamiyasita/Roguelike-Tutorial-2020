@@ -38,7 +38,7 @@ class Citizen(Actor):
             ai=ai_component,
             blocks=True
         )
-        self.tag = {Tag.npc, Tag.friendly}
+        self.tag = {Tag.npc, Tag.friendly, Tag.quest}
 
         self.npc_state = NPC_state.REQUEST
 
@@ -47,7 +47,7 @@ class Citizen(Actor):
         ]
         self.message_event = {
                             "request": ["I'm worried", "I'm really coming", "Please help me"],
-                            "reply":["Yes", "No", "uum...", "fumm..."],
+                            "reply":["Yes", "No", "uum...", "See you later"],
                             "waiting":["Then please"],
                             "accepted":["understood"],
                             "reward":["Thank you"],

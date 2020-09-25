@@ -1,7 +1,9 @@
+from keymap import choices_key
 from random import choice
 import arcade
 from constants import *
 from data import *
+from keymap import choices_key
 
 
 class MessageWindow:
@@ -72,6 +74,25 @@ class MessageWindow:
             font_size=30)
             y -= 45
 
+    def message_choices(self, key):
+        choice = choices_key(key)
+        # 選択枠を上下にループする
+        if isinstance(choice, int):
+            self.choice += choice
+            if self.choice >= len(self.player_message):
+                self.choice = 0
+            if self.choice == -1:
+                self.choice = len(self.player_message)-1
+        # choice変数に"select"が入ると"self.choice"変数の値を読んで反応を返す
+        elif choice == "select":
+            if self.actor.npc_state == NPC_state.WAITING:
+                self.engine.game_state = GAME_STATE.NORMAL
+            if self.choice == 0:
+                self.actor.npc_state = NPC_state.WAITING
+            elif self.choice != 0:
+                self.engine.game_state = GAME_STATE.NORMAL
+        
+        return self.choice
 
 
 

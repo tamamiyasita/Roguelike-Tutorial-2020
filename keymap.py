@@ -35,7 +35,7 @@ KEYMAP_DOOR = [arcade.key.K]
 KEYMAP_GRID_SELECT = [arcade.key.L]
 
 
-def choices_key(key, engine):
+def choices_key(key):
     choice_point = 0
     # if key in KEYMAP_CANCEL:
     #     engine.game_state = GAME_STATE.NORMAL

@@ -29,7 +29,7 @@ MAIN_PANEL_Y = int(SCREEN_HEIGHT - STATES_PANEL_HEIGHT)
 VIEWPORT_MARGIN = int(((SCREEN_WIDTH-STATES_PANEL_WIDTH) /
                        2 + (SCREEN_HEIGHT-STATES_PANEL_HEIGHT) / 2)/2)
 
-MOVE_SPEED = 7
+MOVE_SPEED = 9
 
 EXPERIENCE_PER_LEVEL = [150, 800, 1300, 2000]
 
@@ -54,6 +54,7 @@ class Tag(Enum):
     enemy = auto()
     pet = auto()
     friendly = auto()
+    quest = auto()
 
     # obj
     map_obj = auto()

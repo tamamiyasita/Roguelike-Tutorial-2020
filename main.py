@@ -220,23 +220,9 @@ class MG(arcade.Window):
             if door_check:
                 self.engine.action_queue.extend([{"use_door": door_check}])
 
-        # 会話画面の返答
+        # 会話画面の返答処理
         if self.engine.game_state == GAME_STATE.MESSAGE_WINDOW:
-            choice = choices_key(key, self.engine)
-            if isinstance(choice, int):
-                # TODO 関数に切り分ける
-                self.choice += choice
-                if self.choice >= len(self.massage_window.player_message):
-                    self.choice = 0
-                if self.choice == -1:
-                    self.choice = len(self.massage_window.player_message)-1
-            elif choice == "select":
-                if self.engine.messenger.npc_state == NPC_state.WAITING:
-                    self.engine.game_state = GAME_STATE.NORMAL
-                if self.choice == 0:
-                    self.engine.messenger.npc_state = NPC_state.WAITING
-                elif self.choice != 0:
-                    self.engine.game_state = GAME_STATE.NORMAL
+            self.choice = self.massage_window.message_choices(key)
 
         if key == arcade.key.F11:
             self.save()
