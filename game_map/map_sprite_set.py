@@ -1,16 +1,14 @@
-from os import name
-from pyglet import sprite
-from actor.stairs import Stairs
+from actor.map_obj.stairs import Stairs
 import arcade
 from data import *
 from constants import *
 from util import grid_to_pixel, pixel_to_grid
 
 from actor.actor import Actor
-from actor.wall import Wall
-from actor.floor import Floor
-from actor.door import Door
-from actor.npc import Citizen, Villager, villager
+from actor.map_obj.wall import Wall
+from actor.map_obj.floor import Floor
+from actor.map_obj.door import Door
+from actor.characters.npc import Citizen, Villager, villager
 
 from actor.entities_factory import get_random_monster_by_challenge, get_random_items_by_challenge
 

@@ -1,4 +1,4 @@
-from actor.confusion_scroll import ConfusionScroll
+from actor.items.confusion_scroll import ConfusionScroll
 import random
 import csv
 from arcade import load_texture
@@ -7,14 +7,14 @@ from actor.ai import Basicmonster
 from actor.fighter import Fighter
 from constants import *
 from data import *
-from actor.long_sword import LongSword
-from actor.short_sword import ShortSword
-from actor.small_shield import SmallShield
-from actor.healing_potion import HealingPotion
-from actor.lightning_scroll import LightningScroll
-from actor.fireball_scroll import FireballScroll
-from actor.orcs import Orc, Troll
-from actor.crab import Crab
+from actor.items.long_sword import LongSword
+from actor.items.short_sword import ShortSword
+from actor.items.small_shield import SmallShield
+from actor.items.healing_potion import HealingPotion
+from actor.items.lightning_scroll import LightningScroll
+from actor.items.fireball_scroll import FireballScroll
+from actor.characters.orcs import Orc, Troll
+from actor.characters.crab import Crab
 
 
 def load_entities(filename):

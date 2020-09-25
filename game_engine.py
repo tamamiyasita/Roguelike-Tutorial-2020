@@ -11,19 +11,21 @@ from recalculate_fov import recalculate_fov
 
 from actor.inventory import Inventory
 from actor.item_point_check import ItemPoint
-from actor.PC import Player
-from actor.stairs import Stairs
+from actor.characters.PC import Player
+from actor.map_obj.stairs import Stairs
 from actor.restore_actor import restore_actor
-from actor.short_sword import ShortSword
-from actor.long_sword import LongSword
-from actor.confusion_scroll import ConfusionScroll
-from actor.fireball_scroll import FireballScroll
-from actor.small_shield import SmallShield
 from util import get_door, get_blocking_entity
 from turn_loop import TurnLoop
 from fire import Fire
-from actor.darts import Darts
+from actor.items.boomerang import Boomerang
 from actor.damage_pop import Damagepop
+
+from actor.items.short_sword import ShortSword
+from actor.items.long_sword import LongSword
+from actor.items.confusion_scroll import ConfusionScroll
+from actor.items.fireball_scroll import FireballScroll
+from actor.items.small_shield import SmallShield
+from actor.items.healing_potion import HealingPotion
 
 
 class GameLevel:
@@ -63,7 +65,7 @@ class GameEngine:
 
         self.player = Player(
             inventory=Inventory(capacity=5))
-        # self.player.equipment.item_slot["ranged_weapon"] = Darts()
+        # self.player.equipment.item_slot["ranged_weapon"] = Boomerang()
 
     def setup_level(self, level_number):
 
@@ -165,8 +167,11 @@ class GameEngine:
         self.fb = FireballScroll(self.player.x + 1, self.player.y)
         self.game_level.item_sprites.append(self.fb)
 
-        self.darts = Darts(self.player.x-1, self.player.y + 1)
-        self.game_level.item_sprites.append(self.darts)
+        self.hp = HealingPotion(self.player.x, self.player.y-1)
+        self.game_level.item_sprites.append(self.hp)
+
+        self.boomerang = Boomerang(self.player.x-1, self.player.y + 1)
+        self.game_level.item_sprites.append(self.boomerang)
 
         self.fov_recompute = True
 
@@ -176,7 +181,7 @@ class GameEngine:
 
         arcade.set_background_color(COLORS["black"])
 
-        self.cur_level = self.setup_level(level_number=0)
+        self.cur_level = self.setup_level(level_number=1)
         self.stories.append(self.cur_level)
         self.turn_loop = TurnLoop(self.player)
         self.item_point = ItemPoint(self)
@@ -401,7 +406,7 @@ class GameEngine:
                 item_number = self.selected_item
                 if item_number is not None:
                     item = self.player.inventory.get_item_number(item_number)
-                    if item and Tag.item in item.tag:
+                    if item and Tag.used in item.tag:
                         results = item.use(self)
                         if results:
                             new_action_queue.extend(results)
@@ -444,8 +449,8 @@ class GameEngine:
                     if item:
                         self.player.inventory.remove_item_number(item_number)
                         self.cur_level.item_sprites.append(item)
-                        item.center_x = self.player.center_x
-                        item.center_y = self.player.center_y
+                        item.x = self.player.x
+                        item.y = self.player.y
                         self.item_point.add_point(item)  # mapにPOINTを表示
                         new_action_queue.extend(
                             [{"message": f"You dropped the {item.name}"}])

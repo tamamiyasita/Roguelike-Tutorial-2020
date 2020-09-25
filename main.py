@@ -93,8 +93,12 @@ class MG(arcade.Window):
         self.engine.cur_level.item_sprites.draw(filter=gl.GL_NEAREST)
         self.engine.cur_level.actor_sprites.draw(filter=gl.GL_NEAREST)
         self.engine.cur_level.chara_sprites.draw(filter=gl.GL_NEAREST)
-        self.engine.cur_level.effect_sprites.draw()
         self.engine.cur_level.equip_sprites.draw(filter=gl.GL_NEAREST)
+        self.engine.cur_level.effect_sprites.draw()
+        for e in self.engine.cur_level.effect_sprites:
+            if hasattr(e, "emitter"):
+                e.emitter.draw()
+        
 
     def on_draw(self):
         """全画像の表示"""

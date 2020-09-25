@@ -110,6 +110,8 @@ ammo_tile = get_tile_set(ammo_img, tile_size=16)
 ###effect###
 effect_img_1 = (r"image/Effect1.png")  # 83
 effect1_tile = get_tile_set(effect_img_1, tile_size=16)
+
+healing_potion_effect = arcade.load_texture("image\green_ball.png")
 #######
 
 items_point = arcade.load_texture_pair(r"image/items_point.png")
@@ -164,7 +166,7 @@ IMAGE_ID = {"player": player,
             "long_sword": long_sword,
             "small_shield": [shield_tile[0]],
             "wood_buckler": [shield_tile[5]],
-            "darts": [ammo_tile[20]],
+            "boomerang": [ammo_tile[22]],
 
             "healing_potion": healing_potion_tile,
             "confusion_scroll": [scroll_tile[15]],
@@ -174,6 +176,7 @@ IMAGE_ID = {"player": player,
             "lightning_effect": [effect1_tile[87]],
             "confusion_effect": [effect1_tile[140]],
             "fireball_effect": [effect1_tile[134]],
+            "healing_potion_effect":[healing_potion_effect],
 
             "floor_point": floor_point,
             "items_point": items_point,

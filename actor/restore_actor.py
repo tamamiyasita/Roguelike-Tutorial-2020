@@ -1,20 +1,19 @@
 from actor.actor import Actor
-from actor.PC import Player
-from actor.healing_potion import HealingPotion
-from actor.orcs import Orc
-from actor.troll import Troll
-from actor.crab import Crab
-from actor.short_sword import ShortSword
-from actor.long_sword import LongSword
-from actor.small_shield import SmallShield
-from actor.darts import Darts
-from actor.fireball_scroll import FireballScroll, FireballEffect
-from actor.lightning_scroll import LightningScroll, LightningEffect
-from actor.confusion_scroll import ConfusionScroll, ConfusionEffect
-from actor.wall import Wall
-from actor.floor import Floor
-from actor.stairs import Stairs
-from actor.door import Door
+from actor.characters.PC import Player
+from actor.items.healing_potion import HealingPotion
+from actor.characters.orcs import Orc, Troll
+from actor.characters.crab import Crab
+from actor.items.short_sword import ShortSword
+from actor.items.long_sword import LongSword
+from actor.items.small_shield import SmallShield
+from actor.items.boomerang import Boomerang
+from actor.items.fireball_scroll import FireballScroll, FireballEffect
+from actor.items.lightning_scroll import LightningScroll, LightningEffect
+from actor.items.confusion_scroll import ConfusionScroll, ConfusionEffect
+from actor.map_obj.wall import Wall
+from actor.map_obj.floor import Floor
+from actor.map_obj.stairs import Stairs
+from actor.map_obj.door import Door
 
 
 def restore_actor(actor_dict):
@@ -31,8 +30,8 @@ def restore_actor(actor_dict):
         actor = LongSword()
     elif actor_name == "SmallShield":
         actor = SmallShield()
-    elif actor_name == "Darts":
-        actor = Darts()
+    elif actor_name == "Boomerang":
+        actor = Boomerang()
 
     elif actor_name == "HealingPotion":
         actor = HealingPotion()

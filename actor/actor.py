@@ -7,7 +7,6 @@ import math
 from constants import *
 from data import *
 from util import pixel_to_grid, grid_to_pixel, get_blocking_entity, get_door
-from actor.item import Item
 from particle import AttackParticle, PARTICLE_COUNT
 
 from functools import lru_cache
@@ -32,7 +31,8 @@ class Actor(arcade.Sprite):
             self.texture_ = self.name
         self.dx, self.dy = 0, 0
         self.center_x, self.center_y = grid_to_pixel(x, y)
-        self.x, self.y = pixel_to_grid(self.center_x, self.center_y)
+        self._x, self._y = 0, 0
+        self.x, self.y = x, y
         self.scale = scale
         self.blocks = blocks
         self.block_sight = block_sight
@@ -164,6 +164,25 @@ class Actor(arcade.Sprite):
             self.fighter.owner = self
             self.fighter.restore_from_dict(result["fighter"])
 
+    @property
+    def x(self):
+        return self._x
+
+    @x.setter
+    def x(self, value):
+        self._x = value
+        self.center_x, self.center_y = grid_to_pixel(self._x, self._y)
+
+    @property
+    def y(self):
+        return self._y
+
+    @y.setter
+    def y(self, value):
+        self._y = value
+        self.center_x, self.center_y = grid_to_pixel(self._x, self._y)
+        
+
     def move(self, dxy, target=None, engine=None):
         self.attack_delay = 7
         wall_sprites = engine.cur_level.wall_sprites
@@ -249,9 +268,10 @@ class Actor(arcade.Sprite):
 
             elif not get_blocking_entity(destination_x, destination_y, [actor_sprites, wall_sprites]):
                 # monsterの移動
-                self.state = state.ON_MOVE
-                self.change_y = self.dy * (MOVE_SPEED+ai_move_speed)
-                self.change_x = self.dx * (MOVE_SPEED+ai_move_speed)
+                self.x = destination_x
+                self.y = destination_y
+                self.wait = self.speed
+                self.state = state.TURN_END
 
             else:
                 # A*パスがBlockされたらturn_endを返す
@@ -267,24 +287,12 @@ class Actor(arcade.Sprite):
     def update(self, delta_time=1/60):
         super().update()
         if self.state == state.ON_MOVE:
-            if abs(self.target_x - self.center_x) >= GRID_SIZE and self.dx:
+            if abs(self.target_x - self.center_x) >= GRID_SIZE and self.dx or\
+            abs(self.target_y - self.center_y) >= GRID_SIZE and self.dy:
                 self.change_x = 0
-                if self.dx == 1:
-                    self.center_x = self.target_x + GRID_SIZE
-                    self.x += self.dx
-                if self.dx == -1:
-                    self.center_x = self.target_x - GRID_SIZE
-                    self.x += self.dx
-                self.state = state.TURN_END
-
-            if abs(self.target_y - self.center_y) >= GRID_SIZE and self.dy:
                 self.change_y = 0
-                if self.dy == 1:
-                    self.center_y = self.target_y + GRID_SIZE
-                    self.y += self.dy
-                if self.dy == -1:
-                    self.center_y = self.target_y - GRID_SIZE
-                    self.y += self.dy
+                self.x += self.dx
+                self.y += self.dy
                 self.state = state.TURN_END
 
             self.wait = self.speed
@@ -295,9 +303,9 @@ class Actor(arcade.Sprite):
     def attack(self):
         step = GRID_SIZE // 2.5
 
-        if abs(self.target_x - self.center_x) >= step and self.dx:
+        if abs(self.target_x - self.center_x) >= step and self.dx or\
+        abs(self.target_y - self.center_y) >= step and self.dy:
             self.change_x = 0
-        if abs(self.target_y - self.center_y) >= step and self.dy:
             self.change_y = 0
 
         if self.attack_delay == 6:
@@ -347,6 +355,7 @@ class Actor(arcade.Sprite):
     def texture_(self, value):
         self.textures = []
         self.textures.extend(IMAGE_ID.get(value))
+
         self.texture = self.textures[self.texture_number]
 
     def update_animation(self, delta_time=1 / 60):

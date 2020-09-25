@@ -20,7 +20,7 @@ class TriggerPull(Actor):
         self.effect_sprites = self.engine.cur_level.effect_sprites
 
 
-        self.amm_speed = 35
+        self.amm_speed = 15
         # self.amm_sprite = arcade.Sprite()
         # self.amm_sprite.texture = self.shooter.equipment.item_slot["ranged_weapon"].texture
         # self.amm_sprite.center_x = self.shooter.center_x
