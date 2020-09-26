@@ -5,7 +5,6 @@ TODO ２　スキルシステム
 TODO ３　arcadeのﾊﾟｰﾃｨｸﾙ効果を試したい　
 TODO ３　ダンジョンレベル周りのエンティティPOPシステムのリファクタリング(ハードコートされてる)
 TODO ５　actor等にコメントや変数名の整理
-TODO ５　potion effectの実装
 TODO ４　レベルアップしたとき何か分かりやすい表示をしたい
 TODO ２　他のダンジョンジェネレータの実装
 TODO １　A*パスが若干調整できそうな気がする
@@ -14,6 +13,7 @@ TODO １　データクラスへのリファクタリング(思ったより難�
 
 
 # DONE
+TODO potion effectの実装
 TODO NPC
 TODO ダメージ表記
 TODO 投擲システム

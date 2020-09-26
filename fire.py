@@ -19,12 +19,7 @@ class TriggerPull(Actor):
         self.target = target
         self.effect_sprites = self.engine.cur_level.effect_sprites
 
-
         self.amm_speed = 15
-        # self.amm_sprite = arcade.Sprite()
-        # self.amm_sprite.texture = self.shooter.equipment.item_slot["ranged_weapon"].texture
-        # self.amm_sprite.center_x = self.shooter.center_x
-        # self.amm_sprite.center_y = self.shooter.center_y
 
         self.effect_sprites.append(self)
 
@@ -37,7 +32,6 @@ class TriggerPull(Actor):
         self.change_y = math.sin(angle) * self.amm_speed
         print(f"amm angle:{self.angle:.2f}")
         self.trigger = True
-
 
     def update(self):
         super().update()

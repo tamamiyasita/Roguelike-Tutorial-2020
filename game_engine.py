@@ -487,13 +487,7 @@ class GameEngine:
             if "damage_pop" in action:
                 target = action["damage_pop"]
                 damage = action["damage"]
-                txt = arcade.draw_text(
-                    str(damage), target.center_x, target.center_y, arcade.color.ORANGE, 15)
-
-                # self.damage_pop = {"target":target, "damage":damage}
-                dmg = Damagepop(engine=self, target=target)
-                dmg.set(txt.texture)
-                self.damage_pop.append(dmg)
+                Damagepop(self, damage, arcade.color.ORANGE_PEEL, target)
 
             if "talk" in action:
                 actor = action.pop("talk")

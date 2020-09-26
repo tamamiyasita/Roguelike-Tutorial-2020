@@ -118,6 +118,7 @@ class state(Enum):
     DOOR = auto()
     AMOUNT = auto()
 
+
 class NPC_state(Enum):
     REQUEST = auto()
     WAITING = auto()

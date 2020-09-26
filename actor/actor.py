@@ -182,7 +182,6 @@ class Actor(arcade.Sprite):
     def y(self, value):
         self._y = value
         self.center_x, self.center_y = grid_to_pixel(self._x, self._y)
-        
 
     def move(self, dxy, target=None, engine=None):
         self.attack_delay = 7
@@ -213,13 +212,10 @@ class Actor(arcade.Sprite):
             self.state = state.DOOR
             door_actor = door_actor[0]
             if door_actor.left_face == False:
-                # engine.action_queue.extend([{"delay": {"time": 0.2, "action": {"turn_end": self}}}])
 
                 door_actor.left_face = True
-                # self.state = state.TURN_END
                 print("open door")
                 self.state = state.TURN_END
-                # engine.action_queue.extend([{"turn_end": self}])
                 return [{"delay": {"time": 0.2, "action": "None"}}]
 
         # 行き先がBlockされてるか調べる
@@ -237,13 +233,12 @@ class Actor(arcade.Sprite):
                 if Tag.friendly in actor.tag:
                     result = [{"talk": actor}]
                     if Tag.quest in actor.tag:
-                        result.extend([{"turn_end":self}])
+                        result.extend([{"turn_end": self}])
                     return result
 
                 elif not actor.is_dead:
                     attack_results = self.fighter.attack(actor)
-                    if actor.state == state.TURN_END:
-                        actor.state = state.AMOUNT
+
                     self.tmp = actor
                     self.tmp2 = (actor.center_x, actor.center_y)
                     if attack_results:
@@ -266,8 +261,7 @@ class Actor(arcade.Sprite):
             if target and self.distance_to(target) <= 1.46:
                 # monsterの攻撃チェック
                 attack_results = self.fighter.attack(target)
-                if target.state == state.TURN_END:
-                    target.state = state.AMOUNT
+
                 self.tmp = target
                 self.tmp2 = (target.center_x, target.center_y)
                 if attack_results:
@@ -299,14 +293,14 @@ class Actor(arcade.Sprite):
         super().update()
         if self.state == state.ON_MOVE:
             if abs(self.target_x - self.center_x) >= GRID_SIZE and self.dx or\
-            abs(self.target_y - self.center_y) >= GRID_SIZE and self.dy:
+                    abs(self.target_y - self.center_y) >= GRID_SIZE and self.dy:
                 self.change_x = 0
                 self.change_y = 0
                 self.x += self.dx
                 self.y += self.dy
                 self.wait = self.speed
+                self.target_x, self.target_y = self.center_x, self.center_y
                 self.state = state.TURN_END
-
 
         if self.state == state.ATTACK:
             self.attack()
@@ -315,12 +309,11 @@ class Actor(arcade.Sprite):
         step = GRID_SIZE // 2.5
 
         if abs(self.target_x - self.center_x) >= step and self.dx or\
-        abs(self.target_y - self.center_y) >= step and self.dy:
+                abs(self.target_y - self.center_y) >= step and self.dy:
             self.change_x = 0
             self.change_y = 0
 
         if self.attack_delay == 6:
-            self.tmp.state = state.AMOUNT
             for i in range(PARTICLE_COUNT):
                 particle = AttackParticle()
                 particle.position = (
@@ -356,8 +349,6 @@ class Actor(arcade.Sprite):
     def move_towards(self, target, engine):
 
         actor_sprites = engine.cur_level.actor_sprites
-        if target.state == state.TURN_END:
-            target.state = state.AMOUNT
 
         dx = target.x - self.x
         dy = target.y - self.y

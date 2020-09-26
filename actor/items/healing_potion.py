@@ -1,12 +1,13 @@
 from PIL.ImageOps import scale
 from actor.actor import Actor
+from actor.damage_pop import Damagepop
 from constants import *
 from data import *
 import random
 
 
 class HealingPotionEffect(Actor):
-    def __init__(self, x, y, engine):
+    def __init__(self, x, y, hp_return, engine):
         super().__init__(
             x=x,
             y=y,
@@ -17,8 +18,7 @@ class HealingPotionEffect(Actor):
         self.alpha = 150
         self.particle_time = 100
         self.emitter = arcade.Emitter(
-            center_xy=(self.center_x,self.center_y),
-            # emit_controller=arcade.EmitBurst(200),
+            center_xy=(self.center_x, self.center_y),
             emit_controller=arcade.EmitterIntervalWithTime(0.003 * 5, 0.2),
             particle_factory=lambda emitter: arcade.LifetimeParticle(
                 filename_or_texture=IMAGE_ID["healing_potion_effect"][0],
@@ -31,20 +31,18 @@ class HealingPotionEffect(Actor):
         )
         self.alpha = 0
         self.engine.cur_level.effect_sprites.append(self)
+        Damagepop(engine, hp_return, arcade.color.GREEN_YELLOW, engine.player)
 
-    
     def update(self):
         self.x = self.engine.player.x
         self.y = self.engine.player.y
         self.emitter.center_x = self.engine.player.center_x
         self.emitter.center_y = self.engine.player.center_y
 
-        
         self.particle_time -= 1
         self.emitter.update()
         if self.particle_time < 0:
             self.engine.cur_level.effect_sprites.remove(self)
-        
 
 
 class HealingPotion(Actor):
@@ -59,12 +57,14 @@ class HealingPotion(Actor):
         self.tag = {Tag.item, Tag.used}
 
         self.level = 1
+        self.hp_return = random.randint(3, 9)
 
     def use(self, game_engine):
-        game_engine.player.fighter.hp += 5
+        game_engine.player.fighter.hp += self.hp_return
         if game_engine.player.fighter.hp > game_engine.player.fighter.max_hp:
             game_engine.player.fighter.hp = game_engine.player.fighter.max_hp
         game_engine.player.inventory.remove_item(self)
-        Healing = HealingPotionEffect(game_engine.player.x, game_engine.player.y, game_engine)
+        Healing = HealingPotionEffect(
+            game_engine.player.x, game_engine.player.y, self.hp_return, game_engine)
 
         return [{"message": f"You used the {self.name}"}]

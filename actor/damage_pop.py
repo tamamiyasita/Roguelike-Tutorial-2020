@@ -12,24 +12,27 @@ from actor.actor import Actor
 #     txt.start_x += delta_time
 
 class Damagepop(Actor):
-    def __init__(self, engine, target):
+    def __init__(self, engine, text, color, target):
         super().__init__(
-            color=arcade.color.WHITE
+            # color=arcade.color.WHITE
         )
         self.engine = engine
         self.target = target
         self.center_x = target.center_x
         self.center_y = target.center_y
-        self.color = arcade.color.YELLOW_ORANGE
+        self.color = color
+        self.text = arcade.draw_text(
+            str(text), self.center_x, self.center_y, self.color, font_size=15)
         self.effect_sprites = engine.cur_level.effect_sprites
         self.d_time = 30
 
         self.alpha = 0
         self.change_y = 2.5
 
-    def set(self, t):
-        self.texture = t
+    # def set(self, t):
+        self.texture = self.text.texture
         self.effect_sprites.append(self)
+        self.engine.damage_pop.append(self)
 
     def start(self):
         self.d_time -= 1
