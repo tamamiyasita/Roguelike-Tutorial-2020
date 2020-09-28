@@ -43,6 +43,7 @@ class Player(Actor):
                 self.fighter.level += 1
                 self.fighter.ability_points += 1
                 game_engine.action_queue.extend([{"message": "Level up!!!"}])
+                game_engine.game_state = GAME_STATE.LEVEL_UP_WINDOW
 
     def update_animation(self, delta_time=1 / 60):
         super().update_animation(delta_time)

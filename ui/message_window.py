@@ -3,7 +3,6 @@ from random import choice
 import arcade
 from constants import *
 from data import *
-from keymap import choices_key
 
 
 class MessageWindow:
@@ -13,18 +12,8 @@ class MessageWindow:
         self.player_message = []
 
     def window_pop(self, viewports, choice):
-        self.viewports = viewports
         self.actor = self.engine.messenger
-        if self.actor.npc_state == NPC_state.REQUEST:
-            self.other_message = self.actor.message_event["request"]
-            self.player_message = self.actor.message_event["reply"]
-        elif self.actor.npc_state == NPC_state.WAITING:
-            self.other_message = self.actor.message_event["waiting"]
-            self.player_message = self.actor.message_event["accepted"]
-        elif self.actor.npc_state == NPC_state.REWARD:
-            self.other_message = self.actor.message_event["reward"]
-            self.player_message = self.actor.message_event["ok"]
-
+        self.viewports = viewports
 
         self.viewport_left = self.viewports[0]
         self.viewport_righit = self.viewports[1]
@@ -34,6 +23,15 @@ class MessageWindow:
         self.panel_left_x=self.viewport_left+200
         self.panel_left_y=self.viewport_bottom+200
 
+        if self.actor.npc_state == NPC_state.REQUEST:
+            self.other_message = self.actor.message_event["request"]
+            self.player_message = self.actor.message_event["reply"]
+        elif self.actor.npc_state == NPC_state.WAITING:
+            self.other_message = self.actor.message_event["waiting"]
+            self.player_message = self.actor.message_event["accepted"]
+        elif self.actor.npc_state == NPC_state.REWARD:
+            self.other_message = self.actor.message_event["reward"]
+            self.player_message = self.actor.message_event["ok"]
 
         self.panel_ui(choice)
 

@@ -90,6 +90,11 @@ long_sword_left = arcade.load_texture(
 long_sword_right = arcade.load_texture(
     med_weapon_tiles, x=0, y=0, width=size, height=size, mirrored=True)
 long_sword = [long_sword_right, long_sword_left]
+
+cirsium = arcade.load_texture_pair(r"image\Cirsium.png")
+leaf_blade = arcade.load_texture_pair(r"image\LeafBlade.png")
+
+
 ###items###
 # healing_potionテクスチャセット生成
 healing_potion_tile_img = (r"image/Potion.png")
@@ -167,6 +172,8 @@ IMAGE_ID = {"player": player,
             "small_shield": [shield_tile[0]],
             "wood_buckler": [shield_tile[5]],
             "boomerang": [ammo_tile[22]],
+            "cirsium": cirsium,
+            "leaf_blade": leaf_blade,
 
             "healing_potion": healing_potion_tile,
             "confusion_scroll": [scroll_tile[15]],

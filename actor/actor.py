@@ -191,8 +191,10 @@ class Actor(arcade.Sprite):
         self.effect_sprites = engine.cur_level.effect_sprites
 
         self.dx, self.dy = dxy
-        self.tmp = None
-        self.tmp2 = None
+
+        # 振動ダメージエフェクトに使う変数
+        self.other = None
+        self.other_x = None
 
         if self.dx == -1:
             self.left_face = True
@@ -239,8 +241,8 @@ class Actor(arcade.Sprite):
                 elif not actor.is_dead:
                     attack_results = self.fighter.attack(actor)
 
-                    self.tmp = actor
-                    self.tmp2 = (actor.center_x, actor.center_y)
+                    self.other = actor
+                    self.other_x = actor.center_x
                     if attack_results:
                         self.state = state.ATTACK
                         self.change_y = self.dy * MOVE_SPEED
@@ -262,8 +264,8 @@ class Actor(arcade.Sprite):
                 # monsterの攻撃チェック
                 attack_results = self.fighter.attack(target)
 
-                self.tmp = target
-                self.tmp2 = (target.center_x, target.center_y)
+                self.other = target
+                self.other_x = target.center_x
                 if attack_results:
                     self.state = state.ATTACK
                     self.change_y = self.dy * MOVE_SPEED
@@ -319,12 +321,12 @@ class Actor(arcade.Sprite):
                 particle.position = (
                     self.center_x + (self.dx*20), self.center_y + (self.dy*20))
                 self.effect_sprites.append(particle)
-                self.tmp.change_x += uniform(-0.5, 0.5)
+                self.other.change_x += uniform(-0.7, 0.7)
 
         if self.attack_delay % 2 == 0:
-            self.tmp.alpha = 10
+            self.other.alpha = 10
         else:
-            self.tmp.alpha = 155
+            self.other.alpha = 155
 
         if self.change_x == 0 and self.change_y == 0 and self.state != state.TURN_END:
             self.attack_delay -= 1
@@ -333,9 +335,9 @@ class Actor(arcade.Sprite):
                 self.center_y = self.target_y
                 self.center_x = self.target_x
                 self.change_x, self.change_y = 0, 0
-                self.tmp.alpha = 255
-                self.tmp.change_x = 0
-                self.tmp.center_x = self.tmp2[0]
+                self.other.alpha = 255
+                self.other.change_x = 0
+                self.other.center_x = self.other_x
                 self.state = state.TURN_END
 
         if self.state == state.TURN_END:
@@ -394,9 +396,7 @@ class Actor(arcade.Sprite):
                 self.d_time = 100
 
         # itemを装備した時のsprite表示
-        if self.master:
-            self.color = COLORS["white"]
-            self.alpha = 255
+        if self.master and Tag.flower not in self.tag:
             x = self.master.center_x
             if self.master.left_face:
                 self.left_face = True
@@ -406,6 +406,26 @@ class Actor(arcade.Sprite):
                 self.left_face = False
                 self.center_y = self.master.center_y - self.item_margin_y
                 self.center_x = x + self.item_margin_x
+        elif self.master and Tag.flower in self.tag:
+            self.flower_setup(self.master)
+
+    def flower_setup(self, target):
+        if target.left_face:
+            item_margin_x = self.item_margin_x
+        else:
+            item_margin_x = -self.item_margin_x
+        self.angle += uniform(0.1, 3)
+        x_diff = (target.center_x + item_margin_x + random()) - (self.center_x)
+        y_diff = (target.center_y + self.item_margin_y + random()) - (self.center_y)
+        angle = math.atan2(y_diff, x_diff)
+
+        if abs(x_diff) > 15 or abs(y_diff) > 15:
+
+            self.change_x = math.cos(angle) * (self.my_speed + uniform(0.6, 4.2))
+            self.change_y = math.sin(angle) * (self.my_speed + uniform(0.6, 4.2))
+        else:
+            self.change_x = math.cos(angle) * uniform(0.02, 0.3)
+            self.change_y = math.sin(angle) * uniform(0.02, 0.3)
 
     @property
     def master(self):

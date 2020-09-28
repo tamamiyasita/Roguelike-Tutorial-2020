@@ -40,7 +40,7 @@ class CharacterScreen:
         """ステータス表示"""
         text_position_y -= text_size * spacing
         text_size = 20
-        states_text = f"Attack: {self.player.fighter.base_strength} + {self.player.equipment.states_bonus['str']}"
+        states_text = f"STR: {self.player.fighter.base_strength} + {self.player.equipment.states_bonus['str']}"
         arcade.draw_text(
             text=states_text,
             start_x=text_position_x,
@@ -50,7 +50,17 @@ class CharacterScreen:
         )
 
         text_position_y -= text_size * spacing  # TODO ゼロならボーナス非表示にしよう
-        states_text = f"Defense: {self.player.fighter.base_defense} + {self.player.equipment.states_bonus['defense']}"
+        states_text = f"DEX: {self.player.fighter.base_defense} + {self.player.equipment.states_bonus['dex']}"
+        arcade.draw_text(
+            text=states_text,
+            start_x=text_position_x,
+            start_y=text_position_y,
+            color=text_color,
+            font_size=text_size
+        )
+
+        text_position_y -= text_size * spacing
+        states_text = f"INT: {self.player.fighter.base_intelligence} + {self.player.equipment.states_bonus['int']}"
         arcade.draw_text(
             text=states_text,
             start_x=text_position_x,
@@ -85,21 +95,21 @@ class CharacterScreen:
         button = arcade.Sprite(r"image\plus_button.png")
         button.center_x = self.viewport_left + 200
         button.center_y = sheet_y
-        button.name = "Attack"
+        button.name = "Strength"
         self.character_sheet_buttons.append(button)
 
         sheet_y -= spacing
         button = arcade.Sprite(r"image\plus_button.png")
         button.center_x = self.viewport_left + 200
         button.center_y = sheet_y
-        button.name = "Defense"
+        button.name = "Dexterity"
         self.character_sheet_buttons.append(button)
 
         sheet_y -= spacing
         button = arcade.Sprite(r"image\plus_button.png")
         button.center_x = self.viewport_left + 200
         button.center_y = sheet_y
-        button.name = "HP"
+        button.name = "Intelligence"
         self.character_sheet_buttons.append(button)
 
         self.draw_button()
@@ -113,21 +123,21 @@ class CharacterScreen:
         button = arcade.Sprite(r"image\plus_button.png")
         button.center_x = self.viewport_left + 200
         button.center_y = sheet_y
-        button.name = "Attack"
+        button.name = "Strength"
         self.character_sheet_buttons.append(button)
 
         sheet_y -= spacing
         button = arcade.Sprite(r"image\plus_button.png")
         button.center_x = self.viewport_left + 200
         button.center_y = sheet_y
-        button.name = "Defense"
+        button.name = "Dexterity"
         self.character_sheet_buttons.append(button)
 
         sheet_y -= spacing
         button = arcade.Sprite(r"image\plus_button.png")
         button.center_x = self.viewport_left + 200
         button.center_y = sheet_y
-        button.name = "HP"
+        button.name = "Intelligence"
         self.character_sheet_buttons.append(button)
 
         if self.player.fighter.ability_points > 0:
@@ -140,15 +150,16 @@ class CharacterScreen:
                 sprite_list=self.character_sheet_buttons
             )
             for buttons in buttons_clicked:
-                if buttons.name == "Attack":
+                if buttons.name == "Strength":
                     self.player.fighter.base_strength += 1
                     self.player.fighter.ability_points -= 1
-                elif buttons.name == "Defense":
-                    self.player.fighter.base_defense += 1
+                elif buttons.name == "Dexterity":
+                    self.player.fighter.base_dexterity += 1
                     self.player.fighter.ability_points -= 1
-                elif buttons.name == "HP":
-                    self.player.fighter.base_max_hp += 15
-                    self.player.fighter.max_hp += 15
+                elif buttons.name == "Intelligence":
+                    self.player.fighter.base_max_mp += 5
+                    self.player.fighter.max_mp += 5
+                    self.player.fighter.base_intelligence += 1
                     self.player.fighter.ability_points -= 1
 
 #

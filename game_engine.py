@@ -26,6 +26,7 @@ from actor.items.confusion_scroll import ConfusionScroll
 from actor.items.fireball_scroll import FireballScroll
 from actor.items.small_shield import SmallShield
 from actor.items.healing_potion import HealingPotion
+from actor.items.cirsium import Cirsium
 
 
 class GameLevel:
@@ -65,7 +66,8 @@ class GameEngine:
 
         self.player = Player(
             inventory=Inventory(capacity=5))
-        # self.player.equipment.item_slot["ranged_weapon"] = Boomerang()
+        # self.f = F()
+        # self.player.equipment.item_slot["head"] = self.f
 
     def setup_level(self, level_number):
 
@@ -172,6 +174,10 @@ class GameEngine:
 
         self.boomerang = Boomerang(self.player.x-1, self.player.y + 1)
         self.game_level.item_sprites.append(self.boomerang)
+
+        self.cirsium = Cirsium(self.player.x + 1, self.player.y)
+        self.game_level.item_sprites.append(self.cirsium)
+
 
         self.fov_recompute = True
 
@@ -423,7 +429,7 @@ class GameEngine:
                         new_action_queue.extend(results)
 
             if "pickup" in action:
-                items = arcade.get_sprites_at_exact_point(
+                items = arcade.get_sprites_at_point(
                     (self.player.center_x, self.player.center_y), self.cur_level.item_sprites)
                 for item in items:
                     if Tag.item in item.tag:

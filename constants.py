@@ -31,7 +31,7 @@ VIEWPORT_MARGIN = int(((SCREEN_WIDTH-STATES_PANEL_WIDTH) /
 
 MOVE_SPEED = 9
 
-EXPERIENCE_PER_LEVEL = [150, 800, 1300, 2000]
+EXPERIENCE_PER_LEVEL = [10, 800, 1300, 2000]
 
 FOV_ALGO = 0
 FOV_LIGHT_WALL = True
@@ -45,6 +45,7 @@ DEFAULT_ATTACK_SPEED = 6
 class Tag(Enum):
     # items
     item = auto()
+    flower = auto()
     used = auto()
     equip = auto()
 
@@ -106,6 +107,7 @@ class GAME_STATE(Enum):
     MESSAGE_WINDOW = auto()
     DELAY_WINDOW = auto()
     LOAD_WINDOW = auto()
+    LEVEL_UP_WINDOW = auto()
 
 
 class state(Enum):

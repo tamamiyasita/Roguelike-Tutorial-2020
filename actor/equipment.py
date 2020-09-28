@@ -11,9 +11,10 @@ class Equipment:
         """アイテムスロット、及び装備するタイミングを決めるequip_update_check
         """
         self.item_slot = {
+            "head":None,
             "main_hand": None,
             "off_hand": None,
-            "ranged_weapon": None
+            "ranged_weapon": None,
         }
 
         # 装備変更によるスプライト更新のチェックに使う変数

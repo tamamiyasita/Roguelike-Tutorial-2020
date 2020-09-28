@@ -146,7 +146,7 @@ class Fighter:
                 hit = self.owner.equipment.ranged_hit_rate
         if hit:
 
-            hit_chance = (hit / 100) * \
+            hit_chance = ((hit+self.dex) / 100) * \
                 (1 - (target.fighter.evasion / 100)) * 100
 
             return hit_chance

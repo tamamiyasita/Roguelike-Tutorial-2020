@@ -16,6 +16,7 @@ from ui.mouse_ui import MouseUI
 from ui.select_ui import SelectUI
 from ui.character_screen_ui import CharacterScreen
 from ui.message_window import MessageWindow
+from ui.level_up_ui import LevelupUI
 
 from util import pixel_to_grid
 from viewport import viewport
@@ -80,6 +81,8 @@ class MG(arcade.Window):
 
         # 会話画面の初期化はここで行う
         self.massage_window = MessageWindow(self.engine)
+
+        self.level_up_window = LevelupUI(self.engine)
 
     def draw_sprites(self):
         """ 全てのスプライトリストをここで描画する """
@@ -151,6 +154,9 @@ class MG(arcade.Window):
             self.character_screen.draw_character_screen(
                 self.viewport_left, self.viewport_bottom)
 
+        elif self.engine.game_state == GAME_STATE.LEVEL_UP_WINDOW:
+            self.level_up_window.window_pop(self.viewports)
+
         # 会話画面の表示
         elif self.engine.game_state == GAME_STATE.MESSAGE_WINDOW:
             self.massage_window.window_pop(arcade.get_viewport(), self.choice)
@@ -201,6 +207,7 @@ class MG(arcade.Window):
         if self.engine.game_state == GAME_STATE.SELECT_LOCATION:
             self.select_UI.update()
 
+            
     def on_key_press(self, key, modifiers):
         if key == arcade.key.BACKSPACE:
             arcade.close_window()
@@ -231,6 +238,8 @@ class MG(arcade.Window):
             self.save()
         elif key == arcade.key.F12:
             self.load()
+        elif key == arcade.key.F1:
+            self.engine.game_state = GAME_STATE.LEVEL_UP_WINDOW
 
     def on_key_release(self, key, modifiers):
         self.player_direction = None
