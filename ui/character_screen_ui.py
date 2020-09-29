@@ -50,7 +50,7 @@ class CharacterScreen:
         )
 
         text_position_y -= text_size * spacing  # TODO ゼロならボーナス非表示にしよう
-        states_text = f"DEX: {self.player.fighter.base_defense} + {self.player.equipment.states_bonus['dex']}"
+        states_text = f"DEX: {self.player.fighter.base_dexterity} + {self.player.equipment.states_bonus['dex']}"
         arcade.draw_text(
             text=states_text,
             start_x=text_position_x,

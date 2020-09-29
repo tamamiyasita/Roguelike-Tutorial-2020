@@ -207,7 +207,6 @@ class MG(arcade.Window):
         if self.engine.game_state == GAME_STATE.SELECT_LOCATION:
             self.select_UI.update()
 
-            
     def on_key_press(self, key, modifiers):
         if key == arcade.key.BACKSPACE:
             arcade.close_window()
@@ -230,6 +229,10 @@ class MG(arcade.Window):
             if door_check:
                 self.engine.action_queue.extend([{"use_door": door_check}])
 
+        # Level states up処理
+        if self.engine.game_state == GAME_STATE.LEVEL_UP_WINDOW:
+            self.level_up_window.states_choices(key)
+
         # 会話画面の返答処理
         if self.engine.game_state == GAME_STATE.MESSAGE_WINDOW:
             self.choice = self.massage_window.message_choices(key)
@@ -239,6 +242,7 @@ class MG(arcade.Window):
         elif key == arcade.key.F12:
             self.load()
         elif key == arcade.key.F1:
+            self.engine.player.fighter.ability_points += 1
             self.engine.game_state = GAME_STATE.LEVEL_UP_WINDOW
 
     def on_key_release(self, key, modifiers):

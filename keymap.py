@@ -50,7 +50,6 @@ def choices_key(key):
         return choice_point
     elif key == arcade.key.ENTER:
         return "select"
-    
 
 
 def grid_move_key(key, engine):
@@ -98,10 +97,10 @@ def keymap(key, engine):
         elif key in KEYMAP_DOWN_RIGHT:
             direction = (1, -1)
         elif key in KEYMAP_REST:
-            engine.action_queue.extend([{"turn_end":engine.player}])
-            
+            engine.action_queue.extend([{"turn_end": engine.player}])
+
         elif key in KEYMAP_FIRE:
-            engine.action_queue.extend([{"fire":engine.player}])
+            engine.action_queue.extend([{"fire": engine.player}])
 
         elif key in KEYMAP_PICKUP:
             engine.action_queue.extend([{"pickup": True}])
