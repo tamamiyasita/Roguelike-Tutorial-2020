@@ -42,13 +42,23 @@ class Equipment:
         """装備スプライトの表示はここで行う"""
         if self.equip_update_check:
 
+
+            for item in self.item_slot.values():
+                if item and item.skill_activation:
+                    self.toggle_equip(item.skill_activation, None)
+
+
+            # 遠隔武器以外がスロットに入っていたら装備スプライトをスプライトリストに入れて表示する
             for item in self.item_slot.values():
                 if item and item not in sprites and not item.slot == "ranged_weapon":
                     sprites.append(item)
+
+            # 装備解除しスプライトがスロットから無くなればスプライトリストからも削除
             for sprite in sprites:
                 if sprite not in self.item_slot.values():
                     sprites.remove(sprite)
 
+            # 装備更新完了通知
             self.equip_update_check = False
 
     @property

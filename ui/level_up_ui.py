@@ -11,46 +11,28 @@ class LevelupUI:
         self.up_str = ""
         self.up_dex = ""
         self.up_int = ""
+        self.tmp_states = None
+        self.skill_pop = True
 
     def states_choices(self, key):
-        self.tmp_states = None
+        self.key = key 
         if self.engine.player.fighter.ability_points >= 1:
             if key == arcade.key.S:
                 self.engine.player.fighter.base_strength += 1
                 self.engine.player.fighter.ability_points -= 1
-                self.tmp_states = self.engine.player.fighter.base_strength
+                self.tmp_states = "str"
             elif key == arcade.key.D:
                 self.engine.player.fighter.base_dexterity += 1
                 self.engine.player.fighter.ability_points -= 1
-                self.tmp_states = self.engine.player.fighter.base_dexterity
+                self.tmp_states = "dex"
             elif key == arcade.key.I:
-                self.engine.player.fighter.base_max_mp += 5
-                self.engine.player.fighter.max_mp += 5
                 self.engine.player.fighter.base_intelligence += 1
                 self.engine.player.fighter.ability_points -= 1
-                self.tmp_states = self.engine.player.fighter.base_intelligence
+                self.tmp_states = "int"
 
-        if self.engine.player.fighter.ability_points <= 0:
-            self.up_str = ""
-            self.up_dex = ""
-            self.up_int = ""
-            self.y_n(key)
 
-    def y_n(self, key):
-        arcade.draw_text(
-            text=f"y_or_n",
-            start_x=self.viewport_left + 630,
-            start_y=self.viewport_bottom + 400,
-            font_name="consola.ttf",
-            color=arcade.color.BLACK_BEAN,
-            font_size=15
-        )
-        if key == arcade.key.Y:
-            self.engine.game_state = GAME_STATE.NORMAL
-        elif key == arcade.key.N:
-            self.engine.player.fighter.ability_points += 1
-            if self.tmp_states:
-                self.tmp_states -= 1
+
+
 
     def window_pop(self, viewports):
         self.viewports = viewports
@@ -62,68 +44,181 @@ class LevelupUI:
 
         arcade.draw_xywh_rectangle_filled(
             bottom_left_x=self.viewport_left+650,
-            bottom_left_y=self.viewport_bottom+400,
-            width=SCREEN_WIDTH - 1170,
-            height=SCREEN_HEIGHT - 700,
-            color=[255, 255, 255, 150]
+            bottom_left_y=self.viewport_bottom+500,
+            width=SCREEN_WIDTH - 1180,
+            height=SCREEN_HEIGHT - 800,
+            color=[255, 255, 255, 190]
         )
         spacing = 30
-        text_position_x = self.viewport_left + 660
-        text_position_y = self.viewport_bottom + SCREEN_HEIGHT - 300
+        self.text_position_x = self.viewport_left + 660
+        self.text_position_y = self.viewport_bottom + SCREEN_HEIGHT - 300
         text_size = 24
 
         screen_title = "Level UP!"
-        text_color = arcade.color.RED_ORANGE
+        text_color = arcade.color.GREEN_YELLOW
         arcade.draw_text(
             text=screen_title,
-            start_x=text_position_x-10,
-            start_y=text_position_y,
+            start_x=self.text_position_x-10,
+            start_y=self.text_position_y,
             color=text_color,
             font_size=text_size
         )
 
-        text_color = arcade.color.GREEN_YELLOW
+        text_color = arcade.color.PALATINATE_PURPLE
         arcade.draw_text(
             text=f"ability point: {self.engine.player.fighter.ability_points}",
-            start_x=text_position_x,
-            start_y=text_position_y - spacing,
+            start_x=self.text_position_x,
+            start_y=self.text_position_y - spacing,
             font_name="consola.ttf",
             color=text_color,
             font_size=text_size-7
         )
 
-        text_position_y -= spacing
-        text_color = arcade.color.YELLOW_ROSE
-        self.up_str = "(key press S + 1)"
+        self.text_position_y -= spacing
+        text_color = arcade.color.RED_ORANGE
         arcade.draw_text(
             text=f"STR: {self.engine.player.fighter.base_strength} {self.up_str}",
-            start_x=text_position_x,
-            start_y=text_position_y - spacing,
+            start_x=self.text_position_x,
+            start_y=self.text_position_y - spacing,
             font_name="consola.ttf",
             color=text_color,
             font_size=text_size-7
         )
 
-        text_position_y -= spacing
-        self.up_dex = "(key press D + 1)"
-        text_color = arcade.color.YANKEES_BLUE
+        self.text_position_y -= spacing
+        text_color = arcade.color.BLUEBERRY
         arcade.draw_text(
             text=f"DEX: {self.engine.player.fighter.base_dexterity} {self.up_dex}",
-            start_x=text_position_x,
-            start_y=text_position_y - spacing,
+            start_x=self.text_position_x,
+            start_y=self.text_position_y - spacing,
             font_name="consola.ttf",
             color=text_color,
             font_size=text_size-7
         )
 
-        text_position_y -= spacing
-        self.up_int = "(key press I + 1)"
-        text_color = arcade.color.HONEYDEW
+        self.text_position_y -= spacing
+        text_color = arcade.color.BLACK_LEATHER_JACKET
         arcade.draw_text(
             text=f"INT: {self.engine.player.fighter.base_intelligence} {self.up_int}",
-            start_x=text_position_x,
-            start_y=text_position_y - spacing,
+            start_x=self.text_position_x,
+            start_y=self.text_position_y - spacing,
             font_name="consola.ttf",
             color=text_color,
             font_size=text_size-7
         )
+
+
+        if self.engine.player.fighter.ability_points < 1 and self.skill_pop:
+            self.up_str = ""
+            self.up_dex = ""
+            self.up_int = ""
+            print(self.up_dex)
+            arcade.draw_text(
+                text=f"It's OK? ( YES : key[y]   NO : key[n] )",
+                start_x=self.text_position_x+10,
+                start_y=self.text_position_y-60,
+                # font_name="consola.ttf",
+                color=arcade.color.OLD_BURGUNDY,
+                font_size=15
+            )
+
+            if self.key == arcade.key.Y:
+                self.engine.player.fighter.level += 1
+                self.engine.game_state = GAME_STATE.NORMAL
+            elif self.key == arcade.key.N:
+                self.engine.player.fighter.ability_points += 1
+                if self.tmp_states == "str":
+                    self.engine.player.fighter.base_strength -= 1
+                elif self.tmp_states == "dex":
+                    self.engine.player.fighter.base_dexterity -= 1
+                elif self.tmp_states == "int":
+                    self.engine.player.fighter.base_intelligence -= 1
+
+        else:
+            self.up_str = "(key press S + 1)"
+            self.up_dex = "(key press D + 1)"
+            self.up_int = "(key press I + 1)"
+
+        
+        if self.engine.player.fighter.ability_points < 1 and self.engine.player.fighter.level == 1 or self.engine.player.fighter.level % 3 == 0:
+            self.skill_pop = False
+            # メインスキル窓
+            arcade.draw_xywh_rectangle_filled(
+            bottom_left_x=self.viewport_left+650,
+            bottom_left_y=self.viewport_bottom+330,
+            width=SCREEN_WIDTH - 1180,
+            height=SCREEN_HEIGHT - 790,
+            color=[225, 225, 225, 120]
+        )
+
+
+            # スキル枠A
+            arcade.draw_xywh_rectangle_filled(
+            bottom_left_x=self.viewport_left+662,
+            bottom_left_y=self.viewport_bottom+340,
+            width=128,
+            height=128,
+            color=[255, 25, 25, 190]
+        )
+            # arcade.draw_texture_rectangle(
+            #     self.viewport_left+660,
+            #     self.viewport_bottom+500,
+            #     64,64,
+            #     texture=leaf_blade[0]
+            #     )
+            if self.key == arcade.key.A:
+                arcade.draw_xywh_rectangle_filled(
+                bottom_left_x=self.viewport_left+662,
+                bottom_left_y=self.viewport_bottom+340,
+                width=128,
+                height=128,
+                color=[255, 255, 255, 100]
+            )
+
+            # スキル枠B
+            arcade.draw_xywh_rectangle_filled(
+            bottom_left_x=self.viewport_left+660 + 142,
+            bottom_left_y=self.viewport_bottom+340,
+            width=128,
+            height=128,
+            color=[255, 25, 25, 190]
+        )
+            if self.key == arcade.key.B:
+                arcade.draw_xywh_rectangle_filled(
+                bottom_left_x=self.viewport_left+660 + 142,
+                bottom_left_y=self.viewport_bottom+340,
+                width=128,
+                height=128,
+                color=[255, 255, 255, 100]
+            )
+
+            #スキル枠Aのタイトル
+            arcade.draw_text(
+                text=f"Leaf Blade",
+                start_x=self.viewport_left+662,
+                start_y=self.text_position_y-100,
+                # font_name="consola.ttf",
+                color=arcade.color.AQUA,
+                font_size=15
+            )
+
+            #スキル枠Bのタイトル
+            arcade.draw_text(
+                text=f"Branch Club",
+                start_x=self.viewport_left+660 + 142,
+                start_y=self.text_position_y-100,
+                # font_name="consola.ttf",
+                color=arcade.color.BANGLADESH_GREEN,
+                font_size=15
+            )
+
+            # スキル選択状態ならskill_popフラグをTrueにする
+            if self.key == arcade.key.A :
+                self.engine.player.fighter.skills.update({"leaf_blade":1})
+                self.skill_pop = True
+
+            elif self.key == arcade.key.B:
+                self.skill_pop = True
+
+            else:
+                self.skill_pop = False

@@ -48,6 +48,7 @@ class Actor(arcade.Sprite):
         self.left_face = left_face
         self._master = None
         self.d_time = 100
+        self.skill_activation = None
 
         self.inventory = inventory
         if self.inventory:

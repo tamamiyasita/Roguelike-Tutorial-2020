@@ -26,6 +26,7 @@ class Fighter:
         self.current_xp = current_xp
         self.level = level
         self.ability_points = ability_points
+        self.skills = {}
 
         self.damage = None
 

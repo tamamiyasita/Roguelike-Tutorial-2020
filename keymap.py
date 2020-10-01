@@ -75,7 +75,7 @@ def keymap(key, engine):
     if key in KEYMAP_CHARACTER_SCREEN:
         engine.game_state = GAME_STATE.CHARACTER_SCREEN
 
-    elif key in KEYMAP_CANCEL:
+    elif key in KEYMAP_CANCEL and engine.game_state != GAME_STATE.LEVEL_UP_WINDOW:
         engine.game_state = GAME_STATE.NORMAL
 
     elif engine.player.state == state.READY and engine.game_state == GAME_STATE.NORMAL:
