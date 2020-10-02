@@ -48,6 +48,7 @@ class Tag(Enum):
     flower = auto()
     used = auto()
     equip = auto()
+    skill = auto()
 
     # chara
     player = auto()

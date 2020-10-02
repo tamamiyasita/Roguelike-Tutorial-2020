@@ -3,6 +3,7 @@ from random import choice
 import arcade
 from constants import *
 from data import *
+from actor.skills.leaf_blade import LeafBlade
 
 
 class LevelupUI:
@@ -15,7 +16,7 @@ class LevelupUI:
         self.skill_pop = True
 
     def states_choices(self, key):
-        self.key = key 
+        self.key = key
         if self.engine.player.fighter.ability_points >= 1:
             if key == arcade.key.S:
                 self.engine.player.fighter.base_strength += 1
@@ -29,10 +30,6 @@ class LevelupUI:
                 self.engine.player.fighter.base_intelligence += 1
                 self.engine.player.fighter.ability_points -= 1
                 self.tmp_states = "int"
-
-
-
-
 
     def window_pop(self, viewports):
         self.viewports = viewports
@@ -107,7 +104,6 @@ class LevelupUI:
             font_size=text_size-7
         )
 
-
         if self.engine.player.fighter.ability_points < 1 and self.skill_pop:
             self.up_str = ""
             self.up_dex = ""
@@ -139,27 +135,25 @@ class LevelupUI:
             self.up_dex = "(key press D + 1)"
             self.up_int = "(key press I + 1)"
 
-        
         if self.engine.player.fighter.ability_points < 1 and self.engine.player.fighter.level == 1 or self.engine.player.fighter.level % 3 == 0:
             self.skill_pop = False
             # メインスキル窓
             arcade.draw_xywh_rectangle_filled(
-            bottom_left_x=self.viewport_left+650,
-            bottom_left_y=self.viewport_bottom+330,
-            width=SCREEN_WIDTH - 1180,
-            height=SCREEN_HEIGHT - 790,
-            color=[225, 225, 225, 120]
-        )
-
+                bottom_left_x=self.viewport_left+650,
+                bottom_left_y=self.viewport_bottom+330,
+                width=SCREEN_WIDTH - 1180,
+                height=SCREEN_HEIGHT - 790,
+                color=[225, 225, 225, 120]
+            )
 
             # スキル枠A
             arcade.draw_xywh_rectangle_filled(
-            bottom_left_x=self.viewport_left+662,
-            bottom_left_y=self.viewport_bottom+340,
-            width=128,
-            height=128,
-            color=[255, 25, 25, 190]
-        )
+                bottom_left_x=self.viewport_left+662,
+                bottom_left_y=self.viewport_bottom+340,
+                width=128,
+                height=128,
+                color=[255, 25, 25, 190]
+            )
             # arcade.draw_texture_rectangle(
             #     self.viewport_left+660,
             #     self.viewport_bottom+500,
@@ -168,31 +162,31 @@ class LevelupUI:
             #     )
             if self.key == arcade.key.A:
                 arcade.draw_xywh_rectangle_filled(
-                bottom_left_x=self.viewport_left+662,
-                bottom_left_y=self.viewport_bottom+340,
-                width=128,
-                height=128,
-                color=[255, 255, 255, 100]
-            )
+                    bottom_left_x=self.viewport_left+662,
+                    bottom_left_y=self.viewport_bottom+340,
+                    width=128,
+                    height=128,
+                    color=[255, 255, 255, 100]
+                )
 
             # スキル枠B
             arcade.draw_xywh_rectangle_filled(
-            bottom_left_x=self.viewport_left+660 + 142,
-            bottom_left_y=self.viewport_bottom+340,
-            width=128,
-            height=128,
-            color=[255, 25, 25, 190]
-        )
-            if self.key == arcade.key.B:
-                arcade.draw_xywh_rectangle_filled(
                 bottom_left_x=self.viewport_left+660 + 142,
                 bottom_left_y=self.viewport_bottom+340,
                 width=128,
                 height=128,
-                color=[255, 255, 255, 100]
+                color=[255, 25, 25, 190]
             )
+            if self.key == arcade.key.B:
+                arcade.draw_xywh_rectangle_filled(
+                    bottom_left_x=self.viewport_left+660 + 142,
+                    bottom_left_y=self.viewport_bottom+340,
+                    width=128,
+                    height=128,
+                    color=[255, 255, 255, 100]
+                )
 
-            #スキル枠Aのタイトル
+            # スキル枠Aのタイトル
             arcade.draw_text(
                 text=f"Leaf Blade",
                 start_x=self.viewport_left+662,
@@ -202,7 +196,7 @@ class LevelupUI:
                 font_size=15
             )
 
-            #スキル枠Bのタイトル
+            # スキル枠Bのタイトル
             arcade.draw_text(
                 text=f"Branch Club",
                 start_x=self.viewport_left+660 + 142,
@@ -213,8 +207,10 @@ class LevelupUI:
             )
 
             # スキル選択状態ならskill_popフラグをTrueにする
-            if self.key == arcade.key.A :
-                self.engine.player.fighter.skills.update({"leaf_blade":1})
+            leaf_blade = LeafBlade()
+            if self.key == arcade.key.A:
+                self.engine.player.fighter.skills.update(
+                    {"leaf_blade": leaf_blade})
                 self.skill_pop = True
 
             elif self.key == arcade.key.B:

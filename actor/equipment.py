@@ -1,4 +1,6 @@
 from collections import Counter
+from constants import *
+from actor.skills.leaf_blade import LeafBlade
 
 
 class Equipment:
@@ -11,7 +13,7 @@ class Equipment:
         """アイテムスロット、及び装備するタイミングを決めるequip_update_check
         """
         self.item_slot = {
-            "head":None,
+            "head": None,
             "main_hand": None,
             "off_hand": None,
             "ranged_weapon": None,
@@ -42,12 +44,6 @@ class Equipment:
         """装備スプライトの表示はここで行う"""
         if self.equip_update_check:
 
-
-            for item in self.item_slot.values():
-                if item and item.skill_activation:
-                    self.toggle_equip(item.skill_activation, None)
-
-
             # 遠隔武器以外がスロットに入っていたら装備スプライトをスプライトリストに入れて表示する
             for item in self.item_slot.values():
                 if item and item not in sprites and not item.slot == "ranged_weapon":
@@ -60,6 +56,10 @@ class Equipment:
 
             # 装備更新完了通知
             self.equip_update_check = False
+
+            print(self.item_slot)
+            for s in sprites:
+                print(s)
 
     @property
     def states_bonus(self):
@@ -111,7 +111,6 @@ class Equipment:
 
                 if item and item.name == equip_item.name:  # equip_itemが装備アイテムと同じなら単に解除
                     del self.item_slot[item_key].master
-                    # sprites.remove(self.item_slot[item_key])
 
                     self.item_slot[item_key] = None
                     results.append({"message": f"dequipped {item.name}"})
@@ -121,12 +120,10 @@ class Equipment:
                     # equip_itemが装備されてるものと別のアイテムなら装備を解除しequip_itemを装備
                     if item:
                         del self.item_slot[item_key].master
-                        # sprites.remove(self.item_slot[item_key])
                         self.item_slot[item_key] = None
 
                     self.item_slot[item_key] = equip_item
                     self.item_slot[item_key].master = self.owner
-                    # sprites.append(equip_item)
 
                     results.append({"message": f"equipped {equip_item.name}"})
                     break
@@ -134,3 +131,21 @@ class Equipment:
         self.equip_update_check = True
 
         return results
+
+    def pl_skill_equip(self):
+
+        for item in self.item_slot.values():
+            if item is not None and Tag.flower in item.tag:
+                for skill, level in item.skill_add.items():
+                    if skill in self.owner.fighter.skills:
+                        self.owner.fighter.skills[skill].level += level
+
+        # スキルにより装備を実体化する
+        for equip in self.owner.fighter.skills.values():
+            if Tag.equip in equip.tag and Tag.skill in equip.tag and equip.level > 0:
+                self.item_slot[equip.slot] = equip
+                self.item_slot[equip.slot].master = self.owner
+                # self.toggle_equip(equip, None)
+            elif Tag.equip in equip.tag and Tag.skill in equip.tag and equip.level < 1:
+                del self.item_slot[equip.slot].master
+                self.item_slot[equip.slot] = None

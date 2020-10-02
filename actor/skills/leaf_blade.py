@@ -3,6 +3,7 @@ from actor.actor import Actor
 from constants import *
 from data import *
 
+
 class LeafBlade(Actor):
     def __init__(self, x=0, y=0):
         super().__init__(
@@ -13,13 +14,13 @@ class LeafBlade(Actor):
         )
 
         self.slot = "main_hand"
-        self.states_bonus = {"str": 1, "defense": 1}
+        self.states_bonus = {"str": 1, "dex": 1}
         self.attack_damage = (1, 2, 6)
         self.hit_rate = 93
 
-        self.level = 2
+        self.level = 0
 
-        self.tag = {Tag.item, Tag.equip}
+        self.tag = {Tag.item, Tag.equip, Tag.skill}
 
         self.explanatory_text = f""
 
