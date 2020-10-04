@@ -3,7 +3,7 @@ from constants import *
 from data import *
 import math
 import random
-from actor.skills.leaf_blade import LeafBlade
+from actor.items.leaf_blade import LeafBlade
 
 
 class Cirsium(Actor):

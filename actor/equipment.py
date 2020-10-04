@@ -1,6 +1,6 @@
 from collections import Counter
 from constants import *
-from actor.skills.leaf_blade import LeafBlade
+from actor.items.leaf_blade import LeafBlade
 
 
 class Equipment:
@@ -110,6 +110,7 @@ class Equipment:
             if item_key == equip_item.slot:  # アイテムキーと装備するスロットが同じか判定
 
                 if item and item.name == equip_item.name:  # equip_itemが装備アイテムと同じなら単に解除
+                    self.minus_skill_point(item)
                     del self.item_slot[item_key].master
 
                     self.item_slot[item_key] = None
@@ -119,11 +120,13 @@ class Equipment:
                 else:
                     # equip_itemが装備されてるものと別のアイテムなら装備を解除しequip_itemを装備
                     if item:
+                        self.minus_skill_point(item)
                         del self.item_slot[item_key].master
                         self.item_slot[item_key] = None
 
                     self.item_slot[item_key] = equip_item
                     self.item_slot[item_key].master = self.owner
+                    self.plus_skill_point(equip_item)
 
                     results.append({"message": f"equipped {equip_item.name}"})
                     break
@@ -132,20 +135,30 @@ class Equipment:
 
         return results
 
-    def pl_skill_equip(self):
+    def plus_skill_point(self, item):
+        if hasattr(item, "skill_add"):
+            for skill, level in item.skill_add.items():
+                if skill in self.owner.fighter.skills:
+                    self.owner.fighter.skills[skill].level += level
 
-        for item in self.item_slot.values():
-            if item is not None and Tag.flower in item.tag:
-                for skill, level in item.skill_add.items():
-                    if skill in self.owner.fighter.skills:
-                        self.owner.fighter.skills[skill].level += level
+            for skill in self.owner.fighter.skills.values():
+                if Tag.equip in skill.tag and Tag.skill in skill.tag and skill.level > 0:
+                    self.toggle_equip(skill, None)
+                    # self.item_slot[skill.slot] = skill
+                    # self.item_slot[skill.slot].master = self.owner
 
-        # スキルにより装備を実体化する
-        for equip in self.owner.fighter.skills.values():
-            if Tag.equip in equip.tag and Tag.skill in equip.tag and equip.level > 0:
-                self.item_slot[equip.slot] = equip
-                self.item_slot[equip.slot].master = self.owner
-                # self.toggle_equip(equip, None)
-            elif Tag.equip in equip.tag and Tag.skill in equip.tag and equip.level < 1:
-                del self.item_slot[equip.slot].master
-                self.item_slot[equip.slot] = None
+    def minus_skill_point(self, item):
+        if hasattr(item, "skill_add"):
+            for skill, level in item.skill_add.items():
+                if skill in self.owner.fighter.skills:
+                    self.owner.fighter.skills[skill].level -= level
+
+            for skill in self.owner.fighter.skills.values():
+                if Tag.equip in skill.tag and Tag.skill in skill.tag and skill.level < 1:
+                    self.toggle_equip(skill, None)
+                    # del self.item_slot[skill.slot].master
+                    # self.item_slot[skill.slot] = None
+
+            # スキルにより装備を実体化する
+            #     print(skill, "skill")
+                    # self.toggle_equip(equip, None)

@@ -454,10 +454,10 @@ class GameEngine:
                     # ここでドロップ
                     if item:
                         self.player.inventory.remove_item_number(item_number)
-                        self.cur_level.item_sprites.append(item)
                         item.x = self.player.x
                         item.y = self.player.y
                         self.item_point.add_point(item)  # mapにPOINTを表示
+                        self.cur_level.item_sprites.append(item)
                         new_action_queue.extend(
                             [{"message": f"You dropped the {item.name}"}])
 

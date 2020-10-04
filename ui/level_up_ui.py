@@ -3,7 +3,7 @@ from random import choice
 import arcade
 from constants import *
 from data import *
-from actor.skills.leaf_blade import LeafBlade
+from actor.items.leaf_blade import LeafBlade
 
 
 class LevelupUI:
