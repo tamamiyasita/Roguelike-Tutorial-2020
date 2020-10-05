@@ -40,6 +40,17 @@ class Equipment:
                 item.master = self.owner
                 self.equip_update_check = True
 
+    @property
+    def skill_level_sum(self):
+        """スキルボーナスの計算"""
+
+        bonus = {}
+        for parts in self.item_slot.values():
+            if parts and parts.skill_add:
+                bonus = Counter(bonus) + Counter(parts.skill_add)
+
+        return bonus
+
     def update(self, sprites):
         """装備スプライトの表示はここで行う"""
         if self.equip_update_check:

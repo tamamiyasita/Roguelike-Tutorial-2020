@@ -26,7 +26,7 @@ class Fighter:
         self.current_xp = current_xp
         self.level = level
         self.ability_points = ability_points
-        self.skills = {}
+        self._skill_list = []
 
         self.damage = None
 
@@ -40,13 +40,16 @@ class Fighter:
             # print(key, val)
             result[str(key)] = val
 
-
         return result
 
     def restore_from_dict(self, result):
         for key, val in result.items():
             exec(f"self.{key} = {val}")
 
+    @property
+    def skill_list(self):
+
+        return self._skill_list
 
     @property
     def max_hp(self):

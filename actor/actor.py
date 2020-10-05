@@ -48,7 +48,7 @@ class Actor(arcade.Sprite):
         self.left_face = left_face
         self._master = None
         self.d_time = 100
-        self.skill_activation = None
+        self.skill_add = {}
 
         self.inventory = inventory
         if self.inventory:
@@ -417,13 +417,16 @@ class Actor(arcade.Sprite):
             item_margin_x = -self.item_margin_x
         self.angle += uniform(0.1, 3)
         x_diff = (target.center_x + item_margin_x + random()) - (self.center_x)
-        y_diff = (target.center_y + self.item_margin_y + random()) - (self.center_y)
+        y_diff = (target.center_y + self.item_margin_y +
+                  random()) - (self.center_y)
         angle = math.atan2(y_diff, x_diff)
 
         if abs(x_diff) > 15 or abs(y_diff) > 15:
 
-            self.change_x = math.cos(angle) * (self.my_speed + uniform(0.6, 4.2))
-            self.change_y = math.sin(angle) * (self.my_speed + uniform(0.6, 4.2))
+            self.change_x = math.cos(
+                angle) * (self.my_speed + uniform(0.6, 4.2))
+            self.change_y = math.sin(
+                angle) * (self.my_speed + uniform(0.6, 4.2))
         else:
             self.change_x = math.cos(angle) * uniform(0.02, 0.3)
             self.change_y = math.sin(angle) * uniform(0.02, 0.3)
