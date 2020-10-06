@@ -45,11 +45,11 @@ class Equipment:
         """スキルボーナスの計算"""
 
         bonus = {}
-        for parts in self.item_slot.values():
-            if parts and parts.skill_add:
+        for parts in self.item_slot.values():# crisiumが入る
+            if parts and parts.skill_add:# crisiumのskill_add{leaf_blade:1}が入る
                 bonus = Counter(bonus) + Counter(parts.skill_add)
 
-        return bonus
+        return bonus # {leaf_blade:1}
 
     def update(self, sprites):
         """装備スプライトの表示はここで行う"""
@@ -121,7 +121,6 @@ class Equipment:
             if item_key == equip_item.slot:  # アイテムキーと装備するスロットが同じか判定
 
                 if item and item.name == equip_item.name:  # equip_itemが装備アイテムと同じなら単に解除
-                    self.minus_skill_point(item)
                     del self.item_slot[item_key].master
 
                     self.item_slot[item_key] = None
@@ -131,13 +130,11 @@ class Equipment:
                 else:
                     # equip_itemが装備されてるものと別のアイテムなら装備を解除しequip_itemを装備
                     if item:
-                        self.minus_skill_point(item)
                         del self.item_slot[item_key].master
                         self.item_slot[item_key] = None
 
                     self.item_slot[item_key] = equip_item
                     self.item_slot[item_key].master = self.owner
-                    self.plus_skill_point(equip_item)
 
                     results.append({"message": f"equipped {equip_item.name}"})
                     break

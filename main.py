@@ -237,9 +237,9 @@ class MG(arcade.Window):
         if self.engine.game_state == GAME_STATE.MESSAGE_WINDOW:
             self.choice = self.massage_window.message_choices(key)
 
-        if key == arcade.key.F11:
+        if key == arcade.key.F7:
             self.save()
-        elif key == arcade.key.F12:
+        elif key == arcade.key.F8:
             self.load()
         elif key == arcade.key.F1:
             self.engine.player.fighter.ability_points += 1
@@ -247,6 +247,8 @@ class MG(arcade.Window):
 
     def on_key_release(self, key, modifiers):
         self.player_direction = None
+        print(self.engine.player.fighter.skill_list)
+        print(len(self.engine.player.fighter.skill_list))
 
     def on_mouse_motion(self, x, y, dx, dy):
         """マウスオーバー処理"""

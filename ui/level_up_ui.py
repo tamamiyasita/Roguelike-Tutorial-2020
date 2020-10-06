@@ -4,7 +4,12 @@ import arcade
 from constants import *
 from data import *
 from actor.items.leaf_blade import LeafBlade
+from enum import Enum, auto
 
+class Select(Enum):
+    ability = auto()
+    delay = auto()
+    open_skill = auto()
 
 class LevelupUI:
     def __init__(self, engine):
@@ -14,6 +19,7 @@ class LevelupUI:
         self.up_int = ""
         self.tmp_states = None
         self.skill_pop = True
+        self.ui_state = Select.delay
 
     def states_choices(self, key):
         self.key = key
@@ -30,6 +36,7 @@ class LevelupUI:
                 self.engine.player.fighter.base_intelligence += 1
                 self.engine.player.fighter.ability_points -= 1
                 self.tmp_states = "int"
+            self.ui_state = Select.open_skill
 
     def window_pop(self, viewports):
         self.viewports = viewports
@@ -104,7 +111,7 @@ class LevelupUI:
             font_size=text_size-7
         )
 
-        if self.engine.player.fighter.ability_points < 1 and self.skill_pop:
+        if self.engine.player.fighter.ability_points < 1 or self.ui_state == Select.ability:
             self.up_str = ""
             self.up_dex = ""
             self.up_int = ""
@@ -136,7 +143,7 @@ class LevelupUI:
             self.up_int = "(key press I + 1)"
 
         if self.engine.player.fighter.ability_points < 1 and self.engine.player.fighter.level == 1 or self.engine.player.fighter.level % 3 == 0:
-            self.skill_pop = False
+            # self.ui_state = Select.open_skill
             # メインスキル窓
             arcade.draw_xywh_rectangle_filled(
                 bottom_left_x=self.viewport_left+650,
@@ -207,11 +214,10 @@ class LevelupUI:
             )
 
             # スキル選択状態ならskill_popフラグをTrueにする
-            leaf_blade = LeafBlade()
-            if self.key == arcade.key.A:
-                self.engine.player.fighter.skills.update(
-                    {"leaf_blade": leaf_blade})
-                self.skill_pop = True
+            if self.key == arcade.key.A and self.ui_state == Select.open_skill:
+                leaf_blade = LeafBlade()
+                self.engine.player.fighter.skill_list.append(leaf_blade)
+                self.ui_state = Select.ability
 
             elif self.key == arcade.key.B:
                 self.skill_pop = True

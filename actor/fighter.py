@@ -48,7 +48,10 @@ class Fighter:
 
     @property
     def skill_list(self):
-
+        for s in self._skill_list:# [LeafBlade()]が入る
+            if s.name in self.owner.equipment.skill_level_sum:
+                s.level += self.owner.equipment.skill_level_sum[s.name]
+           
         return self._skill_list
 
     @property
