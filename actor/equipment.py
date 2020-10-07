@@ -48,7 +48,9 @@ class Equipment:
         for parts in self.item_slot.values():# crisiumが入る
             if parts and parts.skill_add:# crisiumのskill_add{leaf_blade:1}が入る
                 bonus = Counter(bonus) + Counter(parts.skill_add)
-
+                # if bonus is None:
+                #     bonus = 0
+        print(bonus, "bonus sum")
         return bonus # {leaf_blade:1}
 
     def update(self, sprites):
@@ -65,12 +67,34 @@ class Equipment:
                 if sprite not in self.item_slot.values():
                     sprites.remove(sprite)
 
+
             # 装備更新完了通知
             self.equip_update_check = False
 
+            if self.owner.fighter.skill_list:
+                skill_list = self.owner.fighter.skill_list
+                self.skill_equip_on(skill_list)
+                self.skill_equip_off(skill_list)
             print(self.item_slot)
-            for s in sprites:
-                print(s)
+            print(self.owner.fighter.skill_list)
+
+    def skill_equip_on(self, skill_list):
+        for s in skill_list:
+            if Tag.equip in s.tag and s.level > 0 and self.item_slot[s.slot] != s:
+                self.item_slot[s.slot] = s
+                self.item_slot[s.slot].master = self.owner
+                self.equip_update_check = True
+
+    def skill_equip_off(self, skill_list):
+        for s in skill_list:
+            if Tag.equip in s.tag and s.level < 1 and self.item_slot[s.slot] == s:
+                del self.item_slot[s.slot].master
+                self.item_slot[s.slot] = None
+                self.equip_update_check = True
+
+                
+
+
 
     @property
     def states_bonus(self):

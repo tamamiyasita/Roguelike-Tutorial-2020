@@ -248,7 +248,7 @@ class MG(arcade.Window):
     def on_key_release(self, key, modifiers):
         self.player_direction = None
         print(self.engine.player.fighter.skill_list)
-        print(len(self.engine.player.fighter.skill_list))
+        print(self.engine.player.fighter.skill_list[0].level, self.engine.player.fighter.skill_list[0].name)
 
     def on_mouse_motion(self, x, y, dx, dy):
         """マウスオーバー処理"""

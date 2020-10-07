@@ -161,12 +161,14 @@ class LevelupUI:
                 height=128,
                 color=[255, 25, 25, 190]
             )
-            # arcade.draw_texture_rectangle(
-            #     self.viewport_left+660,
-            #     self.viewport_bottom+500,
-            #     64,64,
-            #     texture=leaf_blade[0]
-            #     )
+
+            arcade.draw_texture_rectangle(
+                self.viewport_left+662+64,
+                self.viewport_bottom+340+64,
+                64,64,
+                texture=arcade.load_texture("image\leafblade_icon.png")
+                )
+
             if self.key == arcade.key.A:
                 arcade.draw_xywh_rectangle_filled(
                     bottom_left_x=self.viewport_left+662,
@@ -218,6 +220,7 @@ class LevelupUI:
                 leaf_blade = LeafBlade()
                 self.engine.player.fighter.skill_list.append(leaf_blade)
                 self.ui_state = Select.ability
+                self.engine.player.equipment.equip_update_check = True
 
             elif self.key == arcade.key.B:
                 self.skill_pop = True
