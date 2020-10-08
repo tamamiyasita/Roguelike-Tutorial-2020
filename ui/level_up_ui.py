@@ -138,7 +138,6 @@ class LevelupUI:
             )
             # Yボタンが押されたらgame stateをノーマルに戻し終了
             if self.key == arcade.key.Y:
-                self.engine.player.fighter.level += 1
                 self.engine.game_state = GAME_STATE.NORMAL
 
             # Nボタンならability pointを戻し再選択させる
@@ -157,7 +156,7 @@ class LevelupUI:
             self.up_int = "(key press I + 1)"
 
         # ability pointがゼロかつスキル取得レベルなら追加で窓を表示する
-        if self.engine.player.fighter.ability_points < 1 and self.engine.player.fighter.level == 1 or self.engine.player.fighter.level % 3 == 0:
+        if self.engine.player.fighter.ability_points < 1 and self.engine.player.fighter.level == 2 or self.engine.player.fighter.level % 3 == 0:
 
             # スキル表示最下部の窓
             arcade.draw_xywh_rectangle_filled(

@@ -13,7 +13,6 @@ from actor.characters.npc import Citizen, Villager, villager
 from actor.entities_factory import get_random_monster_by_challenge, get_random_items_by_challenge
 
 
-
 class ActorPlacement:
     def __init__(self, game_map, game_engine):
         self.game_map = game_map
@@ -113,27 +112,26 @@ class ActorPlacement:
             tiled_map_obj_sprite.append(obj)
 
         return tiled_map_obj_sprite
-    
+
     def tiled_npc_set(self):
         tiled_npc_sprite = arcade.SpriteList(
             use_spatial_hash=True, spatial_hash_cell_size=32)
 
-        villager_list = arcade.process_layer(self.my_map, "villager", scaling=4, use_spatial_hash=True, hit_box_algorithm="None")
+        villager_list = arcade.process_layer(
+            self.my_map, "villager", scaling=4, use_spatial_hash=True, hit_box_algorithm="None")
         for v in villager_list:
             x, y = pixel_to_grid(v.center_x, v.center_y)
             villager = Villager(x=x, y=y)
             tiled_npc_sprite.append(villager)
 
-        citizen_list = arcade.process_layer(self.my_map, "citizen", scaling=4, use_spatial_hash=True, hit_box_algorithm="None")
+        citizen_list = arcade.process_layer(
+            self.my_map, "citizen", scaling=4, use_spatial_hash=True, hit_box_algorithm="None")
         for c in citizen_list:
             x, y = pixel_to_grid(c.center_x, c.center_y)
             citizen = Citizen(x=x, y=y)
             tiled_npc_sprite.append(citizen)
 
-
-
         return tiled_npc_sprite
-
 
     def map_point_set(self):
         map_point_sprites = arcade.SpriteList(

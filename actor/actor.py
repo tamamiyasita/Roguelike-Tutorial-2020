@@ -73,10 +73,7 @@ class Actor(arcade.Sprite):
             self.fighter.owner = self
 
     def get_dict(self):
-        # def get_d(**kwargs):
-        #     print(kwargs)
-        # get_d(vars(self))
-        print(vars(self))
+
         result = {}
         result["texture_number"] = self.texture_number
         result["name"] = self.name
