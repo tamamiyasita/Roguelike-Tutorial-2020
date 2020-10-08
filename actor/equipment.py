@@ -42,16 +42,15 @@ class Equipment:
 
     @property
     def skill_level_sum(self):
-        """スキルボーナスの計算"""
+        """装備スロットをループしてskill levelの合計を返す"""
 
         bonus = {}
-        for parts in self.item_slot.values():# crisiumが入る
-            if parts and parts.skill_add:# crisiumのskill_add{leaf_blade:1}が入る
+        for parts in self.item_slot.values():  # crisiumが入る
+            if parts and parts.skill_add:  # crisiumのskill_add{leaf_blade:1}が入る
                 bonus = Counter(bonus) + Counter(parts.skill_add)
-                # if bonus is None:
-                #     bonus = 0
+
         print(bonus, "bonus sum")
-        return bonus # {leaf_blade:1}
+        return bonus  # {leaf_blade:1}
 
     def update(self, sprites):
         """装備スプライトの表示はここで行う"""
@@ -67,18 +66,20 @@ class Equipment:
                 if sprite not in self.item_slot.values():
                     sprites.remove(sprite)
 
-
             # 装備更新完了通知
             self.equip_update_check = False
 
             if self.owner.fighter.skill_list:
+                # 装備変更に伴うskill check
                 skill_list = self.owner.fighter.skill_list
                 self.skill_equip_on(skill_list)
                 self.skill_equip_off(skill_list)
+
             print(self.item_slot)
             print(self.owner.fighter.skill_list)
 
     def skill_equip_on(self, skill_list):
+        """skill levelが1以上なら装備skillをslotに入れる"""
         for s in skill_list:
             if Tag.equip in s.tag and s.level > 0 and self.item_slot[s.slot] != s:
                 self.item_slot[s.slot] = s
@@ -86,19 +87,16 @@ class Equipment:
                 self.equip_update_check = True
 
     def skill_equip_off(self, skill_list):
+        """skill levelが1以下なら装備解除しslotから外す"""
         for s in skill_list:
             if Tag.equip in s.tag and s.level < 1 and self.item_slot[s.slot] == s:
                 del self.item_slot[s.slot].master
                 self.item_slot[s.slot] = None
                 self.equip_update_check = True
 
-                
-
-
-
     @property
     def states_bonus(self):
-        """ステータスボーナスの計算"""
+        """item_slotをループしてstates bonusを合計し返す"""
 
         bonus = {"max_hp": 0, "max_mp": 0, "str": 0,
                  "dex": 0, "int": 0, "defense": 0, "evasion": 0}
@@ -166,31 +164,3 @@ class Equipment:
         self.equip_update_check = True
 
         return results
-
-    def plus_skill_point(self, item):
-        if hasattr(item, "skill_add"):
-            for skill, level in item.skill_add.items():
-                if skill in self.owner.fighter.skills:
-                    self.owner.fighter.skills[skill].level += level
-
-            for skill in self.owner.fighter.skills.values():
-                if Tag.equip in skill.tag and Tag.skill in skill.tag and skill.level > 0:
-                    self.toggle_equip(skill, None)
-                    # self.item_slot[skill.slot] = skill
-                    # self.item_slot[skill.slot].master = self.owner
-
-    def minus_skill_point(self, item):
-        if hasattr(item, "skill_add"):
-            for skill, level in item.skill_add.items():
-                if skill in self.owner.fighter.skills:
-                    self.owner.fighter.skills[skill].level -= level
-
-            for skill in self.owner.fighter.skills.values():
-                if Tag.equip in skill.tag and Tag.skill in skill.tag and skill.level < 1:
-                    self.toggle_equip(skill, None)
-                    # del self.item_slot[skill.slot].master
-                    # self.item_slot[skill.slot] = None
-
-            # スキルにより装備を実体化する
-            #     print(skill, "skill")
-                    # self.toggle_equip(equip, None)

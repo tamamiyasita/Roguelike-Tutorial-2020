@@ -37,7 +37,6 @@ class Fighter:
         for key, val in self.__dict__.items():
             if "owner" in str(key):
                 continue
-            # print(key, val)
             result[str(key)] = val
 
         return result
@@ -48,14 +47,14 @@ class Fighter:
 
     @property
     def skill_list(self):
-        for s in self._skill_list:# [LeafBlade()]が入る
-            # if s.name in self.owner.equipment.skill_level_sum:
+        """skill listをループして装備の追加skill levelをskill levelに加える"""
+        for s in self._skill_list:  # [LeafBlade()]が入る
             if s:
                 s.level = 0
                 s.level = self.owner.equipment.skill_level_sum.get(s.name)
                 if s.level is None:
                     s.level = 0
-           
+
         return self._skill_list
 
     @property

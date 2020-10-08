@@ -10,6 +10,7 @@ from actor.items.boomerang import Boomerang
 from actor.items.fireball_scroll import FireballScroll, FireballEffect
 from actor.items.lightning_scroll import LightningScroll, LightningEffect
 from actor.items.confusion_scroll import ConfusionScroll, ConfusionEffect
+from actor.items.cirsium import Cirsium
 from actor.map_obj.wall import Wall
 from actor.map_obj.floor import Floor
 from actor.map_obj.stairs import Stairs
@@ -47,6 +48,9 @@ def restore_actor(actor_dict):
         actor = ConfusionScroll()
     elif actor_name == "ConfusionEffect":
         actor = ConfusionEffect()
+
+    elif actor_name == "Cirsium":
+        actor = Cirsium()
 
     elif actor_name == "Orc":
         actor = Orc()

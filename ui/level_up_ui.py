@@ -5,11 +5,14 @@ from constants import *
 from data import *
 from actor.items.leaf_blade import LeafBlade
 from enum import Enum, auto
+from collections import deque
+
 
 class Select(Enum):
     ability = auto()
     delay = auto()
     open_skill = auto()
+
 
 class LevelupUI:
     def __init__(self, engine):
@@ -18,8 +21,8 @@ class LevelupUI:
         self.up_dex = ""
         self.up_int = ""
         self.tmp_states = None
-        self.skill_pop = True
         self.ui_state = Select.delay
+        self.skill_queue = deque([LeafBlade()])
 
     def states_choices(self, key):
         self.key = key
@@ -39,6 +42,8 @@ class LevelupUI:
             self.ui_state = Select.open_skill
 
     def window_pop(self, viewports):
+        """Levelup時に出現するwindow"""
+
         self.viewports = viewports
 
         self.viewport_left = self.viewports[0]
@@ -46,6 +51,7 @@ class LevelupUI:
         self.viewport_bottom = self.viewports[2]
         self.viewport_top = self.viewports[3]
 
+        # 最下部の基本枠
         arcade.draw_xywh_rectangle_filled(
             bottom_left_x=self.viewport_left+650,
             bottom_left_y=self.viewport_bottom+500,
@@ -53,11 +59,14 @@ class LevelupUI:
             height=SCREEN_HEIGHT - 800,
             color=[255, 255, 255, 190]
         )
+
+        # テキストに使う変数
         spacing = 30
         self.text_position_x = self.viewport_left + 660
         self.text_position_y = self.viewport_bottom + SCREEN_HEIGHT - 300
         text_size = 24
 
+        # 最上段のタイトル
         screen_title = "Level UP!"
         text_color = arcade.color.GREEN_YELLOW
         arcade.draw_text(
@@ -68,6 +77,7 @@ class LevelupUI:
             font_size=text_size
         )
 
+        # ability point表示
         text_color = arcade.color.PALATINATE_PURPLE
         arcade.draw_text(
             text=f"ability point: {self.engine.player.fighter.ability_points}",
@@ -78,6 +88,7 @@ class LevelupUI:
             font_size=text_size-7
         )
 
+        # 以下ステータスpointの表示
         self.text_position_y -= spacing
         text_color = arcade.color.RED_ORANGE
         arcade.draw_text(
@@ -111,7 +122,8 @@ class LevelupUI:
             font_size=text_size-7
         )
 
-        if self.engine.player.fighter.ability_points < 1 or self.ui_state == Select.ability:
+        # ability pointがゼロ、かつstateがabilityで選択文が出る
+        if self.engine.player.fighter.ability_points < 1 and self.ui_state == Select.ability:
             self.up_str = ""
             self.up_dex = ""
             self.up_int = ""
@@ -124,10 +136,12 @@ class LevelupUI:
                 color=arcade.color.OLD_BURGUNDY,
                 font_size=15
             )
-
+            # Yボタンが押されたらgame stateをノーマルに戻し終了
             if self.key == arcade.key.Y:
                 self.engine.player.fighter.level += 1
                 self.engine.game_state = GAME_STATE.NORMAL
+
+            # Nボタンならability pointを戻し再選択させる
             elif self.key == arcade.key.N:
                 self.engine.player.fighter.ability_points += 1
                 if self.tmp_states == "str":
@@ -142,9 +156,10 @@ class LevelupUI:
             self.up_dex = "(key press D + 1)"
             self.up_int = "(key press I + 1)"
 
+        # ability pointがゼロかつスキル取得レベルなら追加で窓を表示する
         if self.engine.player.fighter.ability_points < 1 and self.engine.player.fighter.level == 1 or self.engine.player.fighter.level % 3 == 0:
-            # self.ui_state = Select.open_skill
-            # メインスキル窓
+
+            # スキル表示最下部の窓
             arcade.draw_xywh_rectangle_filled(
                 bottom_left_x=self.viewport_left+650,
                 bottom_left_y=self.viewport_bottom+330,
@@ -161,14 +176,14 @@ class LevelupUI:
                 height=128,
                 color=[255, 25, 25, 190]
             )
-
+            # スキル枠Aのスキルアイコン
             arcade.draw_texture_rectangle(
                 self.viewport_left+662+64,
                 self.viewport_bottom+340+64,
-                64,64,
+                64, 64,
                 texture=arcade.load_texture("image\leafblade_icon.png")
-                )
-
+            )
+            # 選択状態で窓を変化させる(上にポップさせるとか別のやり方もいいかも)
             if self.key == arcade.key.A:
                 arcade.draw_xywh_rectangle_filled(
                     bottom_left_x=self.viewport_left+662,
@@ -217,13 +232,17 @@ class LevelupUI:
 
             # スキル選択状態ならskill_popフラグをTrueにする
             if self.key == arcade.key.A and self.ui_state == Select.open_skill:
+                # TODO このあたりにキューで選択肢をポップさせる仕様にしたい
                 leaf_blade = LeafBlade()
+
+                # playerのskill listに追加し、装備更新をチェックさせる
                 self.engine.player.fighter.skill_list.append(leaf_blade)
-                self.ui_state = Select.ability
                 self.engine.player.equipment.equip_update_check = True
+                self.ui_state = Select.ability
 
             elif self.key == arcade.key.B:
                 self.skill_pop = True
 
-            else:
-                self.skill_pop = False
+        else:
+            # スキル取得レベルで無ければスキル窓表示をスキップ
+            self.ui_state = Select.ability
