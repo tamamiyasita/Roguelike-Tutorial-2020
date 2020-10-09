@@ -21,7 +21,7 @@ class Cirsium(Actor):
         self.level = 1
 
         self.tag = {Tag.item, Tag.equip, Tag.flower}
-        self.skill_add = {"leaf_blade": 1}
+        self.skill_add = {"leaf_blade": 1, "branch_baton":1}
 
         self.item_margin_x = 16
         self.item_margin_y = 17

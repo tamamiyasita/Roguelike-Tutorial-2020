@@ -243,6 +243,7 @@ class MG(arcade.Window):
             self.load()
         elif key == arcade.key.F1:
             self.engine.player.fighter.ability_points += 1
+            self.engine.player.fighter.level += 1
             self.engine.game_state = GAME_STATE.LEVEL_UP_WINDOW
 
     def on_key_release(self, key, modifiers):

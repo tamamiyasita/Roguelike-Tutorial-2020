@@ -4,19 +4,19 @@ from constants import *
 from data import *
 
 
-class LeafBlade(Actor):
+class BranchBaton(Actor):
     def __init__(self, x=0, y=0):
         super().__init__(
-            name="leaf_blade",
+            name="branch_baton",
             x=x,
             y=y,
             color=arcade.color.WHITE
         )
 
         self.slot = "main_hand"
-        self.states_bonus = {"dex": 1}
-        self.attack_damage = (1, 2, 6)
-        self.hit_rate = 95
+        self.states_bonus = {"str": 1}
+        self.attack_damage = (1, 2, 7)
+        self.hit_rate = 92
 
         self.level = 0
 

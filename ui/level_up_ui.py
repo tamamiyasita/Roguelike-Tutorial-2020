@@ -4,6 +4,7 @@ import arcade
 from constants import *
 from data import *
 from actor.items.leaf_blade import LeafBlade
+from actor.items.branch_baton import BranchBaton
 from enum import Enum, auto
 from collections import deque
 
@@ -12,6 +13,7 @@ class Select(Enum):
     ability = auto()
     delay = auto()
     open_skill = auto()
+
 
 
 class LevelupUI:
@@ -23,6 +25,7 @@ class LevelupUI:
         self.tmp_states = None
         self.ui_state = Select.delay
         self.skill_queue = deque([LeafBlade()])
+        self.skill_result = []
 
     def states_choices(self, key):
         self.key = key
@@ -50,6 +53,8 @@ class LevelupUI:
         self.viewport_righit = self.viewports[1]
         self.viewport_bottom = self.viewports[2]
         self.viewport_top = self.viewports[3]
+
+        self.select = None
 
         # 最下部の基本枠
         arcade.draw_xywh_rectangle_filled(
@@ -127,7 +132,6 @@ class LevelupUI:
             self.up_str = ""
             self.up_dex = ""
             self.up_int = ""
-            print(self.up_dex)
             arcade.draw_text(
                 text=f"It's OK? ( YES : key[y]   NO : key[n] )",
                 start_x=self.text_position_x+10,
@@ -139,6 +143,10 @@ class LevelupUI:
             # Yボタンが押されたらgame stateをノーマルに戻し終了
             if self.key == arcade.key.Y:
                 self.engine.game_state = GAME_STATE.NORMAL
+                self.engine.player.fighter.skill_list.extend(self.skill_result)
+                self.engine.player.equipment.equip_update_check = True
+
+
 
             # Nボタンならability pointを戻し再選択させる
             elif self.key == arcade.key.N:
@@ -180,10 +188,10 @@ class LevelupUI:
                 self.viewport_left+662+64,
                 self.viewport_bottom+340+64,
                 64, 64,
-                texture=arcade.load_texture("image\leafblade_icon.png")
+                texture=arcade.load_texture("image\leaf_blade_icon.png")
             )
             # 選択状態で窓を変化させる(上にポップさせるとか別のやり方もいいかも)
-            if self.key == arcade.key.A:
+            if self.key == arcade.key.A and self.skill_result:
                 arcade.draw_xywh_rectangle_filled(
                     bottom_left_x=self.viewport_left+662,
                     bottom_left_y=self.viewport_bottom+340,
@@ -194,20 +202,29 @@ class LevelupUI:
 
             # スキル枠B
             arcade.draw_xywh_rectangle_filled(
-                bottom_left_x=self.viewport_left+660 + 142,
+                bottom_left_x=self.viewport_left+662 + 140,
                 bottom_left_y=self.viewport_bottom+340,
                 width=128,
                 height=128,
                 color=[255, 25, 25, 190]
             )
-            if self.key == arcade.key.B:
+            if self.key == arcade.key.B and self.skill_result:
                 arcade.draw_xywh_rectangle_filled(
-                    bottom_left_x=self.viewport_left+660 + 142,
+                    bottom_left_x=self.viewport_left+662 + 140,
                     bottom_left_y=self.viewport_bottom+340,
                     width=128,
                     height=128,
                     color=[255, 255, 255, 100]
                 )
+
+            # スキル枠Bのスキルアイコン
+            arcade.draw_texture_rectangle(
+                self.viewport_left+662+140+64,
+                self.viewport_bottom+340+64,
+                64, 64,
+                texture=arcade.load_texture(r"image\branch_baton_icon.png")
+            )
+
 
             # スキル枠Aのタイトル
             arcade.draw_text(
@@ -221,26 +238,30 @@ class LevelupUI:
 
             # スキル枠Bのタイトル
             arcade.draw_text(
-                text=f"Branch Club",
+                text=f"Branch Baton",
                 start_x=self.viewport_left+660 + 142,
                 start_y=self.text_position_y-100,
                 # font_name="consola.ttf",
-                color=arcade.color.BANGLADESH_GREEN,
+                color=arcade.color.BABY_BLUE_EYES,
                 font_size=15
             )
 
-            # スキル選択状態ならskill_popフラグをTrueにする
+            # スキル選択でui_stateをablityにして決定の確認に進む
             if self.key == arcade.key.A and self.ui_state == Select.open_skill:
+                self.skill_result = []
+                self.skill_result.append(LeafBlade())
+
                 # TODO このあたりにキューで選択肢をポップさせる仕様にしたい
-                leaf_blade = LeafBlade()
 
                 # playerのskill listに追加し、装備更新をチェックさせる
-                self.engine.player.fighter.skill_list.append(leaf_blade)
-                self.engine.player.equipment.equip_update_check = True
                 self.ui_state = Select.ability
 
-            elif self.key == arcade.key.B:
-                self.skill_pop = True
+            elif self.key == arcade.key.B and self.ui_state == Select.open_skill:
+                self.skill_result = []
+                self.skill_result.append(BranchBaton())
+
+                # self.engine.player.equipment.equip_update_check = True
+                self.ui_state = Select.ability
 
         else:
             # スキル取得レベルで無ければスキル窓表示をスキップ

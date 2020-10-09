@@ -93,6 +93,7 @@ long_sword = [long_sword_right, long_sword_left]
 
 cirsium = arcade.load_texture_pair(r"image\Cirsium.png")
 leaf_blade = arcade.load_texture_pair(r"image\LeafBlade.png")
+branch_baton = arcade.load_texture_pair(r"image\BranchBaton.png")
 
 
 ###items###
@@ -174,6 +175,7 @@ IMAGE_ID = {"player": player,
             "boomerang": [ammo_tile[22]],
             "cirsium": cirsium,
             "leaf_blade": leaf_blade,
+            "branch_baton": branch_baton,
 
             "healing_potion": healing_potion_tile,
             "confusion_scroll": [scroll_tile[15]],
