@@ -211,15 +211,7 @@ class LevelupUI:
                 64, 64,
                 texture=arcade.load_texture("image\leaf_blade_icon.png")
             )
-            # 選択状態で窓を変化させる(上にポップさせるとか別のやり方もいいかも)
-            # if self.key == arcade.key.A and self.skill_result:
-            #     arcade.draw_xywh_rectangle_filled(
-            #         bottom_left_x=self.viewport_left+662,
-            #         bottom_left_y=self.viewport_bottom+340,
-            #         width=128,
-            #         height=128,
-            #         color=[255, 255, 255, 100]
-            #     )
+
 
             # スキル枠B
             arcade.draw_xywh_rectangle_filled(
@@ -229,14 +221,7 @@ class LevelupUI:
                 height=128,
                 color=[255, 25, 25, 190]
             )
-            # if self.key == arcade.key.B and self.skill_result:
-            #     arcade.draw_xywh_rectangle_filled(
-            #         bottom_left_x=self.viewport_left+662 + 140,
-            #         bottom_left_y=self.viewport_bottom+340,
-            #         width=128,
-            #         height=128,
-            #         color=[255, 255, 255, 100]
-            #     )
+
 
             # スキル枠Bのスキルアイコン
             arcade.draw_texture_rectangle(
@@ -245,6 +230,12 @@ class LevelupUI:
                 64, 64,
                 texture=arcade.load_texture(r"image\branch_baton_icon.png")
             )
+
+            arcade.draw_texture_rectangle(
+                self.viewport_left+662+140+64,
+                self.viewport_bottom+340+64,
+                132, 132,
+                texture=arcade.load
 
 
             # スキル枠Aのタイトル
