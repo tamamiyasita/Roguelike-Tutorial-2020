@@ -127,25 +127,6 @@ class LevelupUI:
             font_size=text_size-7
         )
 
-        # if self.select == "A":
-        #     arcade.draw_xywh_rectangle_filled(
-        #         bottom_left_x=self.viewport_left+662,
-        #         bottom_left_y=self.viewport_bottom+340,
-        #         width=128,
-        #         height=128,
-        #         color=[255, 255, 255, 100]
-        #     )
-
-
-
-        # if self.select == "B":
-        #     arcade.draw_xywh_rectangle_filled(
-        #         bottom_left_x=self.viewport_left+662 + 140,
-        #         bottom_left_y=self.viewport_bottom+340,
-        #         width=128,
-        #         height=128,
-        #         color=[255, 255, 255, 100]
-        #     )
         # ability pointがゼロ、かつstateがabilityで選択文が出る
         if self.engine.player.fighter.ability_points < 1 and self.ui_state == Select.ability:
             self.up_str = ""
@@ -231,11 +212,6 @@ class LevelupUI:
                 texture=arcade.load_texture(r"image\branch_baton_icon.png")
             )
 
-            arcade.draw_texture_rectangle(
-                self.viewport_left+662+140+64,
-                self.viewport_bottom+340+64,
-                132, 132,
-                texture=arcade.load
 
 
             # スキル枠Aのタイトル
