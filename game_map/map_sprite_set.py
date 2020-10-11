@@ -134,6 +134,7 @@ class ActorPlacement:
         return tiled_npc_sprite
 
     def map_point_set(self):
+        point = None
         map_point_sprites = arcade.SpriteList(
             use_spatial_hash=True, spatial_hash_cell_size=32)
         for x in range(self.width):
@@ -144,17 +145,18 @@ class ActorPlacement:
                     point = Actor(name="floor_point", scale=2, x=x, y=y,
                                   color=COLORS["black"], visible_color=COLORS["light_ground"], not_visible_color=COLORS["light_ground"])
 
-                    map_point_sprites.append(point)
+                    # map_point_sprites.append(point)
 
                 elif self.tiles[x][y] == TILE.WALL:
                     point = Actor(name="wall_point", scale=2, x=x, y=y,
                                   color=COLORS["white"], visible_color=COLORS["light_ground"], not_visible_color=COLORS["light_ground"])
 
-                    map_point_sprites.append(point)
+                    # map_point_sprites.append(point)
 
                 elif self.tiles[x][y] == TILE.STAIRS_DOWN:
                     point = Actor(name="stairs_down_point", scale=2, x=x, y=y,
                                   color=COLORS["black"], visible_color=COLORS["light_ground"], not_visible_color=COLORS["light_ground"])
+                if point:
                     map_point_sprites.append(point)
 
         return map_point_sprites

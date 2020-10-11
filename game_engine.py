@@ -70,6 +70,7 @@ class GameEngine:
         # self.player.equipment.item_slot["head"] = self.f
 
     def setup_level(self, level_number):
+        """開始レベル(階層)によってmapを変更する"""
 
         self.map_width, self.map_height = MAP_WIDTH, MAP_HEIGHT
         self.game_level = GameLevel()
@@ -177,7 +178,6 @@ class GameEngine:
 
         self.cirsium = Cirsium(self.player.x + 1, self.player.y)
         self.game_level.item_sprites.append(self.cirsium)
-
 
         self.fov_recompute = True
 

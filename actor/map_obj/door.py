@@ -16,6 +16,7 @@ class Door(Actor):
             not_visible_color=COLORS.get("dark_wall"),
 
             blocks=True,
+            left_face=False,
             block_sight=True,
 
         )
@@ -30,5 +31,3 @@ class Door(Actor):
             self.texture = self.textures[0]
             self.blocks = True
             self.block_sight = True
-
-

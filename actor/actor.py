@@ -24,7 +24,7 @@ class Actor(arcade.Sprite):
                  inventory=None, equipment=None,
                  visible_color=COLORS["white"], not_visible_color=COLORS["black"],
                  explanatory_text="", tag={Tag.free},
-                 state=state.TURN_END, left_face=False):
+                 state=state.TURN_END, left_face=None):
         super().__init__(scale=scale)
         if name:
             self.name = name
@@ -41,7 +41,6 @@ class Actor(arcade.Sprite):
         self.visible_color = visible_color
         self.not_visible_color = not_visible_color
         self.is_visible = False
-        self.is_dead = False
         self.state = state
         self.explanatory_text = explanatory_text
         self.tag = tag
@@ -71,6 +70,8 @@ class Actor(arcade.Sprite):
         self.fighter = fighter
         if self.fighter:
             self.fighter.owner = self
+            self.is_dead = False
+            self.left_face = False
 
     def get_dict(self):
 

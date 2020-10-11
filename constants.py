@@ -126,3 +126,26 @@ class NPC_state(Enum):
     REQUEST = auto()
     WAITING = auto()
     REWARD = auto()
+    NORMAL = auto()
+
+
+def result_add(value=0):
+    """関数やメソッドの出力に任意の値やリストの合計を加えるデコレータ
+    プロパティに使用する場合の例
+        @property
+        @result_add([i for i in range(10)])
+        def x(self):
+            x = 5
+            return x
+    """
+    def _result_add(func):
+        def wrapper(*args, **kwargs):
+            result = func(*args, **kwargs)
+            if hasattr(value, "__iter__"):
+                result += sum(value)
+                return result
+            else:
+                result += value
+                return result
+        return wrapper
+    return _result_add

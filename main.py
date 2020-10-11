@@ -281,7 +281,7 @@ class MG(arcade.Window):
         game_dict = self.engine.get_dict()
 
         with open("game_save.json", "w") as write_file:
-            json.dump(game_dict, write_file, indent=4, sort_keys=True)
+            json.dump(game_dict, write_file)  # indent=4, sort_keys=True
         print("**save**")
         self.engine.game_state = GAME_STATE.NORMAL
 
