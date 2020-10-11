@@ -18,7 +18,7 @@ from ui.character_screen_ui import CharacterScreen
 from ui.message_window import MessageWindow
 from ui.level_up_ui import LevelupUI
 
-from util import pixel_to_grid
+from util import pixel_to_grid, stop_watch
 from viewport import viewport
 
 # log = logging.getLogger("__main__")
@@ -248,9 +248,9 @@ class MG(arcade.Window):
 
     def on_key_release(self, key, modifiers):
         self.player_direction = None
-        print(self.engine.player.fighter.skill_list)
-        print(self.engine.player.fighter.skill_list[0].level,
-              self.engine.player.fighter.skill_list[0].name)
+        # print(self.engine.player.fighter.skill_list)
+        # print(self.engine.player.fighter.skill_list[0].level,
+        #       self.engine.player.fighter.skill_list[0].name)
 
     def on_mouse_motion(self, x, y, dx, dy):
         """マウスオーバー処理"""
@@ -275,6 +275,7 @@ class MG(arcade.Window):
             self.character_screen.buttons_click(
                 x+self.viewport_left, y+self.viewport_bottom)
 
+    @stop_watch
     def save(self):
         self.engine.game_state = GAME_STATE.DELAY_WINDOW
         print("save")
@@ -285,6 +286,7 @@ class MG(arcade.Window):
         print("**save**")
         self.engine.game_state = GAME_STATE.NORMAL
 
+    @stop_watch
     def load(self):
         print("load")
         self.engine.game_state = GAME_STATE.DELAY_WINDOW

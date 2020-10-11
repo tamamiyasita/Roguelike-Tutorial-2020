@@ -2,6 +2,8 @@ import arcade
 from random import randint
 from constants import *
 from data import *
+from functools import wraps
+import time
 
 
 def grid_to_pixel(x, y):
@@ -62,6 +64,39 @@ def get_door(x, y, sprite_list):
         return door_sprite
     else:
         return None
+
+
+def result_add(value=0):
+    """関数やメソッドの出力に任意の値やリストの合計を加えるデコレータ
+    プロパティに使用する場合の例
+        @property
+        @result_add([i for i in range(10)])
+        def x(self):
+            x = 5
+            return x
+    """
+    def _result_add(func):
+        def wrapper(*args, **kwargs):
+            result = func(*args, **kwargs)
+            if hasattr(value, "__iter__"):
+                result += sum(value)
+                return result
+            else:
+                result += value
+                return result
+        return wrapper
+    return _result_add
+
+
+def stop_watch(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        start = time.time()
+        result = func(*args, **kwargs)
+        elapsed_time = time.time() - start
+        print(f"{func.__name__}は{elapsed_time}秒かかりました")
+        return result
+    return wrapper
 
 
 def get_tile_set(img, tile_size):

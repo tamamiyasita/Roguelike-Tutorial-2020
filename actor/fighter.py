@@ -1,5 +1,5 @@
 from constants import *
-from util import dice
+from util import dice, stop_watch
 import random
 
 
@@ -174,6 +174,7 @@ class Fighter:
 
         return results
 
+    @stop_watch
     def attack(self, target, ranged=None):
         results = []
 

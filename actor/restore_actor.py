@@ -16,7 +16,10 @@ from actor.map_obj.floor import Floor
 from actor.map_obj.stairs import Stairs
 from actor.map_obj.door import Door
 
+from util import stop_watch
 
+
+# @stop_watch
 def restore_actor(actor_dict):
     actor_name = list(actor_dict.keys())[0]
 

@@ -3,12 +3,14 @@ import arcade
 from random import randint, choice
 from astar import astar
 from constants import *
+from util import stop_watch
+
 
 class Wait:
     def __init__(self):
         self.owner = None
         self.visible_check = None
-    
+
     def take_turn(self, engine):
         results = []
         # self.owner.move((0, 0), engine=engine)
@@ -18,26 +20,27 @@ class Wait:
 
         return results
 
+
 class RandomMove:
     def __init__(self):
         self.owner = None
         self.visible_check = None
-    
+
     def take_turn(self, engine):
         results = []
-        self.owner.move((randint(-1, 1), randint(-1, 1)),engine=engine)
+        self.owner.move((randint(-1, 1), randint(-1, 1)), engine=engine)
         message = choice(self.owner.message)
         results.append(message)
 
         return results
 
 
-
+@stop_watch
 class Basicmonster:
     def __init__(self, target_point=None, visible_check=False):
         self.owner = None
-        self.target_point = target_point # targetの位置を格納する
-        self.visible_check = visible_check # 視野に入った場合チェックされ,Trueなら移動する
+        self.target_point = target_point  # targetの位置を格納する
+        self.visible_check = visible_check  # 視野に入った場合チェックされ,Trueなら移動する
 
     def take_turn(self, target, engine):
         results = []
@@ -46,7 +49,6 @@ class Basicmonster:
         # sprite_listsのactor_spritesとmap_spritesを変数に格納
         actor_sprites = engine.cur_level.actor_sprites
         wall_sprites = engine.cur_level.wall_sprites
-
 
         # 視野のチェック
         if monster.is_visible:
@@ -58,7 +60,7 @@ class Basicmonster:
 
         # ターゲット座標と自分の座標が同じなら視野とターゲットの変数をクリア
         if (monster.x, monster.y) == self.target_point:
-            self.target_point = None 
+            self.target_point = None
             self.visible_check = False
 
         # ターゲットに隣接している場合パスは計算しない
@@ -121,13 +123,13 @@ class ConfusedMonster:
         self.pre_ai = pre_ai
         self.visible_check = None
         self.confused_turn = confused_turn
-    
+
     def get_dict(self):
         result = {}
         result["pre_ai"] = self.pre_ai.__class__.__name__
         result["confused_turn"] = self.confused_turn
         return result
-    
+
     def restore_from_dict(self, result):
         if result["pre_ai"] == "Basicmonster":
             self.pre_ai = Basicmonster()
@@ -149,8 +151,9 @@ class ConfusedMonster:
         else:
             # self.ownerにselfを渡し忘れるとロードした時元のAIにselfが渡されず無限ループするので注意
             monster.ai = self.pre_ai
-            monster.ai.owner = monster # self.owner.ai.owner = self.ownerというややこしい表現になる
-            results.append({"message": f"The {monster.name} is no longer confused"})
-            results.extend([{"pass":monster}])
+            monster.ai.owner = monster  # self.owner.ai.owner = self.ownerというややこしい表現になる
+            results.append(
+                {"message": f"The {monster.name} is no longer confused"})
+            results.extend([{"pass": monster}])
 
         return results
