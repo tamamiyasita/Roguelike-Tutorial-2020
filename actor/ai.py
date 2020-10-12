@@ -35,13 +35,13 @@ class RandomMove:
         return results
 
 
-@stop_watch
 class Basicmonster:
     def __init__(self, target_point=None, visible_check=False):
         self.owner = None
         self.target_point = target_point  # targetの位置を格納する
         self.visible_check = visible_check  # 視野に入った場合チェックされ,Trueなら移動する
 
+    @stop_watch
     def take_turn(self, target, engine):
         results = []
         monster = self.owner

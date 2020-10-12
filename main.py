@@ -47,6 +47,7 @@ class MG(arcade.Window):
         self.viewport_left = 0
         self.viewport_bottom = 0
         self.choice = 0
+        self.game_dict = None
 
     def setup(self):
         """変数に値を設定する、ミニマップ作成の情報もここで渡す"""
@@ -209,6 +210,14 @@ class MG(arcade.Window):
 
     def on_key_press(self, key, modifiers):
         if key == arcade.key.BACKSPACE:
+            self.engine.game_state = GAME_STATE.DELAY_WINDOW
+            print("save")
+            if not self.game_dict:
+                self.game_dict = self.engine.get_dict()
+
+            with open("game_save.json", "w") as write_file:
+                json.dump(self.game_dict, write_file, indent=4, sort_keys=True, check_circular=False)  # indent=4, sort_keys=True
+                
             arcade.close_window()
 
         # playerの移動
@@ -277,28 +286,36 @@ class MG(arcade.Window):
 
     @stop_watch
     def save(self):
-        self.engine.game_state = GAME_STATE.DELAY_WINDOW
-        print("save")
-        game_dict = self.engine.get_dict()
+        # self.engine.game_state = GAME_STATE.DELAY_WINDOW
+        # print("save")
+        # game_dict = self.engine.get_dict()
 
-        with open("game_save.json", "w") as write_file:
-            json.dump(game_dict, write_file)  # indent=4, sort_keys=True
-        print("**save**")
+        # with open("game_save.json", "w") as write_file:
+        #     json.dump(game_dict, write_file, indent=4, sort_keys=True, check_circular=False)  # indent=4, sort_keys=True
+
+
+        self.engine.game_state = GAME_STATE.DELAY_WINDOW
+        self.game_dict = self.engine.get_dict()
         self.engine.game_state = GAME_STATE.NORMAL
+        print("**save**")
 
     @stop_watch
     def load(self):
-        print("load")
-        self.engine.game_state = GAME_STATE.DELAY_WINDOW
-        with open("game_save.json", "r") as read_file:
-            data = json.load(read_file)
+        data = None
 
-        print("**load**")
-        self.engine.restore_from_dict(data)
-        self.engine.player.state = state.READY
-        viewport(self.engine.player.center_x, self.engine.player.center_y)
-        self.engine.game_state = GAME_STATE.NORMAL
-        self.engine.fov_recompute = True
+        if self.game_dict:
+            data = self.game_dict
+        else:
+            with open("game_save.json", "r") as read_file:
+                data = json.load(read_file)
+        if data:
+            self.engine.game_state = GAME_STATE.DELAY_WINDOW
+            print("**load**")
+            self.engine.restore_from_dict(data)
+            self.engine.player.state = state.READY
+            viewport(self.engine.player.center_x, self.engine.player.center_y)
+            self.engine.game_state = GAME_STATE.NORMAL
+            self.engine.fov_recompute = True
 
 
 def main():

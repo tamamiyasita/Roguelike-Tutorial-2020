@@ -7,7 +7,7 @@ import math
 
 from constants import *
 from data import *
-from util import pixel_to_grid, grid_to_pixel, get_blocking_entity, get_door
+from util import pixel_to_grid, grid_to_pixel, get_blocking_entity, get_door, stop_watch
 from particle import AttackParticle, PARTICLE_COUNT
 
 from functools import lru_cache
@@ -255,7 +255,7 @@ class Actor(arcade.Sprite):
                 self.state = state.ON_MOVE
                 self.change_y = self.dy * (MOVE_SPEED)
                 self.change_x = self.dx * (MOVE_SPEED)
-
+        @stop_watch
         def monster_move(target):
             ai_move_speed = MOVE_SPEED*2
 
@@ -305,7 +305,7 @@ class Actor(arcade.Sprite):
 
         if self.state == state.ATTACK:
             self.attack()
-
+    @stop_watch
     def attack(self):
         step = GRID_SIZE // 2.5
 

@@ -14,7 +14,7 @@ from actor.item_point_check import ItemPoint
 from actor.characters.PC import Player
 from actor.map_obj.stairs import Stairs
 from actor.restore_actor import restore_actor
-from util import get_door, get_blocking_entity
+from util import get_door, get_blocking_entity, stop_watch
 from turn_loop import TurnLoop
 from fire import Fire
 from actor.items.boomerang import Boomerang
@@ -195,7 +195,7 @@ class GameEngine:
     def get_actor_dict(self, actor):
         name = actor.__class__.__name__
         return {name: actor.get_dict()}
-
+    @stop_watch
     def get_dict(self):
         """ オブジェクトをjsonにダンプする為の辞書を作る関数 """
 
@@ -204,41 +204,20 @@ class GameEngine:
         levels_dict = []
         for level in self.stories:
 
-            actor_dict = []
-            for sprite in level.actor_sprites:
-                actor_dict.append(self.get_actor_dict(sprite))
+            # actor_dict = []
+            # for sprite in level.actor_sprites:
+            #     actor_dict.append(self.get_actor_dict(sprite))
 
-            floor_dict = []
-            for sprite in level.floor_sprites:
-                floor_dict.append(self.get_actor_dict(sprite))
+            actor_dict = [self.get_actor_dict(s) for s in level.actor_sprites]
+            floor_dict = [self.get_actor_dict(s) for s in level.floor_sprites]
+            wall_dict = [self.get_actor_dict(s) for s in level.wall_sprites]
+            map_point_dict = [self.get_actor_dict(s) for s in level.map_point_sprites]
+            dungeon_obj_dict = [self.get_actor_dict(s) for s in level.map_obj_sprites]
+            item_dict = [self.get_actor_dict(s) for s in level.item_sprites]
+            item_point_dict = [self.get_actor_dict(s) for s in level.item_point_sprites]
+            effect_dict = [self.get_actor_dict(s) for s in level.effect_sprites]
+            equip_dict = [self.get_actor_dict(s) for s in level.equip_sprites]
 
-            wall_dict = []
-            for sprite in level.wall_sprites:
-                wall_dict.append(self.get_actor_dict(sprite))
-
-            map_point_dict = []
-            for sprite in level.map_point_sprites:
-                map_point_dict.append(self.get_actor_dict(sprite))
-
-            dungeon_obj_dict = []
-            for sprite in level.map_obj_sprites:
-                dungeon_obj_dict.append(self.get_actor_dict(sprite))
-
-            item_dict = []
-            for sprite in level.item_sprites:
-                item_dict.append(self.get_actor_dict(sprite))
-
-            item_point_dict = []
-            for sprite in level.item_point_sprites:
-                item_point_dict.append(self.get_actor_dict(sprite))
-
-            effect_dict = []
-            for sprite in level.effect_sprites:
-                effect_dict.append(self.get_actor_dict(sprite))
-
-            equip_dict = []
-            for sprite in level.equip_sprites:
-                equip_dict.append(self.get_actor_dict(sprite))
 
             level_dict = {
                 "actor": actor_dict,
