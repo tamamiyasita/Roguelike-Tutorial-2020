@@ -7,7 +7,6 @@ class Cirsium(Actor):
     def __init__(self, x=0, y=0):
         super().__init__(
             name="cirsium",
-            scale=1.5,
             x=x,
             y=y,
         )
