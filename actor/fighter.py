@@ -4,16 +4,16 @@ import random
 
 
 class Fighter:
-    def __init__(self, hp=0, mp=0, defense=0, str=0, dex=0, int=0, unarmed_attack=(1, 1, 1), attack_speed=DEFAULT_ATTACK_SPEED,
+    def __init__(self, hp=0, mp=0, defense=0, STR=0, DEX=0, INT=0, unarmed_attack=(1, 1, 1), attack_speed=DEFAULT_ATTACK_SPEED,
                  evasion=0, hit_rate=100, xp_reward=0, current_xp=0, level=1, ability_points=0):
         self.hp = hp
         self.base_max_hp = self.hp
         self.mp = mp
         self.base_max_mp = self.mp
 
-        self.base_strength = str
-        self.base_dexterity = dex
-        self.base_intelligence = int
+        self.base_strength = STR
+        self.base_dexterity = DEX
+        self.base_intelligence = INT
 
         self.unarmed_attack = unarmed_attack
         self.base_defense = defense
@@ -32,18 +32,60 @@ class Fighter:
 
     def get_dict(self):
         result = {}
-        print(type(self.owner), self.owner, "owner")
+        # print(type(self.owner), self.owner, "owner")
 
-        for key, val in self.__dict__.items():
-            if "owner" in str(key):
-                continue
-            result[str(key)] = val
+        # for key, val in self.__dict__.items():
+        #     if "owner" in str(key):
+        #         continue
+        #     result[str(key)] = val
+        result["hp"] = self.hp
+        result["max_hp"] = self.base_max_hp
+        result["mp"] = self.mp
+        result["max_mp"] = self.base_max_mp
+
+        result["strength"] = self.base_strength
+        result["dexterity"] = self.base_dexterity
+        result["intelligence"] = self.base_intelligence
+
+        result["unarmed_attack"] = self.unarmed_attack
+        result["defense"] = self.base_defense
+        result["evasion"] = self.base_evasion
+        result["hit_rate"] = self.hit_rate
+        result["attack_speed"] = self.attack_speed
+
+        result["xp_reward"] = self.xp_reward
+        result["current_xp"] = self.current_xp
+        result["level"] = self.level
+        result["ability_points"] = self.ability_points
+        # result["_skill_list"] = self._skill_list
 
         return result
 
     def restore_from_dict(self, result):
-        for key, val in result.items():
-            exec(f"self.{key} = {val}")
+        # for key, val in result.items():
+        #     print(f"restore {key} {val}")
+        #     exec(f"self.{key} = {val}")
+
+        self.hp = result["hp"]
+        self.base_max_hp = result["max_hp"]
+        self.mp = result["mp"]
+        self.base_max_mp = result["max_mp"]
+
+        self.base_strength = result["strength"]
+        self.base_dexterity = result["dexterity"]
+        self.base_intelligence = result["intelligence"]
+
+        self.unarmed_attack = result["unarmed_attack"]
+        self.base_defense = result["defense"]
+        self.base_evasion = result["evasion"]
+        self.hit_rate = result["hit_rate"]
+        self.attack_speed = result["attack_speed"]
+
+        self.xp_reward = result["xp_reward"]
+        self.current_xp = result["current_xp"]
+        self.level = result["level"]
+        self.ability_points = result["ability_points"]
+        # self._skill_list = result["_skill_list"]
 
     @property
     def skill_list(self):
@@ -76,29 +118,29 @@ class Fighter:
         return self.base_max_mp + bonus
 
     @property
-    def str(self):
+    def STR(self):
         bonus = 0
 
         if self.owner and self.owner.equipment:
-            bonus = self.owner.equipment.states_bonus["str"]
+            bonus = self.owner.equipment.states_bonus["STR"]
 
         return self.base_strength + bonus
 
     @property
-    def dex(self):
+    def DEX(self):
         bonus = 0
 
         if self.owner and self.owner.equipment:
-            bonus = self.owner.equipment.states_bonus["dex"]
+            bonus = self.owner.equipment.states_bonus["DEX"]
 
         return self.base_dexterity + bonus
 
     @property
-    def int(self):
+    def INT(self):
         bonus = 0
 
         if self.owner and self.owner.equipment:
-            bonus = self.owner.equipment.states_bonus["int"]
+            bonus = self.owner.equipment.states_bonus["INT"]
 
         return self.base_intelligence + bonus
 
@@ -118,7 +160,7 @@ class Fighter:
         if self.owner and self.owner.equipment:
             bonus = self.owner.equipment.states_bonus["evasion"]
 
-        return self.base_evasion + bonus + (self.dex / 2)
+        return self.base_evasion + bonus + (self.DEX / 2)
 
     @property
     def melee_attack_damage(self):
@@ -127,7 +169,7 @@ class Fighter:
         else:
             D, min_d, max_d = self.owner.fighter.unarmed_attack
 
-        melee_attack_damage = dice(D, min_d+(self.dex//3), max_d+self.str)
+        melee_attack_damage = dice(D, min_d+(self.DEX//3), max_d+self.STR)
 
         return melee_attack_damage
 
@@ -136,7 +178,7 @@ class Fighter:
         if self.owner.equipment and self.owner.equipment.ranged_weapon_damage:
             D, min_d, max_d = self.owner.equipment.ranged_weapon_damage
 
-            ranged_attack_damage = dice(D, min_d+(self.str//3), max_d+self.dex)
+            ranged_attack_damage = dice(D, min_d+(self.STR//3), max_d+self.DEX)
 
             return ranged_attack_damage
 
@@ -156,7 +198,7 @@ class Fighter:
                 hit = self.owner.equipment.ranged_hit_rate
         if hit:
 
-            hit_chance = ((hit+self.dex) / 100) * \
+            hit_chance = ((hit+self.DEX) / 100) * \
                 (1 - (target.fighter.evasion / 100)) * 100
 
             return hit_chance

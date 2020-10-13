@@ -34,15 +34,15 @@ class LevelupUI:
             if key == arcade.key.S:
                 self.engine.player.fighter.base_strength += 1
                 self.engine.player.fighter.ability_points -= 1
-                self.tmp_states = "str"
+                self.tmp_states = "STR"
             elif key == arcade.key.D:
                 self.engine.player.fighter.base_dexterity += 1
                 self.engine.player.fighter.ability_points -= 1
-                self.tmp_states = "dex"
+                self.tmp_states = "DEX"
             elif key == arcade.key.I:
                 self.engine.player.fighter.base_intelligence += 1
                 self.engine.player.fighter.ability_points -= 1
-                self.tmp_states = "int"
+                self.tmp_states = "INT"
             self.ui_state = Select.open_skill
 
     def window_pop(self, viewports):
@@ -153,11 +153,11 @@ class LevelupUI:
             elif self.key == arcade.key.N:
                 self.select = None
                 self.engine.player.fighter.ability_points += 1
-                if self.tmp_states == "str":
+                if self.tmp_states == "STR":
                     self.engine.player.fighter.base_strength -= 1
-                elif self.tmp_states == "dex":
+                elif self.tmp_states == "DEX":
                     self.engine.player.fighter.base_dexterity -= 1
-                elif self.tmp_states == "int":
+                elif self.tmp_states == "INT":
                     self.engine.player.fighter.base_intelligence -= 1
 
         else:

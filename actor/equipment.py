@@ -27,18 +27,30 @@ class Equipment:
         for item_key, item in self.item_slot.items():
             if item is None:
                 result[item_key] = None
+            # elif Tag.skill in item.tag:
+            #     result[item_key] = None
             else:
                 result[item_key] = item.name
 
         return result
 
     def restore_from_dict(self, result):
+        for k, v in self.item_slot.items():
+            if v:
+                del v
+                v = None
+            
         self.item_slot = result
         for item in self.owner.inventory.item_bag:
             if item and item.name in self.item_slot.values():
                 self.item_slot[item.slot] = item
                 item.master = self.owner
-                self.equip_update_check = True
+                # self.equip_update_check = True
+        # for item in self.owner.fighter.skill_list:
+        #     if item and Tag.equip in item.tag:
+        #         item.master = self.owner
+        self.equip_update_check = True
+                
 
     @property
     def skill_level_sum(self):
@@ -58,7 +70,7 @@ class Equipment:
 
             # 遠隔武器以外がスロットに入っていたら装備スプライトをスプライトリストに入れて表示する
             for item in self.item_slot.values():
-                if item and item not in sprites and not item.slot == "ranged_weapon":
+                if item and not isinstance(item, str)  and item not in sprites and not item.slot == "ranged_weapon":
                     sprites.append(item)
 
             # 装備解除しスプライトがスロットから無くなればスプライトリストからも削除
@@ -74,6 +86,7 @@ class Equipment:
                 skill_list = self.owner.fighter.skill_list
                 self.skill_equip_on(skill_list)
                 self.skill_equip_off(skill_list)
+
 
             print(self.item_slot)
             print(self.owner.fighter.skill_list)
@@ -98,10 +111,10 @@ class Equipment:
     def states_bonus(self):
         """item_slotをループしてstates bonusを合計し返す"""
 
-        bonus = {"max_hp": 0, "max_mp": 0, "str": 0,
-                 "dex": 0, "int": 0, "defense": 0, "evasion": 0}
+        bonus = {"max_hp": 0, "max_mp": 0, "STR": 0,
+                 "DEX": 0, "INT": 0, "defense": 0, "evasion": 0}
         for parts in self.item_slot.values():
-            if parts and parts.states_bonus:
+            if parts and not isinstance(parts, str) and parts.states_bonus:
                 bonus = Counter(bonus) + Counter(parts.states_bonus)
 
         return bonus

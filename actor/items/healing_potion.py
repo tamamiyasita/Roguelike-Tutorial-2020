@@ -54,7 +54,7 @@ class HealingPotion(Actor):
             not_visible_color=COLORS["black"],
 
         )
-        self.tag = {Tag.item, Tag.used}
+        self.tag = [Tag.item, Tag.used]
 
         self.level = 1
         self.hp_return = random.randint(3, 9)

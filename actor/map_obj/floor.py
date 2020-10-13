@@ -19,7 +19,7 @@ class Floor(Actor):
             not_visible_color=COLORS.get("dark_ground")
 
         )
-        self.tag = {Tag.map_obj, Tag.floor}
+        self.tag = [Tag.map_obj, Tag.floor]
 
     def update_animation(self, delta_time: float):
         pass

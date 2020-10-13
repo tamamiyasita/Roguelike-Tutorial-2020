@@ -14,13 +14,13 @@ class BranchBaton(Actor):
         )
 
         self.slot = "main_hand"
-        self.states_bonus = {"str": 1}
+        self.states_bonus = {"STR": 1}
         self.attack_damage = (1, 2, 7)
         self.hit_rate = 92
 
         self.level = 0
 
-        self.tag = {Tag.item, Tag.equip, Tag.skill}
+        self.tag = [Tag.item, Tag.equip, Tag.skill]
 
         self.explanatory_text = f""
 

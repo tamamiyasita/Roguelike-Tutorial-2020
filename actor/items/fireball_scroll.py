@@ -35,7 +35,7 @@ class FireballScroll(Actor):
             not_visible_color=COLORS["black"],
 
         )
-        self.tag = {Tag.item, Tag.used}
+        self.tag = [Tag.item, Tag.used]
 
         self.level = 2
 

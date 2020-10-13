@@ -40,7 +40,7 @@ class CharacterScreen:
         """ステータス表示"""
         text_position_y -= text_size * spacing
         text_size = 20
-        states_text = f"STR: {self.player.fighter.base_strength} + {self.player.equipment.states_bonus['str']}"
+        states_text = f"STR: {self.player.fighter.base_strength} + {self.player.equipment.states_bonus['']}"
         arcade.draw_text(
             text=states_text,
             start_x=text_position_x,
@@ -50,7 +50,7 @@ class CharacterScreen:
         )
 
         text_position_y -= text_size * spacing  # TODO ゼロならボーナス非表示にしよう
-        states_text = f"DEX: {self.player.fighter.base_dexterity} + {self.player.equipment.states_bonus['dex']}"
+        states_text = f"DEX: {self.player.fighter.base_dexterity} + {self.player.equipment.states_bonus['DEX']}"
         arcade.draw_text(
             text=states_text,
             start_x=text_position_x,
@@ -60,7 +60,7 @@ class CharacterScreen:
         )
 
         text_position_y -= text_size * spacing
-        states_text = f"INT: {self.player.fighter.base_intelligence} + {self.player.equipment.states_bonus['int']}"
+        states_text = f"INT: {self.player.fighter.base_intelligence} + {self.player.equipment.states_bonus['INT']}"
         arcade.draw_text(
             text=states_text,
             start_x=text_position_x,

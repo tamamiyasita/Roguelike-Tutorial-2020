@@ -12,13 +12,13 @@ class LongSword(Actor):
         )
 
         self.slot = "main_hand"
-        self.states_bonus = {"str": 1, "defense": 1}
+        self.states_bonus = {"STR": 1, "defense": 1}
         self.attack_damage = (1, 2, 6)
         self.hit_rate = 93
 
         self.level = 2
 
-        self.tag = {Tag.item, Tag.equip}
+        self.tag = [Tag.item, Tag.equip]
 
         self.explanatory_text = f"common long sword\nthat deals {self.attack_damage[0]}D({self.attack_damage[1]} - {self.attack_damage[2]})damage"
 

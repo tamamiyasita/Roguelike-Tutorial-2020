@@ -7,7 +7,7 @@ from constants import *
 
 class Crab(Actor):
     def __init__(self, x=0, y=0):
-        fighter_component = Fighter(hp=10, str=4, dex=2,
+        fighter_component = Fighter(hp=10, STR=4, DEX=2,
                                     unarmed_attack=(2, 1, 3),
                                     hit_rate=95,
                                     defense=2,
@@ -27,4 +27,4 @@ class Crab(Actor):
             ai=ai_component,
             blocks=True
         )
-        self.tag = {Tag.npc, Tag.enemy}
+        self.tag = [Tag.npc, Tag.enemy]

@@ -10,17 +10,17 @@ class LeafBlade(Actor):
             name="leaf_blade",
             x=x,
             y=y,
-            color=arcade.color.WHITE
+            color=COLORS["white"]
         )
 
         self.slot = "main_hand"
-        self.states_bonus = {"dex": 1}
+        self.states_bonus = {"DEX": 1}
         self.attack_damage = (1, 2, 6)
         self.hit_rate = 95
 
         self.level = 0
 
-        self.tag = {Tag.item, Tag.equip, Tag.skill}
+        self.tag = [Tag.item, Tag.equip, Tag.skill]
 
         self.explanatory_text = f""
 

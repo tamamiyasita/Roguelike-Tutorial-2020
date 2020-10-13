@@ -92,6 +92,7 @@ long_sword_right = arcade.load_texture(
 long_sword = [long_sword_right, long_sword_left]
 
 cirsium = arcade.load_texture_pair(r"image\Cirsium.png")
+ebony = arcade.load_texture_pair(r"image\ebony.png")
 leaf_blade = arcade.load_texture_pair(r"image\LeafBlade.png")
 branch_baton = arcade.load_texture_pair(r"image\BranchBaton.png")
 
@@ -174,6 +175,7 @@ IMAGE_ID = {"player": player,
             "wood_buckler": [shield_tile[5]],
             "boomerang": [ammo_tile[22]],
             "cirsium": cirsium,
+            "ebony":ebony,
             "leaf_blade": leaf_blade,
             "branch_baton": branch_baton,
 

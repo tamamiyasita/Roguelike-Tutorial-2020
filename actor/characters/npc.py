@@ -18,7 +18,7 @@ class Villager(Actor):
             ai=ai_component,
             blocks=True
         )
-        self.tag = {Tag.npc, Tag.friendly}
+        self.tag = [Tag.npc, Tag.friendly]
 
         self.message = [
             {"message": "test ABC"}, {"message": "mock_testtesttest"}
@@ -38,7 +38,7 @@ class Citizen(Actor):
             ai=ai_component,
             blocks=True
         )
-        self.tag = {Tag.npc, Tag.friendly, Tag.quest}
+        self.tag = [Tag.npc, Tag.friendly, Tag.quest]
 
         self.npc_state = NPC_state.REQUEST
 

@@ -7,7 +7,7 @@ from actor.equipment import Equipment
 
 class Player(Actor):
     def __init__(self, x=0, y=0, inventory=0):
-        fighter_component = Fighter(hp=35, str=3, dex=4, int=4,
+        fighter_component = Fighter(hp=35, STR=3, DEX=4, INT=4,
                                     unarmed_attack=(1, 1, 2),
                                     hit_rate=100,
                                     defense=3,
@@ -27,7 +27,7 @@ class Player(Actor):
             equipment=equip_component
 
         )
-        self.tag = {Tag.player}
+        self.tag = [Tag.player]
 
         self.state = state.READY
         self.delay_time = 5

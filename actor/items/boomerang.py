@@ -19,7 +19,7 @@ class Boomerang(Actor):
 
         self.level = 1
 
-        self.tag = {Tag.item, Tag.equip}
+        self.tag = [Tag.item, Tag.equip]
 
         self.explanatory_text = f"common boomerang\nthat deals {self.attack_damage[0]}D({self.attack_damage[1]} - {self.attack_damage[2]})damage"
 

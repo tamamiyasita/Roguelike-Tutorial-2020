@@ -7,7 +7,7 @@ from constants import *
 
 class Orc(Actor):
     def __init__(self, x=0, y=0):
-        fighter_component = Fighter(hp=8, str=2, dex=1,
+        fighter_component = Fighter(hp=8, STR=2, DEX=1,
                                     unarmed_attack=(1, 1, 3),
                                     hit_rate=90,
                                     defense=1,
@@ -27,12 +27,12 @@ class Orc(Actor):
             ai=ai_component,
             blocks=True
         )
-        self.tag = {Tag.npc, Tag.enemy}
+        self.tag = [Tag.npc, Tag.enemy]
 
 
 class Troll(Actor):
     def __init__(self, x=0, y=0):
-        fighter_component = Fighter(hp=35,  str=5, dex=1,
+        fighter_component = Fighter(hp=35,  STR=5, DEX=1,
                                     unarmed_attack=(1, 1, 6),
                                     hit_rate=80,
                                     defense=2,
@@ -51,4 +51,4 @@ class Troll(Actor):
             ai=ai_component,
             blocks=True
         )
-        self.tag = {Tag.npc, Tag.enemy}
+        self.tag = [Tag.npc, Tag.enemy]

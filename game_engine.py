@@ -27,6 +27,7 @@ from actor.items.fireball_scroll import FireballScroll
 from actor.items.small_shield import SmallShield
 from actor.items.healing_potion import HealingPotion
 from actor.items.cirsium import Cirsium
+from actor.items.ebony import Ebony
 
 
 class GameLevel:
@@ -178,6 +179,9 @@ class GameEngine:
 
         self.cirsium = Cirsium(self.player.x + 1, self.player.y)
         self.game_level.item_sprites.append(self.cirsium)
+
+        self.ebony = Ebony(self.player.x + 1, self.player.y)
+        self.game_level.item_sprites.append(self.ebony)
 
         self.fov_recompute = True
 
