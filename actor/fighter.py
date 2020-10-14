@@ -1,6 +1,8 @@
+import random
 from constants import *
 from util import dice, stop_watch
-import random
+from actor.items.leaf_blade import LeafBlade
+from actor.items.branch_baton import BranchBaton
 
 
 class Fighter:
@@ -57,7 +59,8 @@ class Fighter:
         result["current_xp"] = self.current_xp
         result["level"] = self.level
         result["ability_points"] = self.ability_points
-        # result["_skill_list"] = self._skill_list
+        result["_skill_list"] = [
+            skill.__class__.__name__ for skill in self._skill_list]
 
         return result
 
@@ -85,7 +88,7 @@ class Fighter:
         self.current_xp = result["current_xp"]
         self.level = result["level"]
         self.ability_points = result["ability_points"]
-        # self._skill_list = result["_skill_list"]
+        self._skill_list = [eval(skill)() for skill in result["_skill_list"]]
 
     @property
     def skill_list(self):

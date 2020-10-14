@@ -39,7 +39,7 @@ class Equipment:
             if v:
                 del v
                 v = None
-            
+
         self.item_slot = result
         for item in self.owner.inventory.item_bag:
             if item and item.name in self.item_slot.values():
@@ -50,7 +50,6 @@ class Equipment:
         #     if item and Tag.equip in item.tag:
         #         item.master = self.owner
         self.equip_update_check = True
-                
 
     @property
     def skill_level_sum(self):
@@ -58,7 +57,8 @@ class Equipment:
 
         bonus = {}
         for parts in self.item_slot.values():  # crisiumが入る
-            if parts and parts.skill_add:  # crisiumのskill_add{leaf_blade:1}が入る
+            # crisiumのskill_add{leaf_blade:1}が入る
+            if parts and not isinstance(parts, str) and parts.skill_add:
                 bonus = Counter(bonus) + Counter(parts.skill_add)
 
         print(bonus, "bonus sum")
@@ -70,7 +70,7 @@ class Equipment:
 
             # 遠隔武器以外がスロットに入っていたら装備スプライトをスプライトリストに入れて表示する
             for item in self.item_slot.values():
-                if item and not isinstance(item, str)  and item not in sprites and not item.slot == "ranged_weapon":
+                if item and not isinstance(item, str) and item not in sprites and not item.slot == "ranged_weapon":
                     sprites.append(item)
 
             # 装備解除しスプライトがスロットから無くなればスプライトリストからも削除
@@ -86,7 +86,6 @@ class Equipment:
                 skill_list = self.owner.fighter.skill_list
                 self.skill_equip_on(skill_list)
                 self.skill_equip_off(skill_list)
-
 
             print(self.item_slot)
             print(self.owner.fighter.skill_list)
