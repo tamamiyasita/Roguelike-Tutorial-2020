@@ -14,7 +14,8 @@ from keymap import keymap, grid_move_key, choices_key
 from ui.normal_ui import NormalUI
 from ui.mouse_ui import MouseUI
 from ui.select_ui import SelectUI
-from ui.character_screen_ui import CharacterScreen
+from ui.character_screen_ui import draw_character_screen
+from ui.inventory_ui import draw_inventory
 from ui.message_window import MessageWindow
 from ui.level_up_ui import LevelupUI
 
@@ -53,7 +54,6 @@ class MG(arcade.Window):
         """変数に値を設定する、ミニマップ作成の情報もここで渡す"""
         self.engine.setup()
         viewport(self.engine.player.center_x, self.engine.player.center_y)
-        self.character_screen = CharacterScreen(self.engine.player)
 
         # ここでminimapの作成を行う
         # ----------------------
@@ -152,8 +152,11 @@ class MG(arcade.Window):
 
         # Character_Screen表示
         elif self.engine.game_state == GAME_STATE.CHARACTER_SCREEN:
-            self.character_screen.draw_character_screen(
-                self.viewport_left, self.viewport_bottom)
+            draw_character_screen(self.viewport_left, self.viewport_bottom)
+
+
+        elif self.engine.game_state == GAME_STATE.INVENTORY:
+            draw_inventory(self.engine.player, self.engine.selected_item, self.viewport_left, self.viewport_bottom)
 
         elif self.engine.game_state == GAME_STATE.LEVEL_UP_WINDOW:
             self.level_up_window.window_pop(self.viewports)
@@ -212,7 +215,6 @@ class MG(arcade.Window):
         if key == arcade.key.BACKSPACE:
             self.engine.game_state = GAME_STATE.DELAY_WINDOW
             print("save")
-            # if not self.game_dict:
             self.game_dict = self.engine.get_dict()
 
             with open("game_save.json", "w") as write_file:
@@ -279,20 +281,9 @@ class MG(arcade.Window):
             self.engine.grid_click(grid_x, grid_y)
             self.engine.game_state = GAME_STATE.NORMAL
 
-        # ステータスボタン処理
-        if self.engine.game_state == GAME_STATE.CHARACTER_SCREEN:
-            self.character_screen.buttons_click(
-                x+self.viewport_left, y+self.viewport_bottom)
 
     @stop_watch
     def save(self):
-        # self.engine.game_state = GAME_STATE.DELAY_WINDOW
-        # print("save")
-        # game_dict = self.engine.get_dict()
-
-        # with open("game_save.json", "w") as write_file:
-        #     json.dump(game_dict, write_file, indent=4, sort_keys=True, check_circular=False)  # indent=4, sort_keys=True
-
 
         self.engine.game_state = GAME_STATE.DELAY_WINDOW
         self.game_dict = self.engine.get_dict()

@@ -105,6 +105,7 @@ class GAME_STATE(Enum):
     NORMAL = auto()
     SELECT_LOCATION = auto()
     CHARACTER_SCREEN = auto()
+    INVENTORY = auto()
     MESSAGE_WINDOW = auto()
     DELAY_WINDOW = auto()
     LOAD_WINDOW = auto()

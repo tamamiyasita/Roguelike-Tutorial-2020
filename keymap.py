@@ -29,6 +29,7 @@ KEYMAP_USE_ITEM = [arcade.key.U]
 KEYMAP_EQUIP_ITEM = [arcade.key.J]
 KEYMAP_DROP_ITEM = [arcade.key.H]
 KEYMAP_CHARACTER_SCREEN = [arcade.key.C]
+KEYMAP_INVENTORY = [arcade.key.I]
 KEYMAP_USE_STAIRS = [arcade.key.ENTER]
 KEYMAP_CANCEL = [arcade.key.ESCAPE]
 KEYMAP_DOOR = [arcade.key.K]
@@ -74,6 +75,9 @@ def keymap(key, engine):
 
     if key in KEYMAP_CHARACTER_SCREEN:
         engine.game_state = GAME_STATE.CHARACTER_SCREEN
+        
+    elif key in KEYMAP_INVENTORY:
+        engine.game_state = GAME_STATE.INVENTORY
 
     elif key in KEYMAP_CANCEL and engine.game_state != GAME_STATE.LEVEL_UP_WINDOW:
         engine.game_state = GAME_STATE.NORMAL
