@@ -59,8 +59,7 @@ class Fighter:
         result["current_xp"] = self.current_xp
         result["level"] = self.level
         result["ability_points"] = self.ability_points
-        result["_skill_list"] = [
-            skill.__class__.__name__ for skill in self._skill_list]
+        result["_skill_list"] = [skill.__class__.__name__ for skill in self._skill_list]
 
         return result
 
@@ -94,7 +93,7 @@ class Fighter:
     def skill_list(self):
         """skill listをループして装備の追加skill levelをskill levelに加える"""
         for s in self._skill_list:  # [LeafBlade()]が入る
-            if s:
+            if s and not isinstance(s, str):
                 s.level = 0
                 s.level = self.owner.equipment.skill_level_sum.get(s.name)
                 if s.level is None:

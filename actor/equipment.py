@@ -1,6 +1,7 @@
 from collections import Counter
 from constants import *
 from actor.items.leaf_blade import LeafBlade
+from actor.items.branch_baton import BranchBaton
 
 
 class Equipment:
@@ -27,10 +28,11 @@ class Equipment:
         for item_key, item in self.item_slot.items():
             if item is None:
                 result[item_key] = None
-            # elif Tag.skill in item.tag:
-            #     result[item_key] = None
+            elif Tag.skill in item.tag:
+                result[item_key] = None
             else:
                 result[item_key] = item.name
+                print("#########",result[item_key], type(result[item_key]))
 
         return result
 
