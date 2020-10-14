@@ -33,6 +33,7 @@ class Equipment:
             else:
                 result[item_key] = item.name
                 print("#########",result[item_key], type(result[item_key]))
+                print(result)
 
         return result
 

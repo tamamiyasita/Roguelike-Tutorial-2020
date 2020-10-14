@@ -208,9 +208,6 @@ class GameEngine:
         levels_dict = []
         for level in self.stories:
 
-            # actor_dict = []
-            # for sprite in level.actor_sprites:
-            #     actor_dict.append(self.get_actor_dict(sprite))
 
             actor_dict = [self.get_actor_dict(s) for s in level.actor_sprites]
             floor_dict = [self.get_actor_dict(s) for s in level.floor_sprites]

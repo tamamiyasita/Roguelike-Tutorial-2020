@@ -212,8 +212,8 @@ class MG(arcade.Window):
         if key == arcade.key.BACKSPACE:
             self.engine.game_state = GAME_STATE.DELAY_WINDOW
             print("save")
-            if not self.game_dict:
-                self.game_dict = self.engine.get_dict()
+            # if not self.game_dict:
+            self.game_dict = self.engine.get_dict()
 
             with open("game_save.json", "w") as write_file:
                 json.dump(self.game_dict, write_file, indent=4, sort_keys=True, check_circular=False)  # indent=4, sort_keys=True
