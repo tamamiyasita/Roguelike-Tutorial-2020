@@ -190,7 +190,7 @@ class LevelupUI:
                 self.viewport_left+662+64,
                 self.viewport_bottom+340+64,
                 64, 64,
-                texture=arcade.load_texture("image\leaf_blade_icon.png")
+                texture=arcade.load_texture("image\leaf_blade_icon2.png")
             )
 
 

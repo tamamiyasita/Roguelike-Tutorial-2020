@@ -197,7 +197,7 @@ class MG(arcade.Window):
             if self.engine.player.state == state.READY:
                 self.engine.player.check_experience_level(self.engine)
 
-            # ここでdamageのポップアップを行う
+            # ここでdamageのポップアップを行う TODO 適切かあとで考える
             if self.engine.damage_pop:
                 for pop in self.engine.damage_pop:
                     pop.start()
