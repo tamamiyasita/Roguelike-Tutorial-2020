@@ -25,7 +25,7 @@ class NormalUI:
         """mainに渡すメソッドをまとめる"""
         self.panel_ui()
         self.draw_hp_and_status_bar()
-        # self.draw_inventory()
+        self.draw_inventory()
         self.draw_messages_handle()
 
     def panel_ui(self):
@@ -168,7 +168,7 @@ class NormalUI:
                 )
 
             if self.player.inventory.item_bag[item]:
-                item_name = self.player.inventory.item_bag[item].name
+                item_name = self.player.equipment.item_slot
             else:
                 item_name = ""
 
