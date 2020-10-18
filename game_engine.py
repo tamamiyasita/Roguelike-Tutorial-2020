@@ -66,7 +66,7 @@ class GameEngine:
         self.messenger = None
 
         self.player = Player(
-            inventory=Inventory(capacity=5))
+            inventory=Inventory(capacity=10))
         # self.f = F()
         # self.player.equipment.item_slot["head"] = self.f
 

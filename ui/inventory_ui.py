@@ -26,7 +26,7 @@ def draw_inventory(player, selected_item, viewport_x, viewport_y):
     item_top_position = back_panel_y + panel_height - 50#viewport_bottom + STATES_PANEL_HEIGHT - 220  # パネル上端からの所持アイテム表示位置の調整に使う変数
     separate_size = 1.6  # アイテム名の表示間隔の調整に使う変数
     margin = 3  # 選択したアイテムのアウトライン線の位置調整に使う変数
-    item_font_size = 12
+    item_font_size = 22
     outline_size = 2
     capacity = player.inventory.capacity
     selected_item = selected_item  # ボタン押下で選択したアイテムオブジェクト
@@ -35,8 +35,9 @@ def draw_inventory(player, selected_item, viewport_x, viewport_y):
 
     # キャパシティ数をループし、インベントリのアイテム名とアウトラインを描画する
     # TODO 複数行にする処理を考える（５回ループしたら縦と横の変数に増減するなど）
+    y = 40
     for item in range(capacity):
-        items_position = item * field_width + item_left_position  # パネル左からの所持アイテムの表示位置
+        items_position = item * back_panel_x  # パネル左からの所持アイテムの表示位置
         if item == selected_item:
             arcade.draw_lrtb_rectangle_outline(
                 left=items_position - margin,
@@ -52,12 +53,14 @@ def draw_inventory(player, selected_item, viewport_x, viewport_y):
         else:
             item_name = ""
 
-        item_text = f"{item+1}: {item_name}"
-
+        item_text = f"{item+1: >2}: {item_name}"
+        
         arcade.draw_text(
             text=item_text,
-            start_x=items_position,
-            start_y=item_top_position,
-            color=COLORS["status_panel_text"],
-            font_size=item_font_size
+            start_x=back_panel_x +20,
+            start_y=back_panel_y + panel_height - 120 + y,
+            color=arcade.color.ORANGE,
+            font_size=item_font_size,
+            font_name="consola.ttf"
         )
+        y -= 40
