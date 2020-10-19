@@ -2,6 +2,7 @@
 
 TODO １　タウンマップ
 TODO １　インベントリの改修とスキルシステムを機能させる為のUI変更
+TODO ５　getdict関数のいくつかをsetdefault()に置き換えて動くかの実験
 TODO １　属性ダメージと耐性
 TODO １　別のAI
 TODO ２　デコレータを使ったマップ生成処理…

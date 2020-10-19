@@ -122,7 +122,7 @@ healing_potion_effect = arcade.load_texture("image\green_ball.png")
 #######
 
 items_point = arcade.load_texture_pair(r"image/items_point.png")
-floor_point = arcade.load_texture_pair(r"image/floor_point.png")
+floor_point = arcade.load_texture(r"image/floor_point.png")
 wall_point = arcade.load_texture_pair(r"image/wall_point.png")
 stairs_down_point = arcade.load_texture_pair(r"image/stairs_down_point.png")
 
@@ -131,8 +131,8 @@ floor_img = (r"image/Tile.png")
 floor_tile = get_tile_set(floor_img, tile_size=16)
 floor_len = len(floor_tile)
 floors = [floor_tile[v] for v in range(floor_len)]
-
 stairs = floors
+stone_floor = arcade.load_texture(r"image\stone_tile.png")
 
 # walls_1 = (r"image/wall1.png")
 # walls_1_tiles = get_tile_set(walls_1, tile_size=16)
@@ -189,12 +189,13 @@ IMAGE_ID = {"player": player,
             "fireball_effect": [effect1_tile[134]],
             "healing_potion_effect":[healing_potion_effect],
 
-            "floor_point": floor_point,
+            "floor_point": [floor_point],
             "items_point": items_point,
             "wall_point": wall_point,
             "stairs_down_point": stairs_down_point,
 
             "floor": floors,
+            "stone_floor":[stone_floor],
             # "wall_1": wall_1,
             # "wall_2": wall_2,
             "wall_3": wall_3,

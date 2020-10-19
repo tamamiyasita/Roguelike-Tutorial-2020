@@ -91,7 +91,7 @@ class MG(arcade.Window):
         arcade.draw_rectangle_filled(-1000, -1000,
                                      10000, 10000, color=arcade.color.BLACK)
         # 以下スプライトリスト
-        self.engine.cur_level.floor_sprites.draw()
+        self.engine.cur_level.floor_sprites.draw(filter=gl.GL_NEAREST)
         self.engine.cur_level.wall_sprites.draw()
         self.engine.cur_level.map_obj_sprites.draw(filter=gl.GL_LO_BIAS_NV)
         self.engine.cur_level.item_sprites.draw(filter=gl.GL_NEAREST)

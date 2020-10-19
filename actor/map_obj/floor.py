@@ -6,13 +6,13 @@ from constants import *
 
 
 class Floor(Actor):
-    def __init__(self, texture_number=0, x=0, y=0):
+    def __init__(self, x=0, y=0):
         super().__init__(
-            texture_number=texture_number,
-            name="floor",
+            # texture_number=texture_number,
+            name="stone_floor",
             x=x,
             y=y,
-            scale=SPRITE_SCALE*2,
+            scale=SPRITE_SCALE*1,
             blocks=False,
             color=COLORS.get("black"),
             visible_color=COLORS.get("light_ground"),

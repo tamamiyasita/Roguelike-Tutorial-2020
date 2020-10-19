@@ -32,7 +32,7 @@ class ActorPlacement:
             for y in range(self.height):
                 if self.tiles[x][y] == TILE.EMPTY or TILE.STAIRS_DOWN or TILE.DOOR:
 
-                    floor = Floor(texture_number=21, x=x, y=y)
+                    floor = Floor(x=x, y=y)
                     floor_sprites.append(floor)
 
         return floor_sprites
