@@ -48,10 +48,7 @@ class Equipment:
             if item and item.name in self.item_slot.values():
                 self.item_slot[item.slot] = item
                 item.master = self.owner
-                # self.equip_update_check = True
-        # for item in self.owner.fighter.skill_list:
-        #     if item and Tag.equip in item.tag:
-        #         item.master = self.owner
+
         self.equip_update_check = True
 
     @property

@@ -42,13 +42,13 @@ class Actor(arcade.Sprite):
         self.not_visible_color = not_visible_color
         self.is_visible = False
         self.state = state
-        self.explanatory_text = explanatory_text
+        self.explanatory_text = explanatory_text # Lコマンド等の説明文に使用する
         self.tag = tag
         self.left_face = left_face
-        self._master = None
-        self.d_time = 100
+        self._master = None # 自身がitemだった場合その所持者を表す、主に装備時Spriteの表示位置に使用する
+        self.d_time = 100 # 待機モーション時のdelay時間
         self.is_dead = None
-        self.skill_add = {}
+        self.skill_add = {} # skillLevelの追加に使う
 
         self.inventory = inventory
         if self.inventory:

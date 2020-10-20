@@ -140,6 +140,7 @@ class NormalUI:
 
     def draw_inventory(self):
         """インベントリの表示"""
+        slot_len = len(self.player.equipment.item_slot)
         item_left_position = self.viewport_left + \
             ((SCREEN_WIDTH-STATES_PANEL_WIDTH) / 2.8)   # パネル左からの所持アイテム表示位置の調整に使う変数
         item_top_position = self.viewport_bottom + \
@@ -148,10 +149,9 @@ class NormalUI:
         margin = 3  # 選択したアイテムのアウトライン線の位置調整に使う変数
         item_font_size = 12
         outline_size = 2
-        capacity = self.player.inventory.capacity
         selected_item = self.selected_item  # ボタン押下で選択したアイテムオブジェクト
         field_width = SCREEN_WIDTH / \
-            (capacity + 1) / separate_size  # アイテム表示感覚を決める変数
+            (slot_len + 1) / separate_size  # アイテム表示感覚を決める変数
 
         # キャパシティ数をループし、インベントリのアイテム名とアウトラインを描画する
         # TODO 複数行にする処理を考える（５回ループしたら縦と横の変数に増減するなど）

@@ -67,8 +67,7 @@ class GameEngine:
 
         self.player = Player(
             inventory=Inventory(capacity=10))
-        # self.f = F()
-        # self.player.equipment.item_slot["head"] = self.f
+
 
     def setup_level(self, level_number):
         """開始レベル(階層)によってmapを変更する"""
@@ -82,10 +81,10 @@ class GameEngine:
             return self.basic_dungeon_init(self.player)
 
     def start_town_init(self):
-        # self.town_map = [[TILE.EMPTY for y in range(MAP_HEIGHT)] for x in range(MAP_WIDTH)]
+        """初期townmapの生成"""
         self.town_map = TownMap(
             self.map_width, self.map_height, self.level, self.player)
-        """ スプライトリストの初期化 """
+        # スプライトリストの初期化
         floor_sprite = ActorPlacement(self.town_map, self).tiled_floor_set()
         wall_sprite = ActorPlacement(self.town_map, self).tiled_wall_set()
         map_point_sprite = ActorPlacement(self.town_map, self).map_point_set()
@@ -121,11 +120,11 @@ class GameEngine:
         return self.game_level
 
     def basic_dungeon_init(self, player):
-
+        """基本のdungeonの生成"""
         self.game_map = BasicDungeon(
             self.map_width, self.map_height, self.level, player)
 
-        """ スプライトリストの初期化 """
+        #スプライトリストの初期化
         floor_sprite = ActorPlacement(self.game_map, self).floor_set()
         wall_sprite = ActorPlacement(self.game_map, self).wall_set()
         map_point_sprite = ActorPlacement(self.game_map, self).map_point_set()
@@ -152,9 +151,6 @@ class GameEngine:
 
         self.game_level.level = self.level
 
-        # self.player = Player(
-        #     self.game_map.player_position[0], self.game_map.player_position[1], inventory=Inventory(capacity=5))
-        # self.game_level.chara_sprites.append(self.player)
 
         # テスト用エンティティ
         self.long_sword = LongSword(self.player.x, self.player.y + 1)
