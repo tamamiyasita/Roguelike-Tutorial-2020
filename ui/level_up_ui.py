@@ -1,4 +1,3 @@
-from keymap import choices_key
 from random import choice
 import arcade
 from constants import *

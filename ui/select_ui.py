@@ -14,7 +14,7 @@ class SelectUI:
         self.d_time = 120
         self.x, self.y = 0, 0
 
-    def draw_in_select_ui(self, viewports, grid_press, grid_select):
+    def draw_in_select_ui(self, viewports, grid_press=None, grid_select=None):
         self.dx, self.dy = self.engine.player.x, self.engine.player.y
         self.grid_select = grid_select
         self.grid_press = grid_press
@@ -26,6 +26,7 @@ class SelectUI:
 
         self.panel_ui()
         self.grid_cursor()
+        self.update()
 
     def update(self):
 

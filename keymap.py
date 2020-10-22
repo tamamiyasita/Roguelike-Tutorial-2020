@@ -37,11 +37,8 @@ KEYMAP_GRID_SELECT = [arcade.key.L]
 
 
 def choices_key(key):
+    """会話画面の選択に使う"""
     choice_point = 0
-    # if key in KEYMAP_CANCEL:
-    #     engine.game_state = GAME_STATE.NORMAL
-    #     engine.player.state = state.READY
-    #     return
 
     if key in KEYMAP_UP:
         choice_point += 1
@@ -53,7 +50,8 @@ def choices_key(key):
         return "select"
 
 
-def grid_move_key(key, engine):
+def grid_select_key(key, engine):
+    """アイテム仕様時のカーソル移動に使用する"""
     direction = None
 
     if key in KEYMAP_UP:
@@ -67,7 +65,23 @@ def grid_move_key(key, engine):
     elif key == arcade.key.ENTER:
         direction = "grid_press"
         print(f"{direction=}")
+    return direction
 
+def look_key(key, engine):
+    """Lコマンド時に使用する"""
+    direction = None
+
+    if key in KEYMAP_UP:
+        direction = (0, 1)
+    elif key in KEYMAP_DOWN:
+        direction = (0, -1)
+    elif key in KEYMAP_LEFT:
+        direction = (-1, 0)
+    elif key in KEYMAP_RIGHT:
+        direction = (1, 0)
+    # elif key == arcade.key.ENTER:
+    #     direction = "grid_press"
+    #     print(f"{direction=}")
     return direction
 
 
@@ -139,7 +153,8 @@ def keymap(key, engine):
         elif key in KEYMAP_DOOR:
             engine.action_queue.extend([{"close_door": True}])
         elif key in KEYMAP_GRID_SELECT:
-            engine.action_queue.extend([{"grid_select": True}])
+            # engine.action_queue.extend([{"grid_select": True}])
+            engine.game_state = GAME_STATE.LOOK
 
         return direction
 

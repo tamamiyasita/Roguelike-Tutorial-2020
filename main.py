@@ -9,7 +9,7 @@ import pyglet.gl as gl
 
 from game_engine import GameEngine
 from constants import *
-from keymap import keymap, grid_move_key, choices_key
+from keymap import keymap, grid_select_key, look_key
 
 from ui.normal_ui import NormalUI
 from ui.mouse_ui import MouseUI
@@ -19,7 +19,7 @@ from ui.inventory_ui import draw_inventory
 from ui.message_window import MessageWindow
 from ui.level_up_ui import LevelupUI
 
-from util import pixel_to_grid, stop_watch
+from util import grid_to_pixel, pixel_to_grid, stop_watch
 from viewport import viewport
 
 # log = logging.getLogger("__main__")
@@ -44,7 +44,7 @@ class MG(arcade.Window):
         self.grid_select = [0, 0]
         self.mouse_position = None
         self.viewports = None
-        self.grid_press = None
+        self.grid, self.grid_press = None,None
         self.viewport_left = 0
         self.viewport_bottom = 0
         self.choice = 0
@@ -129,6 +129,12 @@ class MG(arcade.Window):
             viewport(self.engine.player.target_x, self.engine.player.target_y)
         else:
             viewport(self.engine.player.center_x, self.engine.player.center_y)
+
+        if self.engine.game_state == GAME_STATE.SELECT_LOCATION or self.engine.game_state == GAME_STATE.LOOK:
+            if isinstance(self.grid, tuple):
+                x, y = grid_to_pixel(self.grid_select[0]+self.engine.player.x, self.grid_select[1]+self.engine.player.y)
+                viewport(x, y)
+
         # ビューポートの左と下の現在位置を変数に入れる、これはステータスパネルを画面に固定する為に使います
         self.viewports = arcade.get_viewport()
         self.viewport_left = self.viewports[0]
@@ -146,7 +152,7 @@ class MG(arcade.Window):
             self.grid_select = [0, 0]
 
         # アイテム使用時マウス位置にグリッド表示
-        elif self.engine.game_state == GAME_STATE.SELECT_LOCATION:
+        elif self.engine.game_state == GAME_STATE.SELECT_LOCATION or self.engine.game_state == GAME_STATE.LOOK:
             self.select_UI.draw_in_select_ui(
                 arcade.get_viewport(), self.grid_press, self.grid_select)
 
@@ -212,6 +218,7 @@ class MG(arcade.Window):
             self.select_UI.update()
 
     def on_key_press(self, key, modifiers):
+        # windowを閉じた時にjsonにダンプする
         if key == arcade.key.BACKSPACE:
             self.engine.game_state = GAME_STATE.DELAY_WINDOW
             print("save")
@@ -226,13 +233,23 @@ class MG(arcade.Window):
         self.engine.move_switch = True
         self.player_direction = keymap(key, self.engine)
 
-        # カーソルのキー移動量
-        grid = grid_move_key(key, self.engine)
-        if isinstance(grid, tuple):
-            self.grid_select[0] += grid[0]
-            self.grid_select[1] += grid[1]
-        else:
-            self.grid_press = grid
+        # Lコマンド時、スクロール仕様時などのカーソル移動と選択
+        if self.engine.game_state == GAME_STATE.SELECT_LOCATION or self.engine.game_state == GAME_STATE.LOOK:
+            if self.engine.game_state == GAME_STATE.LOOK:
+                self.grid_press = None
+            self.grid = grid_select_key(key, self.engine)
+            if isinstance(self.grid, tuple):
+                self.grid_select[0] += self.grid[0]
+                self.grid_select[1] += self.grid[1]
+            else:
+                self.grid_press = self.grid
+
+        # # 
+        #     self.grid = look_key(key, self.engine)
+        #     if isinstance(self.grid, tuple):
+        #         self.grid_select[0] += self.grid[0]
+        #         self.grid_select[1] += self.grid[1]
+
 
         # ドア開閉
         if self.engine.player.state == state.DOOR:

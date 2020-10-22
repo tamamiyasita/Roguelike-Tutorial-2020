@@ -103,6 +103,7 @@ class TILE:
 
 class GAME_STATE(Enum):
     NORMAL = auto()
+    LOOK = auto()
     SELECT_LOCATION = auto()
     CHARACTER_SCREEN = auto()
     INVENTORY = auto()
