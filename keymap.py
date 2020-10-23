@@ -67,7 +67,7 @@ def grid_select_key(key, engine):
         print(f"{direction=}")
     return direction
 
-def look_key(key, engine):
+def inventory_key(key, engine):
     """Lコマンド時に使用する"""
     direction = None
 
@@ -79,6 +79,33 @@ def look_key(key, engine):
         direction = (-1, 0)
     elif key in KEYMAP_RIGHT:
         direction = (1, 0)
+
+    elif key in KEYMAP_SELECT_ITEM_1:
+        engine.action_queue.extend([{"select_item": 1}])
+    elif key in KEYMAP_SELECT_ITEM_2:
+        engine.action_queue.extend([{"select_item": 2}])
+    elif key in KEYMAP_SELECT_ITEM_3:
+        engine.action_queue.extend([{"select_item": 3}])
+    elif key in KEYMAP_SELECT_ITEM_4:
+        engine.action_queue.extend([{"select_item": 4}])
+    elif key in KEYMAP_SELECT_ITEM_5:
+        engine.action_queue.extend([{"select_item": 5}])
+    elif key in KEYMAP_SELECT_ITEM_6:
+        engine.action_queue.extend([{"select_item": 6}])
+    elif key in KEYMAP_SELECT_ITEM_7:
+        engine.action_queue.extend([{"select_item": 7}])
+    elif key in KEYMAP_SELECT_ITEM_8:
+        engine.action_queue.extend([{"select_item": 8}])
+    elif key in KEYMAP_SELECT_ITEM_9:
+        engine.action_queue.extend([{"select_item": 9}])
+    elif key in KEYMAP_SELECT_ITEM_0:
+        engine.action_queue.extend([{"select_item": 0}])
+    elif key in KEYMAP_USE_ITEM:
+        engine.action_queue.extend([{"use_item": True}])
+    elif key in KEYMAP_EQUIP_ITEM:
+        engine.action_queue.extend([{"equip_item": True}])
+    elif key in KEYMAP_DROP_ITEM:
+        engine.action_queue.extend([{"drop_item": True}])
     # elif key == arcade.key.ENTER:
     #     direction = "grid_press"
     #     print(f"{direction=}")

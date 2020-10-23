@@ -1,11 +1,13 @@
 import arcade
 from constants import *
 from data import *
+from util import grid_to_pixel
 
 
-def draw_inventory(player, selected_item, viewport_x, viewport_y):
+def draw_inventory(player, selected_item, viewport_x, viewport_y, grid_select):
     viewport_left = viewport_x
     viewport_bottom = viewport_y
+    grid_x, grid_y = grid_to_pixel(grid_select[0],grid_select[1])
 
     """背景"""
 
@@ -37,7 +39,7 @@ def draw_inventory(player, selected_item, viewport_x, viewport_y):
     # TODO 複数行にする処理を考える（５回ループしたら縦と横の変数に増減するなど）
     y = 40
     for item in range(capacity):
-        items_position = item * back_panel_x  # パネル左からの所持アイテムの表示位置
+        items_position = item * back_panel_x + grid_x  # パネル左からの所持アイテムの表示位置
         if item == selected_item:
             arcade.draw_lrtb_rectangle_outline(
                 left=items_position - margin,

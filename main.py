@@ -9,7 +9,7 @@ import pyglet.gl as gl
 
 from game_engine import GameEngine
 from constants import *
-from keymap import keymap, grid_select_key, look_key
+from keymap import keymap, grid_select_key, inventory_key
 
 from ui.normal_ui import NormalUI
 from ui.mouse_ui import MouseUI
@@ -162,7 +162,7 @@ class MG(arcade.Window):
 
 
         elif self.engine.game_state == GAME_STATE.INVENTORY:
-            draw_inventory(self.engine.player, self.engine.selected_item, self.viewport_left, self.viewport_bottom)
+            draw_inventory(self.engine.player, self.engine.selected_item, self.viewport_left, self.viewport_bottom, self.grid_select)
 
         elif self.engine.game_state == GAME_STATE.LEVEL_UP_WINDOW:
             self.level_up_window.window_pop(self.viewports)
@@ -213,9 +213,6 @@ class MG(arcade.Window):
                 self.engine.player.equipment.update(
                     self.engine.cur_level.equip_sprites)
 
-        # look機能のアップデート
-        if self.engine.game_state == GAME_STATE.SELECT_LOCATION:
-            self.select_UI.update()
 
     def on_key_press(self, key, modifiers):
         # windowを閉じた時にjsonにダンプする
@@ -225,7 +222,7 @@ class MG(arcade.Window):
             self.game_dict = self.engine.get_dict()
 
             with open("game_save.json", "w") as write_file:
-                json.dump(self.game_dict, write_file, indent=4, sort_keys=True, check_circular=False)  # indent=4, sort_keys=True
+                json.dump(self.game_dict, write_file, indent=4, sort_keys=True, check_circular=False) 
                 
             arcade.close_window()
 
@@ -244,11 +241,11 @@ class MG(arcade.Window):
             else:
                 self.grid_press = self.grid
 
-        # # 
-        #     self.grid = look_key(key, self.engine)
-        #     if isinstance(self.grid, tuple):
-        #         self.grid_select[0] += self.grid[0]
-        #         self.grid_select[1] += self.grid[1]
+        if self.engine.game_state == GAME_STATE.INVENTORY:
+            self.grid = inventory_key(key, self.engine)
+            if isinstance(self.grid, tuple):
+                self.grid_select[0] += self.grid[0]
+                self.grid_select[1] += self.grid[1]
 
 
         # ドア開閉
