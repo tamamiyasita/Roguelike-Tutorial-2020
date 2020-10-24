@@ -57,7 +57,7 @@ class GameEngine:
         self.game_map = None
         self.action_queue = []
         self.messages = deque(maxlen=6)
-        self.selected_item = None  # キー押下で直接選択したアイテム
+        self.selected_item = 0  # キー押下で直接選択したアイテム
         self.turn_check = []
         self.game_state = GAME_STATE.NORMAL
         self.grid_select_handlers = []
@@ -378,6 +378,7 @@ class GameEngine:
                     new_action_queue.extend([target["action"]])
                     self.move_switch = True
 
+            # TODO 削除予定
             if "select_item" in action:
                 item_number = action["select_item"]
                 if 1 <= item_number <= self.player.inventory.capacity:

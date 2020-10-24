@@ -4,7 +4,7 @@ from data import *
 from util import grid_to_pixel
 
 
-def draw_inventory(player, selected_item, viewport_x, viewport_y, grid_select):
+def draw_inventory(player, engine, viewport_x, viewport_y, grid_select):
     viewport_left = viewport_x
     viewport_bottom = viewport_y
     grid_x, grid_y = grid_to_pixel(grid_select[0],grid_select[1])
@@ -31,7 +31,7 @@ def draw_inventory(player, selected_item, viewport_x, viewport_y, grid_select):
     item_font_size = 22
     outline_size = 2
     capacity = player.inventory.capacity
-    selected_item = selected_item  # ボタン押下で選択したアイテムオブジェクト
+    selected_item = engine  # ボタン押下で選択したアイテムオブジェクト
     field_width = SCREEN_WIDTH / \
         (capacity + 1) / separate_size  # アイテム表示感覚を決める変数
 
@@ -39,14 +39,22 @@ def draw_inventory(player, selected_item, viewport_x, viewport_y, grid_select):
     # TODO 複数行にする処理を考える（５回ループしたら縦と横の変数に増減するなど）
     y = 40
     for item in range(capacity):
-        items_position = item * back_panel_x + grid_x  # パネル左からの所持アイテムの表示位置
+        # items_position = item * back_panel_x + grid_x  # パネル左からの所持アイテムの表示位置
+        # if item == selected_item:
+        #     arcade.draw_lrtb_rectangle_outline(
+        #         left=items_position - margin,
+        #         right=items_position + field_width - margin,
+        #         top=item_top_position + item_font_size + margin*2,
+        #         bottom=item_top_position - margin,
+        items_position = back_panel_y  # パネル左からの所持アイテムの表示位置
+        items_positiony = (grid_x ) +back_panel_x  # パネル左からの所持アイテムの表示位置
         if item == selected_item:
             arcade.draw_lrtb_rectangle_outline(
-                left=items_position - margin,
-                right=items_position + field_width - margin,
-                top=item_top_position + item_font_size + margin*2,
-                bottom=item_top_position - margin,
-                color=arcade.color.BLACK,
+                left=back_panel_x+18,
+                right=back_panel_x +430,
+                top=back_panel_y + panel_height - 120 + y+33,
+                bottom=back_panel_y + panel_height - 120 + y-3,
+                color=arcade.color.HOT_PINK,
                 border_width=outline_size
             )
 
@@ -63,6 +71,7 @@ def draw_inventory(player, selected_item, viewport_x, viewport_y, grid_select):
             start_y=back_panel_y + panel_height - 120 + y,
             color=arcade.color.ORANGE,
             font_size=item_font_size,
-            font_name="consola.ttf"
+            font_name="consola.ttf",
+            anchor_y="bottom"
         )
         y -= 40

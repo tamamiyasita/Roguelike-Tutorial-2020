@@ -42,6 +42,7 @@ class MG(arcade.Window):
 
         self.player_direction = None
         self.grid_select = [0, 0]
+        self.cur_select = {"select_item": 1}
         self.mouse_position = None
         self.viewports = None
         self.grid, self.grid_press = None,None
@@ -242,10 +243,10 @@ class MG(arcade.Window):
                 self.grid_press = self.grid
 
         if self.engine.game_state == GAME_STATE.INVENTORY:
-            self.grid = inventory_key(key, self.engine)
-            if isinstance(self.grid, tuple):
-                self.grid_select[0] += self.grid[0]
-                self.grid_select[1] += self.grid[1]
+            inventory_key(key,self.cur_select, self.engine)
+            # if isinstance(self.grid, tuple):
+            #     self.grid_select[0] += self.grid[0]
+            #     self.grid_select[1] += self.grid[1]
 
 
         # ドア開閉

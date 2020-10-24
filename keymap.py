@@ -67,18 +67,20 @@ def grid_select_key(key, engine):
         print(f"{direction=}")
     return direction
 
-def inventory_key(key, engine):
+def inventory_key(key, cur_select, engine):
     """Lコマンド時に使用する"""
-    direction = None
+
 
     if key in KEYMAP_UP:
-        direction = (0, 1)
+        # cur_select["select_item"] += 1
+        # engine.action_queue.extend([cur_select])
+        engine.selected_item -= 1
     elif key in KEYMAP_DOWN:
-        direction = (0, -1)
-    elif key in KEYMAP_LEFT:
-        direction = (-1, 0)
-    elif key in KEYMAP_RIGHT:
-        direction = (1, 0)
+        # cur_select["select_item"] -= 1
+        # engine.action_queue.extend([cur_select])
+        engine.selected_item += 1
+    # elif key in KEYMAP_LEFT:
+    # elif key in KEYMAP_RIGHT:
 
     elif key in KEYMAP_SELECT_ITEM_1:
         engine.action_queue.extend([{"select_item": 1}])
@@ -106,10 +108,7 @@ def inventory_key(key, engine):
         engine.action_queue.extend([{"equip_item": True}])
     elif key in KEYMAP_DROP_ITEM:
         engine.action_queue.extend([{"drop_item": True}])
-    # elif key == arcade.key.ENTER:
-    #     direction = "grid_press"
-    #     print(f"{direction=}")
-    return direction
+
 
 
 def keymap(key, engine):
