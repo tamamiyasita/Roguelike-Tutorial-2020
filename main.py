@@ -185,6 +185,9 @@ class MG(arcade.Window):
         """全てのスプライトリストのアップデートを行う
            他にアクションキュー、ターンチェンジ、pcの移動とviewport、expのチェック
         """
+        if self.engine.game_state == GAME_STATE.NORMAL or self.engine.game_state == GAME_STATE.INVENTORY:
+            self.engine.process_action_queue(delta_time)
+
         if self.engine.game_state == GAME_STATE.NORMAL:
 
             self.engine.cur_level.chara_sprites.update_animation()
@@ -195,7 +198,6 @@ class MG(arcade.Window):
             self.engine.cur_level.equip_sprites.update()
             self.engine.cur_level.equip_sprites.update_animation()
 
-            self.engine.process_action_queue(delta_time)
             self.engine.turn_loop.loop_on(self.engine)
             self.engine.check_for_player_movement(self.player_direction)
             self.engine.cur_level.map_obj_sprites.update_animation()
@@ -244,6 +246,11 @@ class MG(arcade.Window):
 
         if self.engine.game_state == GAME_STATE.INVENTORY:
             inventory_key(key,self.cur_select, self.engine)
+            if key == arcade.key.J:
+                self.engine.game_state = GAME_STATE.DELAY_WINDOW
+                self.engine.game_state = GAME_STATE.INVENTORY
+
+                # draw_inventory(self.engine.player, self.engine.selected_item, self.viewport_left, self.viewport_bottom, self.grid_select)
             # if isinstance(self.grid, tuple):
             #     self.grid_select[0] += self.grid[0]
             #     self.grid_select[1] += self.grid[1]

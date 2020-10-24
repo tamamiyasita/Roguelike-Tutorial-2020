@@ -31,6 +31,8 @@ def draw_inventory(player, engine, viewport_x, viewport_y, grid_select):
     item_font_size = 22
     outline_size = 2
     capacity = player.inventory.capacity
+    font_color = arcade.color.RED_DEVIL
+    equip_this = ""
     selected_item = engine  # ボタン押下で選択したアイテムオブジェクト
     field_width = SCREEN_WIDTH / \
         (capacity + 1) / separate_size  # アイテム表示感覚を決める変数
@@ -38,16 +40,27 @@ def draw_inventory(player, engine, viewport_x, viewport_y, grid_select):
     # キャパシティ数をループし、インベントリのアイテム名とアウトラインを描画する
     # TODO 複数行にする処理を考える（５回ループしたら縦と横の変数に増減するなど）
     y = 40
+    slot_item = [i.name for i in player.equipment.item_slot.values() if hasattr(i, "name")]
+    print(slot_item)
     for item in range(capacity):
-        # items_position = item * back_panel_x + grid_x  # パネル左からの所持アイテムの表示位置
-        # if item == selected_item:
-        #     arcade.draw_lrtb_rectangle_outline(
-        #         left=items_position - margin,
-        #         right=items_position + field_width - margin,
-        #         top=item_top_position + item_font_size + margin*2,
-        #         bottom=item_top_position - margin,
-        items_position = back_panel_y  # パネル左からの所持アイテムの表示位置
-        items_positiony = (grid_x ) +back_panel_x  # パネル左からの所持アイテムの表示位置
+        if player.inventory.item_bag[item]:
+            cur_item  = player.inventory.item_bag[item]
+            item_name = cur_item.name
+            item_tag = cur_item.tag
+            if item_name in slot_item:
+                equip_this = "[E]"
+                font_color = arcade.color.RED_DEVIL
+            else:
+                equip_this = ""
+                font_color = arcade.color.YALE_BLUE
+
+        else:
+            item_name = ""
+            equip_this = ""
+            font_color = arcade.color.ORANGE
+            cur_item = None
+
+
         if item == selected_item:
             arcade.draw_lrtb_rectangle_outline(
                 left=back_panel_x+18,
@@ -57,19 +70,38 @@ def draw_inventory(player, engine, viewport_x, viewport_y, grid_select):
                 color=arcade.color.HOT_PINK,
                 border_width=outline_size
             )
+            if item_name and Tag.equip in item_tag:
+                arcade.draw_text(
+                    text="(equip key: J)",
+                    start_x=back_panel_x +450,
+                    start_y=back_panel_y + panel_height - 120 + y,
+                    color=font_color,
+                    font_size=item_font_size-3,
+                    font_name="consola.ttf",
+                    anchor_y="bottom"
+                )
+            elif item_name and Tag.used in item_tag:
+                arcade.draw_text(
+                    text="(use key: U)",
+                    start_x=back_panel_x +450,
+                    start_y=back_panel_y + panel_height - 120 + y,
+                    color=font_color,
+                    font_size=item_font_size-3,
+                    font_name="consola.ttf",
+                    anchor_y="bottom"
+                )
+            if cur_item:
+                arcade.draw_scaled_texture_rectangle(back_panel_x +400, back_panel_y + panel_height - 105 + y, cur_item.texture, scale=3)
 
-        if player.inventory.item_bag[item]:
-            item_name = player.inventory.item_bag[item].name
-        else:
-            item_name = ""
 
-        item_text = f"{item+1: >2}: {item_name}"
+
+        item_text = f"{item+1: >2}: {item_name} {equip_this}"
         
         arcade.draw_text(
             text=item_text,
             start_x=back_panel_x +20,
             start_y=back_panel_y + panel_height - 120 + y,
-            color=arcade.color.ORANGE,
+            color=font_color,
             font_size=item_font_size,
             font_name="consola.ttf",
             anchor_y="bottom"
