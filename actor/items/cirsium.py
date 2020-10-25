@@ -11,13 +11,16 @@ class Cirsium(Actor):
             y=y,
         )
 
-        self.slot = "head"
+        self.slot = "flower"
         self.states_bonus = {"DEX": 1}
 
         self.level = 1
 
         self.tag = [Tag.item, Tag.equip, Tag.flower]
         self.skill_add = {"leaf_blade": 1}
+
+        self.explanatory_text = f"Is Cirsium TEst test test \n testtesttest"
+
 
         self.item_margin_x = 16
         self.item_margin_y = 17

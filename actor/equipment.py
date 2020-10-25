@@ -1,7 +1,6 @@
 from collections import Counter
 from constants import *
-from actor.items.leaf_blade import LeafBlade
-from actor.items.branch_baton import BranchBaton
+from itertools import chain
 
 
 class Equipment:
@@ -13,11 +12,16 @@ class Equipment:
     def __init__(self):
         """アイテムスロット、及び装備するタイミングを決めるequip_update_check
         """
-        self.item_slot = {
+        self.equip_slot = {
             "head": None,
             "main_hand": None,
             "off_hand": None,
             "ranged_weapon": None,
+        }
+        self.item_slot = {
+            "flower 1": None,
+            "flower 2": None,
+            "flower 3": None,
         }
 
         # 装備変更によるスプライト更新のチェックに使う変数
@@ -69,13 +73,13 @@ class Equipment:
         if self.equip_update_check:
 
             # 遠隔武器以外がスロットに入っていたら装備スプライトをスプライトリストに入れて表示する
-            for item in self.item_slot.values():
-                if item and not isinstance(item, str) and item not in sprites and not item.slot == "ranged_weapon":
-                    sprites.append(item)
+            for equip in chain(self.equip_slot.values(),self.item_slot.values()):
+                if equip and not isinstance(equip, str) and equip not in sprites and not equip.slot == "ranged_weapon":
+                    sprites.append(equip)
 
             # 装備解除しスプライトがスロットから無くなればスプライトリストからも削除
             for sprite in sprites:
-                if sprite not in self.item_slot.values():
+                if sprite not in self.equip_slot.values() and sprite not in self.item_slot.values():
                     sprites.remove(sprite)
 
             # 装備更新完了通知
@@ -87,23 +91,23 @@ class Equipment:
                 self.skill_equip_on(skill_list)
                 self.skill_equip_off(skill_list)
 
-            print(self.item_slot)
+            print(self.item_slot, self.equip_slot)
             print(self.owner.fighter.skill_list)
 
     def skill_equip_on(self, skill_list):
         """skill levelが1以上なら装備skillをslotに入れる"""
         for s in skill_list:
-            if Tag.equip in s.tag and s.level > 0 and self.item_slot[s.slot] != s:
-                self.item_slot[s.slot] = s
-                self.item_slot[s.slot].master = self.owner
+            if Tag.equip in s.tag and s.level > 0 and self.equip_slot[s.slot] != s:
+                self.equip_slot[s.slot] = s
+                self.equip_slot[s.slot].master = self.owner
                 self.equip_update_check = True
 
     def skill_equip_off(self, skill_list):
         """skill levelが1以下なら装備解除しslotから外す"""
         for s in skill_list:
-            if Tag.equip in s.tag and s.level < 1 and self.item_slot[s.slot] == s:
-                del self.item_slot[s.slot].master
-                self.item_slot[s.slot] = None
+            if Tag.equip in s.tag and s.level < 1 and self.equip_slot[s.slot] == s:
+                del self.equip_slot[s.slot].master
+                self.equip_slot[s.slot] = None
                 self.equip_update_check = True
 
     @property
@@ -120,29 +124,29 @@ class Equipment:
 
     @property
     def melee_weapon_damage(self):
-        if self.item_slot["main_hand"]:
-            return self.item_slot["main_hand"].attack_damage
+        if self.equip_slot["main_hand"]:
+            return self.equip_slot["main_hand"].attack_damage
         else:
             return None
 
     @property
     def ranged_weapon_damage(self):
-        if self.item_slot["ranged_weapon"]:
-            return self.item_slot["ranged_weapon"].attack_damage
+        if self.equip_slot["ranged_weapon"]:
+            return self.equip_slot["ranged_weapon"].attack_damage
         else:
             return None
 
     @property
     def weapon_hit_rate(self):
-        if self.item_slot["main_hand"]:
-            return self.item_slot["main_hand"].hit_rate
+        if self.equip_slot["main_hand"]:
+            return self.equip_slot["main_hand"].hit_rate
         else:
             return None
 
     @property
     def ranged_hit_rate(self):
-        if self.item_slot["ranged_weapon"]:
-            return self.item_slot["ranged_weapon"].hit_rate
+        if self.equip_slot["ranged_weapon"]:
+            return self.equip_slot["ranged_weapon"].hit_rate
         else:
             return None
 
@@ -151,28 +155,25 @@ class Equipment:
         """
         results = []
 
-        for item_key, item in self.item_slot.items():
-            if item_key == equip_item.slot:  # アイテムキーと装備するスロットが同じか判定
+        for key, item in self.item_slot.items():
+            if item == equip_item:
 
-                if item and item.name == equip_item.name:  # equip_itemが装備アイテムと同じなら単に解除
-                    del self.item_slot[item_key].master
+                del self.item_slot[key].master
+                self.item_slot[key] = None
+                results.append({"message": f"dequipped {item.name}"})
+                break
 
-                    self.item_slot[item_key] = None
-                    results.append({"message": f"dequipped {item.name}"})
-                    break
+            # self.equip_update_check = True
+            # return results
 
-                else:
-                    # equip_itemが装備されてるものと別のアイテムなら装備を解除しequip_itemを装備
-                    if item:
-                        del self.item_slot[item_key].master
-                        self.item_slot[item_key] = None
+            # for key, item in self.item_slot.items():
+            if item is None:
 
-                    self.item_slot[item_key] = equip_item
-                    self.item_slot[item_key].master = self.owner
+                self.item_slot[key] = equip_item
+                self.item_slot[key].master = self.owner
 
-                    results.append({"message": f"equipped {equip_item.name}"})
-                    break
+                results.append({"message": f"equipped {equip_item.name}"})
+                break
 
         self.equip_update_check = True
-
         return results

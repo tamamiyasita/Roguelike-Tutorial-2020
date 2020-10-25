@@ -155,23 +155,9 @@ class NormalUI:
 
         # キャパシティ数をループし、インベントリのアイテム名とアウトラインを描画する
         # TODO 複数行にする処理を考える（５回ループしたら縦と横の変数に増減するなど）
-        for i, item in enumerate(self.player.equipment.item_slot.items()):
+        for i, item in enumerate(self.player.equipment.equip_slot.items()):
             items_position = i * field_width + item_left_position  # パネル左からの所持アイテムの表示位置
-            # if k == selected_item:
-            #     arcade.draw_lrtb_rectangle_outline(
-            #         left=items_position - margin,
-            #         right=items_position + field_width - margin,
-            #         top=item_top_position + item_font_size + margin*2,
-            #         bottom=item_top_position - margin,
-            #         color=arcade.color.BLACK,
-            #         border_width=outline_size
-            #     )
 
-            # if self.player.inventory.item_bag[item]:
-            #     for i in self.player.equipment.item_slot.values():
-                    # item_name = i
-                # else:
-                #     item_name = ""
             if item[1]:
 
                 item_text = f"{item[0]}: {item[1].name}"

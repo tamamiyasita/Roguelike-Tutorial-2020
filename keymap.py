@@ -26,7 +26,7 @@ KEYMAP_SELECT_ITEM_8 = [arcade.key.KEY_8]
 KEYMAP_SELECT_ITEM_9 = [arcade.key.KEY_9]
 KEYMAP_SELECT_ITEM_0 = [arcade.key.KEY_0]
 KEYMAP_USE_ITEM = [arcade.key.U]
-KEYMAP_EQUIP_ITEM = [arcade.key.J]
+KEYMAP_EQUIP_ITEM = [arcade.key.E]
 KEYMAP_DROP_ITEM = [arcade.key.H]
 KEYMAP_CHARACTER_SCREEN = [arcade.key.C]
 KEYMAP_INVENTORY = [arcade.key.I]
@@ -67,20 +67,20 @@ def grid_select_key(key, engine):
         print(f"{direction=}")
     return direction
 
-def inventory_key(key, cur_select, engine):
+def inventory_key(key, engine):
     """Lコマンド時に使用する"""
 
 
     if key in KEYMAP_UP:
-        # cur_select["select_item"] += 1
-        # engine.action_queue.extend([cur_select])
         engine.selected_item -= 1
+        if engine.selected_item < 0:
+            engine.selected_item = engine.player.inventory.capacity-1
+
     elif key in KEYMAP_DOWN:
-        # cur_select["select_item"] -= 1
-        # engine.action_queue.extend([cur_select])
         engine.selected_item += 1
-    # elif key in KEYMAP_LEFT:
-    # elif key in KEYMAP_RIGHT:
+        if engine.player.inventory.capacity-1 < engine.selected_item:
+            engine.selected_item = 0
+
 
 
     elif key in KEYMAP_USE_ITEM:

@@ -47,6 +47,7 @@ class ConfusionScroll(Actor):
 
         )
         self.tag = [Tag.item, Tag.used]
+        self.enemy = None
 
         self.level = 2
 
@@ -61,17 +62,18 @@ class ConfusionScroll(Actor):
         pixel_x, pixel_y = grid_to_pixel(grid_x, grid_y)
         sprites = arcade.get_sprites_at_point(
             (pixel_x, pixel_y), self.game_engine.cur_level.actor_sprites)
-        for sprite in sprites:
-            if sprite.fighter and not sprite.is_dead:
-                self.enemy = sprite
-                confused_ai = ConfusedMonster(self.enemy.ai)
-                confused_ai.owner = self.enemy
-                self.enemy.ai = confused_ai
+        if sprites:
+            for sprite in sprites:
+                if sprite.fighter and not sprite.is_dead:
+                    self.enemy = sprite
+                    confused_ai = ConfusedMonster(self.enemy.ai)
+                    confused_ai.owner = self.enemy
+                    self.enemy.ai = confused_ai
 
-                results.extend(
-                    [{"message": f"The eyes of the {self.enemy.name} look vacant, as he starts to stumble around! "}])
+                    results.extend(
+                        [{"message": f"The eyes of the {self.enemy.name} look vacant, as he starts to stumble around! "}])
 
-                break
+                    break
         else:
             results.append(
                 {"message": "There is no targetable enemy at that location."})
@@ -79,8 +81,8 @@ class ConfusionScroll(Actor):
     def click(self, x, y):
         results = []
         self.confused(x, y, results)
-        ConfusionEffect(
-            x, y, self.enemy, self.game_engine.cur_level.effect_sprites, self.game_engine.cur_level.actor_sprites)
-        self.game_engine.player.inventory.remove_item(self)
+        if self.enemy:
+            ConfusionEffect(x, y, self.enemy, self.game_engine.cur_level.effect_sprites, self.game_engine.cur_level.actor_sprites)
+            self.game_engine.player.inventory.remove_item(self)
 
         return results

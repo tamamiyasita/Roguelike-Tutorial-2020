@@ -42,7 +42,6 @@ class MG(arcade.Window):
 
         self.player_direction = None
         self.grid_select = [0, 0]
-        self.cur_select = {"select_item": 1}
         self.mouse_position = None
         self.viewports = None
         self.grid, self.grid_press = None,None
@@ -216,6 +215,9 @@ class MG(arcade.Window):
                 self.engine.player.equipment.update(
                     self.engine.cur_level.equip_sprites)
 
+            # グリッド選択変数はNORMAL STATE時は無効にする
+            self.grid_press = None
+
 
     def on_key_press(self, key, modifiers):
         # windowを閉じた時にjsonにダンプする
@@ -235,8 +237,6 @@ class MG(arcade.Window):
 
         # Lコマンド時、スクロール仕様時などのカーソル移動と選択
         if self.engine.game_state == GAME_STATE.SELECT_LOCATION or self.engine.game_state == GAME_STATE.LOOK:
-            if self.engine.game_state == GAME_STATE.LOOK:
-                self.grid_press = None
             self.grid = grid_select_key(key, self.engine)
             if isinstance(self.grid, tuple):
                 self.grid_select[0] += self.grid[0]
@@ -244,16 +244,9 @@ class MG(arcade.Window):
             else:
                 self.grid_press = self.grid
 
+        # インベントリを操作する
         if self.engine.game_state == GAME_STATE.INVENTORY:
-            inventory_key(key,self.cur_select, self.engine)
-            if key == arcade.key.J:
-                self.engine.game_state = GAME_STATE.DELAY_WINDOW
-                self.engine.game_state = GAME_STATE.INVENTORY
-
-                # draw_inventory(self.engine.player, self.engine.selected_item, self.viewport_left, self.viewport_bottom, self.grid_select)
-            # if isinstance(self.grid, tuple):
-            #     self.grid_select[0] += self.grid[0]
-            #     self.grid_select[1] += self.grid[1]
+            inventory_key(key, self.engine)
 
 
         # ドア開閉

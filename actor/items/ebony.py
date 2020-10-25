@@ -12,7 +12,7 @@ class Ebony(Actor):
             y=y,
         )
 
-        self.slot = "head"
+        self.slot = "flower"
         self.states_bonus = {"STR": 1}
 
         self.level = 1
@@ -21,6 +21,9 @@ class Ebony(Actor):
         
         self.skill_add = {"branch_baton":1}
 
-        self.item_margin_x = 16
-        self.item_margin_y = 17
+        self.explanatory_text = f"Is Ebony $#############4TEst test test \n test$#4444444444testtest"
+
+
+        self.item_margin_x = 19
+        self.item_margin_y = 11
         self.my_speed = 4.3
