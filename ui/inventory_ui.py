@@ -133,7 +133,7 @@ def draw_inventory(player, selected_item, viewport_x, viewport_y):
         arcade.draw_text(
             text=item_text,
             start_x=back_panel_x +550,
-            start_y=item_row + y2,
+            start_y=item_row + y,
             color=arcade.color.ARYLIDE_YELLOW,
             font_size=item_font_size
         )
