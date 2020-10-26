@@ -150,7 +150,7 @@ class Equipment:
         else:
             return None
 
-    def toggle_equip(self, equip_item, sprites):
+    def toggle_equip(self, equip_item):
         """装備アイテムの付け外しを行うメソッド
         """
         results = []
@@ -163,10 +163,6 @@ class Equipment:
                 results.append({"message": f"dequipped {item.name}"})
                 break
 
-            # self.equip_update_check = True
-            # return results
-
-            # for key, item in self.item_slot.items():
             if item is None:
 
                 self.item_slot[key] = equip_item

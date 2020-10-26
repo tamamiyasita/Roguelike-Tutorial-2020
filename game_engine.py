@@ -401,8 +401,7 @@ class GameEngine:
                     item = self.player.inventory.get_item_number(
                         item_number)
                     if item and Tag.equip in item.tag:
-                        results = self.player.equipment.toggle_equip(
-                            item, self.cur_level.equip_sprites)
+                        results = self.player.equipment.toggle_equip(item)
                         new_action_queue.extend(results)
 
             if "pickup" in action:
@@ -425,8 +424,7 @@ class GameEngine:
 
                     # これはequipを外す処理
                     if item and item in self.player.equipment.item_slot.values():
-                        self.player.equipment.toggle_equip(
-                            item, self.cur_level.equip_sprites)
+                        self.player.equipment.toggle_equip(item)
 
                     # ここでドロップ
                     if item:
