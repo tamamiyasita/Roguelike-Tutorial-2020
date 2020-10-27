@@ -182,7 +182,7 @@ class LevelupUI:
                 bottom_left_y=self.viewport_bottom+340,
                 width=128,
                 height=128,
-                color=[255, 25, 25, 190]
+                color=[5, 25, 25, 190]
             )
             # スキル枠Aのスキルアイコン
             arcade.draw_texture_rectangle(
@@ -208,7 +208,7 @@ class LevelupUI:
                 self.viewport_left+662+140+64,
                 self.viewport_bottom+340+64,
                 64, 64,
-                texture=arcade.load_texture(r"image\branch_baton_icon.png")
+                texture=IMAGE_ID["branch_baton_icon"]
             )
 
 

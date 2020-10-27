@@ -122,20 +122,53 @@ def draw_inventory(player, selected_item, viewport_x, viewport_y):
 
 
     y = 40
-    for i, item in enumerate(player.equipment.equip_slot.items()):
+    for slot, equip in player.equipment.equip_slot.items():
 
-        if item[1]:
+        if equip:
 
-            item_text = f"{item[0]}: {item[1].name}"
+            item_text = f"{slot} : {equip.name} (level {equip.level})".replace("_", " ").title()
         else:
-            item_text = f"{item[0]}: {item[1]}"
+            continue
 
         arcade.draw_text(
             text=item_text,
-            start_x=back_panel_x +550,
+            start_x=back_panel_x +650,
             start_y=item_row + y,
             color=arcade.color.ARYLIDE_YELLOW,
-            font_size=item_font_size
+            font_size=item_font_size-2
+        )
+
+        arcade.draw_texture_rectangle(
+            center_x=back_panel_x +730,
+            center_y=item_row + y-25,
+            width=40,
+            height=40,
+            texture=equip.icon
         )
             
-        y -= 40
+        arcade.draw_text(
+            text=f"damage: {equip.attack_damage[0]}D/{equip.attack_damage[2]}",
+            start_x=back_panel_x +755,
+            start_y=item_row + y-25,
+            color=arcade.color.APPLE_GREEN,
+            font_size=item_font_size-6,
+            font_name="consola.ttf"
+        )
+        arcade.draw_text(
+            text=f"hit rate: {equip.hit_rate}",
+            start_x=back_panel_x +755,
+            start_y=item_row + y-47,
+            color=arcade.color.ORCHID_PINK,
+            font_size=item_font_size-6,
+            font_name="consola.ttf"
+        )
+        arcade.draw_text(
+            text=f"{equip.explanatory_text}",
+            start_x=back_panel_x +717,
+            start_y=item_row + y-65,
+            color=arcade.color.WHITE,
+            font_size=item_font_size-7,
+            font_name="consola.ttf"
+        )
+
+        y -= 104

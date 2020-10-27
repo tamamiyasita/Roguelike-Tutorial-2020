@@ -95,6 +95,7 @@ cirsium = arcade.load_texture_pair(r"image\Cirsium.png")
 ebony = arcade.load_texture_pair(r"image\ebony.png")
 leaf_blade = arcade.load_texture_pair(r"image\LeafBlade.png")
 branch_baton = arcade.load_texture_pair(r"image\BranchBaton.png")
+branch_baton_icon = arcade.load_texture(r"image\branch_baton_icon.png")
 
 
 ###items###
@@ -178,6 +179,7 @@ IMAGE_ID = {"player": player,
             "ebony":ebony,
             "leaf_blade": leaf_blade,
             "branch_baton": branch_baton,
+            "branch_baton_icon": branch_baton_icon,
 
             "healing_potion": healing_potion_tile,
             "confusion_scroll": [scroll_tile[15]],
