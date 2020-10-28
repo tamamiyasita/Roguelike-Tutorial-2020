@@ -379,11 +379,11 @@ class GameEngine:
                     self.move_switch = True
 
             # TODO 削除予定
-            if "select_item" in action:
-                item_number = action["select_item"]
-                if 1 <= item_number <= self.player.inventory.capacity:
-                    if self.selected_item != item_number - 1:
-                        self.selected_item = item_number - 1
+            # if "select_item" in action:
+            #     item_number = action["select_item"]
+            #     if 1 <= item_number <= self.player.inventory.capacity:
+            #         if self.selected_item != item_number - 1:
+            #             self.selected_item = item_number - 1
 
             if "use_item" in action:
                 item_number = self.selected_item

@@ -230,10 +230,14 @@ class MG(arcade.Window):
                 json.dump(self.game_dict, write_file, indent=4, sort_keys=True, check_circular=False) 
                 
             arcade.close_window()
+        
+        if key == arcade.key.DELETE:
+            arcade.close_window()
 
         # playerの移動
         self.engine.move_switch = True
-        self.player_direction = keymap(key, self.engine)
+        if self.engine.game_state != GAME_STATE.LEVEL_UP_WINDOW:
+            self.player_direction = keymap(key, self.engine)
 
         # Lコマンド時、スクロール仕様時などのカーソル移動と選択
         if self.engine.game_state == GAME_STATE.SELECT_LOCATION or self.engine.game_state == GAME_STATE.LOOK:

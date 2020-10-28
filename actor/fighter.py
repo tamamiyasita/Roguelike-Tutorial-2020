@@ -92,14 +92,22 @@ class Fighter:
     @property
     def skill_list(self):
         """skill listをループして装備の追加skill levelをskill levelに加える"""
-        for s in self._skill_list:  # [LeafBlade()]が入る
-            if s and not isinstance(s, str):
-                s.level = 0
-                s.level = self.owner.equipment.skill_level_sum.get(s.name)
-                if s.level is None:
-                    s.level = 0
+        for skill in self._skill_list:  # [LeafBlade()]が入る
+            if skill and not isinstance(skill, str):
+                skill.level = 0
+                skill.level = self.owner.equipment.skill_level_sum.get(skill.name)
+                if skill.level is None:
+                    skill.level = 0
 
         return self._skill_list
+    
+    @property
+    def active_skill(self):
+        active_skill = []
+        for skill in self.skill_list:
+            if Tag.active in skill.tag:
+                active_skill.append(skill)
+        return active_skill
 
     @property
     def max_hp(self):

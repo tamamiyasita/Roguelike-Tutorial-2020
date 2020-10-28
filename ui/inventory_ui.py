@@ -126,7 +126,7 @@ def draw_inventory(player, selected_item, viewport_x, viewport_y):
 
         if equip:
 
-            item_text = f"{slot} : {equip.name} (level {equip.level})".replace("_", " ").title()
+            item_text = f"{slot}: {equip.name} (level {equip.level})".replace("_", " ").title()
         else:
             continue
 
@@ -135,7 +135,8 @@ def draw_inventory(player, selected_item, viewport_x, viewport_y):
             start_x=back_panel_x +650,
             start_y=item_row + y,
             color=arcade.color.ARYLIDE_YELLOW,
-            font_size=item_font_size-2
+            font_size=item_font_size-4,
+            font_name="consola.ttf"
         )
 
         arcade.draw_texture_rectangle(

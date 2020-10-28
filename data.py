@@ -94,6 +94,7 @@ long_sword = [long_sword_right, long_sword_left]
 cirsium = arcade.load_texture_pair(r"image\Cirsium.png")
 ebony = arcade.load_texture_pair(r"image\ebony.png")
 leaf_blade = arcade.load_texture_pair(r"image\LeafBlade.png")
+leaf_blade_icon = arcade.load_texture(r"image\leaf_blade_icon.png")
 branch_baton = arcade.load_texture_pair(r"image\BranchBaton.png")
 branch_baton_icon = arcade.load_texture(r"image\branch_baton_icon.png")
 
@@ -178,6 +179,7 @@ IMAGE_ID = {"player": player,
             "cirsium": cirsium,
             "ebony":ebony,
             "leaf_blade": leaf_blade,
+            "leaf_blade_icon": leaf_blade_icon,
             "branch_baton": branch_baton,
             "branch_baton_icon": branch_baton_icon,
 

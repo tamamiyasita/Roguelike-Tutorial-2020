@@ -49,6 +49,7 @@ class Tag(Enum):
     used = auto()
     equip = auto()
     skill = auto()
+    active = auto()
 
     # chara
     player = auto()

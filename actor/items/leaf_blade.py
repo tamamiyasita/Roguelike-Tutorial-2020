@@ -14,7 +14,6 @@ class LeafBlade(Actor):
         )
 
         self.slot = "main_hand"
-        self.states_bonus = {"DEX": 1}
         self.attack_damage = (1, 2, 6)
         self.hit_rate = 95
 
@@ -22,7 +21,8 @@ class LeafBlade(Actor):
 
         self.tag = [Tag.item, Tag.equip, Tag.skill]
 
-        self.explanatory_text = f""
+        self.explanatory_text = f"the test or test and test"
+        self.icon = IMAGE_ID["leaf_blade_icon"]
 
         self.item_margin_x = 6 * SPRITE_SCALE
         self.item_margin_y = 3 * SPRITE_SCALE
