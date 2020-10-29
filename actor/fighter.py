@@ -3,6 +3,7 @@ from constants import *
 from util import dice, stop_watch
 from actor.items.leaf_blade import LeafBlade
 from actor.items.branch_baton import BranchBaton
+from actor.items.heal import HealingPotion
 
 
 class Fighter:
@@ -28,7 +29,7 @@ class Fighter:
         self.current_xp = current_xp
         self.level = level
         self.ability_points = ability_points
-        self._skill_list = []
+        self._skill_list = [HealingPotion(), HealingPotion()]
 
         self.damage = None
 
@@ -103,10 +104,12 @@ class Fighter:
     
     @property
     def active_skill(self):
-        active_skill = []
+        count = 1
+        active_skill = {}
         for skill in self.skill_list:
             if Tag.active in skill.tag:
-                active_skill.append(skill)
+                active_skill[count] = skill
+                count += 1
         return active_skill
 
     @property

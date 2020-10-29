@@ -140,37 +140,39 @@ class NormalUI:
 
     def draw_inventory(self):
         """インベントリの表示"""
-        slot_len = len(self.player.equipment.item_slot)
+        slot_len = len(self.player.fighter.active_skill)
         item_left_position = self.viewport_left + \
             ((SCREEN_WIDTH-STATES_PANEL_WIDTH) / 2.8)   # パネル左からの所持アイテム表示位置の調整に使う変数
-        item_top_position = self.viewport_bottom + \
+        skill_top_position = self.viewport_bottom + \
             STATES_PANEL_HEIGHT - 22  # パネル上端からの所持アイテム表示位置の調整に使う変数
-        separate_size = 1.1  # アイテム名の表示間隔の調整に使う変数
-        margin = 3  # 選択したアイテムのアウトライン線の位置調整に使う変数
+        separate_size = 2.5  # スキル名の表示間隔の調整に使う変数
         item_font_size = 12
-        outline_size = 2
-        selected_item = self.selected_item  # ボタン押下で選択したアイテムオブジェクト
-        field_width = SCREEN_WIDTH / \
-            (slot_len + 1) / separate_size  # アイテム表示感覚を決める変数
+        field_width = SCREEN_WIDTH / (slot_len + 1) / separate_size  # アイテム表示感覚を決める変数
 
         # キャパシティ数をループし、インベントリのアイテム名とアウトラインを描画する
         # TODO 複数行にする処理を考える（５回ループしたら縦と横の変数に増減するなど）
-        for i, item in enumerate(self.player.equipment.equip_slot.items()):
-            items_position = i * field_width + item_left_position  # パネル左からの所持アイテムの表示位置
+        for i, skill in self.player.fighter.active_skill.items():
+            skill_position = i * field_width + item_left_position  # パネル左からの所持アイテムの表示位置
 
-            if item[1]:
+            if skill:
 
-                item_text = f"{item[0]}: {item[1].name}"
-            else:
-                item_text = f"{item[0]}: {item[1]}"
+                skill_name = f"{i}: {skill.name}"
 
-            arcade.draw_text(
-                text=item_text,
-                start_x=items_position,
-                start_y=item_top_position,
-                color=COLORS["status_panel_text"],
-                font_size=item_font_size
-            )
+                arcade.draw_text(
+                    text=skill_name,
+                    start_x=skill_position,
+                    start_y=skill_top_position,
+                    color=COLORS["status_panel_text"],
+                    font_size=item_font_size
+                )
+
+                arcade.draw_texture_rectangle(
+                    center_x=skill_position,
+                    center_y=skill_top_position + 20,
+                    width=40,
+                    height=40,
+                    texture=skill.texture
+                )
 
     def draw_messages_handle(self):
         """メッセージ表示領域"""
