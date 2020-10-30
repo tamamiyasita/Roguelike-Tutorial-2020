@@ -57,15 +57,27 @@ class HealingPotion(Actor):
         self.tag = [Tag.item, Tag.used, Tag.active, Tag.skill]
 
         self.level = 1
-        self.hp_return = [3, 9]
+
+
+    def recovery_amount(self, player_fighter):
+        pc_int = player_fighter.INT
+        pc_level = player_fighter.level
+        recovery_min = 2 + int((pc_int/2.5)+(pc_level/2))
+        recovery_max = 7 + int((pc_int/2)+(pc_level/2))
+        return (recovery_min, recovery_max)
+
+
+
 
     def use(self, game_engine):
-        self.hp_return = random.randint(self.hp_return[0], self.hp_return[1])
+        player_fighter = game_engine.player.fighter
+        min_hp, max_hp = self.recovery_amount(player_fighter)
 
-        game_engine.player.fighter.hp += self.hp_return
-        if game_engine.player.fighter.hp > game_engine.player.fighter.max_hp:
-            game_engine.player.fighter.hp = game_engine.player.fighter.max_hp
-        game_engine.player.inventory.remove_item(self)
+        self.hp_return = random.randint(min_hp, max_hp)
+
+        player_fighter.hp += self.hp_return
+        if player_fighter.hp > player_fighter.max_hp:
+            player_fighter.hp = player_fighter.max_hp
         Healing = HealingPotionEffect(
             game_engine.player.x, game_engine.player.y, self.hp_return, game_engine)
 
