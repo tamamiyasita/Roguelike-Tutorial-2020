@@ -100,17 +100,20 @@ class Fighter:
                 if skill.level is None:
                     skill.level = 0
 
+
         return self._skill_list
     
     @property
     def active_skill(self):
-        count = 1
-        active_skill = {}
-        for skill in self.skill_list:
-            if Tag.active in skill.tag:
-                active_skill[count] = skill
-                count += 1
-        return active_skill
+        # count = 1
+        # active_skill = {}
+        # for skill in self.skill_list:
+        #     if Tag.active in skill.tag:
+        #         active_skill[count] = skill
+        #         count += 1
+        # return active_skill
+        return {i+1:skill for i, skill in enumerate(self.skill_list) if Tag.active in skill.tag}
+
 
     @property
     def max_hp(self):

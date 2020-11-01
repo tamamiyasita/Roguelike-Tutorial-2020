@@ -31,6 +31,5 @@ class LeafBlade(Actor):
     def attack_damage(self):
         if self.master:
             self._attack_damage[0] = self.master.fighter.level // 2
-            self._attack_damage[2] = 6 + self.master.fighter.DEX // 3
 
         return self._attack_damage
