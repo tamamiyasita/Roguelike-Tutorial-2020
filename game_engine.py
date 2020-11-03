@@ -25,7 +25,7 @@ from actor.items.long_sword import LongSword
 from actor.items.confusion_scroll import ConfusionScroll
 from actor.items.fireball_scroll import FireballScroll
 from actor.items.small_shield import SmallShield
-from actor.items.healing_potion import HealingPotion
+from actor.items.paeonia import Paeonia
 from actor.items.cirsium import Cirsium
 from actor.items.ebony import Ebony
 
@@ -167,7 +167,7 @@ class GameEngine:
         self.fb = FireballScroll(self.player.x + 1, self.player.y)
         self.game_level.item_sprites.append(self.fb)
 
-        self.hp = HealingPotion(self.player.x, self.player.y-1)
+        self.hp = Paeonia(self.player.x-1, self.player.y)
         self.game_level.item_sprites.append(self.hp)
 
         self.boomerang = Boomerang(self.player.x-1, self.player.y + 1)
@@ -380,9 +380,10 @@ class GameEngine:
 
             if "use_skill" in action:
                 select_skill = action["use_skill"]
+                skill = self.player.fighter.active_skill
  
-                if select_skill is not None:
-                    skill = self.player.fighter.active_skill.get(select_skill)
+                if select_skill is not None and len(skill) >= select_skill:
+                    skill = self.player.fighter.active_skill[select_skill-1]
                     if skill and Tag.active in skill.tag:
                         results = skill.use(self)
                         if results:

@@ -145,18 +145,19 @@ class NormalUI:
             ((SCREEN_WIDTH-STATES_PANEL_WIDTH) / 2.8)   # パネル左からの所持アイテム表示位置の調整に使う変数
         skill_top_position = self.viewport_bottom + \
             STATES_PANEL_HEIGHT - 22  # パネル上端からの所持アイテム表示位置の調整に使う変数
-        separate_size = 2.5  # スキル名の表示間隔の調整に使う変数
+        separate_size = 4.5  # スキル名の表示間隔の調整に使う変数
         item_font_size = 12
         field_width = SCREEN_WIDTH / (slot_len + 1) / separate_size  # アイテム表示感覚を決める変数
 
         # キャパシティ数をループし、インベントリのアイテム名とアウトラインを描画する
         # TODO 複数行にする処理を考える（５回ループしたら縦と横の変数に増減するなど）
-        for i, skill in self.player.fighter.active_skill.items():
+        for i, skill in enumerate(self.player.fighter.active_skill):
+            print(self.player.fighter.active_skill)
             skill_position = i * field_width + item_left_position  # パネル左からの所持アイテムの表示位置
 
             if skill:
 
-                skill_name = f"{i}: {skill.name}"
+                skill_name = f"{i+1}: {skill.name}"
 
                 arcade.draw_text(
                     text=skill_name,
@@ -167,8 +168,8 @@ class NormalUI:
                 )
 
                 arcade.draw_texture_rectangle(
-                    center_x=skill_position,
-                    center_y=skill_top_position + 20,
+                    center_x=skill_position + 50,
+                    center_y=skill_top_position - 25,
                     width=40,
                     height=40,
                     texture=skill.texture

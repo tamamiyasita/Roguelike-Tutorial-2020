@@ -4,9 +4,9 @@ from actor.damage_pop import Damagepop
 from constants import *
 from data import *
 import random
+from util import dice
 
-
-class HealingPotionEffect(Actor):
+class RegenerationEffect(Actor):
     def __init__(self, x, y, hp_return, engine):
         super().__init__(
             x=x,
@@ -45,25 +45,29 @@ class HealingPotionEffect(Actor):
             self.engine.cur_level.effect_sprites.remove(self)
 
 
-class HealingPotion(Actor):
+class Regeneration(Actor):
     def __init__(self, x=0, y=0):
         super().__init__(
             x=x,
             y=y,
-            name="healing_potion",
-            not_visible_color=COLORS["black"],
+            name="regeneration",
+            # not_visible_color=COLORS["black"],
 
         )
+
+        self.level = 0
+
         self.tag = [Tag.item, Tag.used, Tag.active, Tag.skill]
 
-        self.level = 1
+        self.explanatory_text = f"Regeneration testtesttest and test"
+        self.icon = IMAGE_ID["paeonia_icon"]
+
 
 
     def recovery_amount(self, player_fighter):
         pc_int = player_fighter.INT
-        pc_level = player_fighter.level
-        recovery_min = 2 + int((pc_int/2.5)+(pc_level/2))
-        recovery_max = 7 + int((pc_int/2)+(pc_level/2))
+        recovery_min = 2 + int(pc_int/2.5)
+        recovery_max = 7 + int(pc_int/2)
         return (recovery_min, recovery_max)
 
 
@@ -73,12 +77,12 @@ class HealingPotion(Actor):
         player_fighter = game_engine.player.fighter
         min_hp, max_hp = self.recovery_amount(player_fighter)
 
-        self.hp_return = random.randint(min_hp, max_hp)
+        self.hp_return = dice(self.level, min_hp, max_hp)
 
         player_fighter.hp += self.hp_return
         if player_fighter.hp > player_fighter.max_hp:
             player_fighter.hp = player_fighter.max_hp
-        Healing = HealingPotionEffect(
+        Healing = RegenerationEffect(
             game_engine.player.x, game_engine.player.y, self.hp_return, game_engine)
 
         return [{"message": f"You used the {self.name}"}]

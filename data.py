@@ -92,12 +92,13 @@ long_sword_right = arcade.load_texture(
 long_sword = [long_sword_right, long_sword_left]
 
 cirsium = arcade.load_texture_pair(r"image\Cirsium.png")
-ebony = arcade.load_texture_pair(r"image\ebony.png")
 leaf_blade = arcade.load_texture_pair(r"image\LeafBlade.png")
 leaf_blade_icon = arcade.load_texture(r"image\leaf_blade_icon.png")
+ebony = arcade.load_texture_pair(r"image\ebony.png")
 branch_baton = arcade.load_texture_pair(r"image\BranchBaton.png")
 branch_baton_icon = arcade.load_texture(r"image\branch_baton_icon.png")
-
+Paeonia_icon = arcade.load_texture("image\paeonia_icon.png")
+Paeonia = arcade.load_texture("image\paeonia.png")
 
 ###items###
 # healing_potionテクスチャセット生成
@@ -182,6 +183,10 @@ IMAGE_ID = {"player": player,
             "leaf_blade_icon": leaf_blade_icon,
             "branch_baton": branch_baton,
             "branch_baton_icon": branch_baton_icon,
+            "paeonia":[Paeonia],
+            "regeneration":[Paeonia_icon],
+            "paeonia_icon":Paeonia_icon,
+
 
             "healing_potion": healing_potion_tile,
             "confusion_scroll": [scroll_tile[15]],

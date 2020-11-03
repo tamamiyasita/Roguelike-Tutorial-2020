@@ -65,7 +65,6 @@ class Equipment:
             if parts and not isinstance(parts, str) and parts.skill_add:
                 bonus = Counter(bonus) + Counter(parts.skill_add)
 
-        print(bonus, "bonus sum")
         return bonus  # {leaf_blade:1}
 
     def update(self, sprites):

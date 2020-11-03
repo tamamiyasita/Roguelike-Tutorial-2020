@@ -4,26 +4,27 @@ from data import *
 
 
 
-class Ebony(Actor):
+class Paeonia(Actor):
     def __init__(self, x=0, y=0):
         super().__init__(
-            name="ebony",
+            name="paeonia",
             x=x,
             y=y,
+            scale=1.2
         )
 
         self.slot = "flower"
-        self.states_bonus = {"STR": 1}
+        self.states_bonus = {"INT": 1}
 
         self.level = 1
 
         self.tag = [Tag.item, Tag.equip, Tag.flower]
         
-        self.skill_add = {"branch_baton":1, "leaf_blade":2}
+        self.skill_add = {"branch_baton":3, "leaf_blade":3, "regeneration":6}
 
         self.explanatory_text = f"Is Ebony $#############4TEst test test \n test$#4444444444testtest"
 
 
-        self.item_margin_x = 19
-        self.item_margin_y = 11
-        self.my_speed = 4.3
+        self.item_margin_x = 17
+        self.item_margin_y = 6
+        self.my_speed = 2.3

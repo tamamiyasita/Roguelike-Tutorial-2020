@@ -147,8 +147,7 @@ def keymap(key, engine):
             engine.action_queue.extend([{"use_skill": 8}])
         elif key in KEYMAP_SELECT_ITEM_9:
             engine.action_queue.extend([{"use_skill": 9}])
-        elif key in KEYMAP_SELECT_ITEM_0:
-            engine.action_queue.extend([{"use_skill": 0}])
+
         elif key in KEYMAP_USE_ITEM:
             engine.action_queue.extend([{"use_item": True}])
         elif key in KEYMAP_EQUIP_ITEM:
