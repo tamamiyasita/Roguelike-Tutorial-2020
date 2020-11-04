@@ -20,6 +20,14 @@ class TurnLoop:
         self.player = player
         self.turn = Turn.ON
 
+    def cooldown_charge(self, actor):
+        if hasattr(actor, "fighter"):
+            if actor.fighter.active_skill:
+                for skill in actor.fighter.active_skill:
+                    if 0 < skill.cur_cooldown_time:
+                        print(skill.cur_cooldown_time, skill)
+                        skill.cur_cooldown_time -= 1
+
     def loop_on(self, engine):
         """actor間のメインループ制御"""
 
@@ -44,6 +52,7 @@ class TurnLoop:
                     break
 
         if self.turn == Turn.OFF:
+            self.cooldown_charge(self.actor)
 
             if self.actor == self.player:
                 self.player.state = state.READY
@@ -65,3 +74,5 @@ class TurnLoop:
             #     f"{self.actor.name=}, {self.actor.wait=}, {self.actor.state=}, {self.actor.is_dead=}")
             if self.actor.state is state.TURN_END or self.actor.state is None or self.actor.is_dead:
                 self.turn = Turn.ON
+
+    

@@ -107,6 +107,7 @@ class Fighter:
         return [skill for skill in self.skill_list if Tag.active in skill.tag]
 
 
+
     @property
     def max_hp(self):
         bonus = 0

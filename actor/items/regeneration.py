@@ -54,8 +54,10 @@ class Regeneration(Actor):
             # not_visible_color=COLORS["black"],
 
         )
-
         self.level = 0
+
+        self.max_cooldown_time = 3
+        self.cur_cooldown_time = 0
 
         self.tag = [Tag.item, Tag.used, Tag.active, Tag.skill]
 
@@ -74,15 +76,17 @@ class Regeneration(Actor):
 
 
     def use(self, game_engine):
-        player_fighter = game_engine.player.fighter
-        min_hp, max_hp = self.recovery_amount(player_fighter)
+        if self.cur_cooldown_time <= 0:
+            self.cur_cooldown_time = self.max_cooldown_time
+            player_fighter = game_engine.player.fighter
+            min_hp, max_hp = self.recovery_amount(player_fighter)
 
-        self.hp_return = dice(self.level, min_hp, max_hp)
+            self.hp_return = dice(self.level, min_hp, max_hp)
 
-        player_fighter.hp += self.hp_return
-        if player_fighter.hp > player_fighter.max_hp:
-            player_fighter.hp = player_fighter.max_hp
-        Healing = RegenerationEffect(
-            game_engine.player.x, game_engine.player.y, self.hp_return, game_engine)
+            player_fighter.hp += self.hp_return
+            if player_fighter.hp > player_fighter.max_hp:
+                player_fighter.hp = player_fighter.max_hp
+            Healing = RegenerationEffect(
+                game_engine.player.x, game_engine.player.y, self.hp_return, game_engine)
 
-        return [{"message": f"You used the {self.name}"}]
+            return [{"message": f"You used the {self.name}"}]

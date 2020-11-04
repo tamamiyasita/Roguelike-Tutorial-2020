@@ -388,7 +388,8 @@ class GameEngine:
                         results = skill.use(self)
                         if results:
                             new_action_queue.extend(results)
-                            self.player.state = state.TURN_END
+                            new_action_queue.append({"turn_end":self.player})
+
 
             if "use_item" in action:
                 item_number = self.selected_item
