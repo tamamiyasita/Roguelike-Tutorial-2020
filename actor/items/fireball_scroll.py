@@ -59,7 +59,7 @@ class FireballScroll(Actor):
             if sprite.fighter and not sprite.is_dead:
                 results.extend(
                     [{"message": f"{sprite.name} was struck by a fireball for {amount} points."}])
-                result = sprite.fighter.take_damage(amount)
+                result = sprite.fighter.change_hp(amount)
                 if result:
                     results.extend(result)
 

@@ -1,8 +1,7 @@
 import random
 from constants import *
 from util import dice, stop_watch
-from actor.items.leaf_blade import LeafBlade
-from actor.items.branch_baton import BranchBaton
+
 
 
 class Fighter:
@@ -29,6 +28,8 @@ class Fighter:
         self.level = level
         self.ability_points = ability_points
         self._skill_list = []
+
+        self._states = []
 
         self.damage = None
 
@@ -174,20 +175,20 @@ class Fighter:
     @property
     def melee_attack_damage(self):
         if self.owner.equipment and self.owner.equipment.melee_weapon_damage:
-            D, min_d, max_d = self.owner.equipment.melee_weapon_damage
+            max_d = self.owner.equipment.melee_weapon_damage
         else:
-            D, min_d, max_d = self.owner.fighter.unarmed_attack
+            max_d = self.owner.fighter.unarmed_attack
 
-        melee_attack_damage = dice(D, min_d+(self.DEX//3), max_d+self.STR)
+        melee_attack_damage = dice(1 + self.level//3, max_d+(self.STR//3))
 
         return melee_attack_damage
 
     @property
     def ranged_attack_damage(self):
         if self.owner.equipment and self.owner.equipment.ranged_weapon_damage:
-            D, min_d, max_d = self.owner.equipment.ranged_weapon_damage
+            max_d = self.owner.equipment.ranged_weapon_damage
 
-            ranged_attack_damage = dice(D, min_d+(self.STR//3), max_d+self.DEX)
+            ranged_attack_damage = dice(max_d)
 
             return ranged_attack_damage
 
@@ -212,16 +213,22 @@ class Fighter:
 
             return hit_chance
 
-    def take_damage(self, amount):
+    def change_hp(self, value):
+        
         results = []
 
-        self.hp -= amount
+        self.hp += value
 
-        if self.hp <= 0:
+        if self.hp <= 0:#死亡
             self.owner.blocks = False
             self.owner.is_dead = True
             results.append({"dead": self.owner})
             print(f"{self.owner.name} is dead x!")
+
+        if self.hp > self.max_hp:
+            self.hp = self.max_hp
+
+        results.append({"damage_pop": self.owner, "damage": value})
 
         return results
 
@@ -243,20 +250,20 @@ class Fighter:
 
                 results.append(
                     {"message": f"{self.owner.name.capitalize()} attacks {target.name} for {str(self.damage)} hit points."})
-                results.extend(target.fighter.take_damage(self.damage))
+                results.extend(target.fighter.change_hp(-self.damage))
 
                 # xp獲得処理
                 if target.is_dead:
                     self.current_xp += target.fighter.xp_reward
 
-            else:
+            else:# 完全防御
                 results.append(
                     {"message": f"{self.owner.name.capitalize()} attacks {target.name} but no self.damage"}
                 )
 
-            results.extend([{"damage_pop": target, "damage": self.damage}])
+            # results.extend([{"damage_pop": target, "damage": self.damage}])
 
-        else:
+        else:#回避
             results.append(
                 {"message": f"{self.owner.name.capitalize()} attacks {target.name} Avoided"}
             )

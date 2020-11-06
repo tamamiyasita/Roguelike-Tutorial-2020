@@ -29,7 +29,6 @@ class Damagepop(Actor):
         self.alpha = 0
         self.change_y = 2.5
 
-    # def set(self, t):
         self.texture = self.text.texture
         self.effect_sprites.append(self)
         self.engine.damage_pop.append(self)

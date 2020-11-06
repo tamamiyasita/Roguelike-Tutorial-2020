@@ -184,7 +184,7 @@ IMAGE_ID = {"player": player,
             "branch_baton": branch_baton,
             "branch_baton_icon": branch_baton_icon,
             "paeonia":[Paeonia],
-            "regeneration":[Paeonia_icon],
+            "healing":[Paeonia_icon],
             "paeonia_icon":Paeonia_icon,
 
 

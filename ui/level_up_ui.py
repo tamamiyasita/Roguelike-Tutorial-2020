@@ -5,7 +5,7 @@ from constants import *
 from data import *
 from actor.items.leaf_blade import LeafBlade
 from actor.items.branch_baton import BranchBaton
-from actor.items.regeneration import Regeneration
+from actor.items.healing import Healing
 from enum import Enum, auto
 from collections import deque
 
@@ -25,7 +25,7 @@ class LevelupUI:
         self.up_int = ""
         self.tmp_states = None
         self.ui_state = Select.delay
-        self.skill_queue = deque([Regeneration(),(LeafBlade(), BranchBaton()),Regeneration() ])
+        self.skill_queue = deque([Healing(engine),(LeafBlade(), BranchBaton()),Healing() ])
         self.skill_result = []
         self.get_skill = None
 

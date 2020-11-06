@@ -148,7 +148,7 @@ def draw_inventory(player, selected_item, viewport_x, viewport_y):
         )
             
         arcade.draw_text(
-            text=f"damage: {equip.attack_damage[0]}D/{equip.attack_damage[2]}",
+            text=f"damage: {player.fighter.level//3}D/{equip.attack_damage}",
             start_x=back_panel_x +755,
             start_y=item_row + y-25,
             color=arcade.color.APPLE_GREEN,

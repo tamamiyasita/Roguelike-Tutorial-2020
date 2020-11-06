@@ -152,7 +152,7 @@ class NormalUI:
         # キャパシティ数をループし、インベントリのアイテム名とアウトラインを描画する
         # TODO 複数行にする処理を考える（５回ループしたら縦と横の変数に増減するなど）
         for i, skill in enumerate(self.player.fighter.active_skill):
-            print(self.player.fighter.active_skill)
+            # print(self.player.fighter.active_skill)
             skill_position = i * field_width + item_left_position  # パネル左からの所持アイテムの表示位置
 
             if skill:
@@ -166,6 +166,7 @@ class NormalUI:
                     color=COLORS["status_panel_text"],
                     font_size=item_font_size
                 )
+  
 
                 arcade.draw_texture_rectangle(
                     center_x=skill_position + 50,
@@ -174,6 +175,16 @@ class NormalUI:
                     height=40,
                     texture=skill.texture
                 )
+                if 0 < skill.cur_cooldown_time:
+                    arcade.draw_text(
+                        text=str(skill.cur_cooldown_time),
+                        start_x=skill_position + 50,
+                        start_y=skill_top_position - 25,
+                        color=arcade.color.DARK_BLUE,
+                        font_size=25,
+                        anchor_x="center",
+                        anchor_y="center"
+                    )
 
     def draw_messages_handle(self):
         """メッセージ表示領域"""

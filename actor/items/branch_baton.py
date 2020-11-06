@@ -14,7 +14,7 @@ class BranchBaton(Actor):
         )
 
         self.slot = "main_hand"
-        self.attack_damage = (1, 2, 7)
+        self.attack_damage = 7
         self.hit_rate = 92
 
         self.level = 0

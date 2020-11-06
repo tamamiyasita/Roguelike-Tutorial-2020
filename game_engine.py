@@ -385,7 +385,7 @@ class GameEngine:
                 if select_skill is not None and len(skill) >= select_skill:
                     skill = self.player.fighter.active_skill[select_skill-1]
                     if skill and Tag.active in skill.tag:
-                        results = skill.use(self)
+                        results = skill.use()
                         if results:
                             new_action_queue.extend(results)
                             new_action_queue.append({"turn_end":self.player})
@@ -474,7 +474,13 @@ class GameEngine:
             if "damage_pop" in action:
                 target = action["damage_pop"]
                 damage = action["damage"]
-                Damagepop(self, damage, arcade.color.ORANGE_PEEL, target)
+                txt_color =arcade.color.WHITE
+                if 0 < damage:
+                    txt_color = arcade.color.MINT_GREEN
+                elif 0 > damage:
+                    txt_color = arcade.color.ORANGE_PEEL
+
+                Damagepop(self, damage, txt_color, target)
 
             if "talk" in action:
                 actor = action.pop("talk")

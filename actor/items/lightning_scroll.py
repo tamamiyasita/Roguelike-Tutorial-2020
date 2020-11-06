@@ -70,7 +70,7 @@ class LightningScroll(Actor):
             game_engine.player.inventory.remove_item(self)
             results.append(
                 {"message": f"{closest_actor.name} was struck by lighting for {damage} points."})
-            results.extend(closest_actor.fighter.take_damage(damage))
+            results.extend(closest_actor.fighter.change_hp(damage))
 
             return results
         else:

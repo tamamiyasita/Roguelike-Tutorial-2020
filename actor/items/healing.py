@@ -1,12 +1,11 @@
-from PIL.ImageOps import scale
 from actor.actor import Actor
 from actor.damage_pop import Damagepop
 from constants import *
 from data import *
 import random
-from util import dice
+from util import dice, result_add
 
-class RegenerationEffect(Actor):
+class HealingEffect(Actor):
     def __init__(self, x, y, hp_return, engine):
         super().__init__(
             x=x,
@@ -31,7 +30,7 @@ class RegenerationEffect(Actor):
         )
         self.alpha = 0
         self.engine.cur_level.effect_sprites.append(self)
-        Damagepop(engine, hp_return, arcade.color.GREEN_YELLOW, engine.player)
+        # Damagepop(engine, hp_return, arcade.color.GREEN_YELLOW, engine.player)
 
     def update(self):
         self.x = self.engine.player.x
@@ -45,15 +44,14 @@ class RegenerationEffect(Actor):
             self.engine.cur_level.effect_sprites.remove(self)
 
 
-class Regeneration(Actor):
-    def __init__(self, x=0, y=0):
+class Healing(Actor):
+    def __init__(self, engine=None ):
         super().__init__(
-            x=x,
-            y=y,
-            name="regeneration",
-            # not_visible_color=COLORS["black"],
+            name="healing",
 
         )
+
+        self.engine = engine
         self.level = 0
 
         self.max_cooldown_time = 3
@@ -61,32 +59,27 @@ class Regeneration(Actor):
 
         self.tag = [Tag.item, Tag.used, Tag.active, Tag.skill]
 
-        self.explanatory_text = f"Regeneration testtesttest and test"
+        self.explanatory_text = f"Recover a small amount of hp"
         self.icon = IMAGE_ID["paeonia_icon"]
 
+    @property
+    def hp_return(self):
+
+        max_hp = 7 + int(self.engine.player.fighter.INT/2)
+
+        return self.level, max_hp
 
 
-    def recovery_amount(self, player_fighter):
-        pc_int = player_fighter.INT
-        recovery_min = 2 + int(pc_int/2.5)
-        recovery_max = 7 + int(pc_int/2)
-        return (recovery_min, recovery_max)
 
 
-
-
-    def use(self, game_engine):
+    def use(self):
         if self.cur_cooldown_time <= 0:
-            self.cur_cooldown_time = self.max_cooldown_time
-            player_fighter = game_engine.player.fighter
-            min_hp, max_hp = self.recovery_amount(player_fighter)
+            self.cur_cooldown_time = self.max_cooldown_time+1
 
-            self.hp_return = dice(self.level, min_hp, max_hp)
+            hp_return = dice(*self.hp_return)
 
-            player_fighter.hp += self.hp_return
-            if player_fighter.hp > player_fighter.max_hp:
-                player_fighter.hp = player_fighter.max_hp
-            Healing = RegenerationEffect(
-                game_engine.player.x, game_engine.player.y, self.hp_return, game_engine)
+            result = self.engine.player.fighter.change_hp(hp_return)
+            Healing = HealingEffect(
+                self.engine.player.x, self.engine.player.y, hp_return, self.engine)
 
-            return [{"message": f"You used the {self.name}"}]
+            return [{"message": f"You have recovered {hp_return} using {self.name}"}, *result]

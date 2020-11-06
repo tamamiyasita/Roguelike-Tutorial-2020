@@ -14,7 +14,7 @@ class LeafBlade(Actor):
         )
 
         self.slot = "main_hand"
-        self._attack_damage = [1, 2, 6]
+        self.attack_damage = 6
         self.hit_rate = 95
 
         self.level = 0
@@ -27,9 +27,9 @@ class LeafBlade(Actor):
         self.item_margin_x = 6 * SPRITE_SCALE
         self.item_margin_y = 3 * SPRITE_SCALE
 
-    @property
-    def attack_damage(self):
-        if self.master:
-            self._attack_damage[0] = 1 + self.level // 2
+    # @property
+    # def attack_damage(self):
+    #     if self.master:
+    #         self._attack_damage[0] = 1 + self.level // 2
 
-        return self._attack_damage
+    #     return self._attack_damage

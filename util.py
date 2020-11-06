@@ -24,8 +24,8 @@ def pixel_to_grid(x, y):
     return px, py
 
 
-def dice(D, min_d, max_d):
-    return D * randint(min_d, max_d)
+def dice(D, max_d):
+    return D * randint(1, max_d)
 
 
 def get_entity(x, y, sprite_lists):

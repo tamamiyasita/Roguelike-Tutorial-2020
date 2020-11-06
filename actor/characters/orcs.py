@@ -8,7 +8,7 @@ from constants import *
 class Orc(Actor):
     def __init__(self, x=0, y=0):
         fighter_component = Fighter(hp=8, STR=2, DEX=1,
-                                    unarmed_attack=(1, 1, 3),
+                                    unarmed_attack=3,
                                     hit_rate=90,
                                     defense=1,
                                     evasion=1,
@@ -33,7 +33,7 @@ class Orc(Actor):
 class Troll(Actor):
     def __init__(self, x=0, y=0):
         fighter_component = Fighter(hp=35,  STR=5, DEX=1,
-                                    unarmed_attack=(1, 1, 6),
+                                    unarmed_attack=6,
                                     hit_rate=80,
                                     defense=2,
                                     xp_reward=75,

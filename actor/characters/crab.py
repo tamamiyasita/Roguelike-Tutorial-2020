@@ -8,7 +8,7 @@ from constants import *
 class Crab(Actor):
     def __init__(self, x=0, y=0):
         fighter_component = Fighter(hp=10, STR=4, DEX=2,
-                                    unarmed_attack=(2, 1, 3),
+                                    unarmed_attack=4,
                                     hit_rate=95,
                                     defense=2,
                                     evasion=2,
