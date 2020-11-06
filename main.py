@@ -21,6 +21,7 @@ from ui.level_up_ui import LevelupUI
 
 from util import grid_to_pixel, pixel_to_grid, stop_watch
 from viewport import viewport
+from actor.states.poison_status import PoisonStatus
 
 # log = logging.getLogger("__main__")
 
@@ -276,7 +277,12 @@ class MG(arcade.Window):
             self.engine.player.fighter.level += 1
             self.engine.game_state = GAME_STATE.LEVEL_UP_WINDOW
 
+        if key == arcade.key.F2:
+            self.engine.player.fighter.states.append(PoisonStatus(self.engine.player, 1, 3))
+
+
     def on_key_release(self, key, modifiers):
+        print(self.engine.player.fighter.states, "POI")
         self.player_direction = None
         # print(self.engine.player.fighter.skill_list)
         # print(self.engine.player.fighter.skill_list[0].level,

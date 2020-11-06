@@ -14,6 +14,8 @@ from actor.items.cirsium import Cirsium
 from actor.items.leaf_blade import LeafBlade
 from actor.items.ebony import Ebony
 from actor.items.branch_baton import BranchBaton
+from actor.items.paeonia import Paeonia
+from actor.items.healing import Healing
 from actor.map_obj.wall import Wall
 from actor.map_obj.floor import Floor
 from actor.map_obj.stairs import Stairs
@@ -59,6 +61,11 @@ def restore_actor(actor_dict):
         actor = Cirsium()
     elif actor_name == "Ebony":
         actor = Ebony()
+    elif actor_name == "Paeonia":
+        actor = Paeonia()
+    elif actor_name == "Healing":
+        actor = Healing
+
     elif actor_name == "LeafBlade":
         actor = LeafBlade()
     elif actor_name == "BranchBaton":

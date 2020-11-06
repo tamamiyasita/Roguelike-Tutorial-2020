@@ -325,6 +325,7 @@ class GameEngine:
 
         self.action_queue.append({"message": "*load*"})
 
+
     def process_action_queue(self, delta_time):
         """アクターの基本的な行動を制御するアクションキュー
         エンジン内にある各メソッドの返り値(damage, message等)はここに送る
@@ -377,7 +378,7 @@ class GameEngine:
                 else:
                     new_action_queue.extend([target["action"]])
                     self.move_switch = True
-
+    
             if "use_skill" in action:
                 select_skill = action["use_skill"]
                 skill = self.player.fighter.active_skill

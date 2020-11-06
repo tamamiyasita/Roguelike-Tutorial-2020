@@ -1,7 +1,8 @@
+from actor.states.poison_status import PoisonStatus
 import random
 from constants import *
 from util import dice, stop_watch
-
+from actor.states import poison_status
 
 
 class Fighter:
@@ -27,9 +28,9 @@ class Fighter:
         self.current_xp = current_xp
         self.level = level
         self.ability_points = ability_points
-        self._skill_list = []
+        self.states = []
 
-        self._states = []
+        self._skill_list = []
 
         self.damage = None
 

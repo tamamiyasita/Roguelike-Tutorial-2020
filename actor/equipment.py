@@ -32,8 +32,7 @@ class Equipment:
         for item_key, item in self.item_slot.items():
             if item is None:
                 result[item_key] = None
-            elif Tag.skill in item.tag:
-                result[item_key] = None
+      
             else:
                 result[item_key] = item.name
                 print("#########",result[item_key], type(result[item_key]))
