@@ -21,10 +21,8 @@ from actor.map_obj.floor import Floor
 from actor.map_obj.stairs import Stairs
 from actor.map_obj.door import Door
 
-from util import stop_watch
 
 
-# @stop_watch
 def restore_actor(actor_dict):
     actor_name = list(actor_dict.keys())[0]
 
@@ -64,7 +62,7 @@ def restore_actor(actor_dict):
     elif actor_name == "Paeonia":
         actor = Paeonia()
     elif actor_name == "Healing":
-        actor = Healing
+        actor = Healing()
 
     elif actor_name == "LeafBlade":
         actor = LeafBlade()

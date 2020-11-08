@@ -2,7 +2,7 @@ from actor.states.poison_status import PoisonStatus
 import random
 from constants import *
 from util import dice, stop_watch
-from actor.states import poison_status
+from actor.actor_set import *
 
 
 class Fighter:
@@ -61,7 +61,10 @@ class Fighter:
         result["current_xp"] = self.current_xp
         result["level"] = self.level
         result["ability_points"] = self.ability_points
-        result["_skill_list"] = [skill.__class__.__name__ for skill in self._skill_list]
+        result["passive_skill"] = [skill.__class__.__name__ for skill in self._skill_list if Tag.active not in skill.tag]
+        result["active_skill"] = [(skill.__class__.__name__, result.get_dict()) for skill, result in zip(self._skill_list, self._skill_list) if Tag.active in result.tag]
+        result["states"] = [(states.__class__.__name__, result.get_dict()) for states, result in zip(self.states, self.states)]
+        print(result["states"])
 
         return result
 
@@ -89,7 +92,21 @@ class Fighter:
         self.current_xp = result["current_xp"]
         self.level = result["level"]
         self.ability_points = result["ability_points"]
-        self._skill_list = [eval(skill)() for skill in result["_skill_list"]]
+        self._skill_list = [eval(skill)() for skill in result["passive_skill"]]
+        for i, c in result["active_skill"]:
+            if i:
+                print(i, c, "active_skill")
+                ps = eval(i)()
+                ps.restore_from_dict(c)
+                self._skill_list.append(ps)
+        # self.states = [eval(states)().restore_from_dict(result) for states, result in result["states"]]
+        for s, r in result["states"]:
+            if s:
+                print(s, r)
+                sd = eval(s)()
+                sd.restore_from_dict(r)
+                self.states.append(sd)
+        print(self.states)
 
     @property
     def skill_list(self):

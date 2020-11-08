@@ -19,40 +19,42 @@ class Equipment:
             "ranged_weapon": None,
         }
         self.item_slot = {
-            "flower 1": None,
-            "flower 2": None,
-            "flower 3": None,
+            "flower1": None,
+            "flower2": None,
+            "flower3": None,
         }
 
         # 装備変更によるスプライト更新のチェックに使う変数
         self.equip_update_check = False
 
     def get_dict(self):
-        result = {}
-        for item_key, item in self.item_slot.items():
-            if item is None:
-                result[item_key] = None
-      
-            else:
-                result[item_key] = item.name
-                print("#########",result[item_key], type(result[item_key]))
-                print(result)
+        result = [i.__class__.__name__ if i else None for i in self.item_slot.values()] 
+        print(result)
+
 
         return result
 
     def restore_from_dict(self, result):
-        for k, v in self.item_slot.items():
-            if v:
-                del v
-                v = None
 
-        self.item_slot = result
         for item in self.owner.inventory.item_bag:
-            if item and item.name in self.item_slot.values():
-                self.item_slot[item.slot] = item
-                item.master = self.owner
+            if item and item.__class__.__name__ in result:
+                self.toggle_equip(item)
+
+        print(self.item_slot)
 
         self.equip_update_check = True
+
+    def sprite_check(self, sprites):
+            # 遠隔武器以外がスロットに入っていたら装備スプライトをスプライトリストに入れて表示する
+            for equip in chain(self.equip_slot.values(),self.item_slot.values()):
+                if equip and not isinstance(equip, str) and equip not in sprites and not equip.slot == "ranged_weapon":
+                    sprites.append(equip)
+
+            # 装備解除しスプライトがスロットから無くなればスプライトリストからも削除
+            for sprite in sprites:
+                if sprite not in self.equip_slot.values() and sprite not in self.item_slot.values():
+                    sprites.remove(sprite)
+
 
     @property
     def skill_level_sum(self):
@@ -70,15 +72,8 @@ class Equipment:
         """装備スプライトの表示はここで行う"""
         if self.equip_update_check:
 
-            # 遠隔武器以外がスロットに入っていたら装備スプライトをスプライトリストに入れて表示する
-            for equip in chain(self.equip_slot.values(),self.item_slot.values()):
-                if equip and not isinstance(equip, str) and equip not in sprites and not equip.slot == "ranged_weapon":
-                    sprites.append(equip)
+            self.sprite_check(sprites)
 
-            # 装備解除しスプライトがスロットから無くなればスプライトリストからも削除
-            for sprite in sprites:
-                if sprite not in self.equip_slot.values() and sprite not in self.item_slot.values():
-                    sprites.remove(sprite)
 
             # 装備更新完了通知
             self.equip_update_check = False
@@ -159,15 +154,17 @@ class Equipment:
                 del self.item_slot[key].master
                 self.item_slot[key] = None
                 results.append({"message": f"dequipped {item.name}"})
-                break
 
+                self.equip_update_check = True
+                return results
+
+        for key, item in self.item_slot.items():
             if item is None:
 
                 self.item_slot[key] = equip_item
                 self.item_slot[key].master = self.owner
 
                 results.append({"message": f"equipped {equip_item.name}"})
-                break
 
-        self.equip_update_check = True
-        return results
+                self.equip_update_check = True
+                return results

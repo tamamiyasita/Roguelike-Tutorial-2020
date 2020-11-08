@@ -20,7 +20,7 @@ class Paeonia(Actor):
 
         self.tag = [Tag.item, Tag.equip, Tag.flower]
         
-        self.skill_add = {"branch_baton":3, "leaf_blade":3, "healing":1}
+        self.skill_add = {"healing":1}
 
         self.explanatory_text = f"Is Ebony $#############4TEst test test \n test$#4444444444testtest"
 

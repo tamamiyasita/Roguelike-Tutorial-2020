@@ -25,7 +25,7 @@ class LevelupUI:
         self.up_int = ""
         self.tmp_states = None
         self.ui_state = Select.delay
-        self.skill_queue = deque([Healing(engine),(LeafBlade(), BranchBaton()),Healing() ])
+        self.skill_queue = deque([Healing(),(LeafBlade(), BranchBaton()),Healing() ])
         self.skill_result = []
         self.get_skill = None
 

@@ -19,11 +19,11 @@ class Ebony(Actor):
 
         self.tag = [Tag.item, Tag.equip, Tag.flower]
         
-        self.skill_add = {"branch_baton":1, "leaf_blade":2}
+        self.skill_add = {"branch_baton":1}
 
         self.explanatory_text = f"Is Ebony $#############4TEst test test \n test$#4444444444testtest"
 
 
         self.item_margin_x = 19
         self.item_margin_y = 11
-        self.my_speed = 4.3
+        self.my_speed = 4.0

@@ -45,22 +45,30 @@ class HealingEffect(Actor):
 
 
 class Healing(Actor):
-    def __init__(self, engine=None ):
+    def __init__(self):
         super().__init__(
             name="healing",
 
         )
 
-        self.engine = engine
         self.level = 0
 
-        self.max_cooldown_time = 3
+        self.max_cooldown_time = 4
         self.cur_cooldown_time = 0
 
         self.tag = [Tag.item, Tag.used, Tag.active, Tag.skill]
 
         self.explanatory_text = f"Recover a small amount of hp"
         self.icon = IMAGE_ID["paeonia_icon"]
+
+    def get_dict(self):
+        result = {}
+        result["cooldown"] = self.cur_cooldown_time
+        return result
+
+    def restore_from_dict(self, result):
+        self.cur_cooldown_time = result["cooldown"]
+
 
     @property
     def hp_return(self):
@@ -72,7 +80,9 @@ class Healing(Actor):
 
 
 
-    def use(self):
+    def use(self, engine):
+        self.engine = engine
+
         if self.cur_cooldown_time <= 0:
             self.cur_cooldown_time = self.max_cooldown_time+1
 

@@ -2,7 +2,7 @@ import arcade
 
 
 class PoisonStatus:
-    def __init__(self, owner, power, effect_time):
+    def __init__(self, owner=None, power=None, effect_time=None):
         self.owner = owner
         self.power = power
         self.effect_time = effect_time
@@ -27,5 +27,10 @@ class PoisonStatus:
         result["effect_time"] = self.effect_time
 
         return result
+
+    def restore_from_dict(self, result):
+        self.owner = result["owner"]
+        self.power = result["power"]
+        self.effect_time = result["effect_time"]
 
 

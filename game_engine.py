@@ -176,7 +176,7 @@ class GameEngine:
         self.cirsium = Cirsium(self.player.x + 1, self.player.y)
         self.game_level.item_sprites.append(self.cirsium)
 
-        self.ebony = Ebony(self.player.x + 1, self.player.y)
+        self.ebony = Ebony(self.player.x + 1, self.player.y-1)
         self.game_level.item_sprites.append(self.ebony)
 
         self.fov_recompute = True
@@ -386,7 +386,7 @@ class GameEngine:
                 if select_skill is not None and len(skill) >= select_skill:
                     skill = self.player.fighter.active_skill[select_skill-1]
                     if skill and Tag.active in skill.tag:
-                        results = skill.use()
+                        results = skill.use(self)
                         if results:
                             new_action_queue.extend(results)
                             new_action_queue.append({"turn_end":self.player})
@@ -409,7 +409,8 @@ class GameEngine:
                         item_number)
                     if item and Tag.equip in item.tag:
                         results = self.player.equipment.toggle_equip(item)
-                        new_action_queue.extend(results)
+                        if results:
+                            new_action_queue.extend(results)
 
             if "pickup" in action:
                 items = arcade.get_sprites_at_point(

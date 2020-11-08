@@ -188,6 +188,11 @@ class MG(arcade.Window):
         if self.engine.game_state == GAME_STATE.NORMAL or self.engine.game_state == GAME_STATE.INVENTORY:
             self.engine.process_action_queue(delta_time)
 
+            # playerの装備状態のアップデート
+            if self.engine.player.state == state.READY:
+                self.engine.player.equipment.update(
+                    self.engine.cur_level.equip_sprites)
+
         if self.engine.game_state == GAME_STATE.NORMAL:
 
             self.engine.cur_level.chara_sprites.update_animation()
@@ -211,14 +216,9 @@ class MG(arcade.Window):
                 for pop in self.engine.damage_pop:
                     pop.start()
 
-            # playerの装備状態のアップデート
-            if self.engine.player.state == state.READY:
-                self.engine.player.equipment.update(
-                    self.engine.cur_level.equip_sprites)
 
             # グリッド選択変数はNORMAL STATE時は無効にする
             self.grid_press = None
-
 
     def on_key_press(self, key, modifiers):
         # windowを閉じた時にjsonにダンプする
@@ -332,6 +332,7 @@ class MG(arcade.Window):
             viewport(self.engine.player.center_x, self.engine.player.center_y)
             self.engine.game_state = GAME_STATE.NORMAL
             self.engine.fov_recompute = True
+            self.engine.player.equipment.sprite_check(self.engine.cur_level.equip_sprites)
 
 
 def main():
