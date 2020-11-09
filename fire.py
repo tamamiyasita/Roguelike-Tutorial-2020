@@ -56,7 +56,7 @@ class Fire:
         self.trigger = None
 
     def shot(self):
-        amm = self.shooter.equipment.item_slot["ranged_weapon"]
+        amm = self.shooter.equipment.equip_slot["ranged_weapon"]
         target_distance = None
         results = []
 

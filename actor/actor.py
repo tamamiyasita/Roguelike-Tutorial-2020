@@ -1,7 +1,7 @@
 from random import random, randint, uniform
 from arcade import particle
 from arcade.text import draw_text
-from actor.ai import Basicmonster, ConfusedMonster
+from actor.ai import Basicmonster, ConfusedMonster,RandomMove,Wait
 import arcade
 import math
 

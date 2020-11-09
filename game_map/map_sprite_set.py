@@ -1,4 +1,4 @@
-from actor.map_obj.stairs import Stairs
+from actor.map_obj.stairs import Up_Stairs, Down_Stairs
 import arcade
 from data import *
 from constants import *
@@ -92,8 +92,10 @@ class ActorPlacement:
 
         door = arcade.process_layer(
             self.my_map, "door", scaling=4, use_spatial_hash=True, hit_box_algorithm="None")
-        stairs = arcade.process_layer(
-            self.my_map, "stairs", scaling=4, use_spatial_hash=True, hit_box_algorithm="None")
+        up_stairs = arcade.process_layer(
+            self.my_map, "up_stairs", scaling=4, use_spatial_hash=True, hit_box_algorithm="None")
+        down_stairs = arcade.process_layer(
+            self.my_map, "down_stairs", scaling=4, use_spatial_hash=True, hit_box_algorithm="None")
 
         for m in door:
             x, y = pixel_to_grid(m.center_x, m.center_y)
@@ -103,11 +105,19 @@ class ActorPlacement:
             obj.blocks = True
             tiled_map_obj_sprite.append(obj)
 
-        for m in stairs:
+        for m in up_stairs:
             x, y = pixel_to_grid(m.center_x, m.center_y)
-            obj = Stairs(x=x, y=y)
-            obj.scale = 4
-            obj.texture = m.texture
+            obj = Up_Stairs(x=x, y=y)
+            obj.scale = 2
+            # obj.texture = m.texture
+            obj.blocks = True
+            tiled_map_obj_sprite.append(obj)
+
+        for m in down_stairs:
+            x, y = pixel_to_grid(m.center_x, m.center_y)
+            obj = Down_Stairs(x=x, y=y)
+            obj.scale = 2
+            # obj.texture = m.texture
             obj.blocks = True
             tiled_map_obj_sprite.append(obj)
 
@@ -175,10 +185,15 @@ class ActorPlacement:
                     door = Door(x=x, y=y)
                     map_obj_sprites.append(door)
 
+                if self.tiles[x][y] == TILE.STAIRS_UP:
+
+                    up_stairs = Up_Stairs(x=x, y=y)
+                    map_obj_sprites.append(up_stairs)
+
                 if self.tiles[x][y] == TILE.STAIRS_DOWN:
 
-                    stairs = Stairs(x=x, y=y)
-                    map_obj_sprites.append(stairs)
+                    down_stairs = Down_Stairs(x=x, y=y)
+                    map_obj_sprites.append(down_stairs)
 
         return map_obj_sprites
 

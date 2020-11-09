@@ -3,11 +3,13 @@ from actor.actor import Actor
 from data import *
 from constants import *
 from actor.ai import RandomMove, Wait
+from actor.fighter import Fighter
 
 
 class Villager(Actor):
     def __init__(self, x=0, y=0):
         ai_component = RandomMove()
+        fighter_component = Fighter()
 
         super().__init__(
             scale=2.5,
@@ -15,6 +17,8 @@ class Villager(Actor):
             x=x,
             y=y,
             speed=15,
+            fighter=fighter_component,
+
             ai=ai_component,
             blocks=True
         )
@@ -28,14 +32,16 @@ class Villager(Actor):
 class Citizen(Actor):
     def __init__(self, x=0, y=0):
         ai_component = Wait()
+        fighter_component = Fighter()
+
 
         super().__init__(
-            scale=2.5,
             name="citizen",
             x=x,
             y=y,
             speed=45,
             ai=ai_component,
+            fighter=fighter_component,
             blocks=True
         )
         self.tag = [Tag.npc, Tag.friendly, Tag.quest]

@@ -58,6 +58,8 @@ class BasicDungeon:
         self.num_rooms = 0
         last_room_center_x = None
         last_room_center_y = None
+        first_room_center_x = None
+        first_room_center_y = None
 
         for _ in range(MAX_ROOMS):
             w = randint(ROOM_MIN_SIZE, ROOM_MAX_SIZE)
@@ -80,6 +82,8 @@ class BasicDungeon:
                     self.player.x, self.player.y = (new_x, new_y)
                     self.player.center_x, self.player.center_y = grid_to_pixel(
                         new_x, new_y)
+                    first_room_center_x = new_x
+                    first_room_center_y = new_y
 
                 else:
                     (prev_x, prev_y) = rooms[self.num_rooms - 1].center()
@@ -103,6 +107,7 @@ class BasicDungeon:
                 )
 
         self.tiles[last_room_center_x][last_room_center_y] = TILE.STAIRS_DOWN
+        self.tiles[first_room_center_x][first_room_center_y] = TILE.STAIRS_UP
 
     def door_remove(self):
         for y in range(len(self.tiles[0])):

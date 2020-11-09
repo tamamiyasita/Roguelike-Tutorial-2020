@@ -58,7 +58,8 @@ def get_door(x, y, sprite_list):
     sprite_list = arcade.get_sprites_at_exact_point((px, py), sprite_list)
     door_sprite = arcade.SpriteList()
     for sprite in sprite_list:
-        door_sprite.append(sprite)
+        if sprite and Tag.door in sprite.tag:
+            door_sprite.append(sprite)
 
     if len(door_sprite) > 0:
         return door_sprite

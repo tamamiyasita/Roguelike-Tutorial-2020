@@ -189,15 +189,20 @@ class Fighter:
             bonus = self.owner.equipment.states_bonus["evasion"]
 
         return self.base_evasion + bonus + (self.DEX / 2)
-
+    
     @property
-    def melee_attack_damage(self):
+    def max_damage(self):
         if self.owner.equipment and self.owner.equipment.melee_weapon_damage:
             max_d = self.owner.equipment.melee_weapon_damage
         else:
             max_d = self.owner.fighter.unarmed_attack
 
-        melee_attack_damage = dice(1 + self.level//3, max_d+(self.STR//3))
+        return max_d
+
+    @property
+    def melee_attack_damage(self):
+
+        melee_attack_damage = dice(1 + self.level//3, self.max_damage+(self.STR//3))
 
         return melee_attack_damage
 
@@ -261,6 +266,9 @@ class Fighter:
         elif not ranged:
             if random.randrange(1, 100) <= self.hit_chance(target):
                 self.damage = self.melee_attack_damage // target.fighter.defense
+                if random.randrange(1, (100-self.DEX)) < 5:
+                    self.damage += self.max_damage
+                    results.append({"message": f"{self.owner.name.capitalize()} attack is critical HIT!"})
 
         if self.damage:
             if self.damage >= 0:

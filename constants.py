@@ -89,6 +89,7 @@ class TILE:
     WALL = True
     DOOR = auto()
     STAIRS_DOWN = auto()
+    STAIRS_UP = auto()
 
     ORC = auto()
     TROLL = auto()

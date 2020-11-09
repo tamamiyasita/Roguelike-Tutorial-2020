@@ -43,7 +43,7 @@ class MessageWindow:
             height=SCREEN_HEIGHT - 400,
             color=[255, 255, 255, 150]
         )
-        arcade.draw_texture_rectangle(self.panel_left_x+50, self.panel_left_y+510, GRID_SIZE, GRID_SIZE, self.actor.texture)
+        arcade.draw_texture_rectangle(self.panel_left_x+50, self.panel_left_y+510, GRID_SIZE*1.5, GRID_SIZE*1.5, self.actor.texture)
         arcade.draw_texture_rectangle(self.panel_left_x+1030, self.panel_left_y+50, GRID_SIZE*1.5, GRID_SIZE*1.5, IMAGE_ID["player"][1])
         y = 45
         for m in self.other_message:

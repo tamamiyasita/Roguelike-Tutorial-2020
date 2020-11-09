@@ -1,6 +1,6 @@
 from os import name
 from pyglet import sprite
-from actor.stairs import Stairs
+from actor.stairs import Up_Stairs
 import arcade
 from data import *
 from constants import *
@@ -50,7 +50,7 @@ class ActorPlacement:
 
                 if self.tiles[x][y] == TILE.STAIRS_DOWN:
 
-                    stairs = Stairs(x=x, y=y)
+                    stairs = Up_Stairs(x=x, y=y)
                     wall_sprites.append(stairs)
 
         return wall_sprites

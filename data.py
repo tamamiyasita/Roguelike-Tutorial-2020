@@ -73,6 +73,11 @@ citizen_left_1 = arcade.load_texture(
     humanoid_tiles_1, x=size*3, y=size*4, width=size, height=size)
 citizen = [citizen_right_0,citizen_left_0, citizen_right_1, citizen_left_1]
 
+g1 = arcade.load_texture_pair(r"image\gb.png")
+g2 = arcade.load_texture_pair(r"image\gb3.png")
+gb = [*g1,*g2]
+
+
 # short weaponテクスチャ生成
 short_weapon_tiles = (r"image/ShortWep.png")
 
@@ -134,7 +139,8 @@ floor_img = (r"image/Tile.png")
 floor_tile = get_tile_set(floor_img, tile_size=16)
 floor_len = len(floor_tile)
 floors = [floor_tile[v] for v in range(floor_len)]
-stairs = floors
+up_stairs = arcade.load_texture(r"image\up_stairs.png")
+down_stairs = arcade.load_texture(r"image\down_stairs.png")
 stone_floor = arcade.load_texture(r"image\stone_tile.png")
 
 # walls_1 = (r"image/wall1.png")
@@ -170,7 +176,8 @@ IMAGE_ID = {"player": player,
             "orc": orc,
             "troll": troll,
             "villager":villager,
-            "citizen":citizen,
+            # "citizen":citizen,
+            "citizen":gb,
 
             "short_sword": short_sword,
             "long_sword": long_sword,
@@ -208,7 +215,8 @@ IMAGE_ID = {"player": player,
             # "wall_1": wall_1,
             # "wall_2": wall_2,
             "wall_3": wall_3,
-            "stairs": stairs,
+            "up_stairs": [up_stairs],
+            "down_stairs": [down_stairs],
             "door": doors
 
             }

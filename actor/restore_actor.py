@@ -3,6 +3,8 @@ from actor.characters.PC import Player
 from actor.items.healing_potion import HealingPotion
 from actor.characters.orcs import Orc, Troll
 from actor.characters.crab import Crab
+from actor.characters.npc import Villager
+from actor.characters.npc import Citizen
 from actor.items.short_sword import ShortSword
 from actor.items.long_sword import LongSword
 from actor.items.small_shield import SmallShield
@@ -18,7 +20,7 @@ from actor.items.paeonia import Paeonia
 from actor.items.healing import Healing
 from actor.map_obj.wall import Wall
 from actor.map_obj.floor import Floor
-from actor.map_obj.stairs import Stairs
+from actor.map_obj.stairs import Up_Stairs, Down_Stairs
 from actor.map_obj.door import Door
 
 
@@ -75,12 +77,21 @@ def restore_actor(actor_dict):
         actor = Troll()
     elif actor_name == "Crab":
         actor = Crab()
+    elif actor_name == "Citizen":
+        actor = Citizen()
+    elif actor_name == "Villager":
+        actor = Villager()
+
+
+
     elif actor_name == "Wall":
         actor = Wall()
     elif actor_name == "Floor":
         actor = Floor()
-    elif actor_name == "Stairs":
-        actor = Stairs()
+    elif actor_name == "Up_Stairs":
+        actor = Up_Stairs()
+    elif actor_name == "Down_Stairs":
+        actor = Down_Stairs()
     elif actor_name == "Door":
         actor = Door()
     else:
