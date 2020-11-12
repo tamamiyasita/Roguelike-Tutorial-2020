@@ -24,8 +24,8 @@ class Actor(arcade.Sprite):
                  inventory=None, equipment=None,
                  visible_color=COLORS["white"], not_visible_color=COLORS["black"],
                  explanatory_text="", tag={Tag.free},
-                 state=state.TURN_END, left_face=False,
-                 cur_stories=None):
+                 state=state.TURN_END, left_face=False
+                 ):
         super().__init__(scale=scale)
         if name:
             self.name = name
@@ -50,8 +50,6 @@ class Actor(arcade.Sprite):
         self.d_time = 100 # 待機モーション時のdelay時間
         self.is_dead = None
         self.skill_add = {} # skillLevelの追加に使う
-
-        self.cur_stories = cur_stories
 
         self.inventory = inventory
         if self.inventory:

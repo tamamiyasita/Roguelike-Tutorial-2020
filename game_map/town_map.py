@@ -16,4 +16,3 @@ class TownMap:
 
         self.player = player
         self.player.x, self.player.y = pixel_to_grid(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2)
-        self.player.center_x, self.player.center_y = grid_to_pixel(self.player.x, self.player.y)

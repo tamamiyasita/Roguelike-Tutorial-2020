@@ -37,7 +37,7 @@ class Rect:
 
 
 class BasicDungeon:
-    def __init__(self, width, height, dungeon_level=1, player=None):
+    def __init__(self, width, height, dungeon_level=1):
         self.width = width
         self.height = height
         self.dungeon_level = dungeon_level
@@ -48,9 +48,18 @@ class BasicDungeon:
         self.item_tiles = [
             [TILE.EMPTY for y in range(height)] for x in range(width)]
 
-        self.player = player
+        self.up_stairs = None
+        self.down_stairs = None
         self.make_map(dungeon_level)
         self.door_remove()
+
+    def player_set(self, stairs="up"):
+        
+        if stairs == "down":
+            return self.down_stairs
+        else:
+            return self.up_stairs
+
 
     def make_map(self, dungeon_level):
 
@@ -79,16 +88,18 @@ class BasicDungeon:
                 (new_x, new_y) = new_room.center()
 
                 if self.num_rooms == 0:
-                    self.player.x, self.player.y = (new_x, new_y)
-                    self.player.center_x, self.player.center_y = grid_to_pixel(
-                        new_x, new_y)
+                    self.up_stairs = (new_x, new_y)
+                    # self.player.x, self.player.y = (new_x, new_y)
                     first_room_center_x = new_x
                     first_room_center_y = new_y
 
                 else:
                     (prev_x, prev_y) = rooms[self.num_rooms - 1].center()
+                    self.down_stairs = (new_x, new_y)
+
                     last_room_center_x = new_x
                     last_room_center_y = new_y
+                    
 
                     if randint(0, 1) == 1:
                         self.create_h_tunnel(prev_x, new_x, prev_y)

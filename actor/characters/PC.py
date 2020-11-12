@@ -6,7 +6,7 @@ from actor.equipment import Equipment
 
 
 class Player(Actor):
-    def __init__(self, x=0, y=0, inventory=0, cur_stories=None):
+    def __init__(self, x=0, y=0, inventory=0):
         fighter_component = Fighter(hp=10, STR=3, DEX=4, INT=4,
                                     unarmed_attack=2,
                                     hit_rate=100,
@@ -25,7 +25,6 @@ class Player(Actor):
             inventory=inventory,
             fighter=fighter_component,
             equipment=equip_component,
-            cur_stories=cur_stories
 
         )
         self.tag = [Tag.player]
