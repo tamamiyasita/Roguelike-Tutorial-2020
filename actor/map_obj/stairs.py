@@ -9,7 +9,7 @@ class Up_Stairs(Actor):
             name="up_stairs",
             x=x,
             y=y,
-            scale=SPRITE_SCALE*2,
+            # scale=SPRITE_SCALE*2,
 
             color=COLORS.get("black"),
             visible_color=COLORS.get("light_wall"),
@@ -24,7 +24,7 @@ class Down_Stairs(Actor):
             name="down_stairs",
             x=x,
             y=y,
-            scale=SPRITE_SCALE*2,
+            # scale=SPRITE_SCALE*2,
 
             color=COLORS.get("black"),
             visible_color=COLORS.get("light_wall"),

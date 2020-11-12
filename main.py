@@ -269,8 +269,11 @@ class MG(arcade.Window):
             self.choice = self.massage_window.message_choices(key)
 
         if key == arcade.key.F7:
+            import shelve
+
             self.save()
         elif key == arcade.key.F8:
+
             self.load()
         elif key == arcade.key.F1:
             self.engine.player.fighter.ability_points += 1
@@ -282,7 +285,6 @@ class MG(arcade.Window):
 
 
     def on_key_release(self, key, modifiers):
-        print(self.engine.player.fighter.states, "POI")
         self.player_direction = None
         # print(self.engine.player.fighter.skill_list)
         # print(self.engine.player.fighter.skill_list[0].level,
@@ -309,11 +311,7 @@ class MG(arcade.Window):
 
     @stop_watch
     def save(self):
-
-        self.engine.game_state = GAME_STATE.DELAY_WINDOW
         self.game_dict = self.engine.get_dict()
-        self.engine.game_state = GAME_STATE.NORMAL
-        print("**save**")
 
     @stop_watch
     def load(self):
@@ -325,14 +323,8 @@ class MG(arcade.Window):
             with open("game_save.json", "r") as read_file:
                 data = json.load(read_file)
         if data:
-            self.engine.game_state = GAME_STATE.DELAY_WINDOW
-            print("**load**")
             self.engine.restore_from_dict(data)
-            self.engine.player.state = state.READY
             viewport(self.engine.player.center_x, self.engine.player.center_y)
-            self.engine.game_state = GAME_STATE.NORMAL
-            self.engine.fov_recompute = True
-            self.engine.player.equipment.sprite_check(self.engine.cur_level.equip_sprites)
 
 
 def main():

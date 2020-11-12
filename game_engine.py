@@ -47,8 +47,6 @@ class GameLevel:
         self.map_obj_sprites = None
         self.map_name = None
 
-        self.level = 0
-
 
 class GameEngine:
     def __init__(self):
@@ -66,10 +64,9 @@ class GameEngine:
         self.move_switch = True
         self.damage_pop = []
         self.messenger = None
-        self.stairs_position = {}
 
         self.player = Player(
-            inventory=Inventory(capacity=10))
+            inventory=Inventory(capacity=10),cur_stories={"town":None})
 
 
     def setup_level(self, level_number):
@@ -77,16 +74,17 @@ class GameEngine:
 
         self.map_width, self.map_height = MAP_WIDTH, MAP_HEIGHT
         self.game_level = GameLevel()
-        self.level = level_number
-        if self.level == 0:
+        if level_number == 0:
             return self.start_town_init()
-        if self.level >= 1:
-            return self.basic_dungeon_init(self.player)
+        if level_number >= 1:
+            return self.basic_dungeon_init(self.player, level_number)
+
 
     def start_town_init(self):
         """初期townmapの生成"""
         self.town_map = TownMap(
-            self.map_width, self.map_height, self.level, self.player)
+            self.map_width, self.map_height)
+        self.town_map.player_set(self.player)
         # スプライトリストの初期化
         floor_sprite = ActorPlacement(self.town_map, self).tiled_floor_set()
         wall_sprite = ActorPlacement(self.town_map, self).tiled_wall_set()
@@ -118,15 +116,16 @@ class GameEngine:
         self.short_sword = ShortSword(self.player.x+1, self.player.y + 1)
         self.game_level.item_sprites.append(self.short_sword)
 
-        self.game_level.level = self.level
+        self.game_level.floor_level = 0
+
         self.game_level.map_name = f"town"
 
         return self.game_level
 
-    def basic_dungeon_init(self, player):
+    def basic_dungeon_init(self, player, level):
         """基本のdungeonの生成"""
         self.game_map = BasicDungeon(
-            self.map_width, self.map_height, self.level, player)
+            self.map_width, self.map_height, level, player)
 
         #スプライトリストの初期化
         floor_sprite = ActorPlacement(self.game_map, self).floor_set()
@@ -153,7 +152,7 @@ class GameEngine:
             use_spatial_hash=True, spatial_hash_cell_size=32)
         self.game_level.chara_sprites.append(player)
 
-        self.game_level.level = self.level
+        self.game_level.floor_level = level
         self.game_level.map_name = f"basic_dungeon"
 
 
@@ -201,11 +200,14 @@ class GameEngine:
         arcade.set_background_color(COLORS["black"])
 
         self.cur_level = self.setup_level(level_number=0)
-        self.stories[f"{self.cur_level.map_name}{self.cur_level.level}"] = self.cur_level
+        self.stories[self.cur_floor_name] = self.cur_level
         print(f"stories{self.stories}")
         self.turn_loop = TurnLoop(self.player)
         self.item_point = ItemPoint(self)
-        self.cur_level_name = f"{self.cur_level.map_name}{self.cur_level.level}"
+
+    @property
+    def cur_floor_name(self):
+        return f"{self.cur_level.map_name}{self.cur_level.floor_level}"
 
 
     def get_actor_dict(self, actor):
@@ -214,6 +216,9 @@ class GameEngine:
     @stop_watch
     def get_dict(self):
         """ オブジェクトをjsonにダンプする為の辞書を作る関数 """
+        self.game_state = GAME_STATE.DELAY_WINDOW
+        ##############
+
 
         player_dict = self.get_actor_dict(self.player)
 
@@ -233,6 +238,9 @@ class GameEngine:
 
 
             level_dict = {
+                "level":level.floor_level,
+                "map_name":map_name,
+
                 "actor": actor_dict,
                 "floor": floor_dict,
                 "wall": wall_dict,
@@ -247,26 +255,32 @@ class GameEngine:
 
         # ビューポートの位置情報を保存
         viewport = arcade.get_viewport()
-        cur_map = self.cur_level_name
-        stairs_position = self.stairs_position
+        stories = self.stories
 
         result = {"player": player_dict,
                   "viewport": viewport,
                   "levels": levels_dict,
-                  "cur_map":cur_map,
-                  "stairs_position":stairs_position
+                  "stories":stories,
                   }
 
+        ##############
         self.action_queue.append({"message": "*save*"})
+        self.game_state = GAME_STATE.NORMAL
+        print("**save**")
         return result
 
     def restore_from_dict(self, data):
         """ オブジェクトをjsonから復元する為の関数 """
+        self.game_state = GAME_STATE.DELAY_WINDOW
+        self.player.state = state.DELAY
+
+        print("**load**")
+        ####################
 
         player_dict = data["player"]
         self.player.restore_from_dict(player_dict["Player"])
 
-        self.town_map = TownMap(self.map_width, self.map_height, 0, self.player)
+        self.town_map = TownMap(self.map_width, self.map_height)
 
         for map_name, level_dict in data["levels"].items():
             level = GameLevel()
@@ -300,6 +314,9 @@ class GameEngine:
 
             level.effect_sprites = arcade.SpriteList(
                 use_spatial_hash=True, spatial_hash_cell_size=16)
+
+            level.floor_level = level_dict["level"]
+            level.map_name = level_dict["map_name"]
 
             for actor_dict in level_dict["actor"]:
                 actor = restore_actor(actor_dict)
@@ -348,17 +365,21 @@ class GameEngine:
                 equip = restore_actor(equip_dict)
                 level.equip_sprites.append(equip)
 
-            level.chara_sprites.append(self.player)
 
             self.stories[map_name] = level
+        self.stories = data["stories"]
 
-        self.cur_level = self.stories[data["cur_map"]]
-        self.stairs_position = data["stairs_position"]
+        self.cur_level.chara_sprites.append(self.player)
 
         # ビューポートを復元する
         arcade.set_viewport(*data["viewport"])
 
+        ####################
         self.action_queue.append({"message": "*load*"})
+        self.player.state = state.READY
+        self.game_state = GAME_STATE.NORMAL
+        self.fov_recompute = True
+        self.player.equipment.sprite_check(self.cur_level.equip_sprites)
 
 
     def process_action_queue(self, delta_time):
@@ -482,6 +503,7 @@ class GameEngine:
             if "use_stairs" in action:
                 result = self.use_stairs()
                 if result:
+                    self.player.equipment.equip_position_reset()
                     new_action_queue.extend(result)
                     self.game_state = GAME_STATE.NORMAL
                     self.turn_loop = TurnLoop(self.player)
@@ -563,60 +585,98 @@ class GameEngine:
     def use_stairs(self):
         """階段及びplayerの位置の判定
         """
-        self.cur_level_name = f"{self.cur_level.map_name}{self.cur_level.level}"
+        stairs_point = []
+                # self.self.stairs_xy = self.player.x, self.player.y
+
         get_stairs = arcade.get_sprites_at_exact_point(
             point=self.player.position,
             sprite_list=self.cur_level.map_obj_sprites)
 
-        print(self.stairs_position)
 
         for stairs in get_stairs:
+            self.stairs_xy = stairs.x, stairs.y
             if isinstance(stairs, Down_Stairs):
-                self.game_state = GAME_STATE.DELAY_WINDOW
-                self.player.state = state.DELAY
-                self.stairs_xy = self.player.x, self.player.y
-                self.stairs_position[self.cur_level_name] = self.stairs_xy
-                print(self.stairs_position)
-                player_dict = self.get_actor_dict(self.player)
-                next_level_name = f"basic_dungeon{self.cur_level.level+1}"
+                save_floor = self.get_dict()
+                player_dict = save_floor["player"]
+
+                self.stories[f"{self.cur_level.map_name}{self.cur_level.floor_level}"] = save_floor
+
+                next_level_name = f"basic_dungeon{self.cur_level.floor_level+1}"
                 if next_level_name not in self.stories.keys():
+        
                     self.player.restore_from_dict(player_dict["Player"])
-                    level = self.setup_level(self.cur_level.level + 1)
+                    level = self.setup_level(self.cur_level.floor_level + 1)
                     self.cur_level = level
-                    self.stories[f"{next_level_name}"] = level
-                    self.player.state = state.READY
-                    return [{"message": "You went down a level."}]
+                    self.stories[f"basic_dungeon{self.cur_level.floor_level}"] = save_floor
+
+                    print(f"down1 stairs{self.stories}")
 
                 else:
-                    self.cur_level = self.stories[next_level_name]
-                    self.cur_level.level += 1
-                    self.player.x, self.player.y = self.stairs_position[next_level_name]
-                    self.player.state = state.READY
+                    load_floor = self.stories[next_level_name]
+                    self.restore_from_dict(load_floor)
+                    self.player = self.player.restore_from_dict(player_dict)
 
-                    return [{"message": "You went down a level."}]
+
+
+                    # self.cur_level = self.stories[next_level_name]
+                    # self.player.position = self.stairs_xy
+                    # self.cur_level = self.stories[f"{next_level_name}"]
+                    # player_dict = save_floor["player"]
+                    # self.player.restore_from_dict(player_dict["Player"])
+
+                    # self.player.x, self.player.y = self.stairs_position[next_level_name]
+                    # self.player.state = state.READY
+
+                    print(f"down2 stairs{self.stories}")
+
+                self.player.state = state.READY
+                return [{"message": "You went down a level."}]
 
         for stairs in get_stairs:
             if isinstance(stairs, Up_Stairs):
-                self.game_state = GAME_STATE.DELAY_WINDOW
-                self.player.state = state.DELAY
-                self.stairs_xy = self.player.x, self.player.y
-                self.stairs_position[self.cur_level_name] = self.stairs_xy
-                print(self.stairs_position)
+                prev_level_name = f"basic_dungeon{self.cur_level.floor_level-1}"
+                save_floor = self.get_dict()
+                player_dict = save_floor["player"]
+                self.stories[f"{self.cur_level.map_name}{self.cur_level.floor_level}"] = save_floor
+                # self.game_state = GAME_STATE.DELAY_WINDOW
+                # self.player.state = state.DELAY
+                # self.self.stairs_xy = self.player.x, self.player.y
 
-                player_dict = self.get_actor_dict(self.player)
-                self.cur_level.level -= 1 
-                if 0 == self.cur_level.level:
-                    self.cur_level = self.stories[f"town0"]
-                elif -1 >= self.cur_level.level:
+                # player_dict = self.get_actor_dict(self.player)
+                return_level = (self.cur_level.floor_level - 1)
+                if 0 == return_level:
+                    # self.restore_from_dict(self.stories[f"town0"])
+                    # tmp_xy = self.player.position
+                    # self.player.restore_from_dict(player_dict["Player"])
+                    # self.player.position = tmp_xy
+
+                    load_floor = self.stories[f"town0"]
+                    self.restore_from_dict(load_floor)
+                    self.player.restore_from_dict(player_dict["Player"])
+                    
+                    # self.player.x,self.player.y = self.stairs_xy
+                    # self.player.x,self.player.y = self.stairs_position[f"{self.cur_level.map_name}{self.cur_level.floor_level}"]
+                    # self.player.state = state.READY
+
+                    # print(f"town stairs{self.stories}")
+                elif -1 >= return_level:
                     raise ValueError
 
+                else:
+                    self.cur_level = self.stories[prev_level_name]
+                    tmp_xy = self.player.position
+                    self.player.restore_from_dict(player_dict["Player"])
+                    self.player.position = self.stairs_xy
 
-                self.cur_level = self.stories[f"{self.cur_level.map_name}{self.cur_level.level}"]
-                self.player.restore_from_dict(player_dict["Player"])
+
+
+                # self.cur_level = self.stories[f"{self.cur_level.map_name}{self.cur_level.floor_level-1}"]
+                # self.player.restore_from_dict(player_dict["Player"])
                 
-                self.player.x,self.player.y = self.stairs_position[f"{self.cur_level.map_name}{self.cur_level.level}"]
-                self.player.state = state.READY
+                # self.player.x,self.player.y = self.stairs_position[f"{self.cur_level.map_name}{self.cur_level.floor_level}"]
+                # self.player.state = state.READY
 
+                print(f"up stairs{self.stories}")
                 return [{"message": "You went UP a level."}]
 
         return [{"message": "There are no stairs here"}]

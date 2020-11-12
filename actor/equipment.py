@@ -55,6 +55,14 @@ class Equipment:
                 if sprite not in self.equip_slot.values() and sprite not in self.item_slot.values():
                     sprites.remove(sprite)
 
+    def equip_position_reset(self):
+        # 装備アイテムの表示位置をリセットする
+            for equip in chain(self.equip_slot.values(),self.item_slot.values()):
+                if equip:
+                    equip.x = self.owner.x
+                    equip.y = self.owner.y
+
+
 
     @property
     def skill_level_sum(self):
