@@ -33,13 +33,13 @@ def draw_inventory(player, selected_item, viewport_x, viewport_y):
 
 
     # キャパシティ数をループし、インベントリのアイテム名とアウトラインを描画する
-    slot_item = [i.name for i in player.equipment.item_slot.values() if hasattr(i, "name")]
+    slot_item = [i for i in player.equipment.item_slot.values()]
     for item in range(capacity):
         if player.inventory.item_bag[item]:
             cur_item  = player.inventory.item_bag[item]
-            item_name = cur_item.name
+            
             item_tag = cur_item.tag
-            if item_name in slot_item:
+            if cur_item in slot_item:
                 equip_this = "[E]" # そのitemが装備中ならEマークを付ける
                 font_color = arcade.color.ORANGE_PEEL
             else:
@@ -47,10 +47,9 @@ def draw_inventory(player, selected_item, viewport_x, viewport_y):
                 font_color = arcade.color.BLIZZARD_BLUE
 
         else:
-            item_name = ""
+            cur_item = ""
             equip_this = ""
             font_color = arcade.color.YALE_BLUE
-            cur_item = None
 
 
         if item == selected_item:
@@ -64,7 +63,7 @@ def draw_inventory(player, selected_item, viewport_x, viewport_y):
                 border_width=3
             )
             # 装備出来るアイテムならitemの左に(equip key: E)と表示
-            if item_name and Tag.equip in item_tag:
+            if cur_item and Tag.equip in item_tag:
                 arcade.draw_text(
                     text="(equip key: E)",
                     start_x=back_panel_x +450,
@@ -76,7 +75,7 @@ def draw_inventory(player, selected_item, viewport_x, viewport_y):
                 )
 
             # 使用可能アイテムならitemの左に(use key: U)と表示
-            elif item_name and Tag.used in item_tag:
+            elif cur_item and Tag.used in item_tag:
                 arcade.draw_text(
                     text="(use key: U)",
                     start_x=back_panel_x +450,
@@ -108,7 +107,9 @@ def draw_inventory(player, selected_item, viewport_x, viewport_y):
 
 
         # item名の表示
-        item_text = f"{item+1: >2}: {item_name} {equip_this}"
+        if cur_item:
+            cur_item = cur_item.name
+        item_text = f"{item+1: >2}: {cur_item} {equip_this}"
         arcade.draw_text(
             text=item_text,
             start_x=back_panel_x +20,

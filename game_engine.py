@@ -67,7 +67,7 @@ class GameEngine:
         self.messenger = None
 
         self.player = Player(
-            inventory=Inventory(capacity=10),cur_stories={"town":None})
+            inventory=Inventory(capacity=10))
 
 
     def setup_level(self, level_number):
@@ -387,6 +387,7 @@ class GameEngine:
         self.game_state = GAME_STATE.NORMAL
         self.fov_recompute = True
         self.player.equipment.sprite_check(self.cur_level.equip_sprites)
+        self.player.equipment.equip_position_reset()
 
 
     def process_action_queue(self, delta_time):
@@ -510,6 +511,7 @@ class GameEngine:
             if "use_stairs" in action:
                 result = self.use_stairs()
                 if result:
+                    self.player.equipment.sprite_check(self.cur_level.equip_sprites)
                     self.player.equipment.equip_position_reset()
                     new_action_queue.extend(result)
                     self.game_state = GAME_STATE.NORMAL
