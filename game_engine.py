@@ -15,6 +15,8 @@ from recalculate_fov import recalculate_fov
 from actor.inventory import Inventory
 from actor.item_point_check import ItemPoint
 from actor.characters.PC import Player
+from actor.characters.orcs import Orc, orc
+
 from actor.map_obj.stairs import Up_Stairs, Down_Stairs
 from actor.restore_actor import restore_actor
 from util import get_door, get_blocking_entity, stop_watch
@@ -60,7 +62,7 @@ class GameEngine:
         self.player = None
         self.game_map = None
         self.action_queue = []
-        self.messages = deque(maxlen=6)
+        self.messages = deque(maxlen=9)
         self.selected_item = 0  # キー押下で直接選択したアイテム
         self.turn_check = []
         self.game_state = GAME_STATE.NORMAL
@@ -125,6 +127,9 @@ class GameEngine:
         self.game_level.chara_sprites.append(self.player)
 
         self.player.x, self.player.y = 10, 10
+
+        self.orc = Orc(x=10,y=12)
+        self.game_level.actor_sprites.append(self.orc)
 
         self.game_level.floor_level = level
         self.game_level.map_name = f"test_dungeon"
@@ -587,7 +592,7 @@ class GameEngine:
                 if 0 < damage:
                     txt_color = arcade.color.MINT_GREEN
                 elif 0 > damage:
-                    txt_color = arcade.color.ORANGE_PEEL
+                    txt_color = COLORS["status_bar_foreground"]
 
                 Damagepop(self, damage, txt_color, target)
 

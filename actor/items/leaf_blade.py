@@ -21,7 +21,7 @@ class LeafBlade(Actor):
 
         self.tag = [Tag.item, Tag.equip, Tag.skill]
 
-        self.explanatory_text = f"the test or test and test"
+        self.explanatory_text = f"Generate a leaf blade in the main hand"
         self.icon = IMAGE_ID["leaf_blade_icon"]
 
         self.item_margin_x = 6 * SPRITE_SCALE

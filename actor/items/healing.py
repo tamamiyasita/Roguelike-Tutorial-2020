@@ -48,6 +48,7 @@ class Healing(Actor):
     def __init__(self):
         super().__init__(
             name="healing",
+            scale=4.5
 
         )
 
@@ -59,7 +60,7 @@ class Healing(Actor):
         self.tag = [Tag.item, Tag.used, Tag.active, Tag.skill]
 
         self.explanatory_text = f"Recover a small amount of hp"
-        self.icon = IMAGE_ID["paeonia_icon"]
+        self.icon = IMAGE_ID["healing_icon"]
 
     def get_dict(self):
         result = {}

@@ -24,7 +24,7 @@ class Damagepop(Actor):
         self.text = arcade.draw_text(
             str(text), self.center_x, self.center_y, self.color, font_size=15)
         self.effect_sprites = engine.cur_level.effect_sprites
-        self.d_time = 30
+        self.d_time = 25
 
         self.alpha = 0
         self.change_y = 2.5

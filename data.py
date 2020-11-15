@@ -102,9 +102,10 @@ leaf_blade_icon = arcade.load_texture(r"image\leaf_blade_icon.png")
 ebony = arcade.load_texture_pair(r"image\ebony.png")
 branch_baton = arcade.load_texture_pair(r"image\BranchBaton.png")
 branch_baton_icon = arcade.load_texture(r"image\branch_baton_icon.png")
-Paeonia_icon = arcade.load_texture("image\paeonia_icon.png")
-Paeonia = arcade.load_texture("image\paeonia.png")
+healing = arcade.load_texture(r"image\healing.png")
+Paeonia = arcade.load_texture(r"image\paeonia.png")
 
+cool_down = arcade.load_texture(r"image\cool_down.png")
 ###items###
 # healing_potionテクスチャセット生成
 healing_potion_tile_img = (r"image/Potion.png")
@@ -165,7 +166,7 @@ doors = [door_tile[v] for v in range(door_len)]
 
 
 # actorに渡す画像はリスト型にすること
-IMAGE_ID = {"player": player,
+IMAGE_ID = {"Rou": player,
             "pc_move": pc_move,
             "pc_attack": pc_attack,
             "pc_delay": pc_delay,
@@ -191,11 +192,9 @@ IMAGE_ID = {"player": player,
             "branch_baton": branch_baton,
             "branch_baton_icon": branch_baton_icon,
             "paeonia":[Paeonia],
-            "healing":[Paeonia_icon],
-            "paeonia_icon":Paeonia_icon,
-
-
-            "healing_potion": healing_potion_tile,
+            "healing":[healing],
+            "healing_icon":healing,
+            "cool_down":cool_down,
             "confusion_scroll": [scroll_tile[15]],
             "lightning_scroll": [scroll_tile[2]],
             "fireball_scroll": [scroll_tile[6]],

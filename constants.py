@@ -29,6 +29,8 @@ MAIN_PANEL_Y = int(SCREEN_HEIGHT)
 VIEWPORT_MARGIN = int(((MAIN_PANEL_X) /
                        2 + (MAIN_PANEL_Y) / 2)/2)
 
+UI_FONT = "consola.ttf"
+
 MOVE_SPEED = 9
 
 EXPERIENCE_PER_LEVEL = [10, 800, 1300, 2000]
@@ -78,9 +80,9 @@ COLORS = {
     "light_wall": arcade.color.WHITE_SMOKE,
     "light_ground": arcade.color.WHITE_SMOKE,
     "status_panel_background": arcade.color.PINK_LACE,
-    "status_panel_text": arcade.color.BLACK,
+    "status_panel_text": arcade.color.WHITE,
     "status_bar_background": arcade.color.PINK_LACE,
-    "status_bar_foreground": arcade.color.RED_DEVIL
+    "status_bar_foreground": (255,103,123)
 }
 
 

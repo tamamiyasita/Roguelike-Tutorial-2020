@@ -1,3 +1,4 @@
+from arcade import texture
 from actor.actor import Actor
 from actor.fighter import Fighter
 from data import *
@@ -7,7 +8,7 @@ from actor.equipment import Equipment
 
 class Player(Actor):
     def __init__(self, x=0, y=0, inventory=0):
-        fighter_component = Fighter(hp=10, STR=3, DEX=4, INT=4,
+        fighter_component = Fighter(hp=30, STR=3, DEX=4, INT=4,
                                     unarmed_attack=2,
                                     hit_rate=100,
                                     defense=1,
@@ -17,7 +18,7 @@ class Player(Actor):
         equip_component = Equipment()
         super().__init__(
             # scale=0.5,
-            name="player",
+            name="Rou",
             x=x,
             y=y,
             color=COLORS["white"],
@@ -28,6 +29,7 @@ class Player(Actor):
 
         )
         self.tag = [Tag.player]
+        self.race = "Alraune"
 
         self.state = state.READY
         self.delay_time = 5

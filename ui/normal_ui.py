@@ -1,5 +1,7 @@
 
 
+from data import IMAGE_ID
+from actor.characters.PC import Player
 import arcade
 from arcade.gl import geometry
 from arcade.isometric import screen_to_isometric_grid
@@ -18,8 +20,10 @@ class NormalUI:
         self.selected_item = selected_item
         self.messages = messages
         self.mouse_position = mouse_position
-        self.buttom_panel_width = SCREEN_WIDTH-STATES_PANEL_WIDTH
-        self.panel_line_width = 4
+        self.side_panel_left = SCREEN_WIDTH-STATES_PANEL_WIDTH
+        self.panel_line_width = 1
+        self.side_panel_height = SCREEN_HEIGHT - self.panel_line_width -231
+        self.side_panel_left = SCREEN_WIDTH - STATES_PANEL_WIDTH
 
     def draw_in_normal_state(self):
         """mainに渡すメソッドをまとめる"""
@@ -27,34 +31,35 @@ class NormalUI:
         self.draw_hp_and_status_bar()
         self.draw_inventory()
         self.draw_messages_handle()
+        self.draw_equip_icon()
 
     def panel_ui(self):
         # 画面下のパネルをarcadeの四角形を描画する変数で作成
         arcade.draw_xywh_rectangle_filled(
             bottom_left_x=self.viewport_left,
             bottom_left_y=self.viewport_bottom,
-            width=self.buttom_panel_width,
+            width=self.side_panel_left,
             height=STATES_PANEL_HEIGHT,
-            color=(255,255,255,100)#COLORS["status_panel_background"]
+            color=(255,255,255,0)#COLORS["status_panel_background"]
         )
 
         # 下パネルの周りの線
-        arcade.draw_xywh_rectangle_outline(
-            bottom_left_x=self.viewport_left+self.panel_line_width*0.5,
-            bottom_left_y=self.viewport_bottom+self.panel_line_width*0.5,
-            width=self.buttom_panel_width-self.panel_line_width,
-            height=STATES_PANEL_HEIGHT,
-            color=arcade.color.ORANGE,
-            border_width=self.panel_line_width
-        )
+        # arcade.draw_xywh_rectangle_outline(
+        #     bottom_left_x=self.viewport_left+self.panel_line_width*0.5,
+        #     bottom_left_y=self.viewport_bottom+self.panel_line_width*0.5,
+        #     width=self.side_panel_left-self.panel_line_width,
+        #     height=STATES_PANEL_HEIGHT,
+        #     color=arcade.color.ORANGE,
+        #     border_width=self.panel_line_width
+        # )
 
         # 画面横のパネル
         arcade.draw_xywh_rectangle_filled(
             bottom_left_x=self.viewport_left + SCREEN_WIDTH - STATES_PANEL_WIDTH,
             bottom_left_y=self.viewport_bottom,
             width=STATES_PANEL_WIDTH,
-            height=SCREEN_HEIGHT - 231,
-            color=arcade.color.LIBERTY
+            height=self.side_panel_height,
+            color=(25,25,55,255)
         )
 
        # 横パネルの周りの線
@@ -63,7 +68,7 @@ class NormalUI:
             STATES_PANEL_WIDTH + self.panel_line_width*0.5,
             bottom_left_y=self.viewport_bottom + self.panel_line_width*0.5,
             width=STATES_PANEL_WIDTH - self.panel_line_width,
-            height=SCREEN_HEIGHT - self.panel_line_width-231,
+            height=self.side_panel_height,
             color=arcade.color.LEMON_CHIFFON,
             border_width=self.panel_line_width
         )
@@ -89,64 +94,88 @@ class NormalUI:
     def draw_hp_and_status_bar(self):
         """ステータスパネルとHPバー"""
         # パネル用変数
-        hp_font_size = 13
-        hp_bar_width = hp_font_size * 6  # HPバーの幅
-        hp_bar_height = hp_font_size - 2  # HPバーの太さ
-        hp_bar_margin = self.viewport_bottom + STATES_PANEL_HEIGHT - 7  # パネル上端からのHPバーの位置
-        left_margin = self.viewport_left + 25  # 画面左からのHPとバーの位置
-        top_hp_margin = hp_bar_margin - 23  # パネル上端からのHPの位置
-        top_exp_margin = top_hp_margin - 15  # top_hp_marginからのEXPの位置
+        hp_font_size = 15
+        hp_bar_width = hp_font_size * 12  # HPバーの幅
+        hp_bar_height = hp_font_size + 2  # HPバーの太さ
+        hp_bar_margin = self.viewport_bottom + self.side_panel_height - 55  # 15パネル上端からのHPバーの位置
+        left_margin = self.viewport_left + self.side_panel_left + 7  # 画面左からのHPとバーの位置
+
+        Player_attr = f"{self.player.race} {self.player.name}"
+
+        arcade.draw_text(text=Player_attr,
+                         start_x=left_margin,
+                         start_y=hp_bar_margin+25,
+                         color=(132,255,142),
+                         font_size=hp_font_size+1,
+                         font_name=UI_FONT
+
+                         )
 
         # HP/MAXHPの表示
-        hp_text = f"HP: {self.player.fighter.hp}/{self.player.fighter.max_hp}"
+        hp_text = f"HP {self.player.fighter.hp: >2}/{self.player.fighter.max_hp}"
 
         arcade.draw_text(text=hp_text,
                          start_x=left_margin,
-                         start_y=top_hp_margin,
+                         start_y=hp_bar_margin-25,
                          color=COLORS["status_panel_text"],
-                         font_size=hp_font_size
+                         font_size=hp_font_size,
+                         font_name=UI_FONT
+
                          )
 
         # EXPの表示
         if self.player.fighter.level < len(EXPERIENCE_PER_LEVEL):
             xp_to_next_level = EXPERIENCE_PER_LEVEL[self.player.fighter.level - 1]
-            exp_text = f"XP: {self.player.fighter.current_xp} / {xp_to_next_level}"
+            exp_text = f"XP {self.player.fighter.current_xp: >4} / {xp_to_next_level: >4}"
         else:
-            exp_text = f"XP: {self.player.fighter.current_xp}"
+            exp_text = f"XP {self.player.fighter.current_xp}"
 
         arcade.draw_text(text=exp_text,
-                         start_x=left_margin,
-                         start_y=top_exp_margin,
-                         color=arcade.color.BAZAAR
+                         start_x=left_margin+2,
+                         start_y=hp_bar_margin+4,
+                         color=arcade.color.BABY_BLUE_EYES,
+                         font_size=13
                          )
 
+        draw_status_bar(center_x=left_margin+168,
+                        center_y=hp_bar_margin+12,
+                        width=140,
+                        height=7,
+                        current_value=self.player.fighter.current_xp,
+                        max_value=xp_to_next_level,
+                        front_color=arcade.color.BABY_BLUE_EYES,
+                        bac_color=(100,100,100,100)
+                        )
+
         # レベルの表示
-        level_text = f"Level:{self.player.fighter.level}"
+        level_text = f"Level {self.player.fighter.level}"
 
         arcade.draw_text(text=level_text,
-                         start_x=left_margin,
-                         start_y=top_exp_margin - 20,
-                         color=arcade.color.BITTERSWEET
+                         start_x=left_margin+140,
+                         start_y=hp_bar_margin+25,
+                         color=(252,248,151),
+                         font_size=15,
+                         font_name=UI_FONT
                          )
 
         # HPバーの描画
-        draw_status_bar(center_x=hp_bar_width / 2 + left_margin,
-                        center_y=hp_bar_margin,
-                        width=hp_bar_width,
+        draw_status_bar(center_x=hp_bar_width / 2 + left_margin+74,
+                        center_y=hp_bar_margin-14,
+                        width=hp_bar_width-28,
                         height=hp_bar_height,
                         current_value=self.player.fighter.hp,
                         max_value=self.player.fighter.max_hp
                         )
 
     def draw_inventory(self):
-        """インベントリの表示"""
+        """スキルアイコンの表示"""
         slot_len = len(self.player.fighter.active_skill)
         item_left_position = self.viewport_left + \
             ((SCREEN_WIDTH-STATES_PANEL_WIDTH) / 2.8)   # パネル左からの所持アイテム表示位置の調整に使う変数
         skill_top_position = self.viewport_bottom + \
             STATES_PANEL_HEIGHT - 22  # パネル上端からの所持アイテム表示位置の調整に使う変数
         separate_size = 4.5  # スキル名の表示間隔の調整に使う変数
-        item_font_size = 12
+        item_font_size = 11
         field_width = SCREEN_WIDTH / (slot_len + 1) / separate_size  # アイテム表示感覚を決める変数
 
         # キャパシティ数をループし、インベントリのアイテム名とアウトラインを描画する
@@ -157,72 +186,146 @@ class NormalUI:
 
             if skill:
 
-                skill_name = f"{i+1}: {skill.name}"
+                skill_name = f"<key {i+1}>"#f"{i+1}: {skill.name}"
 
-                arcade.draw_text(
-                    text=skill_name,
-                    start_x=skill_position,
-                    start_y=skill_top_position,
-                    color=COLORS["status_panel_text"],
-                    font_size=item_font_size
-                )
   
 
                 arcade.draw_texture_rectangle(
-                    center_x=skill_position + 50,
-                    center_y=skill_top_position - 25,
-                    width=40,
-                    height=40,
+                    center_x=skill_position+10,
+                    center_y=skill_top_position-10,
+                    width=55,
+                    height=55,
                     texture=skill.texture
                 )
                 if 0 < skill.cur_cooldown_time:
+                    arcade.draw_texture_rectangle(
+                        center_x=skill_position+10,
+                        center_y=skill_top_position-10,
+                        width=55,
+                        height=55,
+                        texture=IMAGE_ID["cool_down"],
+                        alpha=200
+                    )
                     arcade.draw_text(
                         text=str(skill.cur_cooldown_time),
-                        start_x=skill_position + 50,
-                        start_y=skill_top_position - 25,
+                        start_x=skill_position + 10,
+                        start_y=skill_top_position - 10,
                         color=arcade.color.DARK_BLUE,
-                        font_size=25,
+                        font_size=27,
                         anchor_x="center",
                         anchor_y="center"
                     )
+                else:
+                    arcade.draw_text(
+                        text=skill_name,
+                        start_x=skill_position-13,
+                        start_y=skill_top_position-55,
+                        color=COLORS["status_panel_text"],
+                        font_size=item_font_size
+                    )
+    
+    def draw_equip_icon(self):
+        back_panel_x = self.viewport_left + SCREEN_WIDTH // 4 # 背景パネルの左端
+        back_panel_y = self.viewport_bottom + SCREEN_HEIGHT // 8 # 背景パネルの下端
+        item_row = back_panel_y + (SCREEN_HEIGHT //1.3) - 320 # 行の最上段
+        item_font_size = 17
+        left_margin = self.viewport_left + self.side_panel_left + 7  # 画面左からのHPとバーの位置
+
+        y = 40
+        for slot, equip in self.player.equipment.equip_slot.items():
+
+            if equip:
+
+                item_text = f"{equip.name} (level {equip.level})".replace("_", " ").title()
+            else:
+                continue
+
+            arcade.draw_text(
+                text=item_text,
+                start_x=left_margin+85,
+                start_y=item_row + y,
+                color=arcade.color.ARYLIDE_YELLOW,
+                font_size=item_font_size-3,
+                # font_name="consola.ttf"
+            )
+            arcade.draw_text(
+                text=slot,
+                start_x=left_margin,
+                start_y=item_row + y,
+                color=arcade.color.WHITE,
+                font_size=item_font_size-4,
+                # font_name="consola.ttf"
+            )
+
+            arcade.draw_texture_rectangle(
+                center_x=left_margin+25,
+                center_y=item_row + y-25,
+                width=40,
+                height=40,
+                texture=equip.icon
+            )
+                
+            arcade.draw_text(
+                text=f"damage: {self.player.fighter.level//3}D/{equip.attack_damage}",
+                start_x=left_margin +55,
+                start_y=item_row + y-23,
+                color=arcade.color.APPLE_GREEN,
+                font_size=item_font_size-5,
+                font_name="consola.ttf"
+            )
+            arcade.draw_text(
+                text=f"hit rate: {equip.hit_rate}",
+                start_x=left_margin +55,
+                start_y=item_row + y-42,
+                color=arcade.color.ORCHID_PINK,
+                font_size=item_font_size-5,
+                font_name="consola.ttf"
+            )
+            arcade.draw_text(
+                text=f"{equip.explanatory_text}",
+                start_x=left_margin +7,
+                start_y=item_row + y-62,
+                color=arcade.color.WHITE,
+                font_size=item_font_size-7,
+                # font_name="consola.ttf"
+            )
+
+            y -= 104        
+
+
+
 
     def draw_messages_handle(self):
         """メッセージ表示領域"""
         margin = 3
         message_top_position = 20  # パネル上端からのメッセージ表示位置
-        message_left_position = self.viewport_left - margin + 125  # 画面左からのメッセージ表示位置
+        message_left_position = self.viewport_left - margin + 25  # 画面左からのメッセージ表示位置
         message_panel_width = (
             (SCREEN_WIDTH-STATES_PANEL_WIDTH) / 2.8) - 125 - margin  # メッセージパネル幅
-        message_panel_height = STATES_PANEL_HEIGHT  # メッセージパネル高
-        message_first_position = self.viewport_bottom + \
-            STATES_PANEL_HEIGHT - message_top_position  # 最初の行
+        message_first_position = self.viewport_bottom + 165# STATES_PANEL_HEIGHT - message_top_position  # 最初の行
 
-        arcade.draw_xywh_rectangle_filled(
-            bottom_left_x=message_left_position,
-            bottom_left_y=self.viewport_bottom + self.panel_line_width,
-            width=message_panel_width,
-            height=message_panel_height - self.panel_line_width,
-            color=arcade.color.SHAMPOO
-        )
 
-        for message in self.messages:
+        c = 255
+        for message in list(reversed(self.messages)):
             arcade.draw_text(
                 text=message,
                 start_x=message_left_position,
                 start_y=message_first_position,
-                color=COLORS["status_panel_text"]
+                color=(255,255,255,c),
+                font_size=16
             )
+            c -= 20
 
             # 文字送り
             message_first_position -= message_top_position
 
 
-def draw_status_bar(center_x, center_y, width, height, current_value, max_value):
+def draw_status_bar(center_x, center_y, width, height, current_value, max_value, front_color=(255,103,123), bac_color=(255,255,255,255)):
     """ステータスバーの実体"""
     arcade.draw_rectangle_filled(
-        center_x, center_y, width, height, color=arcade.color.WHITE)
+        center_x, center_y, width, height, color=bac_color)
 
     states_width = (current_value / max_value) * width
 
     arcade.draw_rectangle_filled(center_x - (width / 2 - states_width / 2),
-                                 center_y, states_width, height, COLORS["status_bar_foreground"])
+                                 center_y, states_width, height, color=front_color)
