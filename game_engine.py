@@ -8,6 +8,8 @@ from data import *
 from game_map.basic_dungeon import BasicDungeon
 from game_map.town_map import TownMap
 from game_map.map_sprite_set import ActorPlacement
+from game_map.test_map import TestMap
+
 from recalculate_fov import recalculate_fov
 
 from actor.inventory import Inventory
@@ -29,6 +31,7 @@ from actor.items.small_shield import SmallShield
 from actor.items.paeonia import Paeonia
 from actor.items.cirsium import Cirsium
 from actor.items.ebony import Ebony
+
 
 
 class GameLevel:
@@ -75,12 +78,89 @@ class GameEngine:
 
         self.map_width, self.map_height = MAP_WIDTH, MAP_HEIGHT
         self.game_level = GameLevel()
+
         if level_number == 0:
             return self.start_town_init()
-        if level_number >= 1:
+        elif level_number >= 99:
+            return self.test_map(level_number)
+        elif level_number >= 1:
             cur_map = self.basic_dungeon_init(level_number)
             return cur_map
 
+    def setup(self):
+
+        arcade.set_background_color(COLORS["black"])
+
+        self.cur_level = self.setup_level(level_number=99)
+        self.stories[self.cur_floor_name] = self.cur_level
+        print(f"stories{self.stories}")
+        self.turn_loop = TurnLoop(self.player)
+        self.item_point = ItemPoint(self)
+
+    def test_map(self, level):
+        self.game_map = TestMap(40,40,99)
+        #スプライトリストの初期化
+        floor_sprite = ActorPlacement(self.game_map, self).floor_set()
+        wall_sprite = ActorPlacement(self.game_map, self).wall_set()
+        map_point_sprite = ActorPlacement(self.game_map, self).map_point_set()
+        map_obj_sprite = ActorPlacement(self.game_map, self).map_obj_set()
+        actorsprite = ActorPlacement(self.game_map, self).actor_set()
+        itemsprite = ActorPlacement(self.game_map, self).items_set()
+        items_point_sprite = ActorPlacement(
+            self.game_map, self).items_point_set()
+
+        self.game_level.floor_sprites = floor_sprite
+        self.game_level.wall_sprites = wall_sprite
+        self.game_level.map_point_sprites = map_point_sprite
+        self.game_level.map_obj_sprites = map_obj_sprite
+        self.game_level.actor_sprites = actorsprite
+        self.game_level.item_sprites = itemsprite
+        self.game_level.item_point_sprites = items_point_sprite
+        self.game_level.equip_sprites = arcade.SpriteList(
+            use_spatial_hash=True, spatial_hash_cell_size=32)
+        self.game_level.effect_sprites = arcade.SpriteList(
+            use_spatial_hash=True, spatial_hash_cell_size=32)
+        self.game_level.chara_sprites = arcade.SpriteList(
+            use_spatial_hash=True, spatial_hash_cell_size=32)
+        self.game_level.chara_sprites.append(self.player)
+
+        self.player.x, self.player.y = 10, 10
+
+        self.game_level.floor_level = level
+        self.game_level.map_name = f"test_dungeon"
+
+        # テスト用エンティティ
+        self.long_sword = LongSword(self.player.x, self.player.y + 1)
+        self.game_level.item_sprites.append(self.long_sword)
+        self.short_sword = ShortSword(self.player.x+1, self.player.y + 1)
+        self.game_level.item_sprites.append(self.short_sword)
+
+        self.small_shield = SmallShield(self.player.x + 2, self.player.y+1)
+        self.game_level.item_sprites.append(self.small_shield)
+
+        self.cnf = ConfusionScroll(self.player.x + 1, self.player.y)
+        self.game_level.item_sprites.append(self.cnf)
+
+        self.fb = FireballScroll(self.player.x + 1, self.player.y)
+        self.game_level.item_sprites.append(self.fb)
+
+        self.hp = Paeonia(self.player.x-1, self.player.y)
+        self.game_level.item_sprites.append(self.hp)
+
+        self.boomerang = Boomerang(self.player.x-1, self.player.y + 1)
+        self.game_level.item_sprites.append(self.boomerang)
+
+        self.cirsium = Cirsium(self.player.x + 1, self.player.y)
+        self.game_level.item_sprites.append(self.cirsium)
+
+        self.ebony = Ebony(self.player.x + 1, self.player.y-1)
+        self.game_level.item_sprites.append(self.ebony)
+
+        self.st = Up_Stairs(self.player.x + 1, self.player.y-1)
+        self.st.scale = 2
+        self.game_level.map_obj_sprites.append(self.st)
+
+        return self.game_level
 
     def start_town_init(self):
         """初期townmapの生成"""
@@ -160,36 +240,6 @@ class GameEngine:
         self.game_level.map_name = f"basic_dungeon"
 
 
-        # テスト用エンティティ
-        self.long_sword = LongSword(self.player.x, self.player.y + 1)
-        self.game_level.item_sprites.append(self.long_sword)
-        self.short_sword = ShortSword(self.player.x+1, self.player.y + 1)
-        self.game_level.item_sprites.append(self.short_sword)
-
-        self.small_shield = SmallShield(self.player.x + 2, self.player.y+1)
-        self.game_level.item_sprites.append(self.small_shield)
-
-        self.cnf = ConfusionScroll(self.player.x + 1, self.player.y)
-        self.game_level.item_sprites.append(self.cnf)
-
-        self.fb = FireballScroll(self.player.x + 1, self.player.y)
-        self.game_level.item_sprites.append(self.fb)
-
-        self.hp = Paeonia(self.player.x-1, self.player.y)
-        self.game_level.item_sprites.append(self.hp)
-
-        self.boomerang = Boomerang(self.player.x-1, self.player.y + 1)
-        self.game_level.item_sprites.append(self.boomerang)
-
-        self.cirsium = Cirsium(self.player.x + 1, self.player.y)
-        self.game_level.item_sprites.append(self.cirsium)
-
-        self.ebony = Ebony(self.player.x + 1, self.player.y-1)
-        self.game_level.item_sprites.append(self.ebony)
-
-        self.st = Up_Stairs(self.player.x + 1, self.player.y-1)
-        self.st.scale = 2
-        self.game_level.map_obj_sprites.append(self.st)
 
         self.ut = Down_Stairs(self.player.x + 2, self.player.y-1)
         self.ut.scale = 2
@@ -199,15 +249,6 @@ class GameEngine:
 
         return self.game_level
 
-    def setup(self):
-
-        arcade.set_background_color(COLORS["black"])
-
-        self.cur_level = self.setup_level(level_number=0)
-        self.stories[self.cur_floor_name] = self.cur_level
-        print(f"stories{self.stories}")
-        self.turn_loop = TurnLoop(self.player)
-        self.item_point = ItemPoint(self)
 
     @property
     def cur_floor_name(self):
@@ -607,22 +648,26 @@ class GameEngine:
 
         for stairs in get_stairs:
             if isinstance(stairs, Down_Stairs):
+                cur_level_name = f"{self.cur_level.map_name}{self.cur_level.floor_level}"
 
-                self.stories[f"{self.cur_level.map_name}{self.cur_level.floor_level}"] = self.cur_level
+                next_level = self.setup_level(self.cur_level.floor_level + 1)
+                next_level_name = f"{next_level.map_name}{self.cur_level.floor_level+1}"
 
-                next_level_name = f"basic_dungeon{self.cur_level.floor_level+1}"
+                self.stories[cur_level_name] = self.cur_level
                 if next_level_name not in self.stories.keys():
+                    self.cur_level = next_level
         
+                    up_stairs = [i for i in self.cur_level.map_obj_sprites if isinstance(i, Up_Stairs)]
                     self.player.restore_from_dict(player_dict["Player"])
-                    level = self.setup_level(self.cur_level.floor_level + 1)
-                    self.cur_level = level
-                    self.stories[f"basic_dungeon{self.cur_level.floor_level}"] = self.cur_level
+                    self.stories[next_level_name] = self.cur_level
+                    self.player.x, self.player.y = up_stairs[0].x, up_stairs[0].y
 
                     print(f"down1 stairs{self.stories}")
 
                 else:
                     load_level = self.stories[next_level_name]
                     self.cur_level = load_level
+                    self.cur_level.floor_level = load_level.floor_level
                     
 
                     up_stairs = [i for i in self.cur_level.map_obj_sprites if isinstance(i, Up_Stairs)]
@@ -637,11 +682,10 @@ class GameEngine:
 
         for stairs in get_stairs:
             if isinstance(stairs, Up_Stairs):
-                prev_level_name = f"basic_dungeon{self.cur_level.floor_level-1}"
-
+                prev_level_name = f"{self.cur_level.map_name}{self.cur_level.floor_level-1}"
                 self.stories[f"{self.cur_level.map_name}{self.cur_level.floor_level}"] = self.cur_level
-
                 return_level = (self.cur_level.floor_level - 1)
+
                 if 0 == return_level:
 
                     load_level = self.stories[f"town0"]

@@ -35,7 +35,7 @@ class NormalUI:
             bottom_left_y=self.viewport_bottom,
             width=self.buttom_panel_width,
             height=STATES_PANEL_HEIGHT,
-            color=COLORS["status_panel_background"]
+            color=(255,255,255,100)#COLORS["status_panel_background"]
         )
 
         # 下パネルの周りの線
