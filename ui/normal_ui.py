@@ -136,7 +136,7 @@ class NormalUI:
                          color=arcade.color.BABY_BLUE_EYES,
                          font_size=13
                          )
-
+        # EXPバーの描画
         draw_status_bar(center_x=left_margin+168,
                         center_y=hp_bar_margin+12,
                         width=140,
@@ -173,7 +173,7 @@ class NormalUI:
         item_left_position = self.viewport_left + \
             ((SCREEN_WIDTH-STATES_PANEL_WIDTH) / 2.8)   # パネル左からの所持アイテム表示位置の調整に使う変数
         skill_top_position = self.viewport_bottom + \
-            STATES_PANEL_HEIGHT - 22  # パネル上端からの所持アイテム表示位置の調整に使う変数
+            STATES_PANEL_HEIGHT + 40  # パネル上端からの所持アイテム表示位置の調整に使う変数
         separate_size = 4.5  # スキル名の表示間隔の調整に使う変数
         item_font_size = 11
         field_width = SCREEN_WIDTH / (slot_len + 1) / separate_size  # アイテム表示感覚を決める変数
@@ -182,14 +182,14 @@ class NormalUI:
         # TODO 複数行にする処理を考える（５回ループしたら縦と横の変数に増減するなど）
         for i, skill in enumerate(self.player.fighter.active_skill):
             # print(self.player.fighter.active_skill)
-            skill_position = i * field_width + item_left_position  # パネル左からの所持アイテムの表示位置
+            skill_position = i * field_width + item_left_position  # 左からの所持skillの表示位置
 
             if skill:
 
-                skill_name = f"<key {i+1}>"#f"{i+1}: {skill.name}"
+                key_number = f"<key {i+1}>"#f"{i+1}: {skill.name}"
 
   
-
+                # スキルアイコンの描画
                 arcade.draw_texture_rectangle(
                     center_x=skill_position+10,
                     center_y=skill_top_position-10,
@@ -197,6 +197,7 @@ class NormalUI:
                     height=55,
                     texture=skill.texture
                 )
+                # アイコンに白幕をかけクールダウンタイム表示
                 if 0 < skill.cur_cooldown_time:
                     arcade.draw_texture_rectangle(
                         center_x=skill_position+10,
@@ -217,7 +218,7 @@ class NormalUI:
                     )
                 else:
                     arcade.draw_text(
-                        text=skill_name,
+                        text=key_number,
                         start_x=skill_position-13,
                         start_y=skill_top_position-55,
                         color=COLORS["status_panel_text"],
@@ -225,7 +226,7 @@ class NormalUI:
                     )
     
     def draw_equip_icon(self):
-        back_panel_x = self.viewport_left + SCREEN_WIDTH // 4 # 背景パネルの左端
+        """スキルアイコン及びステータスを右パネルに描画する"""
         back_panel_y = self.viewport_bottom + SCREEN_HEIGHT // 8 # 背景パネルの下端
         item_row = back_panel_y + (SCREEN_HEIGHT //1.3) - 320 # 行の最上段
         item_font_size = 17
@@ -299,9 +300,7 @@ class NormalUI:
         """メッセージ表示領域"""
         margin = 3
         message_top_position = 20  # パネル上端からのメッセージ表示位置
-        message_left_position = self.viewport_left - margin + 25  # 画面左からのメッセージ表示位置
-        message_panel_width = (
-            (SCREEN_WIDTH-STATES_PANEL_WIDTH) / 2.8) - 125 - margin  # メッセージパネル幅
+        message_left_position = self.viewport_left - margin + 20  # 画面左からのメッセージ表示位置
         message_first_position = self.viewport_bottom + 165# STATES_PANEL_HEIGHT - message_top_position  # 最初の行
 
 
@@ -314,7 +313,7 @@ class NormalUI:
                 color=(255,255,255,c),
                 font_size=16
             )
-            c -= 20
+            c -= 20 # 行ごとに文字列を減色させる
 
             # 文字送り
             message_first_position -= message_top_position
