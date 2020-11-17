@@ -20,19 +20,6 @@ class TurnLoop:
         self.player = player
         self.turn = Turn.ON
 
-    # def cooldown_charge(self, actor):
-    #     if hasattr(actor, "fighter") and actor.fighter.active_skill:
-    #         for skill in actor.fighter.active_skill:
-    #             if 0 < skill.cur_cooldown_time:
-    #                 print(skill.cur_cooldown_time, skill)
-    #                 skill.cur_cooldown_time -= 1
-
-    # def states_effect(self, actor, engine):
-    #     if hasattr(actor, "fighter") and actor.fighter.states:
-    #         for effect in actor.fighter.states:
-    #             if 0 < effect.effect_time:
-    #                 print(effect.effect_time, effect)
-    #                 effect.effect_time -= 1
     def elapsed_time(self, actor, queue):
         """スキルクールダウンとステータス効果時間のカウントダウンを行う"""
         
@@ -44,10 +31,14 @@ class TurnLoop:
         
             if actor.fighter.states:
                 for states in actor.fighter.states:
-                    queue.extend(states.apply())
+                    if 0 < states.effect_time:
+                        queue.extend(states.apply())
+
                     print(states.effect_time, states)
+                    
                     states.effect_time -= 1   
-                    if 0 > states.effect_time:
+                    if 0 >= states.effect_time:
+                        states.call_off()
                         actor.fighter.states.remove(states)
 
 
@@ -57,8 +48,7 @@ class TurnLoop:
         queue = engine.action_queue
 
         while self.turn == Turn.ON:
-            self.sprites = {i for i in chain(
-                engine.cur_level.chara_sprites, engine.cur_level.actor_sprites)}
+            self.sprites = {i for i in chain(engine.cur_level.chara_sprites, engine.cur_level.actor_sprites)}
 
             for sprite in self.sprites:
                 # playerもしくは他のactorの時はvisibleの場合のみwaitを減らす
@@ -99,7 +89,7 @@ class TurnLoop:
             # log.debug(
             #     f"{self.actor.name=}, {self.actor.wait=}, {self.actor.state=}, {self.actor.is_dead=}")
             if self.actor.state is state.TURN_END or self.actor.state is None or self.actor.is_dead:
-                self.turn = Turn.ON
                 self.elapsed_time(self.actor, queue)
+                self.turn = Turn.ON
 
     

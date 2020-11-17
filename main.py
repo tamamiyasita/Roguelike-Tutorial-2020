@@ -75,7 +75,7 @@ class MG(arcade.Window):
         self.quad_fs = geometry.quad_2d_fs()
 
         self.mini_map_quad = geometry.quad_2d(
-            size=(0.5792, 0.97), pos=(0.949, 1.022))
+            size=(0.86, 1.14), pos=(1.0155, 1.072))
         # ----------------------
 
         # Lコマンドで呼び出すlook機能

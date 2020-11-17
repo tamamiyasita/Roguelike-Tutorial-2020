@@ -15,9 +15,9 @@ class PoisonStatus:
 
             return [{"apply":self.owner}, {"message":f"You took {self.power} damage from poison"}, *result]
 
-        else:
-            self.owner.color = arcade.color.WHITE
-            return [{"message":f"The poison has disappeared from your body"}]
+    def call_off(self):
+        self.owner.color = arcade.color.WHITE
+        return [{"message":f"The poison has disappeared from your body"}]
 
     def get_dict(self):
         result = {}

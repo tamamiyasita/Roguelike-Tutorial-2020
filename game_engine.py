@@ -93,7 +93,7 @@ class GameEngine:
 
         arcade.set_background_color(COLORS["black"])
 
-        self.cur_level = self.setup_level(level_number=99)
+        self.cur_level = self.setup_level(level_number=1)
         self.stories[self.cur_floor_name] = self.cur_level
         print(f"stories{self.stories}")
         self.turn_loop = TurnLoop(self.player)
@@ -246,7 +246,7 @@ class GameEngine:
 
 
 
-        self.ut = Down_Stairs(self.player.x + 2, self.player.y-1)
+        self.ut = Down_Stairs(self.player.x, self.player.y-1)
         self.ut.scale = 2
         self.game_level.map_obj_sprites.append(self.ut)
 

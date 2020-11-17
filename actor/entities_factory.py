@@ -44,7 +44,7 @@ def get_random_monster_by_challenge(challenge):
         Crab(), Orc(), Troll()
     ]
     if challenge:
-        filtered_monsters = [monster for monster in monster_list if monster.fighter.level == challenge]
+        filtered_monsters = [monster for monster in monster_list if monster.fighter.level <= challenge]
         if len(filtered_monsters) == 0:
             raise ValueError(
                 f"Error, no entities for challenge level {challenge}.")
@@ -54,11 +54,11 @@ def get_random_monster_by_challenge(challenge):
 
 def get_random_items_by_challenge(challenge):
     item_list = [
-        HealingPotion(), ShortSword(), SmallShield(), LongSword(), LightningScroll(),
+        ShortSword(), SmallShield(), LongSword(), LightningScroll(),
         FireballScroll(), ConfusionScroll()
     ]
     if challenge:
-        filtered_items = [item for item in item_list if item.level == challenge]
+        filtered_items = [item for item in item_list if item.level <= challenge]
         if len(filtered_items) == 0:
             raise ValueError(
                 f"Error, no entities for challenge level {challenge}.")
