@@ -29,6 +29,9 @@ class LevelupUI:
         self.skill_result = []
         self.get_skill = None
 
+        self.window_width = SCREEN_WIDTH - 924
+        self.window_height = SCREEN_HEIGHT - 800
+
     def states_choices(self, key):
         self.key = key
         if self.engine.player.fighter.ability_points >= 1:
@@ -56,6 +59,8 @@ class LevelupUI:
         self.viewport_bottom = self.viewports[2]
         self.viewport_top = self.viewports[3]
 
+        self.bottom_left_x=self.viewport_left+(MAIN_PANEL_X/2) -(self.window_width/2)
+        self.bottom_left_y=self.viewport_bottom+500
         self.draw_base_window()
         self.draw_ability_select()
 
@@ -68,17 +73,17 @@ class LevelupUI:
     def draw_base_window(self):
         # 最下部の基本枠
         arcade.draw_xywh_rectangle_filled(
-            bottom_left_x=self.viewport_left+650,
-            bottom_left_y=self.viewport_bottom+500,
-            width=SCREEN_WIDTH - 1180,
-            height=SCREEN_HEIGHT - 800,
+            bottom_left_x=self.bottom_left_x,
+            bottom_left_y=self.bottom_left_y,
+            width=self.window_width,
+            height=self.window_height,
             color=[255, 255, 255, 190]
         )
 
         # テキストに使う変数
         spacing = 30
-        self.text_position_x = self.viewport_left + 660
-        self.text_position_y = self.viewport_bottom + SCREEN_HEIGHT - 300
+        self.text_position_x = self.bottom_left_x + 10
+        self.text_position_y = self.bottom_left_y + 160
         text_size = 24
 
         # 最上段のタイトル
@@ -195,25 +200,27 @@ class LevelupUI:
 
                 # ベーススキル窓
                 arcade.draw_xywh_rectangle_filled(
-                    bottom_left_x=self.viewport_left+650,
-                    bottom_left_y=self.viewport_bottom+330,
-                    width=SCREEN_WIDTH - 1180,
-                    height=SCREEN_HEIGHT - 790,
-                    color=[59, 25, 29, 170]
+                    bottom_left_x=self.bottom_left_x,
+                    bottom_left_y=self.bottom_left_y-170,
+                    width=self.window_width,
+                    height=self.window_height+10,
+                    color=[59, 125, 29, 170]
                 )
 
                 # スキル枠A
                 arcade.draw_xywh_rectangle_filled(
-                    bottom_left_x=self.viewport_left+662,
-                    bottom_left_y=self.viewport_bottom+340,
+                    bottom_left_x=self.bottom_left_x+12,
+                    bottom_left_y=self.bottom_left_y-160,
                     width=128,
                     height=128,
                     color=[25, 25, 45, 190]
                 )
+
+
                 # スキル枠Aのスキルアイコン
                 arcade.draw_texture_rectangle(
-                    self.viewport_left+662+64,
-                    self.viewport_bottom+340+64,
+                    self.bottom_left_x+76,
+                    self.bottom_left_y-96,
                     64, 64,
                     texture=skill_A.icon
                 )
@@ -221,28 +228,31 @@ class LevelupUI:
 
                 # スキル枠B
                 arcade.draw_xywh_rectangle_filled(
-                    bottom_left_x=self.viewport_left+662 + 140,
-                    bottom_left_y=self.viewport_bottom+340,
+                    bottom_left_x=self.bottom_left_x+152,
+                    bottom_left_y=self.bottom_left_y-160,
                     width=128,
                     height=128,
                     color=[55, 25, 25, 190]
                 )
 
 
+
                 # スキル枠Bのスキルアイコン
                 arcade.draw_texture_rectangle(
-                    self.viewport_left+662+140+64,
-                    self.viewport_bottom+340+64,
+                    self.bottom_left_x+216,
+                    self.bottom_left_y-96,
                     64, 64,
                     texture=skill_B.icon
                 )
 
                 # スキル選択テキスト
+                skill_explanatory_text = ""
                 if self.ui_state == Select.open_skill:
+
 
                     arcade.draw_text(
                         text=f"key press A",
-                        start_x=self.viewport_left+662,
+                        start_x=self.bottom_left_x+12,
                         start_y=self.text_position_y-98,
                         # font_name="consola.ttf",
                         color=arcade.color.WHITE,
@@ -250,7 +260,7 @@ class LevelupUI:
                     )
                     arcade.draw_text(
                         text=f"key press B",
-                        start_x=self.viewport_left+660 + 142,
+                        start_x=self.bottom_left_x+152,
                         start_y=self.text_position_y-98,
                         # font_name="consola.ttf",
                         color=arcade.color.WHITE,
@@ -260,17 +270,25 @@ class LevelupUI:
                 # スキル枠Aのタイトル
                 arcade.draw_text(
                     text=skill_A.name.replace("_", " ").title(),
-                    start_x=self.viewport_left+665,
+                    start_x=self.bottom_left_x+15,
                     start_y=self.text_position_y-123,
                     # font_name="consola.ttf",
                     color=arcade.color.GREEN_YELLOW,
                     font_size=15
                 )
+                # arcade.draw_text(
+                #     text=skill_A.explanatory_text,
+                #     start_x=self.bottom_left_x+15,
+                #     start_y=self.text_position_y-223,
+                #     # font_name="consola.ttf",
+                #     color=arcade.color.GREEN_YELLOW,
+                #     font_size=10
+                # )
 
                 # スキル枠Bのタイトル
                 arcade.draw_text(
                     text=skill_B.name.replace("_", " ").title(),
-                    start_x=self.viewport_left+660 + 145,
+                    start_x=self.bottom_left_x+155,
                     start_y=self.text_position_y-123,
                     # font_name="consola.ttf",
                     color=arcade.color.PALE_GOLD,
@@ -283,13 +301,21 @@ class LevelupUI:
                     self.skill_result.append(skill_A)
 
                     arcade.draw_xywh_rectangle_outline(
-                        bottom_left_x=self.viewport_left+662,
-                        bottom_left_y=self.viewport_bottom+340,
+                        bottom_left_x=self.bottom_left_x+12,
+                        bottom_left_y=self.bottom_left_y-160,
                         width=128,
                         height=128,
-                        color=[255, 155, 155, 255],
-                        border_width=5
+                        color=arcade.color.GREEN_YELLOW,
+                        border_width=1
                     )
+                    arcade.draw_xywh_rectangle_filled(
+                        bottom_left_x=self.bottom_left_x+152,
+                        bottom_left_y=self.bottom_left_y-160,
+                        width=128,
+                        height=128,
+                        color=[255, 255, 255, 185])
+                        
+                    skill_explanatory_text = f"{skill_A.name} {skill_A.explanatory_text}".replace("_", " ")
 
                     # playerのskill listに追加し、装備更新をチェックさせる
                     self.ui_state = Select.ability
@@ -299,39 +325,63 @@ class LevelupUI:
                     self.skill_result.append(skill_B)
 
                     arcade.draw_xywh_rectangle_outline(
-                        bottom_left_x=self.viewport_left+662 + 140,
-                        bottom_left_y=self.viewport_bottom+340,
+                        bottom_left_x=self.bottom_left_x+152,
+                        bottom_left_y=self.bottom_left_y-160,
                         width=128,
                         height=128,
-                        color=[255, 155, 155, 255],
-                        border_width=5
+                        color=arcade.color.PALE_GOLD,
+                        border_width=1
+                    )
+                    arcade.draw_xywh_rectangle_filled(
+                        bottom_left_x=self.bottom_left_x+12,
+                        bottom_left_y=self.bottom_left_y-160,
+                        width=128,
+                        height=128,
+                        color=[255, 255, 255, 185],
                     )
 
+                    skill_explanatory_text = f"{skill_B.name} {skill_B.explanatory_text}".replace("_", " ")
                     self.ui_state = Select.ability
+
+                arcade.draw_text(
+                    text=f"{skill_explanatory_text}",
+                    start_x=self.bottom_left_x+(self.window_width//2),
+                    start_y=self.text_position_y-98,
+                    color=arcade.color.WHITE,
+                    anchor_x="center",
+                    font_size=13
+                )
 
         elif self.get_skill:
                 # ベーススキル窓
                 arcade.draw_xywh_rectangle_filled(
-                    bottom_left_x=self.viewport_left+650,
-                    bottom_left_y=self.viewport_bottom+330,
-                    width=SCREEN_WIDTH - 1180,
-                    height=SCREEN_HEIGHT - 790,
-                    color=[59, 25, 29, 170]
+                    bottom_left_x=self.bottom_left_x,
+                    bottom_left_y=self.bottom_left_y-185,
+                    width=self.window_width,
+                    height=self.window_height+25,
+                    color=[25, 25, 29, 170]
                 )
 
                 # スキル枠
                 arcade.draw_xywh_rectangle_filled(
-                    bottom_left_x=self.viewport_left+732,
-                    bottom_left_y=self.viewport_bottom+340,
+                    bottom_left_x=self.bottom_left_x+82,
+                    bottom_left_y=self.bottom_left_y-160,
                     width=128,
                     height=128,
-                    color=[55, 55, 55, 190]
+                    color=[255, 250, 250, 190]
+                )
+                arcade.draw_xywh_rectangle_outline(
+                    bottom_left_x=self.bottom_left_x+82,
+                    bottom_left_y=self.bottom_left_y-160,
+                    width=128,
+                    height=128,
+                    color=[135, 50, 50, 190]
                 )
         
                 # スキルアイコン
                 arcade.draw_texture_rectangle(
-                    self.viewport_left+732+64,
-                    self.viewport_bottom+340+64,
+                    self.bottom_left_x+146,
+                    self.bottom_left_y-96,
                     64, 64,
                     texture=self.get_skill.icon
                 )
@@ -340,20 +390,28 @@ class LevelupUI:
 
                 arcade.draw_text(
                     text=f"Get Skill",
-                    start_x=self.viewport_left+732,
+                    start_x=self.bottom_left_x+82,
                     start_y=self.text_position_y-98,
-                    # font_name="consola.ttf",
+                    font_name="consola.ttf",
                     color=arcade.color.WHITE,
                     font_size=16
+                )
+                arcade.draw_text(
+                    text=f"{self.get_skill.name} {self.get_skill.explanatory_text}".replace("_", " "),
+                    start_x=self.bottom_left_x+(self.window_width//2),
+                    start_y=self.text_position_y-250,
+                    color=arcade.color.WHITE,
+                    anchor_x="center",
+                    font_size=13
                 )
 
                 # スキル枠のタイトル
                 arcade.draw_text(
                     text=self.get_skill.name.replace("_", " ").title(),
-                    start_x=self.viewport_left+735,
+                    start_x=self.bottom_left_x+88,
                     start_y=self.text_position_y-123,
-                    # font_name="consola.ttf",
-                    color=arcade.color.GREEN_YELLOW,
+                    font_name="consola.ttf",
+                    color=arcade.color.BLUE_VIOLET,
                     font_size=15
                 )
 

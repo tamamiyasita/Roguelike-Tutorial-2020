@@ -14,14 +14,15 @@ class LeafBlade(Actor):
         )
 
         self.slot = "main_hand"
-        self.attack_damage = 6
+        self.attack_damage = 5
         self.hit_rate = 95
+        self.speed = 6
 
         self.level = 0
 
         self.tag = [Tag.item, Tag.equip, Tag.skill]
 
-        self.explanatory_text = f"Generate a leaf blade in the main hand"
+        self.explanatory_text = f"with excellent attack speed"
         self.icon = IMAGE_ID["leaf_blade_icon"]
 
         self.item_margin_x = 6 * SPRITE_SCALE

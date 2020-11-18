@@ -1,3 +1,4 @@
+from constants import UI_FONT
 import arcade
 from actor.actor import Actor
 
@@ -12,7 +13,7 @@ from actor.actor import Actor
 #     txt.start_x += delta_time
 
 class Damagepop(Actor):
-    def __init__(self, engine, text, color, target):
+    def __init__(self, engine, text, color, target, size=16):
         super().__init__(
             # color=arcade.color.WHITE
         )
@@ -20,27 +21,31 @@ class Damagepop(Actor):
         self.target = target
         self.center_x = target.center_x
         self.center_y = target.center_y
+        self.tmp_center_y = target.center_y + 60
         self.color = color
         self.text = arcade.draw_text(
-            str(text), self.center_x, self.center_y, self.color, font_size=15)
+            str(text), self.center_x, self.center_y, color, font_size=size, font_name=UI_FONT)
         self.effect_sprites = engine.cur_level.effect_sprites
-        self.d_time = 25
+        self.d_time = 60
 
-        self.alpha = 0
-        self.change_y = 2.5
+        self.alpha = 30
+        self.change_y = 4.5
 
         self.texture = self.text.texture
         self.effect_sprites.append(self)
         self.engine.damage_pop.append(self)
 
     def start(self):
-        self.d_time -= 1
-        if self.d_time < -5:
-            self.engine.cur_level.effect_sprites.remove(self)
-            self.engine.damage_pop.remove(self)
-        elif self.alpha < 240:
-            self.alpha += 20
-        elif self.alpha >= 250:
-            self.alpha = 255
-        elif self.d_time <= 8:
-            self.change_y = 0
+        if self in self.engine.cur_level.effect_sprites:   
+            self.d_time -= 1
+            if self.d_time < 25 and 20 < self.alpha:
+                self.alpha -= 20
+            if 255 > self.alpha:
+                self.alpha += 7
+            if self.d_time < 0:
+                self.engine.cur_level.effect_sprites.remove(self)
+                self.engine.damage_pop.remove(self)
+            if self.center_y > self.tmp_center_y and self.change_y:
+                self.alpha = 255
+                self.change_y = 0
+

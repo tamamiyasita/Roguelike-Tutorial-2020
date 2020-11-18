@@ -243,14 +243,14 @@ class NormalUI:
 
             arcade.draw_text(
                 text=item_text,
-                start_x=left_margin+85,
+                start_x=left_margin+80,
                 start_y=item_row + y,
                 color=arcade.color.ARYLIDE_YELLOW,
                 font_size=item_font_size-3,
                 # font_name="consola.ttf"
             )
             arcade.draw_text(
-                text=slot,
+                text=f"{slot}".replace("_", " "),
                 start_x=left_margin,
                 start_y=item_row + y,
                 color=arcade.color.WHITE,

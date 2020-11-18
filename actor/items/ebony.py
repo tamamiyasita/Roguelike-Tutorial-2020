@@ -13,13 +13,13 @@ class Ebony(Actor):
         )
 
         self.slot = "flower"
-        self.states_bonus = {"STR": 1}
+        self.states_bonus = {"STR": 1, "DEX":1}
 
         self.level = 1
 
         self.tag = [Tag.item, Tag.equip, Tag.flower]
         
-        self.skill_add = {"branch_baton":1}
+        self.skill_add = {"branch_baton":1, "leaf_blade":1, "test":2, "testst":5}
 
         self.explanatory_text = f"Is Ebony $#############4TEst test test \n test$#4444444444testtest"
 

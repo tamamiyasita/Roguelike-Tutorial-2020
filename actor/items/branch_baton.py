@@ -16,12 +16,13 @@ class BranchBaton(Actor):
         self.slot = "main_hand"
         self.attack_damage = 7
         self.hit_rate = 92
+        self.speed = 7
 
         self.level = 0
 
         self.tag = [Tag.item, Tag.equip, Tag.skill]
 
-        self.explanatory_text = f"testtesttest and test"
+        self.explanatory_text = f"with excellent damage"
         self.icon = IMAGE_ID["branch_baton_icon"]
 
         self.item_margin_x = 6 * SPRITE_SCALE

@@ -21,7 +21,7 @@ class Fighter:
         self.base_defense = defense
         self.base_evasion = evasion
         self.hit_rate = hit_rate
-        self.attack_speed = attack_speed
+        self._attack_speed = attack_speed
 
         self.owner = None
         self.xp_reward = xp_reward
@@ -55,7 +55,7 @@ class Fighter:
         result["defense"] = self.base_defense
         result["evasion"] = self.base_evasion
         result["hit_rate"] = self.hit_rate
-        result["attack_speed"] = self.attack_speed
+        result["_attack_speed"] = self._attack_speed
 
         result["xp_reward"] = self.xp_reward
         result["current_xp"] = self.current_xp
@@ -86,7 +86,7 @@ class Fighter:
         self.base_defense = result["defense"]
         self.base_evasion = result["evasion"]
         self.hit_rate = result["hit_rate"]
-        self.attack_speed = result["attack_speed"]
+        self._attack_speed = result["_attack_speed"]
 
         self.xp_reward = result["xp_reward"]
         self.current_xp = result["current_xp"]
@@ -125,6 +125,15 @@ class Fighter:
     def active_skill(self):
         return [skill for skill in self.skill_list if Tag.active in skill.tag]
 
+
+    @property
+    def attack_speed(self):
+        try:
+            equip_speed = self.owner.equipment.equip_slot["main_hand"].speed
+            self._attack_speed = equip_speed
+            return self._attack_speed
+        except:
+            return self._attack_speed
 
 
     @property

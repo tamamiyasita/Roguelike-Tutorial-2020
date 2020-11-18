@@ -163,7 +163,7 @@ class MG(arcade.Window):
 
 
         elif self.engine.game_state == GAME_STATE.INVENTORY:
-            draw_inventory(self.engine.player, self.engine.selected_item, self.viewport_left, self.viewport_bottom)
+            draw_inventory(self.engine.player, self.engine.selected_item, self.viewports)
 
         elif self.engine.game_state == GAME_STATE.LEVEL_UP_WINDOW:
             self.level_up_window.window_pop(self.viewports)
