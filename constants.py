@@ -33,7 +33,7 @@ UI_FONT = "consola.ttf"
 
 MOVE_SPEED = 9
 
-EXPERIENCE_PER_LEVEL = [10, 300, 700, 1000, 1500, 2700]
+EXPERIENCE_PER_LEVEL = [10, 300, 700, 1000, 1500, 2700, 3500, 4500, 5500, 6500, 7500, 8500]
 
 FOV_ALGO = 0
 FOV_LIGHT_WALL = True
@@ -52,6 +52,7 @@ class Tag(Enum):
     equip = auto()
     skill = auto()
     active = auto()
+    passive = auto()
 
     # chara
     player = auto()
@@ -69,6 +70,7 @@ class Tag(Enum):
     stairs = auto()
 
     free = auto()
+    image_off = auto()
 
 
 COLORS = {

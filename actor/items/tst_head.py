@@ -1,10 +1,9 @@
-import arcade
 from actor.actor import Actor
 from constants import *
 from data import *
 
 
-class LeafBlade(Actor):
+class TestHead(Actor):
     def __init__(self, x=0, y=0):
         super().__init__(
             name="leaf_blade",
@@ -13,24 +12,19 @@ class LeafBlade(Actor):
             color=COLORS["white"]
         )
 
-        self.slot = "main_hand"
+        self.slot = "head"
         self.attack_damage = 5
         self.hit_rate = 95
         self.speed = 6
 
         self.level = 0
 
-        self.tag = [Tag.item, Tag.equip, Tag.skill, Tag.passive]
+        self.tag = [Tag.item, Tag.equip, Tag.skill, Tag.image_off, Tag.passive]
 
-        self.explanatory_text = f"with excellent attack speed"
+        
+
+        self.explanatory_text = f"TST head attack speed"
         self.icon = IMAGE_ID["leaf_blade_icon"]
 
         self.item_margin_x = 6 * SPRITE_SCALE
         self.item_margin_y = 3 * SPRITE_SCALE
-
-    # @property
-    # def attack_damage(self):
-    #     if self.master:
-    #         self._attack_damage[0] = 1 + self.level // 2
-
-    #     return self._attack_damage

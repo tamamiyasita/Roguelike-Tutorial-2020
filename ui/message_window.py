@@ -20,8 +20,10 @@ class MessageWindow:
         self.viewport_bottom = self.viewports[2]
         self.viewport_top = self.viewports[3]
 
-        self.panel_left_x=self.viewport_left+200
-        self.panel_left_y=self.viewport_bottom+200
+        self.panel_left=self.viewport_left+GRID_SIZE*3
+        self.panel_right=self.viewport_righit-GRID_SIZE*3
+        self.panel_bottom=self.viewport_bottom+GRID_SIZE*3
+        self.panel_top=self.viewport_top-GRID_SIZE*3
 
         if self.actor.npc_state == NPC_state.REQUEST:
             self.other_message = self.actor.message_event["request"]
@@ -36,41 +38,60 @@ class MessageWindow:
         self.panel_ui(choice)
 
     def panel_ui(self, c):
-        f = arcade.draw_xywh_rectangle_filled(
-            bottom_left_x=self.viewport_left+200,
-            bottom_left_y=self.viewport_bottom+200,
-            width=SCREEN_WIDTH - 400,
-            height=SCREEN_HEIGHT - 400,
+        arcade.draw_xywh_rectangle_filled(
+            bottom_left_x=self.panel_left,
+            bottom_left_y=self.panel_bottom,
+            width=MAIN_PANEL_X - GRID_SIZE * 2,
+            height=MAIN_PANEL_Y - GRID_SIZE * 6,
             color=[255, 255, 255, 150]
         )
-        arcade.draw_texture_rectangle(self.panel_left_x+50, self.panel_left_y+510, GRID_SIZE*1.5, GRID_SIZE*1.5, self.actor.texture)
-        arcade.draw_texture_rectangle(self.panel_left_x+1030, self.panel_left_y+50, GRID_SIZE*1.5, GRID_SIZE*1.5, IMAGE_ID["player"][1])
-        y = 45
+        arcade.draw_xywh_rectangle_filled(
+            bottom_left_x=self.panel_right,
+            bottom_left_y=self.viewport_bottom,
+            width=GRID_SIZE * 2,
+            height=MAIN_PANEL_Y,
+            color=[0, 0, 0, 255]
+        )
+        
+        arcade.draw_xywh_rectangle_outline(
+            bottom_left_x=self.panel_left,
+            bottom_left_y=self.panel_bottom,
+            width=MAIN_PANEL_X - GRID_SIZE * 2,
+            height=MAIN_PANEL_Y - GRID_SIZE * 6,
+            color=[181, 159, 39, 190]
+        )
+
+        arcade.draw_texture_rectangle(self.panel_left+GRID_SIZE, self.panel_top-GRID_SIZE, GRID_SIZE*1.5, GRID_SIZE*1.5, self.actor.texture)
+        arcade.draw_texture_rectangle(self.panel_right-GRID_SIZE, self.panel_bottom+GRID_SIZE, GRID_SIZE*1.5, GRID_SIZE*1.5, IMAGE_ID["Rou"][1])
+        y = 0
         for m in self.other_message:
             arcade.draw_text(
             text=m,
-            start_x=self.panel_left_x+100,
-            start_y=self.panel_left_y+380+y,
+            start_x=self.panel_left+GRID_SIZE*2,
+            start_y=self.panel_top-GRID_SIZE*2+y,
             color=arcade.color.AIR_FORCE_BLUE,
-            font_size=45)
-            y -= 45
+            font_size=35,
+            font_name=UI_FONT)
+            y -= 40
 
 
         if isinstance(c, int):
             self.choice = c
     
-            arcade.draw_rectangle_filled((self.viewport_left+self.viewport_righit)/2, self.panel_left_y+100+(self.choice*45),SCREEN_WIDTH-410,45,[153,21,111,150])
+            # arcade.draw_rectangle_filled(self.panel_right-GRID_SIZE*4, self.panel_bottom+(GRID_SIZE*2)+(self.choice*40),MAIN_PANEL_X-GRID_SIZE*5,45,[153,21,111,150])
+            arcade.draw_lrtb_rectangle_filled(self.panel_left+GRID_SIZE*2, self.panel_right-GRID_SIZE*2, self.panel_bottom+(GRID_SIZE*2.3)+(self.choice*40), self.panel_bottom+(GRID_SIZE*1.7)+(self.choice*40),[153,21,111,150])
         y=0
         for r in self.player_message:
             arcade.draw_text(
             text=r,
-            start_x=self.panel_left_x+990,
-            start_y=self.panel_left_y+100-y,
+            start_x=self.panel_right-GRID_SIZE*2,
+            start_y=self.panel_bottom+GRID_SIZE*2-y,
             color=arcade.color.ORIOLES_ORANGE,
             anchor_x="right",
             anchor_y="center",
-            font_size=30)
-            y -= 45
+            font_size=26,
+            font_name=UI_FONT)
+            y -= 40
 
     def message_choices(self, key):
         choice = choices_key(key)

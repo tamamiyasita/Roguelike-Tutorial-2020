@@ -45,9 +45,9 @@ class Equipment:
         self.equip_update_check = True
 
     def sprite_check(self, sprites):
-            # 遠隔武器以外がスロットに入っていたら装備スプライトをスプライトリストに入れて表示する
+            # 装備スプライトをスプライトリストに入れて表示する
             for equip in chain(self.equip_slot.values(),self.item_slot.values()):
-                if equip and not isinstance(equip, str) and equip not in sprites and not equip.slot == "ranged_weapon":
+                if equip and not isinstance(equip, str) and equip not in sprites and Tag.image_off not in equip.tag:
                     sprites.append(equip)
 
             # 装備解除しスプライトがスロットから無くなればスプライトリストからも削除

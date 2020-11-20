@@ -20,7 +20,7 @@ class BranchBaton(Actor):
 
         self.level = 0
 
-        self.tag = [Tag.item, Tag.equip, Tag.skill]
+        self.tag = [Tag.item, Tag.equip, Tag.skill, Tag.passive]
 
         self.explanatory_text = f"with excellent damage"
         self.icon = IMAGE_ID["branch_baton_icon"]

@@ -75,7 +75,7 @@ class MG(arcade.Window):
         self.quad_fs = geometry.quad_2d_fs()
 
         self.mini_map_quad = geometry.quad_2d(
-            size=(0.86, 1.14), pos=(1.0155, 1.072))
+            size=(0.86, 0.95), pos=(1.0155, 1.055))
         # ----------------------
 
         # Lコマンドで呼び出すlook機能
@@ -118,7 +118,7 @@ class MG(arcade.Window):
 
             self.engine.cur_level.map_point_sprites.draw()
             arcade.draw_rectangle_filled(center_x=self.engine.player.center_x,
-                                         center_y=self.engine.player.center_y, width=50, height=50, color=arcade.color.BLUE)
+                                         center_y=self.engine.player.center_y, width=45, height=45, color=arcade.color.BLUE)
 
             self.engine.cur_level.item_point_sprites.draw()
 
@@ -145,7 +145,7 @@ class MG(arcade.Window):
 
         # ノーマルステート時の画面表示
         if self.engine.game_state == GAME_STATE.NORMAL or self.engine.game_state == GAME_STATE.DELAY_WINDOW:
-            normal_UI = NormalUI(self.engine.player, self.viewport_left, self.viewport_bottom,
+            normal_UI = NormalUI(self.engine.player, self.viewports,
                                  self.engine.selected_item, self.engine.messages, self.mouse_position)
             normal_UI.draw_in_normal_state()
             if self.mouse_position:

@@ -6,6 +6,7 @@ from data import *
 from actor.items.leaf_blade import LeafBlade
 from actor.items.branch_baton import BranchBaton
 from actor.items.healing import Healing
+from actor.items.tst_head import TestHead
 from enum import Enum, auto
 from collections import deque
 
@@ -25,9 +26,10 @@ class LevelupUI:
         self.up_int = ""
         self.tmp_states = None
         self.ui_state = Select.delay
-        self.skill_queue = deque([Healing(),(LeafBlade(), BranchBaton()),Healing() ])
+        self.skill_queue = deque([TestHead(), (LeafBlade(), BranchBaton()),(LeafBlade(), BranchBaton()), Healing()])
         self.skill_result = []
         self.get_skill = None
+        self.select_skill = True
 
         self.window_width = SCREEN_WIDTH - 924
         self.window_height = SCREEN_HEIGHT - 800
@@ -52,6 +54,9 @@ class LevelupUI:
     def window_pop(self, viewports):
         """Levelup時に出現するwindow"""
 
+
+            
+
         self.viewports = viewports
 
         self.viewport_left = self.viewports[0]
@@ -65,7 +70,6 @@ class LevelupUI:
         self.draw_ability_select()
 
         if self.ui_state == Select.open_skill or self.get_skill:
-            self.get_skill = self.get_skill_queue(self.get_skill)
             self.draw_skill_get_window()
 
 
@@ -159,10 +163,12 @@ class LevelupUI:
 
             # Yボタンが押されたらgame stateをノーマルに戻し終了
             if self.key == arcade.key.Y:
-                self.engine.game_state = GAME_STATE.NORMAL
                 self.engine.player.fighter.skill_list.extend(self.skill_result)
                 self.engine.player.equipment.equip_update_check = True
                 self.get_skill = None
+                self.select_skill = True
+                self.skill_result = []
+                self.engine.game_state = GAME_STATE.NORMAL
 
 
 
@@ -192,9 +198,12 @@ class LevelupUI:
 
     def draw_skill_get_window(self):
         # ability pointがゼロかつスキル取得レベルなら追加で窓を表示する
-        # if self.ui_state == Select.open_skill and self.engine.player.fighter.ability_points < 1 and self.engine.player.fighter.level == 2 or self.engine.player.fighter.level % 3 == 0:
-        if isinstance(self.get_skill, Tuple):
-            if self.engine.player.fighter.ability_points < 1 and self.engine.player.fighter.level == 2 or self.engine.player.fighter.level % 3 == 0:
+        if self.engine.player.fighter.ability_points < 1:
+            if 0 < len(self.skill_queue) and self.select_skill:
+                self.get_skill = self.skill_queue.popleft()
+                self.select_skill = False
+  
+            if isinstance(self.get_skill, Tuple):
                 skill_A = self.get_skill[0]
                 skill_B = self.get_skill[1]
 
@@ -351,8 +360,9 @@ class LevelupUI:
                     anchor_x="center",
                     font_size=13
                 )
+                
 
-        elif self.get_skill:
+            elif self.get_skill:
                 # ベーススキル窓
                 arcade.draw_xywh_rectangle_filled(
                     bottom_left_x=self.bottom_left_x,
@@ -420,6 +430,10 @@ class LevelupUI:
 
                 # playerのskill listに追加し、装備更新をチェックさせる
                 self.ui_state = Select.ability
+
+            else:
+                self.ui_state = Select.ability
+
 
         else:
             # スキル取得レベルで無ければスキル窓表示をスキップ

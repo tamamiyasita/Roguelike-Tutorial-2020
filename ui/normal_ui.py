@@ -13,17 +13,21 @@ class NormalUI:
     """GameState=Normal時に描画するUI
     """
 
-    def __init__(self, player, viewport_x, viewport_y, selected_item, messages, mouse_position):
+    def __init__(self, player, viewport, selected_item, messages, mouse_position):
         self.player = player
-        self.viewport_left = viewport_x
-        self.viewport_bottom = viewport_y
+        self.viewport_left = viewport[0]
+        self.viewport_right = viewport[1]
+        self.viewport_bottom = viewport[2]
+        self.viewport_top = viewport[3]
+
         self.selected_item = selected_item
         self.messages = messages
         self.mouse_position = mouse_position
-        self.side_panel_left = SCREEN_WIDTH-STATES_PANEL_WIDTH
         self.panel_line_width = 1
-        self.side_panel_height = SCREEN_HEIGHT - self.panel_line_width -231
-        self.side_panel_left = SCREEN_WIDTH - STATES_PANEL_WIDTH
+        self.side_panel_height = SCREEN_HEIGHT - GRID_SIZE*3
+        self.side_panel_width = SCREEN_WIDTH - STATES_PANEL_WIDTH
+
+        self.bottom_left_x=self.viewport_right + SCREEN_WIDTH - STATES_PANEL_WIDTH
 
     def draw_in_normal_state(self):
         """mainに渡すメソッドをまとめる"""
@@ -38,20 +42,11 @@ class NormalUI:
         arcade.draw_xywh_rectangle_filled(
             bottom_left_x=self.viewport_left,
             bottom_left_y=self.viewport_bottom,
-            width=self.side_panel_left,
+            width=self.side_panel_width,
             height=STATES_PANEL_HEIGHT,
             color=(255,255,255,0)#COLORS["status_panel_background"]
         )
 
-        # 下パネルの周りの線
-        # arcade.draw_xywh_rectangle_outline(
-        #     bottom_left_x=self.viewport_left+self.panel_line_width*0.5,
-        #     bottom_left_y=self.viewport_bottom+self.panel_line_width*0.5,
-        #     width=self.side_panel_left-self.panel_line_width,
-        #     height=STATES_PANEL_HEIGHT,
-        #     color=arcade.color.ORANGE,
-        #     border_width=self.panel_line_width
-        # )
 
         # 画面横のパネル
         arcade.draw_xywh_rectangle_filled(
@@ -68,15 +63,15 @@ class NormalUI:
             STATES_PANEL_WIDTH + self.panel_line_width*0.5,
             bottom_left_y=self.viewport_bottom + self.panel_line_width*0.5,
             width=STATES_PANEL_WIDTH - self.panel_line_width,
-            height=self.side_panel_height,
+            height=self.side_panel_height-3,
             color=arcade.color.LEMON_CHIFFON,
             border_width=self.panel_line_width
         )
         arcade.draw_xywh_rectangle_filled(
             bottom_left_x=self.viewport_left + SCREEN_WIDTH - STATES_PANEL_WIDTH,
-            bottom_left_y=self.viewport_bottom + SCREEN_HEIGHT - 231,
+            bottom_left_y=self.viewport_top - GRID_SIZE*3,
             width=STATES_PANEL_WIDTH,
-            height=231,
+            height=GRID_SIZE*3,
             color=arcade.color.BLACK
         )
 
@@ -84,9 +79,9 @@ class NormalUI:
         arcade.draw_xywh_rectangle_outline(
             bottom_left_x=self.viewport_left + SCREEN_WIDTH -
             STATES_PANEL_WIDTH + self.panel_line_width*0.5,
-            bottom_left_y=self.viewport_bottom + SCREEN_HEIGHT - 228,
+            bottom_left_y=self.viewport_top - GRID_SIZE*3,
             width=STATES_PANEL_WIDTH - self.panel_line_width,
-            height=225,
+            height=GRID_SIZE*3,
             color=arcade.color.BABY_BLUE,
             border_width=self.panel_line_width
         )
@@ -98,7 +93,7 @@ class NormalUI:
         hp_bar_width = hp_font_size * 12  # HPバーの幅
         hp_bar_height = hp_font_size + 2  # HPバーの太さ
         hp_bar_margin = self.viewport_bottom + self.side_panel_height - 55  # 15パネル上端からのHPバーの位置
-        left_margin = self.viewport_left + self.side_panel_left + 7  # 画面左からのHPとバーの位置
+        left_margin = self.viewport_left + self.side_panel_width + 7  # 画面左からのHPとバーの位置
 
         Player_attr = f"{self.player.race} {self.player.name}"
 
@@ -228,14 +223,14 @@ class NormalUI:
     def draw_equip_icon(self):
         """スキルアイコン及びステータスを右パネルに描画する"""
         back_panel_y = self.viewport_bottom + SCREEN_HEIGHT // 8 # 背景パネルの下端
-        item_row = back_panel_y + (SCREEN_HEIGHT //1.3) - 320 # 行の最上段
+        item_row = self.viewport_top - GRID_SIZE*5#(SCREEN_HEIGHT //1.3) - 320 # 行の最上段
         item_font_size = 17
-        left_margin = self.viewport_left + self.side_panel_left + 7  # 画面左からのHPとバーの位置
+        left_margin = self.viewport_left + self.side_panel_width + 7  # 画面左からのHPとバーの位置
 
-        y = 40
-        for slot, equip in self.player.equipment.equip_slot.items():
+        y = 0
+        for equip in self.player.fighter.skill_list:
 
-            if equip:
+            if equip and Tag.passive in equip.tag:
 
                 item_text = f"{equip.name} (level {equip.level})".replace("_", " ").title()
             else:
@@ -243,20 +238,20 @@ class NormalUI:
 
             arcade.draw_text(
                 text=item_text,
-                start_x=left_margin+80,
+                start_x=left_margin,
                 start_y=item_row + y,
                 color=arcade.color.ARYLIDE_YELLOW,
                 font_size=item_font_size-3,
                 # font_name="consola.ttf"
             )
-            arcade.draw_text(
-                text=f"{slot}".replace("_", " "),
-                start_x=left_margin,
-                start_y=item_row + y,
-                color=arcade.color.WHITE,
-                font_size=item_font_size-4,
-                # font_name="consola.ttf"
-            )
+            # arcade.draw_text(
+            #     text=f"{slot}".replace("_", " "),
+            #     start_x=left_margin,
+            #     start_y=item_row + y,
+            #     color=arcade.color.WHITE,
+            #     font_size=item_font_size-4,
+            #     # font_name="consola.ttf"
+            # )
 
             arcade.draw_texture_rectangle(
                 center_x=left_margin+25,

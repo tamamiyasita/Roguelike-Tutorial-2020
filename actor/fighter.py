@@ -202,7 +202,7 @@ class Fighter:
     @property
     def max_damage(self):
         if self.owner.equipment and self.owner.equipment.melee_weapon_damage:
-            max_d = self.owner.equipment.melee_weapon_damage
+            max_d = self.owner.equipment.melee_weapon_damage+(self.STR//3)
         else:
             max_d = self.owner.fighter.unarmed_attack
 
@@ -211,8 +211,8 @@ class Fighter:
     @property
     def melee_attack_damage(self):
 
-        melee_attack_damage = dice(1 + self.level//3, self.max_damage+(self.STR//3))
-
+        melee_attack_damage = dice(1 + self.level//3, self.max_damage)
+        print(f"{melee_attack_damage=}")
         return melee_attack_damage
 
     @property
