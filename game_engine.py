@@ -545,7 +545,7 @@ class GameEngine:
                     item = self.player.inventory.get_item_number(item_number)
 
                     # これはequipを外す処理
-                    if item and item in self.player.equipment.item_slot.values():
+                    if item and item in self.player.equipment.item_slot:
                         self.player.equipment.toggle_equip(item)
 
                     # ここでドロップ

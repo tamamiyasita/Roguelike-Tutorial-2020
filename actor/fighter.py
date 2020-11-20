@@ -125,6 +125,9 @@ class Fighter:
     def active_skill(self):
         return [skill for skill in self.skill_list if Tag.active in skill.tag]
 
+    @property
+    def active_skill(self):
+        return [skill for skill in self.skill_list if Tag.active in skill.tag]
 
     @property
     def attack_speed(self):

@@ -18,17 +18,13 @@ class Equipment:
             "off_hand": None,
             "ranged_weapon": None,
         }
-        self.item_slot = {
-            "flower1": None,
-            "flower2": None,
-            "flower3": None,
-        }
 
+        self.item_slot = []
         # 装備変更によるスプライト更新のチェックに使う変数
         self.equip_update_check = False
 
     def get_dict(self):
-        result = [i.__class__.__name__ if i else None for i in self.item_slot.values()] 
+        result = [i.__class__.__name__ if i else None for i in self.item_slot] 
         print(result)
 
 
@@ -46,18 +42,18 @@ class Equipment:
 
     def sprite_check(self, sprites):
             # 装備スプライトをスプライトリストに入れて表示する
-            for equip in chain(self.equip_slot.values(),self.item_slot.values()):
+            for equip in chain(self.equip_slot.values(),self.item_slot):
                 if equip and not isinstance(equip, str) and equip not in sprites and Tag.image_off not in equip.tag:
                     sprites.append(equip)
 
             # 装備解除しスプライトがスロットから無くなればスプライトリストからも削除
             for sprite in sprites:
-                if sprite not in self.equip_slot.values() and sprite not in self.item_slot.values():
+                if sprite not in self.equip_slot.values() and sprite not in self.item_slot:
                     sprites.remove(sprite)
 
     def equip_position_reset(self):
         # 装備アイテムの表示位置をリセットする
-            for equip in chain(self.equip_slot.values(),self.item_slot.values()):
+            for equip in chain(self.equip_slot.values(),self.item_slot):
                 if equip:
                     equip.x = self.owner.x
                     equip.y = self.owner.y
@@ -69,7 +65,7 @@ class Equipment:
         """装備スロットをループしてskill levelの合計を返す"""
 
         bonus = {}
-        for parts in self.item_slot.values():  # crisiumが入る
+        for parts in self.item_slot:  # crisiumが入る
             # crisiumのskill_add{leaf_blade:1}が入る
             if parts and not isinstance(parts, str) and parts.skill_add:
                 bonus = Counter(bonus) + Counter(parts.skill_add)
@@ -117,7 +113,7 @@ class Equipment:
 
         bonus = {"max_hp": 0, "max_mp": 0, "STR": 0,
                  "DEX": 0, "INT": 0, "defense": 0, "evasion": 0}
-        for parts in self.item_slot.values():
+        for parts in self.item_slot:
             if parts and not isinstance(parts, str) and parts.states_bonus:
                 bonus = Counter(bonus) + Counter(parts.states_bonus)
 
@@ -156,23 +152,25 @@ class Equipment:
         """
         results = []
 
-        for key, item in self.item_slot.items():
+        for i, item in enumerate(self.item_slot):
             if item == equip_item:
 
-                del self.item_slot[key].master
-                self.item_slot[key] = None
+                del item.master
+                self.item_slot.remove(item)
                 results.append({"message": f"dequipped {item.name}"})
 
                 self.equip_update_check = True
                 return results
 
-        for key, item in self.item_slot.items():
-            if item is None:
+        # for i, item in enumerate(self.item_slot):
+        #     if item:
+        if 5 > len(self.item_slot):
 
-                self.item_slot[key] = equip_item
-                self.item_slot[key].master = self.owner
 
-                results.append({"message": f"equipped {equip_item.name}"})
+            self.item_slot.append(equip_item)
+            equip_item.master = self.owner
 
-                self.equip_update_check = True
-                return results
+            results.append({"message": f"equipped {equip_item.name}"})
+
+            self.equip_update_check = True
+            return results

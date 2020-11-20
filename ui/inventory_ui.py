@@ -37,7 +37,7 @@ def draw_inventory(player, selected_item, viewport):
 
 
     # キャパシティ数をループし、インベントリのアイテム名とアウトラインを描画する
-    slot_item = [i for i in player.equipment.item_slot.values()]
+    slot_item = [i for i in player.equipment.item_slot]
     for item in range(capacity):
         if player.inventory.item_bag[item]:
             cur_item  = player.inventory.item_bag[item]
@@ -157,11 +157,11 @@ def draw_inventory(player, selected_item, viewport):
 
 
     y = GRID_SIZE
-    for slot, item in player.equipment.item_slot.items():
+    for item in player.equipment.item_slot:
 
         if item:
 
-            item_text = f"{slot} {item.name}".replace("_", " ").title()
+            item_text = f"{item.name}".replace("_", " ").title()
             scale = 2
             if Tag.flower in item.tag:
                 scale = 4
@@ -216,7 +216,7 @@ def draw_inventory(player, selected_item, viewport):
 
         else:
             # continue
-            item_text = f"{slot} -".replace("_", " ").title()
+            item_text = f" -".replace("_", " ").title()
 
         arcade.draw_text(
             text=item_text,
