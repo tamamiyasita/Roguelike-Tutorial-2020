@@ -1,13 +1,24 @@
+from data import IMAGE_ID
 import arcade
+from actor.actor import Actor
+from constants import *
+from data import *
 
-
-class PoisonStatus:
-    def __init__(self, owner=None, power=None, effect_time=None):
+class PoisonStatus(Actor):
+    def __init__(self, owner=None, power=None, effect_time=None, sprites=None):
+        super(). __init__()
         self.owner = owner
         self.power = power
         self.effect_time = effect_time
+        self.sprites = sprites
+
+    def update_animation(self, delta_time: float = 1/60):
+        self.owner.angle += 1
 
     def apply(self):
+        self.texture = self.owner.texture
+        self.sprites.append(self)
+        
         if 0 < self.effect_time:
             result = self.owner.fighter.change_hp(-self.power)
             
@@ -16,6 +27,9 @@ class PoisonStatus:
             return [{"apply":self.owner}, {"message":f"You took {self.power} damage from poison"}, *result]
 
     def call_off(self):
+        self.owner.angle = 0
+        self.sprites.remove(self)
+        print(self.sprite_lists)
         self.owner.color = arcade.color.WHITE
         return [{"message":f"The poison has disappeared from your body"}]
 
