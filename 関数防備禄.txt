@@ -13,3 +13,6 @@ eval("10+20") -> 30
 format文字の詰め書式
 txt = "ABC"
 print(f"{txt: >4}"で空白を一つ置いて右詰めの書式になる<で左＾で中央
+
+print(isinstance('string', str))
+# True インスタンスのtype判定

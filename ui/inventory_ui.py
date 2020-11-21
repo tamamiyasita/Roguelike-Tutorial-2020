@@ -63,7 +63,7 @@ def draw_inventory(player, selected_item, viewport):
             arcade.draw_scaled_texture_rectangle(
                 center_x=back_panel_right - ((GRID_SIZE*2)+(GRID_SIZE/2)),
                 center_y=back_panel_top_left - ((GRID_SIZE/2)) + y,
-                texture=IMAGE_ID[cur_item.name][0], #cur_item.texture,
+                texture=cur_item.texture,
                 scale=scale
                 )
 
@@ -168,7 +168,7 @@ def draw_inventory(player, selected_item, viewport):
             arcade.draw_scaled_texture_rectangle(
                 center_x=back_panel_right + GRID_SIZE+(GRID_SIZE/2),
                 center_y=back_panel_top_left - (GRID_SIZE) + y,
-                texture=IMAGE_ID[item.name][0],
+                texture=item.texture,
                 scale=scale
                 )
                 

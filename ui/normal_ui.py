@@ -162,6 +162,15 @@ class NormalUI:
                         max_value=self.player.fighter.max_hp
                         )
 
+        # <passive skill>        
+        arcade.draw_text(text="<Passive Skill>",
+                         start_x=left_margin+5,
+                         start_y=hp_bar_margin-50,
+                         color=(252,248,151),
+                         font_size=12,
+                         font_name=UI_FONT
+                         )
+
     def draw_inventory(self):
         """スキルアイコンの表示"""
         slot_len = len(self.player.fighter.active_skill)

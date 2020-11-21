@@ -93,7 +93,7 @@ class GameEngine:
 
         arcade.set_background_color(COLORS["black"])
 
-        self.cur_level = self.setup_level(level_number=99)
+        self.cur_level = self.setup_level(level_number=0)
         self.stories[self.cur_floor_name] = self.cur_level
         print(f"stories{self.stories}")
         self.turn_loop = TurnLoop(self.player)

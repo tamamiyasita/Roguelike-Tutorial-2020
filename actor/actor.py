@@ -370,7 +370,12 @@ class Actor(arcade.Sprite):
     @texture_.setter
     def texture_(self, value):
         self.textures = []
-        self.textures.extend(IMAGE_ID.get(value))
+        img = IMAGE_ID.get(value)
+        if isinstance(img, list):
+            self.textures.extend(img)
+        else:
+            self.textures.append(img)
+
 
         self.texture = self.textures[self.texture_number]
 
