@@ -12,14 +12,10 @@ class Equipment:
     def __init__(self):
         """アイテムスロット、及び装備するタイミングを決めるequip_update_check
         """
-        self.equip_slot = {
-            "head": None,
-            "main_hand": None,
-            "off_hand": None,
-            "ranged_weapon": None,
-        }
-
         self.item_slot = []
+
+        self.equip_slot = []
+
         # 装備変更によるスプライト更新のチェックに使う変数
         self.equip_update_check = False
 
@@ -42,18 +38,18 @@ class Equipment:
 
     def sprite_check(self, sprites):
             # 装備スプライトをスプライトリストに入れて表示する
-            for equip in chain(self.equip_slot.values(),self.item_slot):
+            for equip in chain(self.equip_slot,self.item_slot):
                 if equip and not isinstance(equip, str) and equip not in sprites and Tag.image_off not in equip.tag:
                     sprites.append(equip)
 
             # 装備解除しスプライトがスロットから無くなればスプライトリストからも削除
             for sprite in sprites:
-                if sprite not in self.equip_slot.values() and sprite not in self.item_slot:
+                if sprite not in self.equip_slot and sprite not in self.item_slot:
                     sprites.remove(sprite)
 
     def equip_position_reset(self):
         # 装備アイテムの表示位置をリセットする
-            for equip in chain(self.equip_slot.values(),self.item_slot):
+            for equip in chain(self.equip_slot,self.item_slot):
                 if equip:
                     equip.x = self.owner.x
                     equip.y = self.owner.y
@@ -82,30 +78,11 @@ class Equipment:
             # 装備更新完了通知
             self.equip_update_check = False
 
-            if self.owner.fighter.skill_list:
-                # 装備変更に伴うskill check
-                skill_list = self.owner.fighter.skill_list
-                self.skill_equip_on(skill_list)
-                self.skill_equip_off(skill_list)
+            # 装備変更に伴うskill check
+            self.owner.fighter.passive_skill_activate()
 
-            print(self.item_slot, self.equip_slot)
             print(self.owner.fighter.skill_list)
 
-    def skill_equip_on(self, skill_list):
-        """skill levelが1以上なら装備skillをslotに入れる"""
-        for s in skill_list:
-            if Tag.equip in s.tag and s.level > 0 and self.equip_slot[s.slot] != s:
-                self.equip_slot[s.slot] = s
-                self.equip_slot[s.slot].master = self.owner
-                self.equip_update_check = True
-
-    def skill_equip_off(self, skill_list):
-        """skill levelが1以下なら装備解除しslotから外す"""
-        for s in skill_list:
-            if Tag.equip in s.tag and s.level < 1 and self.equip_slot[s.slot] == s:
-                del self.equip_slot[s.slot].master
-                self.equip_slot[s.slot] = None
-                self.equip_update_check = True
 
     @property
     def states_bonus(self):
@@ -119,33 +96,6 @@ class Equipment:
 
         return bonus
 
-    @property
-    def melee_weapon_damage(self):
-        if self.equip_slot["main_hand"]:
-            return self.equip_slot["main_hand"].attack_damage
-        else:
-            return None
-
-    @property
-    def ranged_weapon_damage(self):
-        if self.equip_slot["ranged_weapon"]:
-            return self.equip_slot["ranged_weapon"].attack_damage
-        else:
-            return None
-
-    @property
-    def weapon_hit_rate(self):
-        if self.equip_slot["main_hand"]:
-            return self.equip_slot["main_hand"].hit_rate
-        else:
-            return None
-
-    @property
-    def ranged_hit_rate(self):
-        if self.equip_slot["ranged_weapon"]:
-            return self.equip_slot["ranged_weapon"].hit_rate
-        else:
-            return None
 
     def toggle_equip(self, equip_item):
         """装備アイテムの付け外しを行うメソッド

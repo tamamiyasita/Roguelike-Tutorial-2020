@@ -13,8 +13,7 @@ class LeafBlade(Actor):
             color=COLORS["white"]
         )
 
-        self.slot = "main_hand"
-        self.attack_damage = 5
+        self.damage = 5
         self.hit_rate = 95
         self.speed = 6
 
@@ -27,6 +26,17 @@ class LeafBlade(Actor):
 
         self.item_margin_x = 6 * SPRITE_SCALE
         self.item_margin_y = 3 * SPRITE_SCALE
+
+    def activate(self, owner):
+        self.master = owner
+        if self.master and self.master.fighter.weapon is None:
+            self.master.fighter.weapon = self
+
+    def deactivate(self):
+        if self.master and self.master.fighter.weapon is not None:
+            self.master.fighter.weapon = None
+            del self.master
+
 
     # @property
     # def attack_damage(self):

@@ -33,9 +33,9 @@ class NormalUI:
         """mainに渡すメソッドをまとめる"""
         self.panel_ui()
         self.draw_hp_and_status_bar()
-        self.draw_inventory()
+        self.draw_active_skill()
         self.draw_messages_handle()
-        self.draw_equip_icon()
+        self.draw_passive_skill()
 
     def panel_ui(self):
         # 画面下のパネルをarcadeの四角形を描画する変数で作成
@@ -171,7 +171,7 @@ class NormalUI:
                          font_name=UI_FONT
                          )
 
-    def draw_inventory(self):
+    def draw_active_skill(self):
         """スキルアイコンの表示"""
         slot_len = len(self.player.fighter.active_skill)
         item_left_position = self.viewport_left + \
@@ -229,7 +229,7 @@ class NormalUI:
                         font_size=item_font_size
                     )
     
-    def draw_equip_icon(self):
+    def draw_passive_skill(self):
         """スキルアイコン及びステータスを右パネルに描画する"""
         back_panel_y = self.viewport_bottom + SCREEN_HEIGHT // 8 # 背景パネルの下端
         item_row = self.viewport_top - GRID_SIZE*5#(SCREEN_HEIGHT //1.3) - 320 # 行の最上段
@@ -237,11 +237,11 @@ class NormalUI:
         left_margin = self.viewport_left + self.side_panel_width + 7  # 画面左からのHPとバーの位置
 
         y = 0
-        for equip in self.player.fighter.skill_list:
+        for passive in self.player.fighter.passive_skill:
 
-            if equip and Tag.passive in equip.tag:
+            if 0 < passive.level:
 
-                item_text = f"{equip.name} (level {equip.level})".replace("_", " ").title()
+                item_text = f"{passive.name} (level {passive.level})".replace("_", " ").title()
             else:
                 continue
 
@@ -267,11 +267,11 @@ class NormalUI:
                 center_y=item_row + y-25,
                 width=40,
                 height=40,
-                texture=equip.icon
+                texture=passive.icon
             )
                 
             arcade.draw_text(
-                text=f"damage: {self.player.fighter.level//3}D/{equip.attack_damage}",
+                text=f"tst1",
                 start_x=left_margin +55,
                 start_y=item_row + y-23,
                 color=arcade.color.APPLE_GREEN,
@@ -279,7 +279,7 @@ class NormalUI:
                 font_name="consola.ttf"
             )
             arcade.draw_text(
-                text=f"hit rate: {equip.hit_rate}",
+                text=f"tst2",
                 start_x=left_margin +55,
                 start_y=item_row + y-42,
                 color=arcade.color.ORCHID_PINK,
@@ -287,7 +287,7 @@ class NormalUI:
                 font_name="consola.ttf"
             )
             arcade.draw_text(
-                text=f"{equip.explanatory_text}",
+                text=f"{passive.explanatory_text}",
                 start_x=left_margin +7,
                 start_y=item_row + y-62,
                 color=arcade.color.WHITE,

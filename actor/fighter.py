@@ -22,6 +22,7 @@ class Fighter:
         self.base_evasion = evasion
         self.hit_rate = hit_rate
         self._attack_speed = attack_speed
+        self.weapon = None
 
         self.owner = None
         self.xp_reward = xp_reward
@@ -110,7 +111,7 @@ class Fighter:
 
     @property
     def skill_list(self):
-        """skill listをループして装備の追加skill levelをskill levelに加える"""
+        """skill listをループして花の追加skill levelをskill levelに加える"""
         for skill in self._skill_list:  # [LeafBlade()]が入る
             if skill and not isinstance(skill, str):
                 skill.level = 0
@@ -118,25 +119,40 @@ class Fighter:
                 if skill.level is None:
                     skill.level = 0
 
-
         return self._skill_list
+    
     
     @property
     def active_skill(self):
-        return [skill for skill in self.skill_list if Tag.active in skill.tag]
+        return [skill for skill in self.skill_list if Tag.active in skill.tag and 0 < skill.level]
 
     @property
     def passive_skill(self):
         return [skill for skill in self.skill_list if Tag.passive in skill.tag]
 
+    def passive_skill_activate(self):
+        for skill in self.passive_skill:
+            if 0 < skill.level:
+                skill.activate(self.owner)
+            else:
+                skill.deactivate()
+
+            
+
+
+    @property
+    def equip_image(self):
+        return [skill for skill in self.passive_skill if Tag.equip in skill.tag]
+
+
+
     @property
     def attack_speed(self):
-        try:
-            equip_speed = self.owner.equipment.equip_slot["main_hand"].speed
-            self._attack_speed = equip_speed
+        if self.weapon:
+            return self.weapon.speed
+        else:
             return self._attack_speed
-        except:
-            return self._attack_speed
+
 
 
     @property
@@ -202,51 +218,39 @@ class Fighter:
 
         return self.base_evasion + bonus + (self.DEX / 2)
     
-    @property
-    def max_damage(self):
-        if self.owner.equipment and self.owner.equipment.melee_weapon_damage:
-            max_d = self.owner.equipment.melee_weapon_damage+(self.STR//3)
-        else:
-            max_d = self.owner.fighter.unarmed_attack
-
-        return max_d
 
     @property
     def melee_attack_damage(self):
 
-        melee_attack_damage = dice(1 + self.level//3, self.max_damage)
-        print(f"{melee_attack_damage=}")
+        
+        if self.weapon:
+            max_d = self.weapon.damage
+            level = self.weapon.level
+        else:
+            max_d = self.owner.fighter.unarmed_attack
+            level = self.level
+
+        melee_attack_damage = dice(1 + level//3, max_d+(self.STR//3))
+
         return melee_attack_damage
 
-    @property
-    def ranged_attack_damage(self):
-        if self.owner.equipment and self.owner.equipment.ranged_weapon_damage:
-            max_d = self.owner.equipment.ranged_weapon_damage
 
-            ranged_attack_damage = dice(max_d)
 
-            return ranged_attack_damage
-
-    def hit_chance(self, target, ranged=None):
+    def hit_chance(self, target):
         # (命中率)％ ＝（α／１００）＊（１ー （β ／ １００））＊ １００
         # 命中率（α）＝９５、回避率（β）＝５
         hit = None
 
-        if not ranged:
-            if self.owner.equipment and self.owner.equipment.weapon_hit_rate:
-                hit = self.owner.equipment.weapon_hit_rate
-            else:
-                hit = self.owner.fighter.hit_rate
+        if self.weapon:
+            hit = self.weapon.hit_rate
+        else:
+            hit = self.owner.fighter.hit_rate
 
-        elif ranged:
-            if self.owner.equipment and self.owner.equipment.ranged_hit_rate:
-                hit = self.owner.equipment.ranged_hit_rate
-        if hit:
 
-            hit_chance = ((hit+self.DEX) / 100) * \
-                (1 - (target.fighter.evasion / 100)) * 100
+        hit_chance = ((hit+self.DEX) / 100) * \
+            (1 - (target.fighter.evasion / 100)) * 100
 
-            return hit_chance
+        return hit_chance
 
     def change_hp(self, value):
         
@@ -268,19 +272,15 @@ class Fighter:
         return results
 
     @stop_watch
-    def attack(self, target, ranged=None):
+    def attack(self, target):
         results = []
 
-        if ranged:
-            if random.randrange(1, 100) <= self.hit_chance(target, ranged=True):
-                self.damage = self.ranged_attack_damage // target.fighter.defense
+        if random.randrange(1, 100) <= self.hit_chance(target):
+            self.damage = self.melee_attack_damage // target.fighter.defense
+            if random.randrange(1, (100-self.DEX)) < 5:
+                self.damage *= 2
+                results.append({"message": f"{self.owner.name.capitalize()} attack is critical HIT!"})
 
-        elif not ranged:
-            if random.randrange(1, 100) <= self.hit_chance(target):
-                self.damage = self.melee_attack_damage // target.fighter.defense
-                if random.randrange(1, (100-self.DEX)) < 5:
-                    self.damage += self.max_damage
-                    results.append({"message": f"{self.owner.name.capitalize()} attack is critical HIT!"})
 
         if self.damage:
             if self.damage >= 0:

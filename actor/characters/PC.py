@@ -7,7 +7,7 @@ from actor.equipment import Equipment
 
 
 class Player(Actor):
-    def __init__(self, x=0, y=0, inventory=0):
+    def __init__(self, engine=None, x=0, y=0, inventory=0):
         fighter_component = Fighter(hp=30, STR=3, DEX=4, INT=4,
                                     unarmed_attack=2,
                                     hit_rate=100,
@@ -22,6 +22,7 @@ class Player(Actor):
             x=x,
             y=y,
             color=COLORS["white"],
+            engine=engine,
 
             inventory=inventory,
             fighter=fighter_component,

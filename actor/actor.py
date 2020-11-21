@@ -17,7 +17,7 @@ class Actor(arcade.Sprite):
     """ 全てのオブジェクトを作成する基礎となるクラス
     """
 
-    def __init__(self, texture_number=0, name=None, x=0, y=0,
+    def __init__(self,engine=None, texture_number=0, name=None, x=0, y=0,
                  blocks=False, block_sight=False,
                  scale=SPRITE_SCALE, color=COLORS["black"],
                  fighter=None, ai=None, speed=DEFAULT_SPEED,
@@ -27,6 +27,7 @@ class Actor(arcade.Sprite):
                  state=state.TURN_END, left_face=False
                  ):
         super().__init__(scale=scale)
+        self.engine = engine
         if name:
             self.name = name
             self.texture_number = texture_number
@@ -442,10 +443,12 @@ class Actor(arcade.Sprite):
     @master.setter
     def master(self, owner):
         self._master = owner
+        self._master.engine.cur_level.equip_sprites.append(self)
         self.center_x = owner.center_x
         self.center_y = owner.center_y
         self.color = arcade.color.WHITE
 
     @master.deleter
     def master(self):
+        self._master.engine.cur_level.equip_sprites.remove(self)
         self._master = None
