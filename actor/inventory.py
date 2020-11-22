@@ -20,7 +20,6 @@ class Inventory:
                 name = item.__class__.__name__
                 item_dicts.append({name: item.get_dict()})
         result["item_bag"] = item_dicts
-        print(item_dicts, "item_dicts")
         return result
 
     def restore_from_dict(self, result):

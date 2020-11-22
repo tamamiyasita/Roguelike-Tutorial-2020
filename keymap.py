@@ -64,7 +64,6 @@ def grid_select_key(key, engine):
         direction = (1, 0)
     elif key == arcade.key.ENTER:
         direction = "grid_press"
-        print(f"{direction=}")
     return direction
 
 def inventory_key(key, engine):

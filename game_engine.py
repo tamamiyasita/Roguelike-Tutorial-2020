@@ -95,7 +95,6 @@ class GameEngine:
 
         self.cur_level = self.setup_level(level_number=99)
         self.stories[self.cur_floor_name] = self.cur_level
-        print(f"stories{self.stories}")
         self.turn_loop = TurnLoop(self.player)
         self.item_point = ItemPoint(self)
 
@@ -425,7 +424,6 @@ class GameEngine:
 
 
             self.stories[map_name] = level
-        print(f"{self.stories=}")
 
 
         # ビューポートを復元する
@@ -467,7 +465,6 @@ class GameEngine:
                 print(f"{target.name} is pass Turn_END")
 
             if "dead" in action:
-                print("Death")
                 target = action["dead"]
                 target.color = COLORS["dead"]
                 target.is_dead = True
@@ -524,6 +521,9 @@ class GameEngine:
                     if item and Tag.equip in item.tag:
                         results = self.player.equipment.toggle_equip(item)
                         if results:
+
+                            # 装備変更に伴うskill level check
+                            self.player.fighter.passive_skill_activate()
                             new_action_queue.extend(results)
 
             if "pickup" in action:
@@ -671,7 +671,6 @@ class GameEngine:
                     self.stories[next_level_name] = self.cur_level
                     self.player.x, self.player.y = up_stairs[0].x, up_stairs[0].y
 
-                    print(f"down1 stairs{self.stories}")
 
                 else:
                     load_level = self.stories[next_level_name]
@@ -680,11 +679,9 @@ class GameEngine:
                     
 
                     up_stairs = [i for i in self.cur_level.map_obj_sprites if isinstance(i, Up_Stairs)]
-                    print(f"{up_stairs=}")
                     self.player.restore_from_dict(player_dict["Player"])
                     self.player.x, self.player.y = up_stairs[0].x, up_stairs[0].y
 
-                    print(f"down2 stairs{self.stories}")
 
                 self.player.state = state.READY
                 return [{"message": "You went down a level."}]
@@ -701,7 +698,6 @@ class GameEngine:
                     self.cur_level = load_level
 
                     down_stairs = [i for i in self.cur_level.map_obj_sprites if isinstance(i, Down_Stairs)]
-                    print(f"{down_stairs=}")
                     self.player.restore_from_dict(player_dict["Player"])
                     self.player.x, self.player.y = down_stairs[0].x, down_stairs[0].y
 
@@ -712,11 +708,9 @@ class GameEngine:
                     self.cur_level = self.stories[prev_level_name]
 
                     down_stairs = [i for i in self.cur_level.map_obj_sprites if isinstance(i, Down_Stairs)]
-                    print(f"{down_stairs=}")
                     self.player.restore_from_dict(player_dict["Player"])
                     self.player.x, self.player.y = down_stairs[0].x, down_stairs[0].y
 
-                print(f"up stairs{self.stories}")
                 return [{"message": "You went UP a level."}]
 
         return [{"message": "There are no stairs here"}]

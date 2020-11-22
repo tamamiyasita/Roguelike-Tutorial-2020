@@ -68,7 +68,6 @@ class Basicmonster:
             attack = monster.move_towards(target, engine)
             if attack:
                 results.extend(attack)
-                print("move_towards attack")
                 return results
 
         if self.visible_check:

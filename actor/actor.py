@@ -217,7 +217,6 @@ class Actor(arcade.Sprite):
             if door_actor.left_face == False:
 
                 door_actor.left_face = True
-                print("open door")
                 self.state = state.TURN_END
                 return [{"delay": {"time": 0.2, "action": "None"}}]
 

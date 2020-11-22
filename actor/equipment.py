@@ -21,8 +21,6 @@ class Equipment:
 
     def get_dict(self):
         result = [i.__class__.__name__ if i else None for i in self.item_slot] 
-        print(result)
-
 
         return result
 
@@ -31,8 +29,6 @@ class Equipment:
         for item in self.owner.inventory.item_bag:
             if item and item.__class__.__name__ in result:
                 self.toggle_equip(item)
-
-        print(self.item_slot)
 
         self.equip_update_check = True
 
@@ -78,8 +74,7 @@ class Equipment:
             # 装備更新完了通知
             self.equip_update_check = False
 
-            # 装備変更に伴うskill check
-            self.owner.fighter.passive_skill_activate()
+
 
             print(self.owner.fighter.skill_list)
 

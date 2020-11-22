@@ -37,12 +37,7 @@ class Fighter:
 
     def get_dict(self):
         result = {}
-        # print(type(self.owner), self.owner, "owner")
 
-        # for key, val in self.__dict__.items():
-        #     if "owner" in str(key):
-        #         continue
-        #     result[str(key)] = val
         result["hp"] = self.hp
         result["max_hp"] = self.base_max_hp
         result["mp"] = self.mp
@@ -65,14 +60,10 @@ class Fighter:
         result["passive_skill"] = [skill.__class__.__name__ for skill in self._skill_list if Tag.active not in skill.tag]
         result["active_skill"] = [(skill.__class__.__name__, result.get_dict()) for skill, result in zip(self._skill_list, self._skill_list) if Tag.active in result.tag]
         result["states"] = [(states.__class__.__name__, result.get_dict()) for states, result in zip(self.states, self.states)]
-        print(result["states"])
 
         return result
 
     def restore_from_dict(self, result):
-        # for key, val in result.items():
-        #     print(f"restore {key} {val}")
-        #     exec(f"self.{key} = {val}")
 
         self.hp = result["hp"]
         self.base_max_hp = result["max_hp"]
@@ -100,7 +91,6 @@ class Fighter:
                 ps = eval(i)()
                 ps.restore_from_dict(c)
                 self._skill_list.append(ps)
-        # self.states = [eval(states)().restore_from_dict(result) for states, result in result["states"]]
         for s, r in result["states"]:
             if s:
                 print(s, r)
@@ -130,6 +120,8 @@ class Fighter:
     def passive_skill(self):
         return [skill for skill in self.skill_list if Tag.passive in skill.tag]
 
+    # skill level が1以上ならpassive skillを発動する
+    # engineによって呼び出される
     def passive_skill_activate(self):
         for skill in self.passive_skill:
             if 0 < skill.level:
@@ -299,7 +291,6 @@ class Fighter:
                     {"message": f"{self.owner.name.capitalize()} attacks {target.name} but no self.damage"}
                 )
 
-            # results.extend([{"damage_pop": target, "damage": self.damage}])
 
         else:#回避
             results.append(

@@ -29,7 +29,6 @@ class PoisonStatus(Actor):
     def call_off(self):
         self.owner.angle = 0
         self.sprites.remove(self)
-        print(self.sprite_lists)
         self.owner.color = arcade.color.WHITE
         return [{"message":f"The poison has disappeared from your body"}]
 
