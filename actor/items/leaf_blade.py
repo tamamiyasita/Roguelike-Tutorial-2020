@@ -4,6 +4,10 @@ from constants import *
 from data import *
 
 
+
+
+
+
 class LeafBlade(Actor):
     def __init__(self, x=0, y=0):
         super().__init__(
@@ -13,7 +17,7 @@ class LeafBlade(Actor):
             color=COLORS["white"]
         )
 
-        self.damage = 5
+        self.damage = 599
         self.hit_rate = 95
         self.speed = 6
 
@@ -28,19 +32,13 @@ class LeafBlade(Actor):
         self.item_margin_y = 3 * SPRITE_SCALE
 
     def activate(self, owner):
-        self.master = owner
-        if self.master and self.master.fighter.weapon is None:
-            self.master.fighter.weapon = self
+        if not owner.fighter.weapon:
+            owner.fighter.weapon = self
+            self.master = owner
 
-    def deactivate(self):
-        if self.master and self.master.fighter.weapon is not None:
-            self.master.fighter.weapon = None
+    def deactivate(self, owner):
+        if owner.fighter.weapon:
+            owner.fighter.weapon = None
             del self.master
 
 
-    # @property
-    # def attack_damage(self):
-    #     if self.master:
-    #         self._attack_damage[0] = 1 + self.level // 2
-
-    #     return self._attack_damage

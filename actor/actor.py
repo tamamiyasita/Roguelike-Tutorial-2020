@@ -442,12 +442,10 @@ class Actor(arcade.Sprite):
     @master.setter
     def master(self, owner):
         self._master = owner
-        self._master.engine.cur_level.equip_sprites.append(self)
         self.center_x = owner.center_x
         self.center_y = owner.center_y
         self.color = arcade.color.WHITE
 
     @master.deleter
     def master(self):
-        self._master.engine.cur_level.equip_sprites.remove(self)
         self._master = None

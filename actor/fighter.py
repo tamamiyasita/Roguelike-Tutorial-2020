@@ -40,8 +40,6 @@ class Fighter:
 
         result["hp"] = self.hp
         result["max_hp"] = self.base_max_hp
-        result["mp"] = self.mp
-        result["max_mp"] = self.base_max_mp
 
         result["strength"] = self.base_strength
         result["dexterity"] = self.base_dexterity
@@ -67,9 +65,7 @@ class Fighter:
 
         self.hp = result["hp"]
         self.base_max_hp = result["max_hp"]
-        self.mp = result["mp"]
-        self.base_max_mp = result["max_mp"]
-
+ 
         self.base_strength = result["strength"]
         self.base_dexterity = result["dexterity"]
         self.base_intelligence = result["intelligence"]
@@ -116,18 +112,26 @@ class Fighter:
     def active_skill(self):
         return [skill for skill in self.skill_list if Tag.active in skill.tag and 0 < skill.level]
 
-    @property
-    def passive_skill(self):
-        return [skill for skill in self.skill_list if Tag.passive in skill.tag]
+    # def passive_skill_activate(self):
+    #     return [skill for skill in self.skill_list if Tag.passive in skill.tag and 0 < skill.level]
+                    
 
     # skill level が1以上ならpassive skillを発動する
-    # engineによって呼び出される
-    def passive_skill_activate(self):
-        for skill in self.passive_skill:
-            if 0 < skill.level:
-                skill.activate(self.owner)
-            else:
-                skill.deactivate()
+    # equipmentによって呼び出される
+    @property
+    def passive_skill(self):
+        result = []
+        for skill in self.skill_list:
+            if Tag.passive in skill.tag:
+                if 0 < skill.level:
+                    skill.activate(self.owner)
+                    result.append(skill)
+                else:
+                    skill.deactivate(self.owner)
+
+                 
+        return result
+
 
             
 

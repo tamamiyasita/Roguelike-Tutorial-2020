@@ -16,7 +16,7 @@ class Select(Enum):
     delay = auto()
     open_skill = auto()
 
-
+leaf_blade = LeafBlade()
 
 class LevelupUI:
     def __init__(self, engine):
@@ -26,7 +26,7 @@ class LevelupUI:
         self.up_int = ""
         self.tmp_states = None
         self.ui_state = Select.delay
-        self.skill_queue = deque([(LeafBlade(), BranchBaton()), Healing(), TestHead()])
+        self.skill_queue = deque([(leaf_blade, BranchBaton()), Healing(), TestHead()])
         self.skill_result = []
         self.get_skill = None
         self.select_skill = True

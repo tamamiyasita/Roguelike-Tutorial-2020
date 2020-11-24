@@ -34,14 +34,15 @@ class Equipment:
 
     def sprite_check(self, sprites):
             # 装備スプライトをスプライトリストに入れて表示する
-            for equip in chain(self.equip_slot,self.item_slot):
+            for equip in chain(self.owner.fighter.passive_skill,self.item_slot):
                 if equip and not isinstance(equip, str) and equip not in sprites and Tag.image_off not in equip.tag:
                     sprites.append(equip)
 
             # 装備解除しスプライトがスロットから無くなればスプライトリストからも削除
             for sprite in sprites:
-                if sprite not in self.equip_slot and sprite not in self.item_slot:
+                if sprite not in self.owner.fighter.passive_skill and sprite not in self.item_slot:
                     sprites.remove(sprite)
+
 
     def equip_position_reset(self):
         # 装備アイテムの表示位置をリセットする
@@ -67,6 +68,7 @@ class Equipment:
     def update(self, sprites):
         """装備スプライトの表示はここで行う"""
         if self.equip_update_check:
+
 
             self.sprite_check(sprites)
 

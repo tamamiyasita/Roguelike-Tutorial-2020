@@ -236,6 +236,7 @@ class NormalUI:
         left_margin = self.viewport_left + self.side_panel_width + 7  # 画面左からのHPとバーの位置
 
         y = 0
+            
         for passive in self.player.fighter.passive_skill:
 
             if 0 < passive.level:

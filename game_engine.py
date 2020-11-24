@@ -521,10 +521,9 @@ class GameEngine:
                     if item and Tag.equip in item.tag:
                         results = self.player.equipment.toggle_equip(item)
                         if results:
-
                             # 装備変更に伴うskill level check
-                            self.player.fighter.passive_skill_activate()
                             new_action_queue.extend(results)
+
 
             if "pickup" in action:
                 items = arcade.get_sprites_at_point(
