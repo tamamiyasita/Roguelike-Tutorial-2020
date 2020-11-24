@@ -22,6 +22,7 @@ class LeafBlade(Actor):
         self.speed = 6
 
         self.level = 0
+        self.running = False
 
         self.tag = [Tag.item, Tag.equip, Tag.skill, Tag.passive]
 
@@ -32,13 +33,15 @@ class LeafBlade(Actor):
         self.item_margin_y = 3 * SPRITE_SCALE
 
     def activate(self, owner):
+        self.running = True
         if not owner.fighter.weapon:
             owner.fighter.weapon = self
             self.master = owner
 
-    def deactivate(self, owner):
-        if owner.fighter.weapon:
-            owner.fighter.weapon = None
+    def deactivate(self, owner):        
+        self.running = False
+        owner.fighter.weapon = None
+        if self.master:
             del self.master
 
 

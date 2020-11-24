@@ -1,5 +1,4 @@
 
-from PIL.ImageOps import scale
 import arcade
 from collections import deque
 
@@ -71,7 +70,7 @@ class GameEngine:
         self.damage_pop = []
         self.messenger = None
 
-        self.player = Player(engine=self,
+        self.player = Player(
             inventory=Inventory(capacity=9))
 
 
@@ -521,8 +520,20 @@ class GameEngine:
                     if item and Tag.equip in item.tag:
                         results = self.player.equipment.toggle_equip(item)
                         if results:
-                            # 装備変更に伴うskill level check
+                            if results[0]["image_on"] == True:
+                                self.player.equipment.skill_sprite_on(self.cur_level.equip_sprites)
+                                self.cur_level.equip_sprites.append(item)
+                            else:
+                                self.player.equipment.skill_sprite_off(self.cur_level.equip_sprites)
+                                self.cur_level.equip_sprites.remove(item)
+                            
                             new_action_queue.extend(results)
+
+            # if "image_on" in action:
+            #     result = action["image_on"]
+            #     if result:
+
+
 
 
             if "pickup" in action:
@@ -560,7 +571,8 @@ class GameEngine:
             if "use_stairs" in action:
                 result = self.use_stairs()
                 if result:
-                    self.player.equipment.sprite_check(self.cur_level.equip_sprites)
+                    self.player.equipment.skill_sprite_on(self.cur_level.equip_sprites)
+                    self.player.equipment.item_sprite_check(self.cur_level.equip_sprites)
                     self.player.equipment.equip_position_reset()
                     new_action_queue.extend(result)
                     self.game_state = GAME_STATE.NORMAL

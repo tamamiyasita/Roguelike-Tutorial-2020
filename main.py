@@ -1,4 +1,3 @@
-from random import choice
 import arcade
 from arcade.gl import geometry
 import json
@@ -188,10 +187,6 @@ class MG(arcade.Window):
         if self.engine.game_state == GAME_STATE.NORMAL or self.engine.game_state == GAME_STATE.INVENTORY:
             self.engine.process_action_queue(delta_time)
 
-            # playerの装備状態のアップデート
-            if self.engine.player.state == state.READY:
-                self.engine.player.equipment.update(
-                    self.engine.cur_level.equip_sprites)
 
         if self.engine.game_state == GAME_STATE.NORMAL:
 

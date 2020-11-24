@@ -164,11 +164,11 @@ class LevelupUI:
             # Yボタンが押されたらgame stateをノーマルに戻し終了
             if self.key == arcade.key.Y:
                 self.engine.player.fighter.skill_list.extend(self.skill_result)
-                self.engine.player.equipment.equip_update_check = True
                 self.get_skill = None
                 self.select_skill = True
                 self.skill_result = []
                 self.engine.game_state = GAME_STATE.NORMAL
+                self.engine.player.equipment.skill_sprite_on(self.engine.cur_level.equip_sprites)
 
 
 
@@ -430,6 +430,7 @@ class LevelupUI:
 
                 # playerのskill listに追加し、装備更新をチェックさせる
                 self.ui_state = Select.ability
+            
 
             else:
                 self.ui_state = Select.ability

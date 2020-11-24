@@ -125,9 +125,10 @@ class Fighter:
             if Tag.passive in skill.tag:
                 if 0 < skill.level:
                     skill.activate(self.owner)
-                    result.append(skill)
                 else:
                     skill.deactivate(self.owner)
+
+                result.append(skill)
 
                  
         return result

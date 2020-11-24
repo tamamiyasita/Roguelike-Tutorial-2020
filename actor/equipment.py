@@ -14,7 +14,6 @@ class Equipment:
         """
         self.item_slot = []
 
-        self.equip_slot = []
 
         # 装備変更によるスプライト更新のチェックに使う変数
         self.equip_update_check = False
@@ -32,21 +31,30 @@ class Equipment:
 
         self.equip_update_check = True
 
-    def sprite_check(self, sprites):
+    def item_sprite_check(self, sprites):
             # 装備スプライトをスプライトリストに入れて表示する
-            for equip in chain(self.owner.fighter.passive_skill,self.item_slot):
-                if equip and not isinstance(equip, str) and equip not in sprites and Tag.image_off not in equip.tag:
-                    sprites.append(equip)
+            for item in self.item_slot:
+                if item and not isinstance(item, str):
+                    sprites.append(item)
 
             # 装備解除しスプライトがスロットから無くなればスプライトリストからも削除
-            for sprite in sprites:
-                if sprite not in self.owner.fighter.passive_skill and sprite not in self.item_slot:
-                    sprites.remove(sprite)
+            for item in self.item_slot:
+                if item not in sprites:
+                    sprites.remove(item)
 
+    def skill_sprite_on(self, sprites):
+            for equip in self.owner.fighter.passive_skill:
+                if equip and equip not in sprites:
+                    sprites.append(equip)
+
+    def skill_sprite_off(self, sprites):
+            for skill in self.owner.fighter.passive_skill:
+                if skill.running == False and skill in sprites:
+                    sprites.remove(skill)
 
     def equip_position_reset(self):
         # 装備アイテムの表示位置をリセットする
-            for equip in chain(self.equip_slot,self.item_slot):
+            for equip in self.item_slot:
                 if equip:
                     equip.x = self.owner.x
                     equip.y = self.owner.y
@@ -64,21 +72,6 @@ class Equipment:
                 bonus = Counter(bonus) + Counter(parts.skill_add)
 
         return bonus  # {leaf_blade:1}
-
-    def update(self, sprites):
-        """装備スプライトの表示はここで行う"""
-        if self.equip_update_check:
-
-
-            self.sprite_check(sprites)
-
-
-            # 装備更新完了通知
-            self.equip_update_check = False
-
-
-
-            print(self.owner.fighter.skill_list)
 
 
     @property
@@ -99,13 +92,14 @@ class Equipment:
         """
         results = []
 
-        for i, item in enumerate(self.item_slot):
+        for item in self.item_slot:
             if item == equip_item:
 
                 del item.master
                 self.item_slot.remove(item)
-                results.append({"message": f"dequipped {item.name}"})
-
+                
+                results.append({"message": f"dequipped {item.name}","image_on": False})
+                # self.skill_sprite_off(sprites)
                 self.equip_update_check = True
                 return results
 
@@ -117,7 +111,8 @@ class Equipment:
             self.item_slot.append(equip_item)
             equip_item.master = self.owner
 
-            results.append({"message": f"equipped {equip_item.name}"})
+            results.append({"message": f"equipped {equip_item.name}", "image_on": True})
 
+            # self.skill_sprite_on(sprites)
             self.equip_update_check = True
             return results
