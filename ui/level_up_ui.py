@@ -168,7 +168,7 @@ class LevelupUI:
                 self.select_skill = True
                 self.skill_result = []
                 self.engine.game_state = GAME_STATE.NORMAL
-                self.engine.player.equipment.skill_sprite_on(self.engine.cur_level.equip_sprites)
+                self.engine.player.equipment.passive_sprite_on(self.engine.cur_level.equip_sprites)
 
 
 

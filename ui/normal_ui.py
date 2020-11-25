@@ -13,8 +13,9 @@ class NormalUI:
     """GameState=Normal時に描画するUI
     """
 
-    def __init__(self, player, viewport, selected_item, messages, mouse_position):
-        self.player = player
+    def __init__(self, engine, viewport, selected_item, messages, mouse_position):
+        self.engine = engine
+        self.player = engine.player
         self.viewport_left = viewport[0]
         self.viewport_right = viewport[1]
         self.viewport_bottom = viewport[2]
@@ -234,15 +235,17 @@ class NormalUI:
         item_row = self.viewport_top - GRID_SIZE*5#(SCREEN_HEIGHT //1.3) - 320 # 行の最上段
         item_font_size = 17
         left_margin = self.viewport_left + self.side_panel_width + 7  # 画面左からのHPとバーの位置
-
         y = 0
             
         for passive in self.player.fighter.passive_skill:
 
             if 0 < passive.level:
-
+                passive.activate(self.player)
+                self.player.equipment.passive_sprite_on(self.engine.cur_level.equip_sprites)
                 item_text = f"{passive.name} (level {passive.level})".replace("_", " ").title()
             else:
+                passive.deactivate(self.player)
+                self.player.equipment.passive_sprite_off(self.engine.cur_level.equipment)
                 continue
 
             arcade.draw_text(

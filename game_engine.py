@@ -520,18 +520,14 @@ class GameEngine:
                     if item and Tag.equip in item.tag:
                         results = self.player.equipment.toggle_equip(item)
                         if results:
-                            if results[0]["image_on"] == True:
-                                self.player.equipment.skill_sprite_on(self.cur_level.equip_sprites)
+                            if "equipped" in results[0]["message"]:
                                 self.cur_level.equip_sprites.append(item)
                             else:
-                                self.player.equipment.skill_sprite_off(self.cur_level.equip_sprites)
                                 self.cur_level.equip_sprites.remove(item)
                             
                             new_action_queue.extend(results)
 
-            # if "image_on" in action:
-            #     result = action["image_on"]
-            #     if result:
+
 
 
 
@@ -571,7 +567,7 @@ class GameEngine:
             if "use_stairs" in action:
                 result = self.use_stairs()
                 if result:
-                    self.player.equipment.skill_sprite_on(self.cur_level.equip_sprites)
+                    self.player.equipment.passive_sprite_on(self.cur_level.equip_sprites)
                     self.player.equipment.item_sprite_check(self.cur_level.equip_sprites)
                     self.player.equipment.equip_position_reset()
                     new_action_queue.extend(result)

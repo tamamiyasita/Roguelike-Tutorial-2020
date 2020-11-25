@@ -31,6 +31,7 @@ class Equipment:
 
         self.equip_update_check = True
 
+    # 階層を移動する時に使う関数
     def item_sprite_check(self, sprites):
             # 装備スプライトをスプライトリストに入れて表示する
             for item in self.item_slot:
@@ -42,12 +43,13 @@ class Equipment:
                 if item not in sprites:
                     sprites.remove(item)
 
-    def skill_sprite_on(self, sprites):
+    def passive_sprite_on(self, sprites):
+        # leaf blade など画面に表示されるpassiveskillをonにする
             for equip in self.owner.fighter.passive_skill:
                 if equip and equip not in sprites:
                     sprites.append(equip)
 
-    def skill_sprite_off(self, sprites):
+    def passive_sprite_off(self, sprites):
             for skill in self.owner.fighter.passive_skill:
                 if skill.running == False and skill in sprites:
                     sprites.remove(skill)
@@ -64,7 +66,6 @@ class Equipment:
     @property
     def skill_level_sum(self):
         """装備スロットをループしてskill levelの合計を返す"""
-
         bonus = {}
         for parts in self.item_slot:  # crisiumが入る
             # crisiumのskill_add{leaf_blade:1}が入る
@@ -98,21 +99,18 @@ class Equipment:
                 del item.master
                 self.item_slot.remove(item)
                 
-                results.append({"message": f"dequipped {item.name}","image_on": False})
-                # self.skill_sprite_off(sprites)
+                results.append({"message": f"dequipped {item.name}"})
                 self.equip_update_check = True
                 return results
 
-        # for i, item in enumerate(self.item_slot):
-        #     if item:
+
         if 5 > len(self.item_slot):
 
 
             self.item_slot.append(equip_item)
             equip_item.master = self.owner
 
-            results.append({"message": f"equipped {equip_item.name}", "image_on": True})
+            results.append({"message": f"equipped {equip_item.name}"})
 
-            # self.skill_sprite_on(sprites)
             self.equip_update_check = True
             return results

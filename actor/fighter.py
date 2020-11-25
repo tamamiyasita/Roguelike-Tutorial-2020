@@ -112,26 +112,28 @@ class Fighter:
     def active_skill(self):
         return [skill for skill in self.skill_list if Tag.active in skill.tag and 0 < skill.level]
 
-    # def passive_skill_activate(self):
-    #     return [skill for skill in self.skill_list if Tag.passive in skill.tag and 0 < skill.level]
-                    
+    @property
+    def passive_skill(self):
+        return [skill for skill in self.skill_list if Tag.passive in skill.tag and 0 < skill.level]
+
+                 
 
     # skill level が1以上ならpassive skillを発動する
     # equipmentによって呼び出される
-    @property
-    def passive_skill(self):
-        result = []
-        for skill in self.skill_list:
-            if Tag.passive in skill.tag:
-                if 0 < skill.level:
-                    skill.activate(self.owner)
-                else:
-                    skill.deactivate(self.owner)
+    # @property
+    # def passive_skill(self):
+    #     result = []
+    #     for skill in self.skill_list:
+    #         if Tag.passive in skill.tag:
+    #             if 0 < skill.level:
+    #                 skill.activate(self.owner)
+    #             else:
+    #                 skill.deactivate(self.owner)
 
-                result.append(skill)
+    #             result.append(skill)
 
                  
-        return result
+    #     return result
 
 
             

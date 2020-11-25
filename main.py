@@ -144,7 +144,7 @@ class MG(arcade.Window):
 
         # ノーマルステート時の画面表示
         if self.engine.game_state == GAME_STATE.NORMAL or self.engine.game_state == GAME_STATE.DELAY_WINDOW:
-            normal_UI = NormalUI(self.engine.player, self.viewports,
+            normal_UI = NormalUI(self.engine, self.viewports,
                                  self.engine.selected_item, self.engine.messages, self.mouse_position)
             normal_UI.draw_in_normal_state()
             if self.mouse_position:
