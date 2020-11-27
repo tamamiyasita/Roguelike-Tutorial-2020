@@ -245,7 +245,7 @@ class NormalUI:
                 item_text = f"{passive.name} (level {passive.level})".replace("_", " ").title()
             else:
                 passive.deactivate(self.player)
-                self.player.equipment.passive_sprite_off(self.engine.cur_level.equipment)
+                self.player.equipment.passive_sprite_off(self.engine.cur_level.equip_sprites)
                 continue
 
             arcade.draw_text(

@@ -14,7 +14,8 @@ from recalculate_fov import recalculate_fov
 from actor.inventory import Inventory
 from actor.item_point_check import ItemPoint
 from actor.characters.PC import Player
-from actor.characters.orcs import Orc, orc
+from actor.characters.orcs import Orc
+from actor._actor import Actor
 
 from actor.map_obj.stairs import Up_Stairs, Down_Stairs
 from actor.restore_actor import restore_actor
@@ -72,6 +73,7 @@ class GameEngine:
 
         self.player = Player(
             inventory=Inventory(capacity=9))
+
 
 
     def setup_level(self, level_number):
@@ -413,9 +415,9 @@ class GameEngine:
                 effect = restore_actor(effect_dict)
                 level.effect_sprites.append(effect)
 
-            for equip_dict in level_dict["equip"]:
-                equip = restore_actor(equip_dict)
-                level.equip_sprites.append(equip)
+            # for equip_dict in level_dict["equip"]:
+            #     equip = restore_actor(equip_dict)
+            #     level.equip_sprites.append(equip)
 
             level.floor_level = level_dict["level"]
             level.map_name = map_name
@@ -433,7 +435,7 @@ class GameEngine:
         self.player.state = state.READY
         self.game_state = GAME_STATE.NORMAL
         self.fov_recompute = True
-        self.player.equipment.sprite_check(self.cur_level.equip_sprites)
+        self.player.equipment.item_sprite_check(self.cur_level.equip_sprites)
         self.player.equipment.equip_position_reset()
 
 
@@ -520,10 +522,10 @@ class GameEngine:
                     if item and Tag.equip in item.tag:
                         results = self.player.equipment.toggle_equip(item)
                         if results:
-                            if "equipped" in results[0]["message"]:
-                                self.cur_level.equip_sprites.append(item)
-                            else:
+                            if "dequipped" in results[0]["message"]:
                                 self.cur_level.equip_sprites.remove(item)
+                            else:
+                                self.cur_level.equip_sprites.append(item)
                             
                             new_action_queue.extend(results)
 
@@ -567,10 +569,10 @@ class GameEngine:
             if "use_stairs" in action:
                 result = self.use_stairs()
                 if result:
+                    new_action_queue.extend(result)
                     self.player.equipment.passive_sprite_on(self.cur_level.equip_sprites)
                     self.player.equipment.item_sprite_check(self.cur_level.equip_sprites)
                     self.player.equipment.equip_position_reset()
-                    new_action_queue.extend(result)
                     self.game_state = GAME_STATE.NORMAL
                     self.turn_loop = TurnLoop(self.player)
                     self.fov_recompute = True
@@ -651,8 +653,6 @@ class GameEngine:
     def use_stairs(self):
         """階段及びplayerの位置の判定
         """
-        stairs_point = []
-                # self.self.stairs_xy = self.player.x, self.player.y
 
         get_stairs = arcade.get_sprites_at_exact_point(
             point=self.player.position,
@@ -720,7 +720,7 @@ class GameEngine:
 
                 return [{"message": "You went UP a level."}]
 
-        return [{"message": "There are no stairs here"}]
+        return None #[{"message": "There are no stairs here"}]
 
     def use_door(self, door_dist):
         result = []

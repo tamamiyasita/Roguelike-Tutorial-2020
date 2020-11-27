@@ -61,7 +61,7 @@ class TurnLoop:
             for actor in self.sprites:
                 if actor.is_dead:
                     continue
-                if actor.wait < 1 and actor.state:
+                if actor.wait < 1:
                     self.actor = actor
                     self.turn = Turn.OFF
                     break

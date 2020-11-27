@@ -114,7 +114,7 @@ class Fighter:
 
     @property
     def passive_skill(self):
-        return [skill for skill in self.skill_list if Tag.passive in skill.tag and 0 < skill.level]
+        return [skill for skill in self.skill_list if Tag.passive in skill.tag]
 
                  
 

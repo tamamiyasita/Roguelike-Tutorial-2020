@@ -35,13 +35,13 @@ class Equipment:
     def item_sprite_check(self, sprites):
             # 装備スプライトをスプライトリストに入れて表示する
             for item in self.item_slot:
-                if item and not isinstance(item, str):
+                if item and item not in sprites and not isinstance(item, str):
                     sprites.append(item)
 
             # 装備解除しスプライトがスロットから無くなればスプライトリストからも削除
-            for item in self.item_slot:
-                if item not in sprites:
-                    sprites.remove(item)
+            # for item in self.item_slot:
+            #     if item and item not in sprites:
+            #         sprites.remove(item)
 
     def passive_sprite_on(self, sprites):
         # leaf blade など画面に表示されるpassiveskillをonにする

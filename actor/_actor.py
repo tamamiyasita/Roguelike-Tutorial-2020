@@ -1,4 +1,5 @@
 from random import random, randint, uniform
+from PIL.ImageOps import scale
 from arcade import particle
 from arcade.text import draw_text
 from actor.ai import Basicmonster, ConfusedMonster,RandomMove,Wait
@@ -17,7 +18,7 @@ class Actor:
     """ 全てのオブジェクトを作成する基礎となるクラス
     """
 
-    def __init__(self, name=None, x=0, y=0,
+    def __init__(self,name=None, x=0, y=0,
                  blocks=False, block_sight=False,
                  scale=SPRITE_SCALE, color=COLORS["black"],
                  fighter=None, ai=None, speed=DEFAULT_SPEED,
@@ -26,17 +27,18 @@ class Actor:
                  explanatory_text="", tag={Tag.free},
                  state=state.TURN_END, left_face=False
                  ):
-        super().__init__(scale=scale)
+        # super().__init__(scale=scale)
         self.name = name
+        self._sprite = None
 
         self.dx, self.dy = 0, 0
-        self.center_x, self.center_y = grid_to_pixel(x, y)
+        self._center_x, self._center_y = grid_to_pixel(x, y)
         self._x, self._y = 0, 0
         self.x, self.y = x, y
-        self.scale = scale
+        self._scale = scale
         self.blocks = blocks
         self.block_sight = block_sight
-        self.color = color
+        self._color = color
         self.visible_color = visible_color
         self.not_visible_color = not_visible_color
         self.is_visible = False
@@ -71,21 +73,66 @@ class Actor:
         if self.fighter:
             self.fighter.owner = self
             self.is_dead = False
+        self.sprite_set()
 
 
     def join_sprites(self, sprites):
         sprites.append(self.sprite)
 
     @property
-    def sprite(self):
-        sprite = arcade.Sprite(
-            filename=IMAGE_ID[self.name],
-            scale=self.scale,
-            center_x=self.center_x,
-            center_y=self.center_y
-            )
-        return sprite
+    def center_x(self):
+        return self.sprite.center_x
+    @property
+    def center_y(self):
+        return self.sprite.center_y
+    @center_x.setter
+    def center_x(self, value):
+        self._center_x = value
+        if self.sprite:
+            self.sprite.center_x = self._center_x
+    @center_y.setter
+    def center_y(self, value):
+        self._center_y = value
+        if self.sprite:
+            self.sprite.center_y = self._center_y
 
+    @property
+    def color(self):
+        return self.sprite.color
+    @color.setter
+    def color(self, value):
+        self._color = value
+        self.sprite.color = value
+
+    @property
+    def alpha(self):
+        return self.sprite.alpha
+
+    @alpha.setter
+    def alpha(self, value):
+        self.sprite.alpha = value
+
+    @property
+    def scale(self):
+        return self._scale
+
+    @scale.setter
+    def scale(self, value):
+        self._scale = value
+        
+
+        
+
+
+    @property
+    def sprite(self):
+        return self._sprite
+
+    def sprite_set(self):
+        sprite = arcade.Sprite()
+        self._sprite = sprite
+        self.texture=self.name
+        sprite.scale = 2
 
 
     def get_dict(self):
@@ -196,6 +243,23 @@ class Actor:
     def y(self, value):
         self._y = value
         self.center_x, self.center_y = grid_to_pixel(self._x, self._y)
+
+    @property
+    def texture(self):
+        return self._sprite.texture
+
+    @texture.setter
+    def texture(self, value):
+        self.textures = []
+        img = IMAGE_ID.get(value)
+        if isinstance(img, list):
+            self.textures.extend(img)
+        else:
+            self.textures.append(img)
+
+
+        self._sprite.texture = self.textures[0]
+
 
     def move(self, dxy, target=None, engine=None):
         self.attack_delay = 7
@@ -376,21 +440,6 @@ class Actor:
             move = self.move((dx, dy), target, engine)
             return move
 
-    @property
-    def texture_(self):
-        return self.textures
-
-    @texture_.setter
-    def texture_(self, value):
-        self.textures = []
-        img = IMAGE_ID.get(value)
-        if isinstance(img, list):
-            self.textures.extend(img)
-        else:
-            self.textures.append(img)
-
-
-        self.texture = self.textures[self.texture_number]
 
     def update_animation(self, delta_time=1 / 60):
         # 左右を向く

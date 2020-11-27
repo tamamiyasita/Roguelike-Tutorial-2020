@@ -1,5 +1,5 @@
+# from actor.actor import Actor
 from actor.actor import Actor
-# from actor._actor import Actor
 from actor.fighter import Fighter
 from data import *
 from constants import *
@@ -17,7 +17,6 @@ class Player(Actor):
                                     )
         equip_component = Equipment()
         super().__init__(
-            # scale=0.5,
             name="Rou",
             x=x,
             y=y,
@@ -26,6 +25,7 @@ class Player(Actor):
             inventory=inventory,
             fighter=fighter_component,
             equipment=equip_component,
+            
 
         )
         self.tag = [Tag.player]
