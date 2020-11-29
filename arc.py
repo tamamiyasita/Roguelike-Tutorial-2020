@@ -121,7 +121,7 @@ class MG(arcade.Window):
         if key == arcade.key.B:
             self.pc.center_x = SCREEN_WIDTH // 2
         if key == arcade.key.C:
-            self.pc.color[0] -= 20
+            self.pc.color[0] -= 40
         if key == arcade.key.D:
             self.pc.color[0] += 30
         if key == arcade.key.E:
