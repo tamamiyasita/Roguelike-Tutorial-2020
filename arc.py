@@ -123,7 +123,7 @@ class MG(arcade.Window):
         if key == arcade.key.C:
             self.pc.color[0] -= 20
         if key == arcade.key.D:
-            self.pc.color[0] += 20
+            self.pc.color[0] += 30
         if key == arcade.key.E:
             self.pc.alpha += 20
         if key == arcade.key.F:
