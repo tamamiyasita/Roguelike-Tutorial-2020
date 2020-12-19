@@ -13,7 +13,7 @@ from actor.items.fireball_scroll import FireballScroll, FireballEffect
 from actor.items.lightning_scroll import LightningScroll, LightningEffect
 from actor.items.confusion_scroll import ConfusionScroll, ConfusionEffect
 from actor.items.cirsium import Cirsium
-from actor.items.leaf_blade import LeafBlade
+from actor.skills.leaf_blade import LeafBlade
 from actor.items.ebony import Ebony
 from actor.items.branch_baton import BranchBaton
 from actor.items.paeonia import Paeonia

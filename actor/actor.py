@@ -23,7 +23,7 @@ class Actor(arcade.Sprite):
                  fighter=None, ai=None, speed=DEFAULT_SPEED,
                  inventory=None, equipment=None,
                  visible_color=COLORS["white"], not_visible_color=COLORS["black"],
-                 explanatory_text="", tag={Tag.free},
+                 tag={Tag.free},
                  state=state.TURN_END, left_face=False
                  ):
         super().__init__(scale=scale)
@@ -44,7 +44,7 @@ class Actor(arcade.Sprite):
         self.not_visible_color = not_visible_color
         self.is_visible = False
         self.state = state
-        self.explanatory_text = explanatory_text # Lコマンド等の説明文に使用する
+        # self.explanatory_text = explanatory_text # Lコマンド等の説明文に使用する
         self.tag = tag
         self.left_face = left_face
         self._master = None # 自身がitemだった場合その所持者を表す、主に装備時Spriteの表示位置に使用する

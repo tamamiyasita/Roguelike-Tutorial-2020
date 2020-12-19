@@ -98,6 +98,7 @@ class MG(arcade.Window):
         self.engine.cur_level.actor_sprites.draw(filter=gl.GL_NEAREST)
         self.engine.cur_level.chara_sprites.draw(filter=gl.GL_NEAREST)
         self.engine.cur_level.equip_sprites.draw(filter=gl.GL_NEAREST)
+        self.engine.flower_sprites.draw(filter=gl.GL_NEAREST)
         self.engine.cur_level.effect_sprites.draw(filter=gl.GL_NEAREST)
         for e in self.engine.cur_level.effect_sprites:
             if hasattr(e, "emitter"):
@@ -197,7 +198,9 @@ class MG(arcade.Window):
             self.engine.cur_level.effect_sprites.update()
             self.engine.cur_level.effect_sprites.update_animation()
             self.engine.cur_level.equip_sprites.update()
+            self.engine.flower_sprites.update()
             self.engine.cur_level.equip_sprites.update_animation()
+            self.engine.flower_sprites.update_animation()
 
             self.engine.turn_loop.loop_on(self.engine)
             self.engine.check_for_player_movement(self.player_direction)
@@ -265,7 +268,6 @@ class MG(arcade.Window):
             self.choice = self.massage_window.message_choices(key)
 
         if key == arcade.key.F7:
-            import shelve
 
             self.save()
         elif key == arcade.key.F8:

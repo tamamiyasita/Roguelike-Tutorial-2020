@@ -93,7 +93,7 @@ class GameEngine:
     def setup(self):
 
         arcade.set_background_color(COLORS["black"])
-
+        self.flower_sprites = arcade.SpriteList(use_spatial_hash=True, spatial_hash_cell_size=32)
         self.cur_level = self.setup_level(level_number=99)
         self.stories[self.cur_floor_name] = self.cur_level
         self.turn_loop = TurnLoop(self.player)
@@ -288,7 +288,7 @@ class GameEngine:
             item_dict = [self.get_actor_dict(s) for s in level.item_sprites]
             item_point_dict = [self.get_actor_dict(s) for s in level.item_point_sprites]
             effect_dict = [self.get_actor_dict(s) for s in level.effect_sprites]
-            equip_dict = [self.get_actor_dict(s) for s in level.equip_sprites]
+            # equip_dict = [self.get_actor_dict(s) for s in level.equip_sprites]
 
 
             level_dict = {
@@ -303,7 +303,7 @@ class GameEngine:
                 "item": item_dict,
                 "item_point": item_point_dict,
                 "effect": effect_dict,
-                "equip": equip_dict
+                # "equip": equip_dict
             }
             levels_dict[map_name] = level_dict
 
@@ -435,7 +435,7 @@ class GameEngine:
         self.player.state = state.READY
         self.game_state = GAME_STATE.NORMAL
         self.fov_recompute = True
-        self.player.equipment.item_sprite_check(self.cur_level.equip_sprites)
+        self.player.equipment.item_sprite_check(self.flower_sprites)
         self.player.equipment.equip_position_reset()
 
 
@@ -523,9 +523,9 @@ class GameEngine:
                         results = self.player.equipment.toggle_equip(item)
                         if results:
                             if "dequipped" in results[0]["message"]:
-                                self.cur_level.equip_sprites.remove(item)
+                                self.flower_sprites.remove(item)
                             else:
-                                self.cur_level.equip_sprites.append(item)
+                                self.flower_sprites.append(item)
                             
                             new_action_queue.extend(results)
 
@@ -570,8 +570,9 @@ class GameEngine:
                 result = self.use_stairs()
                 if result:
                     new_action_queue.extend(result)
-                    self.player.equipment.passive_sprite_on(self.cur_level.equip_sprites)
-                    self.player.equipment.item_sprite_check(self.cur_level.equip_sprites)
+                    self.flower_sprites = arcade.SpriteList(use_spatial_hash=True, spatial_hash_cell_size=32)
+                    self.player.equipment.passive_sprite_on(self.flower_sprites)
+                    self.player.equipment.item_sprite_check(self.flower_sprites)
                     self.player.equipment.equip_position_reset()
                     self.game_state = GAME_STATE.NORMAL
                     self.turn_loop = TurnLoop(self.player)
@@ -683,8 +684,7 @@ class GameEngine:
                     load_level = self.stories[next_level_name]
                     self.cur_level = load_level
                     self.cur_level.floor_level = load_level.floor_level
-                    
-
+                
                     up_stairs = [i for i in self.cur_level.map_obj_sprites if isinstance(i, Up_Stairs)]
                     self.player.restore_from_dict(player_dict["Player"])
                     self.player.x, self.player.y = up_stairs[0].x, up_stairs[0].y
@@ -717,7 +717,7 @@ class GameEngine:
                     down_stairs = [i for i in self.cur_level.map_obj_sprites if isinstance(i, Down_Stairs)]
                     self.player.restore_from_dict(player_dict["Player"])
                     self.player.x, self.player.y = down_stairs[0].x, down_stairs[0].y
-
+                    
                 return [{"message": "You went UP a level."}]
 
         return None #[{"message": "There are no stairs here"}]

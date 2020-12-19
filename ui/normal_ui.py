@@ -266,29 +266,30 @@ class NormalUI:
             )
                 
             arcade.draw_text(
-                text=f"tst1",
-                start_x=left_margin +55,
-                start_y=item_row + y-23,
-                color=arcade.color.APPLE_GREEN,
-                font_size=item_font_size-5,
-                font_name="consola.ttf"
-            )
-            arcade.draw_text(
-                text=f"tst2",
-                start_x=left_margin +55,
-                start_y=item_row + y-42,
-                color=arcade.color.ORCHID_PINK,
-                font_size=item_font_size-5,
-                font_name="consola.ttf"
-            )
-            arcade.draw_text(
                 text=f"{passive.explanatory_text}",
-                start_x=left_margin +7,
-                start_y=item_row + y-62,
+                start_x=left_margin +55,
+                start_y=item_row + y-6,
                 color=arcade.color.WHITE,
-                font_size=item_font_size-7,
-                # font_name="consola.ttf"
+                font_size=item_font_size-4,
+                # font_name="consola.ttf",
+                anchor_y="top"
             )
+            # arcade.draw_text(
+            #     text=f"tst2",
+            #     start_x=left_margin +55,
+            #     start_y=item_row + y-42,
+            #     color=arcade.color.ORCHID_PINK,
+            #     font_size=item_font_size-5,
+            #     font_name="consola.ttf"
+            # )
+            # arcade.draw_text(
+            #     text=f"{passive.explanatory_text}",
+            #     start_x=left_margin +7,
+            #     start_y=item_row + y-62,
+            #     color=arcade.color.WHITE,
+            #     font_size=item_font_size-7,
+            #     # font_name="consola.ttf"
+            # )
 
             y -= 104        
 

@@ -28,6 +28,7 @@ class Equipment:
         for item in self.owner.inventory.item_bag:
             if item and item.__class__.__name__ in result:
                 self.toggle_equip(item)
+                
 
         self.equip_update_check = True
 
@@ -37,11 +38,12 @@ class Equipment:
             for item in self.item_slot:
                 if item and item not in sprites and not isinstance(item, str):
                     sprites.append(item)
+                
 
             # 装備解除しスプライトがスロットから無くなればスプライトリストからも削除
-            # for item in self.item_slot:
-            #     if item and item not in sprites:
-            #         sprites.remove(item)
+            # for item in sprites:
+            #     if item and item not in self.item_slot:
+            #         item.remove_from_sprite_lists()
 
     def passive_sprite_on(self, sprites):
         # leaf blade など画面に表示されるpassiveskillをonにする

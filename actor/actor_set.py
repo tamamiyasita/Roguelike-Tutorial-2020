@@ -1,5 +1,5 @@
 from actor.items.cirsium import Cirsium
-from actor.items.leaf_blade import LeafBlade
+from actor.skills.leaf_blade import LeafBlade
 from actor.items.ebony import Ebony
 from actor.items.branch_baton import BranchBaton
 from actor.items.paeonia import Paeonia

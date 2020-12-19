@@ -131,7 +131,7 @@ dmypy.json
 .pyre/
 .vscode/settings.json
 .vscode/settings.json
-.vscode/settings.json
+.settings.json
 logging_log
 
 my3.8_venv/

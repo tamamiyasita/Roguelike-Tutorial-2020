@@ -3,7 +3,7 @@ from typing import Tuple
 import arcade
 from constants import *
 from data import *
-from actor.items.leaf_blade import LeafBlade
+from actor.skills.leaf_blade import LeafBlade
 from actor.items.branch_baton import BranchBaton
 from actor.items.healing import Healing
 from actor.items.tst_head import TestHead

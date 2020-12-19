@@ -2,6 +2,28 @@ import arcade
 from arcade import sprite
 GRID_SIZE = 32
 
+from data import * 
+
+class Spriteset(arcade.Sprite):
+    def __init__(self, Entity):
+        super().__init__()
+
+        self.entity = Entity
+    def re_setup(self, Entity):
+        self.entity = Entity
+
+    def update(self, delta_time=1/60):
+        super().update()
+        if self.entity.move_sw:
+            self.center_y = self.entity.center_y
+            self.center_x = self.entity.center_x
+            self.entity.move_sw = False
+        self.change_y = self.entity.change_y
+        self.change_x = self.entity.change_x
+        self.color = self.entity.color
+        self.alpha = self.entity.alpha
+        if self.change_x:
+            print(f"{self.change_x=}")
 class Entity:
     def __init__(self, x=0, y=0, color=[255,255,255], alpha=255) -> None:
         self._x = x
@@ -10,14 +32,24 @@ class Entity:
         self._center_y = None
         self._color = color
         self._alpha = alpha
-        self.sprite = None
-
-    def sprite_set(self):
-        self.sprite = arcade.SpriteSolidColor(32,32, color=arcade.color.BABY_PINK)
-        self.x = self._x
-        self.y = self._y
-        self.sprite.color = self._color
-        self.sprite.alpha = self._alpha
+        self._change_x = 0
+        self._change_y = 0
+        self.move_sw = False
+    @property
+    def change_x(self):
+        return self._change_x
+    @change_x.setter
+    def change_x(self, value):
+        self._change_x = value
+        return self._change_x
+    
+    @property
+    def change_y(self):
+        return self._change_y
+    @change_y.setter
+    def change_y(self, value):
+        self._change_y = value
+        return self._change_y
 
     @property
     def x(self):
@@ -29,12 +61,12 @@ class Entity:
     def x(self, value):
         self._x = value
         self.center_x = self._x * GRID_SIZE
-        self.sprite.center_x = self._x * GRID_SIZE
+        # self.sprite.center_x = self._x * GRID_SIZE
     @y.setter
     def y(self, value):
         self._y = value
         self.center_y = self._y * GRID_SIZE
-        self.sprite.center_y = self._y * GRID_SIZE
+        # self.sprite.center_y = self._y * GRID_SIZE
 
     @property
     def center_x(self):
@@ -45,22 +77,22 @@ class Entity:
     @center_x.setter
     def center_x(self, value):
         self._center_x = value
-        self.sprite.center_x = self._center_x
+        # self.sprite.center_x = self._center_x
         self._x = self._center_x // GRID_SIZE
     @center_y.setter
     def center_y(self, value):
         self._center_y = value
-        self.sprite.center_y = self._center_y
+        # self.sprite.center_y = self._center_y
         self._y = self._center_y // GRID_SIZE
 
     @property
     def color(self):
-        self.sprite.color = self._color
+        # self.sprite.color = self._color
         return self._color
     @color.setter
     def color(self,value):
         self._color = value
-        self.sprite.color = self._color
+        # self.sprite.color = self._color
 
     @property
     def alpha(self):
@@ -72,14 +104,18 @@ class Entity:
             self._alpha = 255
         elif self._alpha < 1:
             self._alpha = 0
-        self.sprite.alpha = self._alpha
+        # self.sprite.alpha = self._alpha
 
     def __repr__(self) -> str:
-        return f"{self.x=} {self.y=} {self.center_x=} {self.center_y=} {self.color=} {self.alpha=}"
+        return f"{self.x=} {self.y=} {self.change_x=} {self.change_y=} {self.center_x=} {self.center_y=} {self.color=} {self.alpha=}"
 
     def move(self, dx, dy):
         self.x += dx
         self.y += dy
+        self.move_sw = True
+
+# TODO シェルフで保存に挑戦する 別の関数で整理しないと保存できないな
+import shelve
 
 
 
@@ -96,16 +132,17 @@ class MG(arcade.Window):
     def setup(self):
         self.pc_sprites = arcade.SpriteList()
         self.pc = Entity(10,10, color=[200,150,255])
-        self.pc.sprite_set()
-        self.pc.join_sprite_list(self.pc_sprites)
+        self.pc_sprite = Spriteset(self.pc)
+        self.pc_sprite.texture = crab_0[0]
+        self.pc_sprites.append(self.pc_sprite)
 
+    def on_update(self, delta_time: float):
+        self.pc_sprites.update()
 
     def on_draw(self):
         arcade.start_render()
         self.pc_sprites.draw()
 
-    def on_update(self, delta_time: float):
-        pass
 
     def on_key_press(self, key: int, modifiers: int):
         if key == arcade.key.ESCAPE:
@@ -128,6 +165,20 @@ class MG(arcade.Window):
             self.pc.alpha += 20
         if key == arcade.key.F:
             self.pc.alpha -= 20
+        if key == arcade.key.K:
+            self.pc.change_x = 5
+
+        if key == arcade.key.S:
+            a = shelve.open("tst_cls")
+            a["tst"] = self.pc
+            a.close()
+
+        if key == arcade.key.L:
+            a = shelve.open("tst_cls")
+            self.pc = a["tst"]
+            self.pc_sprite.re_setup(self.pc)
+            a.close()
+            
 
 
         if key == arcade.key.A:
