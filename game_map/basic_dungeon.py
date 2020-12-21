@@ -123,7 +123,7 @@ class BasicDungeon:
     def door_remove(self):
         for y in range(len(self.tiles[0])):
             for x in range(len(self.tiles)):
-                if self.tiles[x][y] == TILE.DOOR:
+                if self.tiles[x][y] == TILE.DOOR_W or self.tiles[x][y] == TILE.DOOR_H:
                     if self.tiles[x+1][y] == TILE.EMPTY and self.tiles[x-1][y] == TILE.EMPTY and self.tiles[x][y+1] == TILE.EMPTY or\
                        self.tiles[x+1][y] == TILE.EMPTY and self.tiles[x-1][y] == TILE.EMPTY and self.tiles[x][y-1] == TILE.EMPTY or\
                        self.tiles[x+1][y] == TILE.EMPTY and self.tiles[x][y+1] == TILE.EMPTY and self.tiles[x][y-1] == TILE.EMPTY or\
@@ -140,9 +140,9 @@ class BasicDungeon:
             if self.tiles[x][y] == TILE.WALL:
                 self.tiles[x][y] = TILE.EMPTY
             if door_check(self.tiles, x-1, y):
-                self.tiles[x-1][y] = TILE.DOOR
+                self.tiles[x-1][y] = TILE.DOOR_H
             if door_check(self.tiles, x+1, y):
-                self.tiles[x+1][y] = TILE.DOOR
+                self.tiles[x+1][y] = TILE.DOOR_H
 
             else:
                 self.tiles[x][y] = TILE.EMPTY
@@ -152,9 +152,9 @@ class BasicDungeon:
             if self.tiles[x][y] == TILE.WALL:
                 self.tiles[x][y] = TILE.EMPTY
             if door_check(self.tiles, x, y-1):
-                self.tiles[x][y-1] = TILE.DOOR
+                self.tiles[x][y-1] = TILE.DOOR_W
             if door_check(self.tiles, x, y+1):
-                self.tiles[x][y+1] = TILE.DOOR
+                self.tiles[x][y+1] = TILE.DOOR_W
 
             else:
                 self.tiles[x][y] = TILE.EMPTY

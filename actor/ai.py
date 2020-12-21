@@ -6,6 +6,7 @@ from constants import *
 from util import stop_watch
 
 
+
 class Wait:
     def __init__(self):
         self.owner = None

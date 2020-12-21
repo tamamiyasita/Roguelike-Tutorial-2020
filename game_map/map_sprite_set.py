@@ -7,7 +7,7 @@ from util import grid_to_pixel, pixel_to_grid
 from actor.actor import Actor
 from actor.map_obj.wall import Wall
 from actor.map_obj.floor import Floor
-from actor.map_obj.door import Door
+from actor.map_obj.door import DoorH,DoorW
 from actor.characters.npc import Citizen, Villager, villager
 
 from actor.entities_factory import get_random_monster_by_challenge, get_random_items_by_challenge
@@ -22,7 +22,7 @@ class ActorPlacement:
         self.game_engine = game_engine
         self.width = len(self.tiles)
         self.height = len(self.tiles[0])
-        self.my_map = arcade.read_tmx("demo\m_test.tmx")
+        self.my_map = arcade.read_tmx(r"demo\town2.tmx")
 
     def floor_set(self):
         floor_sprites = arcade.SpriteList(
@@ -58,12 +58,12 @@ class ActorPlacement:
             use_spatial_hash=True, spatial_hash_cell_size=32)
 
         floors = arcade.process_layer(
-            self.my_map, "floor", scaling=4, use_spatial_hash=True, hit_box_algorithm="None")
+            self.my_map, "floor", scaling=2, use_spatial_hash=True, hit_box_algorithm="None")
 
         for f in floors:
             x, y = pixel_to_grid(f.center_x, f.center_y)
             floor = Floor(x=x, y=y)
-            floor.scale = 4
+            floor.scale = 2
             floor.texture = f.texture
             tiled_floor_sprite.append(floor)
 
@@ -74,12 +74,12 @@ class ActorPlacement:
             use_spatial_hash=True, spatial_hash_cell_size=32)
 
         walls = arcade.process_layer(
-            self.my_map, "wall", scaling=4, use_spatial_hash=True, hit_box_algorithm="None")
+            self.my_map, "wall", scaling=2, use_spatial_hash=True, hit_box_algorithm="None")
 
         for w in walls:
             x, y = pixel_to_grid(w.center_x, w.center_y)
             wall = Wall(x=x, y=y)
-            wall.scale = 4
+            wall.scale = 2
             wall.texture = w.texture
             wall.blocks = True
             tiled_wall_sprite.append(wall)
@@ -91,16 +91,16 @@ class ActorPlacement:
             use_spatial_hash=True, spatial_hash_cell_size=32)
 
         door = arcade.process_layer(
-            self.my_map, "door", scaling=4, use_spatial_hash=True, hit_box_algorithm="None")
+            self.my_map, "door", scaling=2, use_spatial_hash=True, hit_box_algorithm="None")
         up_stairs = arcade.process_layer(
-            self.my_map, "up_stairs", scaling=4, use_spatial_hash=True, hit_box_algorithm="None")
+            self.my_map, "up_stairs", scaling=2, use_spatial_hash=True, hit_box_algorithm="None")
         down_stairs = arcade.process_layer(
-            self.my_map, "down_stairs", scaling=4, use_spatial_hash=True, hit_box_algorithm="None")
+            self.my_map, "down_stairs", scaling=2, use_spatial_hash=True, hit_box_algorithm="None")
 
         for m in door:
             x, y = pixel_to_grid(m.center_x, m.center_y)
-            obj = Door(x=x, y=y)
-            obj.scale = 4
+            obj = DoorH(x=x, y=y)
+            obj.scale = 2
             obj.texture = m.texture
             obj.blocks = True
             tiled_map_obj_sprite.append(obj)
@@ -128,17 +128,17 @@ class ActorPlacement:
             use_spatial_hash=True, spatial_hash_cell_size=32)
 
         villager_list = arcade.process_layer(
-            self.my_map, "villager", scaling=4, use_spatial_hash=True, hit_box_algorithm="None")
+            self.my_map, "villager", scaling=2, use_spatial_hash=True, hit_box_algorithm="None")
         for v in villager_list:
             x, y = pixel_to_grid(v.center_x, v.center_y)
             villager = Villager(x=x, y=y)
             tiled_npc_sprite.append(villager)
 
         citizen_list = arcade.process_layer(
-            self.my_map, "citizen", scaling=4, use_spatial_hash=True, hit_box_algorithm="None")
+            self.my_map, "citizen", scaling=2, use_spatial_hash=True, hit_box_algorithm="None")
         for c in citizen_list:
             x, y = pixel_to_grid(c.center_x, c.center_y)
-            citizen = Citizen(x=x, y=y)
+            citizen = Citizen(x=x, y=y, state=state.REQUEST)
             tiled_npc_sprite.append(citizen)
 
         return tiled_npc_sprite
@@ -180,10 +180,15 @@ class ActorPlacement:
         for x in range(self.width):
             for y in range(self.height):
 
-                if self.tiles[x][y] == TILE.DOOR:
+                if self.tiles[x][y] == TILE.DOOR_H:
 
-                    door = Door(x=x, y=y)
-                    map_obj_sprites.append(door)
+                    door_h = DoorH(x=x, y=y)
+                    map_obj_sprites.append(door_h)
+
+                if self.tiles[x][y] == TILE.DOOR_W:
+
+                    door_w = DoorW(x=x, y=y)
+                    map_obj_sprites.append(door_w)
 
                 if self.tiles[x][y] == TILE.STAIRS_UP:
 

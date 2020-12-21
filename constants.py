@@ -91,7 +91,8 @@ COLORS = {
 class TILE:
     EMPTY = False
     WALL = True
-    DOOR = auto()
+    DOOR_H = auto()
+    DOOR_W = auto()
     STAIRS_DOWN = auto()
     STAIRS_UP = auto()
 
@@ -131,7 +132,6 @@ class state(Enum):
     AMOUNT = auto()
 
 
-class NPC_state(Enum):
     REQUEST = auto()
     WAITING = auto()
     REWARD = auto()

@@ -21,7 +21,7 @@ from actor.items.healing import Healing
 from actor.map_obj.wall import Wall
 from actor.map_obj.floor import Floor
 from actor.map_obj.stairs import Up_Stairs, Down_Stairs
-from actor.map_obj.door import Door
+from actor.map_obj.door import DoorW, DoorH
 
 
 
@@ -92,8 +92,10 @@ def restore_actor(actor_dict):
         actor = Up_Stairs()
     elif actor_name == "Down_Stairs":
         actor = Down_Stairs()
-    elif actor_name == "Door":
-        actor = Door()
+    elif actor_name == "DoorH":
+        actor = DoorH()
+    elif actor_name == "DoorW":
+        actor = DoorW()
     else:
         raise ValueError(f"Error, don't know how to restore {actor_name}.")
 

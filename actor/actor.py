@@ -1,3 +1,4 @@
+from os import stat
 from random import random, randint, uniform
 from arcade import particle
 from arcade.text import draw_text
@@ -97,7 +98,7 @@ class Actor(arcade.Sprite):
         result["left_face"] = self.left_face
 
         if self.state:
-            result["state"] = True
+            result["state"] = str(self.state.name)
 
         if self.ai.__class__.__name__ == "ConfusedMonster":
             result["confused_ai"] = self.ai.get_dict()
@@ -141,7 +142,7 @@ class Actor(arcade.Sprite):
         self.left_face = result["left_face"]
 
         if "state" in result:
-            self.state = state.TURN_END
+            self.state = state[result["state"]]
         if "ai" in result:
             self.ai = eval(result["ai"])()
             self.ai.owner = self

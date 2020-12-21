@@ -73,10 +73,16 @@ citizen_left_1 = arcade.load_texture(
     humanoid_tiles_1, x=size*3, y=size*4, width=size, height=size)
 citizen = [citizen_right_0,citizen_left_0, citizen_right_1, citizen_left_1]
 
-g1 = arcade.load_texture_pair(r"image\gb.png")
-g2 = arcade.load_texture_pair(r"image\gb3.png")
+
+
+g1 = arcade.load_texture_pair(r"image\gb1.png")
+g2 = arcade.load_texture_pair(r"image\gb2.png")
 gb = [*g1,*g2]
 
+
+ssr1 = arcade.load_texture_pair(r"image\ssr1.png")
+ssr2 = arcade.load_texture_pair(r"image\ssr2.png")
+ssr = [*ssr1, *ssr2]
 
 # short weaponテクスチャ生成
 short_weapon_tiles = (r"image/ShortWep.png")
@@ -159,10 +165,15 @@ walls_3_tiles = get_tile_set(walls_3, tile_size=16)
 wall_3 = [walls_3_tiles[w]
           for w in [6, 6, 11, 11, 10, 10, 1, 12, 4, 5, 2, 5, 0, 5, 1, 8]]
 
-door_img = (r"image/Door0.png")
-door_tile = get_tile_set(door_img, tile_size=16)
-door_len = len(door_tile)
-doors = [door_tile[v] for v in range(door_len)]
+# door_img = (r"image/Door0.png")
+# door_tile = get_tile_set(door_img, tile_size=16)
+# door_len = len(door_tile)
+door1 = arcade.load_texture(r"image\wood_door1.png")
+door2 = arcade.load_texture(r"image\wood_door2.png")
+doors_h = [door1,door2]
+door3 = arcade.load_texture(r"image\door3.png")
+door4 = arcade.load_texture(r"image\door4.png")
+doors_w = [door3,door4]
 
 
 # actorに渡す画像はリスト型にすること
@@ -176,7 +187,7 @@ IMAGE_ID = {"Rou": player,
 
             "orc": orc,
             "troll": troll,
-            "villager":villager,
+            "villager":ssr,
             # "citizen":citizen,
             "citizen":gb,
 
@@ -216,6 +227,7 @@ IMAGE_ID = {"Rou": player,
             "wall_3": wall_3,
             "up_stairs": [up_stairs],
             "down_stairs": [down_stairs],
-            "door": doors
+            "door_h": doors_h,
+            "door_w": doors_h
 
             }

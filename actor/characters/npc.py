@@ -12,7 +12,6 @@ class Villager(Actor):
         fighter_component = Fighter()
 
         super().__init__(
-            scale=2.5,
             name="villager",
             x=x,
             y=y,
@@ -30,7 +29,7 @@ class Villager(Actor):
 
 
 class Citizen(Actor):
-    def __init__(self, x=0, y=0):
+    def __init__(self, x=0, y=0, state=None):
         ai_component = Wait()
         fighter_component = Fighter()
 
@@ -42,11 +41,11 @@ class Citizen(Actor):
             speed=45,
             ai=ai_component,
             fighter=fighter_component,
-            blocks=True
+            blocks=True,
+            state = state.REQUEST
         )
         self.tag = [Tag.npc, Tag.friendly, Tag.quest]
 
-        self.npc_state = NPC_state.REQUEST
 
         self.message = [
             {"message": "test CDEF"}, {"message": "false_test"}
