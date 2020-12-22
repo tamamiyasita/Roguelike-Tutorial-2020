@@ -25,13 +25,13 @@ class MessageWindow:
         self.panel_bottom=self.viewport_bottom+GRID_SIZE*3
         self.panel_top=self.viewport_top-GRID_SIZE*3
 
-        if self.actor.state == state.REQUEST:
+        if self.actor.npc_state == NPC_state.REQUEST:
             self.other_message = self.actor.message_event["request"]
             self.player_message = self.actor.message_event["reply"]
-        elif self.actor.state == state.WAITING:
+        elif self.actor.npc_state == NPC_state.WAITING:
             self.other_message = self.actor.message_event["waiting"]
             self.player_message = self.actor.message_event["accepted"]
-        elif self.actor.state == state.REWARD:
+        elif self.actor.npc_state == NPC_state.REWARD:
             self.other_message = self.actor.message_event["reward"]
             self.player_message = self.actor.message_event["ok"]
 
@@ -104,10 +104,10 @@ class MessageWindow:
                 self.choice = len(self.player_message)-1
         # choice変数に"select"が入ると"self.choice"変数の値を読んで反応を返す
         elif choice == "select":
-            if self.actor.state == state.WAITING:
+            if self.actor.npc_state == NPC_state.WAITING:
                 self.engine.game_state = GAME_STATE.NORMAL
             if self.choice == 0:
-                self.actor.state = state.WAITING
+                self.actor.npc_state = NPC_state.WAITING
             elif self.choice != 0:
                 self.engine.game_state = GAME_STATE.NORMAL
         

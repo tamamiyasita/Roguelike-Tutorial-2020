@@ -12,9 +12,8 @@ class Wait:
         self.owner = None
         self.visible_check = None
 
-    def take_turn(self, engine):
+    def take_turn(self, engine=None):
         results = []
-        # self.owner.move((0, 0), engine=engine)
         message = choice(self.owner.message)
         results.append(message)
         results.extend([{"turn_end": self.owner}])
@@ -27,7 +26,7 @@ class RandomMove:
         self.owner = None
         self.visible_check = None
 
-    def take_turn(self, engine):
+    def take_turn(self, engine=None):
         results = []
         self.owner.move((randint(-1, 1), randint(-1, 1)), engine=engine)
         message = choice(self.owner.message)

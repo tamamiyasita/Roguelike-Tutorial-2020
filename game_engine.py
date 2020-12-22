@@ -15,6 +15,7 @@ from actor.inventory import Inventory
 from actor.item_point_check import ItemPoint
 from actor.characters.PC import Player
 from actor.characters.orcs import Orc
+from actor.characters.npc import Citizen
 from actor._actor import Actor
 
 from actor.map_obj.stairs import Up_Stairs, Down_Stairs
@@ -94,7 +95,7 @@ class GameEngine:
 
         arcade.set_background_color(COLORS["black"])
         self.flower_sprites = arcade.SpriteList(use_spatial_hash=True, spatial_hash_cell_size=32)
-        self.cur_level = self.setup_level(level_number=0)
+        self.cur_level = self.setup_level(level_number=99)
         self.stories[self.cur_floor_name] = self.cur_level
         self.turn_loop = TurnLoop(self.player)
         self.item_point = ItemPoint(self)
@@ -130,6 +131,9 @@ class GameEngine:
 
         self.orc = Orc(x=10,y=12)
         self.game_level.actor_sprites.append(self.orc)
+
+        self.npc = Citizen(x=14,y=14)
+        self.game_level.actor_sprites.append(self.npc)
 
         self.game_level.floor_level = level
         self.game_level.map_name = f"test_dungeon"

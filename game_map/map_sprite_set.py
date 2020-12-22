@@ -138,7 +138,7 @@ class ActorPlacement:
             self.my_map, "citizen", scaling=2, use_spatial_hash=True, hit_box_algorithm="None")
         for c in citizen_list:
             x, y = pixel_to_grid(c.center_x, c.center_y)
-            citizen = Citizen(x=x, y=y, state=state.REQUEST)
+            citizen = Citizen(x=x, y=y)
             tiled_npc_sprite.append(citizen)
 
         return tiled_npc_sprite

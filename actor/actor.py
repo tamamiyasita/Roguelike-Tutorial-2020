@@ -25,7 +25,7 @@ class Actor(arcade.Sprite):
                  inventory=None, equipment=None,
                  visible_color=COLORS["white"], not_visible_color=COLORS["black"],
                  tag={Tag.free},
-                 state=state.TURN_END, left_face=False
+                 states=None, npc_state=None, left_face=False
                  ):
         super().__init__(scale=scale)
         self.engine = engine
@@ -44,8 +44,8 @@ class Actor(arcade.Sprite):
         self.visible_color = visible_color
         self.not_visible_color = not_visible_color
         self.is_visible = False
-        self.state = state
-        # self.explanatory_text = explanatory_text # Lコマンド等の説明文に使用する
+        self.state = states
+        self.npc_state = npc_state
         self.tag = tag
         self.left_face = left_face
         self._master = None # 自身がitemだった場合その所持者を表す、主に装備時Spriteの表示位置に使用する
@@ -57,7 +57,6 @@ class Actor(arcade.Sprite):
         if self.inventory:
             self.inventory.owner = self
 
-        self.state = None
 
         self.speed = speed
         self.wait = speed//2
@@ -65,7 +64,7 @@ class Actor(arcade.Sprite):
         self.ai = ai
         if self.ai:
             self.ai.owner = self
-            self.state = state
+            self.state = state.TURN_END
 
         self.equipment = equipment
         if self.equipment:
@@ -98,7 +97,9 @@ class Actor(arcade.Sprite):
         result["left_face"] = self.left_face
 
         if self.state:
-            result["state"] = str(self.state.name)
+            result["state"] = self.state.name
+        if self.npc_state:
+            result["npc_state"] = self.npc_state.name
 
         if self.ai.__class__.__name__ == "ConfusedMonster":
             result["confused_ai"] = self.ai.get_dict()
@@ -143,6 +144,9 @@ class Actor(arcade.Sprite):
 
         if "state" in result:
             self.state = state[result["state"]]
+        if "npc_state" in result:
+            self.npc_state = state[result["npc_state"]]
+
         if "ai" in result:
             self.ai = eval(result["ai"])()
             self.ai.owner = self

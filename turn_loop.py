@@ -52,7 +52,7 @@ class TurnLoop:
 
             for sprite in self.sprites:
                 # playerもしくは他のactorの時はvisibleの場合のみwaitを減らす
-                if sprite == self.player or sprite.is_visible or sprite.ai and hasattr(sprite.ai, "visible_check"):
+                if sprite == self.player or sprite.is_visible or sprite.ai and sprite.ai.visible_check:
 
                     if sprite.wait > 0:
                         sprite.wait -= 1

@@ -29,7 +29,7 @@ class Villager(Actor):
 
 
 class Citizen(Actor):
-    def __init__(self, x=0, y=0, state=None):
+    def __init__(self, x=0, y=0):
         ai_component = Wait()
         fighter_component = Fighter()
 
@@ -42,7 +42,7 @@ class Citizen(Actor):
             ai=ai_component,
             fighter=fighter_component,
             blocks=True,
-            state = state.REQUEST
+            npc_state=NPC_state.REQUEST
         )
         self.tag = [Tag.npc, Tag.friendly, Tag.quest]
 
