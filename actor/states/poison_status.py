@@ -1,49 +1,82 @@
-from data import IMAGE_ID
-import arcade
 from actor.actor import Actor
+from actor.damage_pop import Damagepop
 from constants import *
 from data import *
+import random
+from util import dice, result_add
+
+class PoisonEffect(Actor):
+    def __init__(self, owner, engine):
+        super().__init__(
+            x=owner.x,
+            y=owner.y,
+            name="poison",
+            color=COLORS["white"]
+        )
+        self.owner = owner
+        self.tmp_color = self.owner.color
+        self.engine = engine
+        self.alpha = 150
+        self.particle_time = 30
+        self.emitter = arcade.Emitter(
+            center_xy=(self.center_x, self.center_y),
+            emit_controller=arcade.EmitBurst(20),
+            particle_factory=lambda emitter: arcade.LifetimeParticle(
+                filename_or_texture=IMAGE_ID["poison"][0],
+                change_xy=arcade.rand_in_circle((0.0, 0.0), 1.0),
+                lifetime=0.7,
+                scale=random.random()*2.8,
+                alpha=random.uniform(42, 138)
+            )
+        )
+        self.alpha = 0
+        self.engine.cur_level.effect_sprites.append(self)
+
+    def update(self):
+        self.owner.color = (60,255,60)
+        self.x = self.owner.x
+        self.y = self.owner.y
+        self.emitter.center_x = self.owner.center_x
+        self.emitter.center_y = self.owner.center_y
+
+        self.particle_time -= 1
+        self.emitter.update()
+        if self.particle_time < 0:
+            self.engine.cur_level.effect_sprites.remove(self)
+            self.owner.color = self.tmp_color
+
 
 class PoisonStatus(Actor):
-    def __init__(self, owner=None, power=None, effect_time=None, sprites=None):
-        super(). __init__()
-        self.owner = owner
-        self.power = power
-        self.effect_time = effect_time
-        self.sprites = sprites
-
-    def update_animation(self, delta_time: float = 1/60):
-        self.owner.angle += 1
-
-    def apply(self):
-        self.texture = self.owner.texture
-        self.sprites.append(self)
-        
-        if 0 < self.effect_time:
-            result = self.owner.fighter.change_hp(-self.power)
-            
-            self.owner.color = arcade.color.GREEN
-
-            return [{"apply":self.owner}, {"message":f"You took {self.power} damage from poison"}, *result]
-
-    def call_off(self):
-        self.owner.angle = 0
-        self.sprites.remove(self)
-        self.owner.color = arcade.color.WHITE
-        return [{"message":f"The poison has disappeared from your body"}]
-
-    def get_dict(self):
-        result = {}
-
-        result["owner"] = self.owner
-        result["power"] = self.power
-        result["effect_time"] = self.effect_time
-
-        return result
-
-    def restore_from_dict(self, result):
-        self.owner = result["owner"]
-        self.power = result["power"]
-        self.effect_time = result["effect_time"]
+    def __init__(self, count=None, power=None):
+        super().__init__(
+            name="poison",
+            scale=4.5,
+            count_time=count,
+            power=power
 
 
+        )
+        self.owner = None
+
+
+        self.level = 0
+
+
+        self.tag = [Tag.item, Tag.used, Tag.active, Tag.skill]
+
+        self.explanatory_text = f""
+        self.icon = IMAGE_ID["poison"]
+
+
+
+
+    def apply(self, engine):
+        self.engine = engine
+
+        if self.owner and self.count_time >= 0:
+
+            result = self.owner.fighter.change_hp(self.power)
+            self.poison = PoisonEffect(
+                self.owner,  self.engine)
+
+            return [{"message": f"{self.owner.name} took {self.power} damage from poison"}, *result]

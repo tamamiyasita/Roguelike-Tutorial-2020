@@ -25,7 +25,8 @@ class Actor(arcade.Sprite):
                  inventory=None, equipment=None,
                  visible_color=COLORS["white"], not_visible_color=COLORS["black"],
                  tag={Tag.free},
-                 states=None, npc_state=None, left_face=False
+                 states=None, npc_state=None, left_face=False,
+                 count_time=None, power=None
                  ):
         super().__init__(scale=scale)
         if name:
@@ -51,6 +52,8 @@ class Actor(arcade.Sprite):
         self.d_time = 100 # 待機モーション時のdelay時間
         self.is_dead = None
         self.skill_add = {} # skillLevelの追加に使う
+        self.count_time = count_time
+        self.power = power
 
         self.inventory = inventory
         if self.inventory:
@@ -94,6 +97,8 @@ class Actor(arcade.Sprite):
         result["is_visible"] = self.is_visible
         result["is_dead"] = self.is_dead
         result["left_face"] = self.left_face
+        result["count_time"] = self.count_time
+        result["power"] = self.power
 
         if self.state:
             result["state"] = self.state.name
@@ -140,6 +145,8 @@ class Actor(arcade.Sprite):
         self.is_visible = result["is_visible"]
         self.is_dead = result["is_dead"]
         self.left_face = result["left_face"]
+        self.count_time = result["count_time"]
+        self.power = result["power"]
 
         if "state" in result:
             self.state = state[result["state"]]
@@ -448,7 +455,7 @@ class Actor(arcade.Sprite):
         self._master = owner
         self.center_x = owner.center_x
         self.center_y = owner.center_y
-        self.color = arcade.color.WHITE
+        self.color = COLORS["white"]
 
     @master.deleter
     def master(self):

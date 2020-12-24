@@ -20,26 +20,27 @@ class TurnLoop:
         self.player = player
         self.turn = Turn.ON
 
-    def elapsed_time(self, actor, queue):
+    def elapsed_time(self, actor, queue, engine):
         """スキルクールダウンとステータス効果時間のカウントダウンを行う"""
         
         if hasattr(actor, "fighter"):
             if actor.fighter.active_skill:
                 for skill in actor.fighter.active_skill:
-                    if 0 < skill.cur_cooldown_time:
-                        skill.cur_cooldown_time -= 1     
+                    if 0 < skill.count_time:
+                        skill.count_time -= 1     
         
             if actor.fighter.states:
                 for states in actor.fighter.states:
-                    if 0 < states.effect_time:
-                        queue.extend(states.apply())
+                    if 0 < states.count_time:
+                        states.count_time -= 1     
+                        queue.extend(states.apply(engine))
 
-                    print(states.effect_time, states)
+                    print(states.count_time, states)
                     
-                    states.effect_time -= 1   
-                    if 0 >= states.effect_time:
-                        states.call_off()
-                        actor.fighter.states.remove(states)
+                    # states.count_time -= 1   
+                    # if 0 > states.count_time:
+                    #     states.call_off()
+                    #     actor.fighter.states.remove(states)
 
 
 
@@ -89,7 +90,7 @@ class TurnLoop:
             # log.debug(
             #     f"{self.actor.name=}, {self.actor.wait=}, {self.actor.state=}, {self.actor.is_dead=}")
             if self.actor.state is state.TURN_END or self.actor.state is None or self.actor.is_dead:
-                self.elapsed_time(self.actor, queue)
+                self.elapsed_time(self.actor, queue, engine)
                 self.turn = Turn.ON
 
     

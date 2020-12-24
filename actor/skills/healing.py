@@ -6,7 +6,7 @@ import random
 from util import dice, result_add
 
 class HealingEffect(Actor):
-    def __init__(self, x, y, hp_return, engine):
+    def __init__(self, x, y, engine):
         super().__init__(
             x=x,
             y=y,
@@ -30,7 +30,6 @@ class HealingEffect(Actor):
         )
         self.alpha = 0
         self.engine.cur_level.effect_sprites.append(self)
-        # Damagepop(engine, hp_return, arcade.color.GREEN_YELLOW, engine.player)
 
     def update(self):
         self.x = self.engine.player.x
@@ -48,27 +47,19 @@ class Healing(Actor):
     def __init__(self):
         super().__init__(
             name="healing",
-            scale=4.5
+            scale=4.5,
+            count_time=0
 
         )
 
         self.level = 0
 
         self.max_cooldown_time = 4
-        self.cur_cooldown_time = 0
 
         self.tag = [Tag.item, Tag.used, Tag.active, Tag.skill]
 
         self.explanatory_text = f"Recover a small amount of hp"
         self.icon = IMAGE_ID["healing_icon"]
-
-    def get_dict(self):
-        result = {}
-        result["cooldown"] = self.cur_cooldown_time
-        return result
-
-    def restore_from_dict(self, result):
-        self.cur_cooldown_time = result["cooldown"]
 
 
     @property
@@ -84,13 +75,13 @@ class Healing(Actor):
     def use(self, engine):
         self.engine = engine
 
-        if self.cur_cooldown_time <= 0:
-            self.cur_cooldown_time = self.max_cooldown_time+1
+        if self.count_time <= 0:
+            self.count_time = self.max_cooldown_time+1
 
             hp_return = dice(*self.hp_return)
 
             result = self.engine.player.fighter.change_hp(hp_return)
             Healing = HealingEffect(
-                self.engine.player.x, self.engine.player.y, hp_return, self.engine)
+                self.engine.player.x, self.engine.player.y, self.engine)
 
             return [{"message": f"You have recovered {hp_return} using {self.name}"}, *result]

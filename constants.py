@@ -74,8 +74,8 @@ class Tag(Enum):
 
 
 COLORS = {
-    "black": arcade.color.BLACK,
-    "white": arcade.color.WHITE,
+    "black": [0,0,0,255],
+    "white": [255,255,255,255],
     "dead": arcade.color.GRAY_BLUE,
     "dark_wall": arcade.color.PURPLE_TAUPE,
     "dark_ground": arcade.color.PURPLE_NAVY,

@@ -4,9 +4,8 @@ import arcade
 from constants import *
 from data import *
 from actor.skills.leaf_blade import LeafBlade
-from actor.items.branch_baton import BranchBaton
-from actor.items.healing import Healing
-from actor.items.tst_head import TestHead
+from actor.skills.branch_baton import BranchBaton
+from actor.skills.healing import Healing
 from enum import Enum, auto
 from collections import deque
 
@@ -17,6 +16,8 @@ class Select(Enum):
     open_skill = auto()
 
 leaf_blade = LeafBlade()
+branch_baton = BranchBaton()
+healing = Healing()
 
 class LevelupUI:
     def __init__(self, engine):
@@ -26,7 +27,7 @@ class LevelupUI:
         self.up_int = ""
         self.tmp_states = None
         self.ui_state = Select.delay
-        self.skill_queue = deque([(leaf_blade, BranchBaton()), Healing(), TestHead()])
+        self.skill_queue = deque([(leaf_blade, branch_baton), healing ])
         self.skill_result = []
         self.get_skill = None
         self.select_skill = True

@@ -29,7 +29,7 @@ class Fighter:
         self.current_xp = current_xp
         self.level = level
         self.ability_points = ability_points
-        self.states = []
+        self._states = []
 
         self._skill_list = []
 
@@ -55,8 +55,11 @@ class Fighter:
         result["current_xp"] = self.current_xp
         result["level"] = self.level
         result["ability_points"] = self.ability_points
-        result["passive_skill"] = [skill.__class__.__name__ for skill in self._skill_list if Tag.active not in skill.tag]
-        result["active_skill"] = [(skill.__class__.__name__, result.get_dict()) for skill, result in zip(self._skill_list, self._skill_list) if Tag.active in result.tag]
+        result["skill_list"] = [skill.__class__.__name__ for skill in self._skill_list]
+        # result["passive_skill"] = [skill.__class__.__name__ for skill in self._skill_list if Tag.active not in skill.tag]
+        # result["active_skill"] = [(skill.__class__.__name__, result.get_dict()) for skill, result in zip(self._skill_list, self._skill_list) if Tag.active in result.tag]
+
+        # クラスと内部値をタプルで保存する
         result["states"] = [(states.__class__.__name__, result.get_dict()) for states, result in zip(self.states, self.states)]
 
         return result
@@ -80,20 +83,22 @@ class Fighter:
         self.current_xp = result["current_xp"]
         self.level = result["level"]
         self.ability_points = result["ability_points"]
-        self._skill_list = [eval(skill)() for skill in result["passive_skill"]]
-        for i, c in result["active_skill"]:
-            if i:
-                print(i, c, "active_skill")
-                ps = eval(i)()
-                ps.restore_from_dict(c)
-                self._skill_list.append(ps)
+        self._skill_list = [eval(skill)() for skill in result["skill_list"]]
+        # self._skill_list = [eval(skill)() for skill in result["passive_skill"]]
+        # for i, c in result["active_skill"]:
+        #     if i:
+        #         print(i, c, "active_skill")
+        #         ps = eval(i)()
+        #         ps.restore_from_dict(c)
+        #         self._skill_list.append(ps)
+
+        # クラスと内部値を結合する
         for s, r in result["states"]:
             if s:
                 print(s, r)
                 sd = eval(s)()
                 sd.restore_from_dict(r)
-                self.states.append(sd)
-        print(self.states)
+                self._states.append(sd)
 
     @property
     def skill_list(self):
@@ -106,6 +111,14 @@ class Fighter:
                     skill.level = 0
 
         return self._skill_list
+
+    @property
+    def states(self):
+        for states in self._states:
+            if states and not isinstance(states, str):
+                states.owner = self.owner
+
+        return self._states
     
     
     @property

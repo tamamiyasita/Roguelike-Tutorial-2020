@@ -523,6 +523,10 @@ class GameEngine:
                             new_action_queue.extend(results)
                             self.player.state = state.TURN_END
 
+            # if "apply" in action:
+            #     sprite = action["apply"]
+            #     self.cur_level.effect_sprites.append(sprite)
+
             if "equip_item" in action:
                 item_number = self.selected_item
                 if item_number is not None:

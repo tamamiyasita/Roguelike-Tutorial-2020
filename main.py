@@ -279,7 +279,9 @@ class MG(arcade.Window):
             self.engine.game_state = GAME_STATE.LEVEL_UP_WINDOW
 
         if key == arcade.key.F2:
-            self.engine.player.fighter.states.append(PoisonStatus(self.engine.player, 1, 3, self.engine.cur_level.effect_sprites))
+            # self.engine.player.fighter.states.append(PoisonStatus(1, 3))
+            # self.engine.player.fighter.states.append(PoisonStatus(self.engine.player, 1, 3, self.engine.cur_level.effect_sprites))
+            self.engine.player.fighter.states.append(PoisonStatus(3,-2))
 
 
     def on_key_release(self, key, modifiers):

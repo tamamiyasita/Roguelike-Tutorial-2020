@@ -202,7 +202,7 @@ class NormalUI:
                     texture=skill.texture
                 )
                 # アイコンに白幕をかけクールダウンタイム表示
-                if 0 < skill.cur_cooldown_time:
+                if 0 < skill.count_time:
                     arcade.draw_texture_rectangle(
                         center_x=skill_position+10,
                         center_y=skill_top_position-10,
@@ -212,7 +212,7 @@ class NormalUI:
                         alpha=200
                     )
                     arcade.draw_text(
-                        text=str(skill.cur_cooldown_time),
+                        text=str(skill.count_time),
                         start_x=skill_position + 10,
                         start_y=skill_top_position - 10,
                         color=arcade.color.DARK_BLUE,
