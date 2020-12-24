@@ -18,7 +18,7 @@ class Actor(arcade.Sprite):
     """ 全てのオブジェクトを作成する基礎となるクラス
     """
 
-    def __init__(self,engine=None, texture_number=0, name=None, x=0, y=0,
+    def __init__(self, texture_number=0, name=None, x=0, y=0,
                  blocks=False, block_sight=False,
                  scale=SPRITE_SCALE, color=COLORS["black"],
                  fighter=None, ai=None, speed=DEFAULT_SPEED,
@@ -28,7 +28,6 @@ class Actor(arcade.Sprite):
                  states=None, npc_state=None, left_face=False
                  ):
         super().__init__(scale=scale)
-        self.engine = engine
         if name:
             self.name = name
             self.texture_number = texture_number
@@ -145,7 +144,7 @@ class Actor(arcade.Sprite):
         if "state" in result:
             self.state = state[result["state"]]
         if "npc_state" in result:
-            self.npc_state = state[result["npc_state"]]
+            self.npc_state = NPC_state[result["npc_state"]]
 
         if "ai" in result:
             self.ai = eval(result["ai"])()

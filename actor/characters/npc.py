@@ -38,7 +38,7 @@ class Citizen(Actor):
             name="citizen",
             x=x,
             y=y,
-            speed=45,
+            speed=10,
             ai=ai_component,
             fighter=fighter_component,
             blocks=True,

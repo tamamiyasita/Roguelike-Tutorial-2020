@@ -217,7 +217,7 @@ class GameEngine:
 
         return self.game_level
 
-    def basic_dungeon_init(self, level, stairs=None):
+    def basic_dungeon_init(self, level=1, stairs=None):
         """基本のdungeonの生成"""
         self.game_map = BasicDungeon(
             self.map_width, self.map_height, level)
@@ -317,6 +317,7 @@ class GameEngine:
         result = {"player": player_dict,
                   "viewport": viewport,
                   "levels": levels_dict,
+                  "cur_level_name":f"{self.cur_level.map_name}{self.cur_level.floor_level}",
                   }
 
         ##############
@@ -370,9 +371,10 @@ class GameEngine:
 
             level.effect_sprites = arcade.SpriteList(
                 use_spatial_hash=True, spatial_hash_cell_size=16)
+            
 
-            # level.floor_level = level_dict["level"]
-            # level.map_name = level_dict["map_name"]
+            level.floor_level = level_dict["level"]
+            level.map_name = level_dict["map_name"]
 
             level.chara_sprites.append(self.player)
 
@@ -380,24 +382,24 @@ class GameEngine:
                 actor = restore_actor(actor_dict)
                 level.actor_sprites.append(actor)
 
-            # if map_name == "town0":
-            #     floors = ActorPlacement(self.town_map, self).tiled_floor_set()
-            #     for f in floors:
-            #         level.floor_sprites.append(f)
+            if map_name == "town0":
+                floors = ActorPlacement(self.town_map, self).tiled_floor_set()
+                for f in floors:
+                    level.floor_sprites.append(f)
 
-            # else:
-            for floor_dict in level_dict["floor"]:
-                floors = restore_actor(floor_dict)
-                level.floor_sprites.append(floors)
+            else:
+                for floor_dict in level_dict["floor"]:
+                    floors = restore_actor(floor_dict)
+                    level.floor_sprites.append(floors)
 
-            # if map_name == "town0":
-            #     walls = ActorPlacement(self.town_map, self).tiled_wall_set()
-            #     for w in walls:
-            #         level.wall_sprites.append(w)
-            # else:
-            for wall_dict in level_dict["wall"]:
-                walls = restore_actor(wall_dict)
-                level.wall_sprites.append(walls)
+            if map_name == "town0":
+                walls = ActorPlacement(self.town_map, self).tiled_wall_set()
+                for w in walls:
+                    level.wall_sprites.append(w)
+            else:
+                for wall_dict in level_dict["wall"]:
+                    walls = restore_actor(wall_dict)
+                    level.wall_sprites.append(walls)
 
             for map_point_dict in level_dict["map_point"]:
                 map_points = restore_actor(map_point_dict)
@@ -423,12 +425,15 @@ class GameEngine:
             #     equip = restore_actor(equip_dict)
             #     level.equip_sprites.append(equip)
 
-            level.floor_level = level_dict["level"]
-            level.map_name = map_name
+            # level.floor_level = level_dict["level"]
+            # level.map_name = map_name
             
 
 
             self.stories[map_name] = level
+        print(self.stories)
+        self.flower_sprites = arcade.SpriteList(use_spatial_hash=True, spatial_hash_cell_size=32)
+        self.cur_level = self.stories[data["cur_level_name"]]
 
 
         # ビューポートを復元する

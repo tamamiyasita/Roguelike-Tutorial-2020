@@ -65,6 +65,7 @@ class ActorPlacement:
             floor = Floor(x=x, y=y)
             floor.scale = 2
             floor.texture = f.texture
+            floor.color = COLORS.get("dark_ground")
             tiled_floor_sprite.append(floor)
 
         return tiled_floor_sprite
@@ -82,6 +83,7 @@ class ActorPlacement:
             wall.scale = 2
             wall.texture = w.texture
             wall.blocks = True
+            wall.color = COLORS.get("dark_ground")
             tiled_wall_sprite.append(wall)
 
         return tiled_wall_sprite
