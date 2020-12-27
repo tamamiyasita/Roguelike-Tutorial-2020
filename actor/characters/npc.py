@@ -33,6 +33,8 @@ class Citizen(Actor):
     def __init__(self, x=0, y=0):
         ai_component = Wait()
         fighter_component = Fighter()
+        healing = Healing()
+        healing.level = 2
 
 
         super().__init__(
@@ -46,7 +48,7 @@ class Citizen(Actor):
             npc_state=NPC_state.REQUEST
         )
         self.tag = [Tag.npc, Tag.friendly, Tag.quest]
-        self.fighter.skill_list.append(Healing)
+        self.fighter.skill_list.append(healing)
 
 
         self.message = [

@@ -15,7 +15,7 @@ class SeedShot(Actor):
 
         self.owner = None
 
-        self.max_cooldown_time = 1
+        self.max_cooldown_time = 2
 
         self.damage = 3
         self.hit_rate = 75
@@ -27,12 +27,16 @@ class SeedShot(Actor):
 
         self.explanatory_text = f""
 
-        self.icon = "seed_shot_icon"
+        self.icon = IMAGE_ID["seed_shot_icon"]
 
     def use(self, engine):
-        fire = Fire(engine, self.owner, self)
-        result = fire.shot()
-        if result:
-            return result
+
+        if self.count_time <= 0:
+            self.count_time = self.max_cooldown_time
+
+            fire = Fire(engine, self.owner, self)
+            result = fire.shot()
+            if result:
+                return result
 
 

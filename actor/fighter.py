@@ -104,12 +104,13 @@ class Fighter:
     def skill_list(self):
         """skill listをループして花の追加skill levelをskill levelに加える"""
         for skill in self._skill_list:  # [LeafBlade()]が入る
-            if skill and not isinstance(skill, str):
+            skill.owner = self.owner
+            if skill and not isinstance(skill, str) and self.owner.equipment is not None:
                 skill.level = 0
                 skill.level = self.owner.equipment.skill_level_sum.get(skill.name)
-                skill.owner = self.owner
                 if skill.level is None:
                     skill.level = 0
+           
 
         return self._skill_list
 

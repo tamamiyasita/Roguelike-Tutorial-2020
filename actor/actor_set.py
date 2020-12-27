@@ -4,6 +4,8 @@ from actor.items.ebony import Ebony
 from actor.skills.branch_baton import BranchBaton
 from actor.items.paeonia import Paeonia
 from actor.skills.healing import Healing
+from actor.skills.seed_shot import SeedShot
+
 from actor.states.poison_status import PoisonStatus
 
 Cirsium()
@@ -12,5 +14,6 @@ Paeonia()
 LeafBlade()
 BranchBaton()
 Healing()
+SeedShot()
 
 PoisonStatus()

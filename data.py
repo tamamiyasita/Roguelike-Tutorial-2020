@@ -110,8 +110,10 @@ branch_baton = arcade.load_texture_pair(r"image\BranchBaton.png")
 branch_baton_icon = arcade.load_texture(r"image\branch_baton_icon.png")
 healing = arcade.load_texture(r"image\healing.png")
 Paeonia = arcade.load_texture(r"image\paeonia.png")
+sunflower = arcade.load_texture(r"image\sunflower.png")
 
 seed_shot = arcade.load_texture(r"image/seed_shot.png")
+seed_shot_icon = arcade.load_texture(r"image/seed_shot_icon.png")
 
 poison = arcade.load_texture(r"image\poison.png")
 
@@ -207,10 +209,11 @@ IMAGE_ID = {"Rou": player,
             "branch_baton": branch_baton,
             "branch_baton_icon": branch_baton_icon,
             "paeonia":Paeonia,
-            "healing":[healing],
+            "healing":healing,
+            "sunflower":sunflower,
             "seed_shot":seed_shot,
+            "seed_shot_icon":seed_shot_icon,
             "poison":[poison],
-            "healing_icon":healing,
             "cool_down":cool_down,
             "confusion_scroll": [scroll_tile[15]],
             "lightning_scroll": [scroll_tile[2]],

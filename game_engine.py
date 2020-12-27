@@ -34,6 +34,7 @@ from actor.items.small_shield import SmallShield
 from actor.items.paeonia import Paeonia
 from actor.items.cirsium import Cirsium
 from actor.items.ebony import Ebony
+from actor.items.sunflower import Sunflower
 
 
 
@@ -129,7 +130,7 @@ class GameEngine:
 
         self.player.x, self.player.y = 10, 10
 
-        self.orc = Orc(x=10,y=12)
+        self.orc = Orc(x=10,y=17)
         self.game_level.actor_sprites.append(self.orc)
 
         self.npc = Citizen(x=14,y=14)
@@ -164,6 +165,10 @@ class GameEngine:
 
         self.ebony = Ebony(self.player.x + 1, self.player.y-1)
         self.game_level.item_sprites.append(self.ebony)
+
+        self.sunflower = Sunflower(self.player.x, self.player.y-2)
+        self.game_level.item_sprites.append(self.sunflower)
+
 
         self.st = Up_Stairs(self.player.x + 1, self.player.y-1)
         self.st.scale = 2
@@ -508,8 +513,8 @@ class GameEngine:
             if "use_skill" in action:
                 select_skill = action["use_skill"]
                 user = action["user"]
-                if isinstance(select_skill, str):
-                    skill = user.active_skill
+                if select_skill and user:
+                    skill = user.fighter.active_skill
     
                     if select_skill is not None and len(skill) >= select_skill:
                         skill = skill[select_skill-1]
@@ -517,7 +522,7 @@ class GameEngine:
                             results = skill.use(self)
                             if results:
                                 new_action_queue.extend(results)
-                                new_action_queue.append({"turn_end":user})
+                                # new_action_queue.append({"turn_end":user})
 
 
 

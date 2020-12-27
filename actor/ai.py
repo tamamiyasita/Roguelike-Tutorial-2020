@@ -14,9 +14,11 @@ class Wait:
 
     def take_turn(self, engine=None):
         results = []
-        if len(self.owner.fighter.skill_list) >= 1:
-            use_skill = [{"use_skill": 1, "user":self.owner}] 
-            results.extend(use_skill)
+
+        dice = randint(1,6)
+        if len(self.owner.fighter.skill_list) >= 1 and dice < 2:
+            use_skill = {"use_skill": 1, "user":self.owner}
+            results.append(use_skill)
             return results
         message = choice(self.owner.message)
         results.append(message)

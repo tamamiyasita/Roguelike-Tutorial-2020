@@ -19,7 +19,7 @@ class TriggerPull(Actor):
         self.target = target
         self.effect_sprites = self.engine.cur_level.effect_sprites
 
-        self.shot_speed = 15
+        self.shot_speed = 25
 
         self.effect_sprites.append(self)
 
@@ -36,7 +36,7 @@ class TriggerPull(Actor):
     def update(self):
         super().update()
         if self.trigger:
-            self.angle += 20
+            # self.angle += 20
 
             if arcade.check_for_collision(self, self.target):
                 self.trigger = None

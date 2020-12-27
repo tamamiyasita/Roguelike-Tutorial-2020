@@ -93,6 +93,7 @@ class Equipment:
     def toggle_equip(self, equip_item):
         """装備アイテムの付け外しを行うメソッド
         """
+        flower_position = {0:(21, 1), 1:(22, 18), 2:(10, 27), 3:(-5, 25), 4:(-20, 23)}#花の位置を決める辞書
         results = []
 
         for item in self.item_slot:
@@ -111,6 +112,10 @@ class Equipment:
 
             self.item_slot.append(equip_item)
             equip_item.master = self.owner
+            pos = len(self.item_slot)
+            for i in range(pos):
+                self.item_slot[i].item_margin_x = flower_position[i][0]
+                self.item_slot[i].item_margin_y = flower_position[i][1]
 
             results.append({"message": f"equipped {equip_item.name}"})
 

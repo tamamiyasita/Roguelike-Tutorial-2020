@@ -61,15 +61,16 @@ class Healing(Actor):
         self.tag = [Tag.item, Tag.used, Tag.active, Tag.skill]
 
         self.explanatory_text = f"Recover a small amount of hp"
-        self.icon = IMAGE_ID["healing_icon"]
+        self.icon = IMAGE_ID["healing"]
 
 
     @property
     def hp_return(self):
+        if self.owner:
 
-        max_hp_return = 7 + int(self.owner.fighter.INT/2)
+            max_hp_return = 7 + int(self.owner.fighter.INT/2)
 
-        return self.level, max_hp_return
+            return self.level, max_hp_return
 
 
 
@@ -78,7 +79,7 @@ class Healing(Actor):
         self.engine = engine
 
         if self.count_time <= 0:
-            self.count_time = self.max_cooldown_time+1
+            self.count_time = self.max_cooldown_time
 
             hp_return = dice(*self.hp_return)
 
@@ -86,4 +87,4 @@ class Healing(Actor):
             Healing = HealingEffect(
                 self.owner, self.engine)
 
-            return [{"message": f"You have recovered {hp_return} using {self.name}"}, *result]
+            return [{"turn_end":self.owner, "message": f"{self.owner.name} have recovered {hp_return} using {self.name}"}, *result]
