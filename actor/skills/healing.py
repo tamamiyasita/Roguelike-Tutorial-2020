@@ -6,13 +6,14 @@ import random
 from util import dice, result_add
 
 class HealingEffect(Actor):
-    def __init__(self, x, y, engine):
+    def __init__(self, owner, engine):
         super().__init__(
-            x=x,
-            y=y,
+            x=owner.x,
+            y=owner.y,
             name="healing_potion_effect",
             color=COLORS["white"]
         )
+        self.owner = owner
         self.engine = engine
         self.alpha = 150
         self.particle_time = 100
@@ -32,10 +33,10 @@ class HealingEffect(Actor):
         self.engine.cur_level.effect_sprites.append(self)
 
     def update(self):
-        self.x = self.engine.player.x
-        self.y = self.engine.player.y
-        self.emitter.center_x = self.engine.player.center_x
-        self.emitter.center_y = self.engine.player.center_y
+        self.x = self.owner.x
+        self.y = self.owner.y
+        self.emitter.center_x = self.owner.center_x
+        self.emitter.center_y = self.owner.center_y
 
         self.particle_time -= 1
         self.emitter.update()
@@ -51,6 +52,7 @@ class Healing(Actor):
             count_time=0
 
         )
+        self.owner = None
 
         self.level = 0
 
@@ -65,9 +67,9 @@ class Healing(Actor):
     @property
     def hp_return(self):
 
-        max_hp = 7 + int(self.engine.player.fighter.INT/2)
+        max_hp_return = 7 + int(self.owner.fighter.INT/2)
 
-        return self.level, max_hp
+        return self.level, max_hp_return
 
 
 
@@ -80,8 +82,8 @@ class Healing(Actor):
 
             hp_return = dice(*self.hp_return)
 
-            result = self.engine.player.fighter.change_hp(hp_return)
+            result = self.owner.fighter.change_hp(hp_return)
             Healing = HealingEffect(
-                self.engine.player.x, self.engine.player.y, self.engine)
+                self.owner, self.engine)
 
             return [{"message": f"You have recovered {hp_return} using {self.name}"}, *result]

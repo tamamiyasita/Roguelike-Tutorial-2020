@@ -4,6 +4,7 @@ from data import *
 from constants import *
 from actor.ai import RandomMove, Wait
 from actor.fighter import Fighter
+from actor.skills.healing import Healing
 
 
 class Villager(Actor):
@@ -45,6 +46,7 @@ class Citizen(Actor):
             npc_state=NPC_state.REQUEST
         )
         self.tag = [Tag.npc, Tag.friendly, Tag.quest]
+        self.fighter.skill_list.append(Healing)
 
 
         self.message = [

@@ -7,9 +7,9 @@ from actor.actor import Actor
 
 
 class TriggerPull(Actor):
-    def __init__(self, shooter, target, engine):
+    def __init__(self, shooter, target, engine, amm):
         super().__init__(
-            name=shooter.equipment.item_slot["ranged_weapon"].name,
+            name=amm,
             color=COLORS["white"],
         )
         self.engine = engine
@@ -19,7 +19,7 @@ class TriggerPull(Actor):
         self.target = target
         self.effect_sprites = self.engine.cur_level.effect_sprites
 
-        self.amm_speed = 15
+        self.shot_speed = 15
 
         self.effect_sprites.append(self)
 
@@ -28,8 +28,8 @@ class TriggerPull(Actor):
         angle = math.atan2(y_diff, x_diff)
 
         self.angle = math.degrees(angle)
-        self.change_x = math.cos(angle) * self.amm_speed
-        self.change_y = math.sin(angle) * self.amm_speed
+        self.change_x = math.cos(angle) * self.shot_speed
+        self.change_y = math.sin(angle) * self.shot_speed
         print(f"amm angle:{self.angle:.2f}")
         self.trigger = True
 
@@ -45,22 +45,21 @@ class TriggerPull(Actor):
 
 
 class Fire:
-    def __init__(self, engine, shooter):
+    def __init__(self, engine, shooter, amm=None):
         self.engine = engine
         self.shooter = shooter
         self.x, self.y = self.shooter.x, self.shooter.y
         self.target = None
-        self.amm = None
+        self.amm = amm
         self.effect_sprites = engine.cur_level.effect_sprites
         self.actor_sprites = engine.cur_level.actor_sprites
         self.trigger = None
 
     def shot(self):
-        amm = self.shooter.equipment.equip_slot["ranged_weapon"]
         target_distance = None
         results = []
 
-        if not amm:
+        if not self.amm:
             results.append({"message": f"You don't have a shooting weapon"})
             return results
 
@@ -78,9 +77,9 @@ class Fire:
             results.append(
                 {"message": f"{self.shooter.name} shot {self.target.name}"})
             results.extend(self.shooter.fighter.attack(
-                target=self.target, ranged=True))
+                target=self.target, ranged=self.amm))
             TriggerPull(shooter=self.shooter, target=self.target,
-                        engine=self.engine)
+                        engine=self.engine, amm=self.amm.name)
             self.trigger = True
 
             return results

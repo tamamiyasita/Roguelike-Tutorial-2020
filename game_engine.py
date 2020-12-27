@@ -425,15 +425,13 @@ class GameEngine:
             #     equip = restore_actor(equip_dict)
             #     level.equip_sprites.append(equip)
 
-            # level.floor_level = level_dict["level"]
-            # level.map_name = map_name
-            
+    
 
 
             self.stories[map_name] = level
         print(self.stories)
         self.flower_sprites = arcade.SpriteList(use_spatial_hash=True, spatial_hash_cell_size=32)
-        self.cur_level = self.stories[data["cur_level_name"]]
+        self.cur_level = self.stories[data["cur_level_name"]]#dataに格納した現在階層を適応する 
 
 
         # ビューポートを復元する
@@ -499,18 +497,28 @@ class GameEngine:
                 else:
                     new_action_queue.extend([target["action"]])
                     self.move_switch = True
+
+            if "fire" in action:
+                shooter = action["fire"]
+                fire = Fire(self, shooter=shooter)
+                result = fire.shot()
+                if result:
+                    new_action_queue.extend(result)
     
             if "use_skill" in action:
                 select_skill = action["use_skill"]
-                skill = self.player.fighter.active_skill
- 
-                if select_skill is not None and len(skill) >= select_skill:
-                    skill = self.player.fighter.active_skill[select_skill-1]
-                    if skill and Tag.active in skill.tag:
-                        results = skill.use(self)
-                        if results:
-                            new_action_queue.extend(results)
-                            new_action_queue.append({"turn_end":self.player})
+                user = action["user"]
+                if isinstance(select_skill, str):
+                    skill = user.active_skill
+    
+                    if select_skill is not None and len(skill) >= select_skill:
+                        skill = skill[select_skill-1]
+                        if skill and Tag.active in skill.tag:
+                            results = skill.use(self)
+                            if results:
+                                new_action_queue.extend(results)
+                                new_action_queue.append({"turn_end":user})
+
 
 
             if "use_item" in action:
@@ -523,9 +531,6 @@ class GameEngine:
                             new_action_queue.extend(results)
                             self.player.state = state.TURN_END
 
-            # if "apply" in action:
-            #     sprite = action["apply"]
-            #     self.cur_level.effect_sprites.append(sprite)
 
             if "equip_item" in action:
                 item_number = self.selected_item
@@ -605,12 +610,6 @@ class GameEngine:
                 if result:
                     new_action_queue.extend(result)
 
-            if "fire" in action:
-                shooter = action["fire"]
-                fire = Fire(self, shooter=shooter)
-                result = fire.shot()
-                if result:
-                    new_action_queue.extend(result)
 
             if "damage_pop" in action:
                 target = action["damage_pop"]

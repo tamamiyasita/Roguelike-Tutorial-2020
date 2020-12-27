@@ -107,6 +107,7 @@ class Fighter:
             if skill and not isinstance(skill, str):
                 skill.level = 0
                 skill.level = self.owner.equipment.skill_level_sum.get(skill.name)
+                skill.owner = self.owner
                 if skill.level is None:
                     skill.level = 0
 
@@ -232,7 +233,7 @@ class Fighter:
     
 
     @property
-    def melee_attack_damage(self):
+    def weapon_damage(self):
 
         
         if self.weapon:
@@ -242,9 +243,9 @@ class Fighter:
             max_d = self.owner.fighter.unarmed_attack
             level = self.level
 
-        melee_attack_damage = dice(1 + level//3, max_d+(self.STR//3))
+        weapon_damage = dice(1 + level//3, max_d+(self.STR//3))
 
-        return melee_attack_damage
+        return weapon_damage
 
 
 
@@ -284,14 +285,22 @@ class Fighter:
         return results
 
     @stop_watch
-    def attack(self, target):
+    def attack(self, target, ranged=None):
         results = []
 
-        if random.randrange(1, 100) <= self.hit_chance(target):
-            self.damage = self.melee_attack_damage // target.fighter.defense
-            if random.randrange(1, (100-self.DEX)) < 5:
-                self.damage *= 2
-                results.append({"message": f"{self.owner.name.capitalize()} attack is critical HIT!"})
+        if ranged:
+            if random.randrange(1, 100) <= self.hit_chance(target):
+                self.damage = dice(1 + ranged.level//3, ranged.damage+(self.DEX//3)) // target.fighter.defense
+                if random.randrange(1, (100-self.DEX)) < 5:
+                    self.damage *= 2
+                    results.append({"message": f"{self.owner.name.capitalize()} attack is critical HIT!"})
+
+        else:
+            if random.randrange(1, 100) <= self.hit_chance(target):
+                self.damage = self.weapon_damage // target.fighter.defense
+                if random.randrange(1, (100-self.DEX)) < 5:
+                    self.damage *= 2
+                    results.append({"message": f"{self.owner.name.capitalize()} attack is critical HIT!"})
 
 
         if self.damage:

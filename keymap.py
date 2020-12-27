@@ -129,23 +129,23 @@ def keymap(key, engine):
         elif key in KEYMAP_PICKUP:
             engine.action_queue.extend([{"pickup": True}])
         elif key in KEYMAP_SELECT_ITEM_1:
-            engine.action_queue.extend([{"use_skill": 1}])
+            engine.action_queue.extend([{"use_skill": 1, "user":engine.player}])
         elif key in KEYMAP_SELECT_ITEM_2:
-            engine.action_queue.extend([{"use_skill": 2}])
+            engine.action_queue.extend([{"use_skill": 2, "user":engine.player}])
         elif key in KEYMAP_SELECT_ITEM_3:
-            engine.action_queue.extend([{"use_skill": 3}])
+            engine.action_queue.extend([{"use_skill": 3, "user":engine.player}])
         elif key in KEYMAP_SELECT_ITEM_4:
-            engine.action_queue.extend([{"use_skill": 4}])
+            engine.action_queue.extend([{"use_skill": 4, "user":engine.player}])
         elif key in KEYMAP_SELECT_ITEM_5:
-            engine.action_queue.extend([{"use_skill": 5}])
+            engine.action_queue.extend([{"use_skill": 5, "user":engine.player}])
         elif key in KEYMAP_SELECT_ITEM_6:
-            engine.action_queue.extend([{"use_skill": 6}])
+            engine.action_queue.extend([{"use_skill": 6, "user":engine.player}])
         elif key in KEYMAP_SELECT_ITEM_7:
-            engine.action_queue.extend([{"use_skill": 7}])
+            engine.action_queue.extend([{"use_skill": 7, "user":engine.player}])
         elif key in KEYMAP_SELECT_ITEM_8:
-            engine.action_queue.extend([{"use_skill": 8}])
+            engine.action_queue.extend([{"use_skill": 8, "user":engine.player}])
         elif key in KEYMAP_SELECT_ITEM_9:
-            engine.action_queue.extend([{"use_skill": 9}])
+            engine.action_queue.extend([{"use_skill": 9, "user":engine.player}])
 
         elif key in KEYMAP_USE_ITEM:
             engine.action_queue.extend([{"use_item": True}])

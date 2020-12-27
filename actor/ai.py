@@ -14,6 +14,10 @@ class Wait:
 
     def take_turn(self, engine=None):
         results = []
+        if len(self.owner.fighter.skill_list) >= 1:
+            use_skill = [{"use_skill": 1, "user":self.owner}] 
+            results.extend(use_skill)
+            return results
         message = choice(self.owner.message)
         results.append(message)
         results.extend([{"turn_end": self.owner}])
@@ -28,7 +32,10 @@ class RandomMove:
 
     def take_turn(self, engine=None):
         results = []
-        self.owner.move((randint(-1, 1), randint(-1, 1)), engine=engine)
+        dice = randint(1,6)
+        if dice <= 5: 
+            self.owner.move((randint(-1, 1), randint(-1, 1)), engine=engine)
+
         message = choice(self.owner.message)
         results.append(message)
 
