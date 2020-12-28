@@ -22,21 +22,26 @@ class TurnLoop:
 
     def elapsed_time(self, actor, queue, engine):
         """スキルクールダウンとステータス効果時間のカウントダウンを行う"""
-        
-        if hasattr(actor, "fighter"):
-            if actor.fighter.active_skill:
-                for skill in actor.fighter.active_skill:
-                    if 0 < skill.count_time:
-                        skill.count_time -= 1     
-        
-            if actor.fighter.states:
-                for states in actor.fighter.states:
-                    if 0 < states.count_time:
-                        states.count_time -= 1     
-                        queue.extend(states.apply(engine))
+        if actor.fighter.skill_list:
+            for skill in actor.fighter.skill_list:
+                if hasattr(skill, "cooldown_switch"):
+                    if not skill.cooldown_switch:
+                        skill.cooldown_switch = True
 
-                    print(states.count_time, states)
-                    
+                    elif skill.cooldown_switch:
+                        skill.count_time -= 1 
+                else:
+                    continue
+                
+
+        if actor.fighter.states:
+            for states in actor.fighter.states:
+                if 0 < states.count_time:
+                    states.count_time -= 1     
+                    queue.extend(states.apply(engine))
+
+                print(states.count_time, states)
+                
                     # states.count_time -= 1   
                     # if 0 > states.count_time:
                     #     states.call_off()
@@ -67,8 +72,8 @@ class TurnLoop:
                     self.turn = Turn.OFF
                     break
 
-        if self.turn == Turn.OFF:
 
+        if self.turn == Turn.OFF:
 
             if self.actor == self.player:
                 self.player.state = state.READY

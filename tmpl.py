@@ -5,42 +5,37 @@ SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
 SCREEN_TITLE = "Starting Template"
 
+blank = 40
+size = 20
+
+WIDTH  = 640  # 幅
+HEIGHT = 400  # 高さ
+SIZE   = 20   # 辺長
+BLANK  = 40   # 余白
+angle = 0
+
+
 class Aw(arcade.SpriteSolidColor):
-    def __init__(self, width: int, height: int, color):
+    def __init__(self, width=20, height=20, color=arcade.color.BLACK_BEAN):
         super().__init__(width, height, color)
-        self.center_x = 100
-        self.center_y = 100
-        self.target_x = 760
-        self.target_y = 560
-        self.t = 0
-        self.angle = 45
-        self.base_range = 5
-        self.max_angle = 50
-        self.ratio = 0.7
+        self.center_x = 0
+        self.center_y = 0
+        # self._angle = 0
 
-    def update(self):
-        super().update()
-        p2 = (self.target_x-self.center_x, self.target_y-self.center_x)
+    # def ang(self):
+    #     for x in range(0, SCREEN_WIDTH):
+    #         self.left = x
+    #         self.top = int(SCREEN_HEIGHT-math.sin(math.radians(self._angle))*(SCREEN_HEIGHT-blank))-size
 
-        dist = arcade.get_distance(self.center_x, self.center_y, self.target_x, self.target_y)
+    #         if self._angle >= 180-1:
+    #             self._angle = 0
+    #         else:
+    #             self._angle += 1
+   
+        
 
-        self.angle = self.angle * dist / self.base_range
-        if self.angle > self.max_angle:
-            self.angle = self.max_angle
-
-        p1x = p2[0] * self.ratio
-        p1y = math.sin(math.degrees(self.angle)) * abs(p1x) / math.cos(math.degrees(self.angle))
-        p1 = (p1x, p1y)
-        look = (p1x, p1y)
-
-
-        vx = 2 * (1 - self.t) * self.t *
-
-aw = Aw(10,10,(250,100,0))
-
-s_list = arcade.SpriteList()
-s_list.append(aw)
 class MyGame(arcade.Window):
+
     """
     Main application class.
 
@@ -54,13 +49,22 @@ class MyGame(arcade.Window):
 
         arcade.set_background_color(arcade.color.AMAZON)
 
+        self._angle = 0
+        self.p = 0
+        self.state = 0
+        self.x_point = 0
+        self.y_point = 0
         # If you have sprite lists, you should create them here,
         # and set them to None
 
     def setup(self):
         """ Set up the game variables. Call to re-start the game. """
         # Create your sprites and sprite lists here
-        pass
+        self.aw = Aw()
+
+        self.s_list = arcade.SpriteList()
+        self.s_list.append(self.aw)
+        # pass
 
     def on_draw(self):
         """
@@ -70,26 +74,53 @@ class MyGame(arcade.Window):
         # This command should happen before we start drawing. It will clear
         # the screen to the background color, and erase what we drew last frame.
         arcade.start_render()
-        s_list.draw()
+        self.s_list.draw()
+        # for x in range(0, SCREEN_WIDTH):
+            # self.aw.left =  x
+            # self.aw.top = int(SCREEN_HEIGHT-math.sin(math.radians(self._angle))*(SCREEN_HEIGHT-blank))-size
+            # self.s_list.draw()
+
+            # if self.aw._angle >= 180-1:
+            #     self.aw._angle = 0
+            # else:
+            #     self.aw._angle += 1
 
         # Call draw() on all your sprite lists below
 
     def on_update(self, delta_time):
-        """
-        All the logic to move, and the game logic goes here.
-        Normally, you'll call update() on the sprite lists that
-        need it.
-        """
-        pass
+        # self.s_list.update()
+        if self.state:
+            self.p += 1
+            # if self.x_point < self.p:
+            #     self.state = 0
+
+
+            # self.aw.top = self.p
+            self.aw.center_x = int(self.x_point-math.sin(math.radians(self._angle))*(self.x_point-BLANK))-SIZE
+            self.aw.center_y = int(self.y_point-math.sin(math.radians(self.y_point))*(self.y_point-BLANK))-SIZE
+
+            if self._angle >= 180-1:
+                self._angle = 0
+            else:
+                self._angle += 1
+
+
+
+        
+
 
     def on_key_press(self, key, key_modifiers):
-        """
-        Called whenever a key on the keyboard is pressed.
+        if key == arcade.key.ESCAPE:
+            arcade.close_window()
+        if key == arcade.key.A:
+            self.state = 1
+        else:
+            self.state = 0
+            # self.p = 0
+            # if self.p >= SCREEN_HEIGHT:
+            #     self.p = 0
+   
 
-        For a full list of keys, see:
-        http://arcade.academy/arcade.key.html
-        """
-        pass
 
     def on_key_release(self, key, key_modifiers):
         """
@@ -104,10 +135,17 @@ class MyGame(arcade.Window):
         pass
 
     def on_mouse_press(self, x, y, button, key_modifiers):
+        if button == arcade.MOUSE_BUTTON_LEFT:
+            self.x_point = x
+            self.y_point = y
+            self.state = 1
+        if button == arcade.MOUSE_BUTTON_RIGHT:
+            self.state = 0
         """
         Called when the user presses a mouse button.
         """
-        pass
+        # pass
+        
 
     def on_mouse_release(self, x, y, button, key_modifiers):
         """
@@ -118,7 +156,7 @@ class MyGame(arcade.Window):
 
 def main():
     """ Main method """
-    game = MyGame(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
+    game = MyGame(WIDTH, HEIGHT, SCREEN_TITLE)
     game.setup()
     arcade.run()
 

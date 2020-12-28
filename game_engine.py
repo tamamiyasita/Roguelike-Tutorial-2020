@@ -323,6 +323,7 @@ class GameEngine:
                   "viewport": viewport,
                   "levels": levels_dict,
                   "cur_level_name":f"{self.cur_level.map_name}{self.cur_level.floor_level}",
+                  'turn_loop_tmp_box':self.turn_loop.tmp_box
                   }
 
         ##############
@@ -442,6 +443,7 @@ class GameEngine:
         # ビューポートを復元する
         arcade.set_viewport(*data["viewport"])
 
+        
         ####################
         self.action_queue.append({"message": "*load*"})
         self.player.state = state.READY

@@ -10,7 +10,9 @@ class SeedShot(Actor):
             x=x,
             y=y,
             color=COLORS["white"],
-            count_time=0
+            count_time=0,
+            cooldown_switch=False
+
         )
 
         self.owner = None

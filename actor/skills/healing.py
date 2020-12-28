@@ -49,7 +49,8 @@ class Healing(Actor):
         super().__init__(
             name="healing",
             scale=4.5,
-            count_time=0
+            count_time=0,
+            cooldown_switch=False
 
         )
         self.owner = None

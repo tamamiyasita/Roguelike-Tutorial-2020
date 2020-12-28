@@ -26,7 +26,7 @@ class Actor(arcade.Sprite):
                  visible_color=COLORS["white"], not_visible_color=COLORS["black"],
                  tag={Tag.free},
                  states=None, npc_state=None, left_face=False,
-                 count_time=None, power=None
+                 count_time=None, cooldown_switch=None, power=None
                  ):
         super().__init__(scale=scale)
         if name:
@@ -53,6 +53,8 @@ class Actor(arcade.Sprite):
         self.is_dead = None
         self.skill_add = {} # skillLevelの追加に使う
         self.count_time = count_time
+        self.cooldown_switch = cooldown_switch
+        
         self.power = power
 
         self.inventory = inventory
@@ -98,6 +100,7 @@ class Actor(arcade.Sprite):
         result["is_dead"] = self.is_dead
         result["left_face"] = self.left_face
         result["count_time"] = self.count_time
+        result["cooldown_switch"] = self.cooldown_switch
         result["power"] = self.power
 
         if self.state:
@@ -146,6 +149,7 @@ class Actor(arcade.Sprite):
         self.is_dead = result["is_dead"]
         self.left_face = result["left_face"]
         self.count_time = result["count_time"]
+        self.cooldown_switch = result["cooldown_switch"]
         self.power = result["power"]
 
         if "state" in result:
