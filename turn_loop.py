@@ -29,7 +29,10 @@ class TurnLoop:
                         skill.cooldown_switch = True
 
                     elif skill.cooldown_switch:
-                        skill.count_time -= 1 
+                        skill.count_time -= 1
+
+                        if 0 >= skill.count_time:
+                            skill.cooldown_switch = False
                 else:
                     continue
                 
