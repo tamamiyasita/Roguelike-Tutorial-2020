@@ -6,7 +6,7 @@ import random
 from util import dice, result_add
 
 class PoisonEffect(Actor):
-    def __init__(self, owner, engine):
+    def __init__(self, owner, color, engine):
         super().__init__(
             x=owner.x,
             y=owner.y,
@@ -14,7 +14,7 @@ class PoisonEffect(Actor):
             color=COLORS["white"]
         )
         self.owner = owner
-        self.tmp_color = self.owner.color
+        self.color = self.color
         self.engine = engine
         self.alpha = 150
         self.particle_time = 30
@@ -41,9 +41,10 @@ class PoisonEffect(Actor):
 
         self.particle_time -= 1
         self.emitter.update()
-        if self.particle_time < 0:
+        if self.particle_time < 1:
+            self.owner.color = self.color
+            self.particle_time = 30
             self.engine.cur_level.effect_sprites.remove(self)
-            self.owner.color = self.tmp_color
 
 
 class PoisonStatus(Actor):
@@ -74,9 +75,10 @@ class PoisonStatus(Actor):
         self.engine = engine
 
         if self.owner and self.count_time >= 0:
+            color = self.owner.color
 
             result = self.owner.fighter.change_hp(self.power)
             self.poison = PoisonEffect(
-                self.owner,  self.engine)
+                self.owner, color,  self.engine)
 
             return [{"message": f"{self.owner.name} took {self.power} damage from poison"}, *result]
