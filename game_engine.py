@@ -472,6 +472,8 @@ class GameEngine:
             if "remove" in action:
                 target = action["remove"]
                 target.remove_from_sprite_lists()
+                # EXPのチェック
+                self.player.check_experience_level(self)
 
             if "turn_end" in action:
                 target = action["turn_end"]
@@ -524,7 +526,6 @@ class GameEngine:
                             results = skill.use(self)
                             if results:
                                 new_action_queue.extend(results)
-                                # new_action_queue.append({"turn_end":user})
 
 
 

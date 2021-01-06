@@ -206,9 +206,6 @@ class MG(arcade.Window):
             self.engine.check_for_player_movement(self.player_direction)
             self.engine.cur_level.map_obj_sprites.update_animation()
 
-            # EXPのチェック
-            if self.engine.player.state == state.READY:
-                self.engine.player.check_experience_level(self.engine)
 
             # ここでdamageのポップアップを行う TODO 適切かあとで考える
             if self.engine.damage_pop:

@@ -51,7 +51,6 @@ class Actor(arcade.Sprite):
         self._master = None # 自身がitemだった場合その所持者を表す、主に装備時Spriteの表示位置に使用する
         self.d_time = 100 # 待機モーション時のdelay時間
         self.is_dead = None
-        self.skill_add = {} # skillLevelの追加に使う
         self.count_time = count_time
         self.cooldown_switch = cooldown_switch
         
@@ -273,7 +272,6 @@ class Actor(arcade.Sprite):
                 self.change_x = self.dx * (MOVE_SPEED)
         @stop_watch
         def monster_move(target):
-            ai_move_speed = MOVE_SPEED*2
 
             if target and self.distance_to(target) <= 1.46:
                 # monsterの攻撃チェック
