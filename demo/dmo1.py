@@ -21,7 +21,7 @@ class MyGame(arcade.Window):
 
     def __init__(self, width, height, title):
         super().__init__(width, height, title)
-        self.dig = 70
+        self.dig = 60
 
         arcade.set_background_color(arcade.color.AMAZON)
         self.x, self.y = 100, 100
@@ -93,9 +93,9 @@ class MyGame(arcade.Window):
 
     def on_mouse_press(self, x, y, button, key_modifiers):
         print(x)
-        self.en.center_x = x -20
-        self.en.center_y = y -20
-        self.en.change_x = 1
+        self.en.center_x = 0
+        self.en.center_y = 0 
+        self.en.change_x = 5
         self.target_x = x
         self.target_y = y
 
