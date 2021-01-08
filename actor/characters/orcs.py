@@ -23,7 +23,7 @@ class Orc(Actor):
             x=x,
             y=y,
             fighter=fighter_component,
-            speed=8,
+            # speed=8,
             ai=ai_component,
             blocks=True
         )

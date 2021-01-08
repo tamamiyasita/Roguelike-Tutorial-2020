@@ -67,7 +67,7 @@ class Fire:
             if actor.is_visible and Tag.enemy in actor.tag:
                 x1, y1 = self.shooter.x, self.shooter.y
                 x2, y2 = actor.x, actor.y
-                distance = math.sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2)
+                distance = math.sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2 )
                 if self.target is None or distance < target_distance:
                     self.target = actor
                     target_distance = distance

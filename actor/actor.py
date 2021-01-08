@@ -49,7 +49,7 @@ class Actor(arcade.Sprite):
         self.tag = tag
         self.left_face = left_face
         self._master = None # 自身がitemだった場合その所持者を表す、主に装備時Spriteの表示位置に使用する
-        self.d_time = 100 # 待機モーション時のdelay時間
+        self.d_time = 170 # 待機モーション時のdelay時間
         self.is_dead = None
         self.skill_add = {} # skillLevelの追加に使う
         self.count_time = count_time
@@ -404,16 +404,16 @@ class Actor(arcade.Sprite):
         # NPC待機モーション
         if len(self.textures) >= 4 and self.ai:
             self.d_time -= 1
-            if 50 > self.d_time and self.left_face:
+            if 100 > self.d_time and self.left_face:
                 self.texture = self.textures[1]
-            if 50 < self.d_time and self.left_face:
+            if 100 < self.d_time and self.left_face:
                 self.texture = self.textures[3]
-            if 50 > self.d_time and not self.left_face:
+            if 100 > self.d_time and not self.left_face:
                 self.texture = self.textures[0]
-            if 50 < self.d_time and not self.left_face:
+            if 100 < self.d_time and not self.left_face:
                 self.texture = self.textures[2]
             if self.d_time < 0:
-                self.d_time = 100
+                self.d_time = 170
 
         # itemを装備した時のsprite表示
         if self.master and Tag.flower not in self.tag:

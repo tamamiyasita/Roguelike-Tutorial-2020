@@ -24,8 +24,8 @@ class TurnLoop:
         """スキルクールダウンとステータス効果時間のカウントダウンを行う"""
         if actor.fighter.skill_list:
             for skill in actor.fighter.skill_list:
-                if hasattr(skill, "cooldown_switch"):
-                    if not skill.cooldown_switch:
+                if hasattr(skill, "max_cooldown_time"):
+                    if skill.cooldown_switch == False:
                         skill.cooldown_switch = True
 
                     elif skill.cooldown_switch:
@@ -59,13 +59,6 @@ class TurnLoop:
         while self.turn == Turn.ON:
             self.sprites = {i for i in chain(engine.cur_level.chara_sprites, engine.cur_level.actor_sprites)}
 
-            for sprite in self.sprites:
-                # playerもしくは他のactorの時はvisibleの場合のみwaitを減らす
-                if sprite == self.player or sprite.is_visible or sprite.ai and sprite.ai.visible_check:
-
-                    if sprite.wait > 0:
-                        sprite.wait -= 1
-
             # waitが0になったactorに行動権を与えてループ終了
             for actor in self.sprites:
                 if actor.is_dead:
@@ -74,6 +67,13 @@ class TurnLoop:
                     self.actor = actor
                     self.turn = Turn.OFF
                     break
+            for sprite in self.sprites:
+                # playerもしくは他のactorの時はvisibleの場合のみwaitを減らす
+                if sprite == self.player or sprite.is_visible or sprite.ai and sprite.ai.visible_check:
+
+                    if sprite.wait > 0:
+                        sprite.wait -= 1
+
 
 
         if self.turn == Turn.OFF:
