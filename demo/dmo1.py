@@ -93,8 +93,8 @@ class MyGame(arcade.Window):
 
     def on_mouse_press(self, x, y, button, key_modifiers):
         print(x)
-        self.en.center_x = 0
-        self.en.center_y = 0 
+        self.en.center_x = 400
+        self.en.center_y = 400 
         self.en.change_x = 5
         self.target_x = x
         self.target_y = y

@@ -99,6 +99,8 @@ class MG(arcade.Window):
         self.engine.cur_level.chara_sprites.draw(filter=gl.GL_NEAREST)
         self.engine.cur_level.equip_sprites.draw(filter=gl.GL_NEAREST)
         self.engine.flower_sprites.draw(filter=gl.GL_NEAREST)
+        self.engine.tmp_effect_sprites.draw(filter=gl.GL_NEAREST)
+
         self.engine.cur_level.effect_sprites.draw(filter=gl.GL_NEAREST)
         for e in self.engine.cur_level.effect_sprites:
             if hasattr(e, "emitter"):
@@ -126,8 +128,8 @@ class MG(arcade.Window):
         self.color_attachment.use(0)
         self.quad_fs.render(self.program)
         # アタック時はビューポート固定する
-        if self.engine.player.state == state.ATTACK or self.engine.player.state == state.TURN_END and hasattr(self.engine.player, "target_x"):
-            viewport(self.engine.player.target_x, self.engine.player.target_y)
+        if self.engine.player.state == state.ATTACK or self.engine.player.state == state.TURN_END and hasattr(self.engine.player, "from_x"):
+            viewport(self.engine.player.from_x, self.engine.player.from_y)
         else:
             viewport(self.engine.player.center_x, self.engine.player.center_y)
 
@@ -198,9 +200,12 @@ class MG(arcade.Window):
             self.engine.cur_level.effect_sprites.update()
             self.engine.cur_level.effect_sprites.update_animation()
             self.engine.cur_level.equip_sprites.update()
-            self.engine.flower_sprites.update()
             self.engine.cur_level.equip_sprites.update_animation()
+            self.engine.flower_sprites.update()
             self.engine.flower_sprites.update_animation()
+            self.engine.tmp_effect_sprites.update()
+            self.engine.tmp_effect_sprites.update_animation()
+
 
             self.engine.turn_loop.loop_on(self.engine)
             self.engine.check_for_player_movement(self.player_direction)

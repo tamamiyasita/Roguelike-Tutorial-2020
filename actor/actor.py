@@ -9,7 +9,8 @@ import math
 from constants import *
 from data import *
 from util import pixel_to_grid, grid_to_pixel, get_blocking_entity, get_door, stop_watch
-from particle import AttackParticle, PARTICLE_COUNT
+# from particle import AttackParticle, PARTICLE_COUNT
+from attack_effect import AttackEffect
 
 from functools import lru_cache
 
@@ -199,11 +200,12 @@ class Actor(arcade.Sprite):
         self.center_x, self.center_y = grid_to_pixel(self._x, self._y)
 
     def move(self, dxy, target=None, engine=None):
-        self.attack_delay = 7
+        # self.attack_delay = 7
         wall_sprites = engine.cur_level.wall_sprites
         map_obj_sprites = engine.cur_level.map_obj_sprites
         actor_sprites = engine.cur_level.actor_sprites
-        self.effect_sprites = engine.cur_level.effect_sprites
+        self.tmp_effect_sprites = engine.tmp_effect_sprites
+        self.attack = AttackEffect(self.tmp_effect_sprites)
 
         self.dx, self.dy = dxy
 
@@ -219,8 +221,8 @@ class Actor(arcade.Sprite):
         destination_x = self.dx + self.x
         destination_y = self.dy + self.y
 
-        self.target_x = self.center_x
-        self.target_y = self.center_y
+        self.from_x = self.center_x
+        self.from_y = self.center_y
 
         # ドアのチェック
         door_actor = get_door(destination_x, destination_y, map_obj_sprites)
@@ -307,55 +309,20 @@ class Actor(arcade.Sprite):
     def update(self, delta_time=1/60):
         super().update()
         if self.state == state.ON_MOVE:
-            if abs(self.target_x - self.center_x) >= GRID_SIZE and self.dx or\
-                    abs(self.target_y - self.center_y) >= GRID_SIZE and self.dy:
+            if abs(self.from_x - self.center_x) >= GRID_SIZE and self.dx or\
+                    abs(self.from_y - self.center_y) >= GRID_SIZE and self.dy:
                 self.change_x = 0
                 self.change_y = 0
                 self.x += self.dx
                 self.y += self.dy
                 self.wait = self.speed
-                self.target_x, self.target_y = self.center_x, self.center_y
+                self.from_x, self.from_y = self.center_x, self.center_y
                 self.state = state.TURN_END
 
         if self.state == state.ATTACK:
-            self.attack()
-    @stop_watch
-    def attack(self):
-        step = GRID_SIZE // 2.5
-
-        if abs(self.target_x - self.center_x) >= step and self.dx or\
-                abs(self.target_y - self.center_y) >= step and self.dy:
-            self.change_x = 0
-            self.change_y = 0
-
-        if self.attack_delay == 6:
-            for i in range(PARTICLE_COUNT):
-                particle = AttackParticle()
-                particle.position = (
-                    self.center_x + (self.dx*20), self.center_y + (self.dy*20))
-                self.effect_sprites.append(particle)
-                self.other.change_x += uniform(-0.7, 0.7)
-
-        if self.attack_delay % 2 == 0:
-            self.other.alpha = 10
-        else:
-            self.other.alpha = 155
-
-        if self.change_x == 0 and self.change_y == 0 and self.state != state.TURN_END:
-            self.attack_delay -= 1
-
-            if 0 > self.attack_delay:
-                self.center_y = self.target_y
-                self.center_x = self.target_x
-                self.change_x, self.change_y = 0, 0
-                self.other.alpha = 255
-                self.other.change_x = 0
-                self.other.center_x = self.other_x
-                self.state = state.TURN_END
-
-        if self.state == state.TURN_END:
-            self.wait = self.fighter.attack_speed
-
+            self.attack.start(self, self.other, self.from_x, self.from_y, self.other_x)
+  
+  
     def distance_to(self, other):
         dx = other.x - self.x
         dy = other.y - self.y

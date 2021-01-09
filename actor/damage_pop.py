@@ -25,7 +25,7 @@ class Damagepop(Actor):
         self.color = color
         self.text = arcade.draw_text(
             str(text), self.center_x, self.center_y, color, font_size=size, font_name=UI_FONT)
-        self.effect_sprites = engine.cur_level.effect_sprites
+        self.effect_sprites = engine.tmp_effect_sprites
         self.d_time = 60
 
         self.alpha = 30
@@ -36,14 +36,14 @@ class Damagepop(Actor):
         self.engine.damage_pop.append(self)
 
     def start(self):
-        if self in self.engine.cur_level.effect_sprites:   
+        if self in self.engine.tmp_effect_sprites:   
             self.d_time -= 1
             if self.d_time < 25 and 20 < self.alpha:
                 self.alpha -= 20
             if 255 > self.alpha:
                 self.alpha += 7
             if self.d_time < 0:
-                self.engine.cur_level.effect_sprites.remove(self)
+                self.engine.tmp_effect_sprites.remove(self)
                 self.engine.damage_pop.remove(self)
             if self.center_y > self.tmp_center_y and self.change_y:
                 self.alpha = 255

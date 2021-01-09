@@ -4,7 +4,7 @@ from constants import COLORS, Tag
 
 import math
 from actor.actor import Actor
-
+from particle import AttackParticle
 
 class TriggerPull(Actor):
     def __init__(self, shooter, target, engine, amm):
@@ -17,7 +17,7 @@ class TriggerPull(Actor):
         self.center_y = shooter.center_y
         self.shooter = shooter
         self.target = target
-        self.effect_sprites = self.engine.cur_level.effect_sprites
+        self.effect_sprites = self.engine.tmp_effect_sprites
 
         self.shot_speed = 25
 
@@ -41,6 +41,9 @@ class TriggerPull(Actor):
             if arcade.check_for_collision(self, self.target):
                 self.trigger = None
                 self.effect_sprites.remove(self)
+                particle = AttackParticle()
+                particle.position = (self.target.center_x, self.target.center_y)
+                self.effect_sprites.append(particle)
                 self.engine.action_queue.extend([{"turn_end": self.shooter}])
 
 
