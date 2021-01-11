@@ -128,7 +128,7 @@ class TileImageTest(arcade.Window):
     ついでに番号をつけた
     """
 
-    def __init__(self, width=1100, height=600, title="tile_test", textures=None, tile_size=16):
+    def __init__(self, width=1100, height=600, title="tile_test", textures=None, tile_size=32):
         super().__init__(width, height, title)
         self.tile_size = tile_size
         arcade.set_background_color(arcade.color.AERO_BLUE)
@@ -156,7 +156,7 @@ class TileImageTest(arcade.Window):
 
 
 def main():
-    t = door_img
+    t = r"image/bs_walls.png"
     tst = TileImageTest(textures=t)
 
     arcade.run()

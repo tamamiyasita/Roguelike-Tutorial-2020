@@ -15,6 +15,7 @@ from actor.inventory import Inventory
 from actor.item_point_check import ItemPoint
 from actor.characters.PC import Player
 from actor.characters.orcs import Orc
+from actor.characters.rat import Water_vole
 from actor.characters.npc import Citizen
 from actor._actor import Actor
 
@@ -97,7 +98,7 @@ class GameEngine:
         arcade.set_background_color(COLORS["black"])
         self.flower_sprites = arcade.SpriteList(use_spatial_hash=True, spatial_hash_cell_size=32)
         self.tmp_effect_sprites = arcade.SpriteList(use_spatial_hash=True, spatial_hash_cell_size=32)
-        self.cur_level = self.setup_level(level_number=99)
+        self.cur_level = self.setup_level(level_number=1)
         self.stories[self.cur_floor_name] = self.cur_level
         self.turn_loop = TurnLoop(self.player)
         self.item_point = ItemPoint(self)
@@ -131,8 +132,8 @@ class GameEngine:
 
         self.player.x, self.player.y = 10, 10
 
-        self.orc = Orc(x=10,y=17)
-        self.game_level.actor_sprites.append(self.orc)
+        self.wb = Water_vole(x=10,y=17)
+        self.game_level.actor_sprites.append(self.wb)
 
         self.npc = Citizen(x=14,y=14)
         self.game_level.actor_sprites.append(self.npc)
@@ -229,8 +230,8 @@ class GameEngine:
             self.map_width, self.map_height, level)
 
         #スプライトリストの初期化
-        floor_sprite = ActorPlacement(self.game_map, self).floor_set()
         wall_sprite = ActorPlacement(self.game_map, self).wall_set()
+        floor_sprite = ActorPlacement(self.game_map, self).floor_set()
         map_point_sprite = ActorPlacement(self.game_map, self).map_point_set()
         map_obj_sprite = ActorPlacement(self.game_map, self).map_obj_set()
         actorsprite = ActorPlacement(self.game_map, self).actor_set()

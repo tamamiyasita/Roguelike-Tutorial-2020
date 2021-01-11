@@ -22,6 +22,12 @@ crab_0 = arcade.load_texture_pair(r"image/crab0.png")
 crab_1 = arcade.load_texture_pair(r"image/crab1.png")
 crab = [*crab_0, *crab_1]
 
+
+water_vole_0 = arcade.load_texture_pair(r"image/water_vole0.png")
+water_vole_1 = arcade.load_texture_pair(r"image/water_vole1.png")
+water_vole =[*water_vole_0, *water_vole_1]
+
+
 size = 16  # テクスチャのサイズと位置情報も兼ねる
 orcs_tiles_0 = (r"image\Characters\Player0.png")  # orcタイルイメージ
 orcs_tiles_1 = (r"image\Characters\Player1.png")  # orcタイルイメージ
@@ -155,6 +161,7 @@ floors = [floor_tile[v] for v in range(floor_len)]
 up_stairs = arcade.load_texture(r"image\up_stairs.png")
 down_stairs = arcade.load_texture(r"image\down_stairs.png")
 stone_floor = arcade.load_texture(r"image\stone_tile.png")
+block_floor = arcade.load_texture(r"image\floor_15.png")
 
 # walls_1 = (r"image/wall1.png")
 # walls_1_tiles = get_tile_set(walls_1, tile_size=16)
@@ -170,6 +177,14 @@ walls_3_tiles = get_tile_set(walls_3, tile_size=16)
 
 wall_3 = [walls_3_tiles[w]
           for w in [6, 6, 11, 11, 10, 10, 1, 12, 4, 5, 2, 5, 0, 5, 1, 8]]
+
+b_walls = (r"image/bs_walls.png")
+b_walls_tiles = get_tile_set(b_walls, tile_size=32)
+b_wall = [b_walls_tiles[w] for w in [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]]
+
+side_floor = (r"image/side_walls.png")
+side_floor = get_tile_set(side_floor, tile_size=32)
+side_floor = [side_floor[w] for w in [0, 1, 2, 3, 4, 5, 6, 7]]
 
 # door_img = (r"image/Door0.png")
 # door_tile = get_tile_set(door_img, tile_size=16)
@@ -190,6 +205,7 @@ IMAGE_ID = {"Rou": player,
             "pc_delay2": pc_delay2,
 
             "crab": crab,
+            "water_vole": water_vole,
 
             "orc": orc,
             "troll": troll,
@@ -231,8 +247,11 @@ IMAGE_ID = {"Rou": player,
 
             "floor": floors,
             "stone_floor":[stone_floor],
+            "block_floor":[block_floor],
+            "side_floor":side_floor,
             # "wall_1": wall_1,
             # "wall_2": wall_2,
+            "b_wall": b_wall,
             "wall_3": wall_3,
             "up_stairs": [up_stairs],
             "down_stairs": [down_stairs],
