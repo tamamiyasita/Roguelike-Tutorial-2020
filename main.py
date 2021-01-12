@@ -132,7 +132,7 @@ class MG(arcade.Window):
             viewport(self.engine.player.from_x, self.engine.player.from_y)
         else:
             viewport(self.engine.player.center_x, self.engine.player.center_y)
-
+        # LOOKシステム
         if self.engine.game_state == GAME_STATE.SELECT_LOCATION or self.engine.game_state == GAME_STATE.LOOK:
             if isinstance(self.grid, tuple):
                 x, y = grid_to_pixel(self.grid_select[0]+self.engine.player.x, self.grid_select[1]+self.engine.player.y)

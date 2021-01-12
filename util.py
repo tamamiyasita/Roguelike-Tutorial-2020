@@ -6,6 +6,28 @@ from functools import wraps
 import time
 
 
+def Bresenham(p0, p1):
+    #1, 原点p0にx,yを入れる、
+    #2, 行き先P1にも同じ処理をする
+    #3, state_ui
+    def plot(x, y):
+        # この位置にgrid_to_pixelでdraw_Rectを被せる
+        x, y = grid_to_pixel(x, y)
+        arcade.draw_rectangle_filled(x,y,GRID_SIZE,GRID_SIZE,arcade.color.BLACK_BEAN)
+    x0, y0 = p0
+    x1, y1 = p1
+    delta_x = x1 - x0
+    delta_y = y1 - y0
+    error = 0
+    y = y0
+    for x in range(min(x0, x1+1), max(x0, x1+1)):
+        plot(x, y)
+        error += 2*delta_y
+        if error > delta_x:
+            y += 1
+            error -= 2*delta_x
+    return None
+
 def grid_to_pixel(x, y):
     """tilepositionからsprite_sizeに変換する"""
     px = x * SPRITE_SIZE * SPRITE_SCALE + SPRITE_SIZE / 2 * SPRITE_SCALE

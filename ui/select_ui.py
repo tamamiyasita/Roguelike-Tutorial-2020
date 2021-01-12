@@ -1,6 +1,6 @@
 import arcade
 from constants import *
-from util import grid_to_pixel
+from util import grid_to_pixel, Bresenham
 from itertools import chain
 
 
@@ -34,6 +34,22 @@ class SelectUI:
         if -40 > self.d_time:
             self.d_time = 120
 
+            #############
+
+            ##ターゲットシステムの構想　fireシステムに渡す、またはターゲットSkill使用時に呼び出される？　actor.spritesをループし、visibleならカーソルをそのアクターに合わせる
+            # その際に問題となる点。キー押下で決定　または次のターゲットにするのと近くのターゲットに最初にカーソルを合わせる方法
+            # ていうかfireシステムから機能をうまく分離すれば良さそうな感じだ
+            # あとファイアボールスクロールクラスからターゲット選択中の一時停止処理を借りれば
+        # Bresenham((self.engine.player.x, self.engine.player.y),(self.dx, self.dy))
+        try:
+            p = arcade.has_line_of_sight((self.engine.player.center_x, self.engine.player.center_y),(self.x, self.y), self.engine.cur_level.wall_sprites)
+            if p:
+                print(p)
+                # arcade.draw_rectangle_filled(self.x,self.y,GRID_SIZE,GRID_SIZE,arcade.color.BLACK_BEAN)
+        except:
+            pass
+
+        #########
     def panel_ui(self):
         # 画面下のパネルをarcadeの四角形を描画する変数で作成
         arcade.draw_xywh_rectangle_filled(
@@ -97,7 +113,7 @@ class SelectUI:
             print(f"{self.x=} {self.viewport_left=}")
 
         # or self.viewport_bottom > self.y > self.viewport_top:
-        if self.viewport_left > self.x:
+        if self.viewport_left > self.x:#TODO これの処理
             print(f"{self.viewports=}")
             self.x = (self.viewport_righit) - GRID_SIZE
             # self.dx -= self.grid_select[0]
@@ -106,6 +122,7 @@ class SelectUI:
         if self.grid_press:
             self.engine.grid_click(self.dx, self.dy)
             self.engine.game_state = GAME_STATE.NORMAL
+
 
         # グリッド囲い線の描写
         arcade.draw_rectangle_outline(
@@ -116,7 +133,7 @@ class SelectUI:
             color=arcade.color.LIGHT_BLUE,
             border_width=2
         )
-
+        # 点滅するグリッド内部
         arcade.draw_rectangle_filled(
             center_x=self.x,
             center_y=self.y,
