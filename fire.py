@@ -1,6 +1,6 @@
 import arcade
 from data import *
-from constants import COLORS, Tag
+from constants import *
 
 import math
 from actor.actor import Actor
@@ -62,7 +62,13 @@ class Fire:
         self.actor_sprites = engine.cur_level.actor_sprites
         self.trigger = None
 
-    def shot(self):
+    def use(self):
+        print("use")
+        self.engine.game_state = GAME_STATE.SELECT_LOCATION
+        self.engine.grid_select_handlers.append(self.shot)
+        return None
+
+    def shot(self, x, y):
         target_distance = None
         results = []
 
@@ -71,14 +77,15 @@ class Fire:
             return results
 
         for actor in self.actor_sprites:
-            if actor.is_visible and Tag.enemy in actor.tag:
-                x1, y1 = self.shooter.x, self.shooter.y
-                x2, y2 = actor.x, actor.y
-                distance = math.sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2 )
-                if self.target is None or distance < target_distance:
-                    self.target = actor
-                    target_distance = distance
-                    break
+            if actor.x== x and actor.y == y:
+                if actor.is_visible and Tag.enemy in actor.tag:
+                    x1, y1 = self.shooter.x, self.shooter.y
+                    x2, y2 = actor.x, actor.y
+                    distance = math.sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2 )
+                    if self.target is None or distance < target_distance:
+                        self.target = actor
+                        target_distance = distance
+                        break
 
         if self.target:
             results.append(
@@ -88,6 +95,8 @@ class Fire:
             TriggerPull(shooter=self.shooter, target=self.target,
                         engine=self.engine, amm=self.amm.name)
             self.trigger = True
+
+            self.amm.count_time = self.amm.max_cooldown_time
 
             return results
 

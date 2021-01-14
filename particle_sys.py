@@ -1,90 +1,71 @@
+"""
+GPU機能を使ったパーティクルのテスト
+"""
 import arcade
-from arcade import Point, Vector
-from arcade.utils import _Vec2
-import random
-import pyglet
-
-FLASH_TEXTURE = arcade.make_soft_circle_texture(80, (40,40,40))
-
-def make_flash(prev_emitter):
-    """花火が爆発した時に短い閃光を表示する"""
-    return arcade.Emitter(
-        center_xy=prev_emitter.get_pos(),
-        emit_controller=arcade.EmitBurst(3),
-        particle_factory=lambda emitter: arcade.FadeParticle(
-            filename_or_texture=FLASH_TEXTURE,
-            change_xy=arcade.rand_in_circle((0.0, 0.0), 3.5),
-            lifetime=0.15
-        )
-    )
-def clamp(a, low, high):
-    if a > high:
-        return high
-    elif a < low:
-        return low
-    else:
-        return a
+import arcade.gl
+from array import array
+from dataclasses import dataclass
 
 
-class AnimatedAlphaParticle(arcade.LifetimeParticle):
-    """3つの異なるアルファレベルの間でアニメーションするカスタムパーティクル"""
 
-    def __init__(
-        self,
-        filename_or_texture = arcade.FilenameOrTexture,
-        change_xy = Vector,
-        start_alpha: int = 0,
-        duration1: float = 1.0,
-        mid_alpha: int = 255,
-        duration2: float = 1.0,
-        end_alpha: int = 0,
-        center_xy: Point =(0.0, 0.0),
-        angle: float = 0,
-        change_angle: float = 0,
-        scale: float = 1.0,
-        mutation_callback=None,
-    ):
-        super().__init__(filename_or_texture, change_xy, duration1 + duration2, center_xy,
-                         angle, change_angle, scale, start_alpha, mutation_callback)
-        self.start_alpha = start_alpha
-        self.in_duration = duration1
-        self.mid_alpha = mid_alpha
-        self.out_duration = duration2
-        self.end_alpha = end_alpha
-    
-    def update(self):
-        super().update()
-        if self.lifetime_elapsed <= self.in_duration:
-            u = self.lifetime_elapsed / self.in_duration
-            self.alpha = clamp(arcade.lerp(self.start_alpha, self.mid_alpha, u), 0, 255)
-        else:
-            u = (self.lifetime_elapsed - self.in_duration) / self.out_duration
-            self.alpha = clamp(arcade.lerp(self.mid_alpha, self.end_alpha, u), 0, 255)
+SCREEN_WIDTH = 1024
+SCREEN_HEIGHT = 768
+SCREEN_TITLE = "GPU Particle Explosion"
 
 
-class Fireworks:
+@dataclass
+class Burst:
+    """各バーストの追跡"""
+    buffer: arcade.gl.Buffer
+    vao: arcade.gl.Geometry
+
+
+
+class MyWindow(arcade.Window):
+    """ Main window"""
     def __init__(self):
-        self.emitters = []
-        #self.launch_firework(0)
+        super().__init__(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
+        self.burst_list = []
 
-    def launch_firework(self, delta_time):
-        launchers = (
-            self.launch_random_firework,
-            self.launch_ringed_firework,
-            self.launch_sparkle_firework
+        # ポイントを視覚化するプログラム
+        self.program = self.ctx.load_program(
+        # vertex_shaderはパーティクルの各頂点をレンダリングする、四角形なら4回実行される
+            vertex_shader="vertex_shader_v1.glsl",# vertex_shader_v1.glslファイルを読み込み位置と色を取得
+        # fragment_shaderは各ピクセルに対してレンダリングする
+            fragment_shader="fragment_shader.glsl",
         )
-        random.choice(launchers)(delta_time)
-        pyglet.clock.schedule_once(self.launch_firework, random.uniform(1.5, 2.5))
-
-    def launch_random_firework(self, _delta_taime):
-        """ランダムな色で爆発するシンプルな花火"""
-        
 
 
 
-# def firework_spark_mutator(particle: arcade.FadeParticle):
-#     # 重力
-#     particle.change_x += -0.03
+        self.ctx.enable_only
 
-#     particle.change_x *= 0.92
-#     particle.change_y *= 0.92
+    def on_draw(self):
+        """ Draw everything """
+        self.clear()
+
+    def on_update(self, dt):
+        """ Update everything """
+        pass
+
+    def on_mouse_press(self, x: float, y: float, button: int, modifiers: int):
+        """ User clicks mouse """
+        # ボタンを押すたびにバーストを作成する
+        def _gen_initial_data(initial_x, initial_y):
+            # パーティクルを生成するジェネレータ関数
+            yield initial_x
+            yield initial_y
+
+        # 現在のピクセル位置からOpenGLへの座標を再計算する
+        x2 = x / self.width * 2.0 - 1.0
+        y2 = y / self.height * 2.0 - 1.0
+
+
+    def on_key_press(self, key: int, modifiers: int):
+        if key == arcade.key.ESCAPE:
+            arcade.close_window()
+
+
+if __name__ == "__main__":
+    window = MyWindow()
+    window.center_window()
+    arcade.run()

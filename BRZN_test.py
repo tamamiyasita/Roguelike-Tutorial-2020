@@ -44,22 +44,67 @@ Wikipedia にある最初のアルゴリズムは分数 (deltaerr の分母の �
 なお、grid を NumPy の配列としておくと matplotlib の imshow() や matshow() で描画できる。
 """
 
-def Bresenham(p0, p1):
     #1, 原点p0にx,yを入れる、
     #2, 行き先P1にも同じ処理をする
     #3, state_ui
-    def plot(x, y):
-        pass# この位置にgrid_to_pixelでdraw_Rectを被せる
-    x0, y0 = p0
-    x1, y1 = p1
-    delta_x = x1 - x0
-    delta_y = y1 - y0
-    error = 0
-    y = y0
-    for x in range(x0, x1+1):
-        plot(x, y)
-        error += 2*delta_y
-        if error > delta_x:
-            y += 1
-            error -= 2*delta_x
-    return None
+    # def plot(x, y):
+    #     pass# この位置にgrid_to_pixelでdraw_Rectを被せる
+    # x1, y1 = p0
+    # x2, y2 = p1
+    # dx = x2 - x1
+    # dy = y2 - y1
+    # error = 0
+    # y = y1
+    # for x in range(x1, x2+1):
+    #     plot(x, y)
+    #     error += 2*y
+    #     if error > x:
+    #         y += 1
+    #         error -= 2*delta_x
+    # return None
+
+        # Setup initial conditions
+def Bresenham(start, end):
+    x1, y1 = start
+    x2, y2 = end
+    dx = x2 - x1
+    dy = y2 - y1
+ 
+    # Determine how steep the line is
+    is_steep = abs(dy) > abs(dx)
+ 
+    # Rotate line
+    if is_steep:
+        x1, y1 = y1, x1
+        x2, y2 = y2, x2
+ 
+    # Swap start and end points if necessary and store swap state
+    swapped = False
+    if x1 > x2:
+        x1, x2 = x2, x1
+        y1, y2 = y2, y1
+        swapped = True
+ 
+    # Recalculate differentials
+    dx = x2 - x1
+    dy = y2 - y1
+ 
+    # Calculate error
+    error = int(dx / 2.0)
+    ystep = 1 if y1 < y2 else -1
+ 
+    # Iterate over bounding box generating points between start and end
+    y = y1
+    points = []
+    for x in range(x1, x2 + 1):
+        coord = (y, x) if is_steep else (x, y)
+        points.append(coord)
+        error -= abs(dy)
+        if error < 0:
+            y += ystep
+            error += dx
+ 
+    # Reverse the list if the coordinates were swapped
+    if swapped:
+        points.reverse()
+    return points

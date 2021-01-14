@@ -44,7 +44,6 @@ class FireballScroll(Actor):
         self.game_engine = game_engine
         game_engine.game_state = GAME_STATE.SELECT_LOCATION
         game_engine.grid_select_handlers.append(self.click)
-        # TODO ターンエンドさせたい
         return None
 
     def apply_damage(self, grid_x, grid_y, amount, results):

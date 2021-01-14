@@ -98,7 +98,7 @@ class GameEngine:
         arcade.set_background_color(COLORS["black"])
         self.flower_sprites = arcade.SpriteList(use_spatial_hash=True, spatial_hash_cell_size=32)
         self.tmp_effect_sprites = arcade.SpriteList(use_spatial_hash=True, spatial_hash_cell_size=32)
-        self.cur_level = self.setup_level(level_number=1)
+        self.cur_level = self.setup_level(level_number=99)
         self.stories[self.cur_floor_name] = self.cur_level
         self.turn_loop = TurnLoop(self.player)
         self.item_point = ItemPoint(self)
@@ -134,6 +134,8 @@ class GameEngine:
 
         self.wb = Water_vole(x=10,y=17)
         self.game_level.actor_sprites.append(self.wb)
+        self.wb2 = Water_vole(x=11,y=17)
+        self.game_level.actor_sprites.append(self.wb2)
 
         self.npc = Citizen(x=14,y=14)
         self.game_level.actor_sprites.append(self.npc)
@@ -740,6 +742,9 @@ class GameEngine:
                 return [{"message": "You went UP a level."}]
 
         return None #[{"message": "There are no stairs here"}]
+
+
+
 
     def use_door(self, door_dist):
         result = []

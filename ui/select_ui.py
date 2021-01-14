@@ -2,6 +2,8 @@ import arcade
 from constants import *
 from util import grid_to_pixel, Bresenham
 from itertools import chain
+from collections import deque
+
 
 
 class SelectUI:
@@ -14,10 +16,37 @@ class SelectUI:
         self.d_time = 120
         self.x, self.y = 0, 0
 
+    def nearby_actor(self):
+        result = deque()
+        enemy_list = [enemy for enemy in self.engine.cur_level.actor_sprites if Tag.enemy in enemy.tag]
+        e_len = len(enemy_list)
+        for i in range(e_len):
+            sprite = arcade.get_closest_sprite(self.engine.player, enemy_list)[0]
+            result.append(sprite)
+            enemy_list.remove(sprite)
+        return result
+
+
     def draw_in_select_ui(self, viewports, grid_press=None, grid_select=None):
-        self.dx, self.dy = self.engine.player.x, self.engine.player.y
-        self.grid_select = grid_select
         self.grid_press = grid_press
+        sprite_list = []
+        if len(sprite_list) == 0:
+            sprite_list = self.nearby_actor()
+        if self.engine.game_state == GAME_STATE.SELECT_LOCATION:
+            try:
+                sprite = sprite_list[0]
+                if self.grid_press == "tab":
+                    sprite_list.rotate()
+                    print(sprite_list)
+                    self.grid_press == None
+                
+                self.dx, self.dy = sprite.x, sprite.y
+            except:    
+                self.dx, self.dy = self.engine.player.x, self.engine.player.y
+
+        else:
+            self.dx, self.dy = self.engine.player.x, self.engine.player.y
+        self.grid_select = grid_select
         self.viewports = viewports
         self.viewport_left = self.viewports[0]
         self.viewport_righit = self.viewports[1]
@@ -40,14 +69,19 @@ class SelectUI:
             # その際に問題となる点。キー押下で決定　または次のターゲットにするのと近くのターゲットに最初にカーソルを合わせる方法
             # ていうかfireシステムから機能をうまく分離すれば良さそうな感じだ
             # あとファイアボールスクロールクラスからターゲット選択中の一時停止処理を借りれば
-        # Bresenham((self.engine.player.x, self.engine.player.y),(self.dx, self.dy))
         try:
-            p = arcade.has_line_of_sight((self.engine.player.center_x, self.engine.player.center_y),(self.x, self.y), self.engine.cur_level.wall_sprites)
-            if p:
-                print(p)
-                # arcade.draw_rectangle_filled(self.x,self.y,GRID_SIZE,GRID_SIZE,arcade.color.BLACK_BEAN)
+            for line in Bresenham((self.engine.player.x, self.engine.player.y),(self.dx, self.dy)):
+                line = grid_to_pixel(*line)
+                arcade.draw_rectangle_filled(line[0],line[1], GRID_SIZE, GRID_SIZE, [100,100,10,100,])
         except:
             pass
+        # try:
+        #     p = arcade.has_line_of_sight((self.engine.player.center_x, self.engine.player.center_y),(self.x, self.y), self.engine.cur_level.wall_sprites)
+        #     if p:
+        #         print(p)
+                # arcade.draw_rectangle_filled(self.x,self.y,GRID_SIZE,GRID_SIZE,arcade.color.BLACK_BEAN)
+        # except:
+        #     pass
 
         #########
     def panel_ui(self):
@@ -112,14 +146,9 @@ class SelectUI:
         if self.x < self.viewport_left:
             print(f"{self.x=} {self.viewport_left=}")
 
-        # or self.viewport_bottom > self.y > self.viewport_top:
-        if self.viewport_left > self.x:#TODO これの処理
-            print(f"{self.viewports=}")
-            self.x = (self.viewport_righit) - GRID_SIZE
-            # self.dx -= self.grid_select[0]
 
         # グリッドactionの制御
-        if self.grid_press:
+        if self.grid_press == "grid_press":
             self.engine.grid_click(self.dx, self.dy)
             self.engine.game_state = GAME_STATE.NORMAL
 
@@ -141,43 +170,46 @@ class SelectUI:
             height=SPRITE_SIZE*SPRITE_SCALE-2,
             color=[255, 255, 255, self.d_time]
         )
+        try:
 
-        # グリッド囲い線の中にあるオブジェクトの情報の表示
-        actor_at_point = arcade.get_sprites_at_exact_point(
-            (self.x, self.y), self.sprites[0])
-        item_at_point = arcade.get_sprites_at_exact_point(
-            (self.x, self.y), self.sprites[1])
-        if actor_at_point or item_at_point:
-            y = 20
-            for actor in chain(actor_at_point, item_at_point):
-                if actor.ai:
-                    arcade.draw_text(
-                        text=f"{actor.name.capitalize()}\n{actor.fighter.hp}/{actor.fighter.max_hp}",
-                        start_x=self.viewport_left + SCREEN_WIDTH - STATES_PANEL_WIDTH + 10,
-                        start_y=self.viewport_bottom + SCREEN_HEIGHT - 400 - y,
-                        color=arcade.color.RED_PURPLE,
-                        font_size=20,
-                    )
-                    y += 20
+            # グリッド囲い線の中にあるオブジェクトの情報の表示
+            actor_at_point = arcade.get_sprites_at_exact_point(
+                (self.x, self.y), self.sprites[0])
+            item_at_point = arcade.get_sprites_at_exact_point(
+                (self.x, self.y), self.sprites[1])
+            if actor_at_point or item_at_point:
+                y = 20
+                for actor in chain(actor_at_point, item_at_point):
+                    if actor.ai:
+                        arcade.draw_text(
+                            text=f"{actor.name.capitalize()}\n{actor.fighter.hp}/{actor.fighter.max_hp}",
+                            start_x=self.viewport_left + SCREEN_WIDTH - STATES_PANEL_WIDTH + 10,
+                            start_y=self.viewport_bottom + SCREEN_HEIGHT - 400 - y,
+                            color=arcade.color.RED_PURPLE,
+                            font_size=20,
+                        )
+                        y += 20
 
-                y += 10
+                    y += 10
 
-                if not actor.ai:
-                    arcade.draw_text(
-                        text=f"{actor.__class__.__name__}",
-                        start_x=self.viewport_left + SCREEN_WIDTH - STATES_PANEL_WIDTH + 10,
-                        start_y=self.viewport_bottom + SCREEN_HEIGHT - 400 - y,
-                        color=arcade.color.GREEN_YELLOW,
-                        font_size=20,
-                    )
-                    y += 30
+                    if not actor.ai:
+                        arcade.draw_text(
+                            text=f"{actor.__class__.__name__}",
+                            start_x=self.viewport_left + SCREEN_WIDTH - STATES_PANEL_WIDTH + 10,
+                            start_y=self.viewport_bottom + SCREEN_HEIGHT - 400 - y,
+                            color=arcade.color.GREEN_YELLOW,
+                            font_size=20,
+                        )
+                        y += 30
 
-                if actor.explanatory_text:
-                    arcade.draw_text(
-                        text=f"{actor.explanatory_text}",
-                        start_x=self.viewport_left + SCREEN_WIDTH - STATES_PANEL_WIDTH + 10,
-                        start_y=self.viewport_bottom + SCREEN_HEIGHT - 400 - y,
-                        color=arcade.color.WHITE,
-                        font_size=14,
-                    )
-                    y += 20
+                    if actor.explanatory_text:
+                        arcade.draw_text(
+                            text=f"{actor.explanatory_text}",
+                            start_x=self.viewport_left + SCREEN_WIDTH - STATES_PANEL_WIDTH + 10,
+                            start_y=self.viewport_bottom + SCREEN_HEIGHT - 400 - y,
+                            color=arcade.color.WHITE,
+                            font_size=14,
+                        )
+                        y += 20
+        except:
+            pass

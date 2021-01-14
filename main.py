@@ -158,6 +158,8 @@ class MG(arcade.Window):
         elif self.engine.game_state == GAME_STATE.SELECT_LOCATION or self.engine.game_state == GAME_STATE.LOOK:
             self.select_UI.draw_in_select_ui(
                 arcade.get_viewport(), self.grid_press, self.grid_select)
+            if self.grid_press == "tab":
+                self.grid_press = None
 
         # Character_Screen表示
         elif self.engine.game_state == GAME_STATE.CHARACTER_SCREEN:
