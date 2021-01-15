@@ -2,7 +2,6 @@ import arcade
 from constants import *
 from util import grid_to_pixel, Bresenham
 from itertools import chain
-from collections import deque
 
 
 
@@ -15,38 +14,35 @@ class SelectUI:
         self.grid_sprites = arcade.SpriteList()
         self.d_time = 120
         self.x, self.y = 0, 0
+        self.dx, self.dy = 0, 0
+        self.grid_press = None
+        self.grid_select = [0,0]
+        self.sprite_list = []
+        self.number = 0
 
-    def nearby_actor(self):
-        result = deque()
-        enemy_list = [enemy for enemy in self.engine.cur_level.actor_sprites if Tag.enemy in enemy.tag]
+    def nearby_actor(self, engine):
+        result = []
+        enemy_list = [enemy for enemy in engine.cur_level.actor_sprites if Tag.enemy in enemy.tag]
         e_len = len(enemy_list)
         for i in range(e_len):
-            sprite = arcade.get_closest_sprite(self.engine.player, enemy_list)[0]
-            result.append(sprite)
-            enemy_list.remove(sprite)
+            sprite = arcade.get_closest_sprite(engine.player, enemy_list)[0]
+            if sprite.is_visible:
+                result.append(sprite)
+                enemy_list.remove(sprite)
         return result
 
 
-    def draw_in_select_ui(self, viewports, grid_press=None, grid_select=None):
-        self.grid_press = grid_press
-        sprite_list = []
-        if len(sprite_list) == 0:
-            sprite_list = self.nearby_actor()
-        if self.engine.game_state == GAME_STATE.SELECT_LOCATION:
-            try:
-                sprite = sprite_list[0]
-                if self.grid_press == "tab":
-                    sprite_list.rotate()
-                    print(sprite_list)
-                    self.grid_press == None
-                
-                self.dx, self.dy = sprite.x, sprite.y
-            except:    
-                self.dx, self.dy = self.engine.player.x, self.engine.player.y
+    def draw_in_select_ui(self, viewports, engine):
+        if len(self.sprite_list) <= self.number:
+            self.number = 0
+        try:
+            self.sprite_list = self.nearby_actor(engine)
+            sprite = self.sprite_list[self.number]
+                      
+            self.dx, self.dy = sprite.x, sprite.y
+        except:    
+            self.dx, self.dy = engine.player.x, engine.player.y
 
-        else:
-            self.dx, self.dy = self.engine.player.x, self.engine.player.y
-        self.grid_select = grid_select
         self.viewports = viewports
         self.viewport_left = self.viewports[0]
         self.viewport_righit = self.viewports[1]
@@ -145,12 +141,6 @@ class SelectUI:
         self.x, self.y = grid_to_pixel(self.dx, self.dy)
         if self.x < self.viewport_left:
             print(f"{self.x=} {self.viewport_left=}")
-
-
-        # グリッドactionの制御
-        if self.grid_press == "grid_press":
-            self.engine.grid_click(self.dx, self.dy)
-            self.engine.game_state = GAME_STATE.NORMAL
 
 
         # グリッド囲い線の描写

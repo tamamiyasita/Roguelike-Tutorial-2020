@@ -50,23 +50,47 @@ def choices_key(key):
         return "select"
 
 
-def grid_select_key(key, engine):
+def grid_select_key(key, select_UI):
     """アイテム仕様時のカーソル移動に使用する"""
     direction = None
 
     if key in KEYMAP_UP:
-        direction = (0, 1)
+        select_UI.grid_select[1] += 1
+        # direction = (0, 1)
     elif key in KEYMAP_DOWN:
-        direction = (0, -1)
+        select_UI.grid_select[1] -= 1
+        # direction = (0, -1)
     elif key in KEYMAP_LEFT:
-        direction = (-1, 0)
+        select_UI.grid_select[0] -= 1
+        # direction = (-1, 0)
     elif key in KEYMAP_RIGHT:
-        direction = (1, 0)
+        select_UI.grid_select[0] += 1
+        # direction = (1, 0)
     elif key == arcade.key.ENTER:
-        direction = "grid_press"
+        select_UI.engine.grid_click(select_UI.dx, select_UI.dy)
+        select_UI.grid_press = None
+        select_UI.dx, select_UI.dy = 0,0
+        select_UI.grid_select = [0,0]
+        select_UI.x, select_UI.y = 0,0
+        select_UI.engine.game_state = GAME_STATE.NORMAL
+
+    elif key == arcade.key.ESCAPE:
+        select_UI.grid_press = None
+        select_UI.dx, select_UI.dy = 0,0
+        select_UI.grid_select = [0,0]
+        select_UI.x, select_UI.y = 0,0
+        select_UI.engine.game_state = GAME_STATE.NORMAL
+
+
     elif key == arcade.key.TAB:
-        direction = "tab"
-    return direction
+        select_UI.number += 1
+
+    # if isinstance(direction, tuple):
+    #     select_UI.grid_select[0] += direction[0]
+    #     select_UI.grid_select[1] += direction[1]
+    else:
+        select_UI.grid_press = direction
+
 
 def inventory_key(key, engine):
     """Lコマンド時に使用する"""
@@ -101,7 +125,7 @@ def keymap(key, engine):
     elif key in KEYMAP_INVENTORY:
         engine.game_state = GAME_STATE.INVENTORY
 
-    elif key in KEYMAP_CANCEL and engine.game_state != GAME_STATE.LEVEL_UP_WINDOW:
+    elif key in KEYMAP_CANCEL and engine.game_state != GAME_STATE.LEVEL_UP_WINDOW or engine.game_state != GAME_STATE.LOOK:
         engine.game_state = GAME_STATE.NORMAL
 
     elif engine.player.state == state.READY and engine.game_state == GAME_STATE.NORMAL:

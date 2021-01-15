@@ -41,10 +41,8 @@ class MG(arcade.Window):
         self.engine = GameEngine()
 
         self.player_direction = None
-        self.grid_select = [0, 0]
         self.mouse_position = None
         self.viewports = None
-        self.grid, self.grid_press = None,None
         self.viewport_left = 0
         self.viewport_bottom = 0
         self.choice = 0
@@ -134,9 +132,8 @@ class MG(arcade.Window):
             viewport(self.engine.player.center_x, self.engine.player.center_y)
         # LOOKシステム
         if self.engine.game_state == GAME_STATE.SELECT_LOCATION or self.engine.game_state == GAME_STATE.LOOK:
-            if isinstance(self.grid, tuple):
-                x, y = grid_to_pixel(self.grid_select[0]+self.engine.player.x, self.grid_select[1]+self.engine.player.y)
-                viewport(x, y)
+            x, y = grid_to_pixel(self.select_UI.grid_select[0]+self.engine.player.x, self.select_UI.grid_select[1]+self.engine.player.y)
+            viewport(x, y)
 
         # ビューポートの左と下の現在位置を変数に入れる、これはステータスパネルを画面に固定する為に使います
         self.viewports = arcade.get_viewport()
@@ -152,14 +149,10 @@ class MG(arcade.Window):
             normal_UI.draw_in_normal_state()
             if self.mouse_position:
                 self.mouse_ui.draw_mouse_over_text()
-            self.grid_select = [0, 0]
 
         # アイテム使用時マウス位置にグリッド表示
         elif self.engine.game_state == GAME_STATE.SELECT_LOCATION or self.engine.game_state == GAME_STATE.LOOK:
-            self.select_UI.draw_in_select_ui(
-                arcade.get_viewport(), self.grid_press, self.grid_select)
-            if self.grid_press == "tab":
-                self.grid_press = None
+            self.select_UI.draw_in_select_ui(arcade.get_viewport(), self.engine)
 
         # Character_Screen表示
         elif self.engine.game_state == GAME_STATE.CHARACTER_SCREEN:
@@ -220,8 +213,6 @@ class MG(arcade.Window):
                     pop.start()
 
 
-            # グリッド選択変数はNORMAL STATE時は無効にする
-            self.grid_press = None
 
     def on_key_press(self, key, modifiers):
         # windowを閉じた時にjsonにダンプする
@@ -245,12 +236,8 @@ class MG(arcade.Window):
 
         # Lコマンド時、スクロール仕様時などのカーソル移動と選択
         if self.engine.game_state == GAME_STATE.SELECT_LOCATION or self.engine.game_state == GAME_STATE.LOOK:
-            self.grid = grid_select_key(key, self.engine)
-            if isinstance(self.grid, tuple):
-                self.grid_select[0] += self.grid[0]
-                self.grid_select[1] += self.grid[1]
-            else:
-                self.grid_press = self.grid
+            grid_select_key(key, self.select_UI)
+                     
 
         # インベントリを操作する
         if self.engine.game_state == GAME_STATE.INVENTORY:
