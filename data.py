@@ -196,6 +196,8 @@ door3 = arcade.load_texture(r"image\door3.png")
 door4 = arcade.load_texture(r"image\door4.png")
 doors_w = [door3,door4]
 
+pop = arcade.load_texture(r"image\pop.png")
+
 
 # actorに渡す画像はリスト型にすること
 IMAGE_ID = {"Rou": player,
@@ -256,6 +258,8 @@ IMAGE_ID = {"Rou": player,
             "up_stairs": [up_stairs],
             "down_stairs": [down_stairs],
             "door_h": doors_h,
-            "door_w": doors_h
+            "door_w": doors_h,
+
+            "pop":pop
 
             }

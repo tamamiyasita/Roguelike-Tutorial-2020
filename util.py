@@ -6,6 +6,16 @@ from functools import wraps
 import time
 
 
+def exp_calc(x=58, max_level=50, ratio=1.2, constant=40):
+    result = {}
+    result[1] = 0
+    for i in range(2,max_level+1):
+        result[i] = int(x)
+        x = x * ratio + constant
+    return result
+    
+    
+print(exp_calc())
 def Bresenham(start, end):
     x1, y1 = start
     x2, y2 = end

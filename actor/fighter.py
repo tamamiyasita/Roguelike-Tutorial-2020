@@ -312,9 +312,9 @@ class Fighter:
                     {"message": f"{self.owner.name.capitalize()} attacks {target.name} for {str(self.damage)} hit points."})
                 results.extend(target.fighter.change_hp(-self.damage))
 
-                # xp獲得処理
-                if target.is_dead:
-                    self.current_xp += target.fighter.xp_reward
+                # # xp獲得処理
+                # if target.is_dead:
+                #     self.current_xp += target.fighter.xp_reward
 
             else:# 完全防御
                 results.append(

@@ -170,9 +170,10 @@ class LevelupUI:
                 self.get_skill = None
                 self.select_skill = True
                 self.skill_result = []
-                self.engine.game_state = GAME_STATE.NORMAL
                 self.engine.player.equipment.passive_sprite_on(self.engine.cur_level.equip_sprites)
 
+                self.engine.player.check_experience_level(self.engine)
+                # self.engine.game_state = GAME_STATE.NORMAL
 
 
             # Nボタンならability pointを戻し再選択させる

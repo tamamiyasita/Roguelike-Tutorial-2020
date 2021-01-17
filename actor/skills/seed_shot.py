@@ -37,11 +37,6 @@ class SeedShot(Actor):
 
             fire = Fire(engine, self.owner, self)
             result = fire.use()
-            # if result[0]["message"] == "not enemy":
-            #     return result
 
-            # elif result:
-            #     self.count_time = self.max_cooldown_time
-            #     return result
 
 

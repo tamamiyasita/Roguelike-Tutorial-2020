@@ -1,3 +1,4 @@
+from data import IMAGE_ID
 import arcade
 from constants import *
 from util import grid_to_pixel, Bresenham
@@ -52,6 +53,21 @@ class SelectUI:
         self.panel_ui()
         self.grid_cursor()
         self.update()
+        self.pop(engine)
+
+    def pop(self, engine):
+        txt_pos = engine.player.right, engine.player.center_y
+
+        arcade.draw_texture_rectangle(txt_pos[0]+55, txt_pos[1]+45, width=128, height=64,texture=IMAGE_ID["pop"],alpha=190)
+        arcade.draw_text("Tab key",txt_pos[0]+30, txt_pos[1]+37, color=arcade.color.RED_DEVIL)
+        arcade.draw_text("change a target",txt_pos[0]+5, txt_pos[1]+20, color=arcade.color.BLACK_LEATHER_JACKET)
+
+        if engine.game_state == GAME_STATE.SELECT_LOCATION:
+            m = 50
+            arcade.draw_texture_rectangle(txt_pos[0]+55, txt_pos[1]+m+45, width=128, height=64,texture=IMAGE_ID["pop"],alpha=190)
+            arcade.draw_text("Enter key",txt_pos[0]+25, txt_pos[1]+m+37, color=arcade.color.RED_DEVIL)
+            arcade.draw_text("Select a target",txt_pos[0]+12, txt_pos[1]+m+20, color=arcade.color.BLACK_LEATHER_JACKET)
+
 
     def update(self):
 

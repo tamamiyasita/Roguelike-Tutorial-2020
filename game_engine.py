@@ -325,7 +325,6 @@ class GameEngine:
                   "viewport": viewport,
                   "levels": levels_dict,
                   "cur_level_name":f"{self.cur_level.map_name}{self.cur_level.floor_level}",
-                  'turn_loop_tmp_box':self.turn_loop.tmp_box
                   }
 
         ##############
@@ -487,7 +486,9 @@ class GameEngine:
                 if target is self.player:
                     new_action_queue.extend([{"message": "player has died!"}])
                 else:
+                    # EXP獲得処理
                     self.player.fighter.current_xp += target.fighter.xp_reward
+                    self.player.equipment.item_exp_add(target.fighter.xp_reward)
                     self.move_switch = False
 
                     new_action_queue.extend(

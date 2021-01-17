@@ -162,7 +162,7 @@ class MG(arcade.Window):
         elif self.engine.game_state == GAME_STATE.INVENTORY:
             draw_inventory(self.engine.player, self.engine.selected_item, self.viewports)
 
-        elif self.engine.game_state == GAME_STATE.LEVEL_UP_WINDOW:
+        elif self.engine.game_state == GAME_STATE.LEVEL_UP_WINDOW or self.engine.game_state == GAME_STATE.LEVEL_UP_FLOWER:
             self.level_up_window.window_pop(self.viewports)
 
         # 会話画面の表示
@@ -229,15 +229,15 @@ class MG(arcade.Window):
         if key == arcade.key.DELETE:
             arcade.close_window()
 
-        # playerの移動
-        self.engine.move_switch = True
-        if self.engine.game_state != GAME_STATE.LEVEL_UP_WINDOW:
-            self.player_direction = keymap(key, self.engine)
 
         # Lコマンド時、スクロール仕様時などのカーソル移動と選択
         if self.engine.game_state == GAME_STATE.SELECT_LOCATION or self.engine.game_state == GAME_STATE.LOOK:
             grid_select_key(key, self.select_UI)
                      
+        # playerの移動
+        self.engine.move_switch = True
+        if self.engine.game_state == GAME_STATE.NORMAL:
+            self.player_direction = keymap(key, self.engine)
 
         # インベントリを操作する
         if self.engine.game_state == GAME_STATE.INVENTORY:
@@ -251,12 +251,18 @@ class MG(arcade.Window):
                 self.engine.action_queue.extend([{"use_door": door_check}])
 
         # Level states up処理
-        if self.engine.game_state == GAME_STATE.LEVEL_UP_WINDOW:
+        if self.engine.game_state == GAME_STATE.LEVEL_UP_WINDOW or self.engine.game_state == GAME_STATE.LEVEL_UP_FLOWER:
             self.level_up_window.states_choices(key)
 
         # 会話画面の返答処理
         if self.engine.game_state == GAME_STATE.MESSAGE_WINDOW:
             self.choice = self.massage_window.message_choices(key)
+
+        # キャラクタースクリーンでキャンセルする為だけの項目
+        if self.engine.game_state == GAME_STATE.CHARACTER_SCREEN:
+            if key == arcade.key.ESCAPE:
+                self.engine.game_state = GAME_STATE.NORMAL
+        
 
         if key == arcade.key.F7:
 
@@ -264,7 +270,7 @@ class MG(arcade.Window):
         elif key == arcade.key.F8:
 
             self.load()
-        elif key == arcade.key.F1:
+        elif key == arcade.key.F1 and modifiers == arcade.key.MOD_SHIFT:
             self.engine.player.fighter.ability_points += 1
             self.engine.player.fighter.level += 1
             self.engine.game_state = GAME_STATE.LEVEL_UP_WINDOW

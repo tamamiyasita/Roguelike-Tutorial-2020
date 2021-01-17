@@ -119,6 +119,7 @@ class GAME_STATE(Enum):
     DELAY_WINDOW = auto()
     LOAD_WINDOW = auto()
     LEVEL_UP_WINDOW = auto()
+    LEVEL_UP_FLOWER = auto()
 
 
 class state(Enum):

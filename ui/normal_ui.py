@@ -120,8 +120,8 @@ class NormalUI:
                          )
 
         # EXPの表示
-        if self.player.fighter.level < len(EXPERIENCE_PER_LEVEL):
-            xp_to_next_level = EXPERIENCE_PER_LEVEL[self.player.fighter.level - 1]
+        if self.player.fighter.level < len(self.player.experience_per_level):
+            xp_to_next_level = self.player.experience_per_level[self.player.fighter.level+1]
             exp_text = f"XP {self.player.fighter.current_xp: >4} / {xp_to_next_level: >4}"
         else:
             exp_text = f"XP {self.player.fighter.current_xp}"

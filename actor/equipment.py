@@ -63,6 +63,14 @@ class Equipment:
                     equip.x = self.owner.x
                     equip.y = self.owner.y
 
+    def item_exp_add(self, exp):
+        # 花にexpを与える
+        for item in self.item_slot:
+            if hasattr(item, "current_xp"):
+                item.current_xp += exp
+
+
+
 
 
     @property
