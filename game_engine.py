@@ -36,6 +36,7 @@ from actor.items.paeonia import Paeonia
 from actor.items.cirsium import Cirsium
 from actor.items.ebony import Ebony
 from actor.items.sunflower import Sunflower
+from level_up_sys import check_experience_level
 
 
 
@@ -470,8 +471,8 @@ class GameEngine:
             if "remove" in action:
                 target = action["remove"]
                 target.remove_from_sprite_lists()
-                # EXPのチェック
-                self.player.check_experience_level(self)
+                # ここでplayerにEXPが入る
+                check_experience_level(self.player, self)
 
             if "turn_end" in action:
                 target = action["turn_end"]

@@ -35,8 +35,4 @@ class Ebony(Actor):
         self.item_margin_y = 11
         self.my_speed = 4.0
 
-    def level_up(self):
-        select = ["STR", "DEX", "INT"]
-        bonus = choices(select, weights=[5, 2.5, 2.5])
-        self.states_bonus.setdefault(bonus[0], 0)
-        self.states_bonus[bonus[0]] += 1
+

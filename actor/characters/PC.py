@@ -1,10 +1,11 @@
 # from actor.actor import Actor
 from actor.actor import Actor
 from actor.fighter import Fighter
+from actor.equipment import Equipment
 from data import *
 from constants import *
-from actor.equipment import Equipment
 from util import exp_calc
+from random import choices
 
 
 class Player(Actor):
@@ -38,27 +39,36 @@ class Player(Actor):
 
         self.experience_per_level = exp_calc()
 
-    def check_experience_level(self, game_engine):
+    # def check_experience_level(self, game_engine):
+    #     # TODO やっぱengineに移動させよう
+    #     flower_list = []
 
-        if self.fighter.level < len(self.experience_per_level):
-            xp_to_next_level = self.experience_per_level[self.fighter.level+1]
-            if self.fighter.current_xp >= xp_to_next_level:
-                self.fighter.level += 1
-                self.fighter.ability_points += 1
-                game_engine.action_queue.extend([{"message": "Level up!!!"}])
-                game_engine.game_state = GAME_STATE.LEVEL_UP_WINDOW
+    #     if self.fighter.level < len(self.experience_per_level):
+    #         xp_to_next_level = self.experience_per_level[self.fighter.level+1]
+    #         if self.fighter.current_xp >= xp_to_next_level:
+    #             self.fighter.level += 1
+    #             self.fighter.ability_points += 1
+    #             game_engine.action_queue.extend([{"message": "Level up!!!"}])
+    #             game_engine.game_state = GAME_STATE.LEVEL_UP_WINDOW
 
-            else:
-                for flower in self.equipment.item_slot:
-                    xp_to_next_level = flower.experience_per_level[flower.level+1]
-                    if flower.current_xp >= xp_to_next_level and flower.max_level >= flower.level:
-                        flower.level += 1
-                        game_engine.action_queue.extend([{"message": f"{flower.name} Level up!!!"}])
-                        game_engine.game_state = GAME_STATE.LEVEL_UP_FLOWER
-                        flower.level_up()
-                        break
-                    else:
-                        game_engine.game_state = GAME_STATE.NORMAL
+    #         else:
+    #             for flower in self.equipment.item_slot:
+    #                 xp_to_next_level = flower.experience_per_level[flower.level+1]
+    #                 if flower.current_xp >= xp_to_next_level and flower.max_level >= flower.level:
+    #                     flower.level += 1
+    #                     flower_list.append(flower)
+    #                     game_engine.action_queue.extend([{"message": f"{flower.name} Level up!!!"}])
+    #                     game_engine.game_state = GAME_STATE.LEVEL_UP_FLOWER
+    #                     # flower.level_up()
+    #                     break
+    #                 else:
+    #                     game_engine.game_state = GAME_STATE.NORMAL
+
+    # def level_up(self):
+    #     select = ["STR", "DEX", "INT"]
+    #     bonus = choices(select, weights=[5, 2.5, 2.5])
+    #     self.states_bonus.setdefault(bonus[0], 0)
+    #     self.states_bonus[bonus[0]] += 1
 
 
 

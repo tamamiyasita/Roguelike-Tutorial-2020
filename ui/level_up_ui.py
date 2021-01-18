@@ -7,6 +7,8 @@ from actor.skills.leaf_blade import LeafBlade
 from actor.skills.branch_baton import BranchBaton
 from actor.skills.healing import Healing
 from actor.skills.seed_shot import SeedShot
+from level_up_sys import check_experience_level
+
 from enum import Enum, auto
 from collections import deque
 
@@ -22,8 +24,7 @@ healing = Healing()
 seed_shot = SeedShot()
 
 class LevelupUI:
-    def __init__(self, engine):
-        self.engine = engine
+    def __init__(self):
         self.up_str = ""
         self.up_dex = ""
         self.up_int = ""
@@ -39,27 +40,26 @@ class LevelupUI:
 
     def states_choices(self, key):
         self.key = key
-        if self.engine.player.fighter.ability_points >= 1:
+        if self.player.fighter.ability_points >= 1:
             if key == arcade.key.S:
-                self.engine.player.fighter.base_strength += 1
-                self.engine.player.fighter.ability_points -= 1
+                self.player.fighter.base_strength += 1
+                self.player.fighter.ability_points -= 1
                 self.tmp_states = "STR"
             elif key == arcade.key.D:
-                self.engine.player.fighter.base_dexterity += 1
-                self.engine.player.fighter.ability_points -= 1
+                self.player.fighter.base_dexterity += 1
+                self.player.fighter.ability_points -= 1
                 self.tmp_states = "DEX"
             elif key == arcade.key.I:
-                self.engine.player.fighter.base_intelligence += 1
-                self.engine.player.fighter.ability_points -= 1
+                self.player.fighter.base_intelligence += 1
+                self.player.fighter.ability_points -= 1
                 self.tmp_states = "INT"
             self.ui_state = Select.open_skill
 
-    def window_pop(self, viewports):
+    def window_pop(self, viewports, engine):
         """Levelup時に出現するwindow"""
-
-
             
-
+        self.engine = engine
+        self.player = engine.player
         self.viewports = viewports
 
         self.viewport_left = self.viewports[0]
@@ -69,11 +69,54 @@ class LevelupUI:
 
         self.bottom_left_x=self.viewport_left+(MAIN_PANEL_X/2) -(self.window_width/2)
         self.bottom_left_y=self.viewport_bottom+500
-        self.draw_base_window()
-        self.draw_ability_select()
 
-        if self.ui_state == Select.open_skill or self.get_skill:
-            self.draw_skill_get_window()
+        if self.engine.game_state == GAME_STATE.LEVEL_UP_WINDOW:
+            self.draw_base_window()
+            self.draw_ability_select()
+
+            if self.ui_state == Select.open_skill or self.get_skill:
+                self.draw_skill_get_window()
+        
+        else:#flowerのlevel画面
+            self.flower_level_up_window()
+
+    def flower_level_up_window(self):
+        # 最下部の基本枠
+        arcade.draw_xywh_rectangle_filled(
+            bottom_left_x=self.bottom_left_x,
+            bottom_left_y=self.bottom_left_y,
+            width=self.window_width,
+            height=self.window_height,
+            color=[25, 255, 255, 220]
+        )
+        flower = None
+
+        for f in self.player.equipment.item_slot:
+            xp_to_next_level = f.experience_per_level[f.level+1]
+            if f.current_xp >= xp_to_next_level and f.max_level >= f.level:
+                flower = f
+                break
+            else:
+                self.game_engine.game_state = GAME_STATE.NORMAL
+        
+        arcade.draw_scaled_texture_rectangle(
+            center_x=self.player.center_x,
+            center_y=self.player.center_y + (GRID_SIZE * 3),
+            texture=flower.texture,
+            scale=5
+            )
+        STR = flower.states_bonus.get("STR")
+        DEX = flower.states_bonus.get("DEX")
+        INT = flower.states_bonus.get("INT")
+
+
+
+        
+
+
+
+
+
 
 
 
@@ -107,19 +150,23 @@ class LevelupUI:
         # ability point表示
         text_color = arcade.color.PALATINATE_PURPLE
         arcade.draw_text(
-            text=f"ability point: {self.engine.player.fighter.ability_points}",
+            text=f"ability point: {self.player.fighter.ability_points}",
             start_x=self.text_position_x,
             start_y=self.text_position_y - spacing,
             font_name="consola.ttf",
             color=text_color,
             font_size=text_size-7
         )
+        STR = f"STR: {self.player.fighter.base_strength} {self.up_str}"
+        DEX = f"DEX: {self.player.fighter.base_dexterity} {self.up_dex}"
+        INT = f"INT: {self.player.fighter.base_intelligence} {self.up_int}"
 
         # 以下ステータスpointの表示
         self.text_position_y -= spacing
         text_color = arcade.color.RED_ORANGE
+
         arcade.draw_text(
-            text=f"STR: {self.engine.player.fighter.base_strength} {self.up_str}",
+            text=STR,
             start_x=self.text_position_x,
             start_y=self.text_position_y - spacing,
             font_name="consola.ttf",
@@ -130,7 +177,7 @@ class LevelupUI:
         self.text_position_y -= spacing
         text_color = arcade.color.BLUEBERRY
         arcade.draw_text(
-            text=f"DEX: {self.engine.player.fighter.base_dexterity} {self.up_dex}",
+            text=DEX,
             start_x=self.text_position_x,
             start_y=self.text_position_y - spacing,
             font_name="consola.ttf",
@@ -141,7 +188,7 @@ class LevelupUI:
         self.text_position_y -= spacing
         text_color = arcade.color.BLACK_LEATHER_JACKET
         arcade.draw_text(
-            text=f"INT: {self.engine.player.fighter.base_intelligence} {self.up_int}",
+            text=INT,
             start_x=self.text_position_x,
             start_y=self.text_position_y - spacing,
             font_name="consola.ttf",
@@ -151,7 +198,7 @@ class LevelupUI:
 
     def draw_ability_select(self):
         # ability pointがゼロ、かつstateがabilityで選択文が出る
-        if self.engine.player.fighter.ability_points == 0 and self.ui_state == Select.ability:
+        if self.player.fighter.ability_points == 0 and self.ui_state == Select.ability:
             self.up_str = ""
             self.up_dex = ""
             self.up_int = ""
@@ -166,27 +213,28 @@ class LevelupUI:
 
             # Yボタンが押されたらgame stateをノーマルに戻し終了
             if self.key == arcade.key.Y:
-                self.engine.player.fighter.skill_list.extend(self.skill_result)
+                self.player.fighter.skill_list.extend(self.skill_result)
                 self.get_skill = None
                 self.select_skill = True
                 self.skill_result = []
-                self.engine.player.equipment.passive_sprite_on(self.engine.cur_level.equip_sprites)
+                self.player.equipment.passive_sprite_on(self.engine.cur_level.equip_sprites)
 
-                self.engine.player.check_experience_level(self.engine)
-                # self.engine.game_state = GAME_STATE.NORMAL
+                # 花も同時にレベルが上がっていた場合に備えてのチェック
+                self.f_list = check_experience_level(self.player, self.engine)
+                # self.engine.game_state = GAME_STATE.NORMAL # ← すぐ上の関数に移動した
 
 
             # Nボタンならability pointを戻し再選択させる
             elif self.key == arcade.key.N or self.key == arcade.key.ESCAPE:
-                self.engine.player.fighter.ability_points += 1
+                self.player.fighter.ability_points += 1
                 if self.tmp_states == "STR":
-                    self.engine.player.fighter.base_strength -= 1
+                    self.player.fighter.base_strength -= 1
                 elif self.tmp_states == "DEX":
-                    self.engine.player.fighter.base_dexterity -= 1
+                    self.player.fighter.base_dexterity -= 1
                 elif self.tmp_states == "INT":
-                    self.engine.player.fighter.base_intelligence -= 1
+                    self.player.fighter.base_intelligence -= 1
 
-        elif self.engine.player.fighter.ability_points != 0:
+        elif self.player.fighter.ability_points != 0:
             self.up_str = "(key press S + 1)"
             self.up_dex = "(key press D + 1)"
             self.up_int = "(key press I + 1)"
@@ -202,7 +250,7 @@ class LevelupUI:
 
     def draw_skill_get_window(self):
         # ability pointがゼロかつスキル取得レベルなら追加で窓を表示する
-        if self.engine.player.fighter.ability_points < 1:
+        if self.player.fighter.ability_points < 1:
             if 0 < len(self.skill_queue) and self.select_skill:
                 self.get_skill = self.skill_queue.popleft()
                 self.select_skill = False

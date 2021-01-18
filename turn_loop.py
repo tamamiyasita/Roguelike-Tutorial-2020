@@ -45,12 +45,6 @@ class TurnLoop:
 
                 print(states.count_time, states)
                 
-                    # states.count_time -= 1   
-                    # if 0 > states.count_time:
-                    #     states.call_off()
-                    #     actor.fighter.states.remove(states)
-
-
 
     def loop_on(self, engine):
         """actor間のメインループ制御"""

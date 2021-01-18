@@ -81,7 +81,7 @@ class MG(arcade.Window):
         # 会話画面の初期化はここで行う
         self.massage_window = MessageWindow(self.engine)
 
-        self.level_up_window = LevelupUI(self.engine)
+        self.level_up_window = LevelupUI()
 
     def draw_sprites(self):
         """ 全てのスプライトリストをここで描画する """
@@ -163,7 +163,7 @@ class MG(arcade.Window):
             draw_inventory(self.engine.player, self.engine.selected_item, self.viewports)
 
         elif self.engine.game_state == GAME_STATE.LEVEL_UP_WINDOW or self.engine.game_state == GAME_STATE.LEVEL_UP_FLOWER:
-            self.level_up_window.window_pop(self.viewports)
+            self.level_up_window.window_pop(self.viewports, self.engine)
 
         # 会話画面の表示
         elif self.engine.game_state == GAME_STATE.MESSAGE_WINDOW:
@@ -182,8 +182,8 @@ class MG(arcade.Window):
         """全てのスプライトリストのアップデートを行う
            他にアクションキュー、ターンチェンジ、pcの移動とviewport、expのチェック
         """
-        if self.engine.game_state == GAME_STATE.NORMAL or self.engine.game_state == GAME_STATE.INVENTORY:
-            self.engine.process_action_queue(delta_time)
+        # if self.engine.game_state == GAME_STATE.NORMAL or self.engine.game_state == GAME_STATE.INVENTORY:
+        self.engine.process_action_queue(delta_time)
 
 
         if self.engine.game_state == GAME_STATE.NORMAL:
@@ -270,7 +270,7 @@ class MG(arcade.Window):
         elif key == arcade.key.F8:
 
             self.load()
-        elif key == arcade.key.F1 and modifiers == arcade.key.MOD_SHIFT:
+        elif key == arcade.key.F1:
             self.engine.player.fighter.ability_points += 1
             self.engine.player.fighter.level += 1
             self.engine.game_state = GAME_STATE.LEVEL_UP_WINDOW

@@ -124,20 +124,6 @@ def draw_inventory(player, selected_item, viewport):
                     anchor_y="top"
                 )
 
-            # # itemのアイコンを描画
-            # if cur_item:
-            #     scale = 2
-            #     if Tag.flower in cur_item.tag:
-            #         scale = 4
-            #     arcade.draw_scaled_texture_rectangle(
-            #         center_x=back_panel_right - ((GRID_SIZE*2)+(GRID_SIZE/2)),
-            #         center_y=back_panel_top_left - ((GRID_SIZE/2)) + y,
-            #         texture=IMAGE_ID[cur_item.name][0], #cur_item.texture,
-            #         scale=scale
-            #         )
-            
-
-
 
 
         # item名の表示
