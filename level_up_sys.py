@@ -4,9 +4,7 @@ from random import choices
 
 
 def check_experience_level(player, game_engine):
-    # TODO やっぱengineに移動させよう
 
-    # if player.fighter.level < len(player.experience_per_level):
     xp_to_next_level = player.experience_per_level[player.fighter.level+1]
     if player.fighter.current_xp >= xp_to_next_level:
         player.fighter.level += 1
@@ -27,8 +25,10 @@ def check_experience_level(player, game_engine):
                 game_engine.game_state = GAME_STATE.NORMAL
 
 
-def level_up(flower):
+def level_up(flower, weights):
     select = ["STR", "DEX", "INT"]
-    bonus = choices(select, weights=[5, 2.5, 2.5])
+    bonus = choices(select, weights=weights)
     flower.states_bonus.setdefault(bonus[0], 0)
     flower.states_bonus[bonus[0]] += 1
+
+    return bonus

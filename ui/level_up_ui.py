@@ -7,7 +7,7 @@ from actor.skills.leaf_blade import LeafBlade
 from actor.skills.branch_baton import BranchBaton
 from actor.skills.healing import Healing
 from actor.skills.seed_shot import SeedShot
-from level_up_sys import check_experience_level
+from level_up_sys import check_experience_level, level_up
 
 from enum import Enum, auto
 from collections import deque
@@ -34,26 +34,30 @@ class LevelupUI:
         self.skill_result = []
         self.get_skill = None
         self.select_skill = True
+        self.level_bonus = None
 
         self.window_width = SCREEN_WIDTH - 924
         self.window_height = SCREEN_HEIGHT - 800
 
     def states_choices(self, key):
         self.key = key
-        if self.player.fighter.ability_points >= 1:
-            if key == arcade.key.S:
-                self.player.fighter.base_strength += 1
-                self.player.fighter.ability_points -= 1
-                self.tmp_states = "STR"
-            elif key == arcade.key.D:
-                self.player.fighter.base_dexterity += 1
-                self.player.fighter.ability_points -= 1
-                self.tmp_states = "DEX"
-            elif key == arcade.key.I:
-                self.player.fighter.base_intelligence += 1
-                self.player.fighter.ability_points -= 1
-                self.tmp_states = "INT"
-            self.ui_state = Select.open_skill
+        if self.engine.game_state == GAME_STATE.LEVEL_UP_WINDOW:
+            if self.player.fighter.ability_points >= 1:
+                if key == arcade.key.S:
+                    self.player.fighter.base_strength += 1
+                    self.player.fighter.ability_points -= 1
+                    self.tmp_states = "STR"
+                elif key == arcade.key.D:
+                    self.player.fighter.base_dexterity += 1
+                    self.player.fighter.ability_points -= 1
+                    self.tmp_states = "DEX"
+                elif key == arcade.key.I:
+                    self.player.fighter.base_intelligence += 1
+                    self.player.fighter.ability_points -= 1
+                    self.tmp_states = "INT"
+                self.ui_state = Select.open_skill
+
+            
 
     def window_pop(self, viewports, engine):
         """Levelup時に出現するwindow"""
@@ -69,6 +73,8 @@ class LevelupUI:
 
         self.bottom_left_x=self.viewport_left+(MAIN_PANEL_X/2) -(self.window_width/2)
         self.bottom_left_y=self.viewport_bottom+500
+        self.back_panel_top_left = self.viewport_top - (GRID_SIZE*4)
+
 
         if self.engine.game_state == GAME_STATE.LEVEL_UP_WINDOW:
             self.draw_base_window()
@@ -77,41 +83,107 @@ class LevelupUI:
             if self.ui_state == Select.open_skill or self.get_skill:
                 self.draw_skill_get_window()
         
-        else:#flowerのlevel画面
-            self.flower_level_up_window()
+        #flowerのlevel画面
+        elif self.engine.game_state == GAME_STATE.LEVEL_UP_FLOWER:
+            self.flower_level_up_window(engine)
 
-    def flower_level_up_window(self):
+    def flower_level_up_window(self, engine):
+            # check_experience_level(self.player, engine)
+            # engine.game_state = GAME_STATE.NORMAL
+
         # 最下部の基本枠
         arcade.draw_xywh_rectangle_filled(
-            bottom_left_x=self.bottom_left_x,
-            bottom_left_y=self.bottom_left_y,
-            width=self.window_width,
-            height=self.window_height,
-            color=[25, 255, 255, 220]
+            bottom_left_x=self.viewport_left + (GRID_SIZE*5),
+            bottom_left_y=self.back_panel_top_left- (GRID_SIZE*3),
+            width=(GRID_SIZE*5),
+            height=(GRID_SIZE*3),
+            color=[255, 255, 255, 60]
         )
-        flower = None
-
-        for f in self.player.equipment.item_slot:
-            xp_to_next_level = f.experience_per_level[f.level+1]
-            if f.current_xp >= xp_to_next_level and f.max_level >= f.level:
-                flower = f
-                break
-            else:
-                self.game_engine.game_state = GAME_STATE.NORMAL
-        
-        arcade.draw_scaled_texture_rectangle(
+        arcade.draw_rectangle_filled(
             center_x=self.player.center_x,
-            center_y=self.player.center_y + (GRID_SIZE * 3),
-            texture=flower.texture,
-            scale=5
-            )
-        STR = flower.states_bonus.get("STR")
-        DEX = flower.states_bonus.get("DEX")
-        INT = flower.states_bonus.get("INT")
+            center_y=self.back_panel_top_left + (GRID_SIZE),
+            width=100,
+            height=100,
+            color=(150,150,150,150)
+        )
+        item = None
+        for item in self.player.equipment.item_slot:
+            xp_to_next_level = item.experience_per_level[item.level+1]
+            if item.current_xp >= xp_to_next_level and item.max_level >= item.level:
+                if self.key == arcade.key.ENTER:
+                    item.level += 1
+                    self.level_bonus = None
+                    check_experience_level(self.player, engine)
+                    
+                elif not self.level_bonus:
+                    self.level_bonus = level_up(item, item.level_up_weights)
 
 
 
-        
+                y = -10
+                font_size =15
+
+                item_text = f"{item.name}".replace("_", " ").title()
+
+                arcade.draw_scaled_texture_rectangle(
+                    center_x=self.player.center_x,
+                    center_y=self.back_panel_top_left + (GRID_SIZE),
+                    texture=item.texture,
+                    scale=6
+                    )
+                    
+                # 花名タイトル
+                arcade.draw_text(
+                    text=f"LEVEL UP {item_text}",
+                    start_x=self.bottom_left_x + 10,
+                    start_y=self.back_panel_top_left-10,
+                    color=arcade.color.BLUE_GREEN,
+                    font_size=font_size+4,
+                    font_name="consola.ttf",
+                    anchor_y="top"
+                )
+
+                ifs = 5
+                # STR,DEX,INTの表示
+                font_color = (220, 208, 255)
+                for k,v in item.states_bonus.items():
+                    if self.level_bonus and k == self.level_bonus[0]:
+                        font_color = (250, 150, 159)
+                    else:
+                        font_color = (220, 208, 255)
+
+                    arcade.draw_text(
+                        text=f"{k}:{v}",
+                        start_x=self.bottom_left_x + 10,
+                        start_y=self.back_panel_top_left + y - (22) - ifs,
+                        color=font_color,
+                        font_size=font_size,
+                        font_name="consola.ttf",
+                        anchor_y="top"
+                    )
+                    ifs += 21
+                # スキルの表示
+                for k, v in item.skill_add.items():
+                    arcade.draw_text(
+                        text=f"{k} level {v}".replace("_", " ").title(),
+                        start_x=self.bottom_left_x + 10,
+                        start_y=self.back_panel_top_left + y - (22) - ifs,
+                        color=arcade.color.CORNSILK,
+                        font_size=font_size,
+                        font_name="consola.ttf",
+                        anchor_y="top"
+                    )
+                    ifs += 19
+                
+                break
+            # else:
+            #     engine.game_state = GAME_STATE.NORMAL
+            #     self.level_bonus = None
+
+
+
+
+            
 
 
 

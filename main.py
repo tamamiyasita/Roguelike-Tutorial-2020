@@ -230,19 +230,11 @@ class MG(arcade.Window):
             arcade.close_window()
 
 
-        # Lコマンド時、スクロール仕様時などのカーソル移動と選択
-        if self.engine.game_state == GAME_STATE.SELECT_LOCATION or self.engine.game_state == GAME_STATE.LOOK:
-            grid_select_key(key, self.select_UI)
                      
         # playerの移動
         self.engine.move_switch = True
         if self.engine.game_state == GAME_STATE.NORMAL:
             self.player_direction = keymap(key, self.engine)
-
-        # インベントリを操作する
-        if self.engine.game_state == GAME_STATE.INVENTORY:
-            inventory_key(key, self.engine)
-
 
         # ドア開閉
         if self.engine.player.state == state.DOOR:
@@ -250,16 +242,25 @@ class MG(arcade.Window):
             if door_check:
                 self.engine.action_queue.extend([{"use_door": door_check}])
 
+        # Lコマンド時、スクロール仕様時などのカーソル移動と選択
+        elif self.engine.game_state == GAME_STATE.SELECT_LOCATION or self.engine.game_state == GAME_STATE.LOOK:
+            grid_select_key(key, self.select_UI)
+
+        # インベントリを操作する
+        elif self.engine.game_state == GAME_STATE.INVENTORY:
+            inventory_key(key, self.engine)
+
+
         # Level states up処理
-        if self.engine.game_state == GAME_STATE.LEVEL_UP_WINDOW or self.engine.game_state == GAME_STATE.LEVEL_UP_FLOWER:
+        elif self.engine.game_state == GAME_STATE.LEVEL_UP_WINDOW or self.engine.game_state == GAME_STATE.LEVEL_UP_FLOWER:
             self.level_up_window.states_choices(key)
 
         # 会話画面の返答処理
-        if self.engine.game_state == GAME_STATE.MESSAGE_WINDOW:
+        elif self.engine.game_state == GAME_STATE.MESSAGE_WINDOW:
             self.choice = self.massage_window.message_choices(key)
 
         # キャラクタースクリーンでキャンセルする為だけの項目
-        if self.engine.game_state == GAME_STATE.CHARACTER_SCREEN:
+        elif self.engine.game_state == GAME_STATE.CHARACTER_SCREEN:
             if key == arcade.key.ESCAPE:
                 self.engine.game_state = GAME_STATE.NORMAL
         
@@ -271,9 +272,12 @@ class MG(arcade.Window):
 
             self.load()
         elif key == arcade.key.F1:
-            self.engine.player.fighter.ability_points += 1
-            self.engine.player.fighter.level += 1
-            self.engine.game_state = GAME_STATE.LEVEL_UP_WINDOW
+            from level_up_sys import check_experience_level
+
+            self.engine.player.fighter.current_xp += 70
+            self.engine.player.equipment.item_exp_add(70)
+            check_experience_level(self.engine.player, self.engine)
+            # self.engine.game_state = GAME_STATE.LEVEL_UP_WINDOW
 
         if key == arcade.key.F2:
             # self.engine.player.fighter.states.append(PoisonStatus(1, 3))

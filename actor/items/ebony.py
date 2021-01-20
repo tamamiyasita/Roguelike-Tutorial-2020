@@ -15,7 +15,7 @@ class Ebony(Actor):
         )
 
         self.slot = "flower"
-        self.states_bonus = {"STR": 1}
+        self.states_bonus = {"STR": 1, "DEX":2, "INT":2}
 
         self.level = 1
         self.max_level = 5
@@ -25,6 +25,7 @@ class Ebony(Actor):
         self.skill_add = {"branch_baton":1, "leaf_blade":1}
 
         self.experience_per_level = exp_calc()
+        self.level_up_weights = [5, 3, 2]
 
         self.current_xp = 0
 
