@@ -12,17 +12,14 @@ def check_experience_level(player, game_engine):
         game_engine.action_queue.extend([{"message": "Level up!!!"}])
         game_engine.game_state = GAME_STATE.LEVEL_UP_WINDOW
 
-    else:
-        for flower in player.equipment.item_slot:
-            xp_to_next_level = flower.experience_per_level[flower.level+1]
-            if flower.current_xp >= xp_to_next_level and flower.max_level >= flower.level:
+def check_flower_level(player):
+    result = []
+    for flower in player.equipment.item_slot:
+        xp_to_next_level = flower.experience_per_level[flower.level+1]
+        if flower.current_xp >= xp_to_next_level and flower.max_level >= flower.level:
+            result.append(flower)
 
-                # game_engine.action_queue.extend([{"message": f"{flower.name} Level up!!!"}])
-                game_engine.game_state = GAME_STATE.LEVEL_UP_FLOWER
-                break
-
-            else:
-                game_engine.game_state = GAME_STATE.NORMAL
+    return result
 
 
 def level_up(flower, weights):

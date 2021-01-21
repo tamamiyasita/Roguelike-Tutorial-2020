@@ -13,27 +13,26 @@ class Ebony(Actor):
             x=x,
             y=y,
         )
-
+        # template
         self.slot = "flower"
-        self.states_bonus = {"STR": 1, "DEX":2, "INT":2}
+        self.tag = [Tag.item, Tag.equip, Tag.flower]
+        self.current_xp = 0
 
+        # level
         self.level = 1
         self.max_level = 5
-
-        self.tag = [Tag.item, Tag.equip, Tag.flower]
-        
-        self.skill_add = {"branch_baton":1, "leaf_blade":1}
-
         self.experience_per_level = exp_calc()
         self.level_up_weights = [5, 3, 2]
 
-        self.current_xp = 0
+        # states
+        self.states_bonus = {"STR": 1}
+        self.skill_add = {"branch_baton":1}
+        
 
-        self.explanatory_text = f"Is Ebony $#############4TEst test test \n test$#4444444444testtest"
-
-
+        # position
         self.item_margin_x = 19
         self.item_margin_y = 11
         self.my_speed = 4.0
 
 
+        self.explanatory_text = f"Is Ebony $#############4TEst test test \n test$#4444444444testtest"

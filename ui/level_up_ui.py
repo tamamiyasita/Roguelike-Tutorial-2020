@@ -7,7 +7,7 @@ from actor.skills.leaf_blade import LeafBlade
 from actor.skills.branch_baton import BranchBaton
 from actor.skills.healing import Healing
 from actor.skills.seed_shot import SeedShot
-from level_up_sys import check_experience_level, level_up
+from level_up_sys import check_experience_level, check_flower_level, level_up
 
 from enum import Enum, auto
 from collections import deque
@@ -31,10 +31,11 @@ class LevelupUI:
         self.tmp_states = None
         self.ui_state = Select.delay
         self.skill_queue = deque([healing, seed_shot, (leaf_blade, branch_baton), healing ])
-        self.skill_result = []
         self.get_skill = None
         self.select_skill = True
-        self.level_bonus = None
+        self.skill_result = [] # playerのSkill決定時にget_skillが入れられる
+        self.level_bonus = None # flowerのステータスボーナス
+        self.flowers = [] # レベルアップするflowerのリスト
 
         self.window_width = SCREEN_WIDTH - 924
         self.window_height = SCREEN_HEIGHT - 800
@@ -84,12 +85,14 @@ class LevelupUI:
                 self.draw_skill_get_window()
         
         #flowerのlevel画面
-        elif self.engine.game_state == GAME_STATE.LEVEL_UP_FLOWER:
+        elif len(self.flowers) > 0:
+            # self.engine.game_state = GAME_STATE.LEVEL_UP_FLOWER
             self.flower_level_up_window(engine)
 
+        elif not self.flowers:
+            engine.game_state = GAME_STATE.NORMAL
+
     def flower_level_up_window(self, engine):
-            # check_experience_level(self.player, engine)
-            # engine.game_state = GAME_STATE.NORMAL
 
         # 最下部の基本枠
         arcade.draw_xywh_rectangle_filled(
@@ -106,14 +109,17 @@ class LevelupUI:
             height=100,
             color=(150,150,150,150)
         )
-        item = None
-        for item in self.player.equipment.item_slot:
+
+        
+        if len(self.flowers) > 0:
+            item = self.flowers[0]
             xp_to_next_level = item.experience_per_level[item.level+1]
             if item.current_xp >= xp_to_next_level and item.max_level >= item.level:
                 if self.key == arcade.key.ENTER:
                     item.level += 1
                     self.level_bonus = None
-                    check_experience_level(self.player, engine)
+                    self.flowers.remove(item)
+                    self.key = None
                     
                 elif not self.level_bonus:
                     self.level_bonus = level_up(item, item.level_up_weights)
@@ -175,10 +181,6 @@ class LevelupUI:
                     )
                     ifs += 19
                 
-                break
-            # else:
-            #     engine.game_state = GAME_STATE.NORMAL
-            #     self.level_bonus = None
 
 
 
@@ -292,7 +294,15 @@ class LevelupUI:
                 self.player.equipment.passive_sprite_on(self.engine.cur_level.equip_sprites)
 
                 # 花も同時にレベルが上がっていた場合に備えてのチェック
-                self.f_list = check_experience_level(self.player, self.engine)
+                self.flowers = check_flower_level(self.player)
+                if len(self.flowers) < 1:
+                    self.engine.game_state = GAME_STATE.NORMAL
+                else:
+                    self.engine.game_state = GAME_STATE.LEVEL_UP_FLOWER
+                    
+
+
+                # self.f_list = check_experience_level(self.player, self.engine)
                 # self.engine.game_state = GAME_STATE.NORMAL # ← すぐ上の関数に移動した
 
 
