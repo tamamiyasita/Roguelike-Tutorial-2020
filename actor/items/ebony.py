@@ -18,6 +18,7 @@ class Ebony(Actor):
         self.tag = [Tag.item, Tag.equip, Tag.flower]
         self.current_xp = 0
 
+
         # level
         self.level = 1
         self.max_level = 5
@@ -27,6 +28,7 @@ class Ebony(Actor):
         # states
         self.states_bonus = {"STR": 1}
         self.skill_add = {"branch_baton":1}
+        self.unique_data = {}
         
 
         # position
