@@ -28,7 +28,7 @@ class Ebony(Actor):
         # states
         self.states_bonus = {"STR": 1}
         self.skill_add = {"branch_baton":1}
-        self.unique_data = {}
+        # self.actor_data = {}
         
 
         # position

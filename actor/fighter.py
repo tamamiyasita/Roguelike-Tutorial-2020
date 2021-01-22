@@ -125,11 +125,14 @@ class Fighter:
     
     @property
     def active_skill(self):
-        return [skill for skill in self.skill_list if Tag.active in skill.tag and 0 < skill.level]
+        return [skill for skill in self.skill_list if Tag.active in skill.tag and skill.actor_data["switch"] == True]
 
     @property
     def passive_skill(self):
         return [skill for skill in self.skill_list if Tag.passive in skill.tag]
+
+                    
+
 
                  
 

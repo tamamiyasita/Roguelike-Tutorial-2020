@@ -1,7 +1,6 @@
 from actor.actor import Actor
 from constants import *
 from data import *
-from random import choices
 from util import exp_calc
 
 

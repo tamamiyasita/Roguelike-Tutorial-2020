@@ -34,27 +34,11 @@ class Equipment:
 
     # 階層を移動する時に使う関数
     def item_sprite_check(self, sprites):
-            # 装備スプライトをスプライトリストに入れて表示する
+            # 花スプライトをスプライトリストに入れて表示する
             for item in self.item_slot:
                 if item and item not in sprites and not isinstance(item, str):
                     sprites.append(item)
                 
-
-            # 装備解除しスプライトがスロットから無くなればスプライトリストからも削除
-            # for item in sprites:
-            #     if item and item not in self.item_slot:
-            #         item.remove_from_sprite_lists()
-
-    def passive_sprite_on(self, sprites):
-        # leaf blade など画面に表示されるpassiveskillをonにする
-            for equip in self.owner.fighter.passive_skill:
-                if equip and equip not in sprites:
-                    sprites.append(equip)
-
-    def passive_sprite_off(self, sprites):
-            for skill in self.owner.fighter.passive_skill:
-                if skill.running == False and skill in sprites:
-                    sprites.remove(skill)
 
     def equip_position_reset(self):
         # 装備アイテムの表示位置をリセットする
@@ -68,9 +52,6 @@ class Equipment:
         for item in self.item_slot:
             if hasattr(item, "current_xp"):
                 item.current_xp += exp
-
-
-
 
 
     @property

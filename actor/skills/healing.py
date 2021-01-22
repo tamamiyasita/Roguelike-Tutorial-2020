@@ -50,12 +50,15 @@ class Healing(Actor):
             name="healing",
             scale=4.5,
             count_time=0,
-            cooldown_switch=False
+            cooldown_switch=False,
+            actor_data={"switch":True,
+                        "count_time":0,
+                        "cooldown":False}
 
         )
         self.owner = None
 
-        self.level = 0
+        self.level = 1
 
         self.max_cooldown_time = 4
 

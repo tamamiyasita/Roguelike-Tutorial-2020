@@ -27,7 +27,8 @@ class Actor(arcade.Sprite):
                  visible_color=COLORS["white"], not_visible_color=COLORS["black"],
                  tag={Tag.free},
                  states=None, npc_state=None, left_face=False,
-                 count_time=None, cooldown_switch=None, power=None
+                 count_time=None, cooldown_switch=None, power=None,
+                 actor_data=None
                  ):
         super().__init__(scale=scale)
         if name:
@@ -52,6 +53,10 @@ class Actor(arcade.Sprite):
         self._master = None # 自身がitemだった場合その所持者を表す、主に装備時Spriteの表示位置に使用する
         self.d_time = 170 # 待機モーション時のdelay時間
         self.is_dead = None
+
+        self.actor_data = actor_data
+
+
         self.count_time = count_time
         self.cooldown_switch = cooldown_switch
         
@@ -102,6 +107,7 @@ class Actor(arcade.Sprite):
         result["count_time"] = self.count_time
         result["cooldown_switch"] = self.cooldown_switch
         result["power"] = self.power
+        result["actor_data"] = self.actor_data
 
         if self.state:
             result["state"] = self.state.name
@@ -151,6 +157,7 @@ class Actor(arcade.Sprite):
         self.count_time = result["count_time"]
         self.cooldown_switch = result["cooldown_switch"]
         self.power = result["power"]
+        self.actor_data = result["actor_data"]
 
         if "state" in result:
             self.state = state[result["state"]]

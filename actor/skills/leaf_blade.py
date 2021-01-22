@@ -14,6 +14,7 @@ class LeafBlade(Actor):
             name="leaf_blade",
             x=x,
             y=y,
+            actor_data={"switch":True},
             color=COLORS["white"]
         )
 
@@ -21,8 +22,7 @@ class LeafBlade(Actor):
         self.hit_rate = 95
         self.speed = 6
 
-        self.level = 0
-        self.running = False
+        self.level = 1
 
         self.tag = [Tag.item, Tag.equip, Tag.skill, Tag.passive]
 
@@ -36,14 +36,12 @@ class LeafBlade(Actor):
     def explanatory_text(self):
         return f"damage: {self.level}D{self.damage}\nhit rate: {self.hit_rate}"
 
-    def activate(self, owner):
-        self.running = True
+    def activate(self, owner):        
         if not owner.fighter.weapon:
             owner.fighter.weapon = self
             self.master = owner
 
     def deactivate(self, owner):        
-        self.running = False
         owner.fighter.weapon = None
         if self.master:
             del self.master

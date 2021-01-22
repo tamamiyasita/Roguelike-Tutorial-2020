@@ -291,7 +291,6 @@ class LevelupUI:
                 self.get_skill = None
                 self.select_skill = True
                 self.skill_result = []
-                self.player.equipment.passive_sprite_on(self.engine.cur_level.equip_sprites)
 
                 # 花も同時にレベルが上がっていた場合に備えてのチェック
                 self.flowers = check_flower_level(self.player)

@@ -600,7 +600,6 @@ class GameEngine:
                     self.flower_sprites = arcade.SpriteList(use_spatial_hash=True, spatial_hash_cell_size=32)
                     self.tmp_effect_sprites = arcade.SpriteList(use_spatial_hash=True, spatial_hash_cell_size=32)
 
-                    self.player.equipment.passive_sprite_on(self.flower_sprites)
                     self.player.equipment.item_sprite_check(self.flower_sprites)
                     self.player.equipment.equip_position_reset()
                     self.game_state = GAME_STATE.NORMAL

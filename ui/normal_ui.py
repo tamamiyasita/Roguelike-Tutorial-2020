@@ -234,18 +234,22 @@ class NormalUI:
         back_panel_y = self.viewport_bottom + SCREEN_HEIGHT // 8 # 背景パネルの下端
         item_row = self.viewport_top - GRID_SIZE*5#(SCREEN_HEIGHT //1.3) - 320 # 行の最上段
         item_font_size = 17
+        item_text = ""
         left_margin = self.viewport_left + self.side_panel_width + 7  # 画面左からのHPとバーの位置
         y = 0
             
         for passive in self.player.fighter.passive_skill:
 
-            if 0 < passive.level:
-                passive.activate(self.player)
-                self.player.equipment.passive_sprite_on(self.engine.cur_level.equip_sprites)
+            if passive.actor_data["switch"] == True:
                 item_text = f"{passive.name} (level {passive.level})".replace("_", " ").title()
-            else:
+
+                if passive not in self.engine.cur_level.equip_sprites:
+                    passive.activate(self.player)
+                    self.engine.cur_level.equip_sprites.append(passive)
+
+            elif passive.actor_data["switch"] == False and passive in self.engine.cur_level.equip_sprites:
                 passive.deactivate(self.player)
-                self.player.equipment.passive_sprite_off(self.engine.cur_level.equip_sprites)
+                passive.remove_from_sprite_lists()
                 continue
 
             arcade.draw_text(
