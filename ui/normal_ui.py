@@ -202,7 +202,7 @@ class NormalUI:
                     texture=skill.texture
                 )
                 # アイコンに白幕をかけクールダウンタイム表示
-                if 0 < skill.count_time:
+                if 0 < skill.data["count_time"]:
                     arcade.draw_texture_rectangle(
                         center_x=skill_position+10,
                         center_y=skill_top_position-10,
@@ -212,7 +212,7 @@ class NormalUI:
                         alpha=200
                     )
                     arcade.draw_text(
-                        text=str(skill.count_time),
+                        text=str(skill.data["count_time"]),
                         start_x=skill_position + 10,
                         start_y=skill_top_position - 10,
                         color=arcade.color.DARK_BLUE,
@@ -240,14 +240,14 @@ class NormalUI:
             
         for passive in self.player.fighter.passive_skill:
 
-            if passive.actor_data["switch"] == True:
+            if passive.data["switch"] == True:
                 item_text = f"{passive.name} (level {passive.level})".replace("_", " ").title()
 
                 if passive not in self.engine.cur_level.equip_sprites:
                     passive.activate(self.player)
                     self.engine.cur_level.equip_sprites.append(passive)
 
-            elif passive.actor_data["switch"] == False and passive in self.engine.cur_level.equip_sprites:
+            elif passive.data["switch"] == False and passive in self.engine.cur_level.equip_sprites:
                 passive.deactivate(self.player)
                 passive.remove_from_sprite_lists()
                 continue

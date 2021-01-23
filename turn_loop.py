@@ -25,25 +25,25 @@ class TurnLoop:
         if actor.fighter.skill_list:
             for skill in actor.fighter.skill_list:
                 if hasattr(skill, "max_cooldown_time"):
-                    if skill.cooldown_switch == False:
-                        skill.cooldown_switch = True
+                    if skill.data["cooldown"] == False:
+                        skill.data["cooldown"] = True
 
-                    elif skill.cooldown_switch:
-                        skill.count_time -= 1
+                    elif skill.data["cooldown"]:
+                        skill.data["count_time"] -= 1
 
-                        if 0 >= skill.count_time:
-                            skill.cooldown_switch = False
+                        if 0 >= skill.data["count_time"]:
+                            skill.data["cooldown"] = False
                 else:
                     continue
                 
 
         if actor.fighter.states:
             for states in actor.fighter.states:
-                if 0 < states.count_time:
-                    states.count_time -= 1     
+                if 0 < states.data["count_time"]:
+                    states.data["count_time"] -= 1     
                     queue.extend(states.apply(engine))
 
-                print(states.count_time, states)
+                print(states.data["count_time"], states)
                 
 
     def loop_on(self, engine):

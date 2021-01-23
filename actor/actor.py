@@ -25,10 +25,9 @@ class Actor(arcade.Sprite):
                  fighter=None, ai=None, speed=DEFAULT_SPEED,
                  inventory=None, equipment=None,
                  visible_color=COLORS["white"], not_visible_color=COLORS["black"],
-                 tag={Tag.free},
                  states=None, npc_state=None, left_face=False,
-                 count_time=None, cooldown_switch=None, power=None,
-                 actor_data=None
+                 power=None,
+                 data=None
                  ):
         super().__init__(scale=scale)
         if name:
@@ -48,17 +47,13 @@ class Actor(arcade.Sprite):
         self.is_visible = False
         self.state = states
         self.npc_state = npc_state
-        self.tag = tag
         self.left_face = left_face
         self._master = None # 自身がitemだった場合その所持者を表す、主に装備時Spriteの表示位置に使用する
         self.d_time = 170 # 待機モーション時のdelay時間
         self.is_dead = None
+        self.tag = {}
 
-        self.actor_data = actor_data
-
-
-        self.count_time = count_time
-        self.cooldown_switch = cooldown_switch
+        self.data = data
         
         self.power = power
 
@@ -104,10 +99,8 @@ class Actor(arcade.Sprite):
         result["is_visible"] = self.is_visible
         result["is_dead"] = self.is_dead
         result["left_face"] = self.left_face
-        result["count_time"] = self.count_time
-        result["cooldown_switch"] = self.cooldown_switch
         result["power"] = self.power
-        result["actor_data"] = self.actor_data
+        result["data"] = self.data
 
         if self.state:
             result["state"] = self.state.name
@@ -154,10 +147,8 @@ class Actor(arcade.Sprite):
         self.is_visible = result["is_visible"]
         self.is_dead = result["is_dead"]
         self.left_face = result["left_face"]
-        self.count_time = result["count_time"]
-        self.cooldown_switch = result["cooldown_switch"]
         self.power = result["power"]
-        self.actor_data = result["actor_data"]
+        self.data = result["data"]
 
         if "state" in result:
             self.state = state[result["state"]]

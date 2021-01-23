@@ -10,10 +10,9 @@ class SeedShot(Actor):
             x=x,
             y=y,
             color=COLORS["white"],
-            actor_data={"switch":False},
-            count_time=0,
-            cooldown_switch=False
-
+            data={"switch":True,
+                  "count_time":0,
+                  "cooldown":False}
         )
 
         self.owner = None
@@ -34,7 +33,7 @@ class SeedShot(Actor):
 
     def use(self, engine):
 
-        if self.count_time <= 0:
+        if self.data["count_time"] <= 0:
 
             fire = Fire(engine, self.owner, self)
             result = fire.use()

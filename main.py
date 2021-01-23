@@ -100,7 +100,7 @@ class MG(arcade.Window):
         self.engine.tmp_effect_sprites.draw(filter=gl.GL_NEAREST)
 
         self.engine.cur_level.effect_sprites.draw(filter=gl.GL_NEAREST)
-        for e in self.engine.cur_level.effect_sprites:
+        for e in self.engine.tmp_effect_sprites:
             if hasattr(e, "emitter"):
                 e.emitter.draw()
 
@@ -277,11 +277,8 @@ class MG(arcade.Window):
             self.engine.player.fighter.current_xp += 70
             self.engine.player.equipment.item_exp_add(70)
             check_experience_level(self.engine.player, self.engine)
-            # self.engine.game_state = GAME_STATE.LEVEL_UP_WINDOW
 
         if key == arcade.key.F2:
-            # self.engine.player.fighter.states.append(PoisonStatus(1, 3))
-            # self.engine.player.fighter.states.append(PoisonStatus(self.engine.player, 1, 3, self.engine.cur_level.effect_sprites))
             self.engine.player.fighter.states.append(PoisonStatus(3,-2))
 
 

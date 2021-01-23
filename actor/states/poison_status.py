@@ -6,7 +6,7 @@ import random
 from util import dice, result_add
 
 class PoisonEffect(Actor):
-    def __init__(self, owner, color, engine):
+    def __init__(self, owner, engine):
         super().__init__(
             x=owner.x,
             y=owner.y,
@@ -52,11 +52,11 @@ class PoisonStatus(Actor):
         super().__init__(
             name="poison",
             scale=4.5,
-            count_time=count,
-            power=power
-
-
+            power=power,
+            data={"count_time":count}
         )
+
+        
         self.owner = None
 
 
@@ -74,7 +74,7 @@ class PoisonStatus(Actor):
     def apply(self, engine):
         self.engine = engine
 
-        if self.owner and self.count_time >= 0:
+        if self.owner and self.data["count_time"] >= 0:
             color = self.owner.color
 
             result = self.owner.fighter.change_hp(self.power)

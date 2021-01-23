@@ -55,9 +55,8 @@ class Fighter:
         result["current_xp"] = self.current_xp
         result["level"] = self.level
         result["ability_points"] = self.ability_points
-        result["skill_list"] = [skill.__class__.__name__ for skill in self._skill_list]
-        # result["passive_skill"] = [skill.__class__.__name__ for skill in self._skill_list if Tag.active not in skill.tag]
-        # result["active_skill"] = [(skill.__class__.__name__, result.get_dict()) for skill, result in zip(self._skill_list, self._skill_list) if Tag.active in result.tag]
+        # result["skill_list"] = [skill.__class__.__name__ for skill in self._skill_list]
+        result["skill_list"] = [(skill.__class__.__name__, result.get_dict()) for skill, result in zip(self.skill_list, self.skill_list)]
 
         # クラスと内部値をタプルで保存する
         result["states"] = [(states.__class__.__name__, result.get_dict()) for states, result in zip(self.states, self.states)]
@@ -83,7 +82,7 @@ class Fighter:
         self.current_xp = result["current_xp"]
         self.level = result["level"]
         self.ability_points = result["ability_points"]
-        self._skill_list = [eval(skill)() for skill in result["skill_list"]]
+        # self._skill_list = [eval(skill)() for skill in result["skill_list"]]
         # self._skill_list = [eval(skill)() for skill in result["passive_skill"]]
         # for i, c in result["active_skill"]:
         #     if i:
@@ -99,6 +98,13 @@ class Fighter:
                 sd = eval(s)()
                 sd.restore_from_dict(r)
                 self._states.append(sd)
+
+        for s, r in result["skill_list"]:
+            if s:
+                print(s, r)
+                sd = eval(s)()
+                sd.restore_from_dict(r)
+                self._skill_list.append(sd)
 
     @property
     def skill_list(self):
@@ -125,7 +131,7 @@ class Fighter:
     
     @property
     def active_skill(self):
-        return [skill for skill in self.skill_list if Tag.active in skill.tag and skill.actor_data["switch"] == True]
+        return [skill for skill in self.skill_list if Tag.active in skill.tag and skill.data["switch"] == True]
 
     @property
     def passive_skill(self):

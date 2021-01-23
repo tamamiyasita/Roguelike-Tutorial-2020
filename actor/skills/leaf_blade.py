@@ -14,7 +14,7 @@ class LeafBlade(Actor):
             name="leaf_blade",
             x=x,
             y=y,
-            actor_data={"switch":True},
+            data={"switch":True},
             color=COLORS["white"]
         )
 

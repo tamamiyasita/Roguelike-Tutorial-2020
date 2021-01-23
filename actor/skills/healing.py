@@ -30,7 +30,7 @@ class HealingEffect(Actor):
             )
         )
         self.alpha = 0
-        self.engine.cur_level.effect_sprites.append(self)
+        engine.tmp_effect_sprites.append(self)
 
     def update(self):
         self.x = self.owner.x
@@ -41,7 +41,7 @@ class HealingEffect(Actor):
         self.particle_time -= 1
         self.emitter.update()
         if self.particle_time < 0:
-            self.engine.cur_level.effect_sprites.remove(self)
+            self.remove_from_sprite_lists()
 
 
 class Healing(Actor):
@@ -49,11 +49,9 @@ class Healing(Actor):
         super().__init__(
             name="healing",
             scale=4.5,
-            count_time=0,
-            cooldown_switch=False,
-            actor_data={"switch":True,
-                        "count_time":0,
-                        "cooldown":False}
+            data={"switch":True,
+                  "count_time":0,
+                  "cooldown":False}
 
         )
         self.owner = None
@@ -82,8 +80,8 @@ class Healing(Actor):
     def use(self, engine):
         self.engine = engine
 
-        if self.count_time <= 0:
-            self.count_time = self.max_cooldown_time
+        if self.data["count_time"] <= 0:
+            self.data["count_time"] = self.max_cooldown_time
 
             hp_return = dice(*self.hp_return)
 

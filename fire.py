@@ -96,7 +96,7 @@ class Fire:
                         engine=self.engine, amm=self.amm.name)
             self.trigger = True
 
-            self.amm.count_time = self.amm.max_cooldown_time
+            self.amm.data["count_time"] = self.amm.max_cooldown_time
 
             return results
 

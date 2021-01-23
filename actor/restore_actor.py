@@ -3,6 +3,7 @@ from actor.actor import Actor
 from actor.characters.PC import Player
 from actor.characters.orcs import Orc, Troll
 from actor.characters.crab import Crab
+from actor.characters.rat import Water_vole
 from actor.characters.npc import Villager, Citizen
 
 from actor.items.healing_potion import HealingPotion
@@ -89,6 +90,8 @@ def restore_actor(actor_dict):
         actor = Troll()
     elif actor_name == "Crab":
         actor = Crab()
+    elif actor_name == "Water_vole":
+        actor = Water_vole()
     elif actor_name == "Citizen":
         actor = Citizen()
     elif actor_name == "Villager":
