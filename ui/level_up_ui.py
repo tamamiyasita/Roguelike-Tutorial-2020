@@ -3,15 +3,13 @@ from typing import Tuple
 import arcade
 from constants import *
 from data import *
-from actor.skills.leaf_blade import LeafBlade
-from actor.skills.branch_baton import BranchBaton
-from actor.skills.healing import Healing
-from actor.skills.seed_shot import SeedShot
+
+from actor.actor_set import *
+
 from level_up_sys import check_experience_level, check_flower_level, level_up
 
 from enum import Enum, auto
-from collections import deque
-
+from collections import deque, Counter
 
 class Select(Enum):
     ability = auto()
@@ -287,7 +285,12 @@ class LevelupUI:
 
             # Yボタンが押されたらgame stateをノーマルに戻し終了
             if self.key == arcade.key.Y:
-                self.player.fighter.skill_list.extend(self.skill_result)
+                name = self.skill_result[0].name
+                # self.player.fighter.skill_list.extend(self.skill_result)
+                if name in self.player.fighter.level_skills:
+                    self.player.fighter.level_skills[name] += 1
+                else:
+                    self.player.fighter.level_skills.setdefault(name, 1)
                 self.get_skill = None
                 self.select_skill = True
                 self.skill_result = []

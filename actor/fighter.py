@@ -2,7 +2,9 @@ from actor.states.poison_status import PoisonStatus
 import random
 from constants import *
 from util import dice, stop_watch
-from actor.actor_set import *
+from actor.actor_set import skill_lists
+from collections import Counter
+
 
 
 class Fighter:
@@ -31,6 +33,7 @@ class Fighter:
         self.ability_points = ability_points
         self._states = []
 
+        self.level_skills = {}
         self._skill_list = []
 
         self.damage = None
@@ -109,11 +112,38 @@ class Fighter:
     @property
     def skill_list(self):
         """skill listをループして花の追加skill levelをskill levelに加える"""
-        for skill in self._skill_list:  # [LeafBlade()]が入る
-            skill.owner = self.owner
+        self._skill_list = []
+        levels = {}
+        for s in skill_lists:
+            if hasattr(self.owner, "equipment") and self.owner.equipment:
+
+                levels = Counter(self.level_skills) + Counter(self.owner.equipment.skill_level_sum)
+                if s.name in levels:
+                    s.level = levels[s.name]
+                    s.owner = self.owner
+                    self._skill_list.append(s)
+                
+
+
+
+
+
+
+        # for name, bonus in self.owner.equipment.skill_level_sum:
+
+
+
+
+
+        # for skill in self._skill_list:  # [LeafBlade()]が入る
+        #     skill.owner = self.owner
+        #         base_level = skill.level
+        #         bonus = self.owner.equipment.skill_level_sum.get(skill.name)
+        #         if bonus:
+        #             skill.level = bonus + base_level
+
             # if skill and not isinstance(skill, str) and self.owner.equipment is not None:
             #     skill.level = 0
-            #     skill.level = self.owner.equipment.skill_level_sum.get(skill.name)
             #     if skill.level is None:
             #         skill.level = 0
            

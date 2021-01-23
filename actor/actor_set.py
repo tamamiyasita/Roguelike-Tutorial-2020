@@ -8,12 +8,14 @@ from actor.skills.seed_shot import SeedShot
 
 from actor.states.poison_status import PoisonStatus
 
-Cirsium()
-Ebony()
-Paeonia()
-LeafBlade()
-BranchBaton()
-Healing()
-SeedShot()
+skill_lists =[
+            Cirsium(),
+            Ebony(),
+            Paeonia(),
+            LeafBlade(),
+            BranchBaton(),
+            Healing(),
+            SeedShot()
+            ]
 
 PoisonStatus()
