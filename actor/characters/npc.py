@@ -34,6 +34,7 @@ class Citizen(Actor):
         ai_component = Wait()
         fighter_component = Fighter()
         healing = Healing()
+        healing.owner = self
         healing.level = 2
 
 

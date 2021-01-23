@@ -2,7 +2,7 @@ from actor.states.poison_status import PoisonStatus
 import random
 from constants import *
 from util import dice, stop_watch
-from actor.actor_set import skill_lists
+from actor.actor_set import *
 from collections import Counter
 
 
@@ -58,7 +58,8 @@ class Fighter:
         result["current_xp"] = self.current_xp
         result["level"] = self.level
         result["ability_points"] = self.ability_points
-        # result["skill_list"] = [skill.__class__.__name__ for skill in self._skill_list]
+        result["level_skills"] = self.level_skills
+
         result["skill_list"] = [(skill.__class__.__name__, result.get_dict()) for skill, result in zip(self.skill_list, self.skill_list)]
 
         # クラスと内部値をタプルで保存する
@@ -85,14 +86,7 @@ class Fighter:
         self.current_xp = result["current_xp"]
         self.level = result["level"]
         self.ability_points = result["ability_points"]
-        # self._skill_list = [eval(skill)() for skill in result["skill_list"]]
-        # self._skill_list = [eval(skill)() for skill in result["passive_skill"]]
-        # for i, c in result["active_skill"]:
-        #     if i:
-        #         print(i, c, "active_skill")
-        #         ps = eval(i)()
-        #         ps.restore_from_dict(c)
-        #         self._skill_list.append(ps)
+        self.level_skills = result["level_skills"]
 
         # クラスと内部値を結合する
         for s, r in result["states"]:
@@ -107,46 +101,28 @@ class Fighter:
                 print(s, r)
                 sd = eval(s)()
                 sd.restore_from_dict(r)
+                print(sd)
                 self._skill_list.append(sd)
 
     @property
     def skill_list(self):
         """skill listをループして花の追加skill levelをskill levelに加える"""
-        self._skill_list = []
-        levels = {}
-        for s in skill_lists:
-            if hasattr(self.owner, "equipment") and self.owner.equipment:
+        # TODO game_stateの状態でループするか決めたい
+        if hasattr(self.owner, "equipment") and self.owner.equipment:
+            levels = {}
 
-                levels = Counter(self.level_skills) + Counter(self.owner.equipment.skill_level_sum)
-                if s.name in levels:
+            levels = Counter(self.level_skills) + Counter(self.owner.equipment.skill_level_sum)
+            s_name = [s.name for s in self._skill_list]
+
+            for s in self._skill_list:
+                if s and s.name in levels:
                     s.level = levels[s.name]
-                    s.owner = self.owner
-                    self._skill_list.append(s)
-                
 
-
-
-
-
-
-        # for name, bonus in self.owner.equipment.skill_level_sum:
-
-
-
-
-
-        # for skill in self._skill_list:  # [LeafBlade()]が入る
-        #     skill.owner = self.owner
-        #         base_level = skill.level
-        #         bonus = self.owner.equipment.skill_level_sum.get(skill.name)
-        #         if bonus:
-        #             skill.level = bonus + base_level
-
-            # if skill and not isinstance(skill, str) and self.owner.equipment is not None:
-            #     skill.level = 0
-            #     if skill.level is None:
-            #         skill.level = 0
-           
+            for name, level in levels.items():
+                if name not in s_name:
+                    skill = skill_dict[name]
+                    skill.level = level
+                    self._skill_list.append(skill)
 
         return self._skill_list
 
@@ -161,7 +137,15 @@ class Fighter:
     
     @property
     def active_skill(self):
-        return [skill for skill in self.skill_list if Tag.active in skill.tag and skill.data["switch"] == True]
+        result = []
+        for skill in self.skill_list:
+             if not skill.owner:
+                 skill.owner = self.owner
+             if skill.data["switch"] == True:
+                 result.append(skill)
+        return result
+
+
 
     @property
     def passive_skill(self):

@@ -1,28 +1,26 @@
-from actor.actor import Actor
-from constants import *
-from data import *
-from util import exp_calc
+
+from actor.items.cirsium import Cirsium
 
 
-class Paeonia(Actor):
+class Paeonia(Cirsium):
     def __init__(self, x=0, y=0):
         super().__init__(
-            name="paeonia",
             x=x,
             y=y,
-            scale=1.2
+            name = "paeonia"
+            
         )
 
-        # template
-        self.slot = "flower"
-        self.tag = [Tag.item, Tag.equip, Tag.flower]
-        self.current_xp = 0
+        # # template
+        # self.slot = "flower"
+        # self.tag = [Tag.item, Tag.equip, Tag.flower]
+        # self.current_xp = 0
 
-        # level
-        self.level = 1
-        self.max_level = 5
-        self.experience_per_level = exp_calc()
-        self.level_up_weights = [3, 5, 2]
+        # # level
+        # self.level = 1
+        # self.max_level = 5
+        # self.experience_per_level = exp_calc()
+        self.level_up_weights = [3, 2, 5]
 
         # states
         self.states_bonus = {"INT": 1}
@@ -32,9 +30,11 @@ class Paeonia(Actor):
         self.item_margin_x = 17
         self.item_margin_y = -3
         self.my_speed = 3.3
+        self.scale = 1.4
 
 
-        self.explanatory_text = f"Is Ebony $#############4TEst test test \n test$#4444444444testtest"
+        self.explanatory_text = f"Is paeonia $#############4TEst test test \n test$#4444444444testtest"
+
 
 
 

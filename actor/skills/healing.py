@@ -49,11 +49,11 @@ class Healing(Actor):
         super().__init__(
             name="healing",
             scale=4.5,
-            data={"switch":True,
-                  "count_time":0,
-                  "cooldown":False}
 
         )
+        self.data={"switch":True,
+                  "count_time":0,
+                  "cooldown":False}
         self.owner = None
 
         self.level = 1

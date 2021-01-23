@@ -1,4 +1,3 @@
-import arcade
 from actor.actor import Actor
 from constants import *
 from data import *
@@ -8,15 +7,17 @@ from data import *
 
 
 
+
 class LeafBlade(Actor):
-    def __init__(self, x=0, y=0):
+    def __init__(self, x=0, y=0, name="leaf_blade"):
         super().__init__(
-            name="leaf_blade",
+            name=name,
             x=x,
             y=y,
-            data={"switch":True},
-            color=COLORS["white"]
+            data={"switch":True}
         )
+        self.color=COLORS["white"]
+
 
         self.damage = 5
         self.hit_rate = 95
@@ -26,7 +27,6 @@ class LeafBlade(Actor):
 
         self.tag = [Tag.item, Tag.equip, Tag.skill, Tag.passive]
 
-        # self.explanatory_text = f"with excellent attack speed"
         self.icon = IMAGE_ID["leaf_blade_icon"]
 
         self.item_margin_x = 6 * SPRITE_SCALE
@@ -34,6 +34,7 @@ class LeafBlade(Actor):
 
     @property
     def explanatory_text(self):
+        # 説明文を返す
         return f"damage: {self.level}D{self.damage}\nhit rate: {self.hit_rate}"
 
     def activate(self, owner):        

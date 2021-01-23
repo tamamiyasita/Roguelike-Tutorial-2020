@@ -18,4 +18,6 @@ skill_lists =[
             SeedShot()
             ]
 
+skill_dict = {skill.name:skill for skill in skill_lists}
+
 PoisonStatus()

@@ -280,6 +280,8 @@ class MG(arcade.Window):
 
         if key == arcade.key.F2:
             self.engine.player.fighter.states.append(PoisonStatus(3,-2))
+        if key == arcade.key.F3:
+            self.engine.player.fighter.skill_list[0].data["switch"] = False
 
 
     def on_key_release(self, key, modifiers):

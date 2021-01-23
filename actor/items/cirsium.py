@@ -5,9 +5,9 @@ from util import exp_calc
 
 
 class Cirsium(Actor):
-    def __init__(self, x=0, y=0):
+    def __init__(self, x=0, y=0, name="cirsium"):
         super().__init__(
-            name="cirsium",
+            name=name,
             x=x,
             y=y,
         )

@@ -186,6 +186,7 @@ class NormalUI:
         # キャパシティ数をループし、インベントリのアイテム名とアウトラインを描画する
         # TODO 複数行にする処理を考える（５回ループしたら縦と横の変数に増減するなど）
         for i, skill in enumerate(self.player.fighter.active_skill):
+            skill.owner = self.player
             skill_position = i * field_width + item_left_position  # 左からの所持skillの表示位置
 
             if skill:
@@ -247,7 +248,7 @@ class NormalUI:
                     passive.activate(self.player)
                     self.engine.cur_level.equip_sprites.append(passive)
 
-            elif passive.data["switch"] == False and passive in self.engine.cur_level.equip_sprites:
+            elif passive.data["switch"] == False:
                 passive.deactivate(self.player)
                 passive.remove_from_sprite_lists()
                 continue
@@ -278,22 +279,7 @@ class NormalUI:
                 # font_name="consola.ttf",
                 anchor_y="top"
             )
-            # arcade.draw_text(
-            #     text=f"tst2",
-            #     start_x=left_margin +55,
-            #     start_y=item_row + y-42,
-            #     color=arcade.color.ORCHID_PINK,
-            #     font_size=item_font_size-5,
-            #     font_name="consola.ttf"
-            # )
-            # arcade.draw_text(
-            #     text=f"{passive.explanatory_text}",
-            #     start_x=left_margin +7,
-            #     start_y=item_row + y-62,
-            #     color=arcade.color.WHITE,
-            #     font_size=item_font_size-7,
-            #     # font_name="consola.ttf"
-            # )
+
 
             y -= 104        
 

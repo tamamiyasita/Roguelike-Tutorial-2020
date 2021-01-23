@@ -1,5 +1,4 @@
 from actor.actor import Actor
-from actor.damage_pop import Damagepop
 from constants import *
 from data import *
 import random
