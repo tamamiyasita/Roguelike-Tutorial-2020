@@ -34,6 +34,7 @@ class LevelupUI:
         self.skill_result = [] # playerのSkill決定時にget_skillが入れられる
         self.level_bonus = None # flowerのステータスボーナス
         self.flowers = [] # レベルアップするflowerのリスト
+        self.add = {}
 
         self.window_width = SCREEN_WIDTH - 924
         self.window_height = SCREEN_HEIGHT - 800
@@ -85,12 +86,12 @@ class LevelupUI:
         #flowerのlevel画面
         elif len(self.flowers) > 0:
             # self.engine.game_state = GAME_STATE.LEVEL_UP_FLOWER
-            self.flower_level_up_window(engine)
+            self.flower_level_up_window()
 
         elif not self.flowers:
             engine.game_state = GAME_STATE.NORMAL
 
-    def flower_level_up_window(self, engine):
+    def flower_level_up_window(self):
 
         # 最下部の基本枠
         arcade.draw_xywh_rectangle_filled(
@@ -100,6 +101,7 @@ class LevelupUI:
             height=(GRID_SIZE*3),
             color=[255, 255, 255, 60]
         )
+        # flowerアイコン
         arcade.draw_rectangle_filled(
             center_x=self.player.center_x,
             center_y=self.back_panel_top_left + (GRID_SIZE),
@@ -110,14 +112,26 @@ class LevelupUI:
 
         
         if len(self.flowers) > 0:
+            # from collections import Counter
             item = self.flowers[0]
             xp_to_next_level = item.experience_per_level[item.level+1]
             if item.current_xp >= xp_to_next_level and item.max_level >= item.level:
                 if self.key == arcade.key.ENTER:
+                    if self.add:# 追加skill
+                        # if self.add in self.player.fighter.level_skills:
+                        #     self.player.fighter.level_skills[self.add] += 1
+                        # else:
+                        #     self.player.fighter.level_skills.setdefault(self.add, 1)
+                        # Counter(self.player.fighter.level_skills) + Counter(self.add)
+                        if self.add in item.skill_add:
+                            item.skill_add[self.add] += 1
+                        else:
+                            item.skill_add.setdefault(self.add, 1)
                     item.level += 1
                     self.level_bonus = None
                     self.flowers.remove(item)
                     self.key = None
+                    self.add = {}
                     
                 elif not self.level_bonus:
                     self.level_bonus = level_up(item, item.level_up_weights)
@@ -138,7 +152,7 @@ class LevelupUI:
                     
                 # 花名タイトル
                 arcade.draw_text(
-                    text=f"LEVEL UP {item_text}",
+                    text=f"LEVEL UP {item_text} level {item.level+1}!",
                     start_x=self.bottom_left_x + 10,
                     start_y=self.back_panel_top_left-10,
                     color=arcade.color.BLUE_GREEN,
@@ -166,7 +180,7 @@ class LevelupUI:
                         anchor_y="top"
                     )
                     ifs += 21
-                # スキルの表示
+                # skillの表示
                 for k, v in item.skill_add.items():
                     arcade.draw_text(
                         text=f"{k} level {v}".replace("_", " ").title(),
@@ -178,18 +192,21 @@ class LevelupUI:
                         anchor_y="top"
                     )
                     ifs += 19
+                # 追加Skillの表示
+                self.add = item.data.get(item.level+1)
+                if self.add: 
+                    arcade.draw_text(
+                        text=f"{self.add} + 1".replace("_", " ").title(),
+                        start_x=self.bottom_left_x + 10,
+                        start_y=self.back_panel_top_left + y - (22) - ifs,
+                        color=arcade.color.RED_PURPLE,
+                        font_size=font_size,
+                        font_name="consola.ttf",
+                        anchor_y="top"
+                    )
+                    ifs += 19
+                        
                 
-
-
-
-
-            
-
-
-
-
-
-
 
 
     def draw_base_window(self):

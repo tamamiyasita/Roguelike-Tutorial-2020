@@ -33,7 +33,7 @@ class Fighter:
         self.ability_points = ability_points
         self._states = []
 
-        self.level_skills = {}
+        self.level_skills = {}#level_upなどに伴う追加Skillの合計に使う
         self._skill_list = []
 
         self.damage = None
@@ -106,7 +106,7 @@ class Fighter:
 
     @property
     def skill_list(self):
-        """skill listをループして花の追加skill levelをskill levelに加える"""
+        """levelsにあるスキルのレベル合計からスキルリストを作成する"""
         # TODO game_stateの状態でループするか決めたい
         if hasattr(self.owner, "equipment") and self.owner.equipment:
             levels = {}
@@ -139,10 +139,10 @@ class Fighter:
     def active_skill(self):
         result = []
         for skill in self.skill_list:
-             if not skill.owner:
-                 skill.owner = self.owner
-             if skill.data["switch"] == True:
-                 result.append(skill)
+             if Tag.active in skill.tag and not skill.owner:
+                skill.owner = self.owner
+                if skill.data["switch"] == True:
+                    result.append(skill)
         return result
 
 
@@ -153,28 +153,6 @@ class Fighter:
 
                     
 
-
-                 
-
-    # skill level が1以上ならpassive skillを発動する
-    # equipmentによって呼び出される
-    # @property
-    # def passive_skill(self):
-    #     result = []
-    #     for skill in self.skill_list:
-    #         if Tag.passive in skill.tag:
-    #             if 0 < skill.level:
-    #                 skill.activate(self.owner)
-    #             else:
-    #                 skill.deactivate(self.owner)
-
-    #             result.append(skill)
-
-                 
-    #     return result
-
-
-            
 
 
     @property
