@@ -327,7 +327,7 @@ class MG(arcade.Window):
 def main():
     window = MG(SCREEN_WIDTH, SCREEN_HEIGHT, TITLE)
     window.setup()
-    window.set_location(20, 200)
+    # window.set_location(20, 200)
 
     arcade.run()
 

@@ -45,6 +45,7 @@ class LeafBlade(Actor):
     def deactivate(self, owner):        
         owner.fighter.weapon = None
         if self.master:
+            self.remove_from_sprite_lists()
             del self.master
 
 

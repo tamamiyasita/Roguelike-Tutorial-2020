@@ -42,6 +42,9 @@ class TurnLoop:
                 if 0 < states.data["count_time"]:
                     states.data["count_time"] -= 1     
                     queue.extend(states.apply(engine))
+                if 1 > states.data["count_time"]:
+                    actor.fighter.states.remove(states)
+
 
                 print(states.data["count_time"], states)
                 

@@ -34,7 +34,7 @@ class Fighter:
         self._states = []
 
         self.level_skills = {}#level_upなどに伴う追加Skillの合計に使う
-        self._skill_list = []
+        self._skill_list = arcade.SpriteList()
 
         self.damage = None
 
@@ -110,19 +110,29 @@ class Fighter:
         # TODO game_stateの状態でループするか決めたい
         if hasattr(self.owner, "equipment") and self.owner.equipment:
             levels = {}
+            # self._skill_list = []
 
             levels = Counter(self.level_skills) + Counter(self.owner.equipment.skill_level_sum)
             s_name = [s.name for s in self._skill_list]
 
-            for s in self._skill_list:
-                if s and s.name in levels:
-                    s.level = levels[s.name]
 
             for name, level in levels.items():
                 if name not in s_name:
                     skill = skill_dict[name]
                     skill.level = level
                     self._skill_list.append(skill)
+
+            for s in self._skill_list:
+                if s and s.name in levels:
+                    s.level = levels[s.name]
+                else:
+                    s.remove_from_sprite_lists()
+            
+            if self.weapon and self.weapon.name not in levels:
+                self.weapon.deactivate(self.owner)
+
+
+            
 
         return self._skill_list
 
@@ -139,10 +149,11 @@ class Fighter:
     def active_skill(self):
         result = []
         for skill in self.skill_list:
-             if Tag.active in skill.tag and not skill.owner:
-                skill.owner = self.owner
+             if Tag.active in skill.tag:
                 if skill.data["switch"] == True:
                     result.append(skill)
+                    if not skill.owner:
+                        skill.owner = self.owner
         return result
 
 

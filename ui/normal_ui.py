@@ -28,7 +28,6 @@ class NormalUI:
         self.side_panel_height = SCREEN_HEIGHT - GRID_SIZE*3
         self.side_panel_width = SCREEN_WIDTH - STATES_PANEL_WIDTH
 
-        self.bottom_left_x=self.viewport_right + SCREEN_WIDTH - STATES_PANEL_WIDTH
 
     def draw_in_normal_state(self):
         """mainに渡すメソッドをまとめる"""
@@ -37,6 +36,29 @@ class NormalUI:
         self.draw_active_skill()
         self.draw_messages_handle()
         self.draw_passive_skill()
+        self.draw_status_icons()
+
+    def draw_status_icons(self):
+        y = GRID_SIZE+5
+        icon_pos_x = self.viewport_right - (GRID_SIZE*4.5)
+        icon_pos_y = self.viewport_top - (GRID_SIZE * 6)
+        for i in range(len(self.player.fighter.states)):
+            icon = self.player.fighter.states[i].icon[0]
+            # arcade.draw_scaled_texture_rectangle(
+            #         center_x=icon_pos_x,
+            #         center_y=icon_pos_y + y,
+            #         texture=icon,
+            #         scale=4
+            # )
+            arcade.draw_texture_rectangle(
+                    center_x=icon_pos_x,
+                    center_y=icon_pos_y + y,
+                    width=155,
+                    height=155,
+                    texture=icon
+                    )
+            y += y
+
 
     def panel_ui(self):
         # 画面下のパネルをarcadeの四角形を描画する変数で作成
@@ -179,7 +201,7 @@ class NormalUI:
             ((SCREEN_WIDTH-STATES_PANEL_WIDTH) / 2.8)   # パネル左からの所持アイテム表示位置の調整に使う変数
         skill_top_position = self.viewport_bottom + \
             STATES_PANEL_HEIGHT + 42  # パネル上端からの所持アイテム表示位置の調整に使う変数
-        separate_size = 4.5  # スキル名の表示間隔の調整に使う変数
+        separate_size = 6.5  # スキル名の表示間隔の調整に使う変数
         item_font_size = 11
         field_width = SCREEN_WIDTH / (slot_len + 1) / separate_size  # アイテム表示感覚を決める変数
 
@@ -225,10 +247,18 @@ class NormalUI:
                     arcade.draw_text(
                         text=key_number,
                         start_x=skill_position-13,
-                        start_y=skill_top_position-55,
-                        color=COLORS["status_panel_text"],
+                        start_y=skill_top_position-67,
+                        color=arcade.color.YELLOW_ORANGE,
                         font_size=item_font_size
                     )
+
+                arcade.draw_text(
+                    text=f"level {skill.level}",
+                    start_x=skill_position-11,
+                    start_y=skill_top_position-55,
+                    color=COLORS["status_panel_text"],
+                    font_size=item_font_size
+                )
     
     def draw_passive_skill(self):
         """スキルアイコン及びステータスを右パネルに描画する"""

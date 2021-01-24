@@ -5,30 +5,33 @@ from data import *
 
 
 def draw_character_screen(player, viewport_x, viewport_y):
-    viewport_left = viewport_x
-    viewport_bottom = viewport_y
+    viewport_left = viewport_x+100
+    viewport_bottom = viewport_y+100
+    panel_width = SCREEN_WIDTH-200
+    panel_height = SCREEN_HEIGHT-200
 
     """背景"""
     arcade.draw_xywh_rectangle_filled(
-        bottom_left_x=0+viewport_left,
-        bottom_left_y=0+viewport_bottom,
-        width=SCREEN_WIDTH,
-        height=SCREEN_HEIGHT,
+        bottom_left_x=viewport_left,
+        bottom_left_y=viewport_bottom,
+        width=panel_width,
+        height=panel_height,
         color=COLORS["status_panel_background"]
     )
 
     """タイトル"""
     spacing = 1.8
-    text_position_y = SCREEN_HEIGHT - 50 + viewport_bottom
+    text_position_y = panel_height + viewport_bottom
     text_position_x = 10 + viewport_left
     text_size = 24
     screen_title = "Character Screen"
-    text_color = arcade.color.AFRICAN_VIOLET
+    title_color = arcade.color.AFRICAN_VIOLET
+    text_color = arcade.color.AIR_FORCE_BLUE
     arcade.draw_text(
         text=screen_title,
         start_x=text_position_x,
         start_y=text_position_y,
-        color=text_color,
+        color=title_color,
         font_size=text_size
     )
 

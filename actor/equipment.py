@@ -91,7 +91,7 @@ class Equipment:
                 del item.master
                 self.item_slot.remove(item)
                 
-                results.append({"message": f"dequipped {item.name}"})
+                results.extend([{"message": f"dequipped {item.name}"}])
                 self.equip_update_check = True
                 return results
 

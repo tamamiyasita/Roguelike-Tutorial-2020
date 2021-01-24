@@ -29,7 +29,7 @@ class PoisonEffect(Actor):
             )
         )
         self.alpha = 0
-        self.engine.cur_level.effect_sprites.append(self)
+        self.engine.tmp_effect_sprites.append(self)
 
     def update(self):
         self.owner.color = (60,255,60)
@@ -43,7 +43,7 @@ class PoisonEffect(Actor):
         if self.particle_time < 1:
             self.owner.color = self.color
             self.particle_time = 30
-            self.engine.cur_level.effect_sprites.remove(self)
+            self.engine.tmp_effect_sprites.remove(self)
 
 
 class PoisonStatus(Actor):
@@ -78,6 +78,6 @@ class PoisonStatus(Actor):
 
             result = self.owner.fighter.change_hp(self.power)
             self.poison = PoisonEffect(
-                self.owner, color,  self.engine)
+                self.owner,  self.engine)
 
             return [{"message": f"{self.owner.name} took {self.power} damage from poison"}, *result]
