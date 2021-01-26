@@ -25,7 +25,7 @@ class LeafBlade(Actor):
 
         self.level = 1
 
-        self.tag = [Tag.item, Tag.equip, Tag.skill, Tag.passive]
+        self.tag = [Tag.item, Tag.equip, Tag.weapon, Tag.skill, Tag.passive]
 
         self.icon = IMAGE_ID["leaf_blade_icon"]
 
@@ -38,14 +38,13 @@ class LeafBlade(Actor):
         return f"damage: {self.level}D{self.damage}\nhit rate: {self.hit_rate}"
 
     def activate(self, owner):        
-        if not owner.fighter.weapon:
+        if owner.fighter.weapon is None:
             owner.fighter.weapon = self
             self.master = owner
 
     def deactivate(self, owner):        
         owner.fighter.weapon = None
-        if self.master:
-            self.remove_from_sprite_lists()
-            del self.master
+        del self.master
+        self.remove_from_sprite_lists()
 
 

@@ -25,6 +25,7 @@ class Fighter:
         self.hit_rate = hit_rate
         self._attack_speed = attack_speed
         self.weapon = None
+        self.data = {}
 
         self.owner = None
         self.xp_reward = xp_reward
@@ -34,7 +35,11 @@ class Fighter:
         self._states = []
 
         self.level_skills = {}#level_upなどに伴う追加Skillの合計に使う
+        self.base_skill_dict = skill_dict
         self._skill_list = arcade.SpriteList()
+        self.active_skill = []
+        self.passive_skill = set()
+        self.equip_skill = set()
 
         self.damage = None
 
@@ -60,7 +65,8 @@ class Fighter:
         result["ability_points"] = self.ability_points
         result["level_skills"] = self.level_skills
 
-        result["skill_list"] = [(skill.__class__.__name__, result.get_dict()) for skill, result in zip(self.skill_list, self.skill_list)]
+        # result["base_skill_dict"] = [(skill.__class__.__name__, result.get_dict()) for skill, result in zip(self.skill_list, self.skill_list)]
+        result["base_skill_dict"] = {name : result.get_dict() for name, result in  self.base_skill_dict.items()}
 
         # クラスと内部値をタプルで保存する
         result["states"] = [(states.__class__.__name__, result.get_dict()) for states, result in zip(self.states, self.states)]
@@ -96,44 +102,74 @@ class Fighter:
                 sd.restore_from_dict(r)
                 self._states.append(sd)
 
-        for s, r in result["skill_list"]:
+        for s, r in result["base_skill_dict"].items():
             if s:
                 print(s, r)
-                sd = eval(s)()
+                sd = self.base_skill_dict[s]
                 sd.restore_from_dict(r)
                 print(sd)
-                self._skill_list.append(sd)
+
+    def skill_equip_check(self, skill):
+        
+        # self.data["weapon"] = None
+            # self.weapon = None
+        if  Tag.weapon in skill.tag:
+            self.equip_skill.add(skill)
+        elif Tag.passive in skill.tag:
+            self.passive_skill.add(skill)
+        elif Tag.active in skill.tag:
+            self.active_skill.append(skill)
+        #         if self.weapon == None and skill.data["switch"] == True:
+        #             skill.activate(self.owner)
+        #         else:
+        #             skill.deactivate(self.owner)
+        # else:
+        #     if self.weapon:
+        #         self.weapon.deactivate(self.owner)
+
+        # elif skill.
+        
+
+        
+
 
     @property
     def skill_list(self):
         """levelsにあるスキルのレベル合計からスキルリストを作成する"""
+        self.equip_skill.clear()
+        self.passive_skill.clear()
+        self.active_skill = []
+
         # TODO game_stateの状態でループするか決めたい
         if hasattr(self.owner, "equipment") and self.owner.equipment:
-            levels = {}
-            # self._skill_list = []
+            # levels = {}
+            self._skill_list = arcade.SpriteList()
 
-            levels = Counter(self.level_skills) + Counter(self.owner.equipment.skill_level_sum)
-            s_name = [s.name for s in self._skill_list]
+            for skill in self.owner.equipment.skill_level_sum:
+                self.skill_equip_check(skill)
+                # 処理を挟む
+                # self._skill_list.append(skill)
+        
 
 
-            for name, level in levels.items():
-                if name not in s_name:
-                    skill = skill_dict[name]
-                    skill.level = level
-                    self._skill_list.append(skill)
-
-            for s in self._skill_list:
-                if s and s.name in levels:
-                    s.level = levels[s.name]
-                else:
-                    s.remove_from_sprite_lists()
+            # try:
             
-            if self.weapon and self.weapon.name not in levels:
-                self.weapon.deactivate(self.owner)
+            #     if self.weapon.name not in levels:
+            #         self.weapon.data["switch"] = False
 
-
+            #     if self.weapon and self.weapon.name in levels:
+            #         self.weapon.data["switch"] = True
+            # except:
+            #     pass
+        if self.weapon and self.weapon not in self.equip_skill:
+            self.weapon.deactivate(self.owner)
             
 
+
+            
+        print(f"{self.active_skill=}")
+        print(f"{self.equip_skill=}")
+        print(f"{self.passive_skill=}")
         return self._skill_list
 
     @property
@@ -145,22 +181,25 @@ class Fighter:
         return self._states
     
     
-    @property
-    def active_skill(self):
-        result = []
-        for skill in self.skill_list:
-             if Tag.active in skill.tag:
-                if skill.data["switch"] == True:
-                    result.append(skill)
-                    if not skill.owner:
-                        skill.owner = self.owner
-        return result
+    # @property
+    # def active_skill(self):
+    #     result = []
+    #     for skill in self.skill_list:
+    #          if Tag.active in skill.tag:
+    #             if skill.data["switch"] == True:
+    #                 result.append(skill)
+    #                 if not skill.owner:
+    #                     skill.owner = self.owner
+    #     return result
 
 
 
-    @property
-    def passive_skill(self):
-        return [skill for skill in self.skill_list if Tag.passive in skill.tag]
+    # @property
+    # def passive_skill(self):
+    #     result =  [skill for skill in self.skill_list if Tag.passive in skill.tag]
+    #     self.skill_equip_check(result)
+    #     return result
+        
 
                     
 

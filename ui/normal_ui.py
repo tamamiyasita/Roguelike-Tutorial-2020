@@ -1,12 +1,9 @@
 
 
 from data import IMAGE_ID
-from actor.characters.PC import Player
 import arcade
-from arcade.gl import geometry
-from arcade.isometric import screen_to_isometric_grid
-from arcade.resources.shaders import fragment
 from constants import *
+from itertools import chain
 
 
 class NormalUI:
@@ -262,14 +259,13 @@ class NormalUI:
     
     def draw_passive_skill(self):
         """スキルアイコン及びステータスを右パネルに描画する"""
-        back_panel_y = self.viewport_bottom + SCREEN_HEIGHT // 8 # 背景パネルの下端
         item_row = self.viewport_top - GRID_SIZE*5#(SCREEN_HEIGHT //1.3) - 320 # 行の最上段
         item_font_size = 17
         item_text = ""
         left_margin = self.viewport_left + self.side_panel_width + 7  # 画面左からのHPとバーの位置
         y = 0
             
-        for passive in self.player.fighter.passive_skill:
+        for passive in chain(self.player.fighter.passive_skill, self.player.fighter.equip_skill):
 
             if passive.data["switch"] == True:
                 item_text = f"{passive.name} (level {passive.level})".replace("_", " ").title()
@@ -280,8 +276,9 @@ class NormalUI:
 
             elif passive.data["switch"] == False:
                 passive.deactivate(self.player)
-                passive.remove_from_sprite_lists()
                 continue
+            
+            
 
             arcade.draw_text(
                 text=item_text,

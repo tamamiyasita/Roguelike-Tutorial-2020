@@ -50,6 +50,7 @@ class Tag(Enum):
     flower = auto()
     used = auto()
     equip = auto()
+    weapon = auto()
     skill = auto()
     active = auto()
     passive = auto()

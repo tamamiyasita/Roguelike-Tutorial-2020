@@ -549,10 +549,12 @@ class GameEngine:
                     if item and Tag.equip in item.tag:
                         results = self.player.equipment.toggle_equip(item)
                         if results:                            
-                            if "dequipped" in results[0]["message"]:
-                                self.flower_sprites.remove(item)
-                            else:
+                            if "dequipped" not in results[0]["message"]:
                                 self.flower_sprites.append(item)
+
+                            results.extend([{"turn_end": self.player}])
+                            # self.game_state = GAME_STATE.NORMAL
+                            
 
                             
                             new_action_queue.extend(results)

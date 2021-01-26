@@ -1,7 +1,7 @@
 from collections import Counter
 from constants import *
 from itertools import chain
-
+from actor.actor_set import *
 
 class Equipment:
     """装備部位とそこからの追加bonusを返す
@@ -12,7 +12,9 @@ class Equipment:
     def __init__(self):
         """アイテムスロット、及び装備するタイミングを決めるequip_update_check
         """
-        self.item_slot = []
+        self.item_slot = arcade.SpriteList()
+        self.skill_list = set()# arcade.SpriteList()
+        
 
 
         # 装備変更によるスプライト更新のチェックに使う変数
@@ -63,7 +65,24 @@ class Equipment:
             if parts and not isinstance(parts, str) and parts.skill_add:
                 bonus = Counter(bonus) + Counter(parts.skill_add)
 
-        return bonus  # {leaf_blade:1}
+        for skill_name, skill_level in bonus.items():
+            skill = self.owner.fighter.base_skill_dict.get(skill_name)
+
+            self.skill_list.add(skill)
+            if skill.level != skill_level:
+                skill.level = skill_level
+            
+            # if skill not in self.skill_list:
+            #     self.skill_list.add(skill)
+
+            if skill.name not in bonus.keys():
+                self.skill_list.discard(skill)
+
+        self.skill_list = {skill for skill in self.skill_list if skill.name in bonus.keys()}
+
+
+
+        return self.skill_list
 
 
     @property
@@ -89,7 +108,7 @@ class Equipment:
             if item == equip_item:
 
                 del item.master
-                self.item_slot.remove(item)
+                item.remove_from_sprite_lists()
                 
                 results.extend([{"message": f"dequipped {item.name}"}])
                 self.equip_update_check = True
