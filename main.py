@@ -156,7 +156,7 @@ class MG(arcade.Window):
 
         # Character_Screen表示
         elif self.engine.game_state == GAME_STATE.CHARACTER_SCREEN:
-            draw_character_screen(self.engine.player, self.viewport_left, self.viewport_bottom)
+            draw_character_screen(self.engine, arcade.get_viewport())
 
 
         elif self.engine.game_state == GAME_STATE.INVENTORY:
