@@ -49,7 +49,7 @@ class Citizen(Actor):
             npc_state=NPC_state.REQUEST
         )
         self.tag = [Tag.npc, Tag.friendly, Tag.quest]
-        self.fighter.skill_list.append(healing)
+        # self.fighter.skill_list.append(healing)
 
 
         self.message = [

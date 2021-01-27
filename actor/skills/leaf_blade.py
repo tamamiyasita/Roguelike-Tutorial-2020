@@ -38,12 +38,11 @@ class LeafBlade(Actor):
         return f"damage: {self.level}D{self.damage}\nhit rate: {self.hit_rate}"
 
     def activate(self, owner):        
-        if owner.fighter.weapon is None:
-            owner.fighter.weapon = self
-            self.master = owner
+        owner.fighter.data["weapon"] = self
+        self.master = owner
 
     def deactivate(self, owner):        
-        owner.fighter.weapon = None
+        owner.fighter.data["weapon"] = None
         del self.master
         self.remove_from_sprite_lists()
 

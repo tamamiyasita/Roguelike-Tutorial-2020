@@ -16,11 +16,11 @@ class Wait:
         results = []
         
         # Skill使用テスト
-        dice = randint(1,6)
-        if len(self.owner.fighter.skill_list) >= 1 and dice < 2:
-            use_skill = {"use_skill": 1, "user":self.owner}
-            results.append(use_skill)
-            return results
+        # dice = randint(1,6)
+        # if len(self.owner.fighter.skill_list) >= 1 and dice < 2:
+        #     use_skill = {"use_skill": 1, "user":self.owner}
+        #     results.append(use_skill)
+        #     return results
         message = choice(self.owner.message)
         results.append(message)
         results.extend([{"turn_end": self.owner}])

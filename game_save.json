@@ -177,8 +177,8 @@
                                     "alpha": 255,
                                     "block_sight": false,
                                     "blocks": false,
-                                    "center_x": 748.0,
-                                    "center_y": 666.0,
+                                    "center_x": 32.0,
+                                    "center_y": 160.0,
                                     "color": [
                                         255,
                                         255,
@@ -502,8 +502,8 @@
                                     "alpha": 255,
                                     "block_sight": false,
                                     "blocks": false,
-                                    "center_x": 748.0,
-                                    "center_y": 666.0,
+                                    "center_x": 32.0,
+                                    "center_y": 160.0,
                                     "color": [
                                         255,
                                         255,
@@ -656,15 +656,15 @@
                 {
                     "Citizen": {
                         "ai": "Wait",
-                        "alpha": 0,
+                        "alpha": 255,
                         "block_sight": false,
                         "blocks": true,
                         "center_x": 928.0,
                         "center_y": 1056.0,
                         "color": [
-                            0,
-                            0,
-                            0
+                            255,
+                            255,
+                            255
                         ],
                         "data": null,
                         "fighter": {
@@ -827,8 +827,8 @@
                                     "alpha": 255,
                                     "block_sight": false,
                                     "blocks": false,
-                                    "center_x": 748.0,
-                                    "center_y": 666.0,
+                                    "center_x": 32.0,
+                                    "center_y": 160.0,
                                     "color": [
                                         255,
                                         255,
@@ -958,7 +958,7 @@
                             "xp_reward": 0
                         },
                         "is_dead": false,
-                        "is_visible": false,
+                        "is_visible": true,
                         "left_face": false,
                         "name": "citizen",
                         "not_visible_color": [
@@ -7751,13 +7751,13 @@
                         "center_x": 416.0,
                         "center_y": 544.0,
                         "color": [
-                            245,
-                            245,
-                            245
+                            78,
+                            81,
+                            128
                         ],
                         "data": null,
                         "is_dead": null,
-                        "is_visible": true,
+                        "is_visible": false,
                         "left_face": false,
                         "name": "block_floor",
                         "not_visible_color": [
@@ -7786,13 +7786,13 @@
                         "center_x": 416.0,
                         "center_y": 608.0,
                         "color": [
-                            245,
-                            245,
-                            245
+                            78,
+                            81,
+                            128
                         ],
                         "data": null,
                         "is_dead": null,
-                        "is_visible": true,
+                        "is_visible": false,
                         "left_face": false,
                         "name": "block_floor",
                         "not_visible_color": [
@@ -7926,13 +7926,13 @@
                         "center_x": 416.0,
                         "center_y": 864.0,
                         "color": [
-                            78,
-                            81,
-                            128
+                            245,
+                            245,
+                            245
                         ],
                         "data": null,
                         "is_dead": null,
-                        "is_visible": false,
+                        "is_visible": true,
                         "left_face": false,
                         "name": "block_floor",
                         "not_visible_color": [
@@ -7961,13 +7961,13 @@
                         "center_x": 416.0,
                         "center_y": 928.0,
                         "color": [
-                            78,
-                            81,
-                            128
+                            245,
+                            245,
+                            245
                         ],
                         "data": null,
                         "is_dead": null,
-                        "is_visible": false,
+                        "is_visible": true,
                         "left_face": false,
                         "name": "block_floor",
                         "not_visible_color": [
@@ -8976,13 +8976,13 @@
                         "center_x": 480.0,
                         "center_y": 416.0,
                         "color": [
-                            245,
-                            245,
-                            245
+                            0,
+                            0,
+                            0
                         ],
                         "data": null,
                         "is_dead": null,
-                        "is_visible": true,
+                        "is_visible": false,
                         "left_face": false,
                         "name": "block_floor",
                         "not_visible_color": [
@@ -9011,13 +9011,13 @@
                         "center_x": 480.0,
                         "center_y": 480.0,
                         "color": [
-                            245,
-                            245,
-                            245
+                            0,
+                            0,
+                            0
                         ],
                         "data": null,
                         "is_dead": null,
-                        "is_visible": true,
+                        "is_visible": false,
                         "left_face": false,
                         "name": "block_floor",
                         "not_visible_color": [
@@ -9291,13 +9291,13 @@
                         "center_x": 480.0,
                         "center_y": 992.0,
                         "color": [
-                            78,
-                            81,
-                            128
+                            245,
+                            245,
+                            245
                         ],
                         "data": null,
                         "is_dead": null,
-                        "is_visible": false,
+                        "is_visible": true,
                         "left_face": false,
                         "name": "block_floor",
                         "not_visible_color": [
@@ -9326,13 +9326,13 @@
                         "center_x": 480.0,
                         "center_y": 1056.0,
                         "color": [
-                            78,
-                            81,
-                            128
+                            245,
+                            245,
+                            245
                         ],
                         "data": null,
                         "is_dead": null,
-                        "is_visible": false,
+                        "is_visible": true,
                         "left_face": false,
                         "name": "block_floor",
                         "not_visible_color": [
@@ -10271,13 +10271,13 @@
                         "center_x": 544.0,
                         "center_y": 416.0,
                         "color": [
-                            245,
-                            245,
-                            245
+                            0,
+                            0,
+                            0
                         ],
                         "data": null,
                         "is_dead": null,
-                        "is_visible": true,
+                        "is_visible": false,
                         "left_face": false,
                         "name": "block_floor",
                         "not_visible_color": [
@@ -10306,13 +10306,13 @@
                         "center_x": 544.0,
                         "center_y": 480.0,
                         "color": [
-                            245,
-                            245,
-                            245
+                            78,
+                            81,
+                            128
                         ],
                         "data": null,
                         "is_dead": null,
-                        "is_visible": true,
+                        "is_visible": false,
                         "left_face": false,
                         "name": "block_floor",
                         "not_visible_color": [
@@ -10586,13 +10586,13 @@
                         "center_x": 544.0,
                         "center_y": 992.0,
                         "color": [
-                            78,
-                            81,
-                            128
+                            245,
+                            245,
+                            245
                         ],
                         "data": null,
                         "is_dead": null,
-                        "is_visible": false,
+                        "is_visible": true,
                         "left_face": false,
                         "name": "block_floor",
                         "not_visible_color": [
@@ -10621,13 +10621,13 @@
                         "center_x": 544.0,
                         "center_y": 1056.0,
                         "color": [
-                            78,
-                            81,
-                            128
+                            245,
+                            245,
+                            245
                         ],
                         "data": null,
                         "is_dead": null,
-                        "is_visible": false,
+                        "is_visible": true,
                         "left_face": false,
                         "name": "block_floor",
                         "not_visible_color": [
@@ -11531,13 +11531,13 @@
                         "center_x": 608.0,
                         "center_y": 352.0,
                         "color": [
-                            245,
-                            245,
-                            245
+                            0,
+                            0,
+                            0
                         ],
                         "data": null,
                         "is_dead": null,
-                        "is_visible": true,
+                        "is_visible": false,
                         "left_face": false,
                         "name": "block_floor",
                         "not_visible_color": [
@@ -11566,13 +11566,13 @@
                         "center_x": 608.0,
                         "center_y": 416.0,
                         "color": [
-                            245,
-                            245,
-                            245
+                            0,
+                            0,
+                            0
                         ],
                         "data": null,
                         "is_dead": null,
-                        "is_visible": true,
+                        "is_visible": false,
                         "left_face": false,
                         "name": "block_floor",
                         "not_visible_color": [
@@ -11916,13 +11916,13 @@
                         "center_x": 608.0,
                         "center_y": 1056.0,
                         "color": [
-                            78,
-                            81,
-                            128
+                            245,
+                            245,
+                            245
                         ],
                         "data": null,
                         "is_dead": null,
-                        "is_visible": false,
+                        "is_visible": true,
                         "left_face": false,
                         "name": "block_floor",
                         "not_visible_color": [
@@ -11951,13 +11951,13 @@
                         "center_x": 608.0,
                         "center_y": 1120.0,
                         "color": [
-                            78,
-                            81,
-                            128
+                            245,
+                            245,
+                            245
                         ],
                         "data": null,
                         "is_dead": null,
-                        "is_visible": false,
+                        "is_visible": true,
                         "left_face": false,
                         "name": "block_floor",
                         "not_visible_color": [
@@ -12826,13 +12826,13 @@
                         "center_x": 672.0,
                         "center_y": 352.0,
                         "color": [
-                            245,
-                            245,
-                            245
+                            0,
+                            0,
+                            0
                         ],
                         "data": null,
                         "is_dead": null,
-                        "is_visible": true,
+                        "is_visible": false,
                         "left_face": false,
                         "name": "block_floor",
                         "not_visible_color": [
@@ -12861,13 +12861,13 @@
                         "center_x": 672.0,
                         "center_y": 416.0,
                         "color": [
-                            245,
-                            245,
-                            245
+                            0,
+                            0,
+                            0
                         ],
                         "data": null,
                         "is_dead": null,
-                        "is_visible": true,
+                        "is_visible": false,
                         "left_face": false,
                         "name": "block_floor",
                         "not_visible_color": [
@@ -13211,13 +13211,13 @@
                         "center_x": 672.0,
                         "center_y": 1056.0,
                         "color": [
-                            78,
-                            81,
-                            128
+                            245,
+                            245,
+                            245
                         ],
                         "data": null,
                         "is_dead": null,
-                        "is_visible": false,
+                        "is_visible": true,
                         "left_face": false,
                         "name": "block_floor",
                         "not_visible_color": [
@@ -13246,13 +13246,13 @@
                         "center_x": 672.0,
                         "center_y": 1120.0,
                         "color": [
-                            78,
-                            81,
-                            128
+                            245,
+                            245,
+                            245
                         ],
                         "data": null,
                         "is_dead": null,
-                        "is_visible": false,
+                        "is_visible": true,
                         "left_face": false,
                         "name": "block_floor",
                         "not_visible_color": [
@@ -14121,13 +14121,13 @@
                         "center_x": 736.0,
                         "center_y": 352.0,
                         "color": [
-                            245,
-                            245,
-                            245
+                            0,
+                            0,
+                            0
                         ],
                         "data": null,
                         "is_dead": null,
-                        "is_visible": true,
+                        "is_visible": false,
                         "left_face": false,
                         "name": "block_floor",
                         "not_visible_color": [
@@ -14156,13 +14156,13 @@
                         "center_x": 736.0,
                         "center_y": 416.0,
                         "color": [
-                            245,
-                            245,
-                            245
+                            0,
+                            0,
+                            0
                         ],
                         "data": null,
                         "is_dead": null,
-                        "is_visible": true,
+                        "is_visible": false,
                         "left_face": false,
                         "name": "block_floor",
                         "not_visible_color": [
@@ -14506,13 +14506,13 @@
                         "center_x": 736.0,
                         "center_y": 1056.0,
                         "color": [
-                            78,
-                            81,
-                            128
+                            245,
+                            245,
+                            245
                         ],
                         "data": null,
                         "is_dead": null,
-                        "is_visible": false,
+                        "is_visible": true,
                         "left_face": false,
                         "name": "block_floor",
                         "not_visible_color": [
@@ -14541,13 +14541,13 @@
                         "center_x": 736.0,
                         "center_y": 1120.0,
                         "color": [
-                            78,
-                            81,
-                            128
+                            245,
+                            245,
+                            245
                         ],
                         "data": null,
                         "is_dead": null,
-                        "is_visible": false,
+                        "is_visible": true,
                         "left_face": false,
                         "name": "block_floor",
                         "not_visible_color": [
@@ -15416,13 +15416,13 @@
                         "center_x": 800.0,
                         "center_y": 352.0,
                         "color": [
-                            245,
-                            245,
-                            245
+                            0,
+                            0,
+                            0
                         ],
                         "data": null,
                         "is_dead": null,
-                        "is_visible": true,
+                        "is_visible": false,
                         "left_face": false,
                         "name": "block_floor",
                         "not_visible_color": [
@@ -15451,13 +15451,13 @@
                         "center_x": 800.0,
                         "center_y": 416.0,
                         "color": [
-                            245,
-                            245,
-                            245
+                            0,
+                            0,
+                            0
                         ],
                         "data": null,
                         "is_dead": null,
-                        "is_visible": true,
+                        "is_visible": false,
                         "left_face": false,
                         "name": "block_floor",
                         "not_visible_color": [
@@ -15801,13 +15801,13 @@
                         "center_x": 800.0,
                         "center_y": 1056.0,
                         "color": [
-                            78,
-                            81,
-                            128
+                            245,
+                            245,
+                            245
                         ],
                         "data": null,
                         "is_dead": null,
-                        "is_visible": false,
+                        "is_visible": true,
                         "left_face": false,
                         "name": "block_floor",
                         "not_visible_color": [
@@ -15836,13 +15836,13 @@
                         "center_x": 800.0,
                         "center_y": 1120.0,
                         "color": [
-                            78,
-                            81,
-                            128
+                            245,
+                            245,
+                            245
                         ],
                         "data": null,
                         "is_dead": null,
-                        "is_visible": false,
+                        "is_visible": true,
                         "left_face": false,
                         "name": "block_floor",
                         "not_visible_color": [
@@ -16711,13 +16711,13 @@
                         "center_x": 864.0,
                         "center_y": 352.0,
                         "color": [
-                            245,
-                            245,
-                            245
+                            0,
+                            0,
+                            0
                         ],
                         "data": null,
                         "is_dead": null,
-                        "is_visible": true,
+                        "is_visible": false,
                         "left_face": false,
                         "name": "block_floor",
                         "not_visible_color": [
@@ -16746,13 +16746,13 @@
                         "center_x": 864.0,
                         "center_y": 416.0,
                         "color": [
-                            245,
-                            245,
-                            245
+                            0,
+                            0,
+                            0
                         ],
                         "data": null,
                         "is_dead": null,
-                        "is_visible": true,
+                        "is_visible": false,
                         "left_face": false,
                         "name": "block_floor",
                         "not_visible_color": [
@@ -17096,13 +17096,13 @@
                         "center_x": 864.0,
                         "center_y": 1056.0,
                         "color": [
-                            78,
-                            81,
-                            128
+                            245,
+                            245,
+                            245
                         ],
                         "data": null,
                         "is_dead": null,
-                        "is_visible": false,
+                        "is_visible": true,
                         "left_face": false,
                         "name": "block_floor",
                         "not_visible_color": [
@@ -17131,13 +17131,13 @@
                         "center_x": 864.0,
                         "center_y": 1120.0,
                         "color": [
-                            78,
-                            81,
-                            128
+                            245,
+                            245,
+                            245
                         ],
                         "data": null,
                         "is_dead": null,
-                        "is_visible": false,
+                        "is_visible": true,
                         "left_face": false,
                         "name": "block_floor",
                         "not_visible_color": [
@@ -18041,13 +18041,13 @@
                         "center_x": 928.0,
                         "center_y": 416.0,
                         "color": [
-                            245,
-                            245,
-                            245
+                            0,
+                            0,
+                            0
                         ],
                         "data": null,
                         "is_dead": null,
-                        "is_visible": true,
+                        "is_visible": false,
                         "left_face": false,
                         "name": "block_floor",
                         "not_visible_color": [
@@ -18076,13 +18076,13 @@
                         "center_x": 928.0,
                         "center_y": 480.0,
                         "color": [
-                            245,
-                            245,
-                            245
+                            0,
+                            0,
+                            0
                         ],
                         "data": null,
                         "is_dead": null,
-                        "is_visible": true,
+                        "is_visible": false,
                         "left_face": false,
                         "name": "block_floor",
                         "not_visible_color": [
@@ -18356,13 +18356,13 @@
                         "center_x": 928.0,
                         "center_y": 992.0,
                         "color": [
-                            78,
-                            81,
-                            128
+                            245,
+                            245,
+                            245
                         ],
                         "data": null,
                         "is_dead": null,
-                        "is_visible": false,
+                        "is_visible": true,
                         "left_face": false,
                         "name": "block_floor",
                         "not_visible_color": [
@@ -18391,13 +18391,13 @@
                         "center_x": 928.0,
                         "center_y": 1056.0,
                         "color": [
-                            78,
-                            81,
-                            128
+                            245,
+                            245,
+                            245
                         ],
                         "data": null,
                         "is_dead": null,
-                        "is_visible": false,
+                        "is_visible": true,
                         "left_face": false,
                         "name": "block_floor",
                         "not_visible_color": [
@@ -19336,13 +19336,13 @@
                         "center_x": 992.0,
                         "center_y": 416.0,
                         "color": [
-                            245,
-                            245,
-                            245
+                            0,
+                            0,
+                            0
                         ],
                         "data": null,
                         "is_dead": null,
-                        "is_visible": true,
+                        "is_visible": false,
                         "left_face": false,
                         "name": "block_floor",
                         "not_visible_color": [
@@ -19371,13 +19371,13 @@
                         "center_x": 992.0,
                         "center_y": 480.0,
                         "color": [
-                            245,
-                            245,
-                            245
+                            0,
+                            0,
+                            0
                         ],
                         "data": null,
                         "is_dead": null,
-                        "is_visible": true,
+                        "is_visible": false,
                         "left_face": false,
                         "name": "block_floor",
                         "not_visible_color": [
@@ -19651,13 +19651,13 @@
                         "center_x": 992.0,
                         "center_y": 992.0,
                         "color": [
-                            78,
-                            81,
-                            128
+                            245,
+                            245,
+                            245
                         ],
                         "data": null,
                         "is_dead": null,
-                        "is_visible": false,
+                        "is_visible": true,
                         "left_face": false,
                         "name": "block_floor",
                         "not_visible_color": [
@@ -19686,13 +19686,13 @@
                         "center_x": 992.0,
                         "center_y": 1056.0,
                         "color": [
-                            78,
-                            81,
-                            128
+                            245,
+                            245,
+                            245
                         ],
                         "data": null,
                         "is_dead": null,
-                        "is_visible": false,
+                        "is_visible": true,
                         "left_face": false,
                         "name": "block_floor",
                         "not_visible_color": [
@@ -20701,13 +20701,13 @@
                         "center_x": 1056.0,
                         "center_y": 544.0,
                         "color": [
-                            245,
-                            245,
-                            245
+                            0,
+                            0,
+                            0
                         ],
                         "data": null,
                         "is_dead": null,
-                        "is_visible": true,
+                        "is_visible": false,
                         "left_face": false,
                         "name": "block_floor",
                         "not_visible_color": [
@@ -20736,13 +20736,13 @@
                         "center_x": 1056.0,
                         "center_y": 608.0,
                         "color": [
-                            245,
-                            245,
-                            245
+                            0,
+                            0,
+                            0
                         ],
                         "data": null,
                         "is_dead": null,
-                        "is_visible": true,
+                        "is_visible": false,
                         "left_face": false,
                         "name": "block_floor",
                         "not_visible_color": [
@@ -20876,13 +20876,13 @@
                         "center_x": 1056.0,
                         "center_y": 864.0,
                         "color": [
-                            78,
-                            81,
-                            128
+                            245,
+                            245,
+                            245
                         ],
                         "data": null,
                         "is_dead": null,
-                        "is_visible": false,
+                        "is_visible": true,
                         "left_face": false,
                         "name": "block_floor",
                         "not_visible_color": [
@@ -20911,13 +20911,13 @@
                         "center_x": 1056.0,
                         "center_y": 928.0,
                         "color": [
-                            78,
-                            81,
-                            128
+                            245,
+                            245,
+                            245
                         ],
                         "data": null,
                         "is_dead": null,
-                        "is_visible": false,
+                        "is_visible": true,
                         "left_face": false,
                         "name": "block_floor",
                         "not_visible_color": [
@@ -50494,6 +50494,46 @@
                     }
                 },
                 {
+                    "Ebony": {
+                        "alpha": 255,
+                        "block_sight": false,
+                        "blocks": false,
+                        "center_x": 736.0,
+                        "center_y": 736.0,
+                        "color": [
+                            255,
+                            255,
+                            255
+                        ],
+                        "data": {
+                            "2": "branch_baton",
+                            "3": "healing"
+                        },
+                        "is_dead": null,
+                        "is_visible": true,
+                        "left_face": false,
+                        "name": "ebony",
+                        "not_visible_color": [
+                            0,
+                            0,
+                            0,
+                            255
+                        ],
+                        "power": null,
+                        "scale": 2,
+                        "texture": "ebony",
+                        "texture_number": 0,
+                        "visible_color": [
+                            255,
+                            255,
+                            255,
+                            255
+                        ],
+                        "x": 11,
+                        "y": 9
+                    }
+                },
+                {
                     "Sunflower": {
                         "alpha": 255,
                         "block_sight": false,
@@ -59162,7 +59202,7 @@
                         ],
                         "data": null,
                         "is_dead": null,
-                        "is_visible": true,
+                        "is_visible": false,
                         "left_face": false,
                         "name": "floor_point",
                         "not_visible_color": [
@@ -59197,7 +59237,7 @@
                         ],
                         "data": null,
                         "is_dead": null,
-                        "is_visible": true,
+                        "is_visible": false,
                         "left_face": false,
                         "name": "floor_point",
                         "not_visible_color": [
@@ -59337,7 +59377,7 @@
                         ],
                         "data": null,
                         "is_dead": null,
-                        "is_visible": false,
+                        "is_visible": true,
                         "left_face": false,
                         "name": "floor_point",
                         "not_visible_color": [
@@ -59372,7 +59412,7 @@
                         ],
                         "data": null,
                         "is_dead": null,
-                        "is_visible": false,
+                        "is_visible": true,
                         "left_face": false,
                         "name": "floor_point",
                         "not_visible_color": [
@@ -60486,13 +60526,13 @@
                         "center_x": 480.0,
                         "center_y": 416.0,
                         "color": [
-                            245,
-                            245,
-                            245
+                            0,
+                            0,
+                            0
                         ],
                         "data": null,
                         "is_dead": null,
-                        "is_visible": true,
+                        "is_visible": false,
                         "left_face": false,
                         "name": "floor_point",
                         "not_visible_color": [
@@ -60521,13 +60561,13 @@
                         "center_x": 480.0,
                         "center_y": 480.0,
                         "color": [
-                            245,
-                            245,
-                            245
+                            0,
+                            0,
+                            0
                         ],
                         "data": null,
                         "is_dead": null,
-                        "is_visible": true,
+                        "is_visible": false,
                         "left_face": false,
                         "name": "floor_point",
                         "not_visible_color": [
@@ -60807,7 +60847,7 @@
                         ],
                         "data": null,
                         "is_dead": null,
-                        "is_visible": false,
+                        "is_visible": true,
                         "left_face": false,
                         "name": "floor_point",
                         "not_visible_color": [
@@ -60842,7 +60882,7 @@
                         ],
                         "data": null,
                         "is_dead": null,
-                        "is_visible": false,
+                        "is_visible": true,
                         "left_face": false,
                         "name": "floor_point",
                         "not_visible_color": [
@@ -61886,13 +61926,13 @@
                         "center_x": 544.0,
                         "center_y": 416.0,
                         "color": [
-                            245,
-                            245,
-                            245
+                            0,
+                            0,
+                            0
                         ],
                         "data": null,
                         "is_dead": null,
-                        "is_visible": true,
+                        "is_visible": false,
                         "left_face": false,
                         "name": "floor_point",
                         "not_visible_color": [
@@ -61927,7 +61967,7 @@
                         ],
                         "data": null,
                         "is_dead": null,
-                        "is_visible": true,
+                        "is_visible": false,
                         "left_face": false,
                         "name": "floor_point",
                         "not_visible_color": [
@@ -62207,7 +62247,7 @@
                         ],
                         "data": null,
                         "is_dead": null,
-                        "is_visible": false,
+                        "is_visible": true,
                         "left_face": false,
                         "name": "floor_point",
                         "not_visible_color": [
@@ -62242,7 +62282,7 @@
                         ],
                         "data": null,
                         "is_dead": null,
-                        "is_visible": false,
+                        "is_visible": true,
                         "left_face": false,
                         "name": "floor_point",
                         "not_visible_color": [
@@ -63251,13 +63291,13 @@
                         "center_x": 608.0,
                         "center_y": 352.0,
                         "color": [
-                            245,
-                            245,
-                            245
+                            0,
+                            0,
+                            0
                         ],
                         "data": null,
                         "is_dead": null,
-                        "is_visible": true,
+                        "is_visible": false,
                         "left_face": false,
                         "name": "floor_point",
                         "not_visible_color": [
@@ -63286,13 +63326,13 @@
                         "center_x": 608.0,
                         "center_y": 416.0,
                         "color": [
-                            245,
-                            245,
-                            245
+                            0,
+                            0,
+                            0
                         ],
                         "data": null,
                         "is_dead": null,
-                        "is_visible": true,
+                        "is_visible": false,
                         "left_face": false,
                         "name": "floor_point",
                         "not_visible_color": [
@@ -63642,7 +63682,7 @@
                         ],
                         "data": null,
                         "is_dead": null,
-                        "is_visible": false,
+                        "is_visible": true,
                         "left_face": false,
                         "name": "floor_point",
                         "not_visible_color": [
@@ -63677,7 +63717,7 @@
                         ],
                         "data": null,
                         "is_dead": null,
-                        "is_visible": false,
+                        "is_visible": true,
                         "left_face": false,
                         "name": "floor_point",
                         "not_visible_color": [
@@ -64651,13 +64691,13 @@
                         "center_x": 672.0,
                         "center_y": 352.0,
                         "color": [
-                            245,
-                            245,
-                            245
+                            0,
+                            0,
+                            0
                         ],
                         "data": null,
                         "is_dead": null,
-                        "is_visible": true,
+                        "is_visible": false,
                         "left_face": false,
                         "name": "floor_point",
                         "not_visible_color": [
@@ -64686,13 +64726,13 @@
                         "center_x": 672.0,
                         "center_y": 416.0,
                         "color": [
-                            245,
-                            245,
-                            245
+                            0,
+                            0,
+                            0
                         ],
                         "data": null,
                         "is_dead": null,
-                        "is_visible": true,
+                        "is_visible": false,
                         "left_face": false,
                         "name": "floor_point",
                         "not_visible_color": [
@@ -65042,7 +65082,7 @@
                         ],
                         "data": null,
                         "is_dead": null,
-                        "is_visible": false,
+                        "is_visible": true,
                         "left_face": false,
                         "name": "floor_point",
                         "not_visible_color": [
@@ -65077,7 +65117,7 @@
                         ],
                         "data": null,
                         "is_dead": null,
-                        "is_visible": false,
+                        "is_visible": true,
                         "left_face": false,
                         "name": "floor_point",
                         "not_visible_color": [
@@ -66051,13 +66091,13 @@
                         "center_x": 736.0,
                         "center_y": 352.0,
                         "color": [
-                            245,
-                            245,
-                            245
+                            0,
+                            0,
+                            0
                         ],
                         "data": null,
                         "is_dead": null,
-                        "is_visible": true,
+                        "is_visible": false,
                         "left_face": false,
                         "name": "floor_point",
                         "not_visible_color": [
@@ -66086,13 +66126,13 @@
                         "center_x": 736.0,
                         "center_y": 416.0,
                         "color": [
-                            245,
-                            245,
-                            245
+                            0,
+                            0,
+                            0
                         ],
                         "data": null,
                         "is_dead": null,
-                        "is_visible": true,
+                        "is_visible": false,
                         "left_face": false,
                         "name": "floor_point",
                         "not_visible_color": [
@@ -66442,7 +66482,7 @@
                         ],
                         "data": null,
                         "is_dead": null,
-                        "is_visible": false,
+                        "is_visible": true,
                         "left_face": false,
                         "name": "floor_point",
                         "not_visible_color": [
@@ -66477,7 +66517,7 @@
                         ],
                         "data": null,
                         "is_dead": null,
-                        "is_visible": false,
+                        "is_visible": true,
                         "left_face": false,
                         "name": "floor_point",
                         "not_visible_color": [
@@ -67451,13 +67491,13 @@
                         "center_x": 800.0,
                         "center_y": 352.0,
                         "color": [
-                            245,
-                            245,
-                            245
+                            0,
+                            0,
+                            0
                         ],
                         "data": null,
                         "is_dead": null,
-                        "is_visible": true,
+                        "is_visible": false,
                         "left_face": false,
                         "name": "floor_point",
                         "not_visible_color": [
@@ -67486,13 +67526,13 @@
                         "center_x": 800.0,
                         "center_y": 416.0,
                         "color": [
-                            245,
-                            245,
-                            245
+                            0,
+                            0,
+                            0
                         ],
                         "data": null,
                         "is_dead": null,
-                        "is_visible": true,
+                        "is_visible": false,
                         "left_face": false,
                         "name": "floor_point",
                         "not_visible_color": [
@@ -67842,7 +67882,7 @@
                         ],
                         "data": null,
                         "is_dead": null,
-                        "is_visible": false,
+                        "is_visible": true,
                         "left_face": false,
                         "name": "floor_point",
                         "not_visible_color": [
@@ -67877,7 +67917,7 @@
                         ],
                         "data": null,
                         "is_dead": null,
-                        "is_visible": false,
+                        "is_visible": true,
                         "left_face": false,
                         "name": "floor_point",
                         "not_visible_color": [
@@ -68851,13 +68891,13 @@
                         "center_x": 864.0,
                         "center_y": 352.0,
                         "color": [
-                            245,
-                            245,
-                            245
+                            0,
+                            0,
+                            0
                         ],
                         "data": null,
                         "is_dead": null,
-                        "is_visible": true,
+                        "is_visible": false,
                         "left_face": false,
                         "name": "floor_point",
                         "not_visible_color": [
@@ -68886,13 +68926,13 @@
                         "center_x": 864.0,
                         "center_y": 416.0,
                         "color": [
-                            245,
-                            245,
-                            245
+                            0,
+                            0,
+                            0
                         ],
                         "data": null,
                         "is_dead": null,
-                        "is_visible": true,
+                        "is_visible": false,
                         "left_face": false,
                         "name": "floor_point",
                         "not_visible_color": [
@@ -69242,7 +69282,7 @@
                         ],
                         "data": null,
                         "is_dead": null,
-                        "is_visible": false,
+                        "is_visible": true,
                         "left_face": false,
                         "name": "floor_point",
                         "not_visible_color": [
@@ -69277,7 +69317,7 @@
                         ],
                         "data": null,
                         "is_dead": null,
-                        "is_visible": false,
+                        "is_visible": true,
                         "left_face": false,
                         "name": "floor_point",
                         "not_visible_color": [
@@ -70286,13 +70326,13 @@
                         "center_x": 928.0,
                         "center_y": 416.0,
                         "color": [
-                            245,
-                            245,
-                            245
+                            0,
+                            0,
+                            0
                         ],
                         "data": null,
                         "is_dead": null,
-                        "is_visible": true,
+                        "is_visible": false,
                         "left_face": false,
                         "name": "floor_point",
                         "not_visible_color": [
@@ -70321,13 +70361,13 @@
                         "center_x": 928.0,
                         "center_y": 480.0,
                         "color": [
-                            245,
-                            245,
-                            245
+                            0,
+                            0,
+                            0
                         ],
                         "data": null,
                         "is_dead": null,
-                        "is_visible": true,
+                        "is_visible": false,
                         "left_face": false,
                         "name": "floor_point",
                         "not_visible_color": [
@@ -70607,7 +70647,7 @@
                         ],
                         "data": null,
                         "is_dead": null,
-                        "is_visible": false,
+                        "is_visible": true,
                         "left_face": false,
                         "name": "floor_point",
                         "not_visible_color": [
@@ -70642,7 +70682,7 @@
                         ],
                         "data": null,
                         "is_dead": null,
-                        "is_visible": false,
+                        "is_visible": true,
                         "left_face": false,
                         "name": "floor_point",
                         "not_visible_color": [
@@ -71686,13 +71726,13 @@
                         "center_x": 992.0,
                         "center_y": 416.0,
                         "color": [
-                            245,
-                            245,
-                            245
+                            0,
+                            0,
+                            0
                         ],
                         "data": null,
                         "is_dead": null,
-                        "is_visible": true,
+                        "is_visible": false,
                         "left_face": false,
                         "name": "floor_point",
                         "not_visible_color": [
@@ -71721,13 +71761,13 @@
                         "center_x": 992.0,
                         "center_y": 480.0,
                         "color": [
-                            245,
-                            245,
-                            245
+                            0,
+                            0,
+                            0
                         ],
                         "data": null,
                         "is_dead": null,
-                        "is_visible": true,
+                        "is_visible": false,
                         "left_face": false,
                         "name": "floor_point",
                         "not_visible_color": [
@@ -72007,7 +72047,7 @@
                         ],
                         "data": null,
                         "is_dead": null,
-                        "is_visible": false,
+                        "is_visible": true,
                         "left_face": false,
                         "name": "floor_point",
                         "not_visible_color": [
@@ -72042,7 +72082,7 @@
                         ],
                         "data": null,
                         "is_dead": null,
-                        "is_visible": false,
+                        "is_visible": true,
                         "left_face": false,
                         "name": "floor_point",
                         "not_visible_color": [
@@ -73156,13 +73196,13 @@
                         "center_x": 1056.0,
                         "center_y": 544.0,
                         "color": [
-                            245,
-                            245,
-                            245
+                            0,
+                            0,
+                            0
                         ],
                         "data": null,
                         "is_dead": null,
-                        "is_visible": true,
+                        "is_visible": false,
                         "left_face": false,
                         "name": "floor_point",
                         "not_visible_color": [
@@ -73191,13 +73231,13 @@
                         "center_x": 1056.0,
                         "center_y": 608.0,
                         "color": [
-                            245,
-                            245,
-                            245
+                            0,
+                            0,
+                            0
                         ],
                         "data": null,
                         "is_dead": null,
-                        "is_visible": true,
+                        "is_visible": false,
                         "left_face": false,
                         "name": "floor_point",
                         "not_visible_color": [
@@ -73337,7 +73377,7 @@
                         ],
                         "data": null,
                         "is_dead": null,
-                        "is_visible": false,
+                        "is_visible": true,
                         "left_face": false,
                         "name": "floor_point",
                         "not_visible_color": [
@@ -73372,7 +73412,7 @@
                         ],
                         "data": null,
                         "is_dead": null,
-                        "is_visible": false,
+                        "is_visible": true,
                         "left_face": false,
                         "name": "floor_point",
                         "not_visible_color": [
@@ -106548,7 +106588,7 @@
             "block_sight": false,
             "blocks": false,
             "center_x": 736.0,
-            "center_y": 672.0,
+            "center_y": 800.0,
             "color": [
                 255,
                 255,
@@ -106556,8 +106596,7 @@
             ],
             "data": null,
             "equipment": [
-                "Cirsium",
-                "Ebony"
+                "Cirsium"
             ],
             "fighter": {
                 "_attack_speed": 7,
@@ -106719,8 +106758,8 @@
                         "alpha": 255,
                         "block_sight": false,
                         "blocks": false,
-                        "center_x": 748.0,
-                        "center_y": 666.0,
+                        "center_x": 32.0,
+                        "center_y": 160.0,
                         "color": [
                             255,
                             255,
@@ -106830,18 +106869,20 @@
                         "y": 0
                     }
                 },
-                "current_xp": 0,
+                "current_xp": 70,
                 "defense": 1,
                 "dexterity": 4,
                 "evasion": 5,
                 "hit_rate": 100,
                 "hp": 30,
                 "intelligence": 4,
-                "level": 1,
-                "level_skills": {},
+                "level": 2,
+                "level_skills": {
+                    "healing": 1
+                },
                 "max_hp": 30,
                 "states": [],
-                "strength": 30,
+                "strength": 31,
                 "unarmed_attack": 2,
                 "xp_reward": 0
             },
@@ -106927,8 +106968,8 @@
                             "alpha": 255,
                             "block_sight": false,
                             "blocks": false,
-                            "center_x": 715.408974950059,
-                            "center_y": 673.4825721627723,
+                            "center_x": 721.068888864583,
+                            "center_y": 801.0604824137068,
                             "color": [
                                 255,
                                 255,
@@ -106962,46 +107003,7 @@
                             "y": 10
                         }
                     },
-                    {
-                        "Ebony": {
-                            "alpha": 255,
-                            "block_sight": false,
-                            "blocks": false,
-                            "center_x": 714.7252802397031,
-                            "center_y": 690.4075864114051,
-                            "color": [
-                                255,
-                                255,
-                                255
-                            ],
-                            "data": {
-                                "2": "branch_baton",
-                                "3": "healing"
-                            },
-                            "is_dead": null,
-                            "is_visible": true,
-                            "left_face": false,
-                            "name": "ebony",
-                            "not_visible_color": [
-                                0,
-                                0,
-                                0,
-                                255
-                            ],
-                            "power": null,
-                            "scale": 2,
-                            "texture": "ebony",
-                            "texture_number": 0,
-                            "visible_color": [
-                                255,
-                                255,
-                                255,
-                                255
-                            ],
-                            "x": 11,
-                            "y": 9
-                        }
-                    },
+                    null,
                     null,
                     null,
                     null,
@@ -107031,13 +107033,13 @@
                 255
             ],
             "x": 11,
-            "y": 8
+            "y": 10
         }
     },
     "viewport": [
         256.0,
         1472.0,
-        192.0,
-        1152.0
+        320.0,
+        1280.0
     ]
 }

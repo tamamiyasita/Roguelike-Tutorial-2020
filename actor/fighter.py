@@ -24,8 +24,7 @@ class Fighter:
         self.base_evasion = evasion
         self.hit_rate = hit_rate
         self._attack_speed = attack_speed
-        self.weapon = None
-        self.data = {}
+        self.data = {"weapon":None}
 
         self.owner = None
         self.xp_reward = xp_reward
@@ -37,9 +36,6 @@ class Fighter:
         self.level_skills = {}#level_upなどに伴う追加Skillの合計に使う
         self.base_skill_dict = skill_dict
         self._skill_list = arcade.SpriteList()
-        self.active_skill = []
-        self.passive_skill = set()
-        self.equip_skill = set()
 
         self.damage = None
 
@@ -65,7 +61,6 @@ class Fighter:
         result["ability_points"] = self.ability_points
         result["level_skills"] = self.level_skills
 
-        # result["base_skill_dict"] = [(skill.__class__.__name__, result.get_dict()) for skill, result in zip(self.skill_list, self.skill_list)]
         result["base_skill_dict"] = {name : result.get_dict() for name, result in  self.base_skill_dict.items()}
 
         # クラスと内部値をタプルで保存する
@@ -109,68 +104,15 @@ class Fighter:
                 sd.restore_from_dict(r)
                 print(sd)
 
-    def skill_equip_check(self, skill):
-        
-        # self.data["weapon"] = None
-            # self.weapon = None
-        if  Tag.weapon in skill.tag:
-            self.equip_skill.add(skill)
-        elif Tag.passive in skill.tag:
-            self.passive_skill.add(skill)
-        elif Tag.active in skill.tag:
-            self.active_skill.append(skill)
-        #         if self.weapon == None and skill.data["switch"] == True:
-        #             skill.activate(self.owner)
-        #         else:
-        #             skill.deactivate(self.owner)
-        # else:
-        #     if self.weapon:
-        #         self.weapon.deactivate(self.owner)
-
-        # elif skill.
-        
-
-        
-
 
     @property
     def skill_list(self):
         """levelsにあるスキルのレベル合計からスキルリストを作成する"""
-        self.equip_skill.clear()
-        self.passive_skill.clear()
-        self.active_skill = []
 
         # TODO game_stateの状態でループするか決めたい
         if hasattr(self.owner, "equipment") and self.owner.equipment:
-            # levels = {}
-            self._skill_list = arcade.SpriteList()
-
-            for skill in self.owner.equipment.skill_level_sum:
-                self.skill_equip_check(skill)
-                # 処理を挟む
-                # self._skill_list.append(skill)
-        
-
-
-            # try:
-            
-            #     if self.weapon.name not in levels:
-            #         self.weapon.data["switch"] = False
-
-            #     if self.weapon and self.weapon.name in levels:
-            #         self.weapon.data["switch"] = True
-            # except:
-            #     pass
-        if self.weapon and self.weapon not in self.equip_skill:
-            self.weapon.deactivate(self.owner)
-            
-
-
-            
-        print(f"{self.active_skill=}")
-        print(f"{self.equip_skill=}")
-        print(f"{self.passive_skill=}")
-        return self._skill_list
+ 
+            return self.owner.equipment.skill_level_sum
 
     @property
     def states(self):
@@ -180,44 +122,63 @@ class Fighter:
 
         return self._states
     
+
+    @property
+    def passive_skill(self):
+        result =  [skill for skill in self.skill_list if Tag.passive in skill.tag]
+        return result
+    @property
+    def active_skill(self):
+        result =  [skill for skill in self.skill_list if Tag.active in skill.tag]
+        return result
+
+    def equip_check(self, weapon, result):
+
+        if weapon and weapon.data["switch"] == False:
+            weapon.deactivate(self.owner)
     
-    # @property
-    # def active_skill(self):
-    #     result = []
-    #     for skill in self.skill_list:
-    #          if Tag.active in skill.tag:
-    #             if skill.data["switch"] == True:
-    #                 result.append(skill)
-    #                 if not skill.owner:
-    #                     skill.owner = self.owner
-    #     return result
+        if weapon is None and result:
+            # self.data["weapon"]が空でresultにオブジェクトがあれば
+            weapon = result[0]
+            weapon.activate(self.owner)
+            # result[0]を代入しActivate
 
+        elif not result and weapon:
+            # resultが空でself.data["weapon"]にオブジェクトがあればdeactivate
+            weapon.deactivate(self.owner)
 
-
-    # @property
-    # def passive_skill(self):
-    #     result =  [skill for skill in self.skill_list if Tag.passive in skill.tag]
-    #     self.skill_equip_check(result)
-    #     return result
+        elif weapon and result:
+            # self.data["weapon"]にオブジェクトがありresultにもあれば
+            if weapon in result:
+                # 同じならパス
+                # weapon.activate(self.owner)
+                pass
+            else:
+                # 違うならself.data["weapon"]はdeactivateしresultを代入
+                weapon.deactivate(self.owner)
+                weapon = result[0]
+                weapon.activate(self.owner)
         
 
-                    
-
-
+    @property
+    def equip_skill(self):
+        result =  [skill for skill in self.skill_list if Tag.weapon in skill.tag]
+        self.equip_check(self.data["weapon"], result)
+            
+        return result
+        
 
     @property
     def equip_image(self):
         return [skill for skill in self.passive_skill if Tag.equip in skill.tag]
 
 
-
     @property
     def attack_speed(self):
-        if self.weapon:
-            return self.weapon.speed
+        if self.data["weapon"]:
+            return self.data["weapon"].speed
         else:
             return self._attack_speed
-
 
 
     @property
@@ -285,19 +246,19 @@ class Fighter:
     
 
     @property
-    def weapon_damage(self):
+    def attack_damage(self):
 
         
-        if self.weapon:
-            max_d = self.weapon.damage
-            level = self.weapon.level
+        if self.data["weapon"]:
+            max_d = self.data["weapon"].damage
+            level = self.data["weapon"].level
         else:
             max_d = self.owner.fighter.unarmed_attack
             level = self.level
 
-        weapon_damage = dice(1 + level//3, max_d+(self.STR//3))
+        attack_damage = dice(1 + level//3, max_d+(self.STR//3))
 
-        return weapon_damage
+        return attack_damage
 
 
 
@@ -306,8 +267,8 @@ class Fighter:
         # 命中率（α）＝９５、回避率（β）＝５
         hit = None
 
-        if self.weapon:
-            hit = self.weapon.hit_rate
+        if self.data["weapon"]:
+            hit = self.data["weapon"].hit_rate
         else:
             hit = self.owner.fighter.hit_rate
 
@@ -349,7 +310,7 @@ class Fighter:
 
         else:
             if random.randrange(1, 100) <= self.hit_chance(target):
-                self.damage = self.weapon_damage // target.fighter.defense
+                self.damage = self.attack_damage // target.fighter.defense
                 if random.randrange(1, (100-self.DEX)) < 5:
                     self.damage *= 2
                     results.append({"message": f"{self.owner.name.capitalize()} attack is critical HIT!"})
@@ -363,9 +324,6 @@ class Fighter:
                     {"message": f"{self.owner.name.capitalize()} attacks {target.name} for {str(self.damage)} hit points."})
                 results.extend(target.fighter.change_hp(-self.damage))
 
-                # # xp獲得処理
-                # if target.is_dead:
-                #     self.current_xp += target.fighter.xp_reward
 
             else:# 完全防御
                 results.append(

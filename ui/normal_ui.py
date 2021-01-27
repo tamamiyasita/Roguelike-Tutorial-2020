@@ -264,21 +264,20 @@ class NormalUI:
         item_text = ""
         left_margin = self.viewport_left + self.side_panel_width + 7  # 画面左からのHPとバーの位置
         y = 0
-            
-        for passive in chain(self.player.fighter.passive_skill, self.player.fighter.equip_skill):
 
-            if passive.data["switch"] == True:
-                item_text = f"{passive.name} (level {passive.level})".replace("_", " ").title()
+        try:
+            if self.player.fighter.data["weapon"] not in self.player.fighter.equip_skill:
+                self.engine.cur_level.equip_sprites.remove(self.player.fighter.data["weapon"])
+        except:
+            pass
+        
+        for passive in self.player.fighter.passive_skill:
 
-                if passive not in self.engine.cur_level.equip_sprites:
-                    passive.activate(self.player)
-                    self.engine.cur_level.equip_sprites.append(passive)
+            if passive == self.player.fighter.data["weapon"] and passive not in self.engine.cur_level.equip_sprites:
+                self.engine.cur_level.equip_sprites.append(passive)
 
-            elif passive.data["switch"] == False:
-                passive.deactivate(self.player)
-                continue
-            
-            
+            item_text = f"{passive.name} (level {passive.level})".replace("_", " ").title()
+
 
             arcade.draw_text(
                 text=item_text,
