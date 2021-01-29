@@ -22,5 +22,5 @@ class BranchBaton(LeafBlade):
         self.icon = IMAGE_ID["branch_baton_icon"]
 
         self.item_margin_x = 6 * SPRITE_SCALE
-        self.item_margin_y = 3 * SPRITE_SCALE
+        self.item_margin_y = 4 * SPRITE_SCALE
 

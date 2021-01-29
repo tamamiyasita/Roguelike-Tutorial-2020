@@ -8,6 +8,7 @@ class Sunflower(Cirsium):
             x=x,
             y=y,
         )
+        self.scale = 1.6
 
 
 

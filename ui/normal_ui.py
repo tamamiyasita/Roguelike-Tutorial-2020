@@ -195,10 +195,10 @@ class NormalUI:
         """スキルアイコンの表示"""
         slot_len = len(self.player.fighter.active_skill)
         item_left_position = self.viewport_left + \
-            ((SCREEN_WIDTH-STATES_PANEL_WIDTH) / 2.8)   # パネル左からの所持アイテム表示位置の調整に使う変数
+            ((SCREEN_WIDTH-STATES_PANEL_WIDTH) / 2.4)   # パネル左からの所持アイテム表示位置の調整に使う変数
         skill_top_position = self.viewport_bottom + \
-            STATES_PANEL_HEIGHT + 42  # パネル上端からの所持アイテム表示位置の調整に使う変数
-        separate_size = 6.5  # スキル名の表示間隔の調整に使う変数
+            STATES_PANEL_HEIGHT + 12  # パネル上端からの所持アイテム表示位置の調整に使う変数
+        separate_size = 6.4  # スキル名の表示間隔の調整に使う変数
         item_font_size = 11
         field_width = SCREEN_WIDTH / (slot_len + 1) / separate_size  # アイテム表示感覚を決める変数
 

@@ -38,20 +38,20 @@ class MouseUI:
             back_ground_width = 100  # テキスト背景幅
             back_ground_height = 16  # テキスト背景高
 
-            arcade.draw_xywh_rectangle_filled(
-                bottom_left_x=x,
-                bottom_left_y=y,
-                width=back_ground_width,
-                height=back_ground_height,
-                color=arcade.color.BLACK
-            )
-            arcade.draw_text(
-                text=self.mouse_over_text,
-                start_x=x,
-                start_y=y,
-                font_size=font_size,
-                color=COLORS["white"]
-            )
+            # arcade.draw_xywh_rectangle_filled(
+            #     bottom_left_x=x,
+            #     bottom_left_y=y,
+            #     width=back_ground_width,
+            #     height=back_ground_height,
+            #     color=arcade.color.BLACK
+            # )
+            # arcade.draw_text(
+            #     text=self.mouse_over_text,
+            #     start_x=x,
+            #     start_y=y,
+            #     font_size=font_size,
+            #     color=COLORS["white"]
+            # )
 
     def draw_select_mouse_location(self):
         """ マウス操作時のグリッド表示"""

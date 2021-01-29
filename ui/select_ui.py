@@ -103,7 +103,7 @@ class SelectUI:
             bottom_left_y=self.viewport_bottom,
             width=self.buttom_panel_width,
             height=STATES_PANEL_HEIGHT,
-            color=COLORS["status_panel_background"]
+            color=arcade.color.BLACK
         )
 
         # 下パネルの周りの線
@@ -112,7 +112,7 @@ class SelectUI:
             bottom_left_y=self.viewport_bottom+self.panel_line_width*0.5,
             width=self.buttom_panel_width-self.panel_line_width,
             height=STATES_PANEL_HEIGHT,
-            color=arcade.color.ORANGE,
+            color=arcade.color.BLACK,
             border_width=self.panel_line_width
         )
 
@@ -122,7 +122,7 @@ class SelectUI:
             bottom_left_y=self.viewport_bottom,
             width=STATES_PANEL_WIDTH,
             height=SCREEN_HEIGHT,
-            color=arcade.color.LIBERTY
+            color=arcade.color.BLACK
         )
 
         # 横パネルの周りの線
@@ -132,7 +132,7 @@ class SelectUI:
             bottom_left_y=self.viewport_bottom + self.panel_line_width*0.5,
             width=STATES_PANEL_WIDTH - self.panel_line_width,
             height=SCREEN_HEIGHT - self.panel_line_width-231,
-            color=arcade.color.LEMON_CHIFFON,
+            color=arcade.color.BLACK,
             border_width=self.panel_line_width
         )
 
@@ -143,7 +143,7 @@ class SelectUI:
             bottom_left_y=self.viewport_bottom + SCREEN_HEIGHT - 228,
             width=STATES_PANEL_WIDTH - self.panel_line_width,
             height=225,
-            color=arcade.color.BABY_BLUE,
+            color=arcade.color.BLACK,
             border_width=self.panel_line_width
         )
 

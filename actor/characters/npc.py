@@ -56,7 +56,7 @@ class Citizen(Actor):
             {"message": "test CDEF"}, {"message": "false_test"}
         ]
         self.message_event = {
-                            "request": ["I'm worried", "I'm really coming", "Please help me"],
+                            "request": ["It is a test screen", " for conversation", "Please help me"],
                             "reply":["Yes", "No", "uum...", "See you later"],
                             "waiting":["Then please"],
                             "accepted":["understood"],

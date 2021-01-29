@@ -99,7 +99,7 @@ class GameEngine:
         arcade.set_background_color(COLORS["black"])
         self.flower_sprites = arcade.SpriteList(use_spatial_hash=True, spatial_hash_cell_size=32)
         self.tmp_effect_sprites = arcade.SpriteList(use_spatial_hash=True, spatial_hash_cell_size=32)
-        self.cur_level = self.setup_level(level_number=99)
+        self.cur_level = self.setup_level(level_number=0)
         self.stories[self.cur_floor_name] = self.cur_level
         self.turn_loop = TurnLoop(self.player)
         self.item_point = ItemPoint(self)
@@ -159,11 +159,11 @@ class GameEngine:
         self.fb = FireballScroll(self.player.x + 1, self.player.y)
         self.game_level.item_sprites.append(self.fb)
 
-        self.hp = Paeonia(self.player.x-1, self.player.y)
-        self.game_level.item_sprites.append(self.hp)
-
         self.boomerang = Boomerang(self.player.x-1, self.player.y + 1)
         self.game_level.item_sprites.append(self.boomerang)
+
+        self.hp = Paeonia(self.player.x-1, self.player.y)
+        self.game_level.item_sprites.append(self.hp)
 
         self.cirsium = Cirsium(self.player.x + 1, self.player.y)
         self.game_level.item_sprites.append(self.cirsium)
@@ -262,7 +262,14 @@ class GameEngine:
         self.game_level.floor_level = level
         self.game_level.map_name = f"basic_dungeon"
 
+        self.hp = Paeonia(self.player.x-1, self.player.y)
+        self.game_level.item_sprites.append(self.hp)
 
+        self.cirsium = Cirsium(self.player.x + 1, self.player.y)
+        self.game_level.item_sprites.append(self.cirsium)
+
+        self.sunflower = Sunflower(self.player.x, self.player.y-1)
+        self.game_level.item_sprites.append(self.sunflower)
 
         self.ut = Down_Stairs(self.player.x, self.player.y-1)
         self.ut.scale = 2

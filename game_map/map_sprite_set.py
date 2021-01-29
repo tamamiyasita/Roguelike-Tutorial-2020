@@ -229,13 +229,13 @@ class ActorPlacement:
                     point = Actor(name="floor_point", scale=2, x=x, y=y,
                                   color=COLORS["black"], visible_color=COLORS["light_ground"], not_visible_color=COLORS["light_ground"])
 
-                    # map_point_sprites.append(point)
+                    map_point_sprites.append(point)
 
                 elif self.tiles[x][y] == TILE.WALL:# ここでcolorをwhiteにするとマップ全体が見れる
                     point = Actor(name="wall_point", scale=2, x=x, y=y,
-                                  color=COLORS["white"], visible_color=COLORS["light_ground"], not_visible_color=COLORS["light_ground"])
+                                  color=COLORS["black"], visible_color=COLORS["light_ground"], not_visible_color=COLORS["light_ground"])
 
-                    # map_point_sprites.append(point)
+                    map_point_sprites.append(point)
 
                 elif self.tiles[x][y] == TILE.STAIRS_DOWN:
                     point = Actor(name="stairs_down_point", scale=2, x=x, y=y,
@@ -293,7 +293,7 @@ class ActorPlacement:
                     monster.center_x = cx
                     monster.center_y = cy
 
-                    # actor_sprites.append(monster)
+                    actor_sprites.append(monster)# ここをコメントアウトすると敵無しに
 
         return actor_sprites
 
