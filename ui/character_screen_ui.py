@@ -4,7 +4,7 @@ from data import *
 
 
 
-def draw_character_screen(engine, viewport):#player, viewport_x, viewport_y):
+def draw_character_screen(engine, viewport, selected_item):
     engine = engine
     player = engine.player
     viewport_left = viewport[0] + GRID_SIZE*3
@@ -23,7 +23,7 @@ def draw_character_screen(engine, viewport):#player, viewport_x, viewport_y):
         bottom_left_y=viewport_bottom,
         width=panel_width,
         height=panel_height,
-        color=COLORS["status_panel_background"]
+        color=(75,75,75,125)
     )
 
     """タイトル"""
@@ -32,8 +32,8 @@ def draw_character_screen(engine, viewport):#player, viewport_x, viewport_y):
     text_position_x = 10 + viewport_left
     text_size = 24
     screen_title = "Character Screen"
-    title_color = arcade.color.AFRICAN_VIOLET
-    text_color = arcade.color.AIR_FORCE_BLUE
+    title_color = (255, 122, 248)
+    text_color = (186, 253, 143)
     
     arcade.draw_text(
         text=screen_title,
@@ -79,7 +79,7 @@ def draw_character_screen(engine, viewport):#player, viewport_x, viewport_y):
         font_name=font_name
     )
 
-    text_position_y -= text_size * spacing  # TODO ゼロならボーナス非表示にしよう
+    text_position_y -= text_size * spacing 
     states_text = f"DEX: {player.fighter.base_dexterity} + {player.equipment.states_bonus['DEX']}"
     arcade.draw_text(
         text=states_text,
@@ -101,45 +101,93 @@ def draw_character_screen(engine, viewport):#player, viewport_x, viewport_y):
         font_name=font_name
     )
 
-    left_position = viewport_left + GRID_SIZE*3
-    top_position = panel_height + viewport_bottom - 50
-    y = 0
+    """スキルリストの表示"""
+    left_position = viewport_left + GRID_SIZE*4
+    top_position = panel_height + viewport_bottom - GRID_SIZE*1.5
+    y = 0 # セパレート
     item_font_size = 15
     skill_list = list(player.fighter.skill_list)
     skill_list = sorted(skill_list, key=lambda x: x.level, reverse=True)
-    for skill in skill_list:
-        item_text = f"{skill.name}".replace("_", " ").title()
 
- 
+    arcade.draw_text(
+        text="Skill List",
+        start_x=left_position,
+        start_y=top_position+GRID_SIZE-10 ,
+        color=(129, 255, 71),
+        font_size=item_font_size+5,
+        font_name="consola.ttf"
+    )
+    arcade.draw_text(
+        text="<Enter:key> Skill on / off",
+        start_x=left_position,
+        start_y=top_position+GRID_SIZE-25 ,
+        color=(239, 155, 71),
+        font_size=item_font_size-3,
+    )
+
+
+
+    for i, skill in enumerate(skill_list):
+
+
+        item_text = f"{skill.name}".replace("_", " ").title()
+        
+           
+        # 上下移動出来る選択枠
+        if i == selected_item:
+            arcade.draw_lrtb_rectangle_outline(
+                left=left_position,
+                right=left_position + GRID_SIZE*3,
+                top=top_position + y,
+                bottom=top_position + y - (GRID_SIZE/2) - 9,
+                color=[252,250,20,255],
+                border_width=1
+            )
+
+
+        # タイトル
         arcade.draw_text(
             text=item_text,
             start_x=left_position,
             start_y=top_position + y,
-            color=arcade.color.BANGLADESH_GREEN,
+            color=(129, 255, 81),
             font_size=item_font_size-4,
             # font_name="consola.ttf"
         )
 
+        # スキルのテクスチャ
         arcade.draw_texture_rectangle(
-            center_x=left_position+17,
-            center_y=top_position + y-18,
-            width=32,
-            height=32,
+            center_x=left_position + 20,
+            center_y=top_position + y-21,
+            width=36,
+            height=36,
             texture=skill.icon
         )
+
+        if skill.data["switch"] == False:
+            arcade.draw_texture_rectangle(
+                center_x=left_position + 20,
+                center_y=top_position + y-21,
+                width=36,
+                height=36,
+                texture=IMAGE_ID["stop_skill"]
+            )
             
+        # スキルレベル
         arcade.draw_text(
             text=f"level {skill.level}",
-            start_x=left_position +35,
-            start_y=top_position + y,
-            color=arcade.color.BISTRE_BROWN,
+            start_x=left_position + 43,
+            start_y=top_position + y-2,
+            color=(234, 255, 96),
             font_size=item_font_size-4,
             # font_name="consola.ttf",
             anchor_y="top"
         )
+
+        # スキルの説明文
         arcade.draw_text(
             text=f"{skill.explanatory_text}",
-            start_x=left_position +35,
+            start_x=left_position + 43,
             start_y=top_position + y-15,
             color=arcade.color.WHITE,
             font_size=item_font_size-5,

@@ -88,10 +88,38 @@ def grid_select_key(key, select_UI):
 
 
 
-def inventory_key(key, engine):
-    """Lコマンド時に使用する"""
+def character_screen_key(key, engine):
+    """キャラクタースクリーンで使うキー"""
+    skill_list = list(engine.player.fighter.skill_list)
 
     if key in KEYMAP_CANCEL:
+        engine.selected_item = 0
+        engine.game_state = GAME_STATE.NORMAL
+
+    if key in KEYMAP_UP:
+        engine.selected_item -= 1
+        if engine.selected_item < 0:
+            engine.selected_item = len(skill_list)-1
+
+    elif key in KEYMAP_DOWN:
+        engine.selected_item += 1
+        if len(skill_list)-1 < engine.selected_item:
+            engine.selected_item = 0
+    elif key in KEYMAP_USE_STAIRS:
+        skill = skill_list[engine.selected_item]
+        if skill.data["switch"] == False:
+            skill.data["switch"] = True
+        elif skill.data["switch"] == True:
+            skill.data["switch"] = False
+        
+
+        
+
+def inventory_key(key, engine):
+    """インベントリを開いたときのキー"""
+
+    if key in KEYMAP_CANCEL:
+        engine.selected_item = 0
         engine.game_state = GAME_STATE.NORMAL
 
     if key in KEYMAP_UP:

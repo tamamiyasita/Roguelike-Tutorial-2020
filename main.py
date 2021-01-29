@@ -8,7 +8,7 @@ import pyglet.gl as gl
 
 from game_engine import GameEngine
 from constants import *
-from keymap import keymap, grid_select_key, inventory_key
+from keymap import keymap, grid_select_key, inventory_key, character_screen_key
 
 from ui.normal_ui import NormalUI
 from ui.mouse_ui import MouseUI
@@ -156,7 +156,7 @@ class MG(arcade.Window):
 
         # Character_Screen表示
         elif self.engine.game_state == GAME_STATE.CHARACTER_SCREEN:
-            draw_character_screen(self.engine, arcade.get_viewport())
+            draw_character_screen(self.engine, arcade.get_viewport(), self.engine.selected_item)
 
 
         elif self.engine.game_state == GAME_STATE.INVENTORY:
@@ -259,10 +259,9 @@ class MG(arcade.Window):
         elif self.engine.game_state == GAME_STATE.MESSAGE_WINDOW:
             self.choice = self.massage_window.message_choices(key)
 
-        # キャラクタースクリーンでキャンセルする為だけの項目
+        # キャラクタースクリーンでスキルのオンオフ操作
         elif self.engine.game_state == GAME_STATE.CHARACTER_SCREEN:
-            if key == arcade.key.ESCAPE:
-                self.engine.game_state = GAME_STATE.NORMAL
+            character_screen_key(key, self.engine)
         
 
         if key == arcade.key.F7:

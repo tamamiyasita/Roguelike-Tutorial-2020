@@ -125,17 +125,18 @@ class Fighter:
 
     @property
     def passive_skill(self):
-        result =  [skill for skill in self.skill_list if Tag.passive in skill.tag]
+        result =  [skill for skill in self.skill_list if Tag.passive in skill.tag if skill.data["switch"] == True]
         return result
     @property
     def active_skill(self):
-        result =  [skill for skill in self.skill_list if Tag.active in skill.tag]
+        result =  [skill for skill in self.skill_list if Tag.active in skill.tag if skill.data["switch"] == True]
         return result
 
     def equip_check(self, weapon, result):
 
         if weapon and weapon.data["switch"] == False:
             weapon.deactivate(self.owner)
+            result.remove(weapon)
     
         if weapon is None and result:
             # self.data["weapon"]が空でresultにオブジェクトがあれば

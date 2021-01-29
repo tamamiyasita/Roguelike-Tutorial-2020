@@ -208,55 +208,53 @@ class NormalUI:
             skill.owner = self.player
             skill_position = i * field_width + item_left_position  # 左からの所持skillの表示位置
 
-            if skill:
+            key_number = f"<key {i+1}>"
 
-                key_number = f"<key {i+1}>"
 
-  
-                # スキルアイコンの描画
+            # スキルアイコンの描画
+            arcade.draw_texture_rectangle(
+                center_x=skill_position+10,
+                center_y=skill_top_position-10,
+                width=55,
+                height=55,
+                texture=skill.texture
+            )
+            # アイコンに白幕をかけクールダウンタイム表示
+            if 0 < skill.data["count_time"]:
                 arcade.draw_texture_rectangle(
                     center_x=skill_position+10,
                     center_y=skill_top_position-10,
                     width=55,
                     height=55,
-                    texture=skill.texture
+                    texture=IMAGE_ID["cool_down"],
+                    alpha=200
                 )
-                # アイコンに白幕をかけクールダウンタイム表示
-                if 0 < skill.data["count_time"]:
-                    arcade.draw_texture_rectangle(
-                        center_x=skill_position+10,
-                        center_y=skill_top_position-10,
-                        width=55,
-                        height=55,
-                        texture=IMAGE_ID["cool_down"],
-                        alpha=200
-                    )
-                    arcade.draw_text(
-                        text=str(skill.data["count_time"]),
-                        start_x=skill_position + 10,
-                        start_y=skill_top_position - 10,
-                        color=arcade.color.DARK_BLUE,
-                        font_size=27,
-                        anchor_x="center",
-                        anchor_y="center"
-                    )
-                else:
-                    arcade.draw_text(
-                        text=key_number,
-                        start_x=skill_position-13,
-                        start_y=skill_top_position-67,
-                        color=arcade.color.YELLOW_ORANGE,
-                        font_size=item_font_size
-                    )
-
                 arcade.draw_text(
-                    text=f"level {skill.level}",
-                    start_x=skill_position-11,
-                    start_y=skill_top_position-55,
-                    color=COLORS["status_panel_text"],
+                    text=str(skill.data["count_time"]),
+                    start_x=skill_position + 10,
+                    start_y=skill_top_position - 10,
+                    color=arcade.color.DARK_BLUE,
+                    font_size=27,
+                    anchor_x="center",
+                    anchor_y="center"
+                )
+            else:
+                arcade.draw_text(
+                    text=key_number,
+                    start_x=skill_position-13,
+                    start_y=skill_top_position-67,
+                    color=arcade.color.YELLOW_ORANGE,
                     font_size=item_font_size
                 )
-    
+
+            arcade.draw_text(
+                text=f"level {skill.level}",
+                start_x=skill_position-11,
+                start_y=skill_top_position-55,
+                color=COLORS["status_panel_text"],
+                font_size=item_font_size
+            )
+
     def draw_passive_skill(self):
         """スキルアイコン及びステータスを右パネルに描画する"""
         item_row = self.viewport_top - GRID_SIZE*5#(SCREEN_HEIGHT //1.3) - 320 # 行の最上段
@@ -272,6 +270,7 @@ class NormalUI:
             pass
         
         for passive in self.player.fighter.passive_skill:
+
 
             if passive == self.player.fighter.data["weapon"] and passive not in self.engine.cur_level.equip_sprites:
                 self.engine.cur_level.equip_sprites.append(passive)

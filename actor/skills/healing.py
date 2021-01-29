@@ -62,7 +62,7 @@ class Healing(Actor):
 
         self.tag = [Tag.item, Tag.used, Tag.active, Tag.skill]
 
-        self.explanatory_text = f"Recover a small amount of hp"
+        self.explanatory_text = f"Recover a small\namount of hp"
         self.icon = IMAGE_ID["healing"]
 
 
