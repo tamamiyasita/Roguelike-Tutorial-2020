@@ -25,6 +25,7 @@ class Fighter:
         self.hit_rate = hit_rate
         self._attack_speed = attack_speed
         self.data = {"weapon":None}
+        self.resist = {"fire": 0, "ice": 0, "acid":0, "poison":0, "mind":0}
 
         self.owner = None
         self.xp_reward = xp_reward
@@ -248,6 +249,7 @@ class Fighter:
 
     @property
     def attack_damage(self):
+        """TODO 属性ダメージを乗せる方法を考える"""
 
         
         if self.data["weapon"]:
@@ -300,6 +302,8 @@ class Fighter:
 
     @stop_watch
     def attack(self, target, ranged=None):
+        """attack_damage関数は（あれば）属性ダメージを辞書(これを定義せねば)でここに渡す
+            ここでその辞書をループし、属性ダメージを耐性の値で割る"""
         results = []
 
         if ranged:

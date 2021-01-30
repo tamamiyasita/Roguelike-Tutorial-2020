@@ -2,7 +2,14 @@ import arcade
 from constants import *
 from data import *
 
-
+def base_panel(x, y, width, height, viewport):
+    point_list = ((150, 240),
+                (165, 240),
+                (180, 255),
+                (180, 285),
+                (165, 300),
+                (150, 300))
+    arcade.draw_polygon_outline(point_list, (255,255,255))
 
 def draw_character_screen(engine, viewport, selected_item):
     engine = engine
@@ -18,6 +25,17 @@ def draw_character_screen(engine, viewport, selected_item):
     panel_width = SCREEN_WIDTH-GRID_SIZE*6
     panel_height = SCREEN_HEIGHT-GRID_SIZE*6
     """背景"""
+    point_list = ((viewport_left +140, viewport_left +280),
+                (viewport_left +145, viewport_left +270),
+                (viewport_left +150, viewport_left +240),
+                (viewport_left +165, viewport_left +240),
+                (viewport_left +180, viewport_left +255),
+                (viewport_left +180, viewport_left +285),
+                (viewport_left +165, viewport_left +300),
+                (viewport_left +150, viewport_left +300))
+    arcade.draw_polygon_outline(point_list, (255,255,255))
+
+    
     arcade.draw_xywh_rectangle_filled(
         bottom_left_x=viewport_left,
         bottom_left_y=viewport_bottom,
@@ -58,7 +76,7 @@ def draw_character_screen(engine, viewport, selected_item):
     )
 
     text_position_y -= text_size * spacing
-    states_text = f"H P: {player.fighter.hp} / {player.fighter.max_hp}"
+    states_text = f"H P: {player.fighter.hp: >2} / {player.fighter.max_hp: >2}"
     arcade.draw_text(
         text=states_text,
         start_x=text_position_x,
@@ -69,7 +87,7 @@ def draw_character_screen(engine, viewport, selected_item):
     )
 
     text_position_y -= text_size * spacing
-    states_text = f"STR: {player.fighter.base_strength} + {player.equipment.states_bonus['STR']}"
+    states_text = f"STR: {player.fighter.base_strength} + {player.equipment.states_bonus['STR']: >2}"
     arcade.draw_text(
         text=states_text,
         start_x=text_position_x,
@@ -80,7 +98,7 @@ def draw_character_screen(engine, viewport, selected_item):
     )
 
     text_position_y -= text_size * spacing 
-    states_text = f"DEX: {player.fighter.base_dexterity} + {player.equipment.states_bonus['DEX']}"
+    states_text = f"DEX: {player.fighter.base_dexterity} + {player.equipment.states_bonus['DEX']: >2}"
     arcade.draw_text(
         text=states_text,
         start_x=text_position_x,
@@ -91,7 +109,7 @@ def draw_character_screen(engine, viewport, selected_item):
     )
 
     text_position_y -= text_size * spacing
-    states_text = f"INT: {player.fighter.base_intelligence} + {player.equipment.states_bonus['INT']}"
+    states_text = f"INT: {player.fighter.base_intelligence} + {player.equipment.states_bonus['INT']: >2}"
     arcade.draw_text(
         text=states_text,
         start_x=text_position_x,
@@ -143,6 +161,7 @@ def draw_character_screen(engine, viewport, selected_item):
                 color=[252,250,20,255],
                 border_width=1
             )
+
 
 
         # タイトル
@@ -197,3 +216,8 @@ def draw_character_screen(engine, viewport, selected_item):
 
 
         y -= 74        
+
+
+
+
+
