@@ -8,6 +8,7 @@ pc_attack = arcade.load_texture_pair(r"image/rou6_a.png")
 pc_delay = arcade.load_texture_pair(r"image/rou6_d.png")
 pc_delay2 = arcade.load_texture_pair(r"image/rou6_d2.png")
 pc_delay3 = arcade.load_texture_pair(r"image/rou6t.png")
+pc_open = arcade.load_texture_pair(r"image/rou6_op.png")
 
 # test_texture
 # player = arcade.load_texture_pair(r"t_image/rou6.png")
@@ -206,6 +207,7 @@ IMAGE_ID = {"Rou": player,
             "pc_attack": pc_attack,
             "pc_delay": pc_delay,
             "pc_delay2": pc_delay2,
+            "pc_open": pc_open,
 
             "crab": crab,
             "water_vole": water_vole,

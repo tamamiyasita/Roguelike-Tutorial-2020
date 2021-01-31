@@ -84,6 +84,15 @@ class Player(Actor):
         if self.state == state.ATTACK and self.left_face:
             self.texture = pc_attack[1]
 
+
+        if self.state == state.DOOR and not self.left_face:
+            self.texture = pc_open[0]
+        if self.state == state.DOOR and self.left_face:
+            self.texture = pc_open[1]
+  
+
+
+
         if self.state == state.READY and not self.left_face:
             self.texture = player[0]
             self.delay_time -= delta_time

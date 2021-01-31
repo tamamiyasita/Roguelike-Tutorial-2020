@@ -231,8 +231,7 @@ class Actor(arcade.Sprite):
             if door_actor.left_face == False:
 
                 door_actor.left_face = True
-                self.state = state.TURN_END
-                return [{"delay": {"time": 0.2, "action": "None"}}]
+                return [{"delay": {"time": 0.3, "action": {"turn_end":self}}}]
 
         # 行き先がBlockされてるか調べる
         blocking_actor = get_blocking_entity(
