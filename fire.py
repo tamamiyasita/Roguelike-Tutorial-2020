@@ -47,7 +47,6 @@ class TriggerPull(Actor):
                     particle.position = (self.target.center_x, self.target.center_y)
                     self.effect_sprites.append(particle)
 
-                # self.engine.action_queue.extend([{"turn_end": self.shooter}])
                 self.engine.action_queue.extend([{"delay": {"time": 0.3, "action": {"turn_end": self.shooter}}}])
 
 
@@ -92,6 +91,11 @@ class Fire:
                 {"message": f"{self.shooter.name} shot {self.target.name}"})
             results.extend(self.shooter.fighter.attack(
                 target=self.target, ranged=self.amm))
+
+            if self.shooter == self.engine.player:
+                self.engine.player.state = state.SHOT
+
+
             TriggerPull(shooter=self.shooter, target=self.target,
                         engine=self.engine, amm=self.amm.name)
             self.trigger = True

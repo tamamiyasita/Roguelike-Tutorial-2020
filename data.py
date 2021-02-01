@@ -1,4 +1,7 @@
 import arcade
+import glob
+
+from arcade.texture import load_texture
 from util import get_tile_set
 
 # playerテクスチャ生成
@@ -9,6 +12,9 @@ pc_delay = arcade.load_texture_pair(r"image/rou6_d.png")
 pc_delay2 = arcade.load_texture_pair(r"image/rou6_d2.png")
 pc_delay3 = arcade.load_texture_pair(r"image/rou6t.png")
 pc_open = arcade.load_texture_pair(r"image/rou6_op.png")
+pc_shot = arcade.load_texture_pair(r"image/rou6_shot.png")
+pc_throw = arcade.load_texture_pair(r"image/rou6_throw.png")
+pc_def = arcade.load_texture_pair(r"image/rou6_def.png")
 
 # test_texture
 # player = arcade.load_texture_pair(r"t_image/rou6.png")
@@ -118,11 +124,16 @@ branch_baton_icon = arcade.load_texture(r"image\branch_baton_icon.png")
 healing = arcade.load_texture(r"image\healing.png")
 Paeonia = arcade.load_texture(r"image\paeonia.png")
 sunflower = arcade.load_texture(r"image\sunflower.png")
+pineapple = arcade.load_texture(r"image/pineapple.png")
 
 seed_shot = arcade.load_texture(r"image/seed_shot.png")
 seed_shot_icon = arcade.load_texture(r"image/seed_shot_icon.png")
 
+pineapple_bomb = arcade.load_texture(r"image/pineapple_bomb.png")
+pineapple_bomb_icon = arcade.load_texture(r"image/pineapple_bomb_icon.png")
+
 poison = arcade.load_texture(r"image\poison.png")
+explosion = [arcade.load_texture(img) for img in glob.glob(r"image\effect\explosion\*")]
 
 cool_down = arcade.load_texture(r"image\cool_down.png")
 ###items###
@@ -223,17 +234,22 @@ IMAGE_ID = {"Rou": player,
             "small_shield": [shield_tile[0]],
             "wood_buckler": [shield_tile[5]],
             "boomerang": [ammo_tile[22]],
+
             "cirsium": cirsium,
             "ebony":ebony,
+            "sunflower":sunflower,
+            "paeonia":Paeonia,
+            "pineapple":pineapple,
+
             "leaf_blade": leaf_blade,
             "leaf_blade_icon": leaf_blade_icon,
             "branch_baton": branch_baton,
             "branch_baton_icon": branch_baton_icon,
-            "paeonia":Paeonia,
             "healing":healing,
-            "sunflower":sunflower,
             "seed_shot":seed_shot,
             "seed_shot_icon":seed_shot_icon,
+            "fruit_bomb":pineapple_bomb,
+            "fruit_bomb_icon":pineapple_bomb_icon,
             "poison":[poison],
             "cool_down":cool_down,
             "confusion_scroll": [scroll_tile[15]],
@@ -244,6 +260,7 @@ IMAGE_ID = {"Rou": player,
             "confusion_effect": [effect1_tile[140]],
             "fireball_effect": [effect1_tile[134]],
             "healing_potion_effect":[healing_potion_effect],
+            "explosion_effect":explosion,
 
             "floor_point": [floor_point],
             "items_point": items_point,

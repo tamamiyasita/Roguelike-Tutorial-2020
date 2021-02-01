@@ -194,11 +194,11 @@ class NormalUI:
     def draw_active_skill(self):
         """スキルアイコンの表示"""
         slot_len = len(self.player.fighter.active_skill)
-        item_left_position = self.viewport_left + \
-            ((SCREEN_WIDTH-STATES_PANEL_WIDTH) / 2.4)   # パネル左からの所持アイテム表示位置の調整に使う変数
-        skill_top_position = self.viewport_bottom + \
-            STATES_PANEL_HEIGHT + 12  # パネル上端からの所持アイテム表示位置の調整に使う変数
-        separate_size = 6.4  # スキル名の表示間隔の調整に使う変数
+        item_left_position = self.viewport_left + GRID_SIZE*7
+            # ((SCREEN_WIDTH-STATES_PANEL_WIDTH) / 2.4)   # パネル左からの所持アイテム表示位置の調整に使う変数
+        skill_top_position = self.viewport_bottom + GRID_SIZE*1.7
+            # STATES_PANEL_HEIGHT + 12  # パネル上端からの所持アイテム表示位置の調整に使う変数
+        separate_size = 4.5  # スキル名の表示間隔の調整に使う変数
         item_font_size = 11
         field_width = SCREEN_WIDTH / (slot_len + 1) / separate_size  # アイテム表示感覚を決める変数
 
@@ -215,17 +215,17 @@ class NormalUI:
             arcade.draw_texture_rectangle(
                 center_x=skill_position+10,
                 center_y=skill_top_position-10,
-                width=55,
-                height=55,
-                texture=skill.texture
+                width=64,
+                height=64,
+                texture=skill.icon
             )
             # アイコンに白幕をかけクールダウンタイム表示
             if 0 < skill.data["count_time"]:
                 arcade.draw_texture_rectangle(
                     center_x=skill_position+10,
                     center_y=skill_top_position-10,
-                    width=55,
-                    height=55,
+                    width=64,
+                    height=64,
                     texture=IMAGE_ID["cool_down"],
                     alpha=200
                 )
@@ -343,3 +343,4 @@ def draw_status_bar(center_x, center_y, width, height, current_value, max_value,
 
     arcade.draw_rectangle_filled(center_x - (width / 2 - states_width / 2),
                                  center_y, states_width, height, color=front_color)
+

@@ -1,7 +1,7 @@
 from actor.actor import Actor
 from constants import *
 from data import *
-
+from random import randint
 
 
 
@@ -29,7 +29,7 @@ class LeafBlade(Actor):
 
         self.icon = IMAGE_ID["leaf_blade_icon"]
 
-        self.item_margin_x = 6 * SPRITE_SCALE
+        self.item_margin_x = 9 * SPRITE_SCALE
         self.item_margin_y = 3 * SPRITE_SCALE
 
     @property
@@ -45,5 +45,22 @@ class LeafBlade(Actor):
         owner.fighter.data["weapon"] = None
         del self.master
         self.remove_from_sprite_lists()
+
+    def update(self):
+        super().update()
+        if self.master.state == state.ON_MOVE:
+            self.item_margin_y = 2 * SPRITE_SCALE
+            # self.item_margin_x = 7 * SPRITE_SCALE
+        else:
+            self.item_margin_y = 3 * SPRITE_SCALE
+            # self.item_margin_x = 6 * SPRITE_SCALE
+        if self.master.state == state.ATTACK:
+            self.item_margin_x = 12 * SPRITE_SCALE
+            self.angle += 40
+        else:
+            self.angle = 0
+            self.item_margin_x = 9 * SPRITE_SCALE
+
+
 
 

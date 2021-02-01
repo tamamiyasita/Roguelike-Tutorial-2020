@@ -24,18 +24,22 @@ from actor.restore_actor import restore_actor
 from util import get_door, get_blocking_entity, stop_watch
 from turn_loop import TurnLoop
 from fire import Fire
-from actor.items.boomerang import Boomerang
 from actor.damage_pop import Damagepop
+
+
+from actor.items.boomerang import Boomerang
 
 from actor.items.short_sword import ShortSword
 from actor.items.long_sword import LongSword
 from actor.items.confusion_scroll import ConfusionScroll
 from actor.items.fireball_scroll import FireballScroll
 from actor.items.small_shield import SmallShield
+
 from actor.items.paeonia import Paeonia
 from actor.items.cirsium import Cirsium
 from actor.items.ebony import Ebony
 from actor.items.sunflower import Sunflower
+from actor.items.pineapple import Pineapple
 from level_up_sys import check_experience_level
 
 
@@ -99,7 +103,7 @@ class GameEngine:
         arcade.set_background_color(COLORS["black"])
         self.flower_sprites = arcade.SpriteList(use_spatial_hash=True, spatial_hash_cell_size=32)
         self.tmp_effect_sprites = arcade.SpriteList(use_spatial_hash=True, spatial_hash_cell_size=32)
-        self.cur_level = self.setup_level(level_number=1)
+        self.cur_level = self.setup_level(level_number=99)
         self.stories[self.cur_floor_name] = self.cur_level
         self.turn_loop = TurnLoop(self.player)
         self.item_point = ItemPoint(self)
@@ -159,8 +163,11 @@ class GameEngine:
         self.fb = FireballScroll(self.player.x + 1, self.player.y)
         self.game_level.item_sprites.append(self.fb)
 
-        self.boomerang = Boomerang(self.player.x-1, self.player.y + 1)
-        self.game_level.item_sprites.append(self.boomerang)
+        # self.boomerang = Boomerang(self.player.x-1, self.player.y + 1)
+        # self.game_level.item_sprites.append(self.boomerang)
+
+        self.pineapple = Pineapple(self.player.x-1, self.player.y + 1)
+        self.game_level.item_sprites.append(self.pineapple)
 
         self.hp = Paeonia(self.player.x-1, self.player.y)
         self.game_level.item_sprites.append(self.hp)

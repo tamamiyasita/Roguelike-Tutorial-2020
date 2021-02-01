@@ -258,8 +258,8 @@ class Actor(arcade.Sprite):
                     self.other_x = actor.center_x
                     if attack_results:
                         self.state = state.ATTACK
-                        self.change_y = self.dy * MOVE_SPEED
-                        self.change_x = self.dx * MOVE_SPEED
+                        self.change_y = self.dy * (MOVE_SPEED -4)
+                        self.change_x = self.dx * (MOVE_SPEED -4)
                         engine.action_queue.extend(
                             [{"delay": {"time": 0.2, "action": {"None": self}}}])
 
@@ -418,9 +418,9 @@ class Actor(arcade.Sprite):
 
     @master.setter
     def master(self, owner):
-        self._master = owner
         self.center_x = owner.center_x
         self.center_y = owner.center_y
+        self._master = owner
         self.color = COLORS["white"]
 
     @master.deleter

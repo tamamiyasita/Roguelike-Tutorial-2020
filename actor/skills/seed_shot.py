@@ -4,9 +4,9 @@ from constants import *
 from fire import Fire
 
 class SeedShot(Actor):
-    def __init__(self, x=0, y=0):
+    def __init__(self, x=0, y=0, name="seed_shot"):
         super().__init__(
-            name="seed_shot",
+            name=name,
             x=x,
             y=y,
             color=COLORS["white"],
@@ -20,7 +20,7 @@ class SeedShot(Actor):
         self.max_cooldown_time = 2
 
         self.damage = 3
-        self.hit_rate = 75
+        self.hit_rate = 85
         self.speed = 10
 
         self.level = 1

@@ -95,10 +95,10 @@ class MG(arcade.Window):
         self.engine.cur_level.item_sprites.draw(filter=gl.GL_NEAREST)
         self.engine.cur_level.actor_sprites.draw(filter=gl.GL_NEAREST)
         self.engine.cur_level.chara_sprites.draw(filter=gl.GL_NEAREST)
+        self.engine.cur_level.equip_sprites.draw(filter=gl.GL_NEAREST)
         self.engine.flower_sprites.draw(filter=gl.GL_NEAREST)
         self.engine.cur_level.effect_sprites.draw(filter=gl.GL_NEAREST)
 
-        self.engine.cur_level.equip_sprites.draw(filter=gl.GL_NEAREST)
         self.engine.tmp_effect_sprites.draw(filter=gl.GL_NEAREST)
         for e in self.engine.tmp_effect_sprites:
             if hasattr(e, "emitter"):
@@ -126,7 +126,7 @@ class MG(arcade.Window):
         self.color_attachment.use(0)
         self.quad_fs.render(self.program)
         # アタック時はビューポート固定する
-        if self.engine.player.state == state.ATTACK or self.engine.player.state == state.TURN_END and hasattr(self.engine.player, "from_x"):
+        if self.engine.player.state == state.ATTACK or self.engine.player.state == state.TURN_END or self.engine.player.state == state.DEFENSE and hasattr(self.engine.player, "from_x"):
             viewport(self.engine.player.from_x, self.engine.player.from_y)
         else:
             viewport(self.engine.player.center_x, self.engine.player.center_y)

@@ -74,10 +74,13 @@ class Player(Actor):
 
     def update_animation(self, delta_time=1 / 60):
         super().update_animation(delta_time)
+
         if self.state == state.ON_MOVE and not self.left_face:
             self.texture = pc_move[0]
+            
         if self.state == state.ON_MOVE and self.left_face:
             self.texture = pc_move[1]
+
 
         if self.state == state.ATTACK and not self.left_face:
             self.texture = pc_attack[0]
@@ -90,8 +93,20 @@ class Player(Actor):
         if self.state == state.DOOR and self.left_face:
             self.texture = pc_open[1]
   
+        if self.state == state.SHOT and not self.left_face:
+            self.texture = pc_shot[0]
+        if self.state == state.SHOT and self.left_face:
+            self.texture = pc_shot[1]
 
+        if self.state == state.THROW and not self.left_face:
+            self.texture = pc_throw[0]
+        if self.state == state.THROW and self.left_face:
+            self.texture = pc_throw[1]
 
+        if self.state == state.DEFENSE and not self.left_face:
+            self.texture = pc_def[0]
+        if self.state == state.DEFENSE and self.left_face:
+            self.texture = pc_def[1]
 
         if self.state == state.READY and not self.left_face:
             self.texture = player[0]

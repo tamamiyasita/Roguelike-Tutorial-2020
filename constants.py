@@ -132,6 +132,9 @@ class state(Enum):
     FOV = auto()
     DOOR = auto()
     AMOUNT = auto()
+    SHOT = auto()
+    THROW = auto()
+    DEFENSE = auto()
 
 class NPC_state(Enum):
     REQUEST = auto()
