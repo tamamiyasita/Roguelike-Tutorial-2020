@@ -16,6 +16,8 @@ class Fruit_bomb(SeedShot):
         self.damage = 7
         self.hit_rate = 80
         self.speed = 16
+        self.attr = "physical"
+
 
         self.icon = IMAGE_ID["fruit_bomb_icon"]
         self.effect = IMAGE_ID["explosion_effect"]

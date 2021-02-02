@@ -24,7 +24,8 @@ class Paeonia(Cirsium):
 
         # states
         self.states_bonus = {"INT": 1}
-        self.skill_add = {"healing":1}
+        self.skill_generate = "healing"
+        self.skill_add = {"healing":1, "leaf_blade":1}
 
         # position
         self.item_margin_x = 17

@@ -17,6 +17,8 @@ class Damagepop(Actor):
         super().__init__(
             # color=arcade.color.WHITE
         )
+        if isinstance(text, str):
+            size = 13
         self.engine = engine
         self.target = target
         self.center_x = target.center_x

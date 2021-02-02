@@ -22,6 +22,8 @@ class SeedShot(Actor):
         self.damage = 3
         self.hit_rate = 85
         self.speed = 10
+        self.attr = "physical"
+
 
         self.level = 1
 

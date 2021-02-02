@@ -567,15 +567,10 @@ class GameEngine:
                                 self.flower_sprites.append(item)
 
                             results.extend([{"turn_end": self.player}])
-                            # self.game_state = GAME_STATE.NORMAL
-                            
+                            # self.game_state = GAME_STATE.NORMAL                         
 
                             
                             new_action_queue.extend(results)
-
-
-
-
 
 
 
@@ -643,7 +638,9 @@ class GameEngine:
                 target = action["damage_pop"]
                 damage = action["damage"]
                 txt_color =arcade.color.WHITE
-                if 0 < damage:
+                if isinstance(damage, str):
+                    txt_color = arcade.color.WHITE
+                elif 0 < damage:
                     txt_color = arcade.color.MINT_GREEN
                 elif 0 > damage:
                     txt_color = COLORS["status_bar_foreground"]

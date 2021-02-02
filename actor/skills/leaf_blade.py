@@ -22,6 +22,7 @@ class LeafBlade(Actor):
         self.damage = 5
         self.hit_rate = 95
         self.speed = 6
+        self.attr = "physical"
 
         self.level = 1
 

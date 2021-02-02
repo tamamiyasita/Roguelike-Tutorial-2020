@@ -55,6 +55,12 @@ class Equipment:
             if hasattr(item, "current_xp"):
                 item.current_xp += exp
 
+    @property
+    def skill_generate_check(self):
+        # Skillの生成チェック
+        result = [item.skill_generate for item in self.item_slot]
+        return result
+
 
     @property
     def skill_level_sum(self):
@@ -62,8 +68,14 @@ class Equipment:
         bonus = {}
         for parts in self.item_slot:  # crisiumが入る
             # crisiumのskill_add{leaf_blade:1}が入る
-            if parts and not isinstance(parts, str) and parts.skill_add:
-                bonus = Counter(bonus) + Counter(parts.skill_add)
+            for name, add in parts.skill_add.items():
+                if name in self.skill_generate_check:
+                    bonus = Counter(bonus) + Counter({name:add})
+                    
+
+            # if parts and not isinstance(parts, str) and parts.skill_add:
+            #     if parts.skill_generate in self.skill_generate_check:
+            #         bonus = Counter(bonus) + Counter(parts.skill_add)
 
         for skill_name, skill_level in bonus.items():
             skill = self.owner.fighter.base_skill_dict.get(skill_name)

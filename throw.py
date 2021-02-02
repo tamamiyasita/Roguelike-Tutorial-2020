@@ -38,6 +38,7 @@ class Flying(Actor):
 
         self.shot_speed = amm.speed
         self.shot_damage = -amm.damage
+        self.attr = amm.attr
         self.explosion_effect = amm.effect
 
         self.effect_sprites.append(self)
@@ -88,7 +89,7 @@ class Flying(Actor):
             if sprite.fighter and not sprite.is_dead:
                 results.extend(
                     [{"message": f"{sprite.name} was struck by a fireball for {amount} points."}])
-                result = sprite.fighter.change_hp(amount)
+                result = sprite.fighter.change_hp(amount, self.attr)
                 if result:
                     results.extend(result)
 

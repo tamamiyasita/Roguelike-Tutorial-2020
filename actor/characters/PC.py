@@ -11,9 +11,9 @@ from random import choices
 class Player(Actor):
     def __init__(self, x=0, y=0, inventory=0):
         fighter_component = Fighter(hp=30, STR=30, DEX=4, INT=4,
-                                    unarmed_attack=2,
-                                    hit_rate=100,
-                                    defense=1,
+                                    unarmed={"damage":2, "level":1, "attr":"physical", "hit_rate":100},
+                                    resist={"physical": 1, "fire": 1, "ice": 1, "acid": 1, "poison": 1, "mind": 1},
+                                    defense=100,
                                     evasion=5,
                                     level=1
                                     )
@@ -39,48 +39,16 @@ class Player(Actor):
 
         self.experience_per_level = exp_calc()
 
-    # def check_experience_level(self, game_engine):
-    #     # TODO やっぱengineに移動させよう
-    #     flower_list = []
-
-    #     if self.fighter.level < len(self.experience_per_level):
-    #         xp_to_next_level = self.experience_per_level[self.fighter.level+1]
-    #         if self.fighter.current_xp >= xp_to_next_level:
-    #             self.fighter.level += 1
-    #             self.fighter.ability_points += 1
-    #             game_engine.action_queue.extend([{"message": "Level up!!!"}])
-    #             game_engine.game_state = GAME_STATE.LEVEL_UP_WINDOW
-
-    #         else:
-    #             for flower in self.equipment.item_slot:
-    #                 xp_to_next_level = flower.experience_per_level[flower.level+1]
-    #                 if flower.current_xp >= xp_to_next_level and flower.max_level >= flower.level:
-    #                     flower.level += 1
-    #                     flower_list.append(flower)
-    #                     game_engine.action_queue.extend([{"message": f"{flower.name} Level up!!!"}])
-    #                     game_engine.game_state = GAME_STATE.LEVEL_UP_FLOWER
-    #                     # flower.level_up()
-    #                     break
-    #                 else:
-    #                     game_engine.game_state = GAME_STATE.NORMAL
-
-    # def level_up(self):
-    #     select = ["STR", "DEX", "INT"]
-    #     bonus = choices(select, weights=[5, 2.5, 2.5])
-    #     self.states_bonus.setdefault(bonus[0], 0)
-    #     self.states_bonus[bonus[0]] += 1
-
 
 
     def update_animation(self, delta_time=1 / 60):
         super().update_animation(delta_time)
 
         if self.state == state.ON_MOVE and not self.left_face:
-            self.texture = pc_move[0]
+            self.texture = pc_move1[0]
             
         if self.state == state.ON_MOVE and self.left_face:
-            self.texture = pc_move[1]
-
+            self.texture = pc_move1[1]
 
         if self.state == state.ATTACK and not self.left_face:
             self.texture = pc_attack[0]
@@ -117,6 +85,8 @@ class Player(Actor):
                 self.texture = pc_delay[0]
             if self.delay_time < 0:
                 self.delay_time = 5
+
+
         if self.state == state.READY and self.left_face:
             self.texture = player[1]
             self.delay_time -= delta_time
@@ -126,3 +96,4 @@ class Player(Actor):
                 self.texture = pc_delay[1]
             if self.delay_time < 0:
                 self.delay_time = 5
+

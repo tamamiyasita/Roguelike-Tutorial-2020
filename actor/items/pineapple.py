@@ -25,6 +25,7 @@ class Pineapple(Cirsium):
 
         # states
         self.states_bonus = {"INT": 1}
+        self.skill_generate = "fruit_bomb"
         self.skill_add = {"fruit_bomb":1}
         self.data = {2:"fruit_bomb", 3:"healing"}
         

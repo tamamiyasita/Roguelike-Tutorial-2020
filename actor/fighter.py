@@ -8,8 +8,9 @@ from collections import Counter
 
 
 class Fighter:
-    def __init__(self, hp=0, mp=0, defense=0, STR=0, DEX=0, INT=0, unarmed_attack=(1, 1, 1), attack_speed=DEFAULT_ATTACK_SPEED,
-                 evasion=0, hit_rate=100, xp_reward=0, current_xp=0, level=1, ability_points=0):
+    def __init__(self, hp=0, mp=0, defense=0, STR=0, DEX=0, INT=0,unarmed=None, attack_speed=DEFAULT_ATTACK_SPEED,
+                 evasion=0, xp_reward=0, current_xp=0, level=1,
+                 resist={"physical": 1, "fire": 1, "ice": 1, "acid": 1, "poison": 1, "mind": 1}, ability_points=0):
         self.hp = hp
         self.base_max_hp = self.hp
         self.mp = mp
@@ -19,13 +20,13 @@ class Fighter:
         self.base_dexterity = DEX
         self.base_intelligence = INT
 
-        self.unarmed_attack = unarmed_attack
+        self.unarmed = unarmed#{"damage":1, "level":1, "attr":"physical"}
+
         self.base_defense = defense
         self.base_evasion = evasion
-        self.hit_rate = hit_rate
         self._attack_speed = attack_speed
-        self.data = {"weapon":None}
-        self.resist = {"fire": 0, "ice": 0, "acid":0, "poison":0, "mind":0}
+        self.data = {"weapon":None }
+        self.resist = resist
 
         self.owner = None
         self.xp_reward = xp_reward
@@ -38,7 +39,6 @@ class Fighter:
         self.base_skill_dict = skill_dict
         self._skill_list = arcade.SpriteList()
 
-        self.damage = None
 
     def get_dict(self):
         result = {}
@@ -49,11 +49,10 @@ class Fighter:
         result["strength"] = self.base_strength
         result["dexterity"] = self.base_dexterity
         result["intelligence"] = self.base_intelligence
+        result["unarmed"] = self.unarmed
 
-        result["unarmed_attack"] = self.unarmed_attack
         result["defense"] = self.base_defense
         result["evasion"] = self.base_evasion
-        result["hit_rate"] = self.hit_rate
         result["_attack_speed"] = self._attack_speed
 
         result["xp_reward"] = self.xp_reward
@@ -77,11 +76,10 @@ class Fighter:
         self.base_strength = result["strength"]
         self.base_dexterity = result["dexterity"]
         self.base_intelligence = result["intelligence"]
+        self.unarmed = result["unarmed"]
 
-        self.unarmed_attack = result["unarmed_attack"]
         self.base_defense = result["defense"]
         self.base_evasion = result["evasion"]
-        self.hit_rate = result["hit_rate"]
         self._attack_speed = result["_attack_speed"]
 
         self.xp_reward = result["xp_reward"]
@@ -249,17 +247,18 @@ class Fighter:
 
     @property
     def attack_damage(self):
-        """TODO 属性ダメージを乗せる方法を考える"""
-
         
         if self.data["weapon"]:
             max_d = self.data["weapon"].damage
             level = self.data["weapon"].level
+            attr = self.data["weapon"].attr
         else:
-            max_d = self.owner.fighter.unarmed_attack
-            level = self.level
+            max_d = self.unarmed["damage"]
+            level = self.unarmed["level"]
+            attr = self.unarmed["attr"]
 
-        attack_damage = dice(1 + level//3, max_d+(self.STR//3))
+
+        attack_damage = (dice(1 + level//3, max_d+(self.STR//3)), attr)
 
         return attack_damage
 
@@ -273,19 +272,29 @@ class Fighter:
         if self.data["weapon"]:
             hit = self.data["weapon"].hit_rate
         else:
-            hit = self.owner.fighter.hit_rate
+            hit = self.unarmed["hit_rate"]
 
 
         hit_chance = ((hit+self.DEX) / 100) * \
             (1 - (target.fighter.evasion / 100)) * 100
+        print(f"{hit_chance=}")
 
         return hit_chance
 
-    def change_hp(self, value):
-        
+    def change_hp(self, value, attr=None):
         results = []
 
-        self.hp += value
+        if isinstance(value, str):
+            results.append({"damage_pop": self.owner, "damage": value})
+            return results
+
+
+        if self.resist[attr] <= 0:
+            damage = int(value * 2.5)
+        else:
+            damage = int(value / self.resist[attr])
+
+        self.hp += damage
 
         if self.hp <= 0:#死亡
             self.owner.blocks = False
@@ -296,7 +305,7 @@ class Fighter:
         if self.hp > self.max_hp:
             self.hp = self.max_hp
 
-        results.append({"damage_pop": self.owner, "damage": value})
+        results.append({"damage_pop": self.owner, "damage": damage})
 
         return results
 
@@ -305,40 +314,67 @@ class Fighter:
         """attack_damage関数は（あれば）属性ダメージを辞書(これを定義せねば)でここに渡す
             ここでその辞書をループし、属性ダメージを耐性の値で割る"""
         results = []
+        damage = None
 
-        if ranged:
+        attack_damage = self.attack_damage[0]
+        attack_attr = self.attack_damage[1]
+
+        if ranged:# 遠隔
+            attack_attr = ranged.attr
             if random.randrange(1, 100) <= self.hit_chance(target):
-                self.damage = dice(1 + ranged.level//3, ranged.damage+(self.DEX//3)) // target.fighter.defense
+                if attack_attr == "physical":
+                    damage = dice(1 + ranged.level//3, ranged.damage+(self.DEX//3)) // target.fighter.defense
+                else:
+                    damage = attack_damage
+
+                if not damage:
+                    results.append(
+                        {"message": f"{self.owner.name.capitalize()} attacks {target.name} but no damage"})
+                    results.extend(target.fighter.change_hp("Guard!"))
+                    return results
+
                 if random.randrange(1, (100-self.DEX)) < 5:
-                    self.damage *= 2
+                    damage *= 2# クリティカルdmg
                     results.append({"message": f"{self.owner.name.capitalize()} attack is critical HIT!"})
 
         else:
             if random.randrange(1, 100) <= self.hit_chance(target):
-                self.damage = self.attack_damage // target.fighter.defense
+                if attack_attr == "physical":
+                    damage = attack_damage // target.fighter.defense
+                else:
+                    damage = attack_damage
+
+                if not damage:
+                    results.append(
+                        {"message": f"{self.owner.name.capitalize()} attacks {target.name} but no damage"})
+                    results.extend(target.fighter.change_hp("Guard!"))
+                    return results
+
+
                 if random.randrange(1, (100-self.DEX)) < 5:
-                    self.damage *= 2
+                    damage *= 2# クリティカルdmg
                     results.append({"message": f"{self.owner.name.capitalize()} attack is critical HIT!"})
 
 
-        if self.damage:
-            if self.damage >= 0:
+        if damage:
+            if damage:
                 # damage表示メッセージを格納する
 
                 results.append(
-                    {"message": f"{self.owner.name.capitalize()} attacks {target.name} for {str(self.damage)} hit points."})
-                results.extend(target.fighter.change_hp(-self.damage))
+                    {"message": f"{self.owner.name.capitalize()} attacks {target.name} for {str(damage)} hit points."})
+                results.extend(target.fighter.change_hp(-damage, attack_attr))
 
 
-            else:# 完全防御
-                results.append(
-                    {"message": f"{self.owner.name.capitalize()} attacks {target.name} but no self.damage"}
-                )
+            # else:# 完全防御
+            #     results.append(
+            #         {"message": f"{self.owner.name.capitalize()} attacks {target.name} but no damage"})
+            #     results.extend(target.fighter.change_hp("Guard!"))
 
 
         else:#回避
             results.append(
-                {"message": f"{self.owner.name.capitalize()} attacks {target.name} Avoided"}
-            )
+                {"message": f"{self.owner.name.capitalize()} attacks {target.name} Avoided"})
+            results.extend(target.fighter.change_hp("MISS"))
+
 
         return results

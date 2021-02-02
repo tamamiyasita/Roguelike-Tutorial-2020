@@ -24,6 +24,7 @@ class Cirsium(Actor):
 
         # states
         self.states_bonus = {"DEX":1}
+        self.skill_generate = "leaf_blade"
         self.skill_add = {"leaf_blade":1}
         self.data = {2:"leaf_blade", 3:"leaf_blade"}
         

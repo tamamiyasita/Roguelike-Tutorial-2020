@@ -16,6 +16,7 @@ class Sunflower(Cirsium):
 
 
         self.states_bonus = {"DEX": 1}
+        self.skill_generate = "seed_shot"
         self.skill_add = {"seed_shot":1}
 
         self.item_margin_x = 17

@@ -1,12 +1,14 @@
 import arcade
 import glob
+from random import choice
 
 from arcade.texture import load_texture
 from util import get_tile_set
 
 # playerテクスチャ生成
 player = arcade.load_texture_pair(r"image/rou6.png")
-pc_move = arcade.load_texture_pair(r"image/rou6_m.png")
+pc_move1 = arcade.load_texture_pair(r"image/rou6_m.png")
+pc_move2 = arcade.load_texture_pair(r"image/_rou6_m_.png")
 pc_attack = arcade.load_texture_pair(r"image/rou6_a.png")
 pc_delay = arcade.load_texture_pair(r"image/rou6_d.png")
 pc_delay2 = arcade.load_texture_pair(r"image/rou6_d2.png")
@@ -214,7 +216,7 @@ stop_skill = arcade.load_texture(r"image\stop_skill.png")
 
 # actorに渡す画像はリスト型にすること
 IMAGE_ID = {"Rou": player,
-            "pc_move": pc_move,
+            "pc_move": pc_move1,
             "pc_attack": pc_attack,
             "pc_delay": pc_delay,
             "pc_delay2": pc_delay2,
