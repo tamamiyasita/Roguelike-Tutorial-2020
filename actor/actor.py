@@ -280,8 +280,8 @@ class Actor(arcade.Sprite):
                 self.other_x = target.center_x
                 if attack_results:
                     self.state = state.ATTACK
-                    self.change_y = self.dy * MOVE_SPEED
-                    self.change_x = self.dx * MOVE_SPEED
+                    self.change_y = self.dy * (MOVE_SPEED+5)
+                    self.change_x = self.dx * (MOVE_SPEED+5)
 
                 return attack_results
 

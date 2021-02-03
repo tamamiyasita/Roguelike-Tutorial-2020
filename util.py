@@ -5,6 +5,28 @@ from data import *
 from functools import wraps
 import time
 
+def skill_activate(engine, owner, skill):  
+
+    if Tag.equip in skill.tag: 
+        if skill not in engine.cur_level.equip_sprites:
+            engine.cur_level.equip_sprites.append(skill)
+    if Tag.weapon in skill.tag: 
+        owner.fighter.data["weapon"] = skill
+
+    skill.master = owner
+    skill.data["switch"] = True
+
+def skill_deactivate(owner, skill):
+
+    if Tag.weapon in skill.tag: 
+        owner.fighter.data["weapon"] = None
+
+    if Tag.equip in skill.tag: 
+        del skill.master
+        skill.remove_from_sprite_lists()
+
+    skill.data["switch"] = False
+
 
 def exp_calc(x=58, max_level=50, ratio=1.2, constant=40):
     result = {}

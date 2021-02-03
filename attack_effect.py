@@ -8,7 +8,7 @@ class AttackEffect:
     def __init__(self,sprites):
         self.attack_delay = 7
         self.tmp_effect_sprites = sprites
-        self.step = GRID_SIZE // 2.5
+        self.step = GRID_SIZE // 2
 
 
     def start(self, actor, other, from_x, from_y, other_x):

@@ -110,8 +110,10 @@ class Fighter:
 
         # TODO game_stateの状態でループするか決めたい
         if hasattr(self.owner, "equipment") and self.owner.equipment:
+            _skill_list = list(self.owner.equipment.skill_level_sum)
+            _skill_list = sorted(_skill_list, key=lambda x: x.level, reverse=True)
  
-            return self.owner.equipment.skill_level_sum
+            return _skill_list
 
     @property
     def states(self):
@@ -124,54 +126,27 @@ class Fighter:
 
     @property
     def passive_skill(self):
-        result =  [skill for skill in self.skill_list if Tag.passive in skill.tag if skill.data["switch"] == True]
+        result =  [skill for skill in self.skill_list if Tag.passive in skill.tag if skill not in self.switch_off_skills]
         return result
     @property
     def active_skill(self):
-        result =  [skill for skill in self.skill_list if Tag.active in skill.tag if skill.data["switch"] == True]
+        result =  [skill for skill in self.skill_list if Tag.active in skill.tag if skill not in self.switch_off_skills]
         return result
 
-    def equip_check(self, weapon, result):
-
-        if weapon and weapon.data["switch"] == False:
-            weapon.deactivate(self.owner)
-            result.remove(weapon)
-    
-        if weapon is None and result:
-            # self.data["weapon"]が空でresultにオブジェクトがあれば
-            weapon = result[0]
-            weapon.activate(self.owner)
-            # result[0]を代入しActivate
-
-        elif not result and weapon:
-            # resultが空でself.data["weapon"]にオブジェクトがあればdeactivate
-            weapon.deactivate(self.owner)
-
-        elif weapon and result:
-            # self.data["weapon"]にオブジェクトがありresultにもあれば
-            if weapon in result:
-                # 同じならパス
-                # weapon.activate(self.owner)
-                pass
-            else:
-                # 違うならself.data["weapon"]はdeactivateしresultを代入
-                weapon.deactivate(self.owner)
-                weapon = result[0]
-                weapon.activate(self.owner)
-        
 
     @property
     def equip_skill(self):
         result =  [skill for skill in self.skill_list if Tag.weapon in skill.tag]
-        self.equip_check(self.data["weapon"], result)
             
         return result
-        
 
     @property
-    def equip_image(self):
-        return [skill for skill in self.passive_skill if Tag.equip in skill.tag]
+    # スイッチの切れたスキルのリストを作って、装備スプライトの表示判定に使う
+    def switch_off_skills(self):
+        result = [skill for skill in self.skill_list if skill.data["switch"] == False]
 
+        return result
+        
 
     @property
     def attack_speed(self):

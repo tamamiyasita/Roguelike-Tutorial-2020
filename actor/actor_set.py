@@ -8,7 +8,7 @@ from actor.skills.branch_baton import BranchBaton
 from actor.skills.leaf_blade import LeafBlade
 from actor.skills.healing import Healing
 from actor.skills.seed_shot import SeedShot
-from actor.skills.fruit_bomb import Fruit_bomb
+from actor.skills.p_grenade import P_Grenade
 
 from actor.states.poison_status import PoisonStatus
 
@@ -23,7 +23,7 @@ skill_lists =[
             BranchBaton(),
             Healing(),
             SeedShot(),
-            Fruit_bomb()
+            P_Grenade()
         
 
             ]

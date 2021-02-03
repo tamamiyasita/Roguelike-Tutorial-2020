@@ -1,3 +1,4 @@
+import math
 from collections import Counter
 from constants import *
 from itertools import chain
@@ -124,7 +125,10 @@ class Equipment:
     def toggle_equip(self, equip_item):
         """装備アイテムの付け外しを行うメソッド
         """
-        flower_position = {0:(21, 1), 1:(22, 18), 2:(10, 27), 3:(-5, 25), 4:(-20, 23)}#花の位置を決める辞書
+
+        flower_position = {i:(40*math.cos(math.radians(s)), 40*math.sin(math.radians(s))) for i, s in enumerate([30,60,90,120,150])}
+        flower_position2 = {i:(60*math.cos(math.radians(s)), 60*math.sin(math.radians(s))) for i, s in enumerate([40,70,100,130,150])}
+
         results = []
 
         for item in self.item_slot:
@@ -138,15 +142,20 @@ class Equipment:
                 return results
 
 
-        if 5 > len(self.item_slot):
+        if 10 > len(self.item_slot):
 
 
             self.item_slot.append(equip_item)
             equip_item.master = self.owner
             pos = len(self.item_slot)
-            for i in range(pos):
-                self.item_slot[i].item_margin_x = flower_position[i][0]
-                self.item_slot[i].item_margin_y = flower_position[i][1]
+            if pos < 6:
+                for i in range(0, pos):
+                    self.item_slot[i].item_margin_x = flower_position[i][0]
+                    self.item_slot[i].item_margin_y = flower_position[i][1]
+            if pos >= 6:
+                for j in range(5, pos):
+                    self.item_slot[j].item_margin_x = flower_position2[j-5][0]
+                    self.item_slot[j].item_margin_y = flower_position2[j-5][1]
 
             results.append({"message": f"equipped {equip_item.name}"})
 

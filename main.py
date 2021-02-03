@@ -94,9 +94,9 @@ class MG(arcade.Window):
         self.engine.cur_level.map_obj_sprites.draw(filter=gl.GL_LO_BIAS_NV)
         self.engine.cur_level.item_sprites.draw(filter=gl.GL_NEAREST)
         self.engine.cur_level.actor_sprites.draw(filter=gl.GL_NEAREST)
-        self.engine.cur_level.chara_sprites.draw(filter=gl.GL_NEAREST)
-        self.engine.cur_level.equip_sprites.draw(filter=gl.GL_NEAREST)
         self.engine.flower_sprites.draw(filter=gl.GL_NEAREST)
+        self.engine.cur_level.equip_sprites.draw(filter=gl.GL_NEAREST)
+        self.engine.cur_level.chara_sprites.draw(filter=gl.GL_NEAREST)
         self.engine.cur_level.effect_sprites.draw(filter=gl.GL_NEAREST)
 
         self.engine.tmp_effect_sprites.draw(filter=gl.GL_NEAREST)
@@ -255,6 +255,7 @@ class MG(arcade.Window):
         elif self.engine.game_state == GAME_STATE.LEVEL_UP_WINDOW or self.engine.game_state == GAME_STATE.LEVEL_UP_FLOWER:
             self.level_up_window.states_choices(key)
 
+ 
         # 会話画面の返答処理
         elif self.engine.game_state == GAME_STATE.MESSAGE_WINDOW:
             self.choice = self.massage_window.message_choices(key)
@@ -279,8 +280,7 @@ class MG(arcade.Window):
 
         if key == arcade.key.F2:
             self.engine.player.fighter.states.append(PoisonStatus(3,-2))
-        if key == arcade.key.F3:
-            self.engine.player.fighter.skill_list[0].data["switch"] = False
+
 
 
     def on_key_release(self, key, modifiers):

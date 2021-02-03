@@ -1,7 +1,7 @@
 from random import choice
 import arcade
 from constants import *
-from util import grid_to_pixel
+from util import grid_to_pixel, skill_activate, skill_deactivate
 
 KEYMAP_UP = [arcade.key.UP, arcade.key.W, arcade.key.NUM_8]
 KEYMAP_DOWN = [arcade.key.DOWN, arcade.key.S, arcade.key.NUM_2]
@@ -101,16 +101,25 @@ def character_screen_key(key, engine):
         if engine.selected_item < 0:
             engine.selected_item = len(skill_list)-1
 
-    elif key in KEYMAP_DOWN:
+    if key in KEYMAP_DOWN:
         engine.selected_item += 1
         if len(skill_list)-1 < engine.selected_item:
             engine.selected_item = 0
-    elif key in KEYMAP_USE_STAIRS:
+
+    if key in KEYMAP_USE_STAIRS:
         skill = skill_list[engine.selected_item]
-        if skill.data["switch"] == False:
-            skill.data["switch"] = True
+        if engine.player.fighter.data["weapon"] is not None and Tag.weapon in skill.tag and skill.name != engine.player.fighter.data["weapon"].name:
+            print("main_weapon skillは一つだけしか起動出来ない")
+        elif engine.player.fighter.data["weapon"] is None and Tag.weapon in skill.tag:
+            skill_activate(engine, engine.player, skill)
+        elif engine.player.fighter.data["weapon"] is not None and engine.player.fighter.data["weapon"] == skill:
+            skill_deactivate(engine.player, skill)
+            
+        elif skill.data["switch"] == False:
+            skill_activate(engine, engine.player, skill)
+
         elif skill.data["switch"] == True:
-            skill.data["switch"] = False
+            skill_deactivate(engine.player, skill)
         
 
         

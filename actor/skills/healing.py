@@ -51,7 +51,7 @@ class Healing(Actor):
             scale=4.5,
 
         )
-        self.data={"switch":True,
+        self.data={"switch":False,
                   "count_time":0,
                   "cooldown":False}
         self.owner = None

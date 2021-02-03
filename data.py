@@ -131,8 +131,8 @@ pineapple = arcade.load_texture(r"image/pineapple.png")
 seed_shot = arcade.load_texture(r"image/seed_shot.png")
 seed_shot_icon = arcade.load_texture(r"image/seed_shot_icon.png")
 
-pineapple_bomb = arcade.load_texture(r"image/pineapple_bomb.png")
-pineapple_bomb_icon = arcade.load_texture(r"image/pineapple_bomb_icon.png")
+pineapple_grenade = arcade.load_texture_pair(r"image/p_grenade.png")
+pineapple_grenade_icon = arcade.load_texture(r"image/pineapple_grenade_icon.png")
 
 poison = arcade.load_texture(r"image\poison.png")
 explosion = [arcade.load_texture(img) for img in glob.glob(r"image\effect\explosion\*")]
@@ -250,8 +250,8 @@ IMAGE_ID = {"Rou": player,
             "healing":healing,
             "seed_shot":seed_shot,
             "seed_shot_icon":seed_shot_icon,
-            "fruit_bomb":pineapple_bomb,
-            "fruit_bomb_icon":pineapple_bomb_icon,
+            "p_grenade":pineapple_grenade,
+            "p_grenade_icon":pineapple_grenade_icon,
             "poison":[poison],
             "cool_down":cool_down,
             "confusion_scroll": [scroll_tile[15]],

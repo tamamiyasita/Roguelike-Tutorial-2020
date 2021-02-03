@@ -303,7 +303,6 @@ class LevelupUI:
             # Yボタンが押されたらgame stateをノーマルに戻し終了
             if self.key == arcade.key.Y:
                 name = self.skill_result[0].name
-                # self.player.fighter.skill_list.extend(self.skill_result)
                 if name in self.player.fighter.level_skills:
                     self.player.fighter.level_skills[name] += 1
                 else:

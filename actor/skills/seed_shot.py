@@ -10,7 +10,7 @@ class SeedShot(Actor):
             x=x,
             y=y,
             color=COLORS["white"],
-            data={"switch":True,
+            data={"switch":False,
                   "count_time":0,
                   "cooldown":False}
         )

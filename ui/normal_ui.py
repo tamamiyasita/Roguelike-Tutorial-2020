@@ -263,16 +263,19 @@ class NormalUI:
         left_margin = self.viewport_left + self.side_panel_width + 7  # 画面左からのHPとバーの位置
         y = 0
 
-        try:
-            if self.player.fighter.data["weapon"] not in self.player.fighter.equip_skill:
-                self.engine.cur_level.equip_sprites.remove(self.player.fighter.data["weapon"])
-        except:
-            pass
+        # try:
+        #     if self.player.fighter.data["weapon"] in self.player.fighter.switch_off_skills:
+        #         self.engine.cur_level.equip_sprites.remove(self.player.fighter.data["weapon"])
+        # except:
+        #     pass
         
         for passive in self.player.fighter.passive_skill:
 
+            # if passive in self.player.fighter.switch_off_skills:
+            #     passive.remove_from_sprite_lists()
+                # self.engine.cur_level.equip_sprites.remove(passive)
 
-            if passive == self.player.fighter.data["weapon"] and passive not in self.engine.cur_level.equip_sprites:
+            if passive not in self.engine.cur_level.equip_sprites:
                 self.engine.cur_level.equip_sprites.append(passive)
 
             item_text = f"{passive.name} (level {passive.level})".replace("_", " ").title()
