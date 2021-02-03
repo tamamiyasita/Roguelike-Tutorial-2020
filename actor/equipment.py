@@ -56,10 +56,18 @@ class Equipment:
                 item.current_xp += exp
 
     @property
-    def skill_generate_check(self):
+    def skill_generate_list(self):
+        self.skill_list = set()
         # Skillの生成チェック
-        result = [item.skill_generate for item in self.item_slot]
-        return result
+        skill_gen = [item.skill_generate for item in self.item_slot]
+
+        for skill_name in skill_gen:
+            skill = self.owner.fighter.base_skill_dict.get(skill_name)
+
+            self.skill_list.add(skill)
+
+
+        return self.skill_list
 
 
     @property
@@ -69,26 +77,29 @@ class Equipment:
         for parts in self.item_slot:  # crisiumが入る
             # crisiumのskill_add{leaf_blade:1}が入る
             for name, add in parts.skill_add.items():
-                if name in self.skill_generate_check:
-                    bonus = Counter(bonus) + Counter({name:add})
+                bonus = Counter(bonus) + Counter({name:add})
                     
 
             # if parts and not isinstance(parts, str) and parts.skill_add:
-            #     if parts.skill_generate in self.skill_generate_check:
-            #         bonus = Counter(bonus) + Counter(parts.skill_add)
+            #     bonus = Counter(bonus) + Counter(parts.skill_add)
 
-        for skill_name, skill_level in bonus.items():
-            skill = self.owner.fighter.base_skill_dict.get(skill_name)
+        # for skill_name, skill_level in bonus.items():
+        #     skill = self.owner.fighter.base_skill_dict.get(skill_name)
 
-            self.skill_list.add(skill)
-            if skill.level != skill_level:
-                skill.level = skill_level
+        #     self.skill_list.add(skill)
+        for skill in self.skill_generate_list:
+            if skill.name in bonus:
+                skill.level = bonus[skill.name]
+
+            # if skill.level != skill_level:
+            #     skill.level = skill_level
             
             # if skill not in self.skill_list:
             #     self.skill_list.add(skill)
 
-            if skill.name not in bonus.keys():
-                self.skill_list.discard(skill)
+            # if skill.name not in bonus.keys():
+            #     self.skill_list.discard(skill)
+
 
         self.skill_list = {skill for skill in self.skill_list if skill.name in bonus.keys()}
 

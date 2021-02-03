@@ -284,13 +284,18 @@ class Fighter:
     def change_hp(self, value, attr=None):
         results = []
 
-        if isinstance(value, str):
+        if attr == None:#回復効果などは属性なしとする
+            results.append({"damage_pop": self.owner, "damage": value})
+            return results
+
+
+        if isinstance(value, str):# 完全防御やミスなど
             results.append({"damage_pop": self.owner, "damage": value})
             return results
 
 
         if self.resist[attr] <= 0:
-            damage = int(value * 2.5)
+            damage = int(value * 2.5)# 弱点ダメージ
         else:
             damage = int(value / self.resist[attr])
 
