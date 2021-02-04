@@ -31,7 +31,7 @@ class Paeonia(Cirsium):
         self.item_margin_x = 17
         self.item_margin_y = -3
         self.my_speed = 3.3
-        self.scale = 1.4
+        self.scale = 0.7
 
 
         self.explanatory_text = f"Is paeonia $#############4TEst test test \n test$#4444444444testtest"

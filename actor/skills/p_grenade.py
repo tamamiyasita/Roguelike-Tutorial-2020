@@ -40,11 +40,11 @@ class P_Grenade(SeedShot):
 
     def update(self):
         super().update()
-        if self.master.state == state.ON_MOVE:
-            self.item_margin_y = 2 * SPRITE_SCALE
-            # self.item_margin_x = 7 * SPRITE_SCALE
-        else:
-            self.item_margin_y = 3 * SPRITE_SCALE
+        # if self.master.state == state.ON_MOVE:
+        #     self.item_margin_y = 2 * SPRITE_SCALE
+        #     # self.item_margin_x = 7 * SPRITE_SCALE
+        # else:
+        #     self.item_margin_y = 3 * SPRITE_SCALE
             # self.item_margin_x = 6 * SPRITE_SCALE
         if self.master.state == state.THROW:
             self.alpha = 0

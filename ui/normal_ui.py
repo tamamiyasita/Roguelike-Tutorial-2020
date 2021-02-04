@@ -28,12 +28,19 @@ class NormalUI:
 
     def draw_in_normal_state(self):
         """mainに渡すメソッドをまとめる"""
+
         self.panel_ui()
         self.draw_hp_and_status_bar()
         self.draw_active_skill()
         self.draw_messages_handle()
         self.draw_passive_skill()
         self.draw_status_icons()
+        self.skill_check()
+
+    def skill_check(self):
+        for skill in self.engine.cur_level.equip_sprites:
+            if skill in self.engine.cur_level.equip_sprites and skill not in self.player.fighter.active_skill:
+                skill.remove_from_sprite_lists()
 
     def draw_status_icons(self):
         y = GRID_SIZE+5
@@ -41,12 +48,7 @@ class NormalUI:
         icon_pos_y = self.viewport_top - (GRID_SIZE * 6)
         for i in range(len(self.player.fighter.states)):
             icon = self.player.fighter.states[i].icon[0]
-            # arcade.draw_scaled_texture_rectangle(
-            #         center_x=icon_pos_x,
-            #         center_y=icon_pos_y + y,
-            #         texture=icon,
-            #         scale=4
-            # )
+
             arcade.draw_texture_rectangle(
                     center_x=icon_pos_x,
                     center_y=icon_pos_y + y,
@@ -210,6 +212,20 @@ class NormalUI:
 
             key_number = f"<key {i+1}>"
 
+            # 階を移動したときに装備が消えないよう処理
+            if skill not in self.engine.cur_level.equip_sprites and Tag.equip in skill.tag:
+                self.engine.cur_level.equip_sprites.append(skill)
+
+            # pos = len(self.engine.cur_level.equip_sprites)
+            # if pos < 6:
+            #     for i in range(0, pos):
+            #         skill.item_margin_x = self.player.fighter.equip_position[i][0]
+            #         skill.item_margin_y = self.player.fighter.equip_position[i][1]
+            # if pos >= 6:
+            #     for j in range(5, pos):
+            #         skill.item_margin_x = self.flower_position2[j-5][0]
+            #         skill.item_margin_y = self.flower_position2[j-5][1]
+
 
             # スキルアイコンの描画
             arcade.draw_texture_rectangle(
@@ -263,18 +279,11 @@ class NormalUI:
         left_margin = self.viewport_left + self.side_panel_width + 7  # 画面左からのHPとバーの位置
         y = 0
 
-        # try:
-        #     if self.player.fighter.data["weapon"] in self.player.fighter.switch_off_skills:
-        #         self.engine.cur_level.equip_sprites.remove(self.player.fighter.data["weapon"])
-        # except:
-        #     pass
         
         for passive in self.player.fighter.passive_skill:
 
-            # if passive in self.player.fighter.switch_off_skills:
-            #     passive.remove_from_sprite_lists()
-                # self.engine.cur_level.equip_sprites.remove(passive)
 
+            # 階を移動したときに装備が消えないよう処理
             if passive not in self.engine.cur_level.equip_sprites:
                 self.engine.cur_level.equip_sprites.append(passive)
 

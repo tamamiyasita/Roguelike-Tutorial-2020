@@ -14,7 +14,7 @@ class Pineapple(Cirsium):
         # self.slot = "flower"
         # self.tag = [Tag.item, Tag.equip, Tag.flower]
         # self.current_xp = 0
-        self.scale = 1.6
+        self.scale = 2
 
 
         # # level

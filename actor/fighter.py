@@ -4,7 +4,7 @@ from constants import *
 from util import dice, stop_watch
 from actor.actor_set import *
 from collections import Counter
-
+import math
 
 
 class Fighter:
@@ -38,6 +38,8 @@ class Fighter:
         self.level_skills = {}#level_upなどに伴う追加Skillの合計に使う
         self.base_skill_dict = skill_dict
         self._skill_list = arcade.SpriteList()
+        self.equip_position = {i:(10*math.cos(math.radians(s)), 10*math.sin(math.radians(s))) for i, s in enumerate([-30,-60,-90,-120,-150])}
+
 
 
     def get_dict(self):

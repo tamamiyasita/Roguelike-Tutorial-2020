@@ -378,7 +378,7 @@ class Actor(arcade.Sprite):
                 self.d_time = 170
 
         # itemを装備した時のsprite表示
-        if self.master and Tag.flower not in self.tag:
+        if self.master and Tag.flower not in self.tag and Tag.equip in self.tag:
             x = self.master.center_x
             if self.master.left_face:
                 self.left_face = True

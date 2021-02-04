@@ -13,13 +13,22 @@ class Explosion(arcade.Sprite):
 
         self.current_texture = 0
         self.textures = texture_list
+        self.texture = texture_list[0]
         self.scale = 4
-    def update(self):
-        self.current_texture += 1
-        if self.current_texture < len(self.textures):
-            self.set_texture(self.current_texture)
-        else:
-            self.remove_from_sprite_lists()
+        self.timer = 0
+
+    def update_animation(self, delta_time=1 / 60):
+        super().update_animation(delta_time)
+        self.timer += delta_time
+        if self.timer >= 0.04:
+
+            self.current_texture += 1
+            if self.current_texture < len(self.textures):
+                self.set_texture(self.current_texture)
+                self.timer = 0
+            else:
+                self.remove_from_sprite_lists()
+
 
 
 class Flying(Actor):
@@ -42,7 +51,8 @@ class Flying(Actor):
         self.explosion_effect = amm.effect
 
         self.effect_sprites.append(self)
-
+    
+        self.scale = 4
 
         x_diff = self.target.center_x - self.center_x
         y_diff = self.target.center_y - self.center_y
@@ -67,7 +77,7 @@ class Flying(Actor):
                 explosion.center_x = self.target.center_x
                 explosion.center_y = self.target.center_y
 
-                explosion.update()
+                explosion.update_animation()
                 self.effect_sprites.append(explosion)
 
 
@@ -75,7 +85,8 @@ class Flying(Actor):
 
 
                 # self.engine.action_queue.extend()
-                self.engine.action_queue.extend([*damage,{"delay": {"time": 0.3, "action": {"turn_end": self.shooter}}}])
+                # if explosion not in self.effect_sprites:
+                self.engine.action_queue.extend([*damage,{"delay": {"time": 0.9, "action": {"turn_end": self.shooter}}}])
 
     def apply_damage(self, grid_x, grid_y, amount, results):
         pixel_x, pixel_y = grid_to_pixel(grid_x, grid_y)

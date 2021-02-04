@@ -33,6 +33,7 @@ class Cirsium(Actor):
         self.item_margin_x = 16
         self.item_margin_y = 17
         self.my_speed = 4.3
+        self.scale=2
 
         self.explanatory_text = f"Is Cirsium TEst test test \n testtesttest"
 

@@ -16,10 +16,10 @@ class Equipment:
         self.item_slot = arcade.SpriteList()
         self.skill_list = set()# arcade.SpriteList()
         
+        self.flower_position = {i:(40*math.cos(math.radians(s)), 40*math.sin(math.radians(s))) for i, s in enumerate([30,60,90,120,150])}
+        self.flower_position2 = {i:(60*math.cos(math.radians(s)), 60*math.sin(math.radians(s))) for i, s in enumerate([40,70,100,130,150])}
 
 
-        # 装備変更によるスプライト更新のチェックに使う変数
-        self.equip_update_check = False
 
     def get_dict(self):
         result = [i.__class__.__name__ if i else None for i in self.item_slot] 
@@ -33,7 +33,6 @@ class Equipment:
                 self.toggle_equip(item)
                 
 
-        self.equip_update_check = True
 
     # 階層を移動する時に使う関数
     def item_sprite_check(self, sprites):
@@ -126,8 +125,6 @@ class Equipment:
         """装備アイテムの付け外しを行うメソッド
         """
 
-        flower_position = {i:(40*math.cos(math.radians(s)), 40*math.sin(math.radians(s))) for i, s in enumerate([30,60,90,120,150])}
-        flower_position2 = {i:(60*math.cos(math.radians(s)), 60*math.sin(math.radians(s))) for i, s in enumerate([40,70,100,130,150])}
 
         results = []
 
@@ -138,7 +135,6 @@ class Equipment:
                 item.remove_from_sprite_lists()
                 
                 results.extend([{"message": f"dequipped {item.name}"}])
-                self.equip_update_check = True
                 return results
 
 
@@ -150,14 +146,13 @@ class Equipment:
             pos = len(self.item_slot)
             if pos < 6:
                 for i in range(0, pos):
-                    self.item_slot[i].item_margin_x = flower_position[i][0]
-                    self.item_slot[i].item_margin_y = flower_position[i][1]
+                    self.item_slot[i].item_margin_x = self.flower_position[i][0]
+                    self.item_slot[i].item_margin_y = self.flower_position[i][1]
             if pos >= 6:
                 for j in range(5, pos):
-                    self.item_slot[j].item_margin_x = flower_position2[j-5][0]
-                    self.item_slot[j].item_margin_y = flower_position2[j-5][1]
+                    self.item_slot[j].item_margin_x = self.flower_position2[j-5][0]
+                    self.item_slot[j].item_margin_y = self.flower_position2[j-5][1]
 
             results.append({"message": f"equipped {equip_item.name}"})
 
-            self.equip_update_check = True
             return results

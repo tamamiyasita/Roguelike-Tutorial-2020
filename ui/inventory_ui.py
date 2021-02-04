@@ -35,6 +35,8 @@ def draw_inventory(player, selected_item, viewport):
     font_color = arcade.color.WHITE
     equip_this = ""
 
+    
+
 
     # キャパシティ数をループし、インベントリのアイテム名とアウトラインを描画する
     slot_item = [i for i in player.equipment.item_slot]
