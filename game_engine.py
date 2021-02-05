@@ -1,6 +1,7 @@
 
 import arcade
 from collections import deque
+from itertools import chain
 
 from constants import *
 from data import *
@@ -76,7 +77,7 @@ class GameEngine:
         self.game_state = GAME_STATE.NORMAL
         self.grid_select_handlers = []
         self.move_switch = True
-        self.damage_pop = []
+        self.pop_position = deque([35,65,40,70])
         self.messenger = None
 
         self.player = Player(
@@ -644,8 +645,11 @@ class GameEngine:
                     txt_color = arcade.color.MINT_GREEN
                 elif 0 > damage:
                     txt_color = COLORS["status_bar_foreground"]
+                    damage= -damage
+                y = self.pop_position[0]
+                self.pop_position.rotate()
+                Damagepop(self, damage, txt_color,  target, y)
 
-                Damagepop(self, damage, txt_color, target)
 
             if "talk" in action:
                 actor = action.pop("talk")
@@ -687,6 +691,32 @@ class GameEngine:
                 self.action_queue.extend(attack)
                 # self.move_switch = False
             dist = None
+
+    def normal_state_update(self, player_direction, delta_time):
+        self.turn_loop.loop_on(self)
+        self.check_for_player_movement(player_direction)
+        self.skill_dispry_check()
+        self.skill_position_update()
+        
+
+
+
+    def skill_dispry_check(self):
+        for skill in self.cur_level.equip_sprites:
+            if skill in self.cur_level.equip_sprites and skill not in chain(self.player.fighter.active_skill, self.player.fighter.passive_skill):
+                skill.remove_from_sprite_lists()
+
+        for i, skill in enumerate(chain(self.player.fighter.active_skill, self.player.fighter.passive_skill)):
+
+            # 階を移動したときに装備が消えないよう処理
+            if skill not in self.cur_level.equip_sprites and Tag.equip in skill.tag:
+                self.cur_level.equip_sprites.append(skill)
+
+    def skill_position_update(self):
+        for i, skill in enumerate(self.player.fighter.skill_weight_list):
+            skill.item_position_x = self.player.fighter.equip_position[i][0]
+            skill.item_position_y = self.player.fighter.equip_position[i][1]
+
 
     def use_stairs(self):
         """階段及びplayerの位置の判定

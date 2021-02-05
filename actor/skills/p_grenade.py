@@ -24,7 +24,7 @@ class P_Grenade(SeedShot):
 
         self.tag = [Tag.item, Tag.used, Tag.active, Tag.skill, Tag.equip]
 
-
+        self.item_weight = 4
 
         self.item_margin_x = 9 * SPRITE_SCALE
         self.item_margin_y = 3 * SPRITE_SCALE
@@ -51,3 +51,14 @@ class P_Grenade(SeedShot):
         else:
             self.alpha = 255
             self.item_margin_x = -13 * SPRITE_SCALE
+
+        try:
+            if self.master.state == state.ON_MOVE:
+                self.item_margin_x = self.item_position_x * SPRITE_SCALE
+                self.item_margin_y = (self.item_position_y - 1) * SPRITE_SCALE
+            else:
+                self.item_margin_x = self.item_position_x * SPRITE_SCALE
+                self.item_margin_y = self.item_position_y * SPRITE_SCALE
+
+        except:
+            pass

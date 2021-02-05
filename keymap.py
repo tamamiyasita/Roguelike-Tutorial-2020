@@ -108,18 +108,18 @@ def character_screen_key(key, engine):
 
     if key in KEYMAP_USE_STAIRS:
         skill = skill_list[engine.selected_item]
-        if engine.player.fighter.data["weapon"] is not None and Tag.weapon in skill.tag and skill.name != engine.player.fighter.data["weapon"].name:
-            print("main_weapon skillは一つだけしか起動出来ない")
-        elif engine.player.fighter.data["weapon"] is None and Tag.weapon in skill.tag:
-            skill_activate(engine, engine.player, skill)
-        elif engine.player.fighter.data["weapon"] is not None and engine.player.fighter.data["weapon"] == skill:
-            skill_deactivate(engine.player, skill)
+        # if engine.player.fighter.data["weapon"] is not None and Tag.weapon in skill.tag and skill.name != engine.player.fighter.data["weapon"].name:
+        #     print("main_weapon skillは一つだけしか起動出来ない")
+        # elif engine.player.fighter.data["weapon"] is None and Tag.weapon in skill.tag:
+        #     skill_activate(engine, engine.player, skill)
+        # elif engine.player.fighter.data["weapon"] is not None and engine.player.fighter.data["weapon"] == skill:
+        #     skill_deactivate(engine.player, skill)
             
-        elif skill.data["switch"] == False:
+        if skill.data["switch"] == False:
             skill_activate(engine, engine.player, skill)
 
         elif skill.data["switch"] == True:
-            skill_deactivate(engine.player, skill)
+            skill_deactivate(skill)
         
 
         

@@ -78,32 +78,12 @@ class Equipment:
             # crisiumのskill_add{leaf_blade:1}が入る
             for name, add in parts.skill_add.items():
                 bonus = Counter(bonus) + Counter({name:add})
-                    
 
-            # if parts and not isinstance(parts, str) and parts.skill_add:
-            #     bonus = Counter(bonus) + Counter(parts.skill_add)
-
-        # for skill_name, skill_level in bonus.items():
-        #     skill = self.owner.fighter.base_skill_dict.get(skill_name)
-
-        #     self.skill_list.add(skill)
         for skill in self.skill_generate_list:
             if skill.name in bonus:
                 skill.level = bonus[skill.name]
 
-            # if skill.level != skill_level:
-            #     skill.level = skill_level
-            
-            # if skill not in self.skill_list:
-            #     self.skill_list.add(skill)
-
-            # if skill.name not in bonus.keys():
-            #     self.skill_list.discard(skill)
-
-
         self.skill_list = {skill for skill in self.skill_list if skill.name in bonus.keys()}
-
-
 
         return self.skill_list
 

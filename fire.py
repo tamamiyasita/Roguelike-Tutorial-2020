@@ -54,7 +54,7 @@ class Fire:
     def __init__(self, engine, shooter, amm=None):
         self.engine = engine
         self.shooter = shooter
-        self.x, self.y = self.shooter.x, self.shooter.y
+        self.x, self.y = shooter.x, shooter.y
         self.target = None
         self.amm = amm
         self.effect_sprites = engine.cur_level.effect_sprites

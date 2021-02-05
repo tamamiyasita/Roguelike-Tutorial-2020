@@ -200,17 +200,14 @@ class MG(arcade.Window):
             self.engine.flower_sprites.update_animation()
             self.engine.tmp_effect_sprites.update()
             self.engine.tmp_effect_sprites.update_animation()
-
-
-            self.engine.turn_loop.loop_on(self.engine)
-            self.engine.check_for_player_movement(self.player_direction)
             self.engine.cur_level.map_obj_sprites.update_animation()
 
 
-            # ここでdamageのポップアップを行う TODO 適切かあとで考える
-            if self.engine.damage_pop:
-                for pop in self.engine.damage_pop:
-                    pop.start()
+            self.engine.normal_state_update(self.player_direction, delta_time)
+
+
+
+
 
 
 

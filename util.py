@@ -7,23 +7,24 @@ import time
 
 def skill_activate(engine, owner, skill):  
 
-    if Tag.equip in skill.tag: 
-        if skill not in engine.cur_level.equip_sprites:
-            engine.cur_level.equip_sprites.append(skill)
-    if Tag.weapon in skill.tag: 
-        owner.fighter.data["weapon"] = skill
+    # if Tag.equip in skill.tag: 
+    if skill not in engine.cur_level.equip_sprites:
+        engine.cur_level.equip_sprites.append(skill)
+    # if Tag.weapon in skill.tag: 
+    #     owner.fighter.data["weapon"] = skill
 
     skill.master = owner
+    skill.owner = owner
     skill.data["switch"] = True
 
-def skill_deactivate(owner, skill):
+def skill_deactivate(skill):
 
-    if Tag.weapon in skill.tag: 
-        owner.fighter.data["weapon"] = None
+    # if Tag.weapon in skill.tag: 
+    #     owner.fighter.data["weapon"] = None
 
-    if Tag.equip in skill.tag: 
-        del skill.master
-        skill.remove_from_sprite_lists()
+    # if Tag.equip in skill.tag: 
+    del skill.master
+    skill.remove_from_sprite_lists()
 
     skill.data["switch"] = False
 

@@ -30,8 +30,13 @@ class LeafBlade(Actor):
 
         self.icon = IMAGE_ID["leaf_blade_icon"]
 
-        self.item_margin_x = 9 * SPRITE_SCALE
-        self.item_margin_y = 3 * SPRITE_SCALE
+        self.item_weight = 1
+
+        self.item_margin_x = 9
+        self.item_margin_y = 2
+
+        self.item_position_x = 9
+        self.item_position_y = 2
 
     @property
     def explanatory_text(self):
@@ -53,17 +58,18 @@ class LeafBlade(Actor):
         super().update()
         try:
             if self.master.state == state.ON_MOVE:
-                self.item_margin_y = 2 * SPRITE_SCALE
-                # self.item_margin_x = 7 * SPRITE_SCALE
+                self.item_margin_x = self.item_position_x * SPRITE_SCALE
+                self.item_margin_y = (self.item_position_y - 1) * SPRITE_SCALE
             else:
-                self.item_margin_y = 3 * SPRITE_SCALE
-                # self.item_margin_x = 6 * SPRITE_SCALE
+                self.item_margin_x = self.item_position_x * SPRITE_SCALE
+                self.item_margin_y = self.item_position_y * SPRITE_SCALE
+
             if self.master.state == state.ATTACK:
-                self.item_margin_x = 12 * SPRITE_SCALE
+                self.item_margin_x = (self.item_position_x + 3) * SPRITE_SCALE
                 self.angle += 60
             else:
                 self.angle = 0
-                self.item_margin_x = 9 * SPRITE_SCALE
+                self.item_margin_x = self.item_position_x * SPRITE_SCALE
         except:
             pass
 

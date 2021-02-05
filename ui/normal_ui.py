@@ -35,12 +35,28 @@ class NormalUI:
         self.draw_messages_handle()
         self.draw_passive_skill()
         self.draw_status_icons()
-        self.skill_check()
+        # self.skill_check()
 
-    def skill_check(self):
-        for skill in self.engine.cur_level.equip_sprites:
-            if skill in self.engine.cur_level.equip_sprites and skill not in self.player.fighter.active_skill:
-                skill.remove_from_sprite_lists()
+    # def skill_check(self):
+    #     for skill in self.engine.cur_level.equip_sprites:
+    #         if skill in self.engine.cur_level.equip_sprites and skill not in self.player.fighter.active_skill:
+    #             skill.remove_from_sprite_lists()
+    #     for skill in self.player.fighter.active_skill:
+
+    #         # 階を移動したときに装備が消えないよう処理
+    #         if skill not in self.engine.cur_level.equip_sprites and Tag.equip in skill.tag:
+    #             self.engine.cur_level.equip_sprites.append(skill)
+
+    #         # pos = len(self.engine.cur_level.equip_sprites)
+    #         # if pos < 6:
+    #         #     for i in range(0, pos):
+    #         #         skill.item_margin_x = self.player.fighter.equip_position[i][0]
+    #         #         skill.item_margin_y = self.player.fighter.equip_position[i][1]
+    #         # if pos >= 6:
+    #         #     for j in range(5, pos):
+    #         #         skill.item_margin_x = self.flower_position2[j-5][0]
+    #         #         skill.item_margin_y = self.flower_position2[j-5][1]
+
 
     def draw_status_icons(self):
         y = GRID_SIZE+5
@@ -207,25 +223,10 @@ class NormalUI:
         # キャパシティ数をループし、インベントリのアイテム名とアウトラインを描画する
         # TODO 複数行にする処理を考える（５回ループしたら縦と横の変数に増減するなど）
         for i, skill in enumerate(self.player.fighter.active_skill):
-            skill.owner = self.player
+            # skill.owner = self.player
             skill_position = i * field_width + item_left_position  # 左からの所持skillの表示位置
 
             key_number = f"<key {i+1}>"
-
-            # 階を移動したときに装備が消えないよう処理
-            if skill not in self.engine.cur_level.equip_sprites and Tag.equip in skill.tag:
-                self.engine.cur_level.equip_sprites.append(skill)
-
-            # pos = len(self.engine.cur_level.equip_sprites)
-            # if pos < 6:
-            #     for i in range(0, pos):
-            #         skill.item_margin_x = self.player.fighter.equip_position[i][0]
-            #         skill.item_margin_y = self.player.fighter.equip_position[i][1]
-            # if pos >= 6:
-            #     for j in range(5, pos):
-            #         skill.item_margin_x = self.flower_position2[j-5][0]
-            #         skill.item_margin_y = self.flower_position2[j-5][1]
-
 
             # スキルアイコンの描画
             arcade.draw_texture_rectangle(
@@ -281,11 +282,6 @@ class NormalUI:
 
         
         for passive in self.player.fighter.passive_skill:
-
-
-            # 階を移動したときに装備が消えないよう処理
-            if passive not in self.engine.cur_level.equip_sprites:
-                self.engine.cur_level.equip_sprites.append(passive)
 
             item_text = f"{passive.name} (level {passive.level})".replace("_", " ").title()
 
