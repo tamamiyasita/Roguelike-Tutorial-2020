@@ -51,12 +51,12 @@ class TriggerPull(Actor):
 
 
 class Fire:
-    def __init__(self, engine, shooter, amm=None):
+    def __init__(self, engine, shooter, skill):
         self.engine = engine
         self.shooter = shooter
+        self.skill = skill
         self.x, self.y = shooter.x, shooter.y
         self.target = None
-        self.amm = amm
         self.effect_sprites = engine.cur_level.effect_sprites
         self.actor_sprites = engine.cur_level.actor_sprites
         self.trigger = None
@@ -71,9 +71,6 @@ class Fire:
         target_distance = None
         results = []
 
-        if not self.amm:
-            results.append({"message": f"You don't have a shooting weapon"})
-            return results
 
         for actor in self.actor_sprites:
             if actor.x== x and actor.y == y:
@@ -90,17 +87,17 @@ class Fire:
             results.append(
                 {"message": f"{self.shooter.name} shot {self.target.name}"})
             results.extend(self.shooter.fighter.attack(
-                target=self.target, ranged=self.amm))
+                target=self.target, ranged=self.skill))
 
             if self.shooter == self.engine.player:
                 self.engine.player.state = state.SHOT
 
 
             TriggerPull(shooter=self.shooter, target=self.target,
-                        engine=self.engine, amm=self.amm.name)
+                        engine=self.engine, amm=self.skill.amm)
             self.trigger = True
 
-            self.amm.data["count_time"] = self.amm.max_cooldown_time
+            self.skill.data["count_time"] = self.skill.max_cooldown_time
 
             return results
 

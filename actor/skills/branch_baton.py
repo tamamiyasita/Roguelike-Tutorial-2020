@@ -16,6 +16,9 @@ class BranchBaton(LeafBlade):
         self.speed = 6
 
         self.level = 1
+        
+        self.item_weight = 1
+
 
 
         self.icon = IMAGE_ID["branch_baton_icon"]

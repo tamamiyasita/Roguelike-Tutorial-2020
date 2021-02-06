@@ -13,7 +13,10 @@ class P_Grenade(SeedShot):
 
         self.max_cooldown_time = 6
 
-        self.damage = 7
+        self.amm = IMAGE_ID["p_grenade"]
+
+
+        self.damage = 10
         self.hit_rate = 80
         self.speed = 16
         self.attr = "physical"

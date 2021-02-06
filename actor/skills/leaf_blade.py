@@ -30,7 +30,7 @@ class LeafBlade(Actor):
 
         self.icon = IMAGE_ID["leaf_blade_icon"]
 
-        self.item_weight = 1
+        self.item_weight = 1.1
 
         self.item_margin_x = 9
         self.item_margin_y = 2
@@ -38,10 +38,12 @@ class LeafBlade(Actor):
         self.item_position_x = 9
         self.item_position_y = 2
 
-    @property
-    def explanatory_text(self):
-        # 説明文を返す
-        return f"damage: {self.level}D{self.damage}\nhit rate: {self.hit_rate}"
+        self.explanatory_text = f"damage: {self.level}D{self.damage}\nhit rate: {self.hit_rate}"
+
+    # @property
+    # def explanatory_text(self):
+    #     # 説明文を返す
+    #     return f"damage: {self.level}D{self.damage}\nhit rate: {self.hit_rate}"
 
     def activate(self, owner):        
         owner.fighter.data["weapon"] = self

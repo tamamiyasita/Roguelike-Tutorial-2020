@@ -38,7 +38,7 @@ class Fighter:
         self.level_skills = {}#level_upなどに伴う追加Skillの合計に使う
         self.base_skill_dict = skill_dict
         self._skill_list = arcade.SpriteList()
-        self.equip_position = {0:(9,2), 1:(-9,3), 2:(9,-4)}
+        self.equip_position = {0:(9,2), 1:(-9,3), 2:(9,-4), 3:(-11, -4), 4:(-14, 1)}
 
 
 

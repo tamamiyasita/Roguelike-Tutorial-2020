@@ -59,15 +59,15 @@ def draw_inventory(player, selected_item, viewport):
 
         # itemのアイコンを描画
         if cur_item:
-            scale = 2
-            if Tag.flower in cur_item.tag:
-                scale = 4
-            arcade.draw_scaled_texture_rectangle(
+            arcade.draw_texture_rectangle(
                 center_x=back_panel_right - ((GRID_SIZE*2)+(GRID_SIZE/2)),
                 center_y=back_panel_top_left - ((GRID_SIZE/2)) + y,
+                width=128,
+                height=128,
                 texture=cur_item.texture,
-                scale=scale
-                )
+
+            )
+
 
         if item == selected_item:
             # アウトラインをitemカーソルとして描画

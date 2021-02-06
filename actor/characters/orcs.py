@@ -11,7 +11,7 @@ class Orc(Actor):
                                     unarmed={"damage":3, "level":1, "attr":"physical", "hit_rate":85},
                                     defense=1,
                                     evasion=1,
-                                    xp_reward=35,
+                                    xp_reward=5,
                                     level=1
                                     )
         ai_component = Basicmonster()
@@ -34,7 +34,7 @@ class Troll(Actor):
         fighter_component = Fighter(hp=35,  STR=5, DEX=1,
                                     unarmed={"damage":8, "level":2, "attr":"physical","hit_rate":80},
                                     defense=2,
-                                    xp_reward=75,
+                                    xp_reward=15,
                                     level=2
                                     )
         ai_component = Basicmonster()

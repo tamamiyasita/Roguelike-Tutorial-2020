@@ -2,9 +2,9 @@ from actor.items.cirsium import Cirsium
 
 
 class Sunflower(Cirsium):
-    def __init__(self, x=0, y=0):
+    def __init__(self, x=0, y=0, name="sunflower"):
         super().__init__(
-            name="sunflower",
+            name=name,
             x=x,
             y=y,
         )
@@ -18,6 +18,8 @@ class Sunflower(Cirsium):
         self.states_bonus = {"DEX": 1}
         self.skill_generate = "seed_shot"
         self.skill_add = {"seed_shot":1}
+        self.data = {2:"p_grenade", 3:"healing"}
+
 
         self.item_margin_x = 17
         self.item_margin_y = 6

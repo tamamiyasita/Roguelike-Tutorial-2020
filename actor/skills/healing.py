@@ -4,6 +4,7 @@ from constants import *
 from data import *
 import random
 from util import dice, result_add
+from actor.skills.leaf_blade import LeafBlade
 
 class HealingEffect(Actor):
     def __init__(self, owner, engine):
@@ -44,12 +45,12 @@ class HealingEffect(Actor):
             self.remove_from_sprite_lists()
 
 
-class Healing(Actor):
-    def __init__(self):
+class Healing(LeafBlade):
+    def __init__(self,x=0, y=0, name="healing"):
         super().__init__(
-            name="healing",
-            scale=4.5,
-
+            name=name,
+            x=x,
+            y=y
         )
         self.data={"switch":False,
                   "count_time":0,
@@ -60,11 +61,19 @@ class Healing(Actor):
 
         self.max_cooldown_time = 4
 
-        self.tag = [Tag.item, Tag.used, Tag.active, Tag.skill]
+        self.item_weight = 5
+
+
+        self.tag = [Tag.item, Tag.equip, Tag.used, Tag.active, Tag.skill]
 
         self.explanatory_text = f"Recover a small\namount of hp"
-        self.icon = IMAGE_ID["healing"]
+        self.icon = IMAGE_ID["healing_icon"]
 
+        # self.item_margin_x = 9 * SPRITE_SCALE
+        # self.item_margin_y = 3 * SPRITE_SCALE
+
+        # self.item_position_x = 9
+        # self.item_position_y = 2
 
     @property
     def hp_return(self):
@@ -90,3 +99,9 @@ class Healing(Actor):
                 self.owner, self.engine)
 
             return [{"turn_end":self.owner, "message": f"{self.owner.name} have recovered {hp_return} using {self.name}"}, *result]
+
+    # def update(self):
+    #     super().update()
+
+    #     if self.master.state == state.HEAL:
+    #         self.item_margin_

@@ -123,12 +123,13 @@ leaf_blade_icon = arcade.load_texture(r"image\leaf_blade_icon.png")
 ebony = arcade.load_texture_pair(r"image\ebony.png")
 branch_baton = arcade.load_texture_pair(r"image\BranchBaton.png")
 branch_baton_icon = arcade.load_texture(r"image\branch_baton_icon.png")
-healing = arcade.load_texture(r"image\healing.png")
+healing_icon = arcade.load_texture(r"image\healing_icon.png")
+healing = arcade.load_texture_pair(r"image\healing.png")
 Paeonia = arcade.load_texture(r"image\paeonia.png")
 sunflower = arcade.load_texture(r"image\sunflower.png")
 pineapple = arcade.load_texture(r"image/pineapple.png")
 
-seed_shot = arcade.load_texture(r"image/seed_shot.png")
+seed_shot = arcade.load_texture_pair(r"image/seed_shot.png")
 seed_shot_icon = arcade.load_texture(r"image/seed_shot_icon.png")
 
 pineapple_grenade = arcade.load_texture_pair(r"image/p_grenade.png")
@@ -247,6 +248,7 @@ IMAGE_ID = {"Rou": player,
             "leaf_blade_icon": leaf_blade_icon,
             "branch_baton": branch_baton,
             "branch_baton_icon": branch_baton_icon,
+            "healing_icon":healing_icon,
             "healing":healing,
             "seed_shot":seed_shot,
             "seed_shot_icon":seed_shot_icon,

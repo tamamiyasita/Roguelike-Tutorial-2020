@@ -3,12 +3,11 @@ from actor.items.cirsium import Cirsium
 
 
 class Paeonia(Cirsium):
-    def __init__(self, x=0, y=0):
+    def __init__(self, x=0, y=0, name="paeonia"):
         super().__init__(
+            name=name,
             x=x,
-            y=y,
-            name = "paeonia"
-            
+            y=y,         
         )
 
         # # template
@@ -25,7 +24,9 @@ class Paeonia(Cirsium):
         # states
         self.states_bonus = {"INT": 1}
         self.skill_generate = "healing"
-        self.skill_add = {"healing":1, "leaf_blade":1}
+        self.skill_add = {"healing":1}
+        self.data = {2:"p_grenade", 3:"healing"}
+
 
         # position
         self.item_margin_x = 17

@@ -11,7 +11,7 @@ class Water_vole(Actor):
                                     unarmed={"damage":2, "level":1, "attr":"physical", "hit_rate":90},
                                     defense=1,
                                     evasion=2,
-                                    xp_reward=35,
+                                    xp_reward=3,
                                     level=1
                                     )
         ai_component = Basicmonster()

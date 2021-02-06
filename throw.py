@@ -129,8 +129,8 @@ class Flying(Actor):
 
 
 class Throw(Fire):
-    def __init__(self, engine, shooter, amm):
-        super().__init__(engine, shooter, amm=amm)
+    def __init__(self, engine, shooter, skill):
+        super().__init__(engine, shooter, skill=skill)
 
     def shot(self, x, y):
         target_distance = None
@@ -149,16 +149,17 @@ class Throw(Fire):
 
         if self.target:
             results.append(
-                {"message": f"{self.shooter.name} threw {self.amm.name} at the {self.target.name}"})
+                {"message": f"{self.shooter.name} threw {self.skill.name} at the {self.target.name}"})
 
             if self.shooter == self.engine.player:
                 self.engine.player.state = state.THROW
 
             Flying(shooter=self.shooter, target=self.target,
-                        engine=self.engine, amm=self.amm)
+                        engine=self.engine, amm=self.skill)
             self.trigger = True
 
-            self.amm.data["count_time"] = self.amm.max_cooldown_time
+            self.skill.data["count_time"] = self.skill.max_cooldown_time
+
 
             return results
 

@@ -11,7 +11,7 @@ class Crab(Actor):
                                     unarmed={"damage":4, "level":1, "attr":"physical", "hit_rate":95},
                                     defense=2,
                                     evasion=2,
-                                    xp_reward=35,
+                                    xp_reward=5,
                                     level=1
                                     )
         ai_component = Basicmonster()
