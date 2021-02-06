@@ -130,6 +130,7 @@ sunflower = arcade.load_texture(r"image\sunflower.png")
 pineapple = arcade.load_texture(r"image/pineapple.png")
 
 seed_shot = arcade.load_texture_pair(r"image/seed_shot.png")
+seed_shot_b = arcade.load_texture(r"image/seed_shot_b.png")
 seed_shot_icon = arcade.load_texture(r"image/seed_shot_icon.png")
 
 pineapple_grenade = arcade.load_texture_pair(r"image/p_grenade.png")
@@ -251,6 +252,7 @@ IMAGE_ID = {"Rou": player,
             "healing_icon":healing_icon,
             "healing":healing,
             "seed_shot":seed_shot,
+            "seed_shot_b":seed_shot_b,
             "seed_shot_icon":seed_shot_icon,
             "p_grenade":pineapple_grenade,
             "p_grenade_icon":pineapple_grenade_icon,

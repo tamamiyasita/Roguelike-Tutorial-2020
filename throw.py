@@ -34,7 +34,7 @@ class Explosion(arcade.Sprite):
 class Flying(Actor):
     def __init__(self, shooter, target, engine, amm, particle_num=5):
         super().__init__(
-            name=amm.name,
+            name=amm.amm,
             color=COLORS["white"],
         )
         self.engine = engine
@@ -83,9 +83,6 @@ class Flying(Actor):
 
                 damage = self.click(self.target.x, self.target.y, self.shot_damage)
 
-
-                # self.engine.action_queue.extend()
-                # if explosion not in self.effect_sprites:
                 self.engine.action_queue.extend([*damage,{"delay": {"time": 0.9, "action": {"turn_end": self.shooter}}}])
 
     def apply_damage(self, grid_x, grid_y, amount, results):
@@ -93,9 +90,7 @@ class Flying(Actor):
         print(f"{pixel_x}{pixel_y} apply pixel_x_y")
         sprites = arcade.get_sprites_at_point(
             (pixel_x, pixel_y), self.engine.cur_level.actor_sprites)
-        # pc_check = arcade.get_sprites_at_point(
-        #     (pixel_x, pixel_y), self.engine.cur_level.chara_sprites)
-        # sprites.extend(pc_check)
+
         for sprite in sprites:
             if sprite.fighter and not sprite.is_dead:
                 results.extend(
@@ -107,7 +102,6 @@ class Flying(Actor):
     def click(self, x, y, damage):
         print("Click!", x, y)
         results = []
-        # FireballEffect(x, y, self.engine.cur_level.effect_sprites)
         self.apply_damage(x, y, damage, results)
 
         self.apply_damage(x-1, y-1, damage+2, results)
@@ -131,6 +125,8 @@ class Flying(Actor):
 class Throw(Fire):
     def __init__(self, engine, shooter, skill):
         super().__init__(engine, shooter, skill=skill)
+        self.actor_sprites = engine.cur_level.floor_sprites
+
 
     def shot(self, x, y):
         target_distance = None
@@ -142,7 +138,6 @@ class Throw(Fire):
                     x1, y1 = self.shooter.x, self.shooter.y
                     x2, y2 = actor.x, actor.y
                     distance = math.sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2 )
-                    # if self.target is None or distance < target_distance:
                     self.target = actor
                     target_distance = distance
                     break

@@ -104,7 +104,7 @@ class GameEngine:
         arcade.set_background_color(COLORS["black"])
         self.flower_sprites = arcade.SpriteList(use_spatial_hash=True, spatial_hash_cell_size=32)
         self.tmp_effect_sprites = arcade.SpriteList(use_spatial_hash=True, spatial_hash_cell_size=32)
-        self.cur_level = self.setup_level(level_number=1)
+        self.cur_level = self.setup_level(level_number=99)
         self.stories[self.cur_floor_name] = self.cur_level
         self.turn_loop = TurnLoop(self.player)
         self.item_point = ItemPoint(self)
@@ -726,8 +726,9 @@ class GameEngine:
 
     def skill_position_update(self):
         for i, skill in enumerate(self.player.fighter.skill_weight_list):
-            skill.item_position_x = self.player.fighter.equip_position[i][0]
-            skill.item_position_y = self.player.fighter.equip_position[i][1]
+            if self.player.state == state.ON_MOVE or self.player.state == state.DELAY:
+                skill.item_position_x = self.player.fighter.equip_position[i][0]
+                skill.item_position_y = self.player.fighter.equip_position[i][1]
 
 
     def use_stairs(self):

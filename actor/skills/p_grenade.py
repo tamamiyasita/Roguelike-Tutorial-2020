@@ -1,19 +1,24 @@
 from constants import *
 from data import *
 from actor.skills.seed_shot import SeedShot
+from actor.skills.leaf_blade import LeafBlade
+
 from throw import Throw
 
-class P_Grenade(SeedShot):
+class P_Grenade(LeafBlade):
     def __init__(self, x=0, y=0, name="p_grenade"):
         super().__init__(
             name=name,
             x=x,
             y=y
             )
+        self.data={"switch":False,
+                  "count_time":0,
+                  "cooldown":False}
+
+        self.amm = "p_grenade"
 
         self.max_cooldown_time = 6
-
-        self.amm = IMAGE_ID["p_grenade"]
 
 
         self.damage = 10
@@ -21,17 +26,16 @@ class P_Grenade(SeedShot):
         self.speed = 16
         self.attr = "physical"
 
+        self.item_weight = 4
 
-        self.icon = IMAGE_ID["p_grenade_icon"]
-        self.effect = IMAGE_ID["explosion_effect"]
+
 
         self.tag = [Tag.item, Tag.used, Tag.active, Tag.skill, Tag.equip]
 
-        self.item_weight = 4
-
-        self.item_margin_x = 9 * SPRITE_SCALE
-        self.item_margin_y = 3 * SPRITE_SCALE
-        
+        self.explanatory_text = f""
+         
+        self.icon = IMAGE_ID["p_grenade_icon"]
+        self.effect = IMAGE_ID["explosion_effect"]
 
 
     def use(self, engine):
@@ -53,15 +57,14 @@ class P_Grenade(SeedShot):
             self.alpha = 0
         else:
             self.alpha = 255
-            self.item_margin_x = -13 * SPRITE_SCALE
 
-        try:
-            if self.master.state == state.ON_MOVE:
-                self.item_margin_x = self.item_position_x * SPRITE_SCALE
-                self.item_margin_y = (self.item_position_y - 1) * SPRITE_SCALE
-            else:
-                self.item_margin_x = self.item_position_x * SPRITE_SCALE
-                self.item_margin_y = self.item_position_y * SPRITE_SCALE
+        # try:
+        #     if self.master.state == state.ON_MOVE:
+        #         self.item_margin_x = self.item_position_x * SPRITE_SCALE
+        #         self.item_margin_y = (self.item_position_y - 1) * SPRITE_SCALE
+        #     else:
+        #         self.item_margin_x = self.item_position_x * SPRITE_SCALE
+        #         self.item_margin_y = self.item_position_y * SPRITE_SCALE
 
-        except:
-            pass
+        # except:
+        #     pass

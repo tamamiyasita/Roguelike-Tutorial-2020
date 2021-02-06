@@ -71,7 +71,7 @@ class LeafBlade(Actor):
                 self.angle += 60
             else:
                 self.angle = 0
-                self.item_margin_x = self.item_position_x * SPRITE_SCALE
+                # self.item_margin_x = self.item_position_x * SPRITE_SCALE
         except:
             pass
 

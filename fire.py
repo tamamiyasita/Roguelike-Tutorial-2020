@@ -7,9 +7,9 @@ from actor.actor import Actor
 from particle import AttackParticle
 
 class TriggerPull(Actor):
-    def __init__(self, shooter, target, engine, amm, particle_num=5):
+    def __init__(self, shooter, target, engine, amm):
         super().__init__(
-            name=amm,
+            name=amm.amm,
             color=COLORS["white"],
         )
         self.engine = engine
@@ -17,8 +17,10 @@ class TriggerPull(Actor):
         self.center_y = shooter.center_y
         self.shooter = shooter
         self.target = target
-        self.particle_num = particle_num
+        self.amm = amm
+        self.particle_num = 5
         self.effect_sprites = self.engine.tmp_effect_sprites
+        
 
         self.shot_speed = 25
 
@@ -36,6 +38,7 @@ class TriggerPull(Actor):
 
     def update(self):
         super().update()
+        result = []
         if self.trigger:
             # self.angle += 20
 
@@ -46,8 +49,12 @@ class TriggerPull(Actor):
                     particle = AttackParticle()
                     particle.position = (self.target.center_x, self.target.center_y)
                     self.effect_sprites.append(particle)
+                damage = self.target.fighter.change_hp(-self.amm.damage, self.amm.attr)
+                result.extend(damage)
 
-                self.engine.action_queue.extend([{"delay": {"time": 0.3, "action": {"turn_end": self.shooter}}}])
+
+                result.extend([{"delay": {"time": 0.3, "action": {"turn_end": self.shooter}}}])
+                self.engine.action_queue.extend(result)
 
 
 class Fire:
@@ -68,7 +75,7 @@ class Fire:
         return None
 
     def shot(self, x, y):
-        target_distance = None
+        # target_distance = None
         results = []
 
 
@@ -78,23 +85,23 @@ class Fire:
                     x1, y1 = self.shooter.x, self.shooter.y
                     x2, y2 = actor.x, actor.y
                     distance = math.sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2 )
-                    if self.target is None or distance < target_distance:
-                        self.target = actor
-                        target_distance = distance
-                        break
+                    # if self.target is None or distance < target_distance:
+                    self.target = actor
+                    # target_distance = distance
+                    break
 
         if self.target:
             results.append(
                 {"message": f"{self.shooter.name} shot {self.target.name}"})
-            results.extend(self.shooter.fighter.attack(
-                target=self.target, ranged=self.skill))
+            # results.extend(self.shooter.fighter.attack(
+            #     target=self.target, ranged=self.skill))
 
             if self.shooter == self.engine.player:
                 self.engine.player.state = state.SHOT
 
 
             TriggerPull(shooter=self.shooter, target=self.target,
-                        engine=self.engine, amm=self.skill.amm)
+                        engine=self.engine, amm=self.skill)
             self.trigger = True
 
             self.skill.data["count_time"] = self.skill.max_cooldown_time

@@ -16,9 +16,7 @@ class SeedShot(LeafBlade):
                   "count_time":0,
                   "cooldown":False}
 
-        self.amm = IMAGE_ID["seed_shot_icon"]
-
-        self.owner = None
+        self.amm = "seed_shot_b"
 
         self.max_cooldown_time = 2
 
@@ -39,12 +37,27 @@ class SeedShot(LeafBlade):
 
         self.icon = IMAGE_ID["seed_shot_icon"]
 
+
     def use(self, engine):
 
         if self.data["count_time"] <= 0:
 
             fire = Fire(engine, self.owner, self)
-            result = fire.use()
+            fire.use()
 
 
 
+    def update(self):
+        super().update()
+
+        if self.master.state == state.SHOT:
+                if self.master.left_face:
+                    self.angle = 90
+                    self.item_margin_x = self.master.x+4
+                    self.item_margin_y = self.master.fighter.equip_position[12][1]+5
+                else:
+                    self.angle = -90
+                    self.item_margin_x = self.master.x+4
+                    self.item_margin_y = self.master.fighter.equip_position[12][1]+5
+        else:
+            self.angle = 0
