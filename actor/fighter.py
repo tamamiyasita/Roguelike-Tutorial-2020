@@ -226,34 +226,37 @@ class Fighter:
         return self.base_evasion + bonus + (self.DEX / 2)
     
 
-    @property
-    def attack_damage(self):
+    # @property()
+    def attack_damage(self, skill=None):
         # ダメージと属性をタプルのリストで返す
         result = []
-
-        if self.skill_list is not None and self.attack_skill:
-            for skill in self.attack_skill:
-                max_d = skill.damage 
-                level = skill.level
-                attr = skill.attr
-                hit_rate = skill.hit_rate
-                
-                result.append((dice(1 + level//3, max_d+(self.STR//3)), hit_rate, attr))
+        if skill:
         
+            max_d = skill.damage 
+            level = skill.level
+            attr = skill.attr
+            hit_rate = skill.hit_rate
+            result.append((dice(1 + level, max_d), hit_rate, attr))
 
-        
-        # if self.data["weapon"]:
-        #     max_d = self.data["weapon"].damage
-        #     level = self.data["weapon"].level
-        #     attr = self.data["weapon"].attr
         else:
-            max_d = self.unarmed["damage"]
-            level = self.unarmed["level"]
-            attr = self.unarmed["attr"]
-            result.append((dice(1 + level//3, max_d+(self.STR//3)), attr))
+
+            if self.skill_list is not None and self.attack_skill:
+                for attack in self.attack_skill:
+                    max_d = attack.damage 
+                    level = attack.level
+                    attr = attack.attr
+                    hit_rate = attack.hit_rate
+                    
+                    result.append((dice(1 + level//3, max_d+(self.STR//3)), hit_rate, attr))
+
+            else:
+                max_d = self.unarmed["damage"]
+                level = self.unarmed["level"]
+                attr = self.unarmed["attr"]
+                hit_rate = self.unarmed["hit_rate"]
+                result.append((dice(1 + level//3, max_d+(self.STR//3)), hit_rate, attr))
 
 
-        # result = [(dice(1 + level//3, max_d+(self.STR//3)), attr)]
 
         return result
 
@@ -262,15 +265,8 @@ class Fighter:
     def hit_chance(self, target, hit_rate):
         # (命中率)％ ＝（α／１００）＊（１ー （β ／ １００））＊ １００
         # 命中率（α）＝９５、回避率（β）＝５
-        hit = None
-
-        # if self.data["weapon"]:
-        #     hit = self.data["weapon"].hit_rate
-        # else:
-        #     hit = self.unarmed["hit_rate"]
 
         hit = hit_rate
-
 
         hit_chance = ((hit+self.DEX) / 100) * \
             (1 - (target.fighter.evasion / 100)) * 100
@@ -312,13 +308,17 @@ class Fighter:
         return results
 
     @stop_watch
-    def attack(self, target):
+    def attack(self, target, skill=None):
         """attack_damage関数は属性ダメージをタプルのリストでここに返す
             ここでそのリストをループし、change_hp関数に渡す"""
+        if skill:
+            attack_damage = self.attack_damage(skill)
+        else:
+            attack_damage = self.attack_damage()
 
         results = []
 
-        for amount, hit_rate, attr in self.attack_damage:
+        for amount, hit_rate, attr in attack_damage:
 
 
             if random.randrange(1, 100) <= self.hit_chance(target, hit_rate):
@@ -328,7 +328,7 @@ class Fighter:
                     damage = amount
 
                 # 完全防御
-                if not damage:
+                if damage < 1:
                     results.append(
                         {"message": f"{self.owner.name.capitalize()} attacks {target.name} but no damage"})
                     results.extend(target.fighter.change_hp("Guard!"))

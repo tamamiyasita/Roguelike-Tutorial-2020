@@ -24,7 +24,7 @@ class P_Grenade(LeafBlade):
         self.damage = 10
         self.hit_rate = 80
         self.speed = 16
-        self.attr = "physical"
+        self.attr = "fire"
 
         self.item_weight = 4
 
@@ -43,28 +43,13 @@ class P_Grenade(LeafBlade):
         if self.data["count_time"] <= 0:
 
             fire = Throw(engine, self.owner, self)
-            result = fire.use()
+            fire.use()
 
     def update(self):
         super().update()
-        # if self.master.state == state.ON_MOVE:
-        #     self.item_margin_y = 2 * SPRITE_SCALE
-        #     # self.item_margin_x = 7 * SPRITE_SCALE
-        # else:
-        #     self.item_margin_y = 3 * SPRITE_SCALE
-            # self.item_margin_x = 6 * SPRITE_SCALE
+
         if self.master.state == state.THROW:
             self.alpha = 0
         else:
             self.alpha = 255
 
-        # try:
-        #     if self.master.state == state.ON_MOVE:
-        #         self.item_margin_x = self.item_position_x * SPRITE_SCALE
-        #         self.item_margin_y = (self.item_position_y - 1) * SPRITE_SCALE
-        #     else:
-        #         self.item_margin_x = self.item_position_x * SPRITE_SCALE
-        #         self.item_margin_y = self.item_position_y * SPRITE_SCALE
-
-        # except:
-        #     pass
