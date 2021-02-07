@@ -129,17 +129,12 @@ class Throw(Fire):
 
 
     def shot(self, x, y):
-        target_distance = None
         results = []
 
         for actor in self.actor_sprites:
             if actor.x== x and actor.y == y:
                 if actor.is_visible:
-                    x1, y1 = self.shooter.x, self.shooter.y
-                    x2, y2 = actor.x, actor.y
-                    distance = math.sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2 )
                     self.target = actor
-                    target_distance = distance
                     break
 
         if self.target:
@@ -151,7 +146,6 @@ class Throw(Fire):
 
             Flying(shooter=self.shooter, target=self.target,
                         engine=self.engine, amm=self.skill)
-            self.trigger = True
 
             self.skill.data["count_time"] = self.skill.max_cooldown_time
 

@@ -62,16 +62,15 @@ class LeafBlade(Actor):
             if self.master.state == state.ON_MOVE:
                 self.item_margin_x = self.item_position_x * SPRITE_SCALE
                 self.item_margin_y = (self.item_position_y - 1) * SPRITE_SCALE
-            else:
+            elif self.master.state == state.DELAY:
                 self.item_margin_x = self.item_position_x * SPRITE_SCALE
                 self.item_margin_y = self.item_position_y * SPRITE_SCALE
 
-            if self.master.state == state.ATTACK:
+            if self.master.state == state.ATTACK and Tag.weapon in self.tag:
                 self.item_margin_x = (self.item_position_x + 3) * SPRITE_SCALE
                 self.angle += 60
             else:
                 self.angle = 0
-                # self.item_margin_x = self.item_position_x * SPRITE_SCALE
         except:
             pass
 

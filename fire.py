@@ -66,7 +66,6 @@ class Fire:
         self.target = None
         self.effect_sprites = engine.cur_level.effect_sprites
         self.actor_sprites = engine.cur_level.actor_sprites
-        self.trigger = None
 
     def use(self):
         print("use")
@@ -75,26 +74,18 @@ class Fire:
         return None
 
     def shot(self, x, y):
-        # target_distance = None
         results = []
 
 
         for actor in self.actor_sprites:
             if actor.x== x and actor.y == y:
                 if actor.is_visible and Tag.enemy in actor.tag:
-                    x1, y1 = self.shooter.x, self.shooter.y
-                    x2, y2 = actor.x, actor.y
-                    distance = math.sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2 )
-                    # if self.target is None or distance < target_distance:
                     self.target = actor
-                    # target_distance = distance
                     break
 
         if self.target:
             results.append(
                 {"message": f"{self.shooter.name} shot {self.target.name}"})
-            # results.extend(self.shooter.fighter.attack(
-            #     target=self.target, ranged=self.skill))
 
             if self.shooter == self.engine.player:
                 self.engine.player.state = state.SHOT
@@ -102,7 +93,6 @@ class Fire:
 
             TriggerPull(shooter=self.shooter, target=self.target,
                         engine=self.engine, amm=self.skill)
-            self.trigger = True
 
             self.skill.data["count_time"] = self.skill.max_cooldown_time
 

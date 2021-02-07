@@ -236,8 +236,9 @@ class Fighter:
                 max_d = skill.damage 
                 level = skill.level
                 attr = skill.attr
+                hit_rate = skill.hit_rate
                 
-                result.append((dice(1 + level//3, max_d+(self.STR//3)), attr))
+                result.append((dice(1 + level//3, max_d+(self.STR//3)), hit_rate, attr))
         
 
         
@@ -258,15 +259,17 @@ class Fighter:
 
 
 
-    def hit_chance(self, target):
+    def hit_chance(self, target, hit_rate):
         # (命中率)％ ＝（α／１００）＊（１ー （β ／ １００））＊ １００
         # 命中率（α）＝９５、回避率（β）＝５
         hit = None
 
-        if self.data["weapon"]:
-            hit = self.data["weapon"].hit_rate
-        else:
-            hit = self.unarmed["hit_rate"]
+        # if self.data["weapon"]:
+        #     hit = self.data["weapon"].hit_rate
+        # else:
+        #     hit = self.unarmed["hit_rate"]
+
+        hit = hit_rate
 
 
         hit_chance = ((hit+self.DEX) / 100) * \
@@ -309,56 +312,32 @@ class Fighter:
         return results
 
     @stop_watch
-    def attack(self, target, ranged=None):
+    def attack(self, target):
         """attack_damage関数は属性ダメージをタプルのリストでここに返す
             ここでそのリストをループし、change_hp関数に渡す"""
+
         results = []
-        
 
-        for amount, attr in self.attack_damage:
-
-        # damage = None
-
-            # damage = self.attack_damage[0]
-            # attack_attr = self.attack_damage[1]
-
-            if ranged:# 遠隔
-                attr = ranged.attr
-                if random.randrange(1, 100) <= self.hit_chance(target):
-                    if attr == "physical":
-                        damage = dice(1 + ranged.level//3, ranged.damage+(self.DEX//3)) // target.fighter.defense
-                    else:
-                        damage = amount
-
-                    # 完全防御
-                    if not damage:
-                        results.append(
-                            {"message": f"{self.owner.name.capitalize()} attacks {target.name} but no damage"})
-                        results.extend(target.fighter.change_hp("Guard!"))
-                        return results
-
-                    if random.randrange(1, (100-self.DEX)) < 5:
-                        damage *= 2# クリティカルdmg
-                        results.append({"message": f"{self.owner.name.capitalize()} attack is critical HIT!"})
-
-            else:
-                if random.randrange(1, 100) <= self.hit_chance(target):
-                    if attr == "physical":
-                        damage = amount // target.fighter.defense
-                    else:
-                        damage = amount
-
-                    # 完全防御
-                    if not damage:
-                        results.append(
-                            {"message": f"{self.owner.name.capitalize()} attacks {target.name} but no damage"})
-                        results.extend(target.fighter.change_hp("Guard!"))
-                        return results
+        for amount, hit_rate, attr in self.attack_damage:
 
 
-                    if random.randrange(1, (100-self.DEX)) < 5:
-                        damage *= 2# クリティカルdmg
-                        results.append({"message": f"{self.owner.name.capitalize()} attack is critical HIT!"})
+            if random.randrange(1, 100) <= self.hit_chance(target, hit_rate):
+                if attr == "physical":
+                    damage = amount // target.fighter.defense
+                else:
+                    damage = amount
+
+                # 完全防御
+                if not damage:
+                    results.append(
+                        {"message": f"{self.owner.name.capitalize()} attacks {target.name} but no damage"})
+                    results.extend(target.fighter.change_hp("Guard!"))
+                    return results
+
+
+                if random.randrange(1, (100-self.DEX)) < 5:
+                    damage *= 2# クリティカルdmg
+                    results.append({"message": f"{self.owner.name.capitalize()} attack is critical HIT!"})
 
 
             if amount:
@@ -367,7 +346,6 @@ class Fighter:
                 results.append(
                     {"message": f"{self.owner.name.capitalize()} attacks {target.name} for {str(amount)} hit points."})
                 results.extend(target.fighter.change_hp(-amount, attr))
-
 
 
             else:#回避
