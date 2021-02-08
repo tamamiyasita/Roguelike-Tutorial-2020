@@ -96,7 +96,7 @@ class Flying(Actor):
             if sprite.fighter and not sprite.is_dead:
                 results.extend(
                     [{"message": f"{sprite.name} was struck by a fireball for {amount} points."}])
-                result = self.shooter.fighter.attack(sprite, skill=self.amm)
+                result = self.shooter.fighter.change_hp(-self.amm.damage, self.amm.attr)
                 if result:
                     results.extend(result)
 

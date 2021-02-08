@@ -8,13 +8,11 @@ import math
 
 
 class Fighter:
-    def __init__(self, hp=0, mp=0, defense=0, STR=0, DEX=0, INT=0,unarmed=None, attack_speed=DEFAULT_ATTACK_SPEED,
+    def __init__(self, hp=0, defense=0, STR=0, DEX=0, INT=0,unarmed=None, attack_speed=DEFAULT_ATTACK_SPEED,
                  evasion=0, xp_reward=0, current_xp=0, level=1,
                  resist={"physical": 1, "fire": 1, "ice": 1, "acid": 1, "poison": 1, "mind": 1}, ability_points=0):
         self.hp = hp
         self.base_max_hp = self.hp
-        self.mp = mp
-        self.base_max_mp = self.mp
 
         self.base_strength = STR
         self.base_dexterity = DEX
@@ -25,7 +23,7 @@ class Fighter:
         self.base_defense = defense
         self.base_evasion = evasion
         self.attack_speed = attack_speed
-        self.data = {"weapon":None }
+        self.data = {}
         self.resist = resist
 
         self.owner = None
@@ -150,18 +148,6 @@ class Fighter:
         return self._states
     
 
-
-
-        
-
-    # @property
-    # def attack_speed(self):
-    #     if self.data["weapon"]:
-    #         return self.data["weapon"].speed
-    #     else:
-    #         return self._attack_speed
-
-
     @property
     def max_hp(self):
         bonus = 0
@@ -171,14 +157,6 @@ class Fighter:
 
         return self.base_max_hp + bonus
 
-    @property
-    def max_mp(self):
-        bonus = 0
-
-        if self.owner and self.owner.equipment:
-            bonus = self.owner.equipment.states_bonus["max_mp"]
-
-        return self.base_max_mp + bonus
 
     @property
     def STR(self):
@@ -226,36 +204,29 @@ class Fighter:
         return self.base_evasion + bonus + (self.DEX / 2)
     
 
-    # @property()
-    def attack_damage(self, skill=None):
+    @property
+    def attack_damage(self):
         # ダメージと属性をタプルのリストで返す
         result = []
-        if skill:
+
+        if self.skill_list is not None and self.attack_skill:
+            for skill in self.attack_skill:
+                max_d = skill.damage 
+                level = skill.level
+                attr = skill.attr
+                hit_rate = skill.hit_rate
+                effect = skill.effect
+                
+                result.append((dice(1 + level//3, max_d+(self.STR//3)), hit_rate, attr, effect))
         
-            max_d = skill.damage 
-            level = skill.level
-            attr = skill.attr
-            hit_rate = skill.hit_rate
-            result.append((dice(1 + level, max_d), hit_rate, attr))
-
         else:
+            max_d = self.unarmed["damage"]
+            level = self.unarmed["level"]
+            attr = self.unarmed["attr"]
+            hit_rate = self.unarmed["hit_rate"]
+            effect = self.unarmed["effect"]
 
-            if self.skill_list is not None and self.attack_skill:
-                for attack in self.attack_skill:
-                    max_d = attack.damage 
-                    level = attack.level
-                    attr = attack.attr
-                    hit_rate = attack.hit_rate
-                    
-                    result.append((dice(1 + level//3, max_d+(self.STR//3)), hit_rate, attr))
-
-            else:
-                max_d = self.unarmed["damage"]
-                level = self.unarmed["level"]
-                attr = self.unarmed["attr"]
-                hit_rate = self.unarmed["hit_rate"]
-                result.append((dice(1 + level//3, max_d+(self.STR//3)), hit_rate, attr))
-
+            result.append((dice(1 + level//3, max_d+(self.STR//3)), hit_rate, attr, effect))
 
 
         return result
@@ -265,8 +236,10 @@ class Fighter:
     def hit_chance(self, target, hit_rate):
         # (命中率)％ ＝（α／１００）＊（１ー （β ／ １００））＊ １００
         # 命中率（α）＝９５、回避率（β）＝５
+        hit = None
 
         hit = hit_rate
+
 
         hit_chance = ((hit+self.DEX) / 100) * \
             (1 - (target.fighter.evasion / 100)) * 100
@@ -274,32 +247,67 @@ class Fighter:
 
         return hit_chance
 
-    def change_hp(self, value, attr=None):
+    def effect_hit_chance(self, target, effect):
+        attr = effect.attr
+        resist = target.fighter.resist[attr]
+
+
+    def change_hp(self, value, outher, critical_flag=None):
         results = []
 
-        if attr == None:#回復効果などは属性なしとする
+        damage = value
+
+        attr = outher.attr
+        hit_rate = outher.hit_rate
+
+        # 回復効果などは属性なしとする
+        if attr == None:
             results.append({"damage_pop": self.owner, "damage": value})
             return results
 
+        # 命中判定
+        if random.randrange(1, 100) <= self.hit_chance(self, hit_rate):
 
-        if isinstance(value, str):# 完全防御やミスなど
-            results.append({"damage_pop": self.owner, "damage": value})
-            return results
+
+
+
+
+        if critical_flag:
+            damage *= 2
+
+        # 物理防御処理
+        elif attr == "physical":
+            damage = damage / self.defense
 
 
         if self.resist[attr] <= 0:
-            damage = int(value * 2.5)# 弱点ダメージ
+            damage = damage * 2.5# 弱点ダメージ
         else:
-            damage = int(value / self.resist[attr])
+            damage = damage / self.resist[attr]
 
-        self.hp += damage
 
-        if self.hp <= 0:#死亡
-            self.owner.blocks = False
-            self.owner.is_dead = True
-            results.append({"dead": self.owner})
-            print(f"{self.owner.name} is dead x!")
+        # 完全防御(符号がマイナスな事に注意)
+        if damage > -1:
+            results.extend([{"message": f"{self.owner.name} but no damage"},{"damage_pop": self.owner, "damage": "Guard!"}])
+            return results
 
+        else:
+            results.append({"message": f"{self.owner.name.capitalize()} for {damage} hit points."})
+
+        damage = int(damage)
+
+
+        if self.hp > 1:
+            self.hp += damage
+
+            # 死亡処理
+            if self.hp <= 0:
+                self.owner.blocks = False
+                self.owner.is_dead = True
+                results.append({"dead": self.owner})
+                print(f"{self.owner.name} is dead x!")
+
+        # 回復などの超過処理
         if self.hp > self.max_hp:
             self.hp = self.max_hp
 
@@ -308,50 +316,35 @@ class Fighter:
         return results
 
     @stop_watch
-    def attack(self, target, skill=None):
-        """attack_damage関数は属性ダメージをタプルのリストでここに返す
+    def attack(self, target):
+        """ここはあくまでダンプアタックの処理に特化する
+            attack_damage関数は属性ダメージをタプルのリストでここに返す
             ここでそのリストをループし、change_hp関数に渡す"""
-        if skill:
-            attack_damage = self.attack_damage(skill)
-        else:
-            attack_damage = self.attack_damage()
-
+        critical_flag = None
         results = []
 
-        for amount, hit_rate, attr in attack_damage:
+        for damage, hit_rate, attr, effect in self.attack_damage:
 
-
+            # 命中判定
             if random.randrange(1, 100) <= self.hit_chance(target, hit_rate):
-                if attr == "physical":
-                    damage = amount // target.fighter.defense
-                else:
-                    damage = amount
+                
+                # ヒット 
+                results.append({"message": f"{self.owner.name.capitalize()} attack!"})
 
-                # 完全防御
-                if damage < 1:
-                    results.append(
-                        {"message": f"{self.owner.name.capitalize()} attacks {target.name} but no damage"})
-                    results.extend(target.fighter.change_hp("Guard!"))
-                    return results
-
-
+                # クリティカル処理
                 if random.randrange(1, (100-self.DEX)) < 5:
-                    damage *= 2# クリティカルdmg
-                    results.append({"message": f"{self.owner.name.capitalize()} attack is critical HIT!"})
+                    critical_flag = True
+                    results.append({"message": f"critical HIT!"})
+
+                results.extend(target.fighter.change_hp(-damage, attr, critical_flag))
 
 
-            if amount:
-                    # damage表示メッセージを格納する
 
-                results.append(
-                    {"message": f"{self.owner.name.capitalize()} attacks {target.name} for {str(amount)} hit points."})
-                results.extend(target.fighter.change_hp(-amount, attr))
-
-
-            else:#回避
+            # 回避
+            else:
                 results.append(
                     {"message": f"{self.owner.name.capitalize()} attacks {target.name} Avoided"})
-                results.extend(target.fighter.change_hp("MISS"))
+                results.append({"damage_pop": self.owner, "damage": "MISS"})
 
 
         return results
