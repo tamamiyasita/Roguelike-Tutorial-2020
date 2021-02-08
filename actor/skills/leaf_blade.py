@@ -18,11 +18,12 @@ class LeafBlade(Actor):
         )
         self.color=COLORS["white"]
 
-
+        #attackに渡される属性
         self.damage = 5
         self.hit_rate = 95
         self.speed = 6
         self.attr = "physical"
+        self.effect = None
 
         self.level = 1
 

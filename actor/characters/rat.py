@@ -8,7 +8,7 @@ from constants import *
 class Water_vole(Actor):
     def __init__(self, x=0, y=0):
         fighter_component = Fighter(hp=8, STR=1, DEX=1,
-                                    unarmed={"damage":2, "level":1, "attr":"physical", "hit_rate":90},
+                                    unarmed={"damage":2, "level":1, "attr":"physical", "hit_rate":90, "effect":None},
                                     defense=1,
                                     evasion=2,
                                     xp_reward=3,
