@@ -16,7 +16,7 @@ from data import *
 
 
 class MeleeAttack(Actor):
-    def __init__(self, x=0, y=0, name="melee_attack", data={"switch":True}):
+    def __init__(self, x=0, y=0, name="melee_attack", data={"switch":False}):
         super().__init__(
             name=name,
             x=x,
@@ -24,13 +24,10 @@ class MeleeAttack(Actor):
             data=data
         )
         self.color=COLORS["white"]
-        if self.name == "melee_attack":
-            self.alpha = 0
 
-        #attackに渡される属性
-        self.damage = 1
+        self.damage = 5
         self.hit_rate = 95
-        self.speed = 10
+        self.speed = 6
         self.attr = "physical"
         self.effect = None
 
@@ -38,24 +35,26 @@ class MeleeAttack(Actor):
 
         self.tag = []
 
-        self.item_margin_x = 0
-        self.item_margin_y = 0
+        self.icon = IMAGE_ID["leaf_blade_icon"]
 
-        self.item_position_x = 0
-        self.item_position_y = 0
+        self.item_weight = 1.1
 
-    # def update_animation2(self, delta_time):
-    #     super().update_animation(delta_time)
-    #     try:
-    #         if Tag.weapon in self.tag:
-    #             if self.master.state == state.ON_MOVE:
-    #                 self.item_margin_x = self.item_position_x * SPRITE_SCALE
-    #                 self.item_margin_y = (self.item_position_y - 1) * SPRITE_SCALE
-    #             elif self.master.state == state.DELAY:
-    #                 self.item_margin_x = self.item_position_x * SPRITE_SCALE
-    #                 self.item_margin_y = self.item_position_y * SPRITE_SCALE
+        self.item_margin_x = 9
+        self.item_margin_y = 2
 
+        self.item_position_x = 9
+        self.item_position_y = 2
 
-    #     except:
-    #         pass
+    def update_animation(self, delta_time):
+        super().update_animation(delta_time)
+        try:
+            if Tag.skill in self.tag:
+                if self.master.state == state.ON_MOVE:
+                    self.item_margin_x = self.item_position_x * SPRITE_SCALE
+                    self.item_margin_y = (self.item_position_y - 1)
+                else:
+                    self.item_margin_x = self.item_position_x * SPRITE_SCALE
+                    self.item_margin_y = self.item_position_y * SPRITE_SCALE
 
+        except:
+            pass

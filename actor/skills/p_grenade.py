@@ -1,11 +1,12 @@
 from constants import *
 from data import *
 from actor.skills.seed_shot import SeedShot
-from actor.skills.leaf_blade import LeafBlade
+from actor.skills.melee_attack import MeleeAttack
+
 
 from throw import Throw
 
-class P_Grenade(LeafBlade):
+class P_Grenade(MeleeAttack):
     def __init__(self, x=0, y=0, name="p_grenade"):
         super().__init__(
             name=name,
@@ -45,8 +46,8 @@ class P_Grenade(LeafBlade):
             fire = Throw(engine, self.owner, self)
             fire.use()
 
-    def update(self):
-        super().update()
+    def update_animation(self, delta_time):
+        super().update_animation(delta_time)
 
         if self.master.state == state.THROW:
             self.alpha = 0

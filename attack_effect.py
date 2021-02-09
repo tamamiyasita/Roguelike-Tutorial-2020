@@ -28,8 +28,8 @@ class AttackEffect:
                 other.change_x += uniform(-0.7, 0.7)
 
         if self.attack_delay % 2 == 0:
-            if Tag.player in other.tag: 
-                other.state = state.DEFENSE
+            # if Tag.player in other.tag: 
+            other.state = state.DEFENSE
 
             other.alpha = 10
         else:

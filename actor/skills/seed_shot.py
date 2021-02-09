@@ -2,10 +2,11 @@ from actor.actor import Actor
 from data import *
 from constants import *
 from fire import Fire
-from actor.skills.leaf_blade import LeafBlade
+from actor.skills.melee_attack import MeleeAttack
 
 
-class SeedShot(LeafBlade):
+
+class SeedShot(MeleeAttack):
     def __init__(self, x=0, y=0, name="seed_shot"):
         super().__init__(
             name=name,
@@ -47,17 +48,17 @@ class SeedShot(LeafBlade):
 
 
 
-    def update(self):
-        super().update()
+    def update_animation(self, delta_time):
+        super().update_animation(delta_time)
 
         if self.master.state == state.SHOT:
                 if self.master.left_face:
                     self.angle = 90
                     self.item_margin_x = self.master.x+4
-                    self.item_margin_y = self.master.fighter.equip_position[12][1]+5
+                    self.item_margin_y = 5
                 else:
                     self.angle = -90
                     self.item_margin_x = self.master.x+4
-                    self.item_margin_y = self.master.fighter.equip_position[12][1]+5
+                    self.item_margin_y = 5
         else:
             self.angle = 0

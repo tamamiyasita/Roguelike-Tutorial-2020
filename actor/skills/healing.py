@@ -4,7 +4,8 @@ from constants import *
 from data import *
 import random
 from util import dice, result_add
-from actor.skills.leaf_blade import LeafBlade
+from actor.skills.melee_attack import MeleeAttack
+
 
 class HealingEffect(Actor):
     def __init__(self, owner, engine):
@@ -45,7 +46,7 @@ class HealingEffect(Actor):
             self.remove_from_sprite_lists()
 
 
-class Healing(LeafBlade):
+class Healing(MeleeAttack):
     def __init__(self,x=0, y=0, name="healing"):
         super().__init__(
             name=name,
@@ -100,8 +101,9 @@ class Healing(LeafBlade):
 
             return [{"turn_end":self.owner, "message": f"{self.owner.name} have recovered {hp_return} using {self.name}"}, *result]
 
-    # def update(self):
-    #     super().update()
+    def update_animation(self, delta_time):
+        super().update_animation(delta_time)
+        pass
 
     #     if self.master.state == state.HEAL:
     #         self.item_margin_
