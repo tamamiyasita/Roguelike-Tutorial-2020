@@ -726,9 +726,9 @@ class GameEngine:
 
     def skill_position_update(self):
         for i, skill in enumerate(self.player.fighter.skill_weight_list):
-            # if self.player.state == state.ON_MOVE or self.player.state == state.DELAY:
-            skill.item_position_x = self.player.fighter.equip_position[i][0]
-            skill.item_position_y = self.player.fighter.equip_position[i][1]
+            if self.player.state == state.ON_MOVE or self.player.state == state.DELAY:
+                skill.item_position_x = self.player.fighter.equip_position[i][0]
+                skill.item_position_y = self.player.fighter.equip_position[i][1]
 
 
     def use_stairs(self):

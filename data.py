@@ -245,6 +245,7 @@ IMAGE_ID = {"Rou": player,
             "paeonia":Paeonia,
             "pineapple":pineapple,
 
+            "melee_attack": leaf_blade,
             "leaf_blade": leaf_blade,
             "leaf_blade_icon": leaf_blade_icon,
             "branch_baton": branch_baton,

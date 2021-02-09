@@ -188,9 +188,9 @@ class MG(arcade.Window):
 
         if self.engine.game_state == GAME_STATE.NORMAL:
 
-            self.engine.cur_level.chara_sprites.update_animation()
+            self.engine.cur_level.chara_sprites.update_animation(delta_time)
             self.engine.cur_level.chara_sprites.update()
-            self.engine.cur_level.actor_sprites.update_animation()
+            self.engine.cur_level.actor_sprites.update_animation(delta_time)
             self.engine.cur_level.actor_sprites.update()
             self.engine.cur_level.effect_sprites.update()
             self.engine.cur_level.effect_sprites.update_animation()

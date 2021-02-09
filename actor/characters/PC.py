@@ -6,12 +6,14 @@ from data import *
 from constants import *
 from util import exp_calc
 from random import choices
+from actor.skills.melee_attack import Unarmed
 
 
 class Player(Actor):
     def __init__(self, x=0, y=0, inventory=0):
+        unarmed_component = Unarmed(damage=100)
         fighter_component = Fighter(hp=15, STR=2, DEX=3, INT=3,
-                                    unarmed={"damage":2, "level":1, "attr":"physical", "hit_rate":100, "effect":None},
+                                    unarmed=unarmed_component,
                                     resist={"physical": 1, "fire": 1, "ice": 1, "acid": 1, "poison": 1, "mind": 1},
                                     defense=2,
                                     evasion=5,

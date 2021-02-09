@@ -2,21 +2,21 @@ from actor.actor import Actor
 from constants import *
 from data import *
 from random import randint
-
+from actor.skills.melee_attack import MeleeAttack
 
 
 
 
 
 class LeafBlade(Actor):
-    def __init__(self, x=0, y=0, name="leaf_blade"):
+    def __init__(self, x=0, y=0, name="leaf_blade", data={"switch":False}):
         super().__init__(
             name=name,
             x=x,
             y=y,
-            data={"switch":False}
+            data=data
         )
-        self.color=COLORS["white"]
+        # self.color=COLORS["white"]
 
         #attackに渡される属性
         self.damage = 5
@@ -40,40 +40,26 @@ class LeafBlade(Actor):
         self.item_position_y = 2
 
         self.explanatory_text = f"damage: {self.level}D{self.damage}\nhit rate: {self.hit_rate}"
-
-    # @property
-    # def explanatory_text(self):
-    #     # 説明文を返す
-    #     return f"damage: {self.level}D{self.damage}\nhit rate: {self.hit_rate}"
-
-    def activate(self, owner):        
-        owner.fighter.data["weapon"] = self
-        self.data["switch"] = True
-        self.master = owner
-
-    def deactivate(self, owner):        
-        owner.fighter.data["weapon"] = None
-        self.data["switch"] = False
-        del self.master
-        self.remove_from_sprite_lists()
-
     def update(self):
         super().update()
-        try:
-            if self.master.state == state.ON_MOVE:
-                self.item_margin_x = self.item_position_x * SPRITE_SCALE
-                self.item_margin_y = (self.item_position_y - 1) * SPRITE_SCALE
-            elif self.master.state == state.DELAY:
-                self.item_margin_x = self.item_position_x * SPRITE_SCALE
-                self.item_margin_y = self.item_position_y * SPRITE_SCALE
 
-            if self.master.state == state.ATTACK and Tag.weapon in self.tag:
-                self.item_margin_x = (self.item_position_x + 3) * SPRITE_SCALE
-                self.angle += 60
-            else:
-                self.angle = 0
-        except:
-            pass
+    # def update_animation(self, delta_time):
+    #     super().update_animation(delta_time)
+        # try:
+        if self.master.state == state.ON_MOVE:
+            self.item_margin_x = self.item_position_x * SPRITE_SCALE
+            self.item_margin_y = (self.item_position_y - 1)
+        elif self.master.state == state.DELAY:
+            self.item_margin_x = self.item_position_x * SPRITE_SCALE
+            self.item_margin_y = self.item_position_y * SPRITE_SCALE
+
+        if self.master.state == state.ATTACK and Tag.weapon in self.tag:
+            self.item_margin_x = (self.item_position_x + 3) * SPRITE_SCALE
+            self.angle += 60
+        else:
+            self.angle = 0
+        # except:
+        #     pass
 
 
 

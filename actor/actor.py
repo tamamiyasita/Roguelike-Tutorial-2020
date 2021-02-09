@@ -357,6 +357,7 @@ class Actor(arcade.Sprite):
         self.texture = self.textures[self.texture_number]
 
     def update_animation(self, delta_time=1 / 60):
+        # super().update_animation()
         # 左右を向く
         if len(self.textures) >= 2:
             if self.left_face:
