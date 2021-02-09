@@ -6,12 +6,12 @@ from data import *
 from constants import *
 from util import exp_calc
 from random import choices
-from actor.skills.melee_attack import Unarmed
+from actor.skills.base_skill import BaseSkill
 
 
 class Player(Actor):
     def __init__(self, x=0, y=0, inventory=0):
-        unarmed_component = Unarmed(damage=100)
+        unarmed_component = BaseSkill(damage=2)
         fighter_component = Fighter(hp=15, STR=2, DEX=3, INT=3,
                                     unarmed=unarmed_component,
                                     resist={"physical": 1, "fire": 1, "ice": 1, "acid": 1, "poison": 1, "mind": 1},
@@ -47,9 +47,11 @@ class Player(Actor):
         super().update_animation(delta_time)
 
         if self.state == state.ON_MOVE and not self.left_face:
+            self.delay_time = 3
             self.texture = pc_move1[0]
             
         if self.state == state.ON_MOVE and self.left_face:
+            self.delay_time = 3
             self.texture = pc_move1[1]
 
         if self.state == state.ATTACK and not self.left_face:
