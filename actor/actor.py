@@ -379,29 +379,6 @@ class Actor(arcade.Sprite):
                 self.d_time = 170
 
 
-    #     if self.master and Tag.flower in self.tag:
-    #         self.flower_setup(self.master)
-
-    # def flower_setup(self, target):
-    #     if target.left_face:
-    #         item_margin_x = self.item_margin_x
-    #     else:
-    #         item_margin_x = -self.item_margin_x
-    #     self.angle += uniform(0.1, 3)
-    #     x_diff = (target.center_x + item_margin_x + random()) - (self.center_x)
-    #     y_diff = (target.center_y + self.item_margin_y +
-    #               random()) - (self.center_y)
-    #     angle = math.atan2(y_diff, x_diff)
-
-    #     if abs(x_diff) > 15 or abs(y_diff) > 15:
-
-    #         self.change_x = math.cos(
-    #             angle) * (self.my_speed + uniform(0.6, 4.2))
-    #         self.change_y = math.sin(
-    #             angle) * (self.my_speed + uniform(0.6, 4.2))
-    #     else:
-    #         self.change_x = math.cos(angle) * uniform(0.02, 0.3)
-    #         self.change_y = math.sin(angle) * uniform(0.02, 0.3)
 
     @property
     def master(self):

@@ -1,9 +1,7 @@
-from data import IMAGE_ID
-from actor.items.silver_grass import SilverGrass
+from actor.items.base_flower import BaseFlower
 
 
-
-class Pineapple(SilverGrass):
+class Pineapple(BaseFlower):
     def __init__(self, x=0, y=0, name="pineapple"):
         super().__init__(
             name=name,

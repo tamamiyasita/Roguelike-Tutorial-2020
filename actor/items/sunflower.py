@@ -1,7 +1,7 @@
-from actor.items.silver_grass import SilverGrass
+from actor.items.base_flower import BaseFlower
 
 
-class Sunflower(SilverGrass):
+class Sunflower(BaseFlower):
     def __init__(self, x=0, y=0, name="sunflower"):
         super().__init__(
             name=name,

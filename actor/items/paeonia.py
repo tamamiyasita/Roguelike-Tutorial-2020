@@ -1,8 +1,8 @@
 
-from actor.items.silver_grass import SilverGrass
+from actor.items.base_flower import BaseFlower
 
 
-class Paeonia(SilverGrass):
+class Paeonia(BaseFlower):
     def __init__(self, x=0, y=0, name="paeonia"):
         super().__init__(
             name=name,

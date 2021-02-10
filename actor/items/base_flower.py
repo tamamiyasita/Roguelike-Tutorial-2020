@@ -4,6 +4,7 @@ from data import *
 from util import exp_calc
 import math
 from random import random, uniform
+
 class BaseFlower(Actor):
     def __init__(self, x=0, y=0, name="silver_grass"):
         super().__init__(
@@ -26,41 +27,54 @@ class BaseFlower(Actor):
         self.skill_generate = ""
         self.skill_add = {}
         self.data = {}
-        
+      
+        self.explanatory_text = f"test \n test"
 
         # position
-        self.item_margin_x = 16
-        self.item_margin_y = 17
+
+        self.item_margin_x = 0
+        self.item_margin_y = 0
+
         self.my_speed = 4.3
         self.scale=2
 
-        self.explanatory_text = f"test \n test"
+        # TODO 別の動きをそのうち実装したい
+        self.flower_move = 0
+        # self.move_time = 3
 
 
     def update_animation(self, delta_time):
         super().update_animation(delta_time)
         try:
+
             if self.master.left_face:
                 item_margin_x = self.item_margin_x
             else:
                 item_margin_x = -self.item_margin_x
-            self.angle += uniform(0.1, 3)
-            x_diff = (self.master.center_x + item_margin_x + random()) - (self.center_x)
-            y_diff = (self.master.center_y + self.item_margin_y +
-                    random()) - (self.center_y)
-            angle = math.atan2(y_diff, x_diff)
+            item_margin_y = self.item_margin_y
 
-            if abs(x_diff) > 15 or abs(y_diff) > 15:
+            if self.flower_move == 0:
+                    
+                self.angle += uniform(0.1, 3)
+                x_diff = (self.master.center_x + item_margin_x + random()) - (self.center_x)
+                y_diff = (self.master.center_y + item_margin_y +random()) - (self.center_y)
+                angle = math.atan2(y_diff, x_diff)
 
-                self.change_x = math.cos(
-                    angle) * (self.my_speed + uniform(0.6, 4.2))
-                self.change_y = math.sin(
-                    angle) * (self.my_speed + uniform(0.6, 4.2))
-            else:
-                self.change_x = math.cos(angle) * uniform(0.02, 0.3)
-                self.change_y = math.sin(angle) * uniform(0.02, 0.3)
+                if abs(x_diff) > 15 or abs(y_diff) > 15:
 
+                    self.change_x = math.cos(
+                        angle) * (self.my_speed + uniform(0.6, 4.2))
+                    self.change_y = math.sin(
+                        angle) * (self.my_speed + uniform(0.6, 4.2))
+                else:
+                    self.change_x = math.cos(angle) * uniform(0.02, 0.3)
+                    self.change_y = math.sin(angle) * uniform(0.02, 0.3)
+
+
+            elif self.flower_move == 1:
+                pass
 
         except:
+
             pass
 

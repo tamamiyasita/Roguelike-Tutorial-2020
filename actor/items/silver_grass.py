@@ -33,5 +33,8 @@ class SilverGrass(BaseFlower):
 
         self.explanatory_text = f"Is SilverGrass TEst test test \n testtesttest"
 
+        self.flower_move = 0
+
+
 
 

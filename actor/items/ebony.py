@@ -1,8 +1,8 @@
-from actor.items.silver_grass import SilverGrass
+from actor.items.base_flower import BaseFlower
 
 
 
-class Ebony(SilverGrass):
+class Ebony(BaseFlower):
     def __init__(self, x=0, y=0, name="ebony"):
         super().__init__(
             name=name,
@@ -35,3 +35,5 @@ class Ebony(SilverGrass):
 
 
         self.explanatory_text = f"Is Ebony $#############4TEst test test \n test$#4444444444testtest"
+
+        self.flower_move = 0

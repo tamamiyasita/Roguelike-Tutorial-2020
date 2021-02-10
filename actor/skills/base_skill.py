@@ -39,11 +39,11 @@ class BaseSkill(Actor):
 
         self.item_weight = 1.1
 
-        self.item_margin_x = 9
-        self.item_margin_y = 2
+        self.item_margin_x = 0
+        self.item_margin_y = 0
 
-        self.item_position_x = 9
-        self.item_position_y = 2
+        self.item_position_x = 0
+        self.item_position_y = 0
 
     def update_animation(self, delta_time):
         super().update_animation(delta_time)
