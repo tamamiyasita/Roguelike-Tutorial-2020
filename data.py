@@ -249,7 +249,7 @@ IMAGE_ID = {"Rou": player,
             "paeonia":Paeonia,
             "pineapple":pineapple,
 
-            "base_skill": leaf_blade,
+            "attack": leaf_blade,
 
             "grass_cutter": grass_cutter,
             "grass_cutter_icon": grass_cutter_icon,

@@ -16,7 +16,7 @@ from data import *
 
 
 class BaseSkill(Actor):
-    def __init__(self, x=0, y=0, name="base_skill", data={"switch":False},
+    def __init__(self, x=0, y=0, name="attack", data={"switch":False},
                 level=1, damage=1, hit_rate=90, attr="physical", effect=None):
         super().__init__(
             name=name,
