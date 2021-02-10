@@ -75,7 +75,7 @@ class Equipment:
         """装備スロットをループしてskill levelの合計を返す"""
         bonus = {}
         for parts in self.item_slot:  # crisiumが入る
-            # crisiumのskill_add{leaf_blade:1}が入る
+            # crisiumのskill_add{grass_cutter:1}が入る
             for name, add in parts.skill_add.items():
                 bonus = Counter(bonus) + Counter({name:add})
 

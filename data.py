@@ -117,6 +117,9 @@ long_sword_right = arcade.load_texture(
     med_weapon_tiles, x=0, y=0, width=size, height=size, mirrored=True)
 long_sword = [long_sword_right, long_sword_left]
 
+silver_grass = arcade.load_texture_pair(r"image\silver_grass.png")
+grass_cutter = arcade.load_texture_pair(r"image\grass_cutter.png")
+grass_cutter_icon = arcade.load_texture(r"image\grass_cutter_icon.png")
 cirsium = arcade.load_texture_pair(r"image\Cirsium.png")
 leaf_blade = arcade.load_texture_pair(r"image\LeafBlade.png")
 leaf_blade_icon = arcade.load_texture(r"image\leaf_blade_icon.png")
@@ -240,12 +243,16 @@ IMAGE_ID = {"Rou": player,
             "boomerang": [ammo_tile[22]],
 
             "cirsium": cirsium,
+            "silver_grass": silver_grass,
             "ebony":ebony,
             "sunflower":sunflower,
             "paeonia":Paeonia,
             "pineapple":pineapple,
 
-            "melee_attack": leaf_blade,
+            "base_skill": leaf_blade,
+
+            "grass_cutter": grass_cutter,
+            "grass_cutter_icon": grass_cutter_icon,
             "leaf_blade": leaf_blade,
             "leaf_blade_icon": leaf_blade_icon,
             "branch_baton": branch_baton,

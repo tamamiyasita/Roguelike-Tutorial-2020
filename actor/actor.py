@@ -316,8 +316,6 @@ class Actor(arcade.Sprite):
                 self.from_x, self.from_y = self.center_x, self.center_y
                 self.state = state.TURN_END
 
-        if self.state == state.ATTACK:
-            self.attack.start(self, self.other, self.from_x, self.from_y, self.other_x)
   
   
     def distance_to(self, other):
@@ -359,6 +357,8 @@ class Actor(arcade.Sprite):
     def update_animation(self, delta_time=1 / 60):
         # super().update_animation()
         # 左右を向く
+        if self.state == state.ATTACK:
+            self.attack.start(self, self.other, self.from_x, self.from_y, self.other_x)
         if len(self.textures) >= 2:
             if self.left_face:
                 self.texture = self.textures[1]
@@ -378,40 +378,30 @@ class Actor(arcade.Sprite):
             if self.d_time < 0:
                 self.d_time = 170
 
-        # itemを装備した時のsprite表示
-        if self.master and Tag.flower not in self.tag and Tag.equip in self.tag:
-            x = self.master.center_x
-            if self.master.left_face:
-                self.left_face = True
-                self.center_y = self.master.center_y - self.item_margin_y
-                self.center_x = x - self.item_margin_x
-            if self.master.left_face == False:
-                self.left_face = False
-                self.center_y = self.master.center_y - self.item_margin_y
-                self.center_x = x + self.item_margin_x
-        elif self.master and Tag.flower in self.tag:
-            self.flower_setup(self.master)
 
-    def flower_setup(self, target):
-        if target.left_face:
-            item_margin_x = self.item_margin_x
-        else:
-            item_margin_x = -self.item_margin_x
-        self.angle += uniform(0.1, 3)
-        x_diff = (target.center_x + item_margin_x + random()) - (self.center_x)
-        y_diff = (target.center_y + self.item_margin_y +
-                  random()) - (self.center_y)
-        angle = math.atan2(y_diff, x_diff)
+    #     if self.master and Tag.flower in self.tag:
+    #         self.flower_setup(self.master)
 
-        if abs(x_diff) > 15 or abs(y_diff) > 15:
+    # def flower_setup(self, target):
+    #     if target.left_face:
+    #         item_margin_x = self.item_margin_x
+    #     else:
+    #         item_margin_x = -self.item_margin_x
+    #     self.angle += uniform(0.1, 3)
+    #     x_diff = (target.center_x + item_margin_x + random()) - (self.center_x)
+    #     y_diff = (target.center_y + self.item_margin_y +
+    #               random()) - (self.center_y)
+    #     angle = math.atan2(y_diff, x_diff)
 
-            self.change_x = math.cos(
-                angle) * (self.my_speed + uniform(0.6, 4.2))
-            self.change_y = math.sin(
-                angle) * (self.my_speed + uniform(0.6, 4.2))
-        else:
-            self.change_x = math.cos(angle) * uniform(0.02, 0.3)
-            self.change_y = math.sin(angle) * uniform(0.02, 0.3)
+    #     if abs(x_diff) > 15 or abs(y_diff) > 15:
+
+    #         self.change_x = math.cos(
+    #             angle) * (self.my_speed + uniform(0.6, 4.2))
+    #         self.change_y = math.sin(
+    #             angle) * (self.my_speed + uniform(0.6, 4.2))
+    #     else:
+    #         self.change_x = math.cos(angle) * uniform(0.02, 0.3)
+    #         self.change_y = math.sin(angle) * uniform(0.02, 0.3)
 
     @property
     def master(self):

@@ -1,10 +1,10 @@
 
 from constants import *
 from data import *
-from actor.skills.melee_attack import MeleeAttack
+from actor.skills.base_skill import BaseSkill
 from random import randint
 
-class BranchBaton(MeleeAttack):
+class BranchBaton(BaseSkill):
     def __init__(self, x=0, y=0, name="branch_baton"):
         super().__init__(
             name=name,
@@ -38,7 +38,6 @@ class BranchBaton(MeleeAttack):
                 self.item_margin_x = (self.item_position_x + 3) * SPRITE_SCALE
                 self.item_margin_y += randint(-8,8)
                 self.item_margin_x += randint(-8,8)
-            else:
-                self.angle = 0
+
         except:
             pass

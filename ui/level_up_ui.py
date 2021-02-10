@@ -16,7 +16,7 @@ class Select(Enum):
     delay = auto()
     open_skill = auto()
 
-leaf_blade = LeafBlade()
+grass_cutter = GrassCutter()
 branch_baton = BranchBaton()
 healing = Healing()
 seed_shot = SeedShot()
@@ -28,7 +28,7 @@ class LevelupUI:
         self.up_int = ""
         self.tmp_states = None
         self.ui_state = Select.delay
-        self.skill_queue = deque([healing, seed_shot, (leaf_blade, branch_baton), healing ])
+        self.skill_queue = deque([healing, seed_shot, (grass_cutter, branch_baton), healing ])
         self.get_skill = None
         self.select_skill = True
         self.skill_result = [] # playerのSkill決定時にget_skillが入れられる

@@ -2,14 +2,14 @@ from actor.actor import Actor
 from constants import *
 from data import *
 from random import randint
-from actor.skills.melee_attack import MeleeAttack
+from actor.skills.base_skill import BaseSkill
 
 
 
 
 
-class LeafBlade(MeleeAttack):
-    def __init__(self, x=0, y=0, name="leaf_blade", data={"switch":False}):
+class GrassCutter(BaseSkill):
+    def __init__(self, x=0, y=0, name="grass_cutter", data={"switch":False}):
         super().__init__(
             name=name,
             x=x,
@@ -39,7 +39,7 @@ class LeafBlade(MeleeAttack):
         # self.item_position_y = 2
         self.explanatory_text = f"damage: {self.level}D{self.damage}\nhit rate: {self.hit_rate}"
 
-        self.icon = IMAGE_ID["leaf_blade_icon"]
+        self.icon = IMAGE_ID["grass_cutter_icon"]
 
     def update_animation(self, delta_time):
         super().update_animation(delta_time)
@@ -47,7 +47,7 @@ class LeafBlade(MeleeAttack):
 
             if self.master.state == state.ATTACK and Tag.weapon in self.tag:
                 self.item_margin_x = (self.item_position_x + 5) * SPRITE_SCALE
-                self.angle += 60
+                self.angle += 70
             else:
                 self.angle = 0
         except:

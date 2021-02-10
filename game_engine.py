@@ -37,7 +37,7 @@ from actor.items.fireball_scroll import FireballScroll
 from actor.items.small_shield import SmallShield
 
 from actor.items.paeonia import Paeonia
-from actor.items.cirsium import Cirsium
+from actor.items.silver_grass import SilverGrass
 from actor.items.ebony import Ebony
 from actor.items.sunflower import Sunflower
 from actor.items.pineapple import Pineapple
@@ -157,8 +157,8 @@ class GameEngine:
         self.hp = Paeonia(self.player.x-1, self.player.y)
         self.game_level.item_sprites.append(self.hp)
 
-        self.cirsium = Cirsium(self.player.x + 1, self.player.y)
-        self.game_level.item_sprites.append(self.cirsium)
+        self.silver_grass = SilverGrass(self.player.x + 1, self.player.y)
+        self.game_level.item_sprites.append(self.silver_grass)
 
         self.ebony = Ebony(self.player.x + 1, self.player.y-1)
         self.game_level.item_sprites.append(self.ebony)
@@ -217,8 +217,8 @@ class GameEngine:
         self.hp = Paeonia(self.player.x-1, self.player.y)
         self.game_level.item_sprites.append(self.hp)
 
-        self.cirsium = Cirsium(self.player.x + 1, self.player.y)
-        self.game_level.item_sprites.append(self.cirsium)
+        self.silver_grass = SilverGrass(self.player.x + 1, self.player.y)
+        self.game_level.item_sprites.append(self.silver_grass)
 
         self.ebony = Ebony(self.player.x + 1, self.player.y-1)
         self.game_level.item_sprites.append(self.ebony)
@@ -279,8 +279,8 @@ class GameEngine:
         self.hp = Paeonia(self.player.x-1, self.player.y)
         self.game_level.item_sprites.append(self.hp)
 
-        self.cirsium = Cirsium(self.player.x + 1, self.player.y)
-        self.game_level.item_sprites.append(self.cirsium)
+        self.silver_grass = SilverGrass(self.player.x + 1, self.player.y)
+        self.game_level.item_sprites.append(self.silver_grass)
 
         self.ebony = Ebony(self.player.x + 1, self.player.y-1)
         self.game_level.item_sprites.append(self.ebony)

@@ -4,7 +4,7 @@ from constants import *
 from data import *
 import random
 from util import dice, result_add
-from actor.skills.melee_attack import MeleeAttack
+from actor.skills.base_skill import BaseSkill
 
 
 class HealingEffect(Actor):
@@ -46,7 +46,7 @@ class HealingEffect(Actor):
             self.remove_from_sprite_lists()
 
 
-class Healing(MeleeAttack):
+class Healing(BaseSkill):
     def __init__(self,x=0, y=0, name="healing"):
         super().__init__(
             name=name,

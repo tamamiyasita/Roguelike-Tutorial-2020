@@ -2,11 +2,11 @@ from actor.actor import Actor
 from data import *
 from constants import *
 from fire import Fire
-from actor.skills.melee_attack import MeleeAttack
+from actor.skills.base_skill import BaseSkill
 
 
 
-class SeedShot(MeleeAttack):
+class SeedShot(BaseSkill):
     def __init__(self, x=0, y=0, name="seed_shot"):
         super().__init__(
             name=name,

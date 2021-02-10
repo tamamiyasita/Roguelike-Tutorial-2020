@@ -58,7 +58,7 @@
                                     "x": 0,
                                     "y": 0
                                 },
-                                "cirsium": {
+                                "silver_grass": {
                                     "alpha": 255,
                                     "block_sight": false,
                                     "blocks": false,
@@ -76,7 +76,7 @@
                                     "is_dead": null,
                                     "is_visible": false,
                                     "left_face": false,
-                                    "name": "cirsium",
+                                    "name": "silver_grass",
                                     "not_visible_color": [
                                         0,
                                         0,
@@ -85,7 +85,7 @@
                                     ],
                                     "power": null,
                                     "scale": 2,
-                                    "texture": "cirsium",
+                                    "texture": "silver_grass",
                                     "texture_number": 0,
                                     "visible_color": [
                                         255,
@@ -383,7 +383,7 @@
                                     "x": 0,
                                     "y": 0
                                 },
-                                "cirsium": {
+                                "silver_grass": {
                                     "alpha": 255,
                                     "block_sight": false,
                                     "blocks": false,
@@ -401,7 +401,7 @@
                                     "is_dead": null,
                                     "is_visible": false,
                                     "left_face": false,
-                                    "name": "cirsium",
+                                    "name": "silver_grass",
                                     "not_visible_color": [
                                         0,
                                         0,
@@ -410,7 +410,7 @@
                                     ],
                                     "power": null,
                                     "scale": 2,
-                                    "texture": "cirsium",
+                                    "texture": "silver_grass",
                                     "texture_number": 0,
                                     "visible_color": [
                                         255,
@@ -708,7 +708,7 @@
                                     "x": 0,
                                     "y": 0
                                 },
-                                "cirsium": {
+                                "silver_grass": {
                                     "alpha": 255,
                                     "block_sight": false,
                                     "blocks": false,
@@ -726,7 +726,7 @@
                                     "is_dead": null,
                                     "is_visible": false,
                                     "left_face": false,
-                                    "name": "cirsium",
+                                    "name": "silver_grass",
                                     "not_visible_color": [
                                         0,
                                         0,
@@ -735,7 +735,7 @@
                                     ],
                                     "power": null,
                                     "scale": 2,
-                                    "texture": "cirsium",
+                                    "texture": "silver_grass",
                                     "texture_number": 0,
                                     "visible_color": [
                                         255,
@@ -106596,7 +106596,7 @@
             ],
             "data": null,
             "equipment": [
-                "Cirsium"
+                "SilverGrass"
             ],
             "fighter": {
                 "_attack_speed": 7,
@@ -106639,7 +106639,7 @@
                         "x": 0,
                         "y": 0
                     },
-                    "cirsium": {
+                    "silver_grass": {
                         "alpha": 255,
                         "block_sight": false,
                         "blocks": false,
@@ -106657,7 +106657,7 @@
                         "is_dead": null,
                         "is_visible": false,
                         "left_face": false,
-                        "name": "cirsium",
+                        "name": "silver_grass",
                         "not_visible_color": [
                             0,
                             0,
@@ -106666,7 +106666,7 @@
                         ],
                         "power": null,
                         "scale": 2,
-                        "texture": "cirsium",
+                        "texture": "silver_grass",
                         "texture_number": 0,
                         "visible_color": [
                             255,
@@ -106964,7 +106964,7 @@
                         }
                     },
                     {
-                        "Cirsium": {
+                        "SilverGrass": {
                             "alpha": 255,
                             "block_sight": false,
                             "blocks": false,
@@ -106982,7 +106982,7 @@
                             "is_dead": null,
                             "is_visible": true,
                             "left_face": false,
-                            "name": "cirsium",
+                            "name": "silver_grass",
                             "not_visible_color": [
                                 0,
                                 0,
@@ -106991,7 +106991,7 @@
                             ],
                             "power": null,
                             "scale": 2,
-                            "texture": "cirsium",
+                            "texture": "silver_grass",
                             "texture_number": 0,
                             "visible_color": [
                                 255,

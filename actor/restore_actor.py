@@ -14,14 +14,14 @@ from actor.items.boomerang import Boomerang
 from actor.items.fireball_scroll import FireballScroll, FireballEffect
 from actor.items.lightning_scroll import LightningScroll, LightningEffect
 from actor.items.confusion_scroll import ConfusionScroll, ConfusionEffect
-from actor.items.cirsium import Cirsium
+from actor.items.silver_grass import SilverGrass
 from actor.items.ebony import Ebony
 from actor.items.paeonia import Paeonia
 from actor.items.sunflower import Sunflower
 from actor.items.pineapple import Pineapple
 
 
-from actor.skills.leaf_blade import LeafBlade
+from actor.skills.grass_cutter import GrassCutter
 from actor.skills.branch_baton import BranchBaton
 from actor.skills.healing import Healing
 from actor.skills.seed_shot import SeedShot
@@ -67,8 +67,8 @@ def restore_actor(actor_dict):
     elif actor_name == "ConfusionEffect":
         actor = ConfusionEffect()
 
-    elif actor_name == "Cirsium":
-        actor = Cirsium()
+    elif actor_name == "SilverGrass":
+        actor = SilverGrass()
     elif actor_name == "Ebony":
         actor = Ebony()
     elif actor_name == "Paeonia":
@@ -79,8 +79,8 @@ def restore_actor(actor_dict):
         actor = Pineapple()
     
 
-    elif actor_name == "LeafBlade":
-        actor = LeafBlade()
+    elif actor_name == "GrassCutter":
+        actor = GrassCutter()
     elif actor_name == "BranchBaton":
         actor = BranchBaton()
     elif actor_name == "Healing":

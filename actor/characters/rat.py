@@ -3,11 +3,11 @@ from actor.fighter import Fighter
 from actor.ai import Basicmonster
 from data import *
 from constants import *
-from actor.skills.melee_attack import Unarmed
+from actor.skills.base_skill import BaseSkill
 
 class Water_vole(Actor):
     def __init__(self, x=0, y=0):
-        unarmed_component = Unarmed()
+        unarmed_component = BaseSkill()
         fighter_component = Fighter(hp=8, STR=1, DEX=1,
                                     unarmed=unarmed_component,
                                     defense=1,
