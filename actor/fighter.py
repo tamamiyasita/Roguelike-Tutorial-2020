@@ -259,7 +259,7 @@ class Fighter:
         # hit_rate = outher.hit_rate
 
         # 回復効果などは属性なしとする
-        if attr == None:
+        if attr == "recovery":
             results.append({"damage_pop": self.owner, "damage": value})
             return results
 

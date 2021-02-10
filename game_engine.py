@@ -705,6 +705,7 @@ class GameEngine:
             dist = None
 
     def normal_state_update(self, player_direction, delta_time):
+        # ノーマルステート時に更新したい関数
         self.turn_loop.loop_on(self)
         self.check_for_player_movement(player_direction)
         self.skill_dispry_check()
@@ -714,6 +715,7 @@ class GameEngine:
 
 
     def skill_dispry_check(self):
+        # 装備スプライトの表示を強制する関数
         for skill in self.cur_level.equip_sprites:
             if skill in self.cur_level.equip_sprites and skill not in chain(self.player.fighter.active_skill, self.player.fighter.passive_skill):
                 skill.remove_from_sprite_lists()
@@ -725,6 +727,7 @@ class GameEngine:
                 self.cur_level.equip_sprites.append(skill)
 
     def skill_position_update(self):
+        # アイテムポジションをプレイヤーに追従するようにする
         for i, skill in enumerate(self.player.fighter.skill_weight_list):
             if self.player.state == state.ON_MOVE or self.player.state == state.DELAY:
                 skill.item_position_x = self.player.fighter.equip_position[i][0]

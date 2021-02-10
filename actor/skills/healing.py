@@ -59,6 +59,8 @@ class Healing(BaseSkill):
         self.owner = None
 
         self.level = 1
+        self.attr = "recovery"
+
 
         self.max_cooldown_time = 4
 
@@ -95,7 +97,7 @@ class Healing(BaseSkill):
 
             hp_return = dice(*self.hp_return)
 
-            result = self.owner.fighter.change_hp(hp_return)
+            result = self.owner.fighter.change_hp(hp_return, )
             Healing = HealingEffect(
                 self.owner, self.engine)
 
