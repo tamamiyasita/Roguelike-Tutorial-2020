@@ -100,6 +100,7 @@ class MG(arcade.Window):
         self.engine.cur_level.effect_sprites.draw(filter=gl.GL_NEAREST)
 
         self.engine.tmp_effect_sprites.draw(filter=gl.GL_NEAREST)
+        TMP_EFFECT_SPRITES.draw(filter=gl.GL_NEAREST)
         for e in self.engine.tmp_effect_sprites:
             if hasattr(e, "emitter"):
                 e.emitter.draw()
@@ -201,6 +202,7 @@ class MG(arcade.Window):
             self.engine.tmp_effect_sprites.update()
             self.engine.tmp_effect_sprites.update_animation()
             self.engine.cur_level.map_obj_sprites.update_animation()
+            TMP_EFFECT_SPRITES.update_animation()
 
 
             self.engine.normal_state_update(self.player_direction, delta_time)

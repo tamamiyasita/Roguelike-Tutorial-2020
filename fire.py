@@ -49,7 +49,7 @@ class TriggerPull(Actor):
                     particle = AttackParticle()
                     particle.position = (self.target.center_x, self.target.center_y)
                     self.effect_sprites.append(particle)
-                damage = self.target.fighter.change_hp(-self.amm.damage, self.amm.attr)
+                damage = self.target.fighter.skill_process(self.amm)
                 result.extend(damage)
 
 

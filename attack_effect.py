@@ -12,6 +12,7 @@ class AttackEffect:
 
 
     def start(self, actor, other, from_x, from_y, other_x):
+        other.state = state.DEFENSE
         
 
         if abs(from_x - actor.center_x) >= self.step and actor.dx or\
@@ -28,8 +29,6 @@ class AttackEffect:
                 other.change_x += uniform(-0.7, 0.7)
 
         if self.attack_delay % 2 == 0:
-            # if Tag.player in other.tag: 
-            other.state = state.DEFENSE
 
             other.alpha = 10
         else:

@@ -7,14 +7,15 @@ from constants import *
 from util import exp_calc
 from random import choices
 from actor.skills.base_skill import BaseSkill
+from actor.actor_set import *
+from random import uniform
 
 
 class Player(Actor):
     def __init__(self, x=0, y=0, inventory=0):
-        unarmed_component = BaseSkill(damage=2)
+        unarmed_component = BaseSkill()
         fighter_component = Fighter(hp=15, STR=2, DEX=3, INT=3,
-                                    unarmed=unarmed_component,
-                                    resist={"physical": 1, "fire": 1, "ice": 1, "acid": 1, "poison": 1, "mind": 1},
+                                    resist={"physical": 1, "fire": 1, "ice": 1, "acid": 1, "poison": 1, "mind": 1},#雷忘れてた
                                     defense=2,
                                     evasion=5,
                                     level=1
@@ -39,7 +40,15 @@ class Player(Actor):
         self.delay_time = 5
         self.visible_check = False
 
+        self.unarmed = unarmed_component
+        self.unarmed.owner = self
+
         self.experience_per_level = exp_calc()
+
+
+        for s in skill_lists:
+            s.owner = self
+
 
 
 
@@ -77,8 +86,11 @@ class Player(Actor):
 
         if self.state == state.DEFENSE and not self.left_face:
             self.texture = pc_def[0]
+            # self.change_x += uniform(-0.7, 0.7)
+
         if self.state == state.DEFENSE and self.left_face:
             self.texture = pc_def[1]
+            # self.change_x += uniform(-0.7, 0.7)
 
         if self.state == state.READY and not self.left_face:
             self.texture = player[0]
@@ -100,4 +112,5 @@ class Player(Actor):
                 self.texture = pc_delay[1]
             if self.delay_time < 0:
                 self.delay_time = 5
+        
 

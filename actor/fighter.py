@@ -5,10 +5,11 @@ from util import dice, stop_watch
 from actor.actor_set import *
 from collections import Counter
 import math
+from actor.skills.base_skill import BaseSkill
 
 
 class Fighter:
-    def __init__(self, hp=0, defense=0, STR=0, DEX=0, INT=0,unarmed=None, attack_speed=DEFAULT_ATTACK_SPEED,
+    def __init__(self, hp=0, defense=0, STR=0, DEX=0, INT=0, attack_speed=DEFAULT_ATTACK_SPEED,
                  evasion=0, xp_reward=0, current_xp=0, level=1,
                  resist={"physical": 1, "fire": 1, "ice": 1, "acid": 1, "poison": 1, "mind": 1}, ability_points=0):
         self.hp = hp
@@ -18,7 +19,7 @@ class Fighter:
         self.base_dexterity = DEX
         self.base_intelligence = INT
 
-        self.unarmed = unarmed#{"damage":1, "level":1, "attr":"physical"}
+        # self.unarmed = BaseSkill()#{"damage":1, "level":1, "attr":"physical"}
 
         self.base_defense = defense
         self.base_evasion = evasion
@@ -100,7 +101,9 @@ class Fighter:
                 sd = self.base_skill_dict[s]
                 sd.restore_from_dict(r)
                 print(sd)
-
+    @property
+    def unarmed(self):
+        return self.owner.unarmed
 
     @property
     def skill_list(self):
@@ -209,14 +212,13 @@ class Fighter:
     
 
 
-
-
-    def effect_hit_chance(self, target, effect):
+    def effect_hit_chance(self, effect):
         attr = effect.attr
-        resist = target.fighter.resist[attr]
+        power = effect.power
+        resist = self.resist[attr]
 
 
-    def change_hp(self, skill):
+    def skill_process(self, skill):
         message = ""
         results = []
         owner_name = self.owner.name.capitalize()
@@ -228,11 +230,11 @@ class Fighter:
         hit_rate = skill.hit_rate
         effect = skill.effect
 
-        damage = dice(level, damage+(self.STR//3))
+        damage = dice(level, damage)
 
         # HP回復
         if attr == "recovery":
-            results.append({"damage_pop": self.owner, "damage": damage})
+            results.append({"damage_pop": self.owner, "damage": damage, "message": f"has recovered {damage}HP"})
             self.hp += damage
             # 超過処理
             if self.hp > self.max_hp:
@@ -248,7 +250,7 @@ class Fighter:
 
             # critical_flag:
             if random.randrange(1, (100+self.DEX)) < 5:
-                skill.damage *= 2
+                damage = skill.damage * 2
                 message += " CRITICAL!"
 
             # 物理防御処理
@@ -273,24 +275,43 @@ class Fighter:
                 message += f" {owner_name} took {int(damage)} damage!"
                 results.append({"message": message})
 
+
             damage = int(damage)
 
-            self.hp -= damage
-
-            # 死亡処理
-            if self.hp <= 0:
-                self.owner.blocks = False
-                self.owner.is_dead = True
-                results.append({"dead": self.owner})
-                print(f"{self.owner.name} is dead x!")
-
+            results.extend(self.change_hp(damage))
 
             results.append({"damage_pop": self.owner, "damage": -damage})
+
+            # self.hp -= damage
+
+            # # 死亡処理
+            # if self.hp <= 0:
+            #     self.owner.blocks = False
+            #     self.owner.is_dead = True
+            #     results.append({"dead": self.owner})
+            #     print(f"{self.owner.name} is dead x!")
+
+
 
         else:
             # 回避
             results.append({"damage_pop": self.owner, "damage": "MISS"})
             results.append({"message": f"{owner_name} Avoided {skill_name}"})
+
+        return results
+
+    def change_hp(self, damage):
+        results = []
+
+        self.hp -= damage
+
+        # 死亡処理
+        if self.hp <= 0 and self.owner.is_dead == False:
+            self.owner.is_dead = True
+            self.owner.blocks = False
+            results.append({"dead": self.owner})
+
+            print(f"{self.owner.name} is dead x!")
 
         return results
 
@@ -303,6 +324,6 @@ class Fighter:
         results.append({"message": f"{self.owner.name.capitalize()} attacked {target.name}"})
         for skill in self.attack_skill:
 
-                results.extend(target.fighter.change_hp(skill))
+                results.extend(target.fighter.skill_process(skill))
 
         return results

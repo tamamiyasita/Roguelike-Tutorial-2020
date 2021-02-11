@@ -12,7 +12,7 @@ class BranchBaton(BaseSkill):
             y=y,
         )
 
-        self.damage = 7
+        self._damage = 7
         self.hit_rate = 92
         self.speed = 6
         self.attr = "physical"

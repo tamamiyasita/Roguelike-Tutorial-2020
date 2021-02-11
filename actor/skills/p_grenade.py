@@ -21,9 +21,8 @@ class P_Grenade(BaseSkill):
 
         self.max_cooldown_time = 6
 
-
-        self.damage = 10
-        self.hit_rate = 80
+        self._damage = 10
+        self.hit_rate = 100
         self.speed = 16
         self.attr = "fire"
 

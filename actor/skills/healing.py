@@ -56,7 +56,8 @@ class Healing(BaseSkill):
         self.data={"switch":False,
                   "count_time":0,
                   "cooldown":False}
-        self.owner = None
+        
+        self._damage = 6
 
         self.level = 1
         self.attr = "recovery"
@@ -72,20 +73,12 @@ class Healing(BaseSkill):
         self.explanatory_text = f"Recover a small\namount of hp"
         self.icon = IMAGE_ID["healing_icon"]
 
-        # self.item_margin_x = 9 * SPRITE_SCALE
-        # self.item_margin_y = 3 * SPRITE_SCALE
 
-        # self.item_position_x = 9
-        # self.item_position_y = 2
 
     @property
-    def hp_return(self):
+    def damage(self):
         if self.owner:
-
-            max_hp_return = 7 + int(self.owner.fighter.INT/2)
-
-            return self.level, max_hp_return
-
+            return int((self.owner.fighter.INT / 2) + self._damage)
 
 
 
@@ -95,17 +88,9 @@ class Healing(BaseSkill):
         if self.data["count_time"] <= 0:
             self.data["count_time"] = self.max_cooldown_time
 
-            hp_return = dice(*self.hp_return)
 
-            result = self.owner.fighter.change_hp(hp_return, )
-            Healing = HealingEffect(
-                self.owner, self.engine)
+            result = self.owner.fighter.skill_process(self)
+            HealingEffect(self.owner, self.engine)
 
-            return [{"turn_end":self.owner, "message": f"{self.owner.name} have recovered {hp_return} using {self.name}"}, *result]
+            return [{"turn_end":self.owner, "message": f"{self.owner.name} used {self.name}"}, *result]
 
-    def update_animation(self, delta_time):
-        super().update_animation(delta_time)
-        pass
-
-    #     if self.master.state == state.HEAL:
-    #         self.item_margin_

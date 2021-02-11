@@ -19,11 +19,13 @@ class GrassCutter(BaseSkill):
         # self.color=COLORS["white"]
 
         #attackに渡される属性
-        self.damage = 5
+        self._damage = 5
         self.hit_rate = 95
         self.speed = 6
         self.attr = "physical"
         self.effect = None
+
+        self.owner = None
 
         self.level = 1
 
@@ -32,14 +34,14 @@ class GrassCutter(BaseSkill):
 
         self.item_weight = 1.1
 
-        # self.item_margin_x = 9
-        # self.item_margin_y = 2
-
-        # self.item_position_x = 9
-        # self.item_position_y = 2
         self.explanatory_text = f"damage: {self.level}D{self.damage}\nhit rate: {self.hit_rate}"
 
         self.icon = IMAGE_ID["grass_cutter_icon"]
+
+    @property
+    def damage(self):
+        if self.owner:
+            return (self.owner.fighter.STR+(self.owner.fighter.DEX/1.5) / 3) + self._damage
 
     def update_animation(self, delta_time):
         super().update_animation(delta_time)
@@ -47,7 +49,7 @@ class GrassCutter(BaseSkill):
 
             if self.master.state == state.ATTACK and Tag.weapon in self.tag:
                 self.item_margin_x = (self.item_position_x + 5) * SPRITE_SCALE
-                self.angle += 70
+                self.angle += 90
             else:
                 self.angle = 0
         except:

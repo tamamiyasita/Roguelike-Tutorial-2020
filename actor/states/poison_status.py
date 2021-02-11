@@ -31,7 +31,8 @@ class PoisonEffect(Actor):
         self.alpha = 0
         self.engine.tmp_effect_sprites.append(self)
 
-    def update(self):
+    def update_animation(self, delta_time=1 / 60):
+        super().update_animation(delta_time)
         self.owner.color = (60,255,60)
         self.x = self.owner.x
         self.y = self.owner.y

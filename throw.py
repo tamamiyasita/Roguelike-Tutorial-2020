@@ -94,9 +94,9 @@ class Flying(Actor):
 
         for sprite in sprites:
             if sprite.fighter and not sprite.is_dead:
-                results.extend(
-                    [{"message": f"{sprite.name} was struck by a fireball for {amount} points."}])
-                result = self.shooter.fighter.change_hp(-self.amm.damage, self.amm.attr)
+                # results.extend(
+                #     [{"message": f"{sprite.name} was struck by a fireball for {amount} points."}])
+                result = sprite.fighter.skill_process(self.amm)
                 if result:
                     results.extend(result)
 
@@ -105,16 +105,16 @@ class Flying(Actor):
         results = []
         self.apply_damage(x, y, damage, results)
 
-        self.apply_damage(x-1, y-1, damage+2, results)
-        self.apply_damage(x, y-1, damage+2, results)
-        self.apply_damage(x+1, y-1, damage+2, results)
+        self.apply_damage(x-1, y-1, damage-2, results)
+        self.apply_damage(x, y-1, damage-2, results)
+        self.apply_damage(x+1, y-1, damage-2, results)
 
-        self.apply_damage(x-1, y, damage+2, results)
-        self.apply_damage(x+1, y, damage+2, results)
+        self.apply_damage(x-1, y, damage-2, results)
+        self.apply_damage(x+1, y, damage-2, results)
 
-        self.apply_damage(x-1, y+1, damage+2, results)
-        self.apply_damage(x, y+1, damage+2, results)
-        self.apply_damage(x + 1, y + 1, damage+2, results)
+        self.apply_damage(x-1, y+1, damage-2, results)
+        self.apply_damage(x, y+1, damage-2, results)
+        self.apply_damage(x + 1, y + 1, damage-2, results)
 
         self.engine.player.inventory.remove_item(self)
 

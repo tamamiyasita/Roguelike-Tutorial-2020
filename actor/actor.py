@@ -242,7 +242,7 @@ class Actor(arcade.Sprite):
             if blocking_actor and not target:
                 # playerの攻撃チェック
                 actor = blocking_actor[0]
-                if actor in wall_sprites:
+                if Tag.enemy not in actor.tag:
                     return [{"None": True}]
 
                 if Tag.friendly in actor.tag:
@@ -260,7 +260,7 @@ class Actor(arcade.Sprite):
                         self.state = state.ATTACK
                         self.change_y = self.dy * (MOVE_SPEED -4)
                         self.change_x = self.dx * (MOVE_SPEED -4)
-                        engine.action_queue.extend(
+                    engine.action_queue.extend(
                             [{"delay": {"time": 0.2, "action": {"None": self}}}])
 
                     return attack_results

@@ -1,18 +1,6 @@
-
-# class BaseSkill:
-#     def __init__(self, level=1, damage=1, hit_rate=90, attr="physical", effect=None) -> None:
-#         self.level = level
-#         self.damage = damage
-#         self.hit_rate=hit_rate
-#         self.attr=attr
-#         self.effect=effect
-
-
 from actor.actor import Actor
 from constants import *
 from data import *
-
-
 
 
 class BaseSkill(Actor):
@@ -27,10 +15,12 @@ class BaseSkill(Actor):
         self.color=COLORS["white"]
 
         self.level = level
-        self.damage = damage
+        self._damage = damage
         self.hit_rate = hit_rate
         self.attr = attr
         self.effect = effect
+
+        self.owner = None
 
 
         self.tag = []
@@ -44,6 +34,11 @@ class BaseSkill(Actor):
 
         self.item_position_x = 0
         self.item_position_y = 0
+
+    @property
+    def damage(self):
+        if self.owner:
+            return (self.owner.fighter.STR+(self.owner.fighter.DEX/2) / 3) + self._damage
 
     def update_animation(self, delta_time):
         super().update_animation(delta_time)

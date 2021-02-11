@@ -43,6 +43,8 @@ DEATH_DELAY = 0.7
 DEFAULT_SPEED = 7
 DEFAULT_ATTACK_SPEED = DEFAULT_SPEED
 
+TMP_EFFECT_SPRITES = arcade.SpriteList(use_spatial_hash=True, spatial_hash_cell_size=32)
+
 
 class Tag(Enum):
     # items

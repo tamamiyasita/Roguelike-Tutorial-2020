@@ -21,7 +21,7 @@ class SeedShot(BaseSkill):
 
         self.max_cooldown_time = 2
 
-        self.damage = 3
+        self._damage = 6
         self.hit_rate = 85
         self.speed = 10
         self.attr = "physical"
