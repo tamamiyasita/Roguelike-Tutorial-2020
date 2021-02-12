@@ -242,7 +242,7 @@ class Actor(arcade.Sprite):
             if blocking_actor and not target:
                 # playerの攻撃チェック
                 actor = blocking_actor[0]
-                if Tag.enemy not in actor.tag:
+                if Tag.wall in actor.tag:
                     return [{"None": True}]
 
                 if Tag.friendly in actor.tag:
@@ -251,7 +251,7 @@ class Actor(arcade.Sprite):
                         result.extend([{"turn_end": self}])
                     return result
 
-                elif not actor.is_dead:
+                elif Tag.enemy in actor.tag and not actor.is_dead:
                     attack_results = self.fighter.attack(actor)
 
                     self.other = actor

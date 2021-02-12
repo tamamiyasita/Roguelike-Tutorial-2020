@@ -14,7 +14,7 @@ pc_delay = arcade.load_texture_pair(r"image/rou6_d.png")
 pc_delay2 = arcade.load_texture_pair(r"image/rou6_d2.png")
 pc_delay3 = arcade.load_texture_pair(r"image/rou6t.png")
 pc_open = arcade.load_texture_pair(r"image/rou6_op.png")
-pc_shot = arcade.load_texture_pair(r"image/rou6_shot.png")
+pc_shot2 = arcade.load_texture_pair(r"image/rou6_shot2.png")
 pc_throw = arcade.load_texture_pair(r"image/rou6_throw.png")
 pc_def = arcade.load_texture_pair(r"image/rou6_def.png")
 

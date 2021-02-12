@@ -282,16 +282,6 @@ class Fighter:
 
             results.append({"damage_pop": self.owner, "damage": -damage})
 
-            # self.hp -= damage
-
-            # # 死亡処理
-            # if self.hp <= 0:
-            #     self.owner.blocks = False
-            #     self.owner.is_dead = True
-            #     results.append({"dead": self.owner})
-            #     print(f"{self.owner.name} is dead x!")
-
-
 
         else:
             # 回避

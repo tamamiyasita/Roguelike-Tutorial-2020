@@ -15,7 +15,7 @@ class Player(Actor):
     def __init__(self, x=0, y=0, inventory=0):
         unarmed_component = BaseSkill()
         fighter_component = Fighter(hp=15, STR=2, DEX=3, INT=3,
-                                    resist={"physical": 1, "fire": 1, "ice": 1, "acid": 1, "poison": 1, "mind": 1},#雷忘れてた
+                                    resist={"physical": 3, "fire": 1, "ice": 1, "acid": 1, "poison": 1, "mind": 1},#雷忘れてた
                                     defense=2,
                                     evasion=5,
                                     level=1
@@ -75,9 +75,9 @@ class Player(Actor):
             self.texture = pc_open[1]
   
         if self.state == state.SHOT and not self.left_face:
-            self.texture = pc_shot[0]
+            self.texture = pc_shot2[0]
         if self.state == state.SHOT and self.left_face:
-            self.texture = pc_shot[1]
+            self.texture = pc_shot2[1]
 
         if self.state == state.THROW and not self.left_face:
             self.texture = pc_throw[0]
