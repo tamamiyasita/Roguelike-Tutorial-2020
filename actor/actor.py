@@ -10,7 +10,7 @@ from constants import *
 from data import *
 from util import pixel_to_grid, grid_to_pixel, get_blocking_entity,  stop_watch
 # from particle import AttackParticle, PARTICLE_COUNT
-from attack_effect import AttackEffect
+from attack_effect import CombatEffect
 
 from functools import lru_cache
 
@@ -203,7 +203,7 @@ class Actor(arcade.Sprite):
         map_obj_sprites = engine.cur_level.map_obj_sprites
         actor_sprites = engine.cur_level.actor_sprites
         self.tmp_effect_sprites = engine.tmp_effect_sprites
-        self.attack = AttackEffect(self.tmp_effect_sprites)
+        self.combat_effect = CombatEffect(self.tmp_effect_sprites)
 
         self.dx, self.dy = dxy
 
@@ -355,7 +355,7 @@ class Actor(arcade.Sprite):
         super().update_animation()
         # 左右を向く
         if self.state == state.ATTACK:
-            self.attack.start(self, self.attack_target, self.from_x, self.from_y, self.attack_target_x)
+            self.combat_effect.attack(self, self.attack_target, self.from_x, self.from_y, self.attack_target_x)
         if len(self.textures) >= 2:
             if self.left_face:
                 self.texture = self.textures[1]

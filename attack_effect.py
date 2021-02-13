@@ -4,14 +4,14 @@ from constants import *
 PARTICLE_COUNT = 7
 
 
-class AttackEffect:
+class CombatEffect:
     def __init__(self,sprites):
         self.attack_delay = 7
         self.tmp_effect_sprites = sprites
         self.step = GRID_SIZE // 2
 
 
-    def start(self, owner, attack_target, from_x, from_y, attack_target_x):
+    def attack(self, owner, attack_target, from_x, from_y, attack_target_x):
         attack_target.state = state.DEFENSE
         
 
