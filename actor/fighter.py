@@ -219,6 +219,8 @@ class Fighter:
 
 
     def skill_process(self, skill):
+        self.owner.state = state.DEFENSE
+        
         message = ""
         results = []
         owner_name = self.owner.name.capitalize()

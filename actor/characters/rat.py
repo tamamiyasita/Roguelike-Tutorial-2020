@@ -4,14 +4,11 @@ from actor.ai import Basicmonster
 from data import *
 from constants import *
 from actor.skills.base_skill import BaseSkill
-from particle import AttackParticle
-from random import uniform
-PARTICLE_COUNT = 7
+
+
 class Water_vole(Actor):
     def __init__(self, x=0, y=0):
-        unarmed_component = BaseSkill()
         fighter_component = Fighter(hp=8, STR=1, DEX=1,
-                                    # unarmed=unarmed_component,
                                     defense=1,
                                     evasion=2,
                                     xp_reward=3,
@@ -20,7 +17,7 @@ class Water_vole(Actor):
         ai_component = Basicmonster()
 
         super().__init__(
-            # scale=2.5,
+            scale=1.8,
             name="water_vole",
             x=x,
             y=y,
@@ -32,7 +29,6 @@ class Water_vole(Actor):
         self.tag = [Tag.npc, Tag.enemy]
 
 
-        self.unarmed = unarmed_component
+        self.unarmed = BaseSkill()
         self.unarmed.owner = self
-        self.attack_delay = 6
 

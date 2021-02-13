@@ -48,16 +48,17 @@ class PoisonEffect(Actor):
 
 
 class PoisonStatus(Actor):
-    def __init__(self, count=None, power=None):
+    def __init__(self, count=None):
         super().__init__(
             name="poison",
             scale=4.5,
-            power=power,
             data={"count_time":count}
         )
 
         
         self.owner = None
+
+        self.power = 2
 
 
         self.level = 0

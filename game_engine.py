@@ -15,10 +15,8 @@ from recalculate_fov import recalculate_fov
 from actor.inventory import Inventory
 from actor.item_point_check import ItemPoint
 from actor.characters.PC import Player
-from actor.characters.orcs import Orc
 from actor.characters.rat import Water_vole
 from actor.characters.npc import Citizen
-from actor._actor import Actor
 
 from actor.map_obj.stairs import Up_Stairs, Down_Stairs
 from actor.restore_actor import restore_actor
@@ -28,13 +26,6 @@ from fire import Fire
 from actor.damage_pop import Damagepop
 
 
-from actor.items.boomerang import Boomerang
-
-from actor.items.short_sword import ShortSword
-from actor.items.long_sword import LongSword
-from actor.items.confusion_scroll import ConfusionScroll
-from actor.items.fireball_scroll import FireballScroll
-from actor.items.small_shield import SmallShield
 
 from actor.items.paeonia import Paeonia
 from actor.items.silver_grass import SilverGrass

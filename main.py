@@ -278,7 +278,7 @@ class MG(arcade.Window):
             check_experience_level(self.engine.player, self.engine)
 
         if key == arcade.key.F2:
-            self.engine.player.fighter.states.append(PoisonStatus(3,-2))
+            self.engine.player.fighter.states.append(PoisonStatus(3))
 
 
 

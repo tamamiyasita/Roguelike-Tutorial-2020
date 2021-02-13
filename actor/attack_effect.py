@@ -3,7 +3,7 @@ from constants import *
 from data import *
 
 
-class AttackEffect(Actor):
+class CombatEffect(Actor):
     def __init__(self, owner, effect_sprites=None):
         super().__init__(
             x=owner.x,
