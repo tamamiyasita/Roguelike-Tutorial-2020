@@ -1,7 +1,7 @@
 from actor.states.poison_status import PoisonStatus
 import random
 from constants import *
-from util import dice, stop_watch
+from util import dice, stop_watch, result_add
 from actor.actor_set import *
 from collections import Counter
 import math
@@ -11,7 +11,7 @@ from actor.skills.base_skill import BaseSkill
 class Fighter:
     def __init__(self, hp=0, defense=0, STR=0, DEX=0, INT=0, attack_speed=DEFAULT_ATTACK_SPEED,
                  evasion=0, xp_reward=0, current_xp=0, level=1,
-                 resist={"physical": 1, "fire": 1, "ice": 1, "acid": 1, "poison": 1, "mind": 1}, ability_points=0):
+                 resist={"physical": 1, "fire": 1, "ice": 1, "lightning":1, "acid": 1, "poison": 1, "mind": 1}, ability_points=0):
         self.hp = hp
         self.base_max_hp = self.hp
 
@@ -308,7 +308,7 @@ class Fighter:
     @stop_watch
     def attack(self, target):
         """ここはダンプアタックを処理する
-            attack_skillをループしchange_hp関数に渡す"""
+            attack_skillをループしskill_process関数に渡す"""
         results = []
 
         results.append({"message": f"{self.owner.name.capitalize()} attacked {target.name}"})
