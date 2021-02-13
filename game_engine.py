@@ -22,7 +22,7 @@ from actor._actor import Actor
 
 from actor.map_obj.stairs import Up_Stairs, Down_Stairs
 from actor.restore_actor import restore_actor
-from util import get_door, get_blocking_entity, stop_watch
+from util import  get_blocking_entity, stop_watch
 from turn_loop import TurnLoop
 from fire import Fire
 from actor.damage_pop import Damagepop
@@ -809,30 +809,31 @@ class GameEngine:
 
 
     def use_door(self, door_dist):
-        result = []
-        dx, dy = door_dist
-        dest_x = self.player.x + dx
-        dest_y = self.player.y + dy
-        door_actor = get_door(dest_x, dest_y, self.cur_level.map_obj_sprites)
-        enemy_actor = get_blocking_entity(
-            dest_x, dest_y, [self.cur_level.actor_sprites])
-        if door_actor and not enemy_actor:
-            door_actor = door_actor[0]
-            if door_actor.left_face:
-                door_actor.left_face = False
-            elif not door_actor.left_face:
-                door_actor.left_face = True
+        pass
+        # result = []
+        # dx, dy = door_dist
+        # dest_x = self.player.x + dx
+        # dest_y = self.player.y + dy
+        # # door_actor = get_door(dest_x, dest_y, self.cur_level.map_obj_sprites)
+        # enemy_actor = get_blocking_entity(
+        #     dest_x, dest_y, [self.cur_level.actor_sprites])
+        # if door_actor and not enemy_actor:
+        #     door_actor = door_actor[0]
+        #     if door_actor.left_face:
+        #         door_actor.left_face = False
+        #     elif not door_actor.left_face:
+        #         door_actor.left_face = True
 
-            result.extend(
-                [{"delay": {"time": 0.2, "action": {"turn_end": self.player}}}])
-        elif door_actor and enemy_actor:
-            result.extend(
-                [{"message": f"We can't close the door because of the {enemy_actor[0].name}."}])
-            result.extend(
-                [{"delay": {"time": 0.2, "action": {"player_turn"}}}])
-        else:
-            result.extend([{"message": f"There is no door in that direction"}])
-            result.extend(
-                [{"delay": {"time": 0.2, "action": {"player_turn"}}}])
+        #     result.extend(
+        #         [{"delay": {"time": 0.2, "action": {"turn_end": self.player}}}])
+        # elif door_actor and enemy_actor:
+        #     result.extend(
+        #         [{"message": f"We can't close the door because of the {enemy_actor[0].name}."}])
+        #     result.extend(
+        #         [{"delay": {"time": 0.2, "action": {"player_turn"}}}])
+        # else:
+        #     result.extend([{"message": f"There is no door in that direction"}])
+        #     result.extend(
+        #         [{"delay": {"time": 0.2, "action": {"player_turn"}}}])
 
-        return result
+        # return result

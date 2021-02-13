@@ -133,19 +133,6 @@ def get_blocking_entity(x, y, sprite_lists):
         return None
 
 
-def get_door(x, y, sprite_list):
-    px, py = grid_to_pixel(x, y)
-    sprite_list = arcade.get_sprites_at_exact_point((px, py), sprite_list)
-    door_sprite = arcade.SpriteList()
-    for sprite in sprite_list:
-        if sprite and Tag.door in sprite.tag:
-            door_sprite.append(sprite)
-
-    if len(door_sprite) > 0:
-        return door_sprite
-    else:
-        return None
-
 
 def result_add(value=0):
     """関数やメソッドの出力に任意の値やリストの合計を加えるデコレータ

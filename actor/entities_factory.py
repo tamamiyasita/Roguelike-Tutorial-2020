@@ -41,7 +41,7 @@ entities = load_entities(r"actor/actors.csv")
 #         return m1
 def get_random_monster_by_challenge(challenge):
     monster_list = [
-        Water_vole(), Crab(), Orc(), Troll()
+        Water_vole()#, Crab(), Orc(), Troll()
     ]
     if challenge:
         filtered_monsters = [monster for monster in monster_list if monster.fighter.level <= challenge]

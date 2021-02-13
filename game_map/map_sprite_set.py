@@ -293,7 +293,7 @@ class ActorPlacement:
                     monster.center_x = cx
                     monster.center_y = cy
 
-                    actor_sprites.append(monster)# ここをコメントアウトすると敵無しに
+                    # actor_sprites.append(monster)# ここをコメントアウトすると敵無しに
 
         return actor_sprites
 

@@ -8,7 +8,7 @@ import math
 
 from constants import *
 from data import *
-from util import pixel_to_grid, grid_to_pixel, get_blocking_entity, get_door, stop_watch
+from util import pixel_to_grid, grid_to_pixel, get_blocking_entity,  stop_watch
 # from particle import AttackParticle, PARTICLE_COUNT
 from attack_effect import AttackEffect
 
@@ -208,8 +208,8 @@ class Actor(arcade.Sprite):
         self.dx, self.dy = dxy
 
         # 振動ダメージエフェクトに使う変数
-        self.other = None
-        self.other_x = None
+        self.attack_target = None
+        self.attack_target_x = None
 
         if self.dx == -1:
             self.left_face = True
@@ -222,20 +222,10 @@ class Actor(arcade.Sprite):
         self.from_x = self.center_x
         self.from_y = self.center_y
 
-        # ドアのチェック
-        door_actor = get_door(destination_x, destination_y, map_obj_sprites)
-
-        if door_actor:
-            self.state = state.DOOR
-            door_actor = door_actor[0]
-            if door_actor.left_face == False:
-
-                door_actor.left_face = True
-                return [{"delay": {"time": 0.3, "action": {"turn_end":self}}}]
 
         # 行き先がBlockされてるか調べる
         blocking_actor = get_blocking_entity(
-            destination_x, destination_y, [actor_sprites, wall_sprites])
+            destination_x, destination_y, [actor_sprites, wall_sprites, map_obj_sprites])
 
         def player_move():
 
@@ -244,6 +234,13 @@ class Actor(arcade.Sprite):
                 actor = blocking_actor[0]
                 if Tag.wall in actor.tag:
                     return [{"None": True}]
+
+                if Tag.door in actor.tag:
+                    self.state = state.DOOR
+                    door_actor = actor
+                    if door_actor.left_face == False:
+                        door_actor.left_face = True
+                        return [{"delay": {"time": 0.3, "action": {"turn_end":self}}}]
 
                 if Tag.friendly in actor.tag:
                     result = [{"talk": actor}]
@@ -254,8 +251,8 @@ class Actor(arcade.Sprite):
                 elif Tag.enemy in actor.tag and not actor.is_dead:
                     attack_results = self.fighter.attack(actor)
 
-                    self.other = actor
-                    self.other_x = actor.center_x
+                    self.attack_target = actor
+                    self.attack_target_x = actor.center_x
                     if attack_results:
                         self.state = state.ATTACK
                         self.change_y = self.dy * (MOVE_SPEED -4)
@@ -276,8 +273,8 @@ class Actor(arcade.Sprite):
                 # monsterの攻撃チェック
                 attack_results = self.fighter.attack(target)
 
-                self.other = target
-                self.other_x = target.center_x
+                self.attack_target = target
+                self.attack_target_x = target.center_x
                 if attack_results:
                     self.state = state.ATTACK
                     self.change_y = self.dy * (MOVE_SPEED+5)
@@ -355,10 +352,10 @@ class Actor(arcade.Sprite):
         self.texture = self.textures[self.texture_number]
 
     def update_animation(self, delta_time=1 / 60):
-        # super().update_animation()
+        super().update_animation()
         # 左右を向く
         if self.state == state.ATTACK:
-            self.attack.start(self, self.other, self.from_x, self.from_y, self.other_x)
+            self.attack.start(self, self.attack_target, self.from_x, self.from_y, self.attack_target_x)
         if len(self.textures) >= 2:
             if self.left_face:
                 self.texture = self.textures[1]

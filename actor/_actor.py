@@ -8,7 +8,7 @@ import math
 
 from constants import *
 from data import *
-from util import pixel_to_grid, grid_to_pixel, get_blocking_entity, get_door, stop_watch
+from util import pixel_to_grid, grid_to_pixel, get_blocking_entity, stop_watch
 from particle import AttackParticle, PARTICLE_COUNT
 
 from functools import lru_cache
