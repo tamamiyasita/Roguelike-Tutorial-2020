@@ -21,7 +21,8 @@ class TurnLoop:
         self.turn = Turn.ON
 
     def elapsed_time(self, actor, queue, engine):
-        """スキルクールダウンとステータス効果時間のカウントダウンを行う"""
+        """スキルクールダウンとステータス効果時間のカウントダウンを行う
+            即時効果はuse時に発動したあとfighter.statesに格納する"""
         if actor.fighter.skill_list:
             for skill in actor.fighter.skill_list:
                 if hasattr(skill, "max_cooldown_time"):
@@ -43,7 +44,8 @@ class TurnLoop:
                     states.data["count_time"] -= 1     
                     queue.extend(states.apply(engine))
                 if 1 > states.data["count_time"]:
-                    actor.fighter.states.remove(states)
+                    # actor.fighter.states.remove(states)
+                    states.remove_from_sprite_lists()
 
 
                 print(states.data["count_time"], states)
@@ -62,6 +64,7 @@ class TurnLoop:
                     continue
                 if actor.wait < 1:
                     self.actor = actor
+                    self.elapsed_time(actor, queue, engine)
                     self.turn = Turn.OFF
                     break
             for sprite in self.sprites:
@@ -95,7 +98,6 @@ class TurnLoop:
             # log.debug(
             #     f"{self.actor.name=}, {self.actor.wait=}, {self.actor.state=}, {self.actor.is_dead=}")
             if self.actor.state is state.TURN_END or self.actor.state is None or self.actor.is_dead:
-                self.elapsed_time(self.actor, queue, engine)
                 self.turn = Turn.ON
 
     

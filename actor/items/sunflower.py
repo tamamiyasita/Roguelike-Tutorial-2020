@@ -16,8 +16,8 @@ class Sunflower(BaseFlower):
 
 
         self.states_bonus = {"DEX": 1}
-        self.skill_generate = "seed_shot"
-        self.skill_add = {"seed_shot":1}
+        self.skill_generate = "poison_dart"
+        self.skill_add = {"poison_dart":1}
         self.data = {2:"p_grenade", 3:"healing"}
 
 

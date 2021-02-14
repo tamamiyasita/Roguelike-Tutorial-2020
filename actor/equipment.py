@@ -15,6 +15,10 @@ class Equipment:
         """
         self.item_slot = arcade.SpriteList()
         self.skill_list = set()# arcade.SpriteList()
+
+        self.states_bonus = {"max_hp": 0, "max_mp": 0, "STR": 0,
+                 "DEX": 0, "INT": 0, "defense": 0, "evasion": 0}
+
         
         self.flower_position = {i:(40*math.cos(math.radians(s)), 40*math.sin(math.radians(s))) for i, s in enumerate([30,60,90,120,150])}
         self.flower_position2 = {i:(60*math.cos(math.radians(s)), 60*math.sin(math.radians(s))) for i, s in enumerate([40,70,100,130,150])}
@@ -70,8 +74,8 @@ class Equipment:
         return self.skill_list
 
 
-    @property
-    def skill_level_sum(self):
+    
+    def skill_level_sum_update(self):
         """装備スロットをループしてskill levelの合計を返す"""
         bonus = {}
         for parts in self.item_slot:  # crisiumが入る
@@ -85,11 +89,11 @@ class Equipment:
 
         self.skill_list = {skill for skill in self.skill_list if skill.name in bonus.keys()}
 
-        return self.skill_list
+        # return self.skill_list
 
 
-    @property
-    def states_bonus(self):
+    
+    def states_bonus_update(self):
         """item_slotをループしてstates bonusを合計し返す"""
 
         bonus = {"max_hp": 0, "max_mp": 0, "STR": 0,
@@ -98,7 +102,7 @@ class Equipment:
             if parts and not isinstance(parts, str) and parts.states_bonus:
                 bonus = Counter(bonus) + Counter(parts.states_bonus)
 
-        return bonus
+        self.states_bonus = bonus
 
 
     def toggle_equip(self, equip_item):
@@ -115,6 +119,10 @@ class Equipment:
                 item.remove_from_sprite_lists()
                 
                 results.extend([{"message": f"dequipped {item.name}"}])
+
+                self.states_bonus_update()
+                self.skill_level_sum_update()
+                
                 return results
 
 
@@ -134,5 +142,8 @@ class Equipment:
                     self.item_slot[j].item_margin_y = self.flower_position2[j-5][1]
 
             results.append({"message": f"equipped {equip_item.name}"})
+
+            self.states_bonus_update()
+            self.skill_level_sum_update()
 
             return results

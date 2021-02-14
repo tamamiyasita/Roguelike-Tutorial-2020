@@ -26,6 +26,7 @@ from actor.skills.branch_baton import BranchBaton
 from actor.skills.healing import Healing
 from actor.skills.seed_shot import SeedShot
 from actor.skills.p_grenade import P_Grenade
+from actor.skills.poison_dart import PoisonDart
 
 from actor.states.poison_status import PoisonStatus
 
@@ -89,6 +90,8 @@ def restore_actor(actor_dict):
         actor = SeedShot()
     elif actor_name == "p_grenade":
         actor = P_Grenade()
+    elif actor_name == "PoisonDart":
+        actor = PoisonDart()
 
 
     elif actor_name == "PoisonStatus":

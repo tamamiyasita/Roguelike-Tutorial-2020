@@ -9,6 +9,7 @@ from actor.skills.grass_cutter import GrassCutter
 from actor.skills.healing import Healing
 from actor.skills.seed_shot import SeedShot
 from actor.skills.p_grenade import P_Grenade
+from actor.skills.poison_dart import PoisonDart
 
 from actor.states.poison_status import PoisonStatus
 
@@ -23,11 +24,12 @@ skill_lists =[
             BranchBaton(),
             Healing(),
             SeedShot(),
-            P_Grenade()
+            P_Grenade(),
+            PoisonDart()
         
 
             ]
 
 skill_dict = {skill.name:skill for skill in skill_lists}
 
-PoisonStatus()
+# PoisonStatus()

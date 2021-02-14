@@ -32,13 +32,16 @@ class Fighter:
         self.current_xp = current_xp
         self.level = level
         self.ability_points = ability_points
-        self._states = []
+        self._states = arcade.SpriteList()
 
         self.level_skills = {}#level_upなどに伴う追加Skillの合計に使う
         self.base_skill_dict = skill_dict
         self._skill_list = arcade.SpriteList()
         self.equip_position = {0:(9,2), 1:(-9,3), 2:(9,-4), 3:(-11, -5), 4:(-14, 1),12:(0, 0)}
 
+        # TODO バフデバフ効果に使う辞書　effect_bonus_update関数を作らねば
+        self.effect_bonus = {"max_hp": 0, "max_mp": 0, "STR": 0,
+                 "DEX": 0, "INT": 0, "defense": 0, "evasion": 0}
 
 
     def get_dict(self):
@@ -111,7 +114,7 @@ class Fighter:
 
         # TODO game_stateの状態でループするか決めたい
         if hasattr(self.owner, "equipment") and self.owner.equipment:
-            _skill_list = list(self.owner.equipment.skill_level_sum)
+            _skill_list = list(self.owner.equipment.skill_list)
             _skill_list = sorted(_skill_list, key=lambda x: x.level, reverse=True)
  
             return _skill_list
@@ -214,9 +217,13 @@ class Fighter:
 
     def effect_hit_chance(self, effect):
         attr = effect.attr
-        power = effect.power
         resist = self.resist[attr]
+        hit_chance = 100/resist
+        if random.randrange(1, 100) <= hit_chance:
+            self.states.append(effect)
 
+    def states_process(self, effect):
+        pass
 
     def skill_process(self, skill):
         self.owner.state = state.DEFENSE
@@ -250,6 +257,9 @@ class Fighter:
             # ヒット 
             message = f"The {skill_name} hit"
 
+            if effect:
+                self.effect_hit_chance(effect)
+
             # critical_flag:
             if random.randrange(1, (100+self.DEX)) < 5:
                 damage = skill.damage * 2
@@ -282,7 +292,6 @@ class Fighter:
 
             results.extend(self.change_hp(damage))
 
-            results.append({"damage_pop": self.owner, "damage": -damage})
 
 
         else:
@@ -304,6 +313,8 @@ class Fighter:
             results.append({"dead": self.owner})
 
             print(f"{self.owner.name} is dead x!")
+
+        results.append({"damage_pop": self.owner, "damage": -damage})
 
         return results
 

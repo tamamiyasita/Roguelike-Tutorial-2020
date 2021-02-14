@@ -136,6 +136,8 @@ seed_shot = arcade.load_texture_pair(r"image/seed_shot.png")
 seed_shot_b = arcade.load_texture(r"image/seed_shot_b.png")
 seed_shot_icon = arcade.load_texture(r"image/seed_shot_icon.png")
 
+poison_dart = arcade.load_texture_pair(r"image/seed_shot.png")
+
 pineapple_grenade = arcade.load_texture_pair(r"image/p_grenade.png")
 pineapple_grenade_icon = arcade.load_texture(r"image/pineapple_grenade_icon.png")
 
@@ -262,6 +264,7 @@ IMAGE_ID = {"Rou": player,
             "seed_shot":seed_shot,
             "seed_shot_b":seed_shot_b,
             "seed_shot_icon":seed_shot_icon,
+            "poison_dart":poison_dart,
             "p_grenade":pineapple_grenade,
             "p_grenade_icon":pineapple_grenade_icon,
             "poison":[poison],
