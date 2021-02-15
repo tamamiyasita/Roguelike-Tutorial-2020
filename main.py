@@ -101,7 +101,7 @@ class MG(arcade.Window):
 
         self.engine.tmp_effect_sprites.draw(filter=gl.GL_NEAREST)
         TMP_EFFECT_SPRITES.draw(filter=gl.GL_NEAREST)
-        for e in self.engine.tmp_effect_sprites:
+        for e in TMP_EFFECT_SPRITES:
             if hasattr(e, "emitter"):
                 e.emitter.draw()
 

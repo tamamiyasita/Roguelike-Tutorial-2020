@@ -1,7 +1,7 @@
 from constants import *
 from data import *
-from actor.skills.seed_shot import SeedShot
 from actor.skills.base_skill import BaseSkill
+from explosion import Explosion
 
 
 from throw import Throw
@@ -23,9 +23,11 @@ class P_Grenade(BaseSkill):
 
         self._damage = 10
         self.hit_rate = 100
-        self.speed = 16
         self.attr = "fire"
+        self.effect = None
 
+
+        self.speed = 16
         self.item_weight = 4
 
 
@@ -35,7 +37,7 @@ class P_Grenade(BaseSkill):
         self.explanatory_text = f""
          
         self.icon = IMAGE_ID["p_grenade_icon"]
-        self.effect = IMAGE_ID["explosion_effect"]
+        self.anime = IMAGE_ID["explosion_effect"]
 
 
     def use(self, engine):

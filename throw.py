@@ -2,32 +2,12 @@ from data import *
 from constants import *
 from util import grid_to_pixel
 from actor.actor import Actor
+from explosion import Explosion
+
 
 import math
 from fire import Fire
 
-
-class Explosion(arcade.Sprite):
-    def __init__(self, texture_list):
-        super().__init__()
-
-        self.current_texture = 0
-        self.textures = texture_list
-        self.texture = texture_list[0]
-        self.scale = 4
-        self.timer = 0
-
-    def update_animation(self, delta_time=1 / 60):
-        super().update_animation(delta_time)
-        self.timer += delta_time
-        if self.timer >= 0.04:
-
-            self.current_texture += 1
-            if self.current_texture < len(self.textures):
-                self.set_texture(self.current_texture)
-                self.timer = 0
-            else:
-                self.remove_from_sprite_lists()
 
 
 
@@ -49,9 +29,9 @@ class Flying(Actor):
         self.shot_speed = amm.speed
         self.shot_damage = -amm.damage
         self.attr = amm.attr
-        self.explosion_effect = amm.effect
+        self.anime_effect = amm.anime
 
-        self.effect_sprites.append(self)
+        TMP_EFFECT_SPRITES.append(self)
     
         self.scale = 4
 
@@ -74,15 +54,11 @@ class Flying(Actor):
                 self.trigger = None
                 self.effect_sprites.remove(self)
 
-                explosion = Explosion(self.explosion_effect)
-                explosion.center_x = self.target.center_x
-                explosion.center_y = self.target.center_y
-
-                explosion.update_animation()
-                self.effect_sprites.append(explosion)
+                Explosion(self.anime_effect, self.target.position, self.effect_sprites)
 
 
-                damage = self.click(self.target.x, self.target.y, self.shot_damage)
+
+                damage = self.circle_range(self.target.x, self.target.y, self.shot_damage)
 
                 self.engine.action_queue.extend([*damage,{"delay": {"time": 0.9, "action": {"turn_end": self.shooter}}}])
 
@@ -100,21 +76,21 @@ class Flying(Actor):
                 if result:
                     results.extend(result)
 
-    def click(self, x, y, damage):
+    def circle_range(self, x, y):
         print("Click!", x, y)
         results = []
-        self.apply_damage(x, y, damage, results)
+        self.apply_damage(x, y, results)
 
-        self.apply_damage(x-1, y-1, damage-2, results)
-        self.apply_damage(x, y-1, damage-2, results)
-        self.apply_damage(x+1, y-1, damage-2, results)
+        self.apply_damage(x-1, y-1, results)
+        self.apply_damage(x, y-1, results)
+        self.apply_damage(x+1, y-1, results)
 
-        self.apply_damage(x-1, y, damage-2, results)
-        self.apply_damage(x+1, y, damage-2, results)
+        self.apply_damage(x-1, y, results)
+        self.apply_damage(x+1, y, results)
 
-        self.apply_damage(x-1, y+1, damage-2, results)
-        self.apply_damage(x, y+1, damage-2, results)
-        self.apply_damage(x + 1, y + 1, damage-2, results)
+        self.apply_damage(x-1, y+1, results)
+        self.apply_damage(x, y+1, results)
+        self.apply_damage(x + 1, y + 1, results)
 
         self.engine.player.inventory.remove_item(self)
 
