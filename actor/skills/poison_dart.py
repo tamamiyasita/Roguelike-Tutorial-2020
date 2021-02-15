@@ -21,13 +21,13 @@ class PoisonDart(BaseSkill):
 
         self.max_cooldown_time = 4
 
-        self._damage = 2
+        self._damage = 1
         self.hit_rate = 85
         self.speed = 10
         self.attr = "poison"
-        self.effect = PoisonStatus(count_time=3)
+        self.effect = None
 
-        self.item_weight = 6
+        self.item_weight = 5
 
 
 
@@ -37,7 +37,7 @@ class PoisonDart(BaseSkill):
 
         self.explanatory_text = f""
 
-        self.icon = IMAGE_ID["seed_shot_icon"]  
+        self.icon = IMAGE_ID["poison_dart_icon"]  
         
 
     def use(self, engine):
