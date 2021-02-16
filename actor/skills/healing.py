@@ -32,7 +32,7 @@ class HealingEffect(Actor):
             )
         )
         self.alpha = 0
-        engine.tmp_effect_sprites.append(self)
+        TMP_EFFECT_SPRITES.append(self)
 
     def update(self):
         self.x = self.owner.x

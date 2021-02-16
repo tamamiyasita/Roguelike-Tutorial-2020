@@ -6,6 +6,7 @@ from actor.actor_set import *
 from collections import Counter
 import math
 from actor.skills.base_skill import BaseSkill
+from hit_anime import hit_particle
 
 
 class Fighter:
@@ -217,10 +218,14 @@ class Fighter:
 
     def effect_hit_chance(self, effect):
         attr = effect.attr
-        resist = self.resist[attr]
-        hit_chance = 100/resist
-        if random.randrange(1, 100) <= hit_chance:
+        resist = self.resist.get(attr)
+        if resist:
+            hit_chance = 100/resist
+            if random.randrange(1, 100) <= hit_chance:
+                self.states.append(effect)
+        else:
             self.states.append(effect)
+
 
     def states_process(self, effect):
         pass
@@ -284,6 +289,7 @@ class Fighter:
 
             
             else:
+                hit_particle(target=self.owner)
                 message += f" {owner_name} took {int(damage)} damage!"
                 results.append({"message": message})
 

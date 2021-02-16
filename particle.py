@@ -38,8 +38,9 @@ class AttackParticle(arcade.SpriteCircle):
 
         self.my_alpha = 255
 
-    def update(self):
-
+    def update_animation(self, delta_time):
+        super().update_animation(delta_time)
+        
         if self.my_alpha <= PARTICLE_FADE_RATE:
             # フェードアウトしたら消去
             self.remove_from_sprite_lists()

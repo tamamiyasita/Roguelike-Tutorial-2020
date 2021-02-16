@@ -19,12 +19,11 @@ class TriggerPull(Actor):
         self.target = target
         self.amm = amm
         self.particle_num = 5
-        self.effect_sprites = self.engine.tmp_effect_sprites
         
 
         self.shot_speed = 25
 
-        self.effect_sprites.append(self)
+        TMP_EFFECT_SPRITES.append(self)
 
         x_diff = self.target.center_x - self.center_x
         y_diff = self.target.center_y - self.center_y
@@ -36,19 +35,19 @@ class TriggerPull(Actor):
         print(f"amm angle:{self.angle:.2f}")
         self.trigger = True
 
-    def update(self):
-        super().update()
+    def update_animation(self, delta_time=1 / 60):
+        super().update_animation(delta_time)
         result = []
         if self.trigger:
-            # self.angle += 20
 
             if arcade.check_for_collision(self, self.target):
                 self.trigger = None
                 self.effect_sprites.remove(self)
+
                 for _ in range(self.particle_num):
                     particle = AttackParticle()
                     particle.position = (self.target.center_x, self.target.center_y)
-                    self.effect_sprites.append(particle)
+                    TMP_EFFECT_SPRITES.append(particle)
                 damage = self.target.fighter.skill_process(self.amm)
                 result.extend(damage)
 
@@ -64,7 +63,6 @@ class Fire:
         self.skill = skill
         self.x, self.y = shooter.x, shooter.y
         self.target = None
-        self.effect_sprites = engine.cur_level.effect_sprites
         self.actor_sprites = engine.cur_level.actor_sprites
 
     def use(self):

@@ -3,6 +3,7 @@ from data import *
 from constants import *
 from fire import Fire
 from actor.skills.base_skill import BaseSkill
+from ranged import Ranged
 
 
 
@@ -18,13 +19,18 @@ class SeedShot(BaseSkill):
                   "cooldown":False}
 
         self.amm = "seed_shot_b"
+        self.amm_scale = 2
 
         self.max_cooldown_time = 2
 
         self._damage = 6
         self.hit_rate = 85
-        self.speed = 10
+        self.speed = 25
         self.attr = "physical"
+
+        self.damage_range = "single"
+        self.player_state = state.SHOT
+
 
         self.item_weight = 6
 
@@ -43,7 +49,7 @@ class SeedShot(BaseSkill):
 
         if self.data["count_time"] <= 0:
 
-            fire = Fire(engine, self.owner, self)
+            fire = Ranged(engine, self.owner, self)
             fire.use()
 
 

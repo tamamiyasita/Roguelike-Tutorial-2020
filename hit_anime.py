@@ -1,16 +1,26 @@
+from constants import TMP_EFFECT_SPRITES
 import arcade
+from particle import AttackParticle
 
-class Explosion(arcade.Sprite):
-    def __init__(self, texture_list, position, sprites):
+
+def hit_particle(target, anime=None):
+    for i in range(5):
+        particle = AttackParticle()
+        particle.position = (target.center_x, target.center_y)
+        TMP_EFFECT_SPRITES.append(particle)
+
+
+class Hit_Anime(arcade.Sprite):
+    def __init__(self, texture_list, position, scale=4):
         super().__init__()
 
         self.current_texture = 0
         self.position = position
         self.textures = texture_list
         self.texture = texture_list[0]
-        self.scale = 4
+        self.scale = scale
         self.timer = 0
-        sprites.append(self)
+        TMP_EFFECT_SPRITES.append(self)
         self.update_animation()
 
     def update_animation(self, delta_time=1 / 60):
@@ -24,4 +34,5 @@ class Explosion(arcade.Sprite):
                 self.timer = 0
             else:
                 self.remove_from_sprite_lists()
+
 

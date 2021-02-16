@@ -3,7 +3,7 @@ from constants import *
 from data import *
 from actor.skills.base_skill import BaseSkill
 from actor.states.poison_status import PoisonStatus
-from fire import Fire
+from ranged import Ranged
 
 class PoisonDart(BaseSkill):
     def __init__(self, x=0, y=0, name="poison_dart"):
@@ -17,15 +17,19 @@ class PoisonDart(BaseSkill):
                   "count_time":0,
                   "cooldown":False}
 
-        self.amm = "seed_shot_b"
+        self.amm = "poison_dart"
 
         self.max_cooldown_time = 4
 
         self._damage = 1
         self.hit_rate = 85
-        self.speed = 10
+        self.speed = 23
         self.attr = "poison"
         self.effect = None
+
+        self.damage_range = "single"
+        self.player_state = state.THROW
+
 
         self.item_weight = 5
 
@@ -45,5 +49,19 @@ class PoisonDart(BaseSkill):
 
         if self.data["count_time"] <= 0:
 
-            fire = Fire(engine, self.owner, self)
+            fire = Ranged(engine, self.owner, self)
             fire.use()
+
+    def update_animation(self, delta_time):
+        super().update_animation(delta_time)
+
+        if self.master.state == state.THROW:
+            self.alpha = 0
+        else:
+            self.alpha = 255
+            if self.master.left_face:
+                self.angle = -90
+            else:
+                self.angle = 90
+        
+

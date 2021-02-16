@@ -1,10 +1,9 @@
 from constants import *
 from data import *
 from actor.skills.base_skill import BaseSkill
-from explosion import Explosion
+from ranged import Ranged
 
-
-from throw import Throw
+from ranged import Ranged
 
 class P_Grenade(BaseSkill):
     def __init__(self, x=0, y=0, name="p_grenade"):
@@ -26,6 +25,9 @@ class P_Grenade(BaseSkill):
         self.attr = "fire"
         self.effect = None
 
+        self.damage_range = "circle"
+        self.player_state = state.THROW
+
 
         self.speed = 16
         self.item_weight = 4
@@ -44,7 +46,7 @@ class P_Grenade(BaseSkill):
 
         if self.data["count_time"] <= 0:
 
-            fire = Throw(engine, self.owner, self)
+            fire = Ranged(engine, self.owner, self, spin=60)
             fire.use()
 
     def update_animation(self, delta_time):

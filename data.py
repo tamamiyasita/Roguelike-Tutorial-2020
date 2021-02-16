@@ -131,6 +131,7 @@ healing = arcade.load_texture_pair(r"image\healing.png")
 Paeonia = arcade.load_texture(r"image\paeonia.png")
 sunflower = arcade.load_texture(r"image\sunflower.png")
 pineapple = arcade.load_texture(r"image/pineapple.png")
+aconite = arcade.load_texture(r"image/aconite.png")
 
 seed_shot = arcade.load_texture_pair(r"image/seed_shot.png")
 seed_shot_b = arcade.load_texture(r"image/seed_shot_b.png")
@@ -251,6 +252,7 @@ IMAGE_ID = {"Rou": player,
             "sunflower":sunflower,
             "paeonia":Paeonia,
             "pineapple":pineapple,
+            "aconite":aconite,
 
             "attack": leaf_blade,
 

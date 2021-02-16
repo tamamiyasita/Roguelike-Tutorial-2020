@@ -99,7 +99,6 @@ class MG(arcade.Window):
         self.engine.cur_level.equip_sprites.draw(filter=gl.GL_NEAREST)
         self.engine.cur_level.effect_sprites.draw(filter=gl.GL_NEAREST)
 
-        self.engine.tmp_effect_sprites.draw(filter=gl.GL_NEAREST)
         TMP_EFFECT_SPRITES.draw(filter=gl.GL_NEAREST)
         for e in TMP_EFFECT_SPRITES:
             if hasattr(e, "emitter"):
@@ -199,9 +198,8 @@ class MG(arcade.Window):
             self.engine.cur_level.equip_sprites.update_animation()
             self.engine.flower_sprites.update()
             self.engine.flower_sprites.update_animation()
-            self.engine.tmp_effect_sprites.update()
-            self.engine.tmp_effect_sprites.update_animation()
             self.engine.cur_level.map_obj_sprites.update_animation()
+            TMP_EFFECT_SPRITES.update()
             TMP_EFFECT_SPRITES.update_animation()
 
 

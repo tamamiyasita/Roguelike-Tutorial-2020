@@ -32,6 +32,7 @@ from actor.items.silver_grass import SilverGrass
 from actor.items.ebony import Ebony
 from actor.items.sunflower import Sunflower
 from actor.items.pineapple import Pineapple
+from actor.items.aconite import Aconite
 from level_up_sys import check_experience_level
 
 
@@ -94,7 +95,6 @@ class GameEngine:
 
         arcade.set_background_color(COLORS["black"])
         self.flower_sprites = arcade.SpriteList(use_spatial_hash=True, spatial_hash_cell_size=32)
-        self.tmp_effect_sprites = arcade.SpriteList(use_spatial_hash=True, spatial_hash_cell_size=32)
         self.cur_level = self.setup_level(level_number=99)
         self.stories[self.cur_floor_name] = self.cur_level
         self.turn_loop = TurnLoop(self.player)
@@ -156,6 +156,9 @@ class GameEngine:
 
         self.sunflower = Sunflower(self.player.x, self.player.y-2)
         self.game_level.item_sprites.append(self.sunflower)
+
+        self.aconite = Aconite(self.player.x+1, self.player.y-2)
+        self.game_level.item_sprites.append(self.aconite)
 
 
         self.st = Up_Stairs(self.player.x + 1, self.player.y-1)
@@ -452,7 +455,6 @@ class GameEngine:
             self.stories[map_name] = level
         print(self.stories)
         self.flower_sprites = arcade.SpriteList(use_spatial_hash=True, spatial_hash_cell_size=32)
-        self.tmp_effect_sprites = arcade.SpriteList(use_spatial_hash=True, spatial_hash_cell_size=32)
 
         self.cur_level = self.stories[data["cur_level_name"]]#dataに格納した現在階層を適応する 
 
@@ -615,7 +617,7 @@ class GameEngine:
                 if result:
                     new_action_queue.extend(result)
                     self.flower_sprites = arcade.SpriteList(use_spatial_hash=True, spatial_hash_cell_size=32)
-                    self.tmp_effect_sprites = arcade.SpriteList(use_spatial_hash=True, spatial_hash_cell_size=32)
+                    TMP_EFFECT_SPRITES = arcade.SpriteList(use_spatial_hash=True, spatial_hash_cell_size=32)
 
                     self.player.equipment.item_sprite_check(self.flower_sprites)
                     self.player.equipment.equip_position_reset()

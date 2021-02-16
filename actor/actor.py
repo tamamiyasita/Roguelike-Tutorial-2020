@@ -10,7 +10,8 @@ from constants import *
 from data import *
 from util import pixel_to_grid, grid_to_pixel, get_blocking_entity,  stop_watch
 # from particle import AttackParticle, PARTICLE_COUNT
-from attack_effect import CombatEffect
+from attack_effect import AttackEffect
+
 
 from functools import lru_cache
 
@@ -52,10 +53,13 @@ class Actor(arcade.Sprite):
         self.d_time = 170 # 待機モーション時のdelay時間
         self.is_dead = None
         self.tag = {}
+        self.attack_delay = 6
 
         self.data = data
         
         self.power = power
+
+        self.step = GRID_SIZE // 2
 
         self.inventory = inventory
         if self.inventory:
@@ -202,8 +206,6 @@ class Actor(arcade.Sprite):
         wall_sprites = engine.cur_level.wall_sprites
         map_obj_sprites = engine.cur_level.map_obj_sprites
         actor_sprites = engine.cur_level.actor_sprites
-        self.tmp_effect_sprites = engine.tmp_effect_sprites
-        self.combat_effect = CombatEffect(self.tmp_effect_sprites)
 
         self.dx, self.dy = dxy
 
@@ -251,12 +253,11 @@ class Actor(arcade.Sprite):
                 elif Tag.enemy in actor.tag and not actor.is_dead:
                     attack_results = self.fighter.attack(actor)
 
-                    self.attack_target = actor
-                    self.attack_target_x = actor.center_x
                     if attack_results:
                         self.state = state.ATTACK
                         self.change_y = self.dy * (MOVE_SPEED -4)
                         self.change_x = self.dx * (MOVE_SPEED -4)
+                    self.combat_effect = AttackEffect(self, actor)
                     engine.action_queue.extend(
                             [{"delay": {"time": 0.2, "action": {"None": self}}}])
 
@@ -272,9 +273,8 @@ class Actor(arcade.Sprite):
             if target and self.distance_to(target) <= 1.46:
                 # monsterの攻撃チェック
                 attack_results = self.fighter.attack(target)
+                self.combat_effect = AttackEffect(self, target)
 
-                self.attack_target = target
-                self.attack_target_x = target.center_x
                 if attack_results:
                     self.state = state.ATTACK
                     self.change_y = self.dy * (MOVE_SPEED+5)
@@ -355,7 +355,24 @@ class Actor(arcade.Sprite):
         super().update_animation()
         # 左右を向く
         if self.state == state.ATTACK:
-            self.combat_effect.attack(self, self.attack_target, self.from_x, self.from_y, self.attack_target_x)
+            if abs(self.from_x - self.center_x) >= self.step and self.dx or\
+                abs(self.from_y - self.center_y) >= self.step and self.dy:
+                self.change_x = 0
+                self.change_y = 0
+            self.combat_effect.attack()
+
+
+
+
+
+
+
+
+
+
+
+
+
         if len(self.textures) >= 2:
             if self.left_face:
                 self.texture = self.textures[1]

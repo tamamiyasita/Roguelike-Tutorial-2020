@@ -29,7 +29,7 @@ class PoisonEffect(Actor):
             )
         )
         self.alpha = 0
-        self.engine.tmp_effect_sprites.append(self)
+        TMP_EFFECT_SPRITES.append(self)
 
     def update_animation(self, delta_time=1 / 60):
         super().update_animation(delta_time)
@@ -44,7 +44,7 @@ class PoisonEffect(Actor):
         if self.particle_time < 1:
             self.owner.color = self.color
             self.particle_time = 30
-            self.engine.tmp_effect_sprites.remove(self)
+            self.remove_from_sprite_lists()
 
 
 class PoisonStatus(Actor):

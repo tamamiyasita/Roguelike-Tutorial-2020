@@ -90,7 +90,6 @@ class Player(Actor):
 
         if self.state == state.DEFENSE and self.left_face:
             self.texture = pc_def[1]
-            # self.change_x += uniform(-0.7, 0.7)
 
         if self.state == state.READY and not self.left_face:
             self.texture = player[0]
