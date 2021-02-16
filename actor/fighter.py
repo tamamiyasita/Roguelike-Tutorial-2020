@@ -6,7 +6,7 @@ from actor.actor_set import *
 from collections import Counter
 import math
 from actor.skills.base_skill import BaseSkill
-from hit_anime import hit_particle
+from hit_anime import hit_particle, Hit_Anime
 
 
 class Fighter:
@@ -289,6 +289,8 @@ class Fighter:
 
             
             else:
+                if hasattr(skill, "anime"):
+                    Hit_Anime(skill.anime, self.owner.position)
                 hit_particle(target=self.owner)
                 message += f" {owner_name} took {int(damage)} damage!"
                 results.append({"message": message})

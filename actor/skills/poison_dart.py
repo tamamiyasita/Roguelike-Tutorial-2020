@@ -42,6 +42,7 @@ class PoisonDart(BaseSkill):
         self.explanatory_text = f""
 
         self.icon = IMAGE_ID["poison_dart_icon"]  
+        self.anime = IMAGE_ID["poison_start"]
         
 
     def use(self, engine):

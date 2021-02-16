@@ -3,10 +3,8 @@ from data import *
 from constants import *
 from util import grid_to_pixel
 from actor.actor import Actor
-from hit_anime import Hit_Anime
 
 from damage_range import circle_range
-from attack_effect import AttackEffect
 
 import math
 
@@ -33,7 +31,6 @@ class Flying(Actor):
         self.attr = skill.attr
         self.damage_range = skill.damage_range
         self.target = arcade.get_sprites_at_point(self.tar_point.position, self.engine.cur_level.actor_sprites)[0]
-        self.attack_effect = AttackEffect(shooter, self.target)
 
         TMP_EFFECT_SPRITES.append(self)
     
@@ -62,8 +59,7 @@ class Flying(Actor):
                 self.remove_from_sprite_lists()
 
                 # if self.anime_effect:
-                if hasattr(self, "anime"):
-                    Hit_Anime(self.anime_effect, self.tar_point.position)
+
 
                 if self.damage_range == "single":
                     damage = self.target.fighter.skill_process(self.skill)

@@ -143,6 +143,7 @@ poison_dart_icon = arcade.load_texture(r"image/poison_dart_icon.png")
 pineapple_grenade = arcade.load_texture_pair(r"image/p_grenade.png")
 pineapple_grenade_icon = arcade.load_texture(r"image/pineapple_grenade_icon.png")
 
+poison_start = [arcade.load_texture(img) for img in glob.glob(r"image\effect\poison_start\*")]
 poison = arcade.load_texture(r"image\poison.png")
 explosion = [arcade.load_texture(img) for img in glob.glob(r"image\effect\explosion\*")]
 
@@ -272,6 +273,7 @@ IMAGE_ID = {"Rou": player,
             "p_grenade":pineapple_grenade,
             "p_grenade_icon":pineapple_grenade_icon,
             "poison":[poison],
+            "poison_start":poison_start,
             "cool_down":cool_down,
             "confusion_scroll": [scroll_tile[15]],
             "lightning_scroll": [scroll_tile[2]],
