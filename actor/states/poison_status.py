@@ -58,15 +58,18 @@ class PoisonStatus(Actor):
         self.data={"switch":False,
             "count_time":count_time,
             "cooldown":False}
-        self.owner = None
-        self.power = 3
         self.max_cooldown_time = 4
+        self.owner = None
 
-
+        self.level = 1
+        self.damage = 4
         self.attr = "poison"
+        self.hit_rate = None
+        self.effect = None
 
 
-        self.level = 0
+
+
 
 
         self.tag = [Tag.item, Tag.used, Tag.active, Tag.skill]
@@ -81,10 +84,8 @@ class PoisonStatus(Actor):
         self.engine = engine
 
         if self.owner and self.data["count_time"] >= 0:
-            color = self.owner.color
 
-            result = self.owner.fighter.change_hp(self.power)
-            self.poison = PoisonEffect(
-                self.owner,  self.engine)
+            result = self.owner.fighter.skill_process(self)
+            PoisonEffect(self.owner,  self.engine)
 
-            return [{"message": f"{self.owner.name} took {self.power} damage from poison"}, *result]
+            return result

@@ -56,6 +56,7 @@ class Tag(Enum):
     skill = auto()
     active = auto()
     passive = auto()
+    counter = auto()
 
     # chara
     player = auto()
@@ -137,6 +138,7 @@ class state(Enum):
     SHOT = auto()
     THROW = auto()
     DEFENSE = auto()
+    STUN = auto()
 
 class NPC_state(Enum):
     REQUEST = auto()

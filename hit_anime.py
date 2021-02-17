@@ -35,4 +35,27 @@ class Hit_Anime(arcade.Sprite):
             else:
                 self.remove_from_sprite_lists()
 
+class Fall(arcade.Sprite):
+    def __init__(self, owner, scale=2):
+        super().__init__()
+
+        self.current_texture = 0
+        self.owner = owner
+        self.texture = owner.texture
+        self.scale = scale
+        self.timer = 0
+        self.owner.alpha = 0
+        TMP_EFFECT_SPRITES.append(self)
+        self.update_animation()
+
+    def update_animation(self, delta_time=1 / 60):
+        super().update_animation(delta_time)
+        self.timer += delta_time
+        self.angle += 10
+        if self.angle >= 90:
+            self.angle = 90
+        if self.timer >= 0.9:
+            self.remove_from_sprite_lists()
+            self.owner.alpha = 255
+
 

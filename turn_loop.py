@@ -44,7 +44,7 @@ class TurnLoop:
                     states.data["count_time"] -= 1     
                     queue.extend(states.apply(engine))
                 if 1 > states.data["count_time"]:
-                    # actor.fighter.states.remove(states)
+                    actor.fighter.states.remove(states)
                     states.remove_from_sprite_lists()
 
 
@@ -65,8 +65,12 @@ class TurnLoop:
                 if actor.wait < 1:
                     self.actor = actor
                     self.elapsed_time(actor, queue, engine)
-                    self.turn = Turn.OFF
-                    break
+                    # 死亡時判定(未テスト)
+                    if actor.is_dead or actor.state == state.STUN:
+                        continue
+                    else:
+                        self.turn = Turn.OFF
+                        break
             for sprite in self.sprites:
                 # playerもしくは他のactorの時はvisibleの場合のみwaitを減らす
                 if sprite == self.player or sprite.is_visible or sprite.ai and sprite.ai.visible_check:

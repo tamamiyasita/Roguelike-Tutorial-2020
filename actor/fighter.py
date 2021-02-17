@@ -130,6 +130,10 @@ class Fighter:
         result =  [skill for skill in self.skill_list if Tag.active in skill.tag if skill not in self.switch_off_skills]
         return result
     @property
+    def counter_skill(self):
+        result =  [skill for skill in self.skill_list if Tag.counter in skill.tag if skill not in self.switch_off_skills]
+        return result
+    @property
     def attack_skill(self):
         try:
             result =  [skill for skill in self.skill_list if Tag.weapon in skill.tag if skill not in self.switch_off_skills]
@@ -217,18 +221,16 @@ class Fighter:
 
 
     def effect_hit_chance(self, effect):
-        attr = effect.attr
-        resist = self.resist.get(attr)
+        resist = self.resist.get(effect.attr)
         if resist:
             hit_chance = 100/resist
             if random.randrange(1, 100) <= hit_chance:
                 self.states.append(effect)
+                # self.owner.name is {effect.name} rd
         else:
             self.states.append(effect)
 
 
-    def states_process(self, effect):
-        pass
 
     def skill_process(self, skill):
         self.owner.state = state.DEFENSE
@@ -255,45 +257,52 @@ class Fighter:
                 self.hp = self.max_hp
             return results
 
+        if self.counter_skill:
+            results.extend(self.counter_check())
+            if "stop" in results:
+                return results
+        
+
         # (命中率)％ ＝（α／１００）＊（１ー （β ／ １００））＊ １００
         # 命中率（α）＝９５、回避率（β）＝５
-        hit_chance = ((hit_rate-self.DEX) / 100) * (1 - (self.evasion / 100)) * 100
-        if random.randrange(1, 100) <= hit_chance:
-            # ヒット 
-            message = f"The {skill_name} hit"
-
-            if effect:
-                self.effect_hit_chance(effect)
-
-            # critical_flag:
-            if random.randrange(1, (100+self.DEX)) < 5:
-                damage = skill.damage * 2
-                message += " CRITICAL!"
-
-            # 物理防御処理
-            elif attr == "physical":
-                damage = damage / self.defense
-
-
-            if self.resist[attr] <= 0:
-                damage *= 2.5# 弱点ダメージ
-            else:
-                damage = damage / self.resist[attr]
-
-
-            # 完全防御
-            if damage < 1:
-                message += f" But {owner_name} was undamaged."
-                results.extend([{"message": message},{"damage_pop": self.owner, "damage": "Guard!"}])
-                return results
-
-            
-            else:
-                if hasattr(skill, "anime"):
-                    Hit_Anime(skill.anime, self.owner.position)
+        if hit_rate:
+            hit_chance = ((hit_rate-self.DEX) / 100) * (1 - (self.evasion / 100)) * 100
+            if random.randrange(1, 100) <= hit_chance:
+                # ヒット 
+                message = f"Hit"
                 hit_particle(target=self.owner)
-                message += f" {owner_name} took {int(damage)} damage!"
-                results.append({"message": message})
+
+                if effect:
+                    self.effect_hit_chance(effect)
+
+                # critical_flag:
+                if random.randrange(1, (100+self.DEX)) < 5:
+                    damage = skill.damage * 2
+                    message += " CRITICAL!"
+
+                # 物理防御処理
+                elif attr == "physical":
+                    damage = damage / self.defense
+
+
+        if self.resist[attr] <= 0:
+            damage *= 2.5# 弱点ダメージ
+        else:
+            damage = damage / self.resist[attr]
+
+
+        # 完全防御
+        if damage < 1:
+            message += f" But {owner_name} was undamaged."
+            results.extend([{"message": message},{"damage_pop": self.owner, "damage": "Guard!"}])
+            return results
+
+        
+        elif damage >= 1:
+            if hasattr(skill, "anime"):
+                Hit_Anime(skill.anime, self.owner.position)
+            message += f" {owner_name} took {int(damage)} damage! from {skill_name}"
+            results.append({"message": message})
 
 
             damage = int(damage)
@@ -338,3 +347,8 @@ class Fighter:
                 results.extend(target.fighter.skill_process(skill))
 
         return results
+
+    def counter_check(self):            
+        for c in self.counter_skill:
+            result = c.use()
+        return result
