@@ -33,8 +33,6 @@ class PoisonDart(BaseSkill):
 
         self.item_weight = 5
 
-
-
         self.level = 1
 
         self.tag = [Tag.item, Tag.used, Tag.active, Tag.skill, Tag.equip]
@@ -46,7 +44,7 @@ class PoisonDart(BaseSkill):
         
 
     def use(self, engine):
-        self.effect = PoisonStatus(count_time=3)
+        self.effect = PoisonStatus(count_time=4)
 
         if self.data["count_time"] <= 0:
 

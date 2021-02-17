@@ -12,7 +12,9 @@ class Water_vole(Actor):
                                     defense=1,
                                     evasion=2,
                                     xp_reward=3,
-                                    level=1
+                                    level=1,
+                                    resist={"physical": 1, "fire": 1, "ice": 1, "lightning":1,
+                                             "acid": 1, "poison": 1, "mind": 1}
                                     )
         ai_component = Basicmonster()
 
