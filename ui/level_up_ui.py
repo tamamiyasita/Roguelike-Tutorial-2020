@@ -123,10 +123,10 @@ class LevelupUI:
                         # else:
                         #     self.player.fighter.level_skills.setdefault(self.add, 1)
                         # Counter(self.player.fighter.level_skills) + Counter(self.add)
-                        if self.add in item.skill_add:
-                            item.skill_add[self.add] += 1
+                        if self.add in item.skill_bonus:
+                            item.skill_bonus[self.add] += 1
                         else:
-                            item.skill_add.setdefault(self.add, 1)
+                            item.skill_bonus.setdefault(self.add, 1)
                     item.level += 1
                     self.level_bonus = None
                     self.flowers.remove(item)
@@ -181,7 +181,7 @@ class LevelupUI:
                     )
                     ifs += 21
                 # skillの表示
-                for k, v in item.skill_add.items():
+                for k, v in item.skill_bonus.items():
                     arcade.draw_text(
                         text=f"{k} level {v}".replace("_", " ").title(),
                         start_x=self.bottom_left_x + 10,
@@ -192,19 +192,7 @@ class LevelupUI:
                         anchor_y="top"
                     )
                     ifs += 19
-                # 追加Skillの表示
-                self.add = item.data.get(item.level+1)
-                if self.add: 
-                    arcade.draw_text(
-                        text=f"{self.add} + 1".replace("_", " ").title(),
-                        start_x=self.bottom_left_x + 10,
-                        start_y=self.back_panel_top_left + y - (22) - ifs,
-                        color=arcade.color.RED_PURPLE,
-                        font_size=font_size,
-                        font_name="consola.ttf",
-                        anchor_y="top"
-                    )
-                    ifs += 19
+
                         
                 
 

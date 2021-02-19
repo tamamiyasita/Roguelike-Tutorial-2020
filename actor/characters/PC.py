@@ -1,6 +1,6 @@
 # from actor.actor import Actor
 from actor.actor import Actor
-from actor.fighter import Fighter
+from actor.player_fighter import PC_Fighter
 from actor.equipment import Equipment
 from data import *
 from constants import *
@@ -14,7 +14,7 @@ from random import uniform
 class Player(Actor):
     def __init__(self, x=0, y=0, inventory=0):
         unarmed_component = BaseSkill()
-        fighter_component = Fighter(hp=15, STR=2, DEX=3, INT=3,
+        fighter_component = PC_Fighter(hp=15, STR=2, DEX=3, INT=3,
                                     resist={"physical": 1, "fire": 1, "ice": 1, "lightning":1, "acid": 1, "poison": 1, "mind": 1},#雷忘れてた
                                     defense=2,
                                     evasion=5,
@@ -28,11 +28,13 @@ class Player(Actor):
             color=COLORS["white"],
 
             inventory=inventory,
-            fighter=fighter_component,
             equipment=equip_component,
             
 
         )
+        self.fighter=fighter_component
+        self.fighter.owner = self
+
         self.tag = [Tag.player]
         self.race = "Alraune"
 

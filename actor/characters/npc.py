@@ -35,7 +35,7 @@ class Citizen(Actor):
         fighter_component = Fighter()
         healing = Healing()
         healing.owner = self
-        healing.level = 2
+        healing._level = 2
 
 
         super().__init__(
@@ -44,12 +44,13 @@ class Citizen(Actor):
             y=y,
             speed=10,
             ai=ai_component,
-            fighter=fighter_component,
             blocks=True,
             npc_state=NPC_state.REQUEST
         )
         self.tag = [Tag.npc, Tag.friendly, Tag.quest]
         # self.fighter.skill_list.append(healing)
+        self.fighter=fighter_component
+        self.fighter.owner = self
 
 
         self.message = [

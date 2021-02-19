@@ -103,7 +103,7 @@ class GameEngine:
     def test_map(self, level):
         self.game_map = TestMap(40,40,99)
         #スプライトリストの初期化
-        floor_sprite = ActorPlacement(self.game_map, self).floor_set()
+        floor_sprite = ActorPlacement(self.game_map, self).floor_set(image="color_tile_1")
         wall_sprite = ActorPlacement(self.game_map, self).wall_set()
         map_point_sprite = ActorPlacement(self.game_map, self).map_point_set()
         map_obj_sprite = ActorPlacement(self.game_map, self).map_obj_set()

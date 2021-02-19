@@ -186,6 +186,8 @@ up_stairs = arcade.load_texture(r"image\up_stairs.png")
 down_stairs = arcade.load_texture(r"image\down_stairs.png")
 stone_floor = arcade.load_texture(r"image\stone_tile.png")
 block_floor = arcade.load_texture(r"image\floor_15.png")
+tst_floor = arcade.load_texture(r"image\tst_floor.png")
+color_tile_1 = arcade.load_texture(r"image\color_tile_1.png")
 
 # walls_1 = (r"image/wall1.png")
 # walls_1_tiles = get_tile_set(walls_1, tile_size=16)
@@ -291,6 +293,8 @@ IMAGE_ID = {"Rou": player,
             "stairs_down_point": stairs_down_point,
 
             "floor": floors,
+            "tst_floor": tst_floor,
+            "color_tile_1": color_tile_1,
             "stone_floor":[stone_floor],
             "block_floor":[block_floor],
             "side_floor":side_floor,

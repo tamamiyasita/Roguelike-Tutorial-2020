@@ -4,23 +4,29 @@ from data import *
 
 
 class BaseSkill(Actor):
-    def __init__(self, x=0, y=0, name="attack", data={"switch":False},
+    def __init__(self, x=0, y=0, name="attack", 
                 level=1, damage=1, hit_rate=90, attr="physical", effect=None):
         super().__init__(
             name=name,
             x=x,
             y=y,
-            data=data
         )
         self.color=COLORS["white"]
 
-        self.level = level
+        self._level = level
         self._damage = damage
         self.hit_rate = hit_rate
         self.attr = attr
         self.effect = effect
 
         self.owner = None
+        self.flower = None
+
+        self.max_cooldown_time = 6
+        self.count_time = 0
+        self.during_cool_down = False
+
+
 
 
         self.tag = []
@@ -34,6 +40,19 @@ class BaseSkill(Actor):
 
         self.item_position_x = 0
         self.item_position_y = 0
+        self.explanatory_text = f""
+
+    @property
+    def level(self):
+        if self.flower:
+            self._level = self.flower.level
+        return self._level
+
+    # @property
+    # def count_time(self):
+    #     if self.flower:
+    #         self._count_time = self.flower.count_time
+    #     return self._count_time
 
     @property
     def damage(self):

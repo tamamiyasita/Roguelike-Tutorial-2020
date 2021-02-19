@@ -1,8 +1,5 @@
-from actor.actor import Actor
-from constants import *
-from data import *
-from util import exp_calc
 from actor.items.base_flower import BaseFlower
+from actor.skills.grass_cutter import GrassCutter
 
 class SilverGrass(BaseFlower):
     def __init__(self, x=0, y=0, name="silver_grass"):
@@ -11,29 +8,29 @@ class SilverGrass(BaseFlower):
             x=x,
             y=y,
         )
-        # template
-        self.tag = [Tag.item, Tag.equip, Tag.flower]
+
+
+        skill_component = GrassCutter()
+
+        # 定数 #############################
+        self.level_up_weights = [3, 5, 2]
+        self.explanatory_text = f"Is silvergrass \n st"
+        self.item_margin_x = 17
+        self.item_margin_y = 6
+        self.my_speed = 4.3
+        self.flower_skill = skill_component
+        self.flower_skill.flower = self
+        ###################################
+
+        self.level = 1
         self.current_xp = 0
 
-        # level
-        self.level = 1
-        self.max_level = 5
-        self.experience_per_level = exp_calc()
-        self.level_up_weights = [3, 5, 2]
 
-        # states
-        self.states_bonus = {"DEX":1}
-        self.skill_generate = "grass_cutter"
-        self.skill_add = {"grass_cutter":1}
-        self.data = {2:"grass_cutter", 3:"grass_cutter"}
+        self.states_bonus = {"DEX": 1}
+        self.skill_bonus = {"grass_cutter":1}
+        self.resist_bonus = {}
 
-        # position
 
-        self.my_speed = 4.3
-
-        self.explanatory_text = f"Is SilverGrass TEst test test \n testtesttest"
-
-        self.flower_move = 0
 
 
 

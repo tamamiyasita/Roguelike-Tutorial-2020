@@ -11,11 +11,10 @@ class StunStatus(Actor):
 
         )
 
-        self.data={"switch":False,
-                   "count_time":count_time,
-                   "cooldown":False}
-        self.max_cooldown_time = 4
         self.owner = None
+
+        self.count_time = count_time
+        self.max_cooldown_time = 4
 
         self.level = 1
         self.damage = None
@@ -33,7 +32,7 @@ class StunStatus(Actor):
     def apply(self, engine):
         self.engine = engine
 
-        if self.owner and self.data["count_time"] >= 0:
+        if self.owner and self.count_time >= 0:
 
             self.owner.state == state.STUN
             self.owner.wait = self.owner.fighter.attack_speed

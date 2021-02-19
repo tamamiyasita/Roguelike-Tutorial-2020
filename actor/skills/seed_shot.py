@@ -14,14 +14,11 @@ class SeedShot(BaseSkill):
             x=x,
             y=y,
         )
-        self.data={"switch":False,
-                  "count_time":0,
-                  "cooldown":False}
 
         self.amm = "seed_shot_b"
         self.amm_scale = 2
 
-        self.max_cooldown_time = 2
+        self.max_cooldown_time = 3
 
         self._damage = 6
         self.hit_rate = 85
@@ -34,9 +31,7 @@ class SeedShot(BaseSkill):
 
         self.item_weight = 6
 
-
-
-        self.level = 1
+        self._level = 1
 
         self.tag = [Tag.item, Tag.used, Tag.active, Tag.skill, Tag.equip]
 
@@ -47,7 +42,7 @@ class SeedShot(BaseSkill):
 
     def use(self, engine):
 
-        if self.data["count_time"] <= 0:
+        if self.count_time <= 0:
 
             fire = Ranged(engine, self.owner, self)
             fire.use()

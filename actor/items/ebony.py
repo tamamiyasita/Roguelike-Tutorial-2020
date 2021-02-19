@@ -1,5 +1,5 @@
 from actor.items.base_flower import BaseFlower
-
+from actor.skills.branch_baton import BranchBaton
 
 
 class Ebony(BaseFlower):
@@ -9,31 +9,24 @@ class Ebony(BaseFlower):
             x=x,
             y=y,
         )
-        # template
-        # self.slot = "flower"
-        # self.tag = [Tag.item, Tag.equip, Tag.flower]
-        # self.current_xp = 0
+        skill_component = BranchBaton()
 
-
-        # # level
-        # self.level = 1
-        # self.max_level = 5
-        # self.experience_per_level = exp_calc()
+        # 定数 #############################
         self.level_up_weights = [5, 3, 2]
-
-        # states
-        self.states_bonus = {"STR": 1}
-        self.skill_generate ="branch_baton"
-        self.skill_add = {"branch_baton":1}
-        self.data = {2:"branch_baton", 3:"healing"}
-        
-
-        # position
+        self.explanatory_text = f"Is Ebony \n st"
         self.item_margin_x = 19
         self.item_margin_y = 11
         self.my_speed = 4.0
+        self.flower_skill = skill_component
+        self.flower_skill.flower = self
+        ###################################
+
+        self.level = 1
+        self.current_xp = 0
 
 
-        self.explanatory_text = f"Is Ebony $#############4TEst test test \n test$#4444444444testtest"
+        self.states_bonus = {"STR": 1}
+        self.skill_bonus = {"branch_baton":1}
+        self.resist_bonus = {}
 
-        self.flower_move = 0
+

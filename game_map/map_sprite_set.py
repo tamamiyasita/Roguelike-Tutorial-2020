@@ -79,7 +79,7 @@ class ActorPlacement:
             floor_sprites.append(f_wall)
 
 
-    def floor_set(self):
+    def floor_set(self, image="block_floor"):
         floor_sprites = arcade.SpriteList(
             use_spatial_hash=True, spatial_hash_cell_size=32)
 
@@ -90,7 +90,7 @@ class ActorPlacement:
 
                     if self.width - 1 > x > 0 and self.height - 2 > y > 0 and self.tiles[x][y+1] != TILE.WALL:
 
-                        floor = Floor(name="block_floor", x=x, y=y)
+                        floor = Floor(name=image, x=x, y=y)
                         floor_sprites.append(floor)
 
                 if self.tiles[x][y] == TILE.WALL:

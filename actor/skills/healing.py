@@ -53,13 +53,10 @@ class Healing(BaseSkill):
             x=x,
             y=y
         )
-        self.data={"switch":False,
-                  "count_time":0,
-                  "cooldown":False}
         
         self._damage = 6
 
-        self.level = 1
+        self._level = 1
         self.attr = "recovery"
 
 
@@ -85,8 +82,8 @@ class Healing(BaseSkill):
     def use(self, engine):
         self.engine = engine
 
-        if self.data["count_time"] <= 0:
-            self.data["count_time"] = self.max_cooldown_time
+        if self.count_time <= 0:
+            self.count_time = self.max_cooldown_time
 
 
             result = self.owner.fighter.skill_process(self)

@@ -92,7 +92,7 @@ class Fire:
             TriggerPull(shooter=self.shooter, target=self.target,
                         engine=self.engine, amm=self.skill)
 
-            self.skill.data["count_time"] = self.skill.max_cooldown_time
+            self.skill.count_time = self.skill.max_cooldown_time
 
             return results
 

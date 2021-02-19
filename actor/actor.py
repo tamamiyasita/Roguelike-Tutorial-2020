@@ -23,12 +23,13 @@ class Actor(arcade.Sprite):
     def __init__(self, texture_number=0, name=None, x=0, y=0,
                  blocks=False, block_sight=False,
                  scale=SPRITE_SCALE, color=COLORS["black"],
-                 fighter=None, ai=None, speed=DEFAULT_SPEED,
+                #  fighter=None,
+                  ai=None, speed=DEFAULT_SPEED,
                  inventory=None, equipment=None,
                  visible_color=COLORS["white"], not_visible_color=COLORS["black"],
                  states=None, npc_state=None, left_face=False,
                  power=None,
-                 data=None
+            
                  ):
         super().__init__(scale=scale)
         if name:
@@ -51,11 +52,11 @@ class Actor(arcade.Sprite):
         self.left_face = left_face
         self._master = None # 自身がitemだった場合その所持者を表す、主に装備時Spriteの表示位置に使用する
         self.d_time = 170 # 待機モーション時のdelay時間
-        self.is_dead = None
+        self.is_dead = False
         self.tag = {}
         self.attack_delay = 6
 
-        self.data = data
+        self.count_time = 0
         
         self.power = power
 
@@ -78,10 +79,10 @@ class Actor(arcade.Sprite):
         if self.equipment:
             self.equipment.owner = self
 
-        self.fighter = fighter
-        if self.fighter:
-            self.fighter.owner = self
-            self.is_dead = False
+        # self.fighter = fighter
+        # if self.fighter:
+        #     self.fighter.owner = self
+        #     self.is_dead = False
 
     def get_dict(self):
 
@@ -104,7 +105,7 @@ class Actor(arcade.Sprite):
         result["is_dead"] = self.is_dead
         result["left_face"] = self.left_face
         result["power"] = self.power
-        result["data"] = self.data
+        result["count_time"] = self.count_time
 
         if self.state:
             result["state"] = self.state.name
@@ -116,8 +117,8 @@ class Actor(arcade.Sprite):
         elif self.ai:
             result["ai"] = self.ai.__class__.__name__
 
-        if self.fighter:
-            result["fighter"] = self.fighter.get_dict()
+        # if self.fighter:
+        #     result["fighter"] = self.fighter.get_dict()
 
         if self.inventory:
             result["inventory"] = self.inventory.get_dict()
@@ -152,7 +153,7 @@ class Actor(arcade.Sprite):
         self.is_dead = result["is_dead"]
         self.left_face = result["left_face"]
         self.power = result["power"]
-        self.data = result["data"]
+        self.count_time = result["count_time"]
 
         if "state" in result:
             self.state = state[result["state"]]
@@ -178,10 +179,10 @@ class Actor(arcade.Sprite):
             self.equipment.owner = self
             self.equipment.restore_from_dict(result["equipment"])
 
-        if "fighter" in result:
-            self.fighter = Fighter()
-            self.fighter.owner = self
-            self.fighter.restore_from_dict(result["fighter"])
+        # if "fighter" in result:
+        #     self.fighter = Fighter()
+        #     self.fighter.owner = self
+        #     self.fighter.restore_from_dict(result["fighter"])
 
     @property
     def x(self):
@@ -403,8 +404,10 @@ class Actor(arcade.Sprite):
         self.center_x = owner.center_x
         self.center_y = owner.center_y
         self._master = owner
+        self.owner = owner
         self.color = COLORS["white"]
 
     @master.deleter
     def master(self):
+        self.owner = None
         self._master = None

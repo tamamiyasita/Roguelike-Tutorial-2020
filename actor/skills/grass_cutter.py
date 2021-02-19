@@ -9,12 +9,11 @@ from actor.skills.base_skill import BaseSkill
 
 
 class GrassCutter(BaseSkill):
-    def __init__(self, x=0, y=0, name="grass_cutter", data={"switch":False}):
+    def __init__(self, x=0, y=0, name="grass_cutter"):
         super().__init__(
             name=name,
             x=x,
             y=y,
-            data=data
         )
         # self.color=COLORS["white"]
 
@@ -27,7 +26,7 @@ class GrassCutter(BaseSkill):
 
         self.owner = None
 
-        self.level = 1
+        self._level = 1
 
         self.tag = [Tag.item, Tag.equip, Tag.weapon, Tag.skill, Tag.passive]
 

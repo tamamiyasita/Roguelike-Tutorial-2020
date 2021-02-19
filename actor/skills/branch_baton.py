@@ -20,7 +20,7 @@ class BranchBaton(BaseSkill):
 
         self.tag = [Tag.item, Tag.equip, Tag.weapon, Tag.skill, Tag.passive]
 
-        self.level = 1
+        self._level = 1
         
         self.item_weight = 1
 

@@ -172,7 +172,7 @@ def draw_inventory(player, selected_item, viewport):
             )
 
             ifs = 10
-            for k, v in item.skill_add.items():
+            for k, v in item.skill_bonus.items():
                 arcade.draw_text(
                     text=f"{k} level {v}".replace("_", " ").title(),
                     start_x=back_panel_right + (GRID_SIZE * 2),

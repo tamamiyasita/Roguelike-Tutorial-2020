@@ -13,19 +13,17 @@ class PoisonDart(BaseSkill):
             name=name,
         )
 
-        self.data={"switch":False,
-                  "count_time":0,
-                  "cooldown":False}
+        effect_component = PoisonStatus(count_time=4)
 
         self.amm = "poison_dart"
 
         self.max_cooldown_time = 4
 
         self._damage = 1
-        self.hit_rate = 85
+        self.hit_rate = 80
         self.speed = 23
         self.attr = "poison"
-        self.effect = None
+        self.effect = effect_component
 
         self.damage_range = "single"
         self.player_state = state.THROW
@@ -33,21 +31,22 @@ class PoisonDart(BaseSkill):
 
         self.item_weight = 5
 
-        self.level = 1
+        self._level = 1
 
         self.tag = [Tag.item, Tag.used, Tag.active, Tag.skill, Tag.equip]
 
         self.explanatory_text = f""
 
         self.icon = IMAGE_ID["poison_dart_icon"]  
-        self.anime = IMAGE_ID["poison_start"]
+        self.anime = (IMAGE_ID["poison_start"], "default")
         
 
     def use(self, engine):
-        self.effect = PoisonStatus(count_time=4)
 
-        if self.data["count_time"] <= 0:
+        if self.count_time <= 0:
 
+            effect_component = PoisonStatus(count_time=4)
+            self.effect = effect_component
             fire = Ranged(engine, self.owner, self)
             fire.use()
 

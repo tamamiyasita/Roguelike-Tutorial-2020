@@ -25,30 +25,31 @@ class TurnLoop:
             即時効果はuse時に発動したあとfighter.statesに格納する"""
         if actor.fighter.skill_list:
             for skill in actor.fighter.skill_list:
-                if hasattr(skill, "max_cooldown_time"):
-                    if skill.data["cooldown"] == False:
-                        skill.data["cooldown"] = True
+                if skill.during_cool_down == False and skill.count_time > 0:
+                    skill.during_cool_down = True
+                    continue
 
-                    elif skill.data["cooldown"]:
-                        skill.data["count_time"] -= 1
+                elif skill.count_time > 0:
+                    skill.count_time -= 1
 
-                        if 0 >= skill.data["count_time"]:
-                            skill.data["cooldown"] = False
+                elif skill.count_time < 1:
+                    skill.during_cool_down = False
+
                 else:
                     continue
                 
 
         if actor.fighter.states:
             for states in actor.fighter.states:
-                if 0 < states.data["count_time"]:
-                    states.data["count_time"] -= 1     
+                if 0 < states.count_time:
+                    states.count_time -= 1     
                     queue.extend(states.apply(engine))
-                if 1 > states.data["count_time"]:
+                if 1 > states.count_time:
                     actor.fighter.states.remove(states)
                     states.remove_from_sprite_lists()
 
 
-                print(states.data["count_time"], states)
+                print(states.count_time, states)
                 
 
     def loop_on(self, engine):

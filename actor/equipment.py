@@ -14,10 +14,11 @@ class Equipment:
         """アイテムスロット、及び装備するタイミングを決めるequip_update_check
         """
         self.item_slot = arcade.SpriteList()
-        self.skill_list = set()# arcade.SpriteList()
+        self.skill_list = []# arcade.SpriteList()
 
-        self.states_bonus = {"max_hp": 0, "max_mp": 0, "STR": 0,
-                 "DEX": 0, "INT": 0, "defense": 0, "evasion": 0}
+        self.states_bonus = {"max_hp": 0,"STR": 0,"DEX": 0, "INT": 0,
+                             "defense": 0, "evasion": 0}
+        self.resist_bonus = {"physical": 0, "fire": 0, "ice": 0, "lightning":0, "acid": 0, "poison": 0, "mind": 0}
 
         
         self.flower_position = {i:(40*math.cos(math.radians(s)), 40*math.sin(math.radians(s))) for i, s in enumerate([30,60,90,120,150])}
@@ -26,15 +27,16 @@ class Equipment:
 
 
     def get_dict(self):
-        result = [i.__class__.__name__ if i else None for i in self.item_slot] 
+        result = {i.__class__.__name__:i.get_dict() for i in self.item_slot}
 
         return result
 
     def restore_from_dict(self, result):
-
-        for item in self.owner.inventory.item_bag:
-            if item and item.__class__.__name__ in result:
-                self.toggle_equip(item)
+        for i, s in result.items():
+            for item in self.owner.inventory.item_bag:
+                if item and item.__class__.__name__ == i:
+                    item.restore_from_dict(s)
+                    self.toggle_equip(item)
                 
 
 
@@ -59,40 +61,26 @@ class Equipment:
             if hasattr(item, "current_xp"):
                 item.current_xp += exp
 
-    @property
-    def skill_generate_list(self):
+    def skill_list_update(self):
         self.skill_list = set()
         # Skillの生成チェック
-        skill_gen = [item.skill_generate for item in self.item_slot]
+        skill_gen = [item.flower_skill for item in self.item_slot]
 
-        for skill_name in skill_gen:
-            skill = self.owner.fighter.base_skill_dict.get(skill_name)
-
-            self.skill_list.add(skill)
-
-
-        return self.skill_list
+        self.skill_list = skill_gen
 
 
     
-    def skill_level_sum_update(self):
-        """装備スロットをループしてskill levelの合計を返す"""
-        bonus = {}
-        for parts in self.item_slot:  # crisiumが入る
-            # crisiumのskill_add{grass_cutter:1}が入る
-            for name, add in parts.skill_add.items():
-                bonus = Counter(bonus) + Counter({name:add})
+    def resist_bonus_update(self):
+        """item_slotをループしてresist bonusを合計し返す"""
 
-        for skill in self.skill_generate_list:
-            if skill.name in bonus:
-                skill.level = bonus[skill.name]
+        bonus = {"physical": 0, "fire": 0, "ice": 0, "lightning":0, "acid": 0, "poison": 0, "mind": 0}
 
-        self.skill_list = {skill for skill in self.skill_list if skill.name in bonus.keys()}
+        for parts in self.item_slot:
+            if parts and not isinstance(parts, str) and parts.resist_bonus:
+                bonus = Counter(bonus) + Counter(parts.resist_bonus)
 
-        # return self.skill_list
+        self.resist_bonus = bonus
 
-
-    
     def states_bonus_update(self):
         """item_slotをループしてstates bonusを合計し返す"""
 
@@ -121,7 +109,8 @@ class Equipment:
                 results.extend([{"message": f"dequipped {item.name}"}])
 
                 self.states_bonus_update()
-                self.skill_level_sum_update()
+                self.skill_list_update()
+                self.resist_bonus_update()
                 
                 return results
 
@@ -131,6 +120,7 @@ class Equipment:
 
             self.item_slot.append(equip_item)
             equip_item.master = self.owner
+            equip_item.flower_skill.master = self.owner
             pos = len(self.item_slot)
             if pos < 6:
                 for i in range(0, pos):
@@ -144,6 +134,7 @@ class Equipment:
             results.append({"message": f"equipped {equip_item.name}"})
 
             self.states_bonus_update()
-            self.skill_level_sum_update()
+            self.skill_list_update()
+            self.resist_bonus_update()
 
             return results

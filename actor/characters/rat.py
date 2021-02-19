@@ -23,11 +23,13 @@ class Water_vole(Actor):
             name="water_vole",
             x=x,
             y=y,
-            fighter=fighter_component,
             # speed=8,
             ai=ai_component,
             blocks=True
         )
+        self.fighter=fighter_component
+        self.fighter.owner = self
+
         self.tag = [Tag.npc, Tag.enemy]
 
 

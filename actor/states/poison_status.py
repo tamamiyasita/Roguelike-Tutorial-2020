@@ -55,10 +55,9 @@ class PoisonStatus(Actor):
 
         )
 
-        self.data={"switch":False,
-            "count_time":count_time,
-            "cooldown":False}
+
         self.max_cooldown_time = 4
+        self.count_time = count_time
         self.owner = None
 
         self.level = 1
@@ -83,7 +82,7 @@ class PoisonStatus(Actor):
     def apply(self, engine):
         self.engine = engine
 
-        if self.owner and self.data["count_time"] >= 0:
+        if self.owner and self.count_time >= 0:
 
             result = self.owner.fighter.skill_process(self)
             PoisonEffect(self.owner,  self.engine)

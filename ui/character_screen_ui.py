@@ -167,14 +167,6 @@ def draw_character_screen(engine, viewport, selected_item):
             texture=skill.icon
         )
 
-        if skill.data["switch"] == False:
-            arcade.draw_texture_rectangle(
-                center_x=left_position + 20,
-                center_y=top_position + y-21,
-                width=36,
-                height=36,
-                texture=IMAGE_ID["stop_skill"]
-            )
             
         # スキルレベル
         arcade.draw_text(

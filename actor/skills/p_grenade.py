@@ -12,9 +12,6 @@ class P_Grenade(BaseSkill):
             x=x,
             y=y
             )
-        self.data={"switch":False,
-                  "count_time":0,
-                  "cooldown":False}
 
         self.amm = "p_grenade"
 
@@ -27,6 +24,7 @@ class P_Grenade(BaseSkill):
 
         self.damage_range = "circle"
         self.player_state = state.THROW
+        self._level = 1
 
 
         self.speed = 16
@@ -34,17 +32,17 @@ class P_Grenade(BaseSkill):
 
 
 
-        self.tag = [Tag.item, Tag.used, Tag.active, Tag.skill, Tag.equip]
+        self.tag = [Tag.item, Tag.used, Tag.active, Tag.skill, Tag.equip, Tag.range_attack]
 
         self.explanatory_text = f""
          
         self.icon = IMAGE_ID["p_grenade_icon"]
-        self.anime = IMAGE_ID["explosion_effect"]
+        self.anime = (IMAGE_ID["explosion_effect"],"default")
 
 
     def use(self, engine):
 
-        if self.data["count_time"] <= 0:
+        if self.count_time <= 0:
 
             fire = Ranged(engine, self.owner, self, spin=60)
             fire.use()

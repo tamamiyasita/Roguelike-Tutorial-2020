@@ -5,6 +5,7 @@ from util import grid_to_pixel
 from actor.actor import Actor
 
 from damage_range import circle_range
+from hit_anime import Hit_Anime
 
 import math
 
@@ -30,7 +31,7 @@ class Flying(Actor):
         self.shot_damage = -skill.damage
         self.attr = skill.attr
         self.damage_range = skill.damage_range
-        self.target = arcade.get_sprites_at_point(self.tar_point.position, self.engine.cur_level.actor_sprites)[0]
+        self.target = arcade.get_sprites_at_point(self.tar_point.position, self.engine.cur_level.actor_sprites)
 
         TMP_EFFECT_SPRITES.append(self)
     
@@ -58,13 +59,17 @@ class Flying(Actor):
                 self.trigger = None
                 self.remove_from_sprite_lists()
 
-                # if self.anime_effect:
+                if hasattr(self.skill, "anime") and Tag.range_attack in self.skill.tag:
+                    Hit_Anime(self.skill.anime[0],self.skill.anime[1], self.tar_point.position)
 
 
-                if self.damage_range == "single":
-                    damage = self.target.fighter.skill_process(self.skill)
+                if self.damage_range == "single" and self.target:
+                    damage = self.target[0].fighter.skill_process(self.skill)
                     self.engine.action_queue.extend([*damage,{"delay": {"time": self.delay_time, "action": {"turn_end": self.shooter}}}])
-
+                elif self.damage_range == "single" and not self.target:
+                    self.engine.action_queue.extend([{"message": "not enemy"}])
+                    self.engine.game_state = GAME_STATE.NORMAL
+                    self.engine.player.state = state.READY
                     
 
                 elif self.damage_range == "circle":
@@ -102,6 +107,8 @@ class Ranged:
                         self.target = actor
                         break
 
+        
+
         if self.target:
             results.append(
                 {"message": f"{self.shooter.name} used {self.skill.name}"})
@@ -112,7 +119,7 @@ class Ranged:
             Flying(shooter=self.shooter, tar_point=self.target,
                         engine=self.engine, skill=self.skill, spin=self.spin)
 
-            self.skill.data["count_time"] = self.skill.max_cooldown_time
+            self.skill.count_time = self.skill.max_cooldown_time
 
 
             return results
