@@ -28,7 +28,7 @@ class Fighter:
         self.owner = None
         self.xp_reward = xp_reward
         self.level = level
-        self._states = arcade.SpriteList()
+        self._states = []
 
         self._skill_list = arcade.SpriteList()
 
@@ -38,8 +38,8 @@ class Fighter:
 
 
     def get_dict(self):
-        pass
-        # result = {}
+        # pass
+        result = {}
 
         # result["hp"] = self.hp
         # result["max_hp"] = self.base_max_hp
@@ -60,13 +60,13 @@ class Fighter:
 
         # result["base_skill_dict"] = {name : result.get_dict() for name, result in  self.base_skill_dict.items()}
 
-        # # クラスと内部値をタプルで保存する
-        # result["states"] = [(states.__class__.__name__, result.get_dict()) for states, result in zip(self.states, self.states)]
+        # クラスと内部値をタプルで保存する
+        result["states"] = [(states.__class__.__name__, result.get_dict()) for states, result in zip(self.states, self.states)]
 
-        # return result
+        return result
 
     def restore_from_dict(self, result):
-        pass
+        # pass
 
         # self.hp = result["hp"]
         # self.base_max_hp = result["max_hp"]
@@ -85,13 +85,13 @@ class Fighter:
         # self.ability_points = result["ability_points"]
         # self.level_skills = result["level_skills"]
 
-        # # クラスと内部値を結合する
-        # for s, r in result["states"]:
-        #     if s:
-        #         print(s, r)
-        #         sd = eval(s)()
-        #         sd.restore_from_dict(r)
-        #         self._states.append(sd)
+        # クラスと内部値を結合する
+        for s, r in result["states"]:
+            if s:
+                print(s, r)
+                sd = eval(s)()
+                sd.restore_from_dict(r)
+                self._states.append(sd)
 
         # for s, r in result["base_skill_dict"].items():
         #     if s:
@@ -137,9 +137,16 @@ class Fighter:
 
     @property
     def states(self):
+        result = []
         for states in self._states:
             if states and not isinstance(states, str):
                 states.owner = self.owner
+            if states.count_time > 0:
+                result.append(states)
+            else:
+                states.remove_from_sprite_lists()
+
+        self._states = result
 
         return self._states
     
@@ -151,8 +158,11 @@ class Fighter:
         resist = self.resist.get(effect.attr)
         if resist:
             hit_chance = 100/resist
-            if random.randrange(1, 100) <= hit_chance:
+            resist_chance = random.randrange(1, 99)
+            print(f"{resist_chance=} < {hit_chance=} ")
+            if  resist_chance < hit_chance:
                 self.states.append(effect)
+                print(f"sucses hit {effect=}")
                 # self.owner.name is {effect.name} rd
         else:
             self.states.append(effect)
@@ -171,7 +181,6 @@ class Fighter:
         damage = skill.damage
         attr = skill.attr
         hit_rate = skill.hit_rate
-        effect = skill.effect
 
         damage = dice(level, damage)
 
@@ -185,9 +194,8 @@ class Fighter:
             return results
 
         if self.counter_skill:
-            results.extend(self.counter_check())
-            if "stop" in results:
-                return results
+            results.extend(self.counter_check(skill.owner))
+
         
 
         # (命中率)％ ＝（α／１００）＊（１ー （β ／ １００））＊ １００
@@ -199,11 +207,9 @@ class Fighter:
                 message = f"Hit"
                 hit_particle(target=self.owner)
 
-                if effect:
-                    self.effect_hit_chance(effect)
 
                 # critical_flag:
-                if random.randrange(1, (100+self.DEX)) < 5:
+                if random.randrange(1, (100+self.DEX)) < 3+skill.owner.fighter.DEX:
                     damage = skill.damage * 2
                     message += " CRITICAL!"
 
@@ -211,6 +217,12 @@ class Fighter:
                 elif attr == "physical":
                     defens_p = self.level // 3
                     damage = damage - dice(defens_p, defens_p+self.defense)
+
+            else:
+                # 回避
+                results.append({"damage_pop": self.owner, "damage": "MISS"})
+                results.append({"message": f"{owner_name} Avoided {skill_name}"})
+                return results
 
 
         if self.resist[attr] <= 0:
@@ -232,17 +244,12 @@ class Fighter:
             message += f" {owner_name} took {int(damage)} damage! from {skill_name}"
             results.append({"message": message})
 
-
             damage = int(damage)
 
             results.extend(self.change_hp(damage))
 
-
-
-        else:
-            # 回避
-            results.append({"damage_pop": self.owner, "damage": "MISS"})
-            results.append({"message": f"{owner_name} Avoided {skill_name}"})
+            if skill.effect:
+                self.effect_hit_chance(skill.effect)
 
         return results
 
@@ -276,7 +283,7 @@ class Fighter:
 
         return results
 
-    def counter_check(self):            
+    def counter_check(self, target):            
         for c in self.counter_skill:
-            result = c.use()
+            result = c.use(target)
         return result

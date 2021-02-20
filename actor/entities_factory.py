@@ -44,6 +44,7 @@ def get_random_monster_by_challenge(challenge):
         Water_vole(), Crab(),# Orc(), Troll()
     ]
     if challenge:
+        # TODO 普通のfor文にして柔軟性のあるリストに作り変える
         filtered_monsters = [monster for monster in monster_list if monster.fighter.level <= challenge]
         if len(filtered_monsters) == 0:
             raise ValueError(

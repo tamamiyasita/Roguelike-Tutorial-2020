@@ -18,7 +18,7 @@ class StunStatus(Actor):
 
         self.level = 1
         self.damage = None
-        self.attr = "stun"
+        self.attr = None
         self.hit_rate = None
         self.effect = None
 
@@ -30,11 +30,10 @@ class StunStatus(Actor):
         self.icon = IMAGE_ID["stun"]
 
     def apply(self, engine):
-        self.engine = engine
 
-        if self.owner and self.count_time >= 0:
+        # if self.owner and self.count_time >= 0:
 
-            self.owner.state == state.STUN
-            self.owner.wait = self.owner.fighter.attack_speed
+        self.owner.state = state.STUN
+        self.owner.wait = self.owner.fighter.attack_speed
 
-            return [{"message": f"{self.owner.name} STUN!"}]
+        return [{"message": f"{self.owner.name} STUN!"}]

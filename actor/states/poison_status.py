@@ -2,7 +2,6 @@ from actor.actor import Actor
 from constants import *
 from data import *
 import random
-from util import dice, result_add
 
 class PoisonEffect(Actor):
     def __init__(self, owner, engine):
@@ -61,7 +60,7 @@ class PoisonStatus(Actor):
         self.owner = None
 
         self.level = 1
-        self.damage = 4
+        self.damage = 1
         self.attr = "poison"
         self.hit_rate = None
         self.effect = None
@@ -82,9 +81,9 @@ class PoisonStatus(Actor):
     def apply(self, engine):
         self.engine = engine
 
-        if self.owner and self.count_time >= 0:
+        # if self.owner and self.count_time > 0:
 
-            result = self.owner.fighter.skill_process(self)
-            PoisonEffect(self.owner,  self.engine)
+        result = self.owner.fighter.skill_process(self)
+        PoisonEffect(self.owner,  self.engine)
 
-            return result
+        return result

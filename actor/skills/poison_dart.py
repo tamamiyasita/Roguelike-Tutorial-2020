@@ -13,17 +13,16 @@ class PoisonDart(BaseSkill):
             name=name,
         )
 
-        effect_component = PoisonStatus(count_time=4)
 
         self.amm = "poison_dart"
 
         self.max_cooldown_time = 4
 
         self._damage = 1
-        self.hit_rate = 80
+        self.hit_rate = 95
         self.speed = 23
         self.attr = "poison"
-        self.effect = effect_component
+        self.effect = None
 
         self.damage_range = "single"
         self.player_state = state.THROW
@@ -42,7 +41,6 @@ class PoisonDart(BaseSkill):
         
 
     def use(self, engine):
-
         if self.count_time <= 0:
 
             effect_component = PoisonStatus(count_time=4)

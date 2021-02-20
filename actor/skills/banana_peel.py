@@ -1,8 +1,7 @@
 from constants import *
 from data import *
 from actor.skills.base_skill import BaseSkill
-from random import randint
-from hit_anime import Fall
+from actor.states.stun import StunStatus
 
 class BananaPeel(BaseSkill):
     def __init__(self, x=0, y=0, name="banana_peel"):
@@ -30,5 +29,10 @@ class BananaPeel(BaseSkill):
 
         self.icon = IMAGE_ID["banana_peel_icon"]
 
-    def use(self, engine):
-        Fall(self)
+    def use(self, target):
+        if self.count_time <= 0:
+
+            effect_component = StunStatus(count_time=4)
+            self.effect = effect_component
+            target.fighter.skill_process(self)
+            

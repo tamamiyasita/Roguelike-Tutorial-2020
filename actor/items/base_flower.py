@@ -15,7 +15,7 @@ class BaseFlower(Actor):
             x=x,
             y=y,
         )
-        skill_component = BaseSkill()
+        skill_component = BaseSkill()# コンポーネントの切替で変化を表したい
 
         # 定数 #############################
         self.tag = [Tag.item, Tag.equip, Tag.flower]
