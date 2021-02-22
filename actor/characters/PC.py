@@ -86,6 +86,11 @@ class Player(Actor):
         if self.state == state.THROW and self.left_face:
             self.texture = pc_throw[1]
 
+        if self.state == state.SMILE and not self.left_face:
+            self.texture = pc_smy[0]
+        if self.state == state.SMILE and self.left_face:
+            self.texture = pc_smy[1]
+
         if self.state == state.DEFENSE and not self.left_face:
             self.texture = pc_def[0]
             # self.change_x += uniform(-0.7, 0.7)

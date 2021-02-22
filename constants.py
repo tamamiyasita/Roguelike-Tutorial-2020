@@ -140,6 +140,7 @@ class state(Enum):
     THROW = auto()
     DEFENSE = auto()
     STUN = auto()
+    SMILE = auto()
 
 class NPC_state(Enum):
     REQUEST = auto()

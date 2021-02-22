@@ -64,6 +64,7 @@ class PoisonStatus(Actor):
         self.attr = "poison"
         self.hit_rate = None
         self.effect = None
+        self.anime = []
 
 
 

@@ -60,7 +60,7 @@ class Flying(Actor):
                 self.remove_from_sprite_lists()
 
                 if hasattr(self.skill, "anime") and Tag.range_attack in self.skill.tag:
-                    Hit_Anime(self.skill.anime[0],self.skill.anime[1], self.tar_point.position)
+                    Hit_Anime(self.skill, self.tar_point)
 
 
                 if self.damage_range == "single" and self.target:

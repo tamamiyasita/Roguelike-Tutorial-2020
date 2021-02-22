@@ -287,7 +287,7 @@ class Actor(arcade.Sprite):
                 # monsterの移動
                 self.x = destination_x
                 self.y = destination_y
-                self.wait = self.speed
+                self.wait += self.speed
                 self.state = state.TURN_END
 
             else:
@@ -310,7 +310,7 @@ class Actor(arcade.Sprite):
                 self.change_y = 0
                 self.x += self.dx
                 self.y += self.dy
-                self.wait = self.speed
+                self.wait += self.speed
                 self.from_x, self.from_y = self.center_x, self.center_y
                 self.state = state.TURN_END
 

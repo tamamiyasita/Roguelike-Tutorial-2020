@@ -17,6 +17,7 @@ pc_open = arcade.load_texture_pair(r"image/rou6_op.png")
 pc_shot2 = arcade.load_texture_pair(r"image/rou6_shot2.png")
 pc_throw = arcade.load_texture_pair(r"image/rou6_throw.png")
 pc_def = arcade.load_texture_pair(r"image/rou6_def.png")
+pc_smy = arcade.load_texture_pair(r"image/rou6_smy.png")
 
 # test_texture
 # player = arcade.load_texture_pair(r"t_image/rou6.png")
@@ -36,6 +37,9 @@ water_vole_0 = arcade.load_texture_pair(r"image/water_vole0.png")
 water_vole_1 = arcade.load_texture_pair(r"image/water_vole1.png")
 water_vole =[*water_vole_0, *water_vole_1]
 
+cabbage_snail_0  = arcade.load_texture_pair(r"image/cabbage_snail0.png")
+cabbage_snail_1 = arcade.load_texture_pair(r"image/cabbage_snail1.png")
+cabbage_snail =[*cabbage_snail_0, *cabbage_snail_1]
 
 size = 16  # テクスチャのサイズと位置情報も兼ねる
 orcs_tiles_0 = (r"image\Characters\Player0.png")  # orcタイルイメージ
@@ -132,20 +136,26 @@ Paeonia = arcade.load_texture(r"image\paeonia.png")
 sunflower = arcade.load_texture(r"image\sunflower.png")
 pineapple = arcade.load_texture(r"image/pineapple.png")
 aconite = arcade.load_texture(r"image/aconite.png")
+bananaflower = arcade.load_texture(r"image/bananaflower.png")
 
 seed_shot = arcade.load_texture_pair(r"image/seed_shot.png")
 seed_shot_b = arcade.load_texture(r"image/seed_shot_b.png")
 seed_shot_icon = arcade.load_texture(r"image/seed_shot_icon.png")
 
+banana_slip = arcade.load_texture_pair(r"image/banana_slip.png")
+banana_slip_icon = arcade.load_texture(r"image/banana_slip_icon.png")
+banana_fall = [arcade.load_texture(img) for img in glob.glob(r"image\effect\banana_fall\*")]
+
 poison_dart = arcade.load_texture_pair(r"image/poison_dart.png")
 poison_dart_icon = arcade.load_texture(r"image/poison_dart_icon.png")
+poison_start = [arcade.load_texture(img) for img in glob.glob(r"image\effect\poison_start\*")]
 
 pineapple_grenade = arcade.load_texture_pair(r"image/p_grenade.png")
 pineapple_grenade_icon = arcade.load_texture(r"image/pineapple_grenade_icon.png")
-
-poison_start = [arcade.load_texture(img) for img in glob.glob(r"image\effect\poison_start\*")]
-poison = arcade.load_texture(r"image\poison.png")
 explosion = [arcade.load_texture(img) for img in glob.glob(r"image\effect\explosion\*")]
+
+poison = arcade.load_texture(r"image\poison.png")
+stun = arcade.load_texture(r"image\stun.png")
 
 cool_down = arcade.load_texture(r"image\cool_down.png")
 ###items###
@@ -236,6 +246,7 @@ IMAGE_ID = {"Rou": player,
 
             "crab": crab,
             "water_vole": water_vole,
+            "cabbage_snail": cabbage_snail,
 
             "orc": orc,
             "troll": troll,
@@ -256,6 +267,7 @@ IMAGE_ID = {"Rou": player,
             "paeonia":Paeonia,
             "pineapple":pineapple,
             "aconite":aconite,
+            "bananaflower":bananaflower,
 
             "attack": leaf_blade,
 
@@ -272,20 +284,25 @@ IMAGE_ID = {"Rou": player,
             "seed_shot_icon":seed_shot_icon,
             "poison_dart":poison_dart,
             "poison_dart_icon":poison_dart_icon,
+            "poison_start":poison_start,
             "p_grenade":pineapple_grenade,
             "p_grenade_icon":pineapple_grenade_icon,
-            "poison":[poison],
-            "poison_start":poison_start,
+            "explosion_effect":explosion,
+            "banana_slip":banana_slip,
+            "banana_slip_icon":banana_slip_icon,
+            "banana_fall":banana_fall,
             "cool_down":cool_down,
             "confusion_scroll": [scroll_tile[15]],
             "lightning_scroll": [scroll_tile[2]],
             "fireball_scroll": [scroll_tile[6]],
 
+            "poison":[poison],
+            "stun":stun,
+
             "lightning_effect": [effect1_tile[87]],
             "confusion_effect": [effect1_tile[140]],
             "fireball_effect": [effect1_tile[134]],
             "healing_potion_effect":[healing_potion_effect],
-            "explosion_effect":explosion,
 
             "floor_point": [floor_point],
             "items_point": items_point,

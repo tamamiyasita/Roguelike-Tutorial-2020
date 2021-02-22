@@ -18,7 +18,7 @@ class StunStatus(Actor):
 
         self.level = 1
         self.damage = None
-        self.attr = None
+        self.attr = "mind"
         self.hit_rate = None
         self.effect = None
 
@@ -34,6 +34,10 @@ class StunStatus(Actor):
         # if self.owner and self.count_time >= 0:
 
         self.owner.state = state.STUN
-        self.owner.wait = self.owner.fighter.attack_speed
+        self.owner.wait += self.owner.fighter.attack_speed*2
+        print(f"stun! {self.owner.name=} {self.owner.wait=} {self.owner.fighter.attack_speed=}")
 
         return [{"message": f"{self.owner.name} STUN!"}]
+
+    def use(self, target):
+        target.state = state.STUN

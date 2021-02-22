@@ -41,12 +41,7 @@ class TurnLoop:
 
         if actor.fighter.states:
             for states in actor.fighter.states:
-                # if states:
-                    # if 1 > states.count_time:
-                    #     # actor.fighter.states.remove(states)
-                    #     states.remove_from_sprite_lists()
 
-                    # if 0 < states.count_time:
                 states.count_time -= 1     
                 queue.extend(states.apply(engine))
 
@@ -67,6 +62,7 @@ class TurnLoop:
                     continue
                 if actor.wait < 1:
                     self.actor = actor
+                    actor.state = state.READY
                     self.elapsed_time(actor, queue, engine)
                     # 死亡時判定(未テスト)
                     if actor.is_dead or actor.state == state.STUN:

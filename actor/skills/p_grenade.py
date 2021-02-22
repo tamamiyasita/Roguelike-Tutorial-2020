@@ -37,7 +37,7 @@ class P_Grenade(BaseSkill):
         self.explanatory_text = f""
          
         self.icon = IMAGE_ID["p_grenade_icon"]
-        self.anime = (IMAGE_ID["explosion_effect"],"default")
+        self.anime = IMAGE_ID["explosion_effect"]
 
 
     def use(self, engine):

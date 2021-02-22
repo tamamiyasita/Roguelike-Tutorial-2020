@@ -16,27 +16,28 @@ class MouseUI:
     def draw_mouse_over_text(self):
         """マウスオーバー時のオブジェクト名表示"""
         # マウスオーバー時に表示するスプライトリストの取得
-        actor_list = arcade.get_sprites_at_point(
-            point=self.mouse_position,
-            sprite_list=self.actor_sprites
-        )
-        item_list = arcade.get_sprites_at_point(
-            point=self.mouse_position,
-            sprite_list=self.item_sprites
-        )
+        pass
+        # actor_list = arcade.get_sprites_at_point(
+        #     point=self.mouse_position,
+        #     sprite_list=self.actor_sprites
+        # )
+        # item_list = arcade.get_sprites_at_point(
+        #     point=self.mouse_position,
+        #     sprite_list=self.item_sprites
+        # )
 
-        self.mouse_over_text = None
-        for actor in chain(actor_list, item_list):
-            if actor.fighter and actor.is_visible:
-                self.mouse_over_text = f"{actor.name} {actor.fighter.hp}/{actor.fighter.max_hp}"
-            elif actor.name:
-                self.mouse_over_text = f"{actor.name}"
+        # self.mouse_over_text = None
+        # for actor in chain(actor_list, item_list):
+        #     if actor.fighter and actor.is_visible:
+        #         self.mouse_over_text = f"{actor.name} {actor.fighter.hp}/{actor.fighter.max_hp}"
+        #     elif actor.name:
+        #         self.mouse_over_text = f"{actor.name}"
 
-        if self.mouse_over_text:
-            font_size = 12
-            x, y = self.mouse_position
-            back_ground_width = 100  # テキスト背景幅
-            back_ground_height = 16  # テキスト背景高
+        # if self.mouse_over_text:
+        #     font_size = 12
+        #     x, y = self.mouse_position
+        #     back_ground_width = 100  # テキスト背景幅
+        #     back_ground_height = 16  # テキスト背景高
 
             # arcade.draw_xywh_rectangle_filled(
             #     bottom_left_x=x,

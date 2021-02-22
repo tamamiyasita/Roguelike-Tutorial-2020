@@ -26,8 +26,7 @@ class BaseSkill(Actor):
         self.count_time = 0
         self.during_cool_down = False
 
-
-
+        self.speed = 10
 
         self.tag = []
 
@@ -41,6 +40,10 @@ class BaseSkill(Actor):
         self.item_position_x = 0
         self.item_position_y = 0
         self.explanatory_text = f""
+
+        self.anime = []
+        self.anime_type = None
+
 
     @property
     def level(self):

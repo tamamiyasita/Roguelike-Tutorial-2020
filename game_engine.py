@@ -16,6 +16,7 @@ from actor.inventory import Inventory
 from actor.item_point_check import ItemPoint
 from actor.characters.PC import Player
 from actor.characters.rat import Water_vole
+from actor.characters.cabbage_snail import CabbageSnail
 from actor.characters.npc import Citizen
 
 from actor.map_obj.stairs import Up_Stairs, Down_Stairs
@@ -33,6 +34,7 @@ from actor.items.ebony import Ebony
 from actor.items.sunflower import Sunflower
 from actor.items.pineapple import Pineapple
 from actor.items.aconite import Aconite
+from actor.items.banana_flower import Bananaflower
 from level_up_sys import check_experience_level
 
 
@@ -133,6 +135,8 @@ class GameEngine:
         self.game_level.actor_sprites.append(self.wb)
         self.wb2 = Water_vole(x=11,y=17)
         self.game_level.actor_sprites.append(self.wb2)
+        self.cs = CabbageSnail(x=12,y=17)
+        self.game_level.actor_sprites.append(self.cs)
 
         self.npc = Citizen(x=14,y=14)
         self.game_level.actor_sprites.append(self.npc)
@@ -142,7 +146,7 @@ class GameEngine:
 
         # テスト用エンティティ
 
-        self.pineapple = Pineapple(self.player.x-1, self.player.y + 1)
+        self.pineapple = Pineapple(self.player.x+1, self.player.y + 1)
         self.game_level.item_sprites.append(self.pineapple)
 
         self.hp = Paeonia(self.player.x-1, self.player.y)
@@ -156,6 +160,9 @@ class GameEngine:
 
         self.sunflower = Sunflower(self.player.x, self.player.y-2)
         self.game_level.item_sprites.append(self.sunflower)
+
+        self.bananaflower = Bananaflower(self.player.x-1, self.player.y+1)
+        self.game_level.item_sprites.append(self.bananaflower)
 
         self.aconite = Aconite(self.player.x+1, self.player.y-2)
         self.game_level.item_sprites.append(self.aconite)
@@ -496,7 +503,7 @@ class GameEngine:
 
             if "turn_end" in action:
                 target = action["turn_end"]
-                target.wait = target.speed
+                target.wait += target.speed
                 target.state = state.TURN_END
                 print(f"{target.name} is pass Turn_END")
 

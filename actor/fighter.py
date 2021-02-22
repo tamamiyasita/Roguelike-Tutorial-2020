@@ -14,7 +14,7 @@ class Fighter:
                  evasion=0, xp_reward=0, level=1,
                  resist={"physical": 1, "fire": 1, "ice": 1, "lightning":1, "acid": 1, "poison": 1, "mind": 1}, ability_points=0):
         self.hp = hp
-        self.base_max_hp = self.hp
+        self.max_hp = self.hp
 
         self.STR = STR
         self.DEX = DEX
@@ -115,6 +115,8 @@ class Fighter:
     @property
     def counter_skill(self):
         result = [skill for skill in self.skill_list if Tag.counter in skill.tag]
+        if not result:
+            return []
         return result
     @property
     def attack_skill(self):
@@ -163,6 +165,8 @@ class Fighter:
             if  resist_chance < hit_chance:
                 self.states.append(effect)
                 print(f"sucses hit {effect=}")
+            if Tag.used in effect.tag:
+                effect.use(self.owner)# 即時効果
                 # self.owner.name is {effect.name} rd
         else:
             self.states.append(effect)
@@ -170,7 +174,6 @@ class Fighter:
 
 
     def skill_process(self, skill):
-        self.owner.state = state.DEFENSE
         
         message = ""
         results = []
@@ -193,13 +196,17 @@ class Fighter:
                 self.hp = self.max_hp
             return results
 
-        if self.counter_skill:
-            results.extend(self.counter_check(skill.owner))
+        if Tag.counter not in skill.tag:# カウンタースキルにはカウンターチェックしない
+            results.extend(self.other_counter_check(skill.owner))
+            if skill.owner.fighter.hp < 1 or skill.owner.state == state.STUN:
+                return results
 
         
 
         # (命中率)％ ＝（α／１００）＊（１ー （β ／ １００））＊ １００
         # 命中率（α）＝９５、回避率（β）＝５
+        if self.owner.state != state.STUN:
+            self.owner.state = state.DEFENSE
         if hit_rate:
             hit_chance = ((hit_rate-self.DEX+skill.owner.fighter.DEX) / 100) * (1 - (self.evasion / 100)) * 100
             if random.randrange(1, 100) <= hit_chance:
@@ -239,8 +246,8 @@ class Fighter:
 
         
         elif damage >= 1:
-            if hasattr(skill, "anime") and Tag.range_attack not in skill.tag:
-                Hit_Anime(skill.anime[0],skill.anime[1], self.owner.position)
+            if skill.anime and Tag.range_attack not in skill.tag:
+                Hit_Anime(skill, self.owner)
             message += f" {owner_name} took {int(damage)} damage! from {skill_name}"
             results.append({"message": message})
 
@@ -283,7 +290,9 @@ class Fighter:
 
         return results
 
-    def counter_check(self, target):            
+    def other_counter_check(self, target):
+        result = []            
         for c in self.counter_skill:
             result = c.use(target)
+
         return result
