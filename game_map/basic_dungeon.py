@@ -1,7 +1,4 @@
-import arcade
 from random import randint, choice
-
-from util import grid_to_pixel
 
 from game_map.door_check import door_check
 from constants import *
