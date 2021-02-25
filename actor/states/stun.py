@@ -37,7 +37,11 @@ class StunStatus(Actor):
         self.owner.wait += self.owner.fighter.attack_speed*2
         print(f"stun! {self.owner.name=} {self.owner.wait=} {self.owner.fighter.attack_speed=}")
 
-        return [{"message": f"{self.owner.name} STUN!"}]
+        results = [{"message": f"{self.owner.name} STUN!"}]
+        results.append({"damage_pop": self.owner, "damage":"STUN"})
+
+        return results
+
 
     def use(self, target):
         target.state = state.STUN

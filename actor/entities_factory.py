@@ -16,7 +16,7 @@ from actor.items.fireball_scroll import FireballScroll
 from actor.characters.orcs import Orc, Troll
 from actor.characters.crab import Crab
 from actor.characters.rat import Water_vole
-
+from actor.characters.cabbage_snail import CabbageSnail
 def load_entities(filename):
     monsters = []
     with open(filename) as input_file:
@@ -41,7 +41,7 @@ entities = load_entities(r"actor/actors.csv")
 #         return m1
 def get_random_monster_by_challenge(challenge):
     monster_list = [
-        Water_vole(), Crab(),# Orc(), Troll()
+        Water_vole(), CabbageSnail() #Crab(),# Orc(), Troll()
     ]
     if challenge:
         # TODO 普通のfor文にして柔軟性のあるリストに作り変える

@@ -196,7 +196,7 @@ class Fighter:
                 self.hp = self.max_hp
             return results
 
-        if Tag.counter not in skill.tag:# カウンタースキルにはカウンターチェックしない
+        if Tag.counter not in skill.tag or Tag.range_attack not in skill.tag or Tag.shot not in skill.tag:# カウンタースキルにはカウンターチェックしない
             results.extend(self.other_counter_check(skill.owner))
             if skill.owner.fighter.hp < 1 or skill.owner.state == state.STUN:
                 return results

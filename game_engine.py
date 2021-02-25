@@ -267,7 +267,7 @@ class GameEngine:
             use_spatial_hash=True, spatial_hash_cell_size=32)
         self.game_level.chara_sprites.append(self.player)
 
-        self.player.x, self.player.y = self.game_map.player_set(stairs)
+        self.player.x, self.player.y = self.game_map.PLAYER_POINT 
 
         self.game_level.floor_level = level
         self.game_level.map_name = f"basic_dungeon"

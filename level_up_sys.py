@@ -11,6 +11,12 @@ def check_experience_level(player, game_engine):
         player.fighter.ability_points += 1
         game_engine.action_queue.extend([{"message": "Level up!!!"}])
         game_engine.game_state = GAME_STATE.LEVEL_UP_WINDOW
+    # 花のレベルアップUI作成
+    # else:
+    #     flower_level_up = check_experience_level(player)
+    #     if flower_level_up:
+    #         game_engine.game_state = GAME_STATE.LEVEL_UP_FLOWER
+
 
 def check_flower_level(player):
     result = []

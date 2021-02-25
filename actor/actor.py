@@ -60,7 +60,7 @@ class Actor(arcade.Sprite):
         
         self.power = power
 
-        self.step = GRID_SIZE // 2
+        self.step = GRID_SIZE // 4
 
         self.inventory = inventory
         if self.inventory:

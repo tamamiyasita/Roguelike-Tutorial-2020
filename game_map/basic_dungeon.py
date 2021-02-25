@@ -40,22 +40,12 @@ class BasicDungeon:
         self.dungeon_level = dungeon_level
 
         self.tiles = [[TILE.WALL for y in range(height)] for x in range(width)]
-        self.actor_tiles = [
-            [TILE.EMPTY for y in range(height)] for x in range(width)]
-        self.item_tiles = [
-            [TILE.EMPTY for y in range(height)] for x in range(width)]
+        self.actor_tiles = [[TILE.EMPTY for y in range(height)] for x in range(width)]
+        self.item_tiles = [[TILE.EMPTY for y in range(height)] for x in range(width)]
 
-        self.up_stairs = None
-        self.down_stairs = None
+        self.PLAYER_POINT = None
         self.make_map(dungeon_level)
         self.door_remove()
-
-    def player_set(self, stairs="up"):
-        
-        if stairs == "down":
-            return self.down_stairs
-        else:
-            return self.up_stairs
 
 
     def make_map(self, dungeon_level):
@@ -85,14 +75,13 @@ class BasicDungeon:
                 (new_x, new_y) = new_room.center()
 
                 if self.num_rooms == 0:
-                    self.up_stairs = (new_x, new_y)
+                    self.PLAYER_POINT = (new_x, new_y)
                     # self.player.x, self.player.y = (new_x, new_y)
                     first_room_center_x = new_x
                     first_room_center_y = new_y
 
                 else:
                     (prev_x, prev_y) = rooms[self.num_rooms - 1].center()
-                    self.down_stairs = (new_x, new_y)
 
                     last_room_center_x = new_x
                     last_room_center_y = new_y
@@ -160,11 +149,11 @@ class BasicDungeon:
         random_place = randint(1, dungeon_level)
 
         if dungeon_level == 1:
-            combos = [[], [1], [1, 1], [1, 1, 1], []]
+            combos = [[2], [1], [1, 1], [1, 1, 1], [2]]
         elif dungeon_level == 2:
-            combos = [[], [1, 1], [1, 1, 1], [2], [1, 2]]
+            combos = [[2], [1, 1], [1, 1, 1], [2], [1, 2]]
         elif dungeon_level == 3:
-            combos = [[], [1, 1, 1], [2], [2, 2], [1, 2], [1, 1, 2]]
+            combos = [[2], [1, 1, 1], [2], [2, 2], [1, 2], [1, 1, 2]]
         else:
             combos = [[randint(1, dungeon_level) for i in range(
                 randint(1, 4))] for _ in range(self.num_rooms)]
