@@ -12,7 +12,7 @@ SPRITE_SCALE = 2
 GRID_SIZE = SPRITE_SIZE * SPRITE_SCALE
 
 MAP_WIDTH = 40
-MAP_HEIGHT = 35
+MAP_HEIGHT = 40
 
 GAME_GROUND_WIDTH = int(GRID_SIZE * MAP_WIDTH)
 GAME_GROUND_HEIGHT = int(GRID_SIZE * MAP_HEIGHT)
@@ -101,7 +101,8 @@ class TILE:
     DOOR_W = auto()
     STAIRS_DOWN = auto()
     STAIRS_UP = auto()
-
+    RANDOM_ENTITY = auto()
+    
     ORC = auto()
     TROLL = auto()
 

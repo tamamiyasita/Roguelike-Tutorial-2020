@@ -1,8 +1,8 @@
-from constants import TILE
+
 import arcade
 import random
-# from constants import *
-# from game_map.door_check import door_check
+from constants import *
+from game_map.door_check import door_check
 
 
 class Rect:
@@ -25,23 +25,27 @@ class Rect:
 BSP_ROOM_MAX_SIZE = 17
 BSP_ROOM_MIN_SIZE = 8
 class BSPTree:
-    def __init__(self):
+    def __init__(self, map_width, map_height, dungeon_level=1):
+        self.map_width = map_width
+        self.map_height = map_height
         self.tiles = []
         self.room = None
         self.MAX_LEAF_SIZE = 18
+        self.dungeon_level = dungeon_level
 
+        # self.generate_tile()
         self.PLAYER_POINT = None
         self.room_count = 1
-        self.room_list = []
+        self.tiles = [[TILE.WALL for y in range(self.map_height)] for x in range(self.map_width)]
+        self.actor_tiles = [[TILE.EMPTY for y in range(self.map_height)] for x in range(self.map_width)]
+        self.item_tiles = [[TILE.EMPTY for y in range(self.map_height)] for x in range(self.map_width)]
 
-    def generate_tile(self, map_width, map_height):
+    def generate_tile(self):
         # 空の2D配列を作成するか、既存の配列をクリアします
-        
-        self.tiles = [[TILE.WALL for y in range(map_height)] for x in range(map_width)]
 
         self._leafs = []
 
-        root_leaf = Leaf(0, 0, map_width, map_height)
+        root_leaf = Leaf(0, 0, self.map_width, self.map_height)
         self._leafs.append(root_leaf)
 
         split_successfully = True
@@ -59,11 +63,11 @@ class BSPTree:
       
         
         root_leaf.create_rooms(self)
-        self.place_entities()
 
         return self.tiles
 
     def create_room(self, room):
+        print(room)
         # 矩形内の全てのタイルを0に設定する
         for x in range(room.x1, room.x2):
             for y in range(room.y1, room.y2):
@@ -72,21 +76,31 @@ class BSPTree:
                 # self.tiles[px][py] = 2
         px, py = int((room.x2+room.x1+1)/2), int((room.y1+1 + room.y2)/2)
 
+
         self.room_count += 1
         self.tiles[px][py] = self.room_count
-        print(f"{self.tiles[px][py]=} and {self.room_count=} and {self.room_list=}")
-        self.room_list.append(self.tiles[px][py])
+        if self.tiles[px][py] == 2:
+            self.tiles[px][py] = TILE.STAIRS_UP
+            self.PLAYER_POINT = px, py
+        print(f"{self.tiles[px][py]=} and {self.room_count=} and ")
+        # self.room_list.append(self.tiles[px][py])
+        self.place_entities(room)
 
-    def place_entities(self, dungeon_level=1):
-        for x in range(len(self.tiles[0])):
-            for y in range(len(self.tiles)):
-                if  type(self.tiles[x][y]) == int:
-                    if self.tiles[x][y] == 2:
-                        self.tiles[x][y] = TILE.STAIRS_UP
-                    elif self.tiles[x][y] == self.room_list[-1]:
-                        self.tiles[x][y] = TILE.STAIRS_DOWN
-                    else:
-                        self.tiles[x][y] = TILE.RANDOM_ENTITY
+    def place_entities(self, room):
+        if self.room_count > 2:
+
+            for point in range(random.randint(1, self.dungeon_level+1)):
+                x = random.randint(room.x1+1, room.x2-2)
+                y = random.randint(room.y1+1, room.y2-2)
+                if not self.actor_tiles[x][y] and not self.tiles[x][y]:
+                    self.actor_tiles[x][y] = self.dungeon_level# TODO 後でレベルの調整
+
+            for point in range(random.randint(1, self.dungeon_level+1)):
+                x = random.randint(room.x1+1, room.x2-2)
+                y = random.randint(room.y1+1, room.y2-2)
+                if random.randint(1,5) == 1:
+                    if not self.actor_tiles[x][y] and not self.tiles[x][y]:
+                        self.item_tiles[x][y] = self.dungeon_level# TODO 後でレベルの調整
                         
 
 
@@ -108,13 +122,13 @@ class BSPTree:
 
     def create_hor_tunnel(self, x1, x2, y):
         for x in range(min(x1, x2), max(x1, x2)+1):
-            if self.tiles[x][y] == 1:
-                self.tiles[x][y] = 0# ここでTILE_FLOORもしくはarcade.draw
+            if self.tiles[x][y] == TILE.WALL:
+                self.tiles[x][y] = TILE.EMPTY# ここでTILE_FLOORもしくはarcade.draw
 
     def create_vir_tunnel(self, y1, y2, x):
         for y in range(min(y1, y2), max(y1, y2)+1):
-            if self.tiles[x][y] == 1:
-                self.tiles[x][y] = 0# ここでTILE_FLOORもしくはarcade.draw
+            if self.tiles[x][y] == TILE.WALL:
+                self.tiles[x][y] = TILE.EMPTY# ここでTILE_FLOORもしくはarcade.draw
 
 
 class Leaf:#BSPツリーアルゴリズムに使用
@@ -245,12 +259,14 @@ class MG(arcade.Window):
         super().__init__(width, height, title)
         
         
-        self.bsp = BSPTree()
-        self.dg_list = self.bsp.generate_tile(50,50)
-        for x in range(len(self.dg_list[0])):
-            for y in range(len(self.dg_list)):
-                if self.dg_list[x][y] == 2:
-                    choice_entity(self.dg_list)
+        self.bsp = BSPTree(map_width=40, map_height=40)
+        self.dg_list = self.bsp.generate_tile()
+        # for x in range(len(self.dg_list[0])):
+        #     for y in range(len(self.dg_list)):
+        #         if self.dg_list[x][y] == 2:
+        #             choice_entity(self.dg_list)
+        self.actor_list = self.bsp.actor_tiles
+        self.item_list = self.bsp.item_tiles
                 
         print(self.dg_list)
 
@@ -260,10 +276,19 @@ class MG(arcade.Window):
         arcade.start_render()
         for x in range(len(self.dg_list[0])):
             for y in range(len(self.dg_list)):
-                if self.dg_list[x][y] == 2:
+                if self.dg_list[x][y] == TILE.STAIRS_UP:
                     arcade.draw_rectangle_filled(x*10, y*10, 9, 9, arcade.color.RED)
-                if self.dg_list[x][y] == 0:
+                if self.dg_list[x][y] == TILE.EMPTY or type(self.dg_list[x][y]) == int:
                     arcade.draw_rectangle_filled(x*10, y*10, 9, 9, arcade.color.BLACK)
+                if type(self.actor_list[x][y]) == int:
+                    arcade.draw_rectangle_filled(x*10, y*10, 9, 9, arcade.color.YELLOW)
+                if type(self.item_list[x][y]) == int:
+                    arcade.draw_rectangle_filled(x*10, y*10, 9, 9, arcade.color.GREEN)
+                if self.dg_list[x][y] == TILE.STAIRS_DOWN:
+                    arcade.draw_rectangle_filled(x*10, y*10, 9, 9, arcade.color.BALL_BLUE)
+                if self.dg_list[x][y] == self.bsp.room_count:
+                    arcade.draw_rectangle_filled(x*10, y*10, 9, 9, arcade.color.BALL_BLUE)
+
 
     def on_update(self, delta_time):
         pass

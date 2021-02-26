@@ -182,7 +182,6 @@ class MG(arcade.Window):
         """全てのスプライトリストのアップデートを行う
            他にアクションキュー、ターンチェンジ、pcの移動とviewport、expのチェック
         """
-        # if self.engine.game_state == GAME_STATE.NORMAL or self.engine.game_state == GAME_STATE.INVENTORY:
         self.engine.process_action_queue(delta_time)
 
 

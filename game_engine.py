@@ -9,6 +9,7 @@ from game_map.basic_dungeon import BasicDungeon
 from game_map.town_map import TownMap
 from game_map.map_sprite_set import ActorPlacement
 from game_map.test_map import TestMap
+from bsp import BSPTree
 
 from recalculate_fov import recalculate_fov
 
@@ -90,14 +91,15 @@ class GameEngine:
         elif level_number >= 99:
             return self.test_map(level_number)
         elif level_number >= 1:
-            cur_map = self.basic_dungeon_init(level_number)
+            # cur_map = self.basic_dungeon_init(level_number)
+            cur_map = self.bps_dungeon_init(level_number)
             return cur_map
 
     def setup(self):
 
         arcade.set_background_color(COLORS["black"])
         self.flower_sprites = arcade.SpriteList(use_spatial_hash=True, spatial_hash_cell_size=32)
-        self.cur_level = self.setup_level(level_number=99)
+        self.cur_level = self.setup_level(level_number=1)
         self.stories[self.cur_floor_name] = self.cur_level
         self.turn_loop = TurnLoop(self.player)
         self.item_point = ItemPoint(self)
@@ -236,6 +238,43 @@ class GameEngine:
         self.game_level.map_name = f"town"
 
         return self.game_level
+
+    def bps_dungeon_init(self, level=1, stairs=None):
+        self.game_map = BSPTree(self.map_width, self.map_height, dungeon_level=level)
+        self.game_map.generate_tile()
+        #スプライトリストの初期化
+        wall_sprite = ActorPlacement(self.game_map, self).wall_set()
+        floor_sprite = ActorPlacement(self.game_map, self).floor_set()
+        map_point_sprite = ActorPlacement(self.game_map, self).map_point_set()
+        map_obj_sprite = ActorPlacement(self.game_map, self).map_obj_set()
+        actorsprite = ActorPlacement(self.game_map, self).actor_set()
+        itemsprite = ActorPlacement(self.game_map, self).items_set()
+        items_point_sprite = ActorPlacement(self.game_map, self).items_point_set()
+
+        self.game_level.floor_sprites = floor_sprite
+        self.game_level.wall_sprites = wall_sprite
+        self.game_level.map_point_sprites = map_point_sprite
+        self.game_level.map_obj_sprites = map_obj_sprite
+        self.game_level.actor_sprites = actorsprite
+        self.game_level.item_sprites = itemsprite
+        self.game_level.item_point_sprites = items_point_sprite
+        self.game_level.equip_sprites = arcade.SpriteList(
+            use_spatial_hash=True, spatial_hash_cell_size=32)
+        self.game_level.effect_sprites = arcade.SpriteList(
+            use_spatial_hash=True, spatial_hash_cell_size=32)
+        self.game_level.chara_sprites = arcade.SpriteList(
+            use_spatial_hash=True, spatial_hash_cell_size=32)
+        self.game_level.chara_sprites.append(self.player)
+
+        self.player.x, self.player.y = self.game_map.PLAYER_POINT 
+
+
+
+        self.game_level.floor_level = level
+        self.game_level.map_name = f"bps_dungeon"
+
+        return self.game_level
+
 
     def basic_dungeon_init(self, level=1, stairs=None):
         """基本のdungeonの生成"""
