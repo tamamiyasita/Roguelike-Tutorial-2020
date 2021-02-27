@@ -142,7 +142,7 @@ class MG(arcade.Window):
         self.draw_sprites()
         arcade.set_background_color(arcade.color.BLACK)
 
-        # ノーマルステート時の画面表示
+        # ノーマルステート時の画面表示6
         if self.engine.game_state == GAME_STATE.NORMAL or self.engine.game_state == GAME_STATE.DELAY_WINDOW:
             normal_UI = NormalUI(self.engine, self.viewports,
                                  self.engine.selected_item, self.engine.messages, self.mouse_position)

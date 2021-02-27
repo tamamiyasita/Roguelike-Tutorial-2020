@@ -69,7 +69,10 @@ class TurnLoop:
                         continue
                     else:
                         self.turn = Turn.OFF
-                        break
+
+            if self.turn == Turn.OFF:
+                break
+            
             for sprite in self.sprites:
                 # playerもしくは他のactorの時はvisibleの場合のみwaitを減らす
                 if sprite == self.player or sprite.is_visible or sprite.ai and sprite.ai.visible_check:
@@ -102,5 +105,8 @@ class TurnLoop:
             #     f"{self.actor.name=}, {self.actor.wait=}, {self.actor.state=}, {self.actor.is_dead=}")
             if self.actor.state is state.TURN_END or self.actor.state is None or self.actor.is_dead:
                 self.turn = Turn.ON
+            elif self.actor.state is state.READY and self.actor != self.player:
+                self.actor.state = state.TURN_END
+                self.actor.wait = self.actor.speed
 
     

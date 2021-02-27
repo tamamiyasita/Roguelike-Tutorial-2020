@@ -68,17 +68,6 @@ class Basicmonster:
         if target:
             self.target_point = target.x, target.y
 
-        # ターゲット座標と自分の座標が同じなら視野とターゲットの変数をクリア
-        if (monster.x, monster.y) == self.target_point:
-            self.target_point = None
-            self.visible_check = False
-
-        # ターゲットに隣接している場合パスは計算しない
-        if target and monster.distance_to(target) <= 1.46 and self.visible_check:
-            attack = monster.move_towards(target, engine)
-            if attack:
-                results.extend(attack)
-                return results
 
         if self.visible_check:
             if monster.distance_to(target) >= 1:
@@ -116,13 +105,16 @@ class Basicmonster:
                         if attack:
                             results.extend(attack)
 
-                    elif not result_astar:
-                        results.extend([{"turn_end": monster}])
+                else:
+                    results.extend([{"turn_end": monster}])
+
+            else:
+                results.extend([{"turn_end": monster}])
 
             return results
 
         else:
-            results.extend([{"pass": monster}])
+            results.extend([{"turn_end": monster}])
             return results
 
 
@@ -163,6 +155,6 @@ class ConfusedMonster:
             monster.ai.owner = monster  # self.owner.ai.owner = self.ownerというややこしい表現になる
             results.append(
                 {"message": f"The {monster.name} is no longer confused"})
-            results.extend([{"pass": monster}])
+            results.extend([{"turn_end": monster}])
 
         return results

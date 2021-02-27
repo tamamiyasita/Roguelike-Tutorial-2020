@@ -45,7 +45,7 @@ class BSPTree:
 
         self._leafs = []
 
-        root_leaf = Leaf(0, 0, self.map_width, self.map_height)
+        root_leaf = Leaf(1, 1, self.map_width-1, self.map_height-1)
         self._leafs.append(root_leaf)
 
         split_successfully = True
