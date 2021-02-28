@@ -4,7 +4,7 @@ from random import randint, choice
 from astar import astar
 from constants import *
 from util import stop_watch
-
+from game_map.square_grid import SquareGrid
 
 
 class Wait:
@@ -71,6 +71,7 @@ class Basicmonster:
 
         if self.visible_check:
             if monster.distance_to(target) >= 1:
+                sq_grid = SquareGrid(40,40,wall_sprites)
                 result_astar = astar(
                     [actor_sprites, wall_sprites], (monster.x, monster.y), (self.target_point))
                 # print(f"Path from ({monster.x},{monster.y}) to {target.x},{target.y}", results)
