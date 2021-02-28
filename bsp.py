@@ -5,6 +5,7 @@ from constants import *
 from game_map.door_check import door_check
 
 
+
 class Rect:
     def __init__(self, x, y, w, h):
         self.x1 = x
@@ -36,9 +37,16 @@ class BSPTree:
         # self.generate_tile()
         self.PLAYER_POINT = None
         self.room_count = 1
+        self.graph = [[x for x in range(40)] for y in range(40)]
         self.tiles = [[TILE.WALL for y in range(self.map_height)] for x in range(self.map_width)]
         self.actor_tiles = [[TILE.EMPTY for y in range(self.map_height)] for x in range(self.map_width)]
         self.item_tiles = [[TILE.EMPTY for y in range(self.map_height)] for x in range(self.map_width)]
+        # self.neighbors((5,5))
+
+    def neighbors(self, point):
+        x, y = point
+        return [(x, y+1), (x, y-1), (x+1, y),(x-1, y),(x+1, y+1),(x+1,y-1),(x-1, y+1),(x-1,y-1)]
+
 
     def generate_tile(self):
         # 空の2D配列を作成するか、既存の配列をクリアします
@@ -267,10 +275,40 @@ class MG(arcade.Window):
         #             choice_entity(self.dg_list)
         self.actor_list = self.bsp.actor_tiles
         self.item_list = self.bsp.item_tiles
+        self.graph = self.bsp.graph
                 
-        print(self.dg_list)
+        # print(self.dg_list)
 
         arcade.set_background_color((200,200,200))
+
+        from queue import Queue
+        start = 5,5
+        goal = 15,15
+        frontier = Queue()
+        frontier.put(start)
+        came_from = dict()
+        came_from[start] = None
+        self.path  = []
+        
+
+        while not frontier.empty():
+            current = frontier.get()
+            for next in self.bsp.neighbors(current):
+                if next not in came_from:
+                    frontier.put(next)
+                    came_from[next] = current
+            if current == goal:
+                break
+
+        while current != start:
+            self.path.append(current)
+            current = came_from[current]
+
+        print(f"{self.path=}")
+                    
+
+
+
 
     def on_draw(self):
         arcade.start_render()
@@ -288,6 +326,9 @@ class MG(arcade.Window):
                     arcade.draw_rectangle_filled(x*10, y*10, 9, 9, arcade.color.BALL_BLUE)
                 if self.dg_list[x][y] == self.bsp.room_count:
                     arcade.draw_rectangle_filled(x*10, y*10, 9, 9, arcade.color.BALL_BLUE)
+                if (x,y) in self.path:
+                    arcade.draw_point(x*10, y*10, arcade.color.RED, 3) 
+        arcade.draw_line_strip(self.path, arcade.color.ANDROID_GREEN,3)
 
 
     def on_update(self, delta_time):
