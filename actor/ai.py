@@ -4,7 +4,7 @@ from random import randint, choice
 from astar import astar
 from constants import *
 from util import stop_watch
-from game_map.square_grid import SquareGrid
+from game_map.square_grid import SquareGrid, breadth_first_search
 
 
 class Wait:
@@ -71,16 +71,19 @@ class Basicmonster:
 
         if self.visible_check:
             if monster.distance_to(target) >= 1:
-                sq_grid = SquareGrid(40,40,wall_sprites)
+                graph = SquareGrid(40,40,engine.game_map.tiles)
+                path = breadth_first_search(graph, (self.owner.x, self.owner.y), (target.x, target.y))
+                print(path, "BFS")
                 result_astar = astar(
                     [actor_sprites, wall_sprites], (monster.x, monster.y), (self.target_point))
+                print(result_astar, "A_star")
                 # print(f"Path from ({monster.x},{monster.y}) to {target.x},{target.y}", results)
                 # monster.move_towards(target.x, target.y, sprite_lists)
                 # monster.move((randint(-1, 1), randint(-1, 1)))
 
                 # results[1]がターゲットパスへの最初のタイル座標なので変数pointに格納
                 if result_astar:
-                    point = result_astar[1]
+                    point = path[-1]
                     x, y = point
                     # ターゲット座標から自分の座標を引いたdx,dyをmoveに渡す
                     dx = x - monster.x
