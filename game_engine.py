@@ -27,6 +27,9 @@ from turn_loop import TurnLoop
 from fire import Fire
 from actor.damage_pop import Damagepop
 
+from game_map.square_grid import SquareGrid, breadth_first_search, a_star_search, GridWithWeights, reconstruct_path
+
+
 
 
 from actor.items.paeonia import Paeonia
@@ -268,6 +271,9 @@ class GameEngine:
 
         self.player.x, self.player.y = self.game_map.PLAYER_POINT 
 
+        self.square_graph = SquareGrid(self.map_width, self.map_height, self.game_map.tiles)
+        self.a_path = arcade.AStarBarrierList(self.game_level.wall_sprites[0], self.game_level.wall_sprites, grid_size=GRID_SIZE, left=GRID_SIZE, right=GRID_SIZE*39, bottom=GRID_SIZE, top=GRID_SIZE*39)
+        # self.a_graph = GridWithWeights(self.map_width, self.map_height, self.game_map.tiles)
 
 
         self.game_level.floor_level = level
@@ -343,6 +349,10 @@ class GameEngine:
     @property
     def cur_floor_name(self):
         return f"{self.cur_level.map_name}{self.cur_level.floor_level}"
+
+
+
+
 
 
     def get_actor_dict(self, actor):

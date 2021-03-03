@@ -3,7 +3,7 @@ import arcade
 import random
 from constants import *
 from game_map.door_check import door_check
-from game_map.square_grid import SquareGrid, breadth_first_search
+from game_map.square_grid import SquareGrid, breadth_first_search, GridWithWeights, dijkstra_search, reconstruct_path, a_star_search, heuristic
 
 
 
@@ -37,16 +37,11 @@ class BSPTree:
 
         # self.generate_tile()
         self.PLAYER_POINT = None
-        self.room_count = 1
+        self.room_center_list = []
         self.graph = [[x for x in range(40)] for y in range(40)]
         self.tiles = [[TILE.WALL for y in range(self.map_height)] for x in range(self.map_width)]
         self.actor_tiles = [[TILE.EMPTY for y in range(self.map_height)] for x in range(self.map_width)]
         self.item_tiles = [[TILE.EMPTY for y in range(self.map_height)] for x in range(self.map_width)]
-        # self.neighbors((5,5))
-
-    def neighbors(self, point):
-        x, y = point
-        return [(x, y+1), (x, y-1), (x+1, y),(x-1, y),(x+1, y+1),(x+1,y-1),(x-1, y+1),(x-1,y-1)]
 
 
     def generate_tile(self):
@@ -86,25 +81,24 @@ class BSPTree:
         px, py = int((room.x2+room.x1+1)/2), int((room.y1+1 + room.y2)/2)
 
 
-        self.room_count += 1
-        self.tiles[px][py] = self.room_count
-        if self.tiles[px][py] == 2:
+        self.room_center_list.append((px, py))
+        self.tiles[px][py] = len(self.room_center_list)
+        if self.tiles[px][py] == 1:
             self.tiles[px][py] = TILE.STAIRS_UP
             self.PLAYER_POINT = px, py
-        print(f"{self.tiles[px][py]=} and {self.room_count=} and ")
         # self.room_list.append(self.tiles[px][py])
         self.place_entities(room)
 
     def place_entities(self, room):
-        if self.room_count > 2:
+        if len(self.room_center_list) > 1:
 
-            for point in range(random.randint(1, self.dungeon_level+1)):
+            for point in range(random.randint(10, self.dungeon_level+29)):
                 x = random.randint(room.x1+1, room.x2-2)
                 y = random.randint(room.y1+1, room.y2-2)
                 if not self.actor_tiles[x][y] and not self.tiles[x][y]:
                     self.actor_tiles[x][y] = self.dungeon_level# TODO 後でレベルの調整
 
-            for point in range(random.randint(1, self.dungeon_level+1)):
+            for point in range(random.randint(10, self.dungeon_level+29)):
                 x = random.randint(room.x1+1, room.x2-2)
                 y = random.randint(room.y1+1, room.y2-2)
                 if random.randint(1,5) == 1:
@@ -282,10 +276,31 @@ class MG(arcade.Window):
 
         arcade.set_background_color((200,200,200))
 
-        graph = SquareGrid(40, 40, self.dg_list)
-        self.path = breadth_first_search(graph, (5,5), (50,50))
-        self.path2 = [(x*10, y*10) for x, y in self.path]
+        # graph = SquareGrid(40, 40, self.dg_list)
+        # self.path = breadth_first_search(graph, (5,5), (50,50))
+        # self.path2 = [(x*10, y*10) for x, y in self.path]
 
+
+
+        cost_pos = []
+        for y in range(40):
+            for x in range(40):
+                if type(self.actor_list[x][y]) == int:
+                    cost_pos.append((x,y))
+        cp = [(x, y) for x in range(40) for y in range(40) if type(self.actor_list[x][y]) == int] 
+        print(cost_pos, "cost_pos")
+        print(cp, "cp")
+
+        start = self.bsp.PLAYER_POINT
+        goal = self.bsp.room_center_list[-1]
+
+
+        graph = GridWithWeights(40, 40, walls=self.dg_list, cost_tile=cp)
+
+        # search = dijkstra_search(graph, start, goal)
+        search = a_star_search(graph, start, goal)
+        self.path = reconstruct_path(search[0], start=start, goal=goal)
+        self.path2 = [(x*10, y*10) for x, y in self.path]
 
 
 
@@ -328,16 +343,16 @@ class MG(arcade.Window):
                     arcade.draw_rectangle_filled(x*10, y*10, 9, 9, arcade.color.RED)
                 if self.dg_list[x][y] == TILE.EMPTY or type(self.dg_list[x][y]) == int:
                     arcade.draw_rectangle_filled(x*10, y*10, 9, 9, arcade.color.BLACK)
-                if type(self.actor_list[x][y]) == int:
-                    arcade.draw_rectangle_filled(x*10, y*10, 9, 9, arcade.color.YELLOW)
-                if type(self.item_list[x][y]) == int:
-                    arcade.draw_rectangle_filled(x*10, y*10, 9, 9, arcade.color.GREEN)
-                if self.dg_list[x][y] == TILE.STAIRS_DOWN:
-                    arcade.draw_rectangle_filled(x*10, y*10, 9, 9, arcade.color.BALL_BLUE)
-                if self.dg_list[x][y] == self.bsp.room_count:
-                    arcade.draw_rectangle_filled(x*10, y*10, 9, 9, arcade.color.BALL_BLUE)
+                # if type(self.item_list[x][y]) == int:
+                #     arcade.draw_rectangle_filled(x*10, y*10, 9, 9, arcade.color.GREEN)
                 if (x,y) in self.path:
                     arcade.draw_point(x*10, y*10, arcade.color.RED, 3) 
+                if type(self.actor_list[x][y]) == int:
+                    arcade.draw_rectangle_filled(x*10, y*10, 9, 9, arcade.color.YELLOW)
+                if self.dg_list[x][y] == TILE.STAIRS_DOWN:
+                    arcade.draw_rectangle_filled(x*10, y*10, 9, 9, arcade.color.BALL_BLUE)
+                if (x, y) == self.bsp.room_center_list[-1]:
+                    arcade.draw_rectangle_filled(x*10, y*10, 9, 9, arcade.color.BALL_BLUE)
         arcade.draw_line_strip(self.path2, arcade.color.ANDROID_GREEN,3)
 
 

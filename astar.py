@@ -14,19 +14,31 @@ class Node():
 
     def __eq__(self, other):
         return self.position == other.position
+    
+    def move_cost(self, a, b, sprites):
+            if get_blocking_entity(b[0], b[1], [sprites]):
+            #     return True
+            # if b == (sp.x, sp.y):
+                return 50
+            elif a[0] == b[0] or a[1] == b[1]:
+                return 1
+            else:
+                return 1.42
+            return 1
 
 
 def spot_is_blocked(x, y, sprite_lists):
     if x < 0 or y < 0 or x >= MAP_WIDTH or y >= MAP_HEIGHT:
         return True
 
-    for sprite_list in sprite_lists:
-        if get_blocking_entity(x, y, [sprite_list]):
-            return True
+    # for sprite_list in sprite_lists:
+    if get_blocking_entity(x, y, sprite_lists):
+        return True
+
     return False
 
 
-def astar(sprite_lists, start, end):
+def astar(sprite_lists, map_obj, start, end):
     """指定位置の開始と終了点をタプルのリストとして返す"""
 
     # 開始ノードと終了ノードを作成する
@@ -82,8 +94,12 @@ def astar(sprite_lists, start, end):
             # maze[len(maze) - 1]) - 1) or node_position[1] < 0: continue
 
             # 歩ける地形か確認する
-            if spot_is_blocked(node_position[0], node_position[1], sprite_lists):
+            if spot_is_blocked(node_position[0], node_position[1], [sprite_lists]):
                 continue
+
+            candidataG = start_node.move_cost(new_position, node_position, map_obj)
+            if (current_node.g) >= candidataG:
+                current_node.g = candidataG
 
             # 新規ノードを作成して追加する
             new_node = Node(current_node, node_position)
@@ -97,9 +113,9 @@ def astar(sprite_lists, start, end):
                     continue
 
             # create the f, g, h values
-            child.g = current_node.g + 1
-            child.h = ((child.position[0] - end_node.position[0]) **
-                       2) + ((child.position[1] - end_node.position[1]) ** 2)
+            child.g = current_node.g
+            child.h = ((child.position[0] - end_node.position[0]) **2) + ((child.position[1] - end_node.position[1]) ** 2)
+
             child.f = child.g + child.h
 
             # child is already in the open list

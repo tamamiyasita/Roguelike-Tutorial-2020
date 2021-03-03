@@ -283,7 +283,7 @@ class Actor(arcade.Sprite):
 
                 return attack_results
 
-            elif not get_blocking_entity(destination_x, destination_y, [actor_sprites, wall_sprites]):
+            elif not get_blocking_entity(destination_x, destination_y, [wall_sprites]):
                 # monsterの移動
                 self.x = destination_x
                 self.y = destination_y

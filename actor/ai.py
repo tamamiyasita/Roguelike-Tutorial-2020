@@ -3,8 +3,8 @@ import arcade
 from random import randint, choice
 from astar import astar
 from constants import *
-from util import stop_watch
-from game_map.square_grid import SquareGrid, breadth_first_search
+from util import pixel_to_grid, stop_watch
+from game_map.square_grid import SquareGrid, breadth_first_search, a_star_search, GridWithWeights, reconstruct_path
 
 
 class Wait:
@@ -59,6 +59,7 @@ class Basicmonster:
         # sprite_listsのactor_spritesとmap_spritesを変数に格納
         actor_sprites = engine.cur_level.actor_sprites
         wall_sprites = engine.cur_level.wall_sprites
+        # cost_tile = [(actor.x, actor.y) for actor in actor_sprites]
 
         # 視野のチェック
         if monster.is_visible:
@@ -70,50 +71,64 @@ class Basicmonster:
 
 
         if self.visible_check:
-            if monster.distance_to(target) >= 1:
-                graph = SquareGrid(40,40,engine.game_map.tiles)
-                path = breadth_first_search(graph, (self.owner.x, self.owner.y), (target.x, target.y))
-                print(path, "BFS")
-                result_astar = astar(
-                    [actor_sprites, wall_sprites], (monster.x, monster.y), (self.target_point))
-                print(result_astar, "A_star")
-                # print(f"Path from ({monster.x},{monster.y}) to {target.x},{target.y}", results)
-                # monster.move_towards(target.x, target.y, sprite_lists)
-                # monster.move((randint(-1, 1), randint(-1, 1)))
+        # if monster.distance_to(target) >= 1:
+            # graph = SquareGrid(40,40,engine.game_map.tiles)
+            path = breadth_first_search(engine.square_graph, (self.owner.x, self.owner.y), (target.x, target.y))
+            # graph2 = GridWithWeights(40,40,engine.game_map.tiles, cost_tile=cost_tile)
+            # path2 = a_star_search(graph=engine.Graph, start=(self.owner.x, self.owner.y), goal=(target.x, target.y))
+            # AST = reconstruct_path(path2[0], (self.owner.x, self.owner.y), goal=(target.x, target.y))
+            # print(path, "BFS")
+            # result_astar = astar(
+            #     wall_sprites, actor_sprites, (monster.x, monster.y), (self.target_point))
+            # print(result_astar, "A_star")
+            # print(AST, "AST")
+            # print(f"Path from ({monster.x},{monster.y}) to {target.x},{target.y}", results)
+            # monster.move_towards(target.x, target.y, sprite_lists)
+            # monster.move((randint(-1, 1), randint(-1, 1)))
 
-                # results[1]がターゲットパスへの最初のタイル座標なので変数pointに格納
-                if result_astar:
-                    point = path[-1]
-                    x, y = point
-                    # ターゲット座標から自分の座標を引いたdx,dyをmoveに渡す
-                    dx = x - monster.x
-                    dy = y - monster.y
+            acp = arcade.astar_calculate_path(self.owner.position, target.position, engine.a_path)
+            # results[1]がターゲットパスへの最初のタイル座標なので変数pointに格納
+            # if AST:
+            #     point = AST[0]
+            if path:
+                print(path, "path")
+            #     point = path[-1]
+            # if result_astar:
+            #     point = result_astar[1]
+            print(acp)
+            print([pixel_to_grid(x, y) for x, y in acp], "p_acp")
+            if acp:
+                point = acp[1]
+                x, y = pixel_to_grid(point[0], point[1])
+                # ターゲット座標から自分の座標を引いたdx,dyをmoveに渡す
+                dx = x - monster.x
+                dy = y - monster.y
 
-                    attack = monster.move(
-                        (dx, dy), target, engine)
-                    if attack:
-                        results.extend(attack)
+                attack = monster.move(
+                    (dx, dy), target, engine)
+                if attack:
+                    results.extend(attack)
 
-                elif not result_astar:
-                    result_astar = astar(
-                        [wall_sprites], (monster.x, monster.y), (self.target_point))
-                    if result_astar:
-                        point = result_astar[1]
-                        x, y = point
-                        # ターゲット座標から自分の座標を引いたdx,dyをmoveに渡す
-                        dx = x - monster.x
-                        dy = y - monster.y
+            # elif not result_astar:
+            #     result_astar = astar(
+            #         [wall_sprites], (monster.x, monster.y), (self.target_point))
+            #     if result_astar:
+            #         point = result_astar[1]
+            #         x, y = point
+            #         # ターゲット座標から自分の座標を引いたdx,dyをmoveに渡す
+            #         dx = x - monster.x
+            #         dy = y - monster.y
 
-                        attack = monster.move(
-                            (dx, dy), target, engine)
-                        if attack:
-                            results.extend(attack)
-
-                else:
-                    results.extend([{"turn_end": monster}])
+            #         attack = monster.move(
+            #             (dx, dy), target, engine)
+            #         if attack:
+            #             results.extend(attack)
 
             else:
                 results.extend([{"turn_end": monster}])
+
+            # else:
+            #     results.extend([{"turn_end": monster}])
 
             return results
 
