@@ -273,7 +273,7 @@ class GameEngine:
 
         self.square_graph = SquareGrid(self.map_width, self.map_height, self.game_map.tiles)
         self.a_path = arcade.AStarBarrierList(self.game_level.wall_sprites[0], self.game_level.wall_sprites, grid_size=GRID_SIZE, left=GRID_SIZE, right=GRID_SIZE*39, bottom=GRID_SIZE, top=GRID_SIZE*39)
-        # self.a_graph = GridWithWeights(self.map_width, self.map_height, self.game_map.tiles)
+        self.a_graph = GridWithWeights(40, 40, self.game_map.tiles,cost_tile=[])
 
 
         self.game_level.floor_level = level

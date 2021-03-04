@@ -39,16 +39,16 @@ class GridWithWeights(SquareGrid):
         self.weights = {loc:100 for loc in cost_tile}
 
     def cost(self, from_node, to_node):
-        prev_cost = self.weights.get(to_node, 1)
-        nudge = 0
-        (x1, y1) = from_node
-        (x2, y2) = to_node
-        if (x1 + y1) % 2 == 0 and x2 != x1:
-            nudge = 1
-        if (x1 + y1) % 2 == 1 and y2 != y1:
-            nudge = 1
-        return prev_cost + 0.001 * nudge
-        # return self.weights.get(to_node, 1)
+        # prev_cost = self.weights.get(to_node, 1)
+        # nudge = 0
+        # (x1, y1) = from_node
+        # (x2, y2) = to_node
+        # if (x1 + y1) % 2 == 0 and x2 != x1:
+        #     nudge = 1
+        # if (x1 + y1) % 2 == 1 and y2 != y1:
+        #     nudge = 1
+        # return prev_cost + 0.001 * nudge
+        return self.weights.get(to_node, 1)
 
 from queue import PriorityQueue
 
@@ -81,20 +81,20 @@ def reconstruct_path(came_from, start, goal):
     while current != start:
         path.append(current)
         current = came_from[current]
-    # path.append(start)
+    path.append(start)
     path.reverse()
     return path
 
 
 def heuristic(a, b):
-    D = 1
-    D2 = 1
-    dx = abs(a[0] - b[0])
-    dy = abs(a[1] - b[1])
-    return D * (dx + dy) + (D2 - 2 * D) * min(dx, dy)
-    # (x1, x2) = a
-    # (y1, y2) = b
-    # return abs(x1 - x2) + abs(y1 - y2)
+    # D = 1
+    # D2 = 1
+    # dx = abs(a[0] - b[0])
+    # dy = abs(a[1] - b[1])
+    # return D * (dx + dy) + (D2 - 2 * D) * min(dx, dy)
+    (x1, y1) = a
+    (x2, y2) = b
+    return abs(x1 - x2) + abs(y1 - y2)
 
 def a_star_search(graph, start, goal):
     frontier = PriorityQueue()
