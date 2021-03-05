@@ -217,10 +217,16 @@ wall_3 = [walls_3_tiles[w]
 b_walls = (r"image/bs_walls.png")
 b_walls_tiles = get_tile_set(b_walls, tile_size=32)
 b_wall = [b_walls_tiles[w] for w in [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]]
+color_tile_walls = (r"image/color_tile_walls.png")
+color_tile_walls = get_tile_set(color_tile_walls, tile_size=32)
+color_tile_walls = [color_tile_walls[w] for w in [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]]
 
 side_floor = (r"image/side_walls.png")
 side_floor = get_tile_set(side_floor, tile_size=32)
 side_floor = [side_floor[w] for w in [0, 1, 2, 3, 4, 5, 6, 7]]
+side_color_tile_1 = (r"image/side_color_tile_1.png")
+side_color_tile_1 = get_tile_set(side_color_tile_1, tile_size=32)
+side_color_tile_1 = [side_color_tile_1[w] for w in [0, 1, 2, 3, 4, 5, 6, 7]]
 
 # door_img = (r"image/Door0.png")
 # door_tile = get_tile_set(door_img, tile_size=16)
@@ -312,11 +318,13 @@ IMAGE_ID = {"Rou": player,
             "floor": floors,
             "tst_floor": tst_floor,
             "color_tile_1": color_tile_1,
-            "stone_floor":[stone_floor],
+            "stone_floor":stone_floor,
             "block_floor":[block_floor],
             "side_floor":side_floor,
+            "side_color_tile_1":side_color_tile_1,
             # "wall_1": wall_1,
             # "wall_2": wall_2,
+            "color_tile_walls":color_tile_walls,
             "b_wall": b_wall,
             "wall_3": wall_3,
             "up_stairs": [up_stairs],

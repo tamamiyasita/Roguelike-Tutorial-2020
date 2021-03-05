@@ -132,16 +132,14 @@ class Basicmonster:
 
                 else:
                     results.extend([{"turn_end": monster}])
-                    return results
 
             else:
                 results.extend([{"turn_end": monster}])
-                return results
 
 
         else:
             results.extend([{"turn_end": monster}])
-            return results
+        return results
 
 
 class ConfusedMonster:

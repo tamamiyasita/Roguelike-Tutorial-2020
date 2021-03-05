@@ -23,8 +23,8 @@ class Rect:
                 self.y1 <= other.y2 and self.y2 >= other.y1)
 
 
-BSP_ROOM_MAX_SIZE = 17
-BSP_ROOM_MIN_SIZE = 8
+BSP_ROOM_MAX_SIZE = 14
+BSP_ROOM_MIN_SIZE = 7
 class BSPTree:
     def __init__(self, map_width, map_height, dungeon_level=1):
         self.map_width = map_width
@@ -41,7 +41,7 @@ class BSPTree:
         self.tiles = [[TILE.WALL for y in range(self.map_height)] for x in range(self.map_width)]
         self.actor_tiles = [[TILE.EMPTY for y in range(self.map_height)] for x in range(self.map_width)]
         self.item_tiles = [[TILE.EMPTY for y in range(self.map_height)] for x in range(self.map_width)]
-        # self.neighbors((5,5))
+ 
 
     def neighbors(self, point):
         x, y = point
@@ -71,8 +71,19 @@ class BSPTree:
       
         
         root_leaf.create_rooms(self)
+        self.door_remove()
 
         return self.tiles
+
+    def door_remove(self):
+        for y in range(len(self.tiles[0])):
+            for x in range(len(self.tiles)):
+                if self.tiles[x][y] == TILE.DOOR_W or self.tiles[x][y] == TILE.DOOR_H:
+                    if self.tiles[x+1][y] == TILE.EMPTY and self.tiles[x-1][y] == TILE.EMPTY and self.tiles[x][y+1] == TILE.EMPTY or\
+                       self.tiles[x+1][y] == TILE.EMPTY and self.tiles[x-1][y] == TILE.EMPTY and self.tiles[x][y-1] == TILE.EMPTY or\
+                       self.tiles[x+1][y] == TILE.EMPTY and self.tiles[x][y+1] == TILE.EMPTY and self.tiles[x][y-1] == TILE.EMPTY or\
+                       self.tiles[x-1][y] == TILE.EMPTY and self.tiles[x][y+1] == TILE.EMPTY and self.tiles[x][y-1] == TILE.EMPTY:
+                        self.tiles[x][y] = TILE.EMPTY
 
     def create_room(self, room):
         print(room)
@@ -133,12 +144,22 @@ class BSPTree:
             if self.tiles[x][y] == TILE.WALL:
                 self.tiles[x][y] = TILE.EMPTY# ここでTILE_FLOORもしくはarcade.draw
 
+            if door_check(self.tiles, x-1, y):
+                self.tiles[x-1][y] = TILE.DOOR_H
+            if door_check(self.tiles, x+1, y):
+                self.tiles[x+1][y] = TILE.DOOR_H
+            else:
+                self.tiles[x][y] = TILE.EMPTY
     def create_vir_tunnel(self, y1, y2, x):
         for y in range(min(y1, y2), max(y1, y2)+1):
             if self.tiles[x][y] == TILE.WALL:
                 self.tiles[x][y] = TILE.EMPTY# ここでTILE_FLOORもしくはarcade.draw
-
-
+            if door_check(self.tiles, x, y-1):
+                self.tiles[x][y-1] = TILE.DOOR_W
+            if door_check(self.tiles, x, y+1):
+                self.tiles[x][y+1] = TILE.DOOR_W
+            else:
+                self.tiles[x][y] = TILE.EMPTY
 class Leaf:#BSPツリーアルゴリズムに使用
     def __init__(self, x, y, width, height):
         self.x = x
@@ -324,6 +345,10 @@ class MG(arcade.Window):
                     arcade.draw_rectangle_filled(x*10, y*10, 9, 9, arcade.color.GREEN)
                 if self.dg_list[x][y] == TILE.STAIRS_DOWN:
                     arcade.draw_rectangle_filled(x*10, y*10, 9, 9, arcade.color.BALL_BLUE)
+                if self.dg_list[x][y] == TILE.DOOR_H:
+                    arcade.draw_rectangle_filled(x*10, y*10, 9, 9, arcade.color.AIR_SUPERIORITY_BLUE)
+                if self.dg_list[x][y] == TILE.DOOR_W:
+                    arcade.draw_rectangle_filled(x*10, y*10, 9, 9, arcade.color.AIR_FORCE_BLUE)
                 if self.dg_list[x][y] == self.bsp.room_count:
                     arcade.draw_rectangle_filled(x*10, y*10, 9, 9, arcade.color.BALL_BLUE)
                 if (x,y) in self.path:

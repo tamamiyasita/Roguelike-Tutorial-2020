@@ -14,6 +14,7 @@ class TestMap:
         self.width = width
         self.height = height
         self.dungeon_level = dungeon_level
+        self.PLAYER_POINT = (10,10)
 
         self.tiles = [[TILE.EMPTY for y in range(height)] for x in range(width)]
         self.actor_tiles = [
@@ -21,3 +22,6 @@ class TestMap:
         self.item_tiles = [
             [TILE.EMPTY for y in range(height)] for x in range(width)]
         self.tiles[width//2][height//2] = TILE.STAIRS_DOWN
+
+    def generate_tile(self):
+        pass

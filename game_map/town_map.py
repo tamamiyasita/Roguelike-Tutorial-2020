@@ -11,8 +11,12 @@ class TownMap:
             [TILE.EMPTY for y in range(height)] for x in range(width)]
         self.item_tiles = [
             [TILE.EMPTY for y in range(height)] for x in range(width)]
+        self.PLAYER_POINT = pixel_to_grid(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2)
 
     def player_set(self,player):
 
         self.player = player
         self.player.x, self.player.y = pixel_to_grid(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2)
+
+    def generate_tile(self):
+        pass

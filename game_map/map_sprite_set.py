@@ -24,7 +24,7 @@ class ActorPlacement:
         self.height = len(self.tiles[0])
         self.my_map = arcade.read_tmx(r"demo\town2.tmx")
 
-    def wall_set(self):
+    def wall_set(self, image):
         """ 静的な地形スプライトをgame_mapブロック情報から作成する
         """
         wall_sprites = arcade.SpriteList(
@@ -37,49 +37,49 @@ class ActorPlacement:
 
 
                     if number == 6 and self.tiles[x][y-1] == TILE.WALL:                    
-                        wall = Wall(texture_number=15, x=x, y=y)
+                        wall = Wall(name=image, texture_number=15, x=x, y=y)
                         wall_sprites.append(wall)
                     else:
-                        wall = Wall(texture_number=number, x=x, y=y)
+                        wall = Wall(name=image, texture_number=number, x=x, y=y)
                         wall_sprites.append(wall)
 
         return wall_sprites
 
-    def floor_wall(self, number, x, y, floor_sprites):
+    def floor_wall(self,image2, number, x, y, floor_sprites):
         if number == 0 and self.tiles[x][y-1] in (TILE.EMPTY ,TILE.DOOR_H, TILE.DOOR_W):
-            f_wall = Floor(name="side_floor", texture_number=0, x=x, y=y-1) 
+            f_wall = Floor(name=image2, texture_number=0, x=x, y=y-1) 
             floor_sprites.append(f_wall)
             
         if number == 1 and self.tiles[x][y-1] in (TILE.EMPTY ,TILE.DOOR_H, TILE.DOOR_W): 
-            f_wall = Floor(name="side_floor", texture_number=1, x=x, y=y-1) 
+            f_wall = Floor(name=image2, texture_number=1, x=x, y=y-1) 
             floor_sprites.append(f_wall)
 
         if number == 2 and self.tiles[x][y-1] in (TILE.EMPTY ,TILE.DOOR_H, TILE.DOOR_W):
-            f_wall = Floor(name="side_floor", texture_number=2, x=x, y=y-1) 
+            f_wall = Floor(name=image2, texture_number=2, x=x, y=y-1) 
             floor_sprites.append(f_wall)
 
         if number == 3 and self.tiles[x][y-1] in (TILE.EMPTY ,TILE.DOOR_H, TILE.DOOR_W):
-            f_wall = Floor(name="side_floor", texture_number=3, x=x, y=y-1) 
+            f_wall = Floor(name=image2, texture_number=3, x=x, y=y-1) 
             floor_sprites.append(f_wall)
 
         if number == 4 and self.tiles[x][y-1] in (TILE.EMPTY ,TILE.DOOR_H, TILE.DOOR_W):
-            f_wall = Floor(name="side_floor", texture_number=4, x=x, y=y-1) 
+            f_wall = Floor(name=image2, texture_number=4, x=x, y=y-1) 
             floor_sprites.append(f_wall)
 
         if number == 5 and self.tiles[x][y-1] in (TILE.EMPTY ,TILE.DOOR_H, TILE.DOOR_W):
-            f_wall = Floor(name="side_floor", texture_number=5, x=x, y=y-1) 
+            f_wall = Floor(name=image2, texture_number=5, x=x, y=y-1) 
             floor_sprites.append(f_wall)
 
         if number == 6 and self.tiles[x][y-1] in (TILE.EMPTY ,TILE.DOOR_H, TILE.DOOR_W):
-            f_wall = Floor(name="side_floor", texture_number=6, x=x, y=y-1) 
+            f_wall = Floor(name=image2, texture_number=6, x=x, y=y-1) 
             floor_sprites.append(f_wall)
 
         if number == 7 and self.tiles[x][y-1] in (TILE.EMPTY ,TILE.DOOR_H, TILE.DOOR_W):
-            f_wall = Floor(name="side_floor", texture_number=7, x=x, y=y-1) 
+            f_wall = Floor(name=image2, texture_number=7, x=x, y=y-1) 
             floor_sprites.append(f_wall)
 
 
-    def floor_set(self, image="block_floor"):
+    def floor_set(self, image="block_floor", image2=None):
         floor_sprites = arcade.SpriteList(
             use_spatial_hash=True, spatial_hash_cell_size=32)
 
@@ -95,7 +95,7 @@ class ActorPlacement:
 
                 if self.tiles[x][y] == TILE.WALL:
                     number = self.search_wall_number(x, y, self.tiles)
-                    self.floor_wall(number, x, y, floor_sprites)
+                    self.floor_wall(image2, number, x, y, floor_sprites)
 
 
         return floor_sprites

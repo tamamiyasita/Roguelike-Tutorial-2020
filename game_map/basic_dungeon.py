@@ -44,7 +44,9 @@ class BasicDungeon:
         self.item_tiles = [[TILE.EMPTY for y in range(height)] for x in range(width)]
 
         self.PLAYER_POINT = None
-        self.make_map(dungeon_level)
+
+    def generate_tile(self):
+        self.make_map(self.dungeon_level)
         self.door_remove()
 
 
