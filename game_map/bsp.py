@@ -346,13 +346,13 @@ class MG(arcade.Window):
                 if self.dg_list[x][y] == TILE.STAIRS_DOWN:
                     arcade.draw_rectangle_filled(x*10, y*10, 9, 9, arcade.color.BALL_BLUE)
                 if self.dg_list[x][y] == TILE.DOOR_H:
-                    arcade.draw_rectangle_filled(x*10, y*10, 9, 9, arcade.color.AIR_SUPERIORITY_BLUE)
+                    arcade.draw_rectangle_filled(x*10, y*10, 9, 9, arcade.color.HOT_PINK)
                 if self.dg_list[x][y] == TILE.DOOR_W:
-                    arcade.draw_rectangle_filled(x*10, y*10, 9, 9, arcade.color.AIR_FORCE_BLUE)
+                    arcade.draw_rectangle_filled(x*10, y*10, 9, 9, arcade.color.HOT_PINK)
                 if self.dg_list[x][y] == self.bsp.room_count:
                     arcade.draw_rectangle_filled(x*10, y*10, 9, 9, arcade.color.BALL_BLUE)
-                if (x,y) in self.path:
-                    arcade.draw_point(x*10, y*10, arcade.color.RED, 3) 
+                # if (x,y) in self.path:
+                #     arcade.draw_point(x*10, y*10, arcade.color.RED, 3) 
         arcade.draw_line_strip(self.path, arcade.color.ANDROID_GREEN,3)
 
 

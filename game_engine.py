@@ -252,8 +252,22 @@ class GameEngine:
 
         self.square_graph = SquareGrid(self.map_width, self.map_height, dungeon.game_map.tiles)
 
+        ####################
 
+        self.pineapple = Pineapple(self.player.x-1, self.player.y + 1)
+        self.game_level.item_sprites.append(self.pineapple)
 
+        self.hp = Paeonia(self.player.x-1, self.player.y)
+        self.game_level.item_sprites.append(self.hp)
+
+        self.silver_grass = SilverGrass(self.player.x + 1, self.player.y)
+        self.game_level.item_sprites.append(self.silver_grass)
+
+        self.ebony = Ebony(self.player.x + 1, self.player.y-1)
+        self.game_level.item_sprites.append(self.ebony)
+
+        self.sunflower = Sunflower(self.player.x, self.player.y-2)
+        self.game_level.item_sprites.append(self.sunflower)
 
     def drunker_dungeon_init(self, level=1, stairs=None):
         image_set={"wall": "color_tile_walls",
@@ -290,20 +304,6 @@ class GameEngine:
 
 
 
-        self.pineapple = Pineapple(self.player.x-1, self.player.y + 1)
-        self.game_level.item_sprites.append(self.pineapple)
-
-        self.hp = Paeonia(self.player.x-1, self.player.y)
-        self.game_level.item_sprites.append(self.hp)
-
-        self.silver_grass = SilverGrass(self.player.x + 1, self.player.y)
-        self.game_level.item_sprites.append(self.silver_grass)
-
-        self.ebony = Ebony(self.player.x + 1, self.player.y-1)
-        self.game_level.item_sprites.append(self.ebony)
-
-        self.sunflower = Sunflower(self.player.x, self.player.y-2)
-        self.game_level.item_sprites.append(self.sunflower)
 
 
 
