@@ -34,9 +34,9 @@ class BSPTree:
         self.MAX_LEAF_SIZE = 18
         self.dungeon_level = dungeon_level
 
-        # self.generate_tile()
         self.PLAYER_POINT = None
-        self.room_count = 1
+        
+        self.room_count = 1 # これが下り階段になる
         self.graph = [[x for x in range(40)] for y in range(40)]
         self.tiles = [[TILE.WALL for y in range(self.map_height)] for x in range(self.map_width)]
         self.actor_tiles = [[TILE.EMPTY for y in range(self.map_height)] for x in range(self.map_width)]
@@ -343,8 +343,8 @@ class MG(arcade.Window):
                     arcade.draw_rectangle_filled(x*10, y*10, 9, 9, arcade.color.YELLOW)
                 if type(self.item_list[x][y]) == int:
                     arcade.draw_rectangle_filled(x*10, y*10, 9, 9, arcade.color.GREEN)
-                if self.dg_list[x][y] == TILE.STAIRS_DOWN:
-                    arcade.draw_rectangle_filled(x*10, y*10, 9, 9, arcade.color.BALL_BLUE)
+                # if self.dg_list[x][y] == TILE.STAIRS_DOWN:
+                #     arcade.draw_rectangle_filled(x*10, y*10, 9, 9, arcade.color.BALL_BLUE)
                 if self.dg_list[x][y] == TILE.DOOR_H:
                     arcade.draw_rectangle_filled(x*10, y*10, 9, 9, arcade.color.HOT_PINK)
                 if self.dg_list[x][y] == TILE.DOOR_W:
