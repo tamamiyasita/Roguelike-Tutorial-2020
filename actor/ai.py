@@ -4,9 +4,7 @@ from random import randint, choice
 from astar import astar
 from constants import *
 from util import pixel_to_grid, stop_watch
-from game_map.square_grid import SquareGrid, breadth_first_search, a_star_search, GridWithWeights, reconstruct_path,
-from game_map.dijkstra_map import 
-
+from game_map.square_grid import SquareGrid, breadth_first_search, a_star_search, GridWithWeights, reconstruct_path
 
 class Wait:
     def __init__(self):
@@ -135,6 +133,7 @@ class Basicmonster:
 
 
         if self.visible_check:
+
             result_dijkstra = engine.target_player_map.get_low_number(monster.x, monster.y)
 
 

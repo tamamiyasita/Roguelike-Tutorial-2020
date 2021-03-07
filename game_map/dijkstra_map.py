@@ -38,20 +38,28 @@ class DijkstraMap:
         return 0 <= x <= self.map_width and 0 <= y <= self.map_height
 
     def get_low_number(self, x, y):
+        point = 2000
+        dist = None
         current_num = self.dist_map[x][y]
         for dx, dy in self.neighbors:
             tx, ty = x+dx, y+dy 
             if self.map_range_inner(tx, ty) and self.dist_map[tx][ty] < current_num:
-                return tx, ty
+                if point > self.dist_map[tx][ty]:
+                    point = self.dist_map[tx][ty]
+                    dist = tx,ty
+        return dist
+                    
 
 
 
     def compute_distance_map(self, *args):
-        if args is not None:# 位置更新に使う
+        # if args == None:# 位置更新に使う
+        if args:# actorオブジェクトならx,yをタプルで入れる
             self.target = args
 
-        if not isinstance(self.target, tuple):# actorオブジェクトならx,yをタプルで入れる
-            self.target = (self.target.x, self.target.y), # ,を付けてタプルにしてる
+        if not isinstance(*self.target, tuple):# actorオブジェクトならx,yをタプルで入れる
+            tar = self.target[0]
+            self.target = (tar.x, tar.y), # ,を付けてタプルにしてる
 
         dist_map = [[2000 for x in range(self.map_width)] for y in range(self.map_height)]
         

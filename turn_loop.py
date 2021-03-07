@@ -105,6 +105,8 @@ class TurnLoop:
             #     f"{self.actor.name=}, {self.actor.wait=}, {self.actor.state=}, {self.actor.is_dead=}")
             if self.actor.state == state.TURN_END or self.actor.state is None or self.actor.is_dead:
                 self.turn = Turn.ON
+                if self.actor == self.player:
+                    engine.target_player_map.compute_distance_map(self.player)
             elif self.actor.state == state.READY and self.actor != self.player:
                 # self.actor.state = state.TURN_END
                 # self.actor.wait = self.actor.speed
