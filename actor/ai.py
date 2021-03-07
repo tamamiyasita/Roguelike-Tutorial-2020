@@ -4,7 +4,8 @@ from random import randint, choice
 from astar import astar
 from constants import *
 from util import pixel_to_grid, stop_watch
-from game_map.square_grid import SquareGrid, breadth_first_search, a_star_search, GridWithWeights, reconstruct_path
+from game_map.square_grid import SquareGrid, breadth_first_search, a_star_search, GridWithWeights, reconstruct_path,
+from game_map.dijkstra_map import 
 
 
 class Wait:
@@ -59,7 +60,6 @@ class Basicmonster:
         # sprite_listsのactor_spritesとmap_spritesを変数に格納
         actor_sprites = engine.cur_level.actor_sprites
         wall_sprites = engine.cur_level.wall_sprites
-        cost_tile = [(actor.x, actor.y) for actor in actor_sprites]
 
         # 視野のチェック
         if monster.is_visible:
@@ -71,22 +71,9 @@ class Basicmonster:
 
 
         if self.visible_check:
-            # result_asterで一回パスを作り、ブロックされたときBFSに切り替える
-        # if monster.distance_to(target) >= 1:
-            # graph = SquareGrid(40,40,engine.game_map.tiles)
-            # graph2 = GridWithWeights(40,40,engine.game_map.tiles, cost_tile=cost_tile)
-            # path2 = a_star_search(graph=graph2, start=(self.owner.x, self.owner.y), goal=(target.x, target.y))
-            # AST = reconstruct_path(path2[0], (self.owner.x, self.owner.y), goal=(target.x, target.y))
-            # print(path, "BFS")
-            result_astar = astar([wall_sprites, actor_sprites], (monster.x, monster.y), (self.target_point))
-            # print(result_astar, "A_star")
-            # print(AST, "AST")
-            # print(f"Path from ({monster.x},{monster.y}) to {target.x},{target.y}", results)
-            # monster.move_towards(target.x, target.y, sprite_lists)
-            # monster.move((randint(-1, 1), randint(-1, 1)))
 
-            # if AST:
-            #     point = AST[1]
+            result_astar = astar([wall_sprites, actor_sprites], (monster.x, monster.y), (self.target_point))
+
             # results[1]がターゲットパスへの最初のタイル座標なので変数pointに格納
             if result_astar:
                 point = result_astar[1]
@@ -116,19 +103,6 @@ class Basicmonster:
                         (dx, dy), target, engine)
                     if attack:
                         results.extend(attack)
-            #     result_astar = astar(
-            #         [wall_sprites], (monster.x, monster.y), (self.target_point))
-            #     if result_astar:
-            #         point = result_astar[1]
-            #         x, y = point
-            #         # ターゲット座標から自分の座標を引いたdx,dyをmoveに渡す
-            #         dx = x - monster.x
-            #         dy = y - monster.y
-
-            #         attack = monster.move(
-            #             (dx, dy), target, engine)
-            #         if attack:
-            #             results.extend(attack)
 
                 else:
                     results.extend([{"turn_end": monster}])
@@ -141,6 +115,52 @@ class Basicmonster:
             results.extend([{"turn_end": monster}])
         return results
 
+
+    @stop_watch
+    def take_turn_2(self, target, engine):
+        results = []
+        monster = self.owner
+
+        # sprite_listsのactor_spritesとmap_spritesを変数に格納
+        actor_sprites = engine.cur_level.actor_sprites
+        wall_sprites = engine.cur_level.wall_sprites
+
+        # 視野のチェック
+        if monster.is_visible:
+            self.visible_check = True
+
+        # ターゲット座標の更新
+        if target:
+            self.target_point = target.x, target.y
+
+
+        if self.visible_check:
+            result_dijkstra = engine.target_player_map.get_low_number(monster.x, monster.y)
+
+
+            # results[1]がターゲットパスへの最初のタイル座標なので変数pointに格納
+            if result_dijkstra:
+                point = result_dijkstra
+
+
+                x, y = point[0], point[1]
+                # ターゲット座標から自分の座標を引いたdx,dyをmoveに渡す
+                dx = x - monster.x
+                dy = y - monster.y
+
+                attack = monster.move(
+                    (dx, dy), target, engine)
+                if attack:
+                    results.extend(attack)
+
+
+            else:
+                results.extend([{"turn_end": monster}])
+
+
+        else:
+            results.extend([{"turn_end": monster}])
+        return results
 
 class ConfusedMonster:
     def __init__(self, pre_ai=None, confused_turn=50):

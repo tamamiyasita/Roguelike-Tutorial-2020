@@ -30,7 +30,7 @@ from fire import Fire
 from actor.damage_pop import Damagepop
 
 from game_map.square_grid import SquareGrid, breadth_first_search, a_star_search, GridWithWeights, reconstruct_path
-
+from game_map.dijkstra_map import DijkstraMap
 
 
 
@@ -221,17 +221,17 @@ class GameEngine:
         return self.game_level
 
     def init_dungeon_sprites(self, dungeon, image_set=None, level=1):
-        dungeon.game_map = dungeon
-        dungeon.game_map.generate_tile()
+        self.game_map = dungeon.game_map
+        self.game_map.generate_tile()
 
         #スプライトリストの初期化
-        wall_sprite = ActorPlacement(dungeon.game_map, self).wall_set(image_set["wall"])
-        floor_sprite = ActorPlacement(dungeon.game_map, self).floor_set(image_set["floor"], image_set["floor_wall"])
-        map_point_sprite = ActorPlacement(dungeon.game_map, self).map_point_set()
-        map_obj_sprite = ActorPlacement(dungeon.game_map, self).map_obj_set()
-        actorsprite = ActorPlacement(dungeon.game_map, self).actor_set()
-        itemsprite = ActorPlacement(dungeon.game_map, self).items_set()
-        items_point_sprite = ActorPlacement(dungeon.game_map, self).items_point_set()
+        wall_sprite = ActorPlacement(self.game_map, self).wall_set(image_set["wall"])
+        floor_sprite = ActorPlacement(self.game_map, self).floor_set(image_set["floor"], image_set["floor_wall"])
+        map_point_sprite = ActorPlacement(self.game_map, self).map_point_set()
+        map_obj_sprite = ActorPlacement(self.game_map, self).map_obj_set()
+        actorsprite = ActorPlacement(self.game_map, self).actor_set()
+        itemsprite = ActorPlacement(self.game_map, self).items_set()
+        items_point_sprite = ActorPlacement(self.game_map, self).items_point_set()
 
         self.game_level.floor_sprites = floor_sprite
         self.game_level.wall_sprites = wall_sprite
@@ -248,9 +248,12 @@ class GameEngine:
             use_spatial_hash=True, spatial_hash_cell_size=32)
         self.game_level.chara_sprites.append(self.player)
 
-        self.player.x, self.player.y = dungeon.game_map.PLAYER_POINT 
+        self.player.x, self.player.y = self.game_map.PLAYER_POINT 
 
         self.square_graph = SquareGrid(self.map_width, self.map_height, dungeon.game_map.tiles)
+
+        # playerを目標にしたダイクストラマップ作成
+        self.target_player_map = DijkstraMap(self.game_map.tiles, self.player)
 
         ####################
 
@@ -301,11 +304,6 @@ class GameEngine:
 
         self.game_level.floor_level = level
         self.game_level.map_name = f"basic_dungeon"
-
-
-
-
-
 
 
         self.ut = Down_Stairs(self.player.x, self.player.y-1)

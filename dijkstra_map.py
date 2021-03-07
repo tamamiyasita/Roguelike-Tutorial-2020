@@ -3,55 +3,85 @@ import heapq
 from constants import *
 from game_map.bsp import BSPTree
 
+class DijkstraMap:
+    def __init__(self, game_map, *target):
+        """game_mapとstartで初期化する、その後は必要に応じて
+        self.compute_distance_mapで目標位置を更新する"""
 
-max_distance = 2000
+        self.game_map = game_map
+        self.target = target
 
-def compute_distance_map(cost_map, starts):
-    map_height = len(cost_map)
-    map_width = len(cost_map[0])
-    dist_map = [[max_distance for x in range(map_width)] for y in range(map_height)]
+        self.cost_map = None
+        self.dist_map = None
 
-    
-    pq = []
-    for pos_start in starts:
-        heapq.heappush(pq, (0, pos_start))# スタート位置(目標位置になる)はゼロとなる
 
-    while pq:
-        dist, pos = heapq.heappop(pq)
+        self.cost_map_init(self.game_map)
+        self.map_height = len(self.cost_map)
+        self.map_width = len(self.cost_map[0])
 
-        # distが訪問済みならパス
-        if dist_map[pos[1]][pos[0]] <= dist:
-            continue
+        self.compute_distance_map()
 
-        # dist_mapに位置コストdistを代入、これがパスとなる
-        dist_map[pos[1]][pos[0]] = dist
+        self.neighbors = [(-1, -1), (0, -1), (1, -1), (-1, 0),
+                          (1, 0), (-1, 1), (0, 1), (1, 1)]
 
-        # 近隣のタイルを調べ壁ならスキップ床なら値を比べてpqに入れるか決める
-        for d_pos in [(-1, 0), (1, 0), (0, -1), (0, 1), (1, 1), (1, -1), (-1, 1), (-1, -1)]:
-            pos_new = (pos[0] + d_pos[0], pos[1] + d_pos[1])# 周りを調べる
-            if pos_new[0] < 0 or pos_new[0] >= map_width:# 調べる範囲がマップサイズに収まってなければスキップさせる
+    def tile_cost(self, tile):
+        if tile == TILE.WALL:
+            return 2000
+        else:
+            return 1
+
+    def cost_map_init(self, game_map):
+        self.cost_map = [[self.tile_cost(i) for i in row] for row in game_map]
+
+    def map_range_inner(self, x, y):
+        # マップサイズの範囲内かどうか判定する
+        return 0 <= x <= self.map_width and 0 <= y <= self.map_height
+
+    def get_low_number(self, x, y):
+        current_num = self.dist_map[x][y]
+        for dx, dy in self.neighbors:
+            tx, ty = x+dx, y+dy 
+            if self.map_range_inner(tx, ty) and self.dist_map[tx][ty] < current_num:
+                return tx, ty
+
+
+
+    def compute_distance_map(self, *args):
+        if args is not None:# 位置更新に使う
+            self.target = args
+
+        if not isinstance(self.target, tuple):# actorオブジェクトならx,yをタプルで入れる
+            self.target = (self.target.x, self.target.y), # ,を付けてタプルにしてる
+
+        dist_map = [[2000 for x in range(self.map_width)] for y in range(self.map_height)]
+        
+        pq = []
+        for pos_start in self.target:
+            heapq.heappush(pq, (0, pos_start))# スタート位置(目標位置になる)はゼロとなる
+
+        while pq:
+            dist, pos = heapq.heappop(pq)
+
+            # distが訪問済みならパス
+            if dist_map[pos[0]][pos[1]] <= dist:
                 continue
-            if pos_new[1] < 0 or pos_new[1] >= map_height:# 同上
-                continue
-            dist_new = dist + cost_map[pos_new[1]][pos_new[0]] # 現在地のコストにコストマップの近隣の位置コスト(1か2000)を加える
-            if dist_new >= dist_map[pos_new[1]][pos_new[0]]: # その値がdistマップの近隣の位置のコストより高ければスキップ
-                continue
-            heapq.heappush(pq, (dist_new, pos_new)) # pqに近隣の位置(x, y)とコスト値dist_newを加える
 
-    return dist_map
+            # dist_mapに位置コストdistを代入、これがパスとなる
+            dist_map[pos[0]][pos[1]] = dist
 
-impassable_cost = 2000
-passable_cost = 1
+            # 近隣のタイルを調べ壁ならスキップ床なら値を比べてpqに入れるか決める
+            for d_pos in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
+                pos_new = (pos[0] + d_pos[0], pos[1] + d_pos[1])# 周りを調べる
+                if not self.map_range_inner(x=pos_new[0], y=pos_new[1]):# 調べる範囲がマップサイズに収まってなければスキップさせる
+                    continue
 
-def tile_cost(tile):
-    if tile == TILE.WALL:
-        return impassable_cost
-    else:
-        return passable_cost
+                dist_new = dist + self.cost_map[pos_new[0]][pos_new[1]] # 現在地のコストにコストマップの近隣の位置コスト(1か2000)を加える
+                if dist_new >= dist_map[pos_new[0]][pos_new[1]]: # その値がdistマップの近隣の位置のコストより高ければスキップ
+                    continue
+                heapq.heappush(pq, (dist_new, pos_new)) # pqに近隣の位置(x, y)とコスト値dist_newを加える
 
-def cost_map_init(sprites):
-    return [[tile_cost(i) for i in row] for row in sprites]
 
+        self.dist_map = dist_map
 
 
 class MG(arcade.Window):
@@ -64,38 +94,32 @@ class MG(arcade.Window):
         self.bsp = self._bsp.generate_tile()
 
         arcade.set_background_color((200,200,200))
-        self.cost_map = cost_map_init(self.bsp)
-        self.dist_map = compute_distance_map(self.cost_map,[(self._bsp.PLAYER_POINT)])
-        print(self.dist_map)
+        self.target_player_map = DijkstraMap(self.bsp, self._bsp.PLAYER_POINT)
+        self.target_player_map.compute_distance_map((10,10),(20,35))
+
+
+        g = self._bsp.PLAYER_POINT[0]+3, self._bsp.PLAYER_POINT[1]+3
+        get_1 = self.target_player_map.get_low_number(*g)
+        f = self._bsp.PLAYER_POINT[0]+2, self._bsp.PLAYER_POINT[1]+2
+        get_2 = self.target_player_map.get_low_number(*f)
+        p = self._bsp.PLAYER_POINT[0]+1, self._bsp.PLAYER_POINT[1]+1
+        get_3 = self.target_player_map.get_low_number(*p)
+        print(self._bsp.PLAYER_POINT, get_1, get_2, get_3)
 
 
 
     def on_draw(self):
         arcade.start_render()
-        for x in range(len(self.cost_map)):
-            for y in range(len(self.cost_map)):
-                if self.cost_map[x][y] >= 2000:
+        for x in range(len(self.tiles)):
+            for y in range(len(self.tiles)):
+                if self.target_player_map.dist_map[x][y] >= 2000:
                     arcade.draw_rectangle_filled(x*10, y*10, 9, 9, arcade.color.BABY_POWDER)
                 else:
-                    num = self.dist_map[x][y]
+                    num = self.target_player_map.dist_map[x][y]
                     arcade.draw_rectangle_filled(x*10, y*10, 9, 9, (num*9, num*5, num*2))
+                
 
                 
-        #         if self.cost_map[x][y] == TILE.EMPTY or type(self.dg_list[x][y]) == int:
-        #             arcade.draw_rectangle_filled(x*10, y*10, 9, 9, arcade.color.BLACK)
-        #         # if type(self.item_list[x][y]) == int:
-        #         #     arcade.draw_rectangle_filled(x*10, y*10, 9, 9, arcade.color.GREEN)
-        #         if (x,y) in self.path:
-        #             arcade.draw_point(x*10, y*10, arcade.color.RED, 3) 
-        #         if type(self.actor_list[x][y]) == int:
-        #             arcade.draw_rectangle_filled(x*10, y*10, 9, 9, arcade.color.YELLOW)
-        #         if self.dg_list[x][y] == TILE.STAIRS_DOWN:
-        #             arcade.draw_rectangle_filled(x*10, y*10, 9, 9, arcade.color.BALL_BLUE)
-        #         if (x, y) == self.bsp.room_center_list[-1]:
-        #             arcade.draw_rectangle_filled(x*10, y*10, 9, 9, arcade.color.BALL_BLUE)
-        # arcade.draw_line_strip(self.path2, arcade.color.ANDROID_GREEN,3)
-
-
     def on_update(self, delta_time):
         pass
 

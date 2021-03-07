@@ -89,7 +89,7 @@ class TurnLoop:
                 self.turn = Turn.DELAY
                 engine.fov_recompute = True
             elif Tag.enemy in self.actor.tag:
-                result = self.actor.ai.take_turn(self.player, engine)
+                result = self.actor.ai.take_turn_2(self.player, engine)
                 if result:
                     engine.action_queue.extend(result)
                 self.turn = Turn.DELAY
@@ -103,10 +103,11 @@ class TurnLoop:
         elif self.turn == Turn.DELAY:
             # log.debug(
             #     f"{self.actor.name=}, {self.actor.wait=}, {self.actor.state=}, {self.actor.is_dead=}")
-            if self.actor.state is state.TURN_END or self.actor.state is None or self.actor.is_dead:
+            if self.actor.state == state.TURN_END or self.actor.state is None or self.actor.is_dead:
                 self.turn = Turn.ON
-            elif self.actor.state is state.READY and self.actor != self.player:
-                self.actor.state = state.TURN_END
-                self.actor.wait = self.actor.speed
+            elif self.actor.state == state.READY and self.actor != self.player:
+                # self.actor.state = state.TURN_END
+                # self.actor.wait = self.actor.speed
+                engine.action_queue.extend([{"turn_end": self.actor}])
 
     
