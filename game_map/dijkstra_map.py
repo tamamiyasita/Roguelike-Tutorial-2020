@@ -4,12 +4,12 @@ from constants import *
 from game_map.bsp import BSPTree
 
 class DijkstraMap:
-    def __init__(self, game_map, *target):
+    def __init__(self, game_map, target):
         """game_mapとstartで初期化する、その後は必要に応じて
         self.compute_distance_mapで目標位置を更新する"""
 
         self.game_map = game_map
-        self.target = target
+        self.target = [(target.x, target.y) for target in target]
 
         self.cost_map = None
         self.dist_map = None
@@ -52,16 +52,24 @@ class DijkstraMap:
 
 
 
-    def compute_distance_map(self, *args):
+    def compute_distance_map(self, targets=None, blocks=None):
         # if args == None:# 位置更新に使う
-        if args:# actorオブジェクトならx,yをタプルで入れる
-            self.target = args
+        if targets:# actorオブジェクトならx,yをタプルで入れる
+            self.target = [(target.x, target.y) for target in targets]
 
-        if not isinstance(*self.target, tuple):# actorオブジェクトならx,yをタプルで入れる
-            tar = self.target[0]
-            self.target = (tar.x, tar.y), # ,を付けてタプルにしてる
+
 
         dist_map = [[2000 for x in range(self.map_width)] for y in range(self.map_height)]
+
+        if blocks:
+            self.cost_map_init(self.game_map)
+            for block in blocks:
+                self.cost_map[block.x][block.y] = 2000
+
+
+
+
+
         
         pq = []
         for pos_start in self.target:

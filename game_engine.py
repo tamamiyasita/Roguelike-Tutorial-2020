@@ -253,7 +253,7 @@ class GameEngine:
         self.square_graph = SquareGrid(self.map_width, self.map_height, dungeon.game_map.tiles)
 
         # playerを目標にしたダイクストラマップ作成
-        self.target_player_map = DijkstraMap(dungeon.game_map.tiles, self.player)
+        self.target_player_map = DijkstraMap(dungeon.game_map.tiles, [self.player])
 
         ####################
 

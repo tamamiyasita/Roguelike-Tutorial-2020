@@ -119,9 +119,6 @@ class Basicmonster:
         results = []
         monster = self.owner
 
-        # sprite_listsのactor_spritesとmap_spritesを変数に格納
-        actor_sprites = engine.cur_level.actor_sprites
-        wall_sprites = engine.cur_level.wall_sprites
 
         # 視野のチェック
         if monster.is_visible:
