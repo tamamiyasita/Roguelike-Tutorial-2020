@@ -48,11 +48,23 @@ class Player(Actor):
         self.experience_per_level = exp_calc()
 
 
+
         for s in skill_lists:
             s.owner = self
 
 
 
+    def update(self):
+        super().update()
+        if self.state == state.ON_MOVE:
+            if abs(self.from_x - self.center_x) >= GRID_SIZE  or abs(self.from_y - self.center_y) >= GRID_SIZE:
+                self.change_x = 0
+                self.change_y = 0
+                self.x += self.dx
+                self.y += self.dy
+                self.wait += self.speed
+                self.from_x, self.from_y = self.center_x, self.center_y
+                self.state = state.TURN_END
 
     def update_animation(self, delta_time=1 / 60):
         super().update_animation(delta_time)

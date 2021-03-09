@@ -63,8 +63,9 @@ class TurnLoop:
                 if actor.wait < 1:
                     self.actor = actor
                     actor.state = state.READY
-                    self.elapsed_time(actor, queue, engine)
-                    # 死亡時判定(未テスト)
+                    self.elapsed_time(actor, queue, engine)# ターンが来たらステータス効果発動
+
+                    # ステータス効果による死亡やスタン判定
                     if actor.is_dead or actor.state == state.STUN:
                         continue
                     else:
@@ -106,8 +107,10 @@ class TurnLoop:
             if self.actor.state == state.TURN_END or self.actor.state is None or self.actor.is_dead:
                 self.turn = Turn.ON
                 if self.actor == self.player:
+                    # Playerをターゲットとしたダイクストラマップの更新
                     engine.target_player_map.compute_distance_map(targets=engine.cur_level.chara_sprites)
-                else :
+                else:
+                    # 他のアクターを障害物としてマップを計算する
                     engine.target_player_map.compute_distance_map(blocks=engine.cur_level.actor_sprites)
             elif self.actor.state == state.READY and self.actor != self.player:
                 engine.action_queue.extend([{"turn_end": self.actor}])

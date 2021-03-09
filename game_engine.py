@@ -32,6 +32,8 @@ from actor.damage_pop import Damagepop
 from game_map.square_grid import SquareGrid, breadth_first_search, a_star_search, GridWithWeights, reconstruct_path
 from game_map.dijkstra_map import DijkstraMap
 
+from actor.action import dist_action
+
 
 
 from actor.items.paeonia import Paeonia
@@ -506,6 +508,13 @@ class GameEngine:
             if "player_turn" in action:
                 print("player_turn")
                 self.player.state = state.READY
+            if "action" in action:
+                target = action["action"][0]
+                dist = action["action"][1]
+                # target.move(dxy=dist, engine=self)
+                dist_action(dist, self.player, self)
+
+                # [{"action":(self, (3,6))}]
 
             if "None" in action:
                 pass
@@ -716,9 +725,11 @@ class GameEngine:
         """プレイヤーの移動
         """
         if self.player.state == state.READY and dist and self.move_switch:
-            attack = self.player.move(dist, None, self)
-            if attack:
-                self.action_queue.extend(attack)
+            self.action_queue.extend([{"action":(self.player,(dist))}])
+
+            # attack = self.player.move(dist, None, self)
+            # if attack:
+            #     self.action_queue.extend(attack)
                 # self.move_switch = False
             dist = None
 

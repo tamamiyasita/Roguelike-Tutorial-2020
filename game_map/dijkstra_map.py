@@ -64,11 +64,7 @@ class DijkstraMap:
         if blocks:
             self.cost_map_init(self.game_map)
             for block in blocks:
-                self.cost_map[block.x][block.y] = 2000
-
-
-
-
+                self.cost_map[block.x][block.y] = 8
 
         
         pq = []

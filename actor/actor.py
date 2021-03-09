@@ -53,6 +53,8 @@ class Actor(arcade.Sprite):
         self._master = None # 自身がitemだった場合その所持者を表す、主に装備時Spriteの表示位置に使用する
         self.d_time = 170 # 待機モーション時のdelay時間
         self.is_dead = False
+        self.from_x, self.from_y = self.center_x, self.center_y
+        self.dx, self.dy = 0,0
         self.tag = {}
         self.attack_delay = 6
 
@@ -301,18 +303,18 @@ class Actor(arcade.Sprite):
         else:
             return player_move()
 
-    def update(self, delta_time=1/60):
-        super().update()
-        if self.state == state.ON_MOVE:
-            if abs(self.from_x - self.center_x) >= GRID_SIZE and self.dx or\
-                    abs(self.from_y - self.center_y) >= GRID_SIZE and self.dy:
-                self.change_x = 0
-                self.change_y = 0
-                self.x += self.dx
-                self.y += self.dy
-                self.wait += self.speed
-                self.from_x, self.from_y = self.center_x, self.center_y
-                self.state = state.TURN_END
+    # def update(self, delta_time=1/60):
+    #     super().update()
+    #     if self.state == state.ON_MOVE:
+    #         if abs(self.from_x - self.center_x) >= GRID_SIZE and self.dx or\
+    #                 abs(self.from_y - self.center_y) >= GRID_SIZE and self.dy:
+    #             self.change_x = 0
+    #             self.change_y = 0
+    #             self.x += self.dx
+    #             self.y += self.dy
+    #             self.wait += self.speed
+    #             self.from_x, self.from_y = self.center_x, self.center_y
+    #             self.state = state.TURN_END
 
   
   
