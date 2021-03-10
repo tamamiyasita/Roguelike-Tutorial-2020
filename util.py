@@ -98,17 +98,13 @@ def get_entity(x, y, sprite_lists):
 
 def get_blocking_entity(x, y, sprite_lists):
     px, py = grid_to_pixel(x, y)
-    blocking_sprite = arcade.SpriteList()
     for sprite_list in sprite_lists:
         s_list = arcade.get_sprites_at_exact_point((px, py), sprite_list)
         for sprite in s_list:
             if sprite.blocks:
-                blocking_sprite.append(sprite)
+                return sprite
+    return None
 
-    if len(blocking_sprite) > 0:
-        return blocking_sprite
-    else:
-        return None
 
 
 

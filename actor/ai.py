@@ -144,11 +144,12 @@ class Basicmonster:
                 dx = x - monster.x
                 dy = y - monster.y
 
-                attack = monster.move(
-                    (dx, dy), target, engine)
-                if attack:
-                    results.extend(attack)
+                # attack = monster.move(
+                #     (dx, dy), target, engine)
+                # if attack:
+                #     results.extend(attack)
 
+                results.extend([{"action":(self.owner,(dx, dy))}])
 
             else:
                 results.extend([{"turn_end": monster}])

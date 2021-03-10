@@ -5,7 +5,7 @@ from constants import *
 
 class AttackEffect:
     def __init__(self, owner, attack_target):
-        self.attack_delay = 15
+        self.attack_delay = 17
         self.step = GRID_SIZE // 2
 
         self.owner = owner
@@ -14,9 +14,15 @@ class AttackEffect:
         self.from_y = owner.center_y
         self.attack_target_x = attack_target.center_x
 
+        self.owner.state = state.ATTACK
+        self.owner.change_y = owner.dy * (MOVE_SPEED -4)
+        self.owner.change_x = owner.dx * (MOVE_SPEED -4)
 
     def attack(self):
-
+        if abs(self.from_x - self.owner.center_x) >= self.step and self.owner.dx or\
+            abs(self.from_y - self.owner.center_y) >= self.step and self.owner.dy:
+            self.owner.change_x = 0
+            self.owner.change_y = 0
         # if self.attack_delay == 6:
         #     for i in range(13):
         #         if i % 2 == 0:
@@ -34,3 +40,4 @@ class AttackEffect:
             self.owner.change_x, self.owner.change_y = 0, 0
             self.owner.wait += self.owner.fighter.attack_speed
             self.owner.state = state.TURN_END
+

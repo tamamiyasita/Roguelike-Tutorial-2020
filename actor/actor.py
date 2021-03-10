@@ -236,7 +236,7 @@ class Actor(arcade.Sprite):
 
             if blocking_actor and not target:
                 # playerの攻撃チェック
-                actor = blocking_actor[0]
+                actor = blocking_actor
                 if Tag.wall in actor.tag:
                     return [{"None": True}]
 
@@ -356,12 +356,8 @@ class Actor(arcade.Sprite):
 
     def update_animation(self, delta_time=1 / 60):
         super().update_animation()
-        # 左右を向く
+
         if self.state == state.ATTACK:
-            if abs(self.from_x - self.center_x) >= self.step and self.dx or\
-                abs(self.from_y - self.center_y) >= self.step and self.dy:
-                self.change_x = 0
-                self.change_y = 0
             self.combat_effect.attack()
 
 

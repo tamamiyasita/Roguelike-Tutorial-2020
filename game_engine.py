@@ -32,7 +32,7 @@ from actor.damage_pop import Damagepop
 from game_map.square_grid import SquareGrid, breadth_first_search, a_star_search, GridWithWeights, reconstruct_path
 from game_map.dijkstra_map import DijkstraMap
 
-from actor.action import dist_action
+from actor.action import dist_action, door_action
 
 
 
@@ -99,8 +99,8 @@ class GameEngine:
             return self.test_map(level_number)
         elif level_number >= 1:
             # cur_map = self.basic_dungeon_init(level_number)
-            # cur_map = self.bps_dungeon_init(level_number)
-            cur_map = self.drunker_dungeon_init(level_number)
+            cur_map = self.bps_dungeon_init(level_number)
+            # cur_map = self.drunker_dungeon_init(level_number)
             return cur_map
 
     def setup(self):
@@ -512,7 +512,10 @@ class GameEngine:
                 target = action["action"][0]
                 dist = action["action"][1]
                 # target.move(dxy=dist, engine=self)
-                dist_action(dist, self.player, self)
+                result = dist_action(dist, target, self)
+                if result:
+                    new_action_queue.extend(result)
+                    
 
                 # [{"action":(self, (3,6))}]
 
@@ -767,10 +770,7 @@ class GameEngine:
         """階段及びplayerの位置の判定
         """
 
-        get_stairs = arcade.get_sprites_at_exact_point(
-            point=self.player.position,
-            sprite_list=self.cur_level.map_obj_sprites)
-
+        get_stairs = arcade.get_sprites_at_exact_point(point=self.player.position, sprite_list=self.cur_level.map_obj_sprites)
         player_dict = self.get_actor_dict(self.player)
         
 
@@ -838,31 +838,23 @@ class GameEngine:
 
 
     def use_door(self, door_dist):
-        pass
-        # result = []
-        # dx, dy = door_dist
-        # dest_x = self.player.x + dx
-        # dest_y = self.player.y + dy
-        # # door_actor = get_door(dest_x, dest_y, self.cur_level.map_obj_sprites)
-        # enemy_actor = get_blocking_entity(
-        #     dest_x, dest_y, [self.cur_level.actor_sprites])
-        # if door_actor and not enemy_actor:
-        #     door_actor = door_actor[0]
-        #     if door_actor.left_face:
-        #         door_actor.left_face = False
-        #     elif not door_actor.left_face:
-        #         door_actor.left_face = True
+        result = []
+        dx, dy = door_dist
+        dest_x = self.player.x + dx
+        dest_y = self.player.y + dy
+        # door_actor = get_door(dest_x, dest_y, self.cur_level.map_obj_sprites)
+        door = get_blocking_entity(dest_x, dest_y, [self.cur_level.map_obj_sprites])
+        if Tag.door in door:
+            if door.left_face:
+                door.left_face = False
+            elif not door.left_face:
+                door.left_face = True
 
-        #     result.extend(
-        #         [{"delay": {"time": 0.2, "action": {"turn_end": self.player}}}])
-        # elif door_actor and enemy_actor:
-        #     result.extend(
-        #         [{"message": f"We can't close the door because of the {enemy_actor[0].name}."}])
-        #     result.extend(
-        #         [{"delay": {"time": 0.2, "action": {"player_turn"}}}])
-        # else:
-        #     result.extend([{"message": f"There is no door in that direction"}])
-        #     result.extend(
-        #         [{"delay": {"time": 0.2, "action": {"player_turn"}}}])
+            result.extend(
+                [{"delay": {"time": 0.2, "action": {"turn_end": self.player}}}])
+ 
+        else:
+            result.extend([{"message": f"There is no door in that direction"}])
+            result.extend([{"delay": {"time": 0.2, "action": {"None"}}}])
 
-        # return result
+        return result

@@ -35,7 +35,7 @@ class Player(Actor):
         self.fighter=fighter_component
         self.fighter.owner = self
 
-        self.tag = [Tag.player]
+        self.tag = [Tag.player, Tag.use_door]
         self.race = "Alraune"
 
         self.state = state.READY

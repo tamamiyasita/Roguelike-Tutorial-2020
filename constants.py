@@ -59,6 +59,7 @@ class Tag(Enum):
     counter = auto()
     shot = auto()
     range_attack = auto()
+    use_door = auto()
 
     # chara
     player = auto()
