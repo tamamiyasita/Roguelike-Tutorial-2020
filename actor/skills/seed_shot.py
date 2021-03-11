@@ -26,7 +26,7 @@ class SeedShot(BaseSkill):
         self.attr = "physical"
 
         self.damage_range = "single"
-        self.player_state = state.SHOT
+        self.player_form = form.SHOT
 
 
         self.item_weight = 6
@@ -52,7 +52,7 @@ class SeedShot(BaseSkill):
     def update_animation(self, delta_time):
         super().update_animation(delta_time)
 
-        if self.master.state == state.SHOT:
+        if self.master.form == form.SHOT:
                 if self.master.left_face:
                     self.angle = 90
                     self.item_margin_x = self.master.x+4

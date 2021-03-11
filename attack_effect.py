@@ -12,7 +12,8 @@ class AttackEffect:
         self.attack_target = attack_target
         self.owner.from_x = owner.center_x
         self.owner.from_y = owner.center_y
-        self.attack_target_x = attack_target.center_x
+        self.owner.fx = owner.x
+        self.owner.fy = owner.y
 
         self.owner.state = state.ATTACK
         if Tag.player in self.owner.tag:
@@ -40,9 +41,12 @@ class AttackEffect:
         if 0 > self.attack_delay:
             self.attack_target.alpha = 255
             # self.attack_target.center_x = self.attack_target_x
-            self.owner.center_y = self.owner.from_y
-            self.owner.center_x = self.owner.from_x
+            # self.owner.center_y = self.owner.from_y
+            # self.owner.center_x = self.owner.from_x
+            self.owner.y = self.owner.fy
+            self.owner.x = self.owner.fx
             self.owner.change_x, self.owner.change_y = 0, 0
+            self.owner.dx, self.owner.dy = 0, 0
             self.owner.wait += self.owner.fighter.attack_speed
             self.owner.state = state.TURN_END
 

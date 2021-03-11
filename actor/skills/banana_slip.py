@@ -34,6 +34,8 @@ class BananaSlip(BaseSkill):
 
 
     def use(self, target):
+        self.owner.form = form.SMILE
         self.effect = StunStatus(count_time=1)
         return target.fighter.skill_process(self)
+        
             

@@ -20,6 +20,7 @@ from actor.items.paeonia import Paeonia
 from actor.items.sunflower import Sunflower
 from actor.items.pineapple import Pineapple
 from actor.items.aconite import Aconite
+from actor.items.banana_flower import Bananaflower
 
 
 from actor.skills.grass_cutter import GrassCutter
@@ -81,6 +82,8 @@ def restore_actor(actor_dict):
         actor = Pineapple()
     elif actor_name == "Aconite":
         actor = Aconite()
+    elif actor_name == "Bananaflower":
+        actor = Bananaflower()
     
 
     elif actor_name == "GrassCutter":

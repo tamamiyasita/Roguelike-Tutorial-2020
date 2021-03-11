@@ -118,7 +118,7 @@ class Ranged:
                 {"message": f"{self.shooter.name} used {self.skill.name}"})
 
             if self.shooter == self.engine.player:
-                self.engine.player.state = self.skill.player_state
+                self.engine.player.form = self.skill.player_form
 
             Flying(shooter=self.shooter, tar_point=self.target,
                         engine=self.engine, skill=self.skill, spin=self.spin)

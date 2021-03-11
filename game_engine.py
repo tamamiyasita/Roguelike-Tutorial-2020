@@ -107,7 +107,7 @@ class GameEngine:
 
         arcade.set_background_color(COLORS["black"])
         self.flower_sprites = arcade.SpriteList(use_spatial_hash=True, spatial_hash_cell_size=32)
-        self.cur_level = self.setup_level(level_number=1)
+        self.cur_level = self.setup_level(level_number=99)
         self.stories[self.cur_floor_name] = self.cur_level
         self.turn_loop = TurnLoop(self.player)
         self.item_point = ItemPoint(self)
@@ -228,7 +228,7 @@ class GameEngine:
 
         #スプライトリストの初期化
         wall_sprite = ActorPlacement(dungeon.game_map, self).wall_set(image_set["wall"])
-        floor_sprite = ActorPlacement(dungeon.game_map, self).floor_set(image_set["floor"], image_set["floor_wall"])
+        floor_sprite = ActorPlacement(dungeon.game_map, self).floor_set(image_set["floor"], image_set.get("floor_wall"))
         map_point_sprite = ActorPlacement(dungeon.game_map, self).map_point_set()
         map_obj_sprite = ActorPlacement(dungeon.game_map, self).map_obj_set()
         actorsprite = ActorPlacement(dungeon.game_map, self).actor_set()
@@ -667,7 +667,7 @@ class GameEngine:
                 self.game_state = GAME_STATE.SELECT_LOCATION
 
             if "close_door" in action:
-                self.player.state = state.DOOR
+                self.player.form = form.DOOR
                 new_action_queue.extend(
                     [{"message": f"What direction do you want the door to close?"}])
 

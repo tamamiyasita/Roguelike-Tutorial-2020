@@ -205,8 +205,8 @@ class Fighter:
 
         # (命中率)％ ＝（α／１００）＊（１ー （β ／ １００））＊ １００
         # 命中率（α）＝９５、回避率（β）＝５
-        if self.owner.state != state.STUN:
-            self.owner.state = state.DEFENSE
+        if self.owner.state != state.STUN and Tag.player in self.owner.tag:
+            self.owner.form = form.DEFENSE
         if hit_rate:
             hit_chance = ((hit_rate-self.DEX+skill.owner.fighter.DEX) / 100) * (1 - (self.evasion / 100)) * 100
             if random.randrange(1, 100) <= hit_chance:

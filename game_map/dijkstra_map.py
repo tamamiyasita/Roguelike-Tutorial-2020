@@ -35,7 +35,7 @@ class DijkstraMap:
 
     def map_range_inner(self, x, y):
         # マップサイズの範囲内かどうか判定する
-        return 0 <= x <= self.map_width and 0 <= y <= self.map_height
+        return 1 <= x < self.map_width and 1 <= y < self.map_height
 
     def get_low_number(self, x, y):
         point = 2000

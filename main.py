@@ -126,7 +126,7 @@ class MG(arcade.Window):
         self.color_attachment.use(0)
         self.quad_fs.render(self.program)
         # アタック時はビューポート固定する
-        if self.engine.player.state == state.ATTACK or self.engine.player.state == state.TURN_END or self.engine.player.state == state.DEFENSE and hasattr(self.engine.player, "from_x"):
+        if self.engine.player.state == state.ATTACK or self.engine.player.state == state.TURN_END and hasattr(self.engine.player, "from_x"):
             viewport(self.engine.player.from_x, self.engine.player.from_y)
         else:
             viewport(self.engine.player.center_x, self.engine.player.center_y)
@@ -233,7 +233,7 @@ class MG(arcade.Window):
             self.player_direction = keymap(key, self.engine)
 
         # ドア開閉
-        if self.engine.player.state == state.DOOR:
+        if self.engine.player.form == form.DOOR:
             door_check = keymap(key, self.engine)
             if door_check:
                 self.engine.action_queue.extend([{"use_door": door_check}])

@@ -86,7 +86,7 @@ class Fire:
                 {"message": f"{self.shooter.name} shot {self.target.name}"})
 
             if self.shooter == self.engine.player:
-                self.engine.player.state = state.SHOT
+                self.engine.player.form = form.SHOT
 
 
             TriggerPull(shooter=self.shooter, target=self.target,

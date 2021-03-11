@@ -23,6 +23,7 @@ def dist_action(dxy, owner, engine):
 
     elif Tag.enemy in blocking_actor.tag:
         if Tag.player in owner.tag:
+            engine.move_switch = False
             result.extend(attack_action(blocking_actor, owner))
     elif Tag.player in blocking_actor.tag:
         if Tag.enemy in owner.tag:
@@ -57,7 +58,7 @@ def talk_action(actor, owner):
 def door_action(owner, door):
     result = []
     if Tag.use_door in owner.tag:
-        owner.state = state.DOOR
+        owner.form = form.DOOR
         if door.left_face == False:
             door.left_face = True
             result.extend([{"delay": {"time": 0.2, "action": {"turn_end":owner}}}])

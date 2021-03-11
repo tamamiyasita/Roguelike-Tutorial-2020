@@ -132,17 +132,20 @@ class GAME_STATE(Enum):
 
 class state(Enum):
     READY = auto()
-    DELAY = auto()
     ON_MOVE = auto()
     TURN_END = auto()
     ATTACK = auto()
-    FOV = auto()
+    DELAY = auto()
+    STUN = auto()
+
+class form(Enum):
+    NORMAL = auto()
+    ATTACK = auto()
+    ON_MOVE = auto()
     DOOR = auto()
-    AMOUNT = auto()
     SHOT = auto()
     THROW = auto()
     DEFENSE = auto()
-    STUN = auto()
     SMILE = auto()
 
 class NPC_state(Enum):

@@ -62,7 +62,7 @@ class TurnLoop:
                     continue
                 if actor.wait < 1:
                     self.actor = actor
-                    actor.state = state.READY
+                    self.actor.state = state.READY # スタンなどの状態異常が無ければstate解除
                     self.elapsed_time(actor, queue, engine)# ターンが来たらステータス効果発動
 
                     # ステータス効果による死亡やスタン判定
@@ -84,6 +84,8 @@ class TurnLoop:
 
 
         if self.turn == Turn.OFF:
+            if actor.is_dead or actor.state == state.STUN:
+                self.turn = Turn.DELAY
 
             if self.actor == self.player:
                 self.player.state = state.READY
@@ -104,7 +106,7 @@ class TurnLoop:
         elif self.turn == Turn.DELAY:
             # log.debug(
             #     f"{self.actor.name=}, {self.actor.wait=}, {self.actor.state=}, {self.actor.is_dead=}")
-            if self.actor.state == state.TURN_END or self.actor.state is None or self.actor.is_dead:
+            if self.actor.state == state.TURN_END or self.actor.state is None or self.actor.is_dead or self.actor.state == state.STUN:
                 self.turn = Turn.ON
                 if self.actor == self.player:
                     # Playerをターゲットとしたダイクストラマップの更新

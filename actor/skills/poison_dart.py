@@ -25,7 +25,7 @@ class PoisonDart(BaseSkill):
         self.effect = None
 
         self.damage_range = "single"
-        self.player_state = state.THROW
+        self.player_form = form.THROW
 
 
         self.item_weight = 5
@@ -51,7 +51,7 @@ class PoisonDart(BaseSkill):
     def update_animation(self, delta_time):
         super().update_animation(delta_time)
 
-        if self.master.state == state.THROW:
+        if self.master.form == form.THROW:
             self.alpha = 0
         else:
             self.alpha = 255
