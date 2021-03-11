@@ -251,6 +251,7 @@ class GameEngine:
         self.game_level.chara_sprites.append(self.player)
 
         self.player.x, self.player.y = dungeon.game_map.PLAYER_POINT 
+        self.player.from_x, self.player.from_y = self.player.position
 
         self.square_graph = SquareGrid(self.map_width, self.map_height, dungeon.game_map.tiles)
 
@@ -733,7 +734,7 @@ class GameEngine:
             # attack = self.player.move(dist, None, self)
             # if attack:
             #     self.action_queue.extend(attack)
-                # self.move_switch = False
+            # self.move_switch = False
             dist = None
 
     def normal_state_update(self, player_direction, delta_time):
@@ -843,12 +844,13 @@ class GameEngine:
         dest_x = self.player.x + dx
         dest_y = self.player.y + dy
         # door_actor = get_door(dest_x, dest_y, self.cur_level.map_obj_sprites)
-        door = get_blocking_entity(dest_x, dest_y, [self.cur_level.map_obj_sprites])
-        if Tag.door in door:
-            if door.left_face:
-                door.left_face = False
-            elif not door.left_face:
-                door.left_face = True
+        for door in self.cur_level.map_obj_sprites:
+            if Tag.door in door.tag:
+                if (door.x, door.y) == (dest_x, dest_y):
+                    if door.left_face:
+                        door.left_face = False
+                    elif not door.left_face:
+                        door.left_face = True
 
             result.extend(
                 [{"delay": {"time": 0.2, "action": {"turn_end": self.player}}}])

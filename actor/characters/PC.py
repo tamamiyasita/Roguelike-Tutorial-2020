@@ -26,6 +26,7 @@ class Player(Actor):
             x=x,
             y=y,
             color=COLORS["white"],
+            blocks=True,
 
             inventory=inventory,
             equipment=equip_component,

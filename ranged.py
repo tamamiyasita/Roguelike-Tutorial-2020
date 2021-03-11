@@ -105,6 +105,10 @@ class Ranged:
                 if actor.x== x and actor.y == y:
                     if actor.is_visible:
                         self.target = actor
+                        if self.target and self.shooter.x < self.target.x:
+                            self.shooter.left_face = False
+                        elif self.target and self.shooter.x > self.target.x:
+                            self.shooter.left_face = True
                         break
 
         

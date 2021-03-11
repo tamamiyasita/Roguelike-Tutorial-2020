@@ -10,7 +10,7 @@ def dist_action(dxy, owner, engine):
     dist_x, dist_y = dxy[0] + owner.x, dxy[1] + owner.y
 
     # 行き先に何があるかを調べる
-    blocking_actor = get_blocking_entity(dist_x, dist_y, [engine.cur_level.wall_sprites,engine.cur_level.map_obj_sprites,engine.cur_level.actor_sprites])
+    blocking_actor = get_blocking_entity(dist_x, dist_y, [engine.cur_level.wall_sprites,engine.cur_level.map_obj_sprites,engine.cur_level.actor_sprites,engine.cur_level.chara_sprites])
     owner.dx, owner.dy = dx, dy
     if owner.dx == -1:
         owner.left_face = True
@@ -20,11 +20,16 @@ def dist_action(dxy, owner, engine):
     if not blocking_actor:# 何もなければ移動
         walk_action(owner)
     
-    elif Tag.door in blocking_actor.tag:
-        result.extend(door_action(owner, blocking_actor))
 
     elif Tag.enemy in blocking_actor.tag:
+        if Tag.player in owner.tag:
             result.extend(attack_action(blocking_actor, owner))
+    elif Tag.player in blocking_actor.tag:
+        if Tag.enemy in owner.tag:
+            result.extend(attack_action(blocking_actor, owner))
+
+    elif Tag.door in blocking_actor.tag:
+        result.extend(door_action(owner, blocking_actor))
 
     elif Tag.friendly in blocking_actor.tag:
             result.extend(talk_action(blocking_actor, owner))
