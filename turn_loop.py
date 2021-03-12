@@ -63,10 +63,10 @@ class TurnLoop:
                 if actor.wait < 1:
                     self.actor = actor
                     self.actor.state = state.READY # スタンなどの状態異常が無ければstate解除
-                    self.elapsed_time(actor, queue, engine)# ターンが来たらステータス効果発動
+                    self.elapsed_time(self.actor, queue, engine)# ターンが来たらステータス効果発動
 
                     # ステータス効果による死亡やスタン判定
-                    if actor.is_dead or actor.state == state.STUN:
+                    if self.actor.is_dead or self.actor.state == state.STUN or self.actor.wait:
                         continue
                     else:
                         self.turn = Turn.OFF
