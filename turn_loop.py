@@ -71,8 +71,8 @@ class TurnLoop:
                     else:
                         self.turn = Turn.OFF
 
-            if self.turn == Turn.OFF:
-                break
+                    if self.turn == Turn.OFF:
+                        break
             
             for sprite in self.sprites:
                 # playerもしくは他のactorの時はvisibleの場合のみwaitを減らす
