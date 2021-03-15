@@ -39,7 +39,7 @@ def draw_inventory(player, selected_item, viewport):
 
 
     # キャパシティ数をループし、インベントリのアイテム名とアウトラインを描画する
-    slot_item = [i for i in player.equipment.item_slot]
+    slot_item = [i for i in player.equipment.flower_slot]
     for item in range(capacity):
         if player.inventory.item_bag[item]:
             cur_item  = player.inventory.item_bag[item]
@@ -145,7 +145,7 @@ def draw_inventory(player, selected_item, viewport):
 
 
     y = GRID_SIZE
-    for item in player.equipment.item_slot:
+    for item in player.equipment.flower_slot:
 
         if item:
 

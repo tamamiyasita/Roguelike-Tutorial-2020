@@ -4,11 +4,6 @@ from data import *
 
 from actor.actor_set import *
 
-from level_up_sys import check_flower_level
-
-from enum import Enum, auto
-
-
 
 class LevelupUI:
     def __init__(self):

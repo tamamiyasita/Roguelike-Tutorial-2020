@@ -1,4 +1,4 @@
-from actor.items.confusion_scroll import ConfusionScroll
+
 import random
 import csv
 from arcade import load_texture

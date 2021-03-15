@@ -10,10 +10,8 @@ from actor.items.healing_potion import HealingPotion
 from actor.items.short_sword import ShortSword
 from actor.items.long_sword import LongSword
 from actor.items.small_shield import SmallShield
-from actor.items.boomerang import Boomerang
 from actor.items.fireball_scroll import FireballScroll, FireballEffect
 from actor.items.lightning_scroll import LightningScroll, LightningEffect
-from actor.items.confusion_scroll import ConfusionScroll, ConfusionEffect
 from actor.items.silver_grass import SilverGrass
 from actor.items.ebony import Ebony
 from actor.items.paeonia import Paeonia

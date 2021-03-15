@@ -13,7 +13,7 @@ class Equipment:
     def __init__(self):
         """アイテムスロット、及び装備するタイミングを決めるequip_update_check
         """
-        self.item_slot = arcade.SpriteList()
+        self.flower_slot = arcade.SpriteList()
         self.skill_list = []# arcade.SpriteList()
 
         self.states_bonus = {"max_hp": 0,"STR": 0,"DEX": 0, "INT": 0,
@@ -27,7 +27,7 @@ class Equipment:
 
 
     def get_dict(self):
-        result = {i.__class__.__name__:i.get_dict() for i in self.item_slot}
+        result = {i.__class__.__name__:i.get_dict() for i in self.flower_slot}
 
         return result
 
@@ -43,50 +43,50 @@ class Equipment:
     # 階層を移動する時に使う関数
     def item_sprite_check(self, sprites):
             # 花スプライトをスプライトリストに入れて表示する
-            for item in self.item_slot:
+            for item in self.flower_slot:
                 if item and item not in sprites and not isinstance(item, str):
                     sprites.append(item)
                 
 
     def equip_position_reset(self):
         # 装備アイテムの表示位置をリセットする
-            for equip in self.item_slot:
+            for equip in self.flower_slot:
                 if equip:
                     equip.x = self.owner.x
                     equip.y = self.owner.y
 
     def item_exp_add(self, exp):
         # 花にexpを与える
-        for item in self.item_slot:
+        for item in self.flower_slot:
             if hasattr(item, "current_xp"):
                 item.current_xp += exp
 
     def skill_list_update(self):
         self.skill_list = set()
         # Skillの生成チェック
-        skill_gen = [item.flower_skill for item in self.item_slot]
+        skill_gen = [item.flower_skill for item in self.flower_slot]
 
         self.skill_list = skill_gen
 
 
     
     def resist_bonus_update(self):
-        """item_slotをループしてresist bonusを合計し返す"""
+        """flower_slotをループしてresist bonusを合計し返す"""
 
         bonus = {"physical": 0, "fire": 0, "ice": 0, "lightning":0, "acid": 0, "poison": 0, "mind": 0}
 
-        for parts in self.item_slot:
+        for parts in self.flower_slot:
             if parts and not isinstance(parts, str) and parts.resist_bonus:
                 bonus = Counter(bonus) + Counter(parts.resist_bonus)
 
         self.resist_bonus = bonus
 
     def states_bonus_update(self):
-        """item_slotをループしてstates bonusを合計し返す"""
+        """flower_slotをループしてstates bonusを合計し返す"""
 
         bonus = {"max_hp": 0, "max_mp": 0, "STR": 0,
                  "DEX": 0, "INT": 0, "defense": 0, "evasion": 0}
-        for parts in self.item_slot:
+        for parts in self.flower_slot:
             if parts and not isinstance(parts, str) and parts.states_bonus:
                 bonus = Counter(bonus) + Counter(parts.states_bonus)
 
@@ -100,7 +100,7 @@ class Equipment:
 
         results = []
 
-        for item in self.item_slot:
+        for item in self.flower_slot:
             if item == equip_item:
 
                 del item.master
@@ -115,21 +115,21 @@ class Equipment:
                 return results
 
 
-        if 10 > len(self.item_slot):
+        if 10 > len(self.flower_slot):
 
 
-            self.item_slot.append(equip_item)
+            self.flower_slot.append(equip_item)
             equip_item.master = self.owner
             equip_item.flower_skill.master = self.owner
-            pos = len(self.item_slot)
+            pos = len(self.flower_slot)
             if pos < 6:
                 for i in range(0, pos):
-                    self.item_slot[i].item_margin_x = self.flower_position[i][0]
-                    self.item_slot[i].item_margin_y = self.flower_position[i][1]
+                    self.flower_slot[i].item_margin_x = self.flower_position[i][0]
+                    self.flower_slot[i].item_margin_y = self.flower_position[i][1]
             if pos >= 6:
                 for j in range(5, pos):
-                    self.item_slot[j].item_margin_x = self.flower_position2[j-5][0]
-                    self.item_slot[j].item_margin_y = self.flower_position2[j-5][1]
+                    self.flower_slot[j].item_margin_x = self.flower_position2[j-5][0]
+                    self.flower_slot[j].item_margin_y = self.flower_position2[j-5][1]
 
             results.append({"message": f"equipped {equip_item.name}"})
 

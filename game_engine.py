@@ -51,6 +51,7 @@ class GameLevel:
     """dungeon階層毎にsprite_listを生成し、self.storiesに格納する"""
 
     def __init__(self):
+        
         self.chara_sprites = None
         self.actor_sprites = None
         self.floor_sprites = None
@@ -66,7 +67,22 @@ class GameLevel:
         self.floor_level = None
 
 class GameEngine:
+    __instance = None
+
+    @staticmethod
+    def get_instance():
+        if GameEngine.__instance == None:
+            GameEngine()
+        return GameEngine.__instance
+
     def __init__(self):
+        if GameEngine.__instance != None:
+            raise Exception("singleton! class")
+        else:
+            GameEngine.__instance == self
+
+
+
         self.stories = {}  # 階層を格納する変数
         self.cur_level = None
 
@@ -637,7 +653,7 @@ class GameEngine:
                     item = self.player.inventory.get_item_number(item_number)
 
                     # これはequipを外す処理
-                    if item and item in self.player.equipment.item_slot:
+                    if item and item in self.player.equipment.flower_slot:
                         self.player.equipment.toggle_equip(item)
 
                     # ここでドロップ
