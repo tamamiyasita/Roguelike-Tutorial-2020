@@ -6,8 +6,8 @@ import pyglet.gl as gl
 # import logging
 # import logging_config
 
-from game_engine import GameEngine
 from constants import *
+from game_engine import GameEngine
 from keymap import keymap, grid_select_key, inventory_key, character_screen_key
 
 from ui.normal_ui import NormalUI
@@ -17,6 +17,7 @@ from ui.character_screen_ui import draw_character_screen
 from ui.inventory_ui import draw_inventory
 from ui.message_window import MessageWindow
 from ui.level_up_ui import LevelupUI
+from ui.level_up_flower_ui import LevelUpFlower
 
 from util import grid_to_pixel, pixel_to_grid, stop_watch
 from viewport import viewport
@@ -82,6 +83,7 @@ class MG(arcade.Window):
         self.massage_window = MessageWindow(self.engine)
 
         self.level_up_window = LevelupUI()
+        self.level_up_flower = LevelUpFlower()
 
     def draw_sprites(self):
         """ 全てのスプライトリストをここで描画する """
@@ -162,8 +164,11 @@ class MG(arcade.Window):
         elif self.engine.game_state == GAME_STATE.INVENTORY:
             draw_inventory(self.engine.player, self.engine.selected_item, self.viewports)
 
-        elif self.engine.game_state == GAME_STATE.LEVEL_UP_WINDOW or self.engine.game_state == GAME_STATE.LEVEL_UP_FLOWER:
+        elif self.engine.game_state == GAME_STATE.LEVEL_UP_WINDOW:
             self.level_up_window.window_pop(self.viewports, self.engine)
+
+        elif self.engine.game_state == GAME_STATE.LEVEL_UP_FLOWER:
+            self.level_up_flower.window_pop(self.viewports, self.engine)
 
         # 会話画面の表示
         elif self.engine.game_state == GAME_STATE.MESSAGE_WINDOW:
@@ -271,7 +276,7 @@ class MG(arcade.Window):
             from level_up_sys import check_experience_level
 
             self.engine.player.fighter.current_xp += 70
-            self.engine.player.equipment.item_exp_add(70)
+            self.engine.player.equipment.item_exp_add(100)
             check_experience_level(self.engine.player, self.engine)
 
         if key == arcade.key.F2:

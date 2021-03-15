@@ -12,7 +12,11 @@ from hit_anime import hit_particle, Hit_Anime
 class Fighter:
     def __init__(self, hp=0, defense=0, STR=0, DEX=0, INT=0, attack_speed=DEFAULT_ATTACK_SPEED,
                  evasion=0, xp_reward=0, level=1,
-                 resist={"physical": 1, "fire": 1, "ice": 1, "lightning":1, "acid": 1, "poison": 1, "mind": 1}, ability_points=0):
+                 # 物理:オレンジ, 火:赤, 氷:白, 雷:青, 酸:黄色, 毒:紫, 精神:ピンク
+                 resist={"physical": 1, "fire": 0, "ice": 1, "lightning":1, "acid": 1, "poison": 1, "mind": 1},
+                 description={"complexion":1, "fragrance":1, "brilliant":2, "thorns":0, "hardness":0, "supple":1},
+                 ability_points=0):
+
         self.hp = hp
         self.max_hp = self.hp
 

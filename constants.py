@@ -1,7 +1,6 @@
 import arcade
 from enum import Enum, auto
 
-from arcade.key import ESCAPE
 
 
 TITLE = "Roguelike tutorial 2020"
