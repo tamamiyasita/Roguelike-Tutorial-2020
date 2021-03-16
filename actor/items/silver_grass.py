@@ -28,6 +28,8 @@ class SilverGrass(BaseFlower):
 
         self.states_bonus = {"DEX": 1}
         self.skill_bonus = {"grass_cutter":1}
+        self.description={"complexion":0, "fragrance":0, "brilliant":0, "thorns":1, "hardness":0, "supple":1},
+
         self.resist_bonus = {}
 
 

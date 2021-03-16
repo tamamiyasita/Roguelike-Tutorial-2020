@@ -28,6 +28,7 @@ class Fighter:
         self.evasion = evasion
         self.attack_speed = attack_speed
         self.resist = resist
+        self.description = description
 
         self.owner = None
         self.xp_reward = xp_reward
@@ -189,7 +190,7 @@ class Fighter:
         attr = skill.attr
         hit_rate = skill.hit_rate
 
-        damage = dice(level, damage)
+        # damage = dice(level, damage)
 
         # HP回復
         if attr == "recovery":

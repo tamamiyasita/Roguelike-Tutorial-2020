@@ -3,7 +3,7 @@ from constants import *
 from data import *
 from random import randint
 from actor.skills.base_skill import BaseSkill
-
+from util import dice
 
 
 
@@ -40,7 +40,9 @@ class GrassCutter(BaseSkill):
     @property
     def damage(self):
         if self.owner:
-            return (self.owner.fighter.STR+(self.owner.fighter.DEX/1.5) / 3) + self._damage
+            attr = self.owner.description
+            return dice((self.level / 3 + 1), ((self.owner.fighter.STR + attr["hardness"]))/2, attr["thorns"])
+            # return (self.owner.fighter.STR+(attr["hardness"]) / 3) + attr["thorns"]
 
     def update_animation(self, delta_time):
         super().update_animation(delta_time)
