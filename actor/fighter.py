@@ -14,7 +14,7 @@ class Fighter:
                  evasion=0, xp_reward=0, level=1,
                  # 物理:オレンジ, 火:赤, 氷:白, 雷:青, 酸:黄色, 毒:紫, 精神:ピンク
                  resist={"physical": 1, "fire": 0, "ice": 1, "lightning":1, "acid": 1, "poison": 1, "mind": 1},
-                 description={"complexion":1, "fragrance":1, "brilliant":2, "thorns":0, "hardness":0, "supple":1},
+                 description={"brilliant":1, "glow":0, "fragrance":1, "thorns":0, "strong":0, "supple":0, "medicinal":0},
                  ability_points=0):
 
         self.hp = hp

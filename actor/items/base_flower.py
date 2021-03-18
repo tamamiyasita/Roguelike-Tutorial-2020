@@ -50,7 +50,7 @@ class BaseFlower(Actor):
         self.states_bonus = {}# ステータスボーナス
         self.skill_bonus = {}# スキルボーナス
         self.resist_bonus = {}
-        self.description={"complexion":0, "fragrance":0, "brilliant":0, "thorns":0, "hardness":0, "supple":0},
+        self.description={"brilliant":0, "glow":0, "fragrance":0, "thorns":0, "strong":0, "supple":0, "medicinal":0},
 
         ###################################
 
