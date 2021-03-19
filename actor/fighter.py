@@ -13,8 +13,7 @@ class Fighter:
     def __init__(self, hp=0, defense=0, STR=0, DEX=0, INT=0, attack_speed=DEFAULT_ATTACK_SPEED,
                  evasion=0, xp_reward=0, level=1,
                  # 物理:オレンジ, 火:赤, 氷:白, 雷:青, 酸:黄色, 毒:紫, 精神:ピンク
-                 resist={"physical": 1, "fire": 0, "ice": 1, "lightning":1, "acid": 1, "poison": 1, "mind": 1},
-                 description={"brilliant":1, "glow":0, "fragrance":1, "thorns":0, "strong":0, "supple":0, "medicinal":0},
+                 resist={"physical": 1, "fire": 0, "ice": 1, "lightning":1, "acid": 1, "poison": 1, "mind": 1},           
                  ability_points=0):
 
         self.hp = hp
@@ -28,7 +27,6 @@ class Fighter:
         self.evasion = evasion
         self.attack_speed = attack_speed
         self.resist = resist
-        self.description = description
 
         self.owner = None
         self.xp_reward = xp_reward
@@ -169,7 +167,7 @@ class Fighter:
             print(f"{resist_chance=} < {hit_chance=} ")
             if  resist_chance < hit_chance:
                 self.states.append(effect)
-                print(f"sucses hit {effect=}")
+                print(f"success hit {effect=}")
             if Tag.used in effect.tag:
                 effect.use(self.owner)# 即時効果
                 # self.owner.name is {effect.name} rd

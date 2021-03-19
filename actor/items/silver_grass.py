@@ -25,7 +25,7 @@ class SilverGrass(BaseFlower):
         self.level = 1
         self.current_xp = 0
 
-
+        self.color = "white"
         self.states_bonus = {"DEX": 1}
         self.skill_bonus = {"grass_cutter":1}
         self.description={"complexion":0, "fragrance":0, "brilliant":0, "thorns":1, "hardness":0, "supple":1},

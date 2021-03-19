@@ -12,7 +12,10 @@ from actor.fighter import Fighter
 class PC_Fighter(Fighter):
     def __init__(self, hp=0, defense=0, STR=0, DEX=0, INT=0, attack_speed=DEFAULT_ATTACK_SPEED,
                  evasion=0, xp_reward=0, current_xp=0, level=1,
+                 description={"brilliant":1, "glow":0, "fragrance":1, "thorns":0, "strong":0, "supple":0, "medicinal":0},
+                 affinity={"physical": 0, "fire": 0, "ice": 0, "lightning": 0, "acid": 0, "poison": 0, "mind": 0},
                  resist={"physical": 1, "fire": 1, "ice": 1, "lightning":1, "acid": 1, "poison": 1, "mind": 1}, ability_points=0):
+
         self.level_up_bonus = {"max_hp": 0,"STR": 0,"DEX": 0, "INT": 0, "defense": 0, "evasion": 0}
         self.hp = hp
         self.base_max_hp = self.hp
@@ -22,12 +25,14 @@ class PC_Fighter(Fighter):
         self.base_intelligence = INT
 
         # self.unarmed = BaseSkill()#{"damage":1, "level":1, "attr":"physical"}
+        self.attack_speed = attack_speed
 
         self.base_defense = defense
         self.base_evasion = evasion
-        
-        self.attack_speed = attack_speed
+        self._affinity = affinity
+        self.description = description
         self._resist = resist
+
 
         self.owner = None
         self.xp_reward = xp_reward
@@ -149,6 +154,15 @@ class PC_Fighter(Fighter):
     def skill_weight_list(self):
         result = sorted(self.skill_list, key=lambda x: x.item_weight)
         return result
+
+    @property
+    def affinity(self):
+        base_affinity = {"physical": 0, "fire": 0, "ice": 0, "lightning":0, "acid": 0, "poison": 0, "mind": 0}
+        for name in self._affinity:
+            base_affinity[name] = self._affinity[name] + self.owner.equipment.affinity_bonus[name]
+
+        return base_affinity
+
 
     @property
     def resist(self):
