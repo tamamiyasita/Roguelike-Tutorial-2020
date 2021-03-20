@@ -18,7 +18,7 @@ class Equipment:
 
         self.states_bonus = {"max_hp": 0,"STR": 0,"DEX": 0, "INT": 0,
                              "defense": 0, "evasion": 0}
-        self.description={"brilliant":0, "glow":0, "fragrance":0, "thorns":0, "strong":0, "supple":0, "medicinal":0}
+        self.description_bonus={"brilliant":0, "glow":0, "fragrance":0, "sharp":0, "robust":0, "supple":0, "medicinal":0}
         self.affinity_bonus = {"physical": 0, "fire": 0, "ice": 0, "lightning":0, "acid": 0, "poison": 0, "mind": 0}
         self.resist_bonus = {"physical": 0, "fire": 0, "ice": 0, "lightning":0, "acid": 0, "poison": 0, "mind": 0}
         
@@ -78,12 +78,23 @@ class Equipment:
         bonus = {"physical": 0, "fire": 0, "ice": 0, "lightning":0, "acid": 0, "poison": 0, "mind": 0}
 
         for parts in self.flower_slot:
-            if parts and not isinstance(parts, str) and parts.color:
-                c = parts[parts.color]
+            if parts and not isinstance(parts, str) and parts.flower_color:
+                c = parts.flower_color
                 bonus[color[c]] += 1
 
         self.affinity_bonus = bonus
     
+    def description_bonus_update(self):
+        """flower_slotをループしてdescription bonusを合計し返す"""
+
+        bonus={"brilliant":0, "glow":0, "fragrance":0, "sharp":0, "robust":0, "supple":0, "medicinal":0}
+
+        for parts in self.flower_slot:
+            if parts and not isinstance(parts, str) and parts.description:
+                bonus = Counter(bonus) + Counter(parts.description)
+
+        self.description_bonus = bonus
+
     def resist_bonus_update(self):
         """flower_slotをループしてresist bonusを合計し返す"""
 
@@ -126,6 +137,7 @@ class Equipment:
                 self.skill_list_update()
                 self.resist_bonus_update()
                 self.affinity_bonus_update()
+                self.description_bonus_update()
 
                 
                 return results
@@ -153,5 +165,6 @@ class Equipment:
             self.skill_list_update()
             self.resist_bonus_update()
             self.affinity_bonus_update()
+            self.description_bonus_update()
 
             return results

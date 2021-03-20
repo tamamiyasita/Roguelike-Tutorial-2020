@@ -226,7 +226,7 @@ class Fighter:
                 # 物理防御処理
                 elif attr == "physical":
                     defens_p = self.level // 3
-                    damage = damage - dice(defens_p, defens_p+self.defense)
+                    damage = damage - dice(defens_p, defens_p+self.defense, self.owner.fighter.level)
 
             else:
                 # 回避

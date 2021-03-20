@@ -12,7 +12,7 @@ from actor.fighter import Fighter
 class PC_Fighter(Fighter):
     def __init__(self, hp=0, defense=0, STR=0, DEX=0, INT=0, attack_speed=DEFAULT_ATTACK_SPEED,
                  evasion=0, xp_reward=0, current_xp=0, level=1,
-                 description={"brilliant":1, "glow":0, "fragrance":1, "thorns":0, "strong":0, "supple":0, "medicinal":0},
+                 description={"brilliant":1, "glow":0, "fragrance":1, "sharp":0, "robust":0, "supple":0, "medicinal":0},
                  affinity={"physical": 0, "fire": 0, "ice": 0, "lightning": 0, "acid": 0, "poison": 0, "mind": 0},
                  resist={"physical": 1, "fire": 1, "ice": 1, "lightning":1, "acid": 1, "poison": 1, "mind": 1}, ability_points=0):
 
@@ -30,7 +30,7 @@ class PC_Fighter(Fighter):
         self.base_defense = defense
         self.base_evasion = evasion
         self._affinity = affinity
-        self.description = description
+        self._description = description
         self._resist = resist
 
 
@@ -154,6 +154,15 @@ class PC_Fighter(Fighter):
     def skill_weight_list(self):
         result = sorted(self.skill_list, key=lambda x: x.item_weight)
         return result
+
+
+    @property
+    def description(self):
+        base_description={"brilliant":1, "glow":0, "fragrance":1, "sharp":0, "robust":0, "supple":0, "medicinal":0}
+        for name in self._description:
+            base_description[name] = self._description[name] + self.owner.equipment.description_bonus[name]
+
+        return base_description
 
     @property
     def affinity(self):

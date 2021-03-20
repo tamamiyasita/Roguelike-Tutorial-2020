@@ -28,6 +28,6 @@ class Ebony(BaseFlower):
         self.states_bonus = {"STR": 1}
         self.skill_bonus = {"branch_baton":1}
         self.resist_bonus = {}
-        self.description={"brilliant":0, "glow":0, "fragrance":0, "thorns":0, "strong":0, "supple":0, "medicinal":0},
+        self.description={"brilliant":0, "glow":0, "fragrance":0, "sharp":0, "robust":0, "supple":0, "medicinal":0},
 
 
