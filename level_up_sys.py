@@ -1,29 +1,29 @@
 from constants import *
 from util import exp_calc
-from random import choices
+from random import choices, randint
 
 
 def check_experience_level(player, game_engine):
 
-    while True:
 
-        xp_to_next_level = player.experience_per_level[player.fighter.level+1]
-        flower_level = check_flower_level(player)
-        
-        if player.fighter.current_xp >= xp_to_next_level:
-            player.fighter.level += 1
-            player.fighter.ability_points += 1
-            game_engine.action_queue.extend([{"message": "Level up!!!"}])
-            game_engine.game_state = GAME_STATE.LEVEL_UP_WINDOW
-        # 花のレベルアップUI作成
+    xp_to_next_level = player.experience_per_level[player.fighter.level+1]
+    flower_level = check_flower_level(player)
+    
+    if player.fighter.current_xp >= xp_to_next_level:
+        player.fighter.level += 1
+        player.fighter.ability_points += 1
+        game_engine.action_queue.extend([{"message": "Level up!!!"}])
+        game_engine.game_state = GAME_STATE.LEVEL_UP_WINDOW
+    # 花のレベルアップUI作成
 
-        elif flower_level:
-            game_engine.game_state = GAME_STATE.LEVEL_UP_FLOWER
+    elif flower_level:
+        game_engine.game_state = GAME_STATE.LEVEL_UP_FLOWER
+    
+    else:
+        game_engine.game_state = GAME_STATE.NORMAL
 
-        else:
-            break
 
-    game_engine.game_state = GAME_STATE.NORMAL
+
     
     
 
@@ -38,10 +38,16 @@ def check_flower_level(player):
     return result
 
 
-def level_up(flower, weights):
-    select = ["STR", "DEX", "INT"]
-    bonus = choices(select, weights=weights)
-    flower.states_bonus.setdefault(bonus[0], 0)
-    flower.states_bonus[bonus[0]] += 1
+class FlowerLevelUp:
+    def __init__(self, flower):
+        rarity_point = {"common":3, "uncomon":5, "rare":7}
+        self.flower = flower
+        self.point = rarity_point[self.flower.rarity]
 
-    return bonus
+    def point_set(self):
+        for _ in range(self.point):
+            p = randint(1, 6)
+            if p == 6:
+                self.resist_bonus = {}
+
+        self.flower.states_bonus 

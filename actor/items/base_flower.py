@@ -47,8 +47,10 @@ class BaseFlower(Actor):
         self.count_time = 0
 
         # states
-        self.states_bonus = {}# ステータスボーナス
-        self.skill_bonus = {}# スキルボーナス
+        self.rarity = "common"
+        self.flower_color = ""
+        self.states_bonus = {}
+        self.skill_bonus = {}
         self.resist_bonus = {}
         self.description={"brilliant":0, "glow":0, "fragrance":0, "sharp":0, "robust":0, "supple":0, "medicinal":0},
 
