@@ -169,7 +169,7 @@ class PC_Fighter(Fighter):
         base_affinity = {"physical": 0, "fire": 0, "ice": 0, "lightning":0, "acid": 0, "poison": 0, "mind": 0}
         for name in self._affinity:
             base_affinity[name] = self._affinity[name] + self.owner.equipment.affinity_bonus[name]
-
+        print(base_affinity)
         return base_affinity
 
 
