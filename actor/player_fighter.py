@@ -25,7 +25,7 @@ class PC_Fighter(Fighter):
         self.base_intelligence = INT
 
         # self.unarmed = BaseSkill()#{"damage":1, "level":1, "attr":"physical"}
-        self.attack_speed = attack_speed
+        self.base_attack_speed = attack_speed
 
         self.base_defense = defense
         self.base_evasion = evasion
@@ -206,6 +206,9 @@ class PC_Fighter(Fighter):
     def evasion(self):
         return self.base_evasion + self.owner.equipment.states_bonus["evasion"] + self.DEX//2
     
+    @property
+    def attack_speed(self):
+        return self.base_attack_speed + self.owner.equipment.states_bonus["attack_speed"]
 
 
     # def effect_hit_chance(self, effect):

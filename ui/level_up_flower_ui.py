@@ -1,20 +1,33 @@
 import arcade
 from constants import *
-from level_up_sys import check_flower_level
+from level_up_sys import check_flower_level, Select_param
+
+
 class LevelUpFlower:
-    def __init__(self):
+    def __init__(self, engine):
         self.level_bonus = None # flowerのステータスボーナス
         self.flowers = None # レベルアップするflowerのリスト
-        self.add = {}
-
-    def window_pop(self, viewports, engine):
+        self.key = None
         self.engine = engine
+        self.player = engine.player
+
+    def states_choices(self, key):
+        self.key = key
+
+
+    def window_pop(self, viewports):
         self.flowers = check_flower_level(self.engine.player) 
 
         self.viewport_left = viewports[0]
         self.viewport_righit = viewports[1]
         self.viewport_bottom = viewports[2]
         self.viewport_top = viewports[3]
+        self.window_width = SCREEN_WIDTH - 924
+        self.window_height = SCREEN_HEIGHT - 800
+
+        self.bottom_left_x=self.viewport_left+(MAIN_PANEL_X/2) -(self.window_width/2)
+        self.bottom_left_y=self.viewport_bottom+500
+        self.back_panel_top_left = self.viewport_top - (GRID_SIZE*4)
 
         # 最下部の基本枠
         arcade.draw_xywh_rectangle_filled(
@@ -34,28 +47,21 @@ class LevelUpFlower:
         )
 
         
-        if len(self.flowers) > 0:
-            # from collections import Counter
-            item = self.flowers[0]
-            if self.key == arcade.key.ENTER:
-                if self.add:# 追加skill
-                    # if self.add in self.player.fighter.level_skills:
-                    #     self.player.fighter.level_skills[self.add] += 1
-                    # else:
-                    #     self.player.fighter.level_skills.setdefault(self.add, 1)
-                    # Counter(self.player.fighter.level_skills) + Counter(self.add)
-                    if self.add in item.skill_bonus:
-                        item.skill_bonus[self.add] += 1
-                    else:
-                        item.skill_bonus.setdefault(self.add, 1)
-                item.level += 1
-                self.level_bonus = None
-                self.flowers.remove(item)
-                self.key = None
-                self.add = {}
+        if not self.flowers:
+            self.engine.game_state = GAME_STATE.NORMAL
+        
+        if self.key == arcade.key.ENTER:
+            self.flowers[0].level += 1
+            self.level_bonus = None
+            self.flowers.remove(self.flowers[0])
+            self.key = None
                 
-            elif not self.level_bonus:
-                self.level_bonus = level_up(item, item.level_up_weights)
+        if len(self.flowers) > 0:
+
+            item = self.flowers[0]
+            level_bonus = Select_param(item)
+            if not self.level_bonus:
+                self.level_bonus = level_bonus.point_set()
 
 
 
@@ -71,7 +77,7 @@ class LevelUpFlower:
                 scale=6
                 )
                 
-            # 花名タイトル
+            # タイトル
             arcade.draw_text(
                 text=f"LEVEL UP {item_text} level {item.level+1}!",
                 start_x=self.bottom_left_x + 10,
@@ -83,33 +89,34 @@ class LevelUpFlower:
             )
 
             ifs = 5
-            # STR,DEX,INTの表示
+            # statesの表示
             font_color = (220, 208, 255)
-            for k,v in item.states_bonus.items():
-                if self.level_bonus and k == self.level_bonus[0]:
-                    font_color = (250, 150, 159)
-                else:
-                    font_color = (220, 208, 255)
+            if self.level_bonus:
+                for k,v in self.level_bonus.items():
 
-                arcade.draw_text(
-                    text=f"{k}:{v}",
-                    start_x=self.bottom_left_x + 10,
-                    start_y=self.back_panel_top_left + y - (22) - ifs,
-                    color=font_color,
-                    font_size=font_size,
-                    font_name="consola.ttf",
-                    anchor_y="top"
-                )
-                ifs += 21
-            # skillの表示
-            for k, v in item.skill_bonus.items():
-                arcade.draw_text(
-                    text=f"{k} level {v}".replace("_", " ").title(),
-                    start_x=self.bottom_left_x + 10,
-                    start_y=self.back_panel_top_left + y - (22) - ifs,
-                    color=arcade.color.CORNSILK,
-                    font_size=font_size,
-                    font_name="consola.ttf",
-                    anchor_y="top"
-                )
-                ifs += 19
+                    font_color = (250, 150, 159)
+
+                    arcade.draw_text(
+                        text=f"{k}:{v}",
+                        start_x=self.bottom_left_x + 10,
+                        start_y=self.back_panel_top_left + y - (22) - ifs,
+                        color=font_color,
+                        font_size=font_size,
+                        font_name="consola.ttf",
+                        anchor_y="top"
+                    )
+                    ifs += 21
+            # の表示
+            # for k, v in self.level_bonus.items():
+            #     arcade.draw_text(
+            #         text=f"{k} level {v}".replace("_", " ").title(),
+            #         start_x=self.bottom_left_x + 10,
+            #         start_y=self.back_panel_top_left + y - (22) - ifs,
+            #         color=arcade.color.CORNSILK,
+            #         font_size=font_size,
+            #         font_name="consola.ttf",
+            #         anchor_y="top"
+            #     )
+            #     ifs += 19
+
+

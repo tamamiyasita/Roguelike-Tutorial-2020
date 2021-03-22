@@ -83,7 +83,7 @@ class MG(arcade.Window):
         self.massage_window = MessageWindow(self.engine)
 
         self.level_up_window = LevelupUI()
-        self.level_up_flower = LevelUpFlower()
+        self.level_up_flower = LevelUpFlower(self.engine)
 
     def draw_sprites(self):
         """ 全てのスプライトリストをここで描画する """
@@ -168,7 +168,7 @@ class MG(arcade.Window):
             self.level_up_window.window_pop(self.viewports, self.engine)
 
         elif self.engine.game_state == GAME_STATE.LEVEL_UP_FLOWER:
-            self.level_up_flower.window_pop(self.viewports, self.engine)
+            self.level_up_flower.window_pop(self.viewports)
 
         # 会話画面の表示
         elif self.engine.game_state == GAME_STATE.MESSAGE_WINDOW:
@@ -253,8 +253,10 @@ class MG(arcade.Window):
 
 
         # Level states up処理
-        elif self.engine.game_state == GAME_STATE.LEVEL_UP_WINDOW or self.engine.game_state == GAME_STATE.LEVEL_UP_FLOWER:
+        elif self.engine.game_state == GAME_STATE.LEVEL_UP_WINDOW:
             self.level_up_window.states_choices(key)
+        elif self.engine.game_state == GAME_STATE.LEVEL_UP_FLOWER:
+            self.level_up_flower.states_choices(key)
 
  
         # 会話画面の返答処理

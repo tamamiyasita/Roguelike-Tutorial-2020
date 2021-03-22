@@ -49,10 +49,10 @@ class BaseFlower(Actor):
         # states
         self.rarity = "common"
         self.flower_color = ""
-        self.states_bonus = {}
+        self.states_bonus = {"max_hp": 0,"STR": 0,"DEX": 0, "INT": 0, "defense": 0, "evasion": 0, "attack_speed":0}
         self.skill_bonus = {}
-        self.resist_bonus = {}
-        self.description={"brilliant":0, "glow":0, "fragrance":0, "sharp":0, "robust":0, "supple":0, "medicinal":0},
+        self.resist_bonus = {"physical": 0, "fire": 0, "ice": 0, "lightning":0, "acid": 0, "poison": 0, "mind": 0}
+        self.description={"brilliant":0, "glow":0, "fragrance":0, "sharp":0, "robust":0, "supple":0, "medicinal":0}
 
         ###################################
 
