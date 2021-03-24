@@ -94,10 +94,10 @@ class LevelUpFlower:
             if self.level_bonus:
                 for k,v in self.level_bonus.items():
 
-                    font_color = (250, 150, 159)
+                    font_color = (250, 15, 15)
 
                     arcade.draw_text(
-                        text=f"{k}:{v}",
+                        text=f"{k:15} + {v:4}",
                         start_x=self.bottom_left_x + 10,
                         start_y=self.back_panel_top_left + y - (22) - ifs,
                         color=font_color,
@@ -105,7 +105,7 @@ class LevelUpFlower:
                         font_name="consola.ttf",
                         anchor_y="top"
                     )
-                    ifs += 21
+                    ifs += 23
             # の表示
             # for k, v in self.level_bonus.items():
             #     arcade.draw_text(
