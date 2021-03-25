@@ -278,7 +278,7 @@ class MG(arcade.Window):
             from level_up_sys import check_experience_level
 
             self.engine.player.fighter.current_xp += 70
-            self.engine.player.equipment.item_exp_add(100)
+            self.engine.player.equipment.item_exp_add(70)
             check_experience_level(self.engine.player, self.engine)
 
         if key == arcade.key.F2:

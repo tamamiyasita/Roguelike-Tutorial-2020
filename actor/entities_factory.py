@@ -7,16 +7,16 @@ from actor.ai import Basicmonster
 from actor.fighter import Fighter
 from constants import *
 from data import *
-from actor.items.long_sword import LongSword
-from actor.items.short_sword import ShortSword
-from actor.items.small_shield import SmallShield
-from actor.items.healing_potion import HealingPotion
-from actor.items.lightning_scroll import LightningScroll
-from actor.items.fireball_scroll import FireballScroll
+from actor.items.silver_grass import SilverGrass
+
 from actor.characters.orcs import Orc, Troll
 from actor.characters.crab import Crab
 from actor.characters.rat import Water_vole
 from actor.characters.cabbage_snail import CabbageSnail
+
+from level_up_sys import random_flower_gen
+
+
 def load_entities(filename):
     monsters = []
     with open(filename) as input_file:
@@ -54,9 +54,8 @@ def get_random_monster_by_challenge(challenge):
 
 
 def get_random_items_by_challenge(challenge):
-    item_list = [
-        ShortSword(), SmallShield(), LongSword(), LightningScroll(),
-        FireballScroll(), ConfusionScroll()
+    item_list = [SilverGrass()
+        
     ]
     if challenge:
         filtered_items = [item for item in item_list if item.level <= challenge]
@@ -64,6 +63,7 @@ def get_random_items_by_challenge(challenge):
             raise ValueError(
                 f"Error, no entities for challenge level {challenge}.")
         i1 = random.choice(filtered_items)
+        random_flower_gen(i1, challenge+5)
         return i1
 
 

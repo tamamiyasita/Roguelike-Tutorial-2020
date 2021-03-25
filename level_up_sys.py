@@ -50,7 +50,7 @@ class Select_param:
         self.point = rarity_point[self.flower.rarity]
         self.up_state = ("description", "max_hp", "base_states", "high_states", "resist", "speed")
         if self.flower.rarity == "common":
-            self.choice_pram = [95, 55, 5, 4, 2, 1]
+            self.choice_pram = [5, 5, 5, 4, 2, 1]
         if self.flower.rarity == "uncommon":
             self.choice_pram = [10, 10, 5, 4, 2, 1]
         if self.flower.rarity == "rare":
@@ -94,6 +94,13 @@ class Select_param:
 
 
 
+def random_flower_gen(flower, level_value):
+    """mapに配置するitemのrandomstatesを決める"""
+    for l in range(level_value):
+        Select_param(flower).point_set()
+    flower.level += level_value
 
 
-        self.flower.states_bonus 
+
+
+
