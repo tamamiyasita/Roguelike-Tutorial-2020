@@ -18,7 +18,7 @@ class Orc(Actor):
 
         super().__init__(
             scale=2.5,
-            name="orc",
+            image="orc",
             x=x,
             y=y,
             fighter=fighter_component,
@@ -41,7 +41,7 @@ class Troll(Actor):
 
         super().__init__(
             scale=2.6,
-            name="troll",
+            image="troll",
             x=x,
             y=y,
             speed=9,

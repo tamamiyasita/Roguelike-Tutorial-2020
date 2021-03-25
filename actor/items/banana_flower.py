@@ -5,6 +5,7 @@ class Bananaflower(BaseFlower):
     def __init__(self, x=0, y=0, name="bananaflower"):
         super().__init__(
             name=name,
+            image=name,
             x=x,
             y=y,
         )

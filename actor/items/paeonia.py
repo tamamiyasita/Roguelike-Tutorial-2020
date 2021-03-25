@@ -3,9 +3,9 @@ from actor.items.base_flower import BaseFlower
 from actor.skills.healing import Healing
 
 class Paeonia(BaseFlower):
-    def __init__(self, x=0, y=0, name="paeonia"):
+    def __init__(self, x=0, y=0, image="paeonia"):
         super().__init__(
-            name=name,
+            image=image,
             x=x,
             y=y,         
         )

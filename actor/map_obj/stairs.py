@@ -6,7 +6,7 @@ class Up_Stairs(Actor):
     def __init__(self, x=0, y=0):
         super().__init__(
             # texture_number=31,
-            name="up_stairs",
+            image="up_stairs",
             x=x,
             y=y,
             # scale=SPRITE_SCALE*2,
@@ -21,7 +21,7 @@ class Down_Stairs(Actor):
     def __init__(self, x=0, y=0):
         super().__init__(
             # texture_number=31,
-            name="down_stairs",
+            image="down_stairs",
             x=x,
             y=y,
             # scale=SPRITE_SCALE*2,

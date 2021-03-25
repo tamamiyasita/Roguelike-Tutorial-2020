@@ -8,9 +8,9 @@ from util import dice
 
 
 class GrassCutter(BaseSkill):
-    def __init__(self, x=0, y=0, name="grass_cutter"):
+    def __init__(self, x=0, y=0, image="grass_cutter"):
         super().__init__(
-            name=name,
+            image=image,
             x=x,
             y=y,
         )

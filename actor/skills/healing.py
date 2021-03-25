@@ -12,7 +12,7 @@ class HealingEffect(Actor):
         super().__init__(
             x=owner.x,
             y=owner.y,
-            name="healing_potion_effect",
+            image="healing_potion_effect",
             color=COLORS["white"]
         )
         self.owner = owner
@@ -47,9 +47,9 @@ class HealingEffect(Actor):
 
 
 class Healing(BaseSkill):
-    def __init__(self,x=0, y=0, name="healing"):
+    def __init__(self,x=0, y=0, image="healing"):
         super().__init__(
-            name=name,
+            image=image,
             x=x,
             y=y
         )

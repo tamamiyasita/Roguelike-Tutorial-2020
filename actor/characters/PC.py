@@ -22,6 +22,7 @@ class Player(Actor):
         equip_component = Equipment()
         super().__init__(
             name="Rou",
+            image="Rou",
             x=x,
             y=y,
             color=COLORS["white"],
@@ -93,27 +94,7 @@ class Player(Actor):
             self.form = form.ATTACK
             self.texture = pc_attack[1]
 
-        if self.state == state.READY and not self.left_face:
-            self.form = form.NORMAL
-            self.texture = player[0]
-            self.delay_time -= delta_time
-            if self.delay_time < 0.7:
-                self.texture = pc_delay2[0]
-            if self.delay_time <= 0.5:
-                self.texture = pc_delay[0]
-            if self.delay_time < 0:
-                self.delay_time = 5
 
-        if self.state == state.READY and self.left_face:
-            self.form = form.NORMAL
-            self.texture = player[1]
-            self.delay_time -= delta_time
-            if self.delay_time < 0.7:
-                self.texture = pc_delay2[1]
-            if self.delay_time <= 0.5:
-                self.texture = pc_delay[1]
-            if self.delay_time < 0:
-                self.delay_time = 5
         
 
 
@@ -144,3 +125,25 @@ class Player(Actor):
         if self.form == form.DEFENSE and self.left_face:
             self.texture = pc_def[1]
 
+
+        if self.state == state.TURN_END:
+            self.form = form.NORMAL
+
+        if self.form == form.NORMAL and self.left_face:
+            self.texture = player[1]
+            self.delay_time -= delta_time
+            if self.delay_time < 0.7:
+                self.texture = pc_delay2[1]
+            if self.delay_time <= 0.5:
+                self.texture = pc_delay[1]
+            if self.delay_time < 0:
+                self.delay_time = 5
+        if self.form == form.NORMAL and not self.left_face:
+            self.texture = player[0]
+            self.delay_time -= delta_time
+            if self.delay_time < 0.7:
+                self.texture = pc_delay2[0]
+            if self.delay_time <= 0.5:
+                self.texture = pc_delay[0]
+            if self.delay_time < 0:
+                self.delay_time = 5

@@ -21,7 +21,7 @@ class Actor(arcade.Sprite):
     """ 全てのオブジェクトを作成する基礎となるクラス
     """
 
-    def __init__(self, texture_number=0, name=None, x=0, y=0,
+    def __init__(self, texture_number=0, name=None, image=None, x=0, y=0,
                  blocks=False, block_sight=False,
                  scale=SPRITE_SCALE, color=COLORS["black"],
                 #  fighter=None,
@@ -33,10 +33,11 @@ class Actor(arcade.Sprite):
             
                  ):
         super().__init__(scale=scale)
-        if name:
-            self.name = name
+        self.name = name
+        if image:
+            self.image = image
             self.texture_number = texture_number
-            self.texture_ = self.name
+            self.texture_ = self.image
         self.dx, self.dy = 0, 0
         # self.center_x, self.center_y = grid_to_pixel(x, y)
         self._x, self._y = 0, 0

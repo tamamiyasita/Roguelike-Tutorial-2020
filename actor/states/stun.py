@@ -6,7 +6,7 @@ from data import *
 class StunStatus(Actor):
     def __init__(self, count_time=None):
         super().__init__(
-            name="stun",
+            image="stun",
             scale=4.5,
 
         )
@@ -35,7 +35,7 @@ class StunStatus(Actor):
 
         self.owner.state = state.STUN
         self.owner.wait += self.owner.speed*2
-        print(f"stun! {self.owner.name=} {self.owner.wait=} {self.owner.speed=}")
+        print(f"stun! {self.owner.image=} {self.owner.wait=} {self.owner.speed=}")
 
         results = [{"message": f"{self.owner.name} STUN!"}]
         results.append({"damage_pop": self.owner, "damage":"STUN"})

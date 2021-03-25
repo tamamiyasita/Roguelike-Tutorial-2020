@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.4" tiledversion="1.4.2" name="tst" tilewidth="32" tileheight="32" tilecount="64" columns="8">
+<tileset version="1.4" tiledversion="1.4.2" image="tst" tilewidth="32" tileheight="32" tilecount="64" columns="8">
  <image source="../image/tiletest.png" width="256" height="256"/>
  <terraintypes>
-  <terrain name="dart" tile="35"/>
+  <terrain image="dart" tile="35"/>
  </terraintypes>
  <tile id="18" terrain=",,,0"/>
  <tile id="19" terrain=",,0,0"/>

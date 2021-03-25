@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.4" tiledversion="1.4.2" name="tiletest" tilewidth="32" tileheight="32" tilecount="64" columns="8">
+<tileset version="1.4" tiledversion="1.4.2" image="tiletest" tilewidth="32" tileheight="32" tilecount="64" columns="8">
  <image source="../../../../../../OneDrive/ドキュメント/aseprite_files/tiletest.png" width="256" height="256"/>
  <terraintypes>
-  <terrain name="新しい地形" tile="19"/>
+  <terrain image="新しい地形" tile="19"/>
  </terraintypes>
  <tile id="18" terrain=",,,0"/>
  <tile id="19" terrain=",,0,0"/>

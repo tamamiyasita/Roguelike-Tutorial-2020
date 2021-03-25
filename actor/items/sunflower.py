@@ -2,9 +2,9 @@ from actor.items.base_flower import BaseFlower
 from actor.skills.seed_shot import SeedShot
 
 class Sunflower(BaseFlower):
-    def __init__(self, x=0, y=0, name="sunflower"):
+    def __init__(self, x=0, y=0, image="sunflower"):
         super().__init__(
-            name=name,
+            image=image,
             x=x,
             y=y,
         )

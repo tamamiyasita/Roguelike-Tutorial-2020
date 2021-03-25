@@ -5,6 +5,7 @@ class Pineapple(BaseFlower):
     def __init__(self, x=0, y=0, name="pineapple"):
         super().__init__(
             name=name,
+            image=name,
             x=x,
             y=y,
         )

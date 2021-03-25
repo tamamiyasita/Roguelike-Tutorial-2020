@@ -15,7 +15,7 @@ import math
 class Flying(Actor):
     def __init__(self, shooter, tar_point, engine, skill, spin):
         super().__init__(
-            name=skill.amm,
+            image=skill.amm,
             color=COLORS["white"],
         )
         self.engine = engine

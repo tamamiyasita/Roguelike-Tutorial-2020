@@ -5,9 +5,9 @@ from actor.states.stun import StunStatus
 from hit_anime import Fall
 
 class BananaSlip(BaseSkill):
-    def __init__(self, x=0, y=0, name="banana_slip"):
+    def __init__(self, x=0, y=0, image="banana_slip"):
         super().__init__(
-            name=name,
+            image=image,
             x=x,
             y=y,
         )

@@ -6,7 +6,7 @@ class DoorH(Actor):
     def __init__(self, x=0, y=0):
         super().__init__(
             texture_number=0,
-            name="door_h",
+            image="door_h",
             x=x,
             y=y,
             scale=SPRITE_SCALE,
@@ -37,7 +37,7 @@ class DoorW(Actor):
     def __init__(self, x=0, y=0):
         super().__init__(
             texture_number=0,
-            name="door_w",
+            image="door_w",
             x=x,
             y=y,
             scale=SPRITE_SCALE,

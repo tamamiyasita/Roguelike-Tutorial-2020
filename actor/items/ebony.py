@@ -3,9 +3,9 @@ from actor.skills.branch_baton import BranchBaton
 
 
 class Ebony(BaseFlower):
-    def __init__(self, x=0, y=0, name="ebony"):
+    def __init__(self, x=0, y=0, image="ebony"):
         super().__init__(
-            name=name,
+            image=image,
             x=x,
             y=y,
         )

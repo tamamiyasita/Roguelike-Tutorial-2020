@@ -5,9 +5,9 @@ from actor.skills.base_skill import BaseSkill
 from random import randint
 
 class BranchBaton(BaseSkill):
-    def __init__(self, x=0, y=0, name="branch_baton"):
+    def __init__(self, x=0, y=0, image="branch_baton"):
         super().__init__(
-            name=name,
+            image=image,
             x=x,
             y=y,
         )

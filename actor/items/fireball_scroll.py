@@ -9,7 +9,7 @@ class FireballEffect(Actor):
         super().__init__(
             x=x,
             y=y,
-            name="fireball_effect",
+            image="fireball_effect",
             color=COLORS["white"]
         )
         self.effect_sprites = effect_sprites
@@ -31,7 +31,7 @@ class FireballScroll(Actor):
         super().__init__(
             x=x,
             y=y,
-            name="fireball_scroll",
+            image="fireball_scroll",
             not_visible_color=COLORS["black"],
 
         )

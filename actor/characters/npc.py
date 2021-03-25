@@ -24,7 +24,7 @@ class Villager(Actor):
 
         super().__init__(
             # scale=1.8,
-            name="villager",
+            image="villager",
             x=x,
             y=y,
             # speed=8,
@@ -64,7 +64,7 @@ class Citizen(Actor):
 
 
         super().__init__(
-            name="citizen",
+            image="citizen",
             x=x,
             y=y,
             speed=10,

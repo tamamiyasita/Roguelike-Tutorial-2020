@@ -6,7 +6,7 @@ from constants import *
 class ShortSword(Actor):
     def __init__(self, x=0, y=0):
         super().__init__(
-            name="short_sword",
+            image="short_sword",
             x=x,
             y=y,
             scale=1.4,

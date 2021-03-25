@@ -13,7 +13,7 @@ class LightningEffect(Actor):
         super().__init__(
             x=x,
             y=y,
-            name="lightning_effect",
+            image="lightning_effect",
             color=COLORS["white"]
         )
         self.effect_sprites = effect_sprites
@@ -39,7 +39,7 @@ class LightningScroll(Actor):
         super().__init__(
             x=x,
             y=y,
-            name="lightning_scroll",
+            image="lightning_scroll",
             not_visible_color=COLORS["black"],
 
         )

@@ -20,8 +20,9 @@ class CabbageSnail(Actor):
         ai_component = Basicmonster()
 
         super().__init__(
-            # scale=1.8,
+            scale=1.8,
             name="cabbage_snail",
+            image="cabbage_snail",
             x=x,
             y=y,
             # speed=8,

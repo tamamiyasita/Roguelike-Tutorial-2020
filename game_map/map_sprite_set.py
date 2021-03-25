@@ -22,7 +22,7 @@ class ActorPlacement:
         self.game_engine = game_engine
         self.width = len(self.tiles)
         self.height = len(self.tiles[0])
-        self.my_map = arcade.read_tmx(r"demo\town2.tmx")
+        # self.my_map = arcade.read_tmx(r"demo\town2.tmx")
 
     def wall_set(self, image):
         """ 静的な地形スプライトをgame_mapブロック情報から作成する
@@ -37,45 +37,45 @@ class ActorPlacement:
 
 
                     if number == 6 and self.tiles[x][y-1] == TILE.WALL:                    
-                        wall = Wall(name=image, texture_number=15, x=x, y=y)
+                        wall = Wall(image=image, texture_number=15, x=x, y=y)
                         wall_sprites.append(wall)
                     else:
-                        wall = Wall(name=image, texture_number=number, x=x, y=y)
+                        wall = Wall(image=image, texture_number=number, x=x, y=y)
                         wall_sprites.append(wall)
 
         return wall_sprites
 
     def floor_wall(self,image2, number, x, y, floor_sprites):
         if number == 0 and self.tiles[x][y-1] in (TILE.EMPTY ,TILE.DOOR_H, TILE.DOOR_W):
-            f_wall = Floor(name=image2, texture_number=0, x=x, y=y-1) 
+            f_wall = Floor(image=image2, texture_number=0, x=x, y=y-1) 
             floor_sprites.append(f_wall)
             
         if number == 1 and self.tiles[x][y-1] in (TILE.EMPTY ,TILE.DOOR_H, TILE.DOOR_W): 
-            f_wall = Floor(name=image2, texture_number=1, x=x, y=y-1) 
+            f_wall = Floor(image=image2, texture_number=1, x=x, y=y-1) 
             floor_sprites.append(f_wall)
 
         if number == 2 and self.tiles[x][y-1] in (TILE.EMPTY ,TILE.DOOR_H, TILE.DOOR_W):
-            f_wall = Floor(name=image2, texture_number=2, x=x, y=y-1) 
+            f_wall = Floor(image=image2, texture_number=2, x=x, y=y-1) 
             floor_sprites.append(f_wall)
 
         if number == 3 and self.tiles[x][y-1] in (TILE.EMPTY ,TILE.DOOR_H, TILE.DOOR_W):
-            f_wall = Floor(name=image2, texture_number=3, x=x, y=y-1) 
+            f_wall = Floor(image=image2, texture_number=3, x=x, y=y-1) 
             floor_sprites.append(f_wall)
 
         if number == 4 and self.tiles[x][y-1] in (TILE.EMPTY ,TILE.DOOR_H, TILE.DOOR_W):
-            f_wall = Floor(name=image2, texture_number=4, x=x, y=y-1) 
+            f_wall = Floor(image=image2, texture_number=4, x=x, y=y-1) 
             floor_sprites.append(f_wall)
 
         if number == 5 and self.tiles[x][y-1] in (TILE.EMPTY ,TILE.DOOR_H, TILE.DOOR_W):
-            f_wall = Floor(name=image2, texture_number=5, x=x, y=y-1) 
+            f_wall = Floor(image=image2, texture_number=5, x=x, y=y-1) 
             floor_sprites.append(f_wall)
 
         if number == 6 and self.tiles[x][y-1] in (TILE.EMPTY ,TILE.DOOR_H, TILE.DOOR_W):
-            f_wall = Floor(name=image2, texture_number=6, x=x, y=y-1) 
+            f_wall = Floor(image=image2, texture_number=6, x=x, y=y-1) 
             floor_sprites.append(f_wall)
 
         if number == 7 and self.tiles[x][y-1] in (TILE.EMPTY ,TILE.DOOR_H, TILE.DOOR_W):
-            f_wall = Floor(name=image2, texture_number=7, x=x, y=y-1) 
+            f_wall = Floor(image=image2, texture_number=7, x=x, y=y-1) 
             floor_sprites.append(f_wall)
 
 
@@ -90,7 +90,7 @@ class ActorPlacement:
 
                     if self.width - 1 > x > 0 and self.height - 2 > y > 0 and self.tiles[x][y+1] != TILE.WALL:
 
-                        floor = Floor(name=image, x=x, y=y)
+                        floor = Floor(image=image, x=x, y=y)
                         floor_sprites.append(floor)
 
                 if self.tiles[x][y] == TILE.WALL:
@@ -226,19 +226,19 @@ class ActorPlacement:
                 # == TILE.EMPTY or TILE.STAIRS_DOWN or TILE.DOOR:
                 if self.tiles[x][y] != TILE.WALL and self.tiles[x][y] != TILE.STAIRS_DOWN:
 
-                    point = Actor(name="floor_point", scale=2, x=x, y=y,
+                    point = Actor(image="floor_point", scale=2, x=x, y=y,
                                   color=COLORS["black"], visible_color=COLORS["light_ground"], not_visible_color=COLORS["light_ground"])
 
                     map_point_sprites.append(point)
 
                 elif self.tiles[x][y] == TILE.WALL:# ここでcolorをwhiteにするとマップ全体が見れる
-                    point = Actor(name="wall_point", scale=2, x=x, y=y,
+                    point = Actor(image="wall_point", scale=2, x=x, y=y,
                                   color=COLORS["black"], visible_color=COLORS["light_ground"], not_visible_color=COLORS["light_ground"])
 
                     map_point_sprites.append(point)
 
                 elif self.tiles[x][y] == TILE.STAIRS_DOWN:
-                    point = Actor(name="stairs_down_point", scale=2, x=x, y=y,
+                    point = Actor(image="stairs_down_point", scale=2, x=x, y=y,
                                   color=COLORS["black"], visible_color=COLORS["light_ground"], not_visible_color=COLORS["light_ground"])
                 if point:
                     map_point_sprites.append(point)
@@ -324,7 +324,7 @@ class ActorPlacement:
             for y in range(self.height):
                 if type(self.item_tiles[x][y]) is int:
 
-                    item = Actor(name="items_point", scale=1.2, x=x, y=y,
+                    item = Actor(image="items_point", scale=1.2, x=x, y=y,
                                  color=COLORS["black"], visible_color=COLORS["light_ground"], not_visible_color=COLORS["light_ground"])
                     item.x = x
                     item.y = y

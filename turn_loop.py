@@ -105,7 +105,7 @@ class TurnLoop:
             
         elif self.turn == Turn.DELAY:
             # log.debug(
-            #     f"{self.actor.name=}, {self.actor.wait=}, {self.actor.state=}, {self.actor.is_dead=}")
+            #     f"{self.actor.image=}, {self.actor.wait=}, {self.actor.state=}, {self.actor.is_dead=}")
             if self.actor.state == state.TURN_END or self.actor.state is None or self.actor.is_dead or self.actor.state == state.STUN:
                 self.turn = Turn.ON
                 if self.actor == self.player:

@@ -4,10 +4,10 @@ from data import *
 
 
 class BaseSkill(Actor):
-    def __init__(self, x=0, y=0, name="attack", 
+    def __init__(self, x=0, y=0, image="attack", 
                 level=1, damage=1, hit_rate=90, attr="physical", effect=None):
         super().__init__(
-            name=name,
+            image=image,
             x=x,
             y=y,
         )

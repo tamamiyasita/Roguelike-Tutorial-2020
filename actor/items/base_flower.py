@@ -9,9 +9,10 @@ from actor.skills.base_skill import BaseSkill
 
 
 class BaseFlower(Actor):
-    def __init__(self, x=0, y=0, name="silver_grass"):
+    def __init__(self, x=0, y=0, name="silver_grass", image=None):
         super().__init__(
             name=name,
+            image=name,
             x=x,
             y=y,
         )

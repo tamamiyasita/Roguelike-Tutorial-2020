@@ -6,9 +6,9 @@ from ranged import Ranged
 from ranged import Ranged
 
 class P_Grenade(BaseSkill):
-    def __init__(self, x=0, y=0, name="p_grenade"):
+    def __init__(self, x=0, y=0, image="p_grenade"):
         super().__init__(
-            name=name,
+            image=image,
             x=x,
             y=y
             )

@@ -21,6 +21,7 @@ class Water_vole(Actor):
         super().__init__(
             scale=1.8,
             name="water_vole",
+            image="water_vole",
             x=x,
             y=y,
             # speed=8,

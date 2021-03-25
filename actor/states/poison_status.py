@@ -8,7 +8,7 @@ class PoisonEffect(Actor):
         super().__init__(
             x=owner.x,
             y=owner.y,
-            name="poison",
+            image="poison",
             color=COLORS["white"]
         )
         self.owner = owner
@@ -49,7 +49,7 @@ class PoisonEffect(Actor):
 class PoisonStatus(Actor):
     def __init__(self, count_time=None):
         super().__init__(
-            name="poison",
+            image="poison",
             scale=4.5,
 
         )

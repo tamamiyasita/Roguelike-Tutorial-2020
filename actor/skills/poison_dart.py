@@ -6,11 +6,11 @@ from actor.states.poison_status import PoisonStatus
 from ranged import Ranged
 
 class PoisonDart(BaseSkill):
-    def __init__(self, x=0, y=0, name="poison_dart"):
+    def __init__(self, x=0, y=0, image="poison_dart"):
         super().__init__(
             x=x,
             y=y,
-            name=name,
+            image=image,
         )
 
 

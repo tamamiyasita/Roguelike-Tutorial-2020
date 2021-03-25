@@ -9,7 +9,7 @@ from particle import AttackParticle
 class TriggerPull(Actor):
     def __init__(self, shooter, target, engine, amm):
         super().__init__(
-            name=amm.amm,
+            image=amm.amm,
             color=COLORS["white"],
         )
         self.engine = engine

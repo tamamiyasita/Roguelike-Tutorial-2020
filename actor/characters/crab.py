@@ -19,7 +19,7 @@ class Crab(Actor):
 
         super().__init__(
             scale=1,
-            name="crab",
+            image="crab",
             x=x,
             y=y,
             fighter=fighter_component,
@@ -58,7 +58,7 @@ class Crab(Actor):
 
     #     super().__init__(
     #         scale=1,
-    #         name="crab",
+    #         image="crab",
     #         x=x,
     #         y=y,
     #         fighter=fighter_component,

@@ -11,7 +11,7 @@ class HealingPotionEffect(Actor):
         super().__init__(
             x=x,
             y=y,
-            name="healing_potion_effect",
+            image="healing_potion_effect",
             color=COLORS["white"]
         )
         self.engine = engine
@@ -50,7 +50,7 @@ class HealingPotion(Actor):
         super().__init__(
             x=x,
             y=y,
-            name="healing_potion",
+            image="healing_potion",
             not_visible_color=COLORS["black"],
 
         )
