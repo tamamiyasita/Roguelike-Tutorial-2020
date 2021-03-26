@@ -10,11 +10,11 @@ def viewport(x, y):
 
     left_boundary = int(view_left + VIEWPORT_MARGIN)
     if x < left_boundary:
-        view_left -= (x - left_boundary)
+        view_left -= (left_boundary - x)
         changed = True
 
-    right_boundary = int(view_left + VIEWPORT_MARGIN)# SCREEN_WIDTH -
-                        #  VIEWPORT_MARGIN) - STATES_PANEL_WIDTH)
+    right_boundary = int(view_left + (SCREEN_WIDTH-GRID_SIZE) -
+                         VIEWPORT_MARGIN)
     if x > right_boundary:
         view_left += (x - right_boundary)
         changed = True
