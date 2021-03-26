@@ -69,6 +69,7 @@ class Player(Actor):
                 
                 self.from_x, self.from_y = self.center_x, self.center_y
                 self.state = state.TURN_END
+                self.form = form.NORMAL
         if self.state == state.TURN_END:
             self.change_x = 0
             self.change_y = 0
@@ -126,8 +127,7 @@ class Player(Actor):
             self.texture = pc_def[1]
 
 
-        if self.state == state.TURN_END:
-            self.form = form.NORMAL
+
 
         if self.form == form.NORMAL and self.left_face:
             self.texture = player[1]
