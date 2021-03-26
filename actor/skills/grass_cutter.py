@@ -39,8 +39,7 @@ class GrassCutter(BaseSkill):
     @property
     def damage(self):
         if self.owner:
-            attr = self.owner.fighter.description
-            return dice((self.level / 3 + 1), ((self.owner.fighter.STR + attr["supple"]))/2, attr["sharp"])
+            return dice((self.level / 3 + 1), ((self.owner.fighter.STR))/2, self.level)
 
     def update_animation(self, delta_time):
         super().update_animation(delta_time)

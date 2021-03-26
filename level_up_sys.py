@@ -42,31 +42,27 @@ def check_flower_level(player):
 class Select_param:
     def __init__(self, flower):
         """rarity値からlevel_pointを割り振る
-        rare:1 = description, rare:2 = max_hp rare:3 = str.dex.int,
-        rare:4 = eva.def, rare:5 = resist, rare:6 speed
+        rare:1 = max_hp rare:2 = str.dex.int,
+        rare:3 = eva.def, rare:4 = resist, rare:5 speed
         """
-        rarity_point = {"common":3, "uncomon":5, "rare":7}
+        rarity_point = {"common":1, "uncomon":2, "rare":3}
         self.flower = flower
         self.point = rarity_point[self.flower.rarity]
-        self.up_state = ("description", "max_hp", "base_states", "high_states", "resist", "speed")
+        self.up_state = ("max_hp", "base_states", "high_states", "resist", "speed")
         if self.flower.rarity == "common":
-            self.choice_pram = [5, 5, 5, 4, 2, 1]
+            self.choice_pram = [35, 5, 1, 0, 0]
         if self.flower.rarity == "uncommon":
-            self.choice_pram = [10, 10, 5, 4, 2, 1]
+            self.choice_pram = [10, 5, 4, 2, 1]
         if self.flower.rarity == "rare":
-            self.choice_pram = [1, 1, 1, 1, 1, 1]
+            self.choice_pram = [1, 1, 1, 1, 1]
 
 
     def point_set(self):
         result = {}
         for _ in range(self.point):
             param = choices(self.up_state, self.choice_pram)
-            if "description" in param:
-                choice_des =  choice(["complexion", "fragrance", "brilliant", "sharp", "robust", "supple"])
-                self.flower.description[choice_des] += 1
-                result[choice_des] = 1
 
-            elif "max_hp" in param:
+            if "max_hp" in param:
                 get_hp = randint(4, 8) 
                 self.flower.states_bonus["max_hp"] += get_hp
                 result["max_hp"] = get_hp

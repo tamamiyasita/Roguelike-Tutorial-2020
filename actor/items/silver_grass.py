@@ -29,7 +29,6 @@ class SilverGrass(BaseFlower):
         self.flower_color = "white"
         self.states_bonus =  {"max_hp": 0,"STR": 0,"DEX": 1, "INT": 0, "defense": 0, "evasion": 0, "attack_speed":0}
         self.skill_bonus = {"grass_cutter":1}
-        self.description={"complexion":0, "fragrance":0, "brilliant":0, "sharp":1, "robust":0, "supple":1}
 
         self.resist_bonus = {"physical": 0, "fire": 0, "ice": 0, "lightning":0, "acid": 0, "poison": 0, "mind": 0}
 

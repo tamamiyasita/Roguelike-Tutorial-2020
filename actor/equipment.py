@@ -84,16 +84,6 @@ class Equipment:
 
         self.affinity_bonus = bonus
     
-    def description_bonus_update(self):
-        """flower_slotをループしてdescription bonusを合計し返す"""
-
-        bonus={"brilliant":0, "glow":0, "fragrance":0, "sharp":0, "robust":0, "supple":0, "medicinal":0}
-
-        for parts in self.flower_slot:
-            if parts and not isinstance(parts, str) and parts.description:
-                bonus = Counter(bonus) + Counter(parts.description)
-
-        self.description_bonus = bonus
 
     def resist_bonus_update(self):
         """flower_slotをループしてresist bonusを合計し返す"""
