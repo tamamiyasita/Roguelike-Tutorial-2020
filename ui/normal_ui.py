@@ -92,7 +92,7 @@ class NormalUI:
             bottom_left_y=self.viewport_bottom,
             width=STATES_PANEL_WIDTH,
             height=self.side_panel_height,
-            color=(25,25,55,255)
+            color=(25,25,55,55)
         )
 
        # 横パネルの周りの線
