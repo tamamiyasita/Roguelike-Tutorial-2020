@@ -10,7 +10,7 @@ from hit_anime import hit_particle, Hit_Anime
 from actor.fighter import Fighter
 
 class PC_Fighter(Fighter):
-    def __init__(self, hp=0, defense=0, STR=0, DEX=0, INT=0, attack_speed=DEFAULT_ATTACK_SPEED,
+    def __init__(self, hp=0, defense=0, STR=0, DEX=0, INT=0, speed=10, attack_speed=DEFAULT_ATTACK_SPEED,
                  evasion=0, xp_reward=0, current_xp=0, level=1,
                  affinity={"physical": 0, "fire": 0, "ice": 0, "lightning": 0, "acid": 0, "poison": 0, "mind": 0},
                  resist={"physical": 1, "fire": 1, "ice": 1, "lightning":1, "acid": 1, "poison": 1, "mind": 1}, ability_points=0):
@@ -24,6 +24,8 @@ class PC_Fighter(Fighter):
         self.base_intelligence = INT
 
         # self.unarmed = BaseSkill()#{"damage":1, "level":1, "attr":"physical"}
+        self.speed = speed
+        self.wait = speed//2
         self.base_attack_speed = attack_speed
 
         self.base_defense = defense

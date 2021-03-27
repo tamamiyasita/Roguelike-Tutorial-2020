@@ -34,8 +34,8 @@ class StunStatus(Actor):
         # if self.owner and self.count_time >= 0:
 
         self.owner.state = state.STUN
-        self.owner.wait += self.owner.speed*2
-        print(f"stun! {self.owner.image=} {self.owner.wait=} {self.owner.speed=}")
+        self.owner.fighter.wait += self.owner.speed*2
+        print(f"stun! {self.owner.image=} {self.owner.fighter.wait=} {self.owner.speed=}")
 
         results = [{"message": f"{self.owner.name} STUN!"}]
         results.append({"damage_pop": self.owner, "damage":"STUN"})

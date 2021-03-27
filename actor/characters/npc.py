@@ -67,7 +67,7 @@ class Citizen(Actor):
             image="citizen",
             x=x,
             y=y,
-            speed=10,
+            # speed=10,
             ai=ai_component,
             blocks=True,
             npc_state=NPC_state.REQUEST

@@ -552,7 +552,7 @@ class GameEngine:
 
             if "turn_end" in action:
                 target = action["turn_end"]
-                target.wait += target.speed
+                target.fighter.wait += target.fighter.speed
                 target.state = state.TURN_END
                 print(f"{target.name} is pass Turn_END")
 
@@ -870,11 +870,12 @@ class GameEngine:
                     elif not door.left_face:
                         door.left_face = True
 
-            result.extend(
-                [{"delay": {"time": 0.2, "action": {"turn_end": self.player}}}])
- 
+                    result.extend([{"delay": {"time": 0.5, "action": {"turn_end": self.player}}}])
+                    if result:
+                        return result
+        
         else:
             result.extend([{"message": f"There is no door in that direction"}])
-            result.extend([{"delay": {"time": 0.2, "action": {"None"}}}])
+            result.extend([{"delay": {"time": 0.5, "action": {"None"}}}])
 
         return result

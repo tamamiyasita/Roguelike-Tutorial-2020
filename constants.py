@@ -137,10 +137,10 @@ class state(Enum):
     STUN = auto()
 
 class form(Enum):
+    DOOR = auto()
     NORMAL = auto()
     ATTACK = auto()
     ON_MOVE = auto()
-    DOOR = auto()
     SHOT = auto()
     THROW = auto()
     DEFENSE = auto()

@@ -211,7 +211,7 @@ def keymap(key, engine):
 
         return direction
 
-    elif engine.player.form == form.DOOR:
+def door_key(key, engine):
         direction = None
         if key in KEYMAP_UP:
             direction = (0, 1)

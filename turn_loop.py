@@ -60,13 +60,13 @@ class TurnLoop:
             for actor in self.sprites:
                 if actor.is_dead:
                     continue
-                if actor.wait < 1:
+                if actor.fighter.wait < 1:
                     self.actor = actor
                     self.actor.state = state.READY # スタンなどの状態異常が無ければstate解除
                     self.elapsed_time(self.actor, queue, engine)# ターンが来たらステータス効果発動
 
                     # ステータス効果による死亡やスタン判定
-                    if self.actor.is_dead or self.actor.state == state.STUN or self.actor.wait:
+                    if self.actor.is_dead or self.actor.state == state.STUN or self.actor.fighter.wait:
                         continue
                     else:
                         self.turn = Turn.OFF
@@ -78,8 +78,8 @@ class TurnLoop:
                 # playerもしくは他のactorの時はvisibleの場合のみwaitを減らす
                 if sprite == self.player or sprite.is_visible or sprite.ai and sprite.ai.visible_check:
 
-                    if sprite.wait > 0:
-                        sprite.wait -= 1
+                    if sprite.fighter.wait > 0:
+                        sprite.fighter.wait -= 1
 
 
 
@@ -106,7 +106,7 @@ class TurnLoop:
             
         elif self.turn == Turn.DELAY:
             # log.debug(
-            #     f"{self.actor.image=}, {self.actor.wait=}, {self.actor.state=}, {self.actor.is_dead=}")
+            #     f"{self.actor.image=}, {self.actor.fighter.wait=}, {self.actor.state=}, {self.actor.is_dead=}")
             if self.actor.state == state.TURN_END or self.actor.state is None or self.actor.is_dead or self.actor.state == state.STUN:
                 self.turn = Turn.ON
                 if self.actor == self.player:

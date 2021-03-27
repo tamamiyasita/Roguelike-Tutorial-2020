@@ -8,7 +8,7 @@ import pyglet.gl as gl
 
 from constants import *
 from game_engine import GameEngine
-from keymap import keymap, grid_select_key, inventory_key, character_screen_key
+from keymap import keymap, grid_select_key, inventory_key, character_screen_key, door_key
 
 from ui.normal_ui import NormalUI
 from ui.mouse_ui import MouseUI
@@ -239,8 +239,9 @@ class MG(arcade.Window):
 
         # ドア開閉
         if self.engine.player.form == form.DOOR:
-            door_check = keymap(key, self.engine)
+            door_check = door_key(key, self.engine)
             if door_check:
+                self.player_direction = None
                 self.engine.action_queue.extend([{"use_door": door_check}])
 
         # Lコマンド時、スクロール仕様時などのカーソル移動と選択

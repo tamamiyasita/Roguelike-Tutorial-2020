@@ -25,11 +25,10 @@ class Actor(arcade.Sprite):
                  blocks=False, block_sight=False,
                  scale=SPRITE_SCALE, color=COLORS["black"],
                 #  fighter=None,
-                  ai=None, speed=DEFAULT_SPEED,
+                  ai=None,# speed=DEFAULT_SPEED,
                  inventory=None, equipment=None,
                  visible_color=COLORS["white"], not_visible_color=COLORS["black"],
                  states=None, npc_state=None, left_face=False,
-                 power=None,
             
                  ):
         super().__init__(scale=scale)
@@ -69,8 +68,8 @@ class Actor(arcade.Sprite):
             self.inventory.owner = self
 
 
-        self.speed = speed
-        self.wait = speed//2
+        # self.speed = speed
+        # self.fighter.wait = speed//2
 
         self.ai = ai
         if self.ai:

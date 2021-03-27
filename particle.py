@@ -31,10 +31,10 @@ class AttackParticle(arcade.SpriteCircle):
 
         self.normal_texture = self.texture
 
-        speed = random.random() * PARTICLE_SPEED_RANGE + PARTICLE_MIN_SPEED
+        a_speed = random.random() * PARTICLE_SPEED_RANGE + PARTICLE_MIN_SPEED
         direction = random.randrange(360)
-        self.change_x = math.sin(math.radians(direction)) * speed
-        self.change_y = math.cos(math.radians(direction)) * speed
+        self.change_x = math.sin(math.radians(direction)) * a_speed
+        self.change_y = math.cos(math.radians(direction)) * a_speed
 
         self.my_alpha = 255
 

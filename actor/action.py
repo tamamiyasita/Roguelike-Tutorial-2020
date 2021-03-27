@@ -59,6 +59,7 @@ def door_action(owner, door):
     result = []
     if Tag.use_door in owner.tag:
         owner.form = form.DOOR
+        owner.state = state.DELAY
         if door.left_face == False:
             door.left_face = True
             result.extend([{"delay": {"time": 0.2, "action": {"turn_end":owner}}}])

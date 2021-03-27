@@ -10,7 +10,7 @@ from hit_anime import hit_particle, Hit_Anime
 
 
 class Fighter:
-    def __init__(self, hp=0, defense=0, STR=0, DEX=0, INT=0, attack_speed=DEFAULT_ATTACK_SPEED,
+    def __init__(self, hp=0, defense=0, STR=0, DEX=0, INT=0, speed=10, attack_speed=DEFAULT_ATTACK_SPEED,
                  evasion=0, xp_reward=0, level=1,
                  # 物理:オレンジ, 火:赤, 氷:白, 雷:青, 酸:黄色, 毒:紫, 精神:ピンク
                  resist={"physical": 1, "fire": 0, "ice": 1, "lightning":1, "acid": 1, "poison": 1, "mind": 1},           
@@ -25,6 +25,9 @@ class Fighter:
 
         self.defense = defense
         self.evasion = evasion
+        self.speed = speed
+        self.wait = speed//2
+
         self.attack_speed = attack_speed
         self.resist = resist
 
