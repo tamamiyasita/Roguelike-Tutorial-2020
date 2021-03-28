@@ -4,7 +4,7 @@ from constants import *
 from fire import Fire
 from actor.skills.base_skill import BaseSkill
 from ranged import Ranged
-
+from util import dice
 
 
 class SeedShot(BaseSkill):
@@ -22,7 +22,7 @@ class SeedShot(BaseSkill):
 
         self._damage = 6
         self.hit_rate = 85
-        self.speed = 25
+        self.shot_speed = 25
         self.attr = "physical"
 
         self.damage_range = "single"
@@ -38,6 +38,12 @@ class SeedShot(BaseSkill):
         self.explanatory_text = f""
 
         self.icon = IMAGE_ID["seed_shot_icon"]
+
+
+    @property
+    def damage(self):
+        if self.owner:
+            return dice((self.level / 3 + 1), ((self.owner.fighter.STR+self._damage))/2, (self.level/3))
 
 
     def use(self, engine):

@@ -1,4 +1,3 @@
-from actor.states.poison_status import PoisonStatus
 import random
 from constants import *
 from util import dice, stop_watch, result_add

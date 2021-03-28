@@ -3,6 +3,52 @@ from constants import *
 from data import *
 import random
 
+
+
+class PoisonStatus(Actor):
+    def __init__(self, count_time=None, power=None):
+        super().__init__(
+            image="poison",
+            scale=4.5,
+
+        )
+
+
+        self.max_cooldown_time = 4
+        self.count_time = count_time
+        self.owner = None
+
+        self.level = 1
+        self.damage = power
+        self.attr = "poison"
+        self.hit_rate = None
+        self.effect = None
+        self.anime = []
+
+
+
+
+
+
+        self.tag = [Tag.item, Tag.used, Tag.active, Tag.skill]
+
+        self.explanatory_text = f""
+        self.icon = IMAGE_ID["poison"]
+
+
+
+
+    def apply(self, engine):
+        self.engine = engine
+
+        # if self.owner and self.count_time > 0:
+
+        result = self.owner.fighter.skill_process(self)
+        PoisonEffect(self.owner,  self.engine)
+
+        return result
+
+
 class PoisonEffect(Actor):
     def __init__(self, owner, engine):
         super().__init__(
@@ -44,47 +90,3 @@ class PoisonEffect(Actor):
             self.owner.color = self.color
             self.particle_time = 30
             self.remove_from_sprite_lists()
-
-
-class PoisonStatus(Actor):
-    def __init__(self, count_time=None):
-        super().__init__(
-            image="poison",
-            scale=4.5,
-
-        )
-
-
-        self.max_cooldown_time = 4
-        self.count_time = count_time
-        self.owner = None
-
-        self.level = 1
-        self.damage = 1
-        self.attr = "poison"
-        self.hit_rate = None
-        self.effect = None
-        self.anime = []
-
-
-
-
-
-
-        self.tag = [Tag.item, Tag.used, Tag.active, Tag.skill]
-
-        self.explanatory_text = f""
-        self.icon = IMAGE_ID["poison"]
-
-
-
-
-    def apply(self, engine):
-        self.engine = engine
-
-        # if self.owner and self.count_time > 0:
-
-        result = self.owner.fighter.skill_process(self)
-        PoisonEffect(self.owner,  self.engine)
-
-        return result

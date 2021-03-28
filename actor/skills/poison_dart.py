@@ -4,6 +4,8 @@ from data import *
 from actor.skills.base_skill import BaseSkill
 from actor.states.poison_status import PoisonStatus
 from ranged import Ranged
+from util import dice
+
 
 class PoisonDart(BaseSkill):
     def __init__(self, x=0, y=0, image="poison_dart"):
@@ -20,7 +22,7 @@ class PoisonDart(BaseSkill):
 
         self._damage = 1
         self.hit_rate = 95
-        self.speed = 23
+        self.shot_speed = 23
         self.attr = "poison"
         self.effect = None
 
@@ -38,12 +40,22 @@ class PoisonDart(BaseSkill):
 
         self.icon = IMAGE_ID["poison_dart_icon"]  
         self.anime = IMAGE_ID["poison_start"]
+
+
+    @property
+    def damage(self):
+        if self.owner:
+            return dice((self.level / 5 + 1), ((self.owner.fighter.DEX+self._damage))/2, (self.level/5))
+    @property
+    def power(self):
+        if self.owner:
+            return (self.owner.fighter.INT/5)+1
         
 
     def use(self, engine):
         if self.count_time <= 0:
 
-            effect_component = PoisonStatus(count_time=4)
+            effect_component = PoisonStatus(count_time=4, power=self.power)
             self.effect = effect_component
             fire = Ranged(engine, self.owner, self)
             fire.use()
