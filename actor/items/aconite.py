@@ -12,10 +12,8 @@ class Aconite(BaseFlower):
         skill_component = PoisonDart()
 
         # 定数 #############################
-        self.level_up_weights = [3, 5, 2]
         self.explanatory_text = f"Is aconite \n st"
-        self.item_margin_x = 17
-        self.item_margin_y = 6
+
         self.my_speed = 2.7
         self.flower_skill = skill_component
         self.flower_skill.flower = self
@@ -24,11 +22,10 @@ class Aconite(BaseFlower):
         self.level = 1
         self.current_xp = 0
 
-
-        self.states_bonus = {"DEX": 1}
+        self.flower_color = "purple"
+        self.states_bonus =  {"max_hp": 0,"STR": 0,"DEX": 1, "INT": 0, "defense": 0, "evasion": 0, "attack_speed":0}
         self.skill_bonus = {"poison_dart":1}
-        self.resist_bonus = {"poison":1}
-
+        self.resist_bonus = {"physical": 0, "fire": 0, "ice": 0, "lightning":0, "acid": 0, "poison": 1, "mind": 0}
 
 
 

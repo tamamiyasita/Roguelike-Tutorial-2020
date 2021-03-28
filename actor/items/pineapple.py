@@ -12,11 +12,8 @@ class Pineapple(BaseFlower):
         skill_component = P_Grenade()
 
         # 定数 #############################
-        self.scale = 2
-        self.level_up_weights = [2, 3, 5]
         self.explanatory_text = f"Is pineapple \n and pineapple"
-        self.item_margin_x = 19
-        self.item_margin_y = 11
+
         self.my_speed = 4.0
         self.flower_skill = skill_component
         self.flower_skill.flower = self
@@ -26,7 +23,8 @@ class Pineapple(BaseFlower):
         self.current_xp = 0
 
 
-        self.states_bonus = {"INT": 1}
+        self.flower_color = "purple"
+        self.states_bonus =  {"max_hp": 3, "STR": 0, "DEX": 0, "INT": 0, "defense": 0, "evasion": 0, "attack_speed":0}
         self.skill_bonus = {"p_grenade":1}
-        self.resist_bonus = {"fire":1}
+        self.resist_bonus = {"physical": 0, "fire": 0, "ice": 0, "lightning":0, "acid": 0, "poison": 0, "mind": 0}
 

@@ -2,7 +2,7 @@ from constants import *
 from data import *
 from actor.skills.base_skill import BaseSkill
 from actor.states.stun import StunStatus
-from hit_anime import Fall
+from util import dice
 
 class BananaSlip(BaseSkill):
     def __init__(self, x=0, y=0, image="banana_slip"):
@@ -31,6 +31,11 @@ class BananaSlip(BaseSkill):
         self.icon = IMAGE_ID["banana_slip_icon"]
         self.anime = IMAGE_ID["banana_fall"]
         self.anime_type = "fall"
+
+    @property
+    def damage(self):
+        if self.owner:
+            return dice((self.level / 5 + 1), ((self.owner.fighter.INT+self._damage))/2, (self.level/5))
 
 
     def use(self, target):

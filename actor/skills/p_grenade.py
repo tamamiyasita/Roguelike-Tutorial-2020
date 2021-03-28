@@ -2,8 +2,8 @@ from constants import *
 from data import *
 from actor.skills.base_skill import BaseSkill
 from ranged import Ranged
+from util import dice
 
-from ranged import Ranged
 
 class P_Grenade(BaseSkill):
     def __init__(self, x=0, y=0, image="p_grenade"):
@@ -27,7 +27,7 @@ class P_Grenade(BaseSkill):
         self._level = 1
 
 
-        self.speed = 16
+        self.shot_speed = 16
         self.item_weight = 4
 
 
@@ -38,6 +38,12 @@ class P_Grenade(BaseSkill):
          
         self.icon = IMAGE_ID["p_grenade_icon"]
         self.anime = IMAGE_ID["explosion_effect"]
+
+
+    @property
+    def damage(self):
+        if self.owner:
+            return dice((self.level / 3 + 1), ((self.owner.fighter.INT+self._damage))/2, (self.level/2))
 
 
     def use(self, engine):

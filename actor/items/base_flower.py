@@ -21,7 +21,6 @@ class BaseFlower(Actor):
         # 定数 #############################
         self.tag = [Tag.item, Tag.equip, Tag.flower]
         self.max_level = 5
-        self.level_up_weights = [3, 3, 4]
         self.experience_per_level = exp_calc()
         self.explanatory_text = f"test \n test"
         self.owner = None

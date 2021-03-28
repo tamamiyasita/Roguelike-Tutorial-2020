@@ -5,8 +5,6 @@ from actor.skills.base_skill import BaseSkill
 from util import dice
 
 
-
-
 class GrassCutter(BaseSkill):
     def __init__(self, x=0, y=0, image="grass_cutter"):
         super().__init__(
@@ -14,12 +12,10 @@ class GrassCutter(BaseSkill):
             x=x,
             y=y,
         )
-        # self.color=COLORS["white"]
 
         #attackに渡される属性
         self._damage = 5
         self.hit_rate = 95
-        self.speed = 6
         self.attr = "physical"
         self.effect = None
 
@@ -39,7 +35,7 @@ class GrassCutter(BaseSkill):
     @property
     def damage(self):
         if self.owner:
-            return dice((self.level / 3 + 1), ((self.owner.fighter.STR))/2, self.level)
+            return dice((self.level / 3 + 1), ((self.owner.fighter.STR+self._damage))/2, (self.level/2))
 
     def update_animation(self, delta_time):
         super().update_animation(delta_time)

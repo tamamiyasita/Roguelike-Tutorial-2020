@@ -26,8 +26,8 @@ class Flying(Actor):
         self.skill = skill
         self.spin = spin
 
-        self.shot_speed = skill.speed
-        self.delay_time = 10 / skill.speed
+        self.shot_speed = skill.shot_speed
+        self.delay_time = 10 / skill.shot_speed
         self.shot_damage = -skill.damage
         self.attr = skill.attr
         self.damage_range = skill.damage_range

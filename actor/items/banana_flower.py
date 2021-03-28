@@ -9,29 +9,26 @@ class Bananaflower(BaseFlower):
             x=x,
             y=y,
         )
+
         skill_component = BananaSlip()
+        
         # 定数 #############################
         # self.scale = 1.6
-        self.level_up_weights = [3, 5, 2]
         self.explanatory_text = f"Is bananalower \n st"
-        self.item_margin_x = 17
-        self.item_margin_y = 6
+
         self.my_speed = 2.3
         self.flower_skill = skill_component
         self.flower_skill.flower = self
         ###################################
 
-
-        # 変数（要保存）####################
-
-        # level
         self.level = 1
         self.current_xp = 0
         
-        # states
-        self.states_bonus = {"DEX": 1}
+        self.flower_color = "purple"
+        self.states_bonus =  {"max_hp": 2,"STR": 0,"DEX": 0, "INT": 0, "defense": 0, "evasion": 0, "attack_speed":0}
         self.skill_bonus = {"banana_slip":1}
-        self.resist_bonus = {"fire":1}
+        self.resist_bonus = {"physical": 0, "fire": 0, "ice": 0, "lightning":0, "acid": 0, "poison": 0, "mind": 0}
+
 
 
         ###################################
