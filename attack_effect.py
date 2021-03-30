@@ -10,6 +10,7 @@ class AttackEffect:
 
         self.owner = owner
         self.attack_target = attack_target
+        self.attack_target_x = attack_target.center_x
         self.owner.from_x = owner.center_x
         self.owner.from_y = owner.center_y
         self.owner.fx = owner.x
@@ -29,20 +30,20 @@ class AttackEffect:
             self.owner.change_x = 0
             self.owner.change_y = 0
     
-        # if self.attack_delay == 6:
-        #     for i in range(13):
-        #         if i % 2 == 0:
-        #             self.attack_target.center_x += 1
-        #         else:
-        #             self.attack_target.center_x -= 1
+        if self.attack_delay == 6:
+            for i in range(13):
+                if i % 2 == 0:
+                    self.attack_target.center_x += 1
+                else:
+                    self.attack_target.center_x -= 1
 
         self.attack_delay -= 1
 
         if 0 > self.attack_delay:
             self.attack_target.alpha = 255
-            # self.attack_target.center_x = self.attack_target_x
-            # self.owner.center_y = self.owner.from_y
-            # self.owner.center_x = self.owner.from_x
+            self.attack_target.center_x = self.attack_target_x
+            self.owner.center_y = self.owner.from_y
+            self.owner.center_x = self.owner.from_x
             self.owner.y = self.owner.fy
             self.owner.x = self.owner.fx
             self.owner.change_x, self.owner.change_y = 0, 0

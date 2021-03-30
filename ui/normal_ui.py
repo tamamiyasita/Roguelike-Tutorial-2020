@@ -88,39 +88,55 @@ class NormalUI:
 
         # 画面横のパネル
         arcade.draw_xywh_rectangle_filled(
-            bottom_left_x=self.viewport_left + SCREEN_WIDTH - STATES_PANEL_WIDTH,
-            bottom_left_y=self.viewport_bottom,
-            width=STATES_PANEL_WIDTH,
-            height=self.side_panel_height,
+            bottom_left_x=self.viewport_left + SCREEN_WIDTH - STATES_PANEL_WIDTH-15,
+            bottom_left_y=self.viewport_bottom+GRID_SIZE*3+9,
+            width=STATES_PANEL_WIDTH+8,
+            height=self.side_panel_height-16,
             color=(25,25,55,55)
         )
 
        # 横パネルの周りの線
         arcade.draw_xywh_rectangle_outline(
-            bottom_left_x=self.viewport_left + SCREEN_WIDTH -
-            STATES_PANEL_WIDTH + self.panel_line_width*0.5,
-            bottom_left_y=self.viewport_bottom + self.panel_line_width*0.5,
-            width=STATES_PANEL_WIDTH - self.panel_line_width,
-            height=self.side_panel_height-3,
+            bottom_left_x=self.viewport_left + SCREEN_WIDTH - STATES_PANEL_WIDTH - 15,
+            bottom_left_y=self.viewport_bottom+GRID_SIZE*3+9,
+            width=STATES_PANEL_WIDTH + 8,
+            height=self.side_panel_height-16,
             color=arcade.color.LEMON_CHIFFON,
             border_width=self.panel_line_width
         )
+        # アクティブスキルアイコン枠
+        arcade.draw_xywh_rectangle_outline(
+            bottom_left_x=self.viewport_left+(GRID_SIZE*6)+7,
+            bottom_left_y=self.viewport_bottom+8,
+            width=SCREEN_WIDTH-(GRID_SIZE*9)-29,
+            height=(GRID_SIZE*3)-7,
+            color=arcade.color.BABY_BLUE,
+            border_width=self.panel_line_width
+        )
+        # メッセージパネル枠
+        arcade.draw_xywh_rectangle_outline(
+            bottom_left_x=self.viewport_left+8,
+            bottom_left_y=self.viewport_bottom+8,
+            width=GRID_SIZE*6-8,
+            height=(GRID_SIZE*3)-7,
+            color=arcade.color.WHITE_SMOKE,
+            border_width=self.panel_line_width
+        )
+        # ミニマップ黒背景
         arcade.draw_xywh_rectangle_filled(
-            bottom_left_x=self.viewport_left + SCREEN_WIDTH - STATES_PANEL_WIDTH,
-            bottom_left_y=self.viewport_top - GRID_SIZE*3,
-            width=STATES_PANEL_WIDTH,
-            height=GRID_SIZE*3,
+            bottom_left_x=self.viewport_left + SCREEN_WIDTH - STATES_PANEL_WIDTH-15,
+            bottom_left_y=self.viewport_bottom+8,
+            width=STATES_PANEL_WIDTH+8,
+            height=GRID_SIZE*3-7,
             color=arcade.color.BLACK
         )
-
         # ミニマップ囲い線
         arcade.draw_xywh_rectangle_outline(
-            bottom_left_x=self.viewport_left + SCREEN_WIDTH -
-            STATES_PANEL_WIDTH + self.panel_line_width*0.5,
-            bottom_left_y=self.viewport_top - GRID_SIZE*3,
-            width=STATES_PANEL_WIDTH - self.panel_line_width,
-            height=GRID_SIZE*3,
-            color=arcade.color.BABY_BLUE,
+            bottom_left_x=self.viewport_left + SCREEN_WIDTH - STATES_PANEL_WIDTH - 15,
+            bottom_left_y=self.viewport_bottom+8,
+            width=STATES_PANEL_WIDTH+8,
+            height=(GRID_SIZE*3)-7,
+            color=arcade.color.GO_GREEN,
             border_width=self.panel_line_width
         )
 
@@ -128,28 +144,40 @@ class NormalUI:
         """ステータスパネルとHPバー"""
         # パネル用変数
         hp_font_size = 15
-        hp_bar_width = hp_font_size * 12  # HPバーの幅
-        hp_bar_height = hp_font_size + 2  # HPバーの太さ
+        hp_bar_width = 180  # HPバーの幅
+        hp_bar_height = hp_font_size + 3  # HPバーの太さ
         hp_bar_margin = self.viewport_bottom + self.side_panel_height - 55  # 15パネル上端からのHPバーの位置
-        left_margin = self.viewport_left + self.side_panel_width + 7  # 画面左からのHPとバーの位置
+        left_margin = self.viewport_left + self.side_panel_width-5  # 画面左からのHPとバーの位置
 
         Player_attr = f"{self.player.race} {self.player.name}"
 
         arcade.draw_text(text=Player_attr,
                          start_x=left_margin,
-                         start_y=hp_bar_margin+25,
+                         start_y=hp_bar_margin+45,
                          color=(132,255,142),
-                         font_size=hp_font_size+1,
+                         font_size=hp_font_size,
                          font_name=UI_FONT
 
                          )
 
         # HP/MAXHPの表示
         hp_text = f"HP {self.player.fighter.hp: >2}/{self.player.fighter.max_hp}"
+        # HPバーの描画
+        front_color=arcade.color.RAJAH
+        if self.player.fighter.hp == self.player.fighter.max_hp:
+            front_color = arcade.color.MSU_GREEN
+        draw_status_bar(center_x=left_margin,
+                        center_y=hp_bar_margin-26,
+                        width=hp_bar_width,
+                        height=hp_bar_height,
+                        current_value=self.player.fighter.hp,
+                        front_color=front_color,
+                        max_value=self.player.fighter.max_hp
+                        )
 
         arcade.draw_text(text=hp_text,
-                         start_x=left_margin,
-                         start_y=hp_bar_margin-25,
+                         start_x=left_margin+1,
+                         start_y=hp_bar_margin-27,
                          color=COLORS["status_panel_text"],
                          font_size=hp_font_size,
                          font_name=UI_FONT
@@ -164,16 +192,16 @@ class NormalUI:
             exp_text = f"XP {self.player.fighter.current_xp}"
 
         arcade.draw_text(text=exp_text,
-                         start_x=left_margin+2,
-                         start_y=hp_bar_margin+4,
+                         start_x=left_margin+1,
+                         start_y=hp_bar_margin,
                          color=arcade.color.BABY_BLUE_EYES,
                          font_size=13
                          )
         # EXPバーの描画
-        draw_status_bar(center_x=left_margin+168,
-                        center_y=hp_bar_margin+12,
-                        width=140,
-                        height=7,
+        draw_status_bar(center_x=left_margin,  #left_margin+168,
+                        center_y=hp_bar_margin+2,
+                        width=hp_bar_width,
+                        height=15,
                         current_value=self.player.fighter.current_xp,
                         max_value=xp_to_next_level,
                         front_color=arcade.color.BABY_BLUE_EYES,
@@ -184,21 +212,13 @@ class NormalUI:
         level_text = f"Level {self.player.fighter.level}"
 
         arcade.draw_text(text=level_text,
-                         start_x=left_margin+140,
-                         start_y=hp_bar_margin+25,
+                         start_x=left_margin,
+                         start_y=hp_bar_margin+24,
                          color=(252,248,151),
-                         font_size=15,
+                         font_size=13,
                          font_name=UI_FONT
                          )
 
-        # HPバーの描画
-        draw_status_bar(center_x=hp_bar_width / 2 + left_margin+74,
-                        center_y=hp_bar_margin-14,
-                        width=hp_bar_width-28,
-                        height=hp_bar_height,
-                        current_value=self.player.fighter.hp,
-                        max_value=self.player.fighter.max_hp
-                        )
 
         # <passive skill>        
         arcade.draw_text(text="<Passive Skill>",
@@ -323,8 +343,8 @@ class NormalUI:
         """メッセージ表示領域"""
         margin = 3
         message_top_position = 20  # パネル上端からのメッセージ表示位置
-        message_left_position = self.viewport_left - margin + 20  # 画面左からのメッセージ表示位置
-        message_first_position = self.viewport_bottom + 165# STATES_PANEL_HEIGHT - message_top_position  # 最初の行
+        message_left_position = self.viewport_left - margin + 17  # 画面左からのメッセージ表示位置
+        message_first_position = self.viewport_bottom + 170# STATES_PANEL_HEIGHT - message_top_position  # 最初の行
 
 
         c = 255
@@ -334,7 +354,7 @@ class NormalUI:
                 start_x=message_left_position,
                 start_y=message_first_position,
                 color=(255,255,255,c),
-                font_size=16
+                font_size=15
             )
             c -= 20 # 行ごとに文字列を減色させる
 
@@ -342,13 +362,15 @@ class NormalUI:
             message_first_position -= message_top_position
 
 
-def draw_status_bar(center_x, center_y, width, height, current_value, max_value, front_color=(255,103,123), bac_color=(255,255,255,255)):
+def draw_status_bar(center_x, center_y, width, height, current_value, max_value, front_color, bac_color=(255,255,255,255)):
     """ステータスバーの実体"""
-    arcade.draw_rectangle_filled(
-        center_x, center_y, width, height, color=bac_color)
+    # arcade.draw_rectangle_filled(
+    #     center_x, center_y, width, height, color=bac_color)
+    arcade.draw_xywh_rectangle_filled(center_x, center_y, width, height, color=bac_color)
 
     states_width = (current_value / max_value) * width
 
-    arcade.draw_rectangle_filled(center_x - (width / 2 - states_width / 2),
-                                 center_y, states_width, height, color=front_color)
+    # arcade.draw_rectangle_filled(center_x - (width / 2 - states_width / 2),
+    #                              center_y, states_width, height, color=front_color)
 
+    arcade.draw_xywh_rectangle_filled(center_x ,center_y, states_width, height, color=front_color)

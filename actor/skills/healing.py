@@ -3,7 +3,7 @@ from actor.damage_pop import Damagepop
 from constants import *
 from data import *
 import random
-from util import dice, result_add
+from util import dice
 from actor.skills.base_skill import BaseSkill
 
 
@@ -75,7 +75,7 @@ class Healing(BaseSkill):
     @property
     def damage(self):
         if self.owner:
-            return int((self.owner.fighter.INT / 2) + self._damage)
+            return dice((self.level/3+1), (self.owner.fighter.INT / 2) + self._damage, self.level/2)
 
 
 

@@ -199,6 +199,7 @@ class Fighter:
 
         # HP回復
         if attr == "recovery":
+            damage = int(damage)
             results.append({"damage_pop": self.owner, "damage": damage, "message": f"has recovered {damage}HP"})
             self.hp += damage
             # 超過処理

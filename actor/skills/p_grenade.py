@@ -17,7 +17,7 @@ class P_Grenade(BaseSkill):
 
         self.max_cooldown_time = 6
 
-        self._damage = 10
+        self._damage = 11
         self.hit_rate = 100
         self.attr = "fire"
         self.effect = None
@@ -43,7 +43,7 @@ class P_Grenade(BaseSkill):
     @property
     def damage(self):
         if self.owner:
-            return dice((self.level / 3 + 1), ((self.owner.fighter.INT+self._damage))/2, (self.level/2))
+            return dice((self.level / 3 + 1), ((self.owner.fighter.INT+self._damage))/2, (self.level/1.5))
 
 
     def use(self, engine):

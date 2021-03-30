@@ -73,7 +73,7 @@ class MG(arcade.Window):
         self.quad_fs = geometry.quad_2d_fs()
 
         self.mini_map_quad = geometry.quad_2d(
-            size=(0.86, 0.95), pos=(1.0155, 1.055))
+            size=(0.66, 1.05), pos=(.995, -.475))
         # ----------------------
 
         # Lコマンドで呼び出すlook機能
@@ -283,7 +283,7 @@ class MG(arcade.Window):
             check_experience_level(self.engine.player, self.engine)
 
         if key == arcade.key.F2:
-            self.engine.player.fighter.states.append(PoisonStatus(3))
+            self.engine.player.fighter.states.append(PoisonStatus(3, 3))
 
 
 

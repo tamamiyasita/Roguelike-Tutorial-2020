@@ -11,7 +11,7 @@ from actor.fighter import Fighter
 class PC_Fighter(Fighter):
     def __init__(self, hp=0, defense=0, STR=0, DEX=0, INT=0, speed=10, attack_speed=DEFAULT_ATTACK_SPEED,
                  evasion=0, xp_reward=0, current_xp=0, level=1,
-                 affinity={"physical": 0, "fire": 0, "ice": 0, "lightning": 0, "acid": 0, "poison": 0, "mind": 0},
+                 affinity={"physical": 0, "fire": 0, "ice": 0, "lightning": 0, "acid": 0, "poison": 0, "mind": 0, "recovery":0},
                  resist={"physical": 1, "fire": 1, "ice": 1, "lightning":1, "acid": 1, "poison": 1, "mind": 1}, ability_points=0):
 
         self.level_up_bonus = {"max_hp": 0,"STR": 0,"DEX": 0, "INT": 0, "defense": 0, "evasion": 0}
@@ -43,7 +43,7 @@ class PC_Fighter(Fighter):
         self.level_skills = {}#level_upなどに伴う追加Skillの合計に使う
         self.base_skill_dict = skill_dict
         self._skill_list = arcade.SpriteList()
-        self.equip_position = {0:(9,2), 1:(-9,3), 2:(9,-4), 3:(-11, -5), 4:(-14, 1),12:(0, 0)}
+        self.equip_position = {0:(9,2), 1:(-9,3), 2:(9,-4), 3:(-11, -5), 4:(-14, 1),12:(0, 0),5:(0, 0),6:(0, 0),7:(0, 0),8:(0, 0),9:(0, 0)}
 
         # TODO バフデバフ効果に使う辞書　effect_bonus_update関数を作らねば
         self.effect_bonus = {"max_hp": 0, "max_mp": 0, "STR": 0,
@@ -158,7 +158,7 @@ class PC_Fighter(Fighter):
 
     @property
     def affinity(self):
-        base_affinity = {"physical": 0, "fire": 0, "ice": 0, "lightning":0, "acid": 0, "poison": 0, "mind": 0}
+        base_affinity = {"physical": 0, "fire": 0, "ice": 0, "lightning":0, "acid": 0, "poison": 0, "mind": 0, "recovery":0}
         for name in self._affinity:
             base_affinity[name] = self._affinity[name] + self.owner.equipment.affinity_bonus[name]
         print(base_affinity)
