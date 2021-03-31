@@ -35,27 +35,6 @@ class NormalUI:
         self.draw_messages_handle()
         self.draw_passive_skill()
         self.draw_status_icons()
-        # self.skill_check()
-
-    # def skill_check(self):
-    #     for skill in self.engine.cur_level.equip_sprites:
-    #         if skill in self.engine.cur_level.equip_sprites and skill not in self.player.fighter.active_skill:
-    #             skill.remove_from_sprite_lists()
-    #     for skill in self.player.fighter.active_skill:
-
-    #         # 階を移動したときに装備が消えないよう処理
-    #         if skill not in self.engine.cur_level.equip_sprites and Tag.equip in skill.tag:
-    #             self.engine.cur_level.equip_sprites.append(skill)
-
-    #         # pos = len(self.engine.cur_level.equip_sprites)
-    #         # if pos < 6:
-    #         #     for i in range(0, pos):
-    #         #         skill.item_margin_x = self.player.fighter.equip_position[i][0]
-    #         #         skill.item_margin_y = self.player.fighter.equip_position[i][1]
-    #         # if pos >= 6:
-    #         #     for j in range(5, pos):
-    #         #         skill.item_margin_x = self.flower_position2[j-5][0]
-    #         #         skill.item_margin_y = self.flower_position2[j-5][1]
 
 
     def draw_status_icons(self):
@@ -160,14 +139,31 @@ class NormalUI:
 
                          )
 
-        # HP/MAXHPの表示
+
+        # HPの表示
         hp_text = f"HP {self.player.fighter.hp: >2}/{self.player.fighter.max_hp}"
-        # HPバーの描画
-        front_color=arcade.color.RAJAH
-        if self.player.fighter.hp == self.player.fighter.max_hp:
-            front_color = arcade.color.MSU_GREEN
-        draw_status_bar(center_x=left_margin,
-                        center_y=hp_bar_margin-26,
+        # HPバーの描画 割合で色を変化させる
+        c = 255
+        h = 255-int(127*((self.player.fighter.hp)/self.player.fighter.max_hp))
+        if h >= 55:
+            c = int(255*(self.player.fighter.hp/self.player.fighter.max_hp))
+        hp_color = (h,c,60)
+        front_color=hp_color
+
+        # front_color=arcade.color.RAJAH
+        # if self.player.fighter.hp == self.player.fighter.max_hp:
+        #     front_color = arcade.color.MSU_GREEN
+        # elif self.player.fighter.hp <= (self.player.fighter.max_hp*0.8):
+        #     front_color = arcade.color.LIME_GREEN
+        # elif self.player.fighter.hp <= (self.player.fighter.max_hp*0.6):
+        #     front_color = arcade.color.YELLOW
+        # elif self.player.fighter.hp <= (self.player.fighter.max_hp*0.4):
+        #     front_color = arcade.color.ORANGE_PEEL
+        # elif self.player.fighter.hp <= (self.player.fighter.max_hp*0.2):
+        #     front_color = arcade.color.RED_DEVIL
+        
+        draw_status_bar(start_x=left_margin,
+                        start_y=hp_bar_margin-26,
                         width=hp_bar_width,
                         height=hp_bar_height,
                         current_value=self.player.fighter.hp,
@@ -198,8 +194,8 @@ class NormalUI:
                          font_size=13
                          )
         # EXPバーの描画
-        draw_status_bar(center_x=left_margin,  #left_margin+168,
-                        center_y=hp_bar_margin+2,
+        draw_status_bar(start_x=left_margin,  #left_margin+168,
+                        start_y=hp_bar_margin+2,
                         width=hp_bar_width,
                         height=15,
                         current_value=self.player.fighter.current_xp,
@@ -356,21 +352,18 @@ class NormalUI:
                 color=(255,255,255,c),
                 font_size=15
             )
-            c -= 20 # 行ごとに文字列を減色させる
+            c -= 15 # 行ごとに文字列を減色させる
 
             # 文字送り
             message_first_position -= message_top_position
 
 
-def draw_status_bar(center_x, center_y, width, height, current_value, max_value, front_color, bac_color=(255,255,255,255)):
+def draw_status_bar(start_x, start_y, width, height, current_value, max_value, front_color, bac_color=(155,155,155,155)):
     """ステータスバーの実体"""
-    # arcade.draw_rectangle_filled(
-    #     center_x, center_y, width, height, color=bac_color)
-    arcade.draw_xywh_rectangle_filled(center_x, center_y, width, height, color=bac_color)
+
+    arcade.draw_xywh_rectangle_filled(start_x, start_y, width, height, color=bac_color)
 
     states_width = (current_value / max_value) * width
 
-    # arcade.draw_rectangle_filled(center_x - (width / 2 - states_width / 2),
-    #                              center_y, states_width, height, color=front_color)
 
-    arcade.draw_xywh_rectangle_filled(center_x ,center_y, states_width, height, color=front_color)
+    arcade.draw_xywh_rectangle_filled(start_x ,start_y, states_width, height, color=front_color)

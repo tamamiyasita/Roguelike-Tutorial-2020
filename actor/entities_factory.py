@@ -66,6 +66,19 @@ def get_random_items_by_challenge(challenge):
         random_flower_gen(i1, challenge+5)
         return i1
 
+def drop_system(engine, target):
+    """リスト内にtupleでitemと確率をまとめて格納する(item, 50)"""
+    if hasattr(target, "drop_item") and target.drop_item:
+        for items in target.drop_item:
+            item = items[0]
+            drop = items[1]#INT(50で50パーのドロップ率)
+            chance = random.randint(1, 100)
+            if drop >=  chance:
+                item.position_xy = target.position_xy
+                item.level = target.fighter.level
+                engine.cur_level.item_sprites.append(item)
+        
+
 
 def make_monster_sprite(monster_dict):
     sprite = Actor(image=monster_dict["Name"])

@@ -30,7 +30,7 @@ class PoisonStatus(Actor):
 
 
 
-        self.tag = [Tag.item, Tag.used, Tag.active, Tag.skill]
+        self.tag = [Tag.item, Tag.active, Tag.skill]
 
         self.explanatory_text = f""
         self.icon = IMAGE_ID["poison"]

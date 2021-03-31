@@ -14,7 +14,7 @@ from game_map.drunker import DrunkerWalk
 
 
 from recalculate_fov import recalculate_fov
-
+from actor.entities_factory import drop_system
 from actor.inventory import Inventory
 from actor.item_point_check import ItemPoint
 from actor.characters.PC import Player
@@ -566,6 +566,7 @@ class GameEngine:
                     # EXP獲得処理
                     self.player.fighter.current_xp += target.fighter.xp_reward
                     self.player.equipment.item_exp_add(target.fighter.xp_reward)
+                    drop_system(self, target)
                     self.move_switch = False
 
                     new_action_queue.extend(

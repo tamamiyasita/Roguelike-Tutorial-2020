@@ -74,6 +74,10 @@ class Player(Actor):
             self.change_x = 0
             self.change_y = 0
             self.center_x, self.center_y = grid_to_pixel(self.x, self.y)
+        elif self.state == state.READY:
+            self.change_x = 0
+            self.change_y = 0
+            self.center_x, self.center_y = grid_to_pixel(self.x, self.y)
 
 
     def update_animation(self, delta_time=1 / 60):

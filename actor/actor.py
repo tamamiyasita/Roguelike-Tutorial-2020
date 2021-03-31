@@ -202,6 +202,14 @@ class Actor(arcade.Sprite):
         self._y = value
         self.center_x, self.center_y = grid_to_pixel(self._x, self._y)
 
+    @property
+    def position_xy(self):
+        return self._x, self._y
+
+    @position_xy.setter
+    def position_xy(self, value):
+        self._x, self._y = value
+        self.center_x, self.center_y = grid_to_pixel(self._x, self._y)
 
     @property
     def texture_(self):
@@ -224,6 +232,9 @@ class Actor(arcade.Sprite):
 
         if self.state == state.ATTACK:
             self.combat_effect.attack()
+
+        if self.is_dead:
+            self.remove_from_sprite_lists()
 
 
 
