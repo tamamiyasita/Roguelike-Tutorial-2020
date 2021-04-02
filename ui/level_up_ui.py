@@ -2,7 +2,7 @@ import arcade
 from constants import *
 from data import *
 from level_up_sys import check_flower_level
-from actor.actor_set import *
+# from actor.actor_set import *
 
 
 class LevelupUI:

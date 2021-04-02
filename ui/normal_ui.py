@@ -25,6 +25,10 @@ class NormalUI:
         self.side_panel_height = SCREEN_HEIGHT - GRID_SIZE*3
         self.side_panel_width = SCREEN_WIDTH - STATES_PANEL_WIDTH
 
+        self.active_panel_line = self.viewport_left+(GRID_SIZE*6)+7
+        self.passive_panel_line = self.active_panel_line+(GRID_SIZE*5)-11
+        self.skill_panel_height = (GRID_SIZE*3)-10
+
 
     def draw_in_normal_state(self):
         """mainに渡すメソッドをまとめる"""
@@ -84,11 +88,21 @@ class NormalUI:
             border_width=self.panel_line_width
         )
         # アクティブスキルアイコン枠
+        d = 14
         arcade.draw_xywh_rectangle_outline(
-            bottom_left_x=self.viewport_left+(GRID_SIZE*6)+7,
+            bottom_left_x=self.active_panel_line,
             bottom_left_y=self.viewport_bottom+8,
-            width=SCREEN_WIDTH-(GRID_SIZE*9)-29,
-            height=(GRID_SIZE*3)-7,
+            width=(SCREEN_WIDTH-(GRID_SIZE*10))/2 +d,
+            height=self.skill_panel_height,
+            color=arcade.color.BALL_BLUE,
+            border_width=self.panel_line_width
+        )
+        # パッシブスキルアイコン枠
+        arcade.draw_xywh_rectangle_outline(
+            bottom_left_x=self.passive_panel_line,
+            bottom_left_y=self.viewport_bottom+8,
+            width=(SCREEN_WIDTH-(GRID_SIZE*10))/2 +d,
+            height=self.skill_panel_height,
             color=arcade.color.BABY_BLUE,
             border_width=self.panel_line_width
         )
@@ -97,7 +111,7 @@ class NormalUI:
             bottom_left_x=self.viewport_left+8,
             bottom_left_y=self.viewport_bottom+8,
             width=GRID_SIZE*6-8,
-            height=(GRID_SIZE*3)-7,
+            height=self.skill_panel_height,
             color=arcade.color.WHITE_SMOKE,
             border_width=self.panel_line_width
         )
@@ -204,22 +218,14 @@ class NormalUI:
                          )
 
 
-        # <passive skill>        
-        arcade.draw_text(text="<Passive Skill>",
-                         start_x=left_margin+5,
-                         start_y=hp_bar_margin-500,
-                         color=(252,248,151),
-                         font_size=12,
-                         font_name=UI_FONT
-                         )
 
     def draw_active_skill(self):
         """スキルアイコンの表示"""
         slot_len = len(self.player.fighter.active_skill)
-        item_left_position = self.viewport_left + GRID_SIZE*7
-            # ((SCREEN_WIDTH-STATES_PANEL_WIDTH) / 2.4)   # パネル左からの所持アイテム表示位置の調整に使う変数
+        skill_left_position = self.viewport_left + GRID_SIZE*7
+        # パネル左からの所持アイテム表示位置の調整に使う変数
         skill_top_position = self.viewport_bottom + GRID_SIZE*1.7
-            # STATES_PANEL_HEIGHT + 12  # パネル上端からの所持アイテム表示位置の調整に使う変数
+        # パネル上端からの所持アイテム表示位置の調整に使う変数
         separate_size = 4.5  # スキル名の表示間隔の調整に使う変数
         item_font_size = 11
         field_width = SCREEN_WIDTH / (slot_len + 1) / separate_size  # アイテム表示感覚を決める変数
@@ -228,7 +234,7 @@ class NormalUI:
         # TODO 複数行にする処理を考える（５回ループしたら縦と横の変数に増減するなど）
         for i, skill in enumerate(self.player.fighter.active_skill):
             # skill.owner = self.player
-            skill_position = i * field_width + item_left_position  # 左からの所持skillの表示位置
+            skill_position = i * field_width + skill_left_position  # 左からの所持skillの表示位置
 
             key_number = f"<key {i+1}>"
 
@@ -278,57 +284,74 @@ class NormalUI:
 
     def draw_passive_skill(self):
         """スキルアイコン及びステータスを右パネルに描画する"""
-        item_row = self.viewport_top - GRID_SIZE*10#(SCREEN_HEIGHT //1.3) - 320 # 行の最上段
+        skill_left_position = self.passive_panel_line+37
+        panel_top_position = self.viewport_bottom + self.skill_panel_height
+        skill_top_position = panel_top_position - 45
+        separate_size=3.57
+        field_width = SCREEN_WIDTH / 6 / separate_size  # アイテム表示感覚を決める変数
+
         item_font_size = 17
         item_text = ""
-        left_margin = self.viewport_left + self.side_panel_width + 7  # 画面左からのHPとバーの位置
-        y = 0
+
+        # <passive skill>        
+        arcade.draw_text(text="[Passive Skill]",
+                         start_x=self.passive_panel_line+5,
+                         start_y=panel_top_position - 15,
+                         color=arcade.color.BABY_BLUE,
+                         font_size=12,
+                         font_name=UI_FONT
+                         )
 
         
-        for passive in self.player.fighter.passive_skill:
+        for i, passive in enumerate(self.player.fighter.passive_skill):
+            if i == 5:
+                skill_top_position = skill_top_position - GRID_SIZE
+            if i > 4:
+                i -= 5
 
+            skill_position = i * field_width + skill_left_position  # 左からの所持skillの表示位置
             item_text = f"{passive.name} (level {passive.level})".replace("_", " ").title()
 
 
-            arcade.draw_text(
-                text=item_text,
-                start_x=left_margin,
-                start_y=item_row + y,
-                color=arcade.color.ARYLIDE_YELLOW,
-                font_size=item_font_size-3,
-                # font_name="consola.ttf"
-            )
+            # arcade.draw_text(
+            #     text=item_text,
+            #     start_x=skill_position,
+            #     start_y=skill_top_position,
+            #     color=arcade.color.ARYLIDE_YELLOW,
+            #     font_size=item_font_size-3,
+            #     # font_name="consola.ttf"
+            # )
 
             arcade.draw_texture_rectangle(
-                center_x=left_margin+25,
-                center_y=item_row + y-25,
+                center_x=skill_position,
+                center_y=skill_top_position,
                 width=40,
                 height=40,
                 texture=passive.icon
             )
                 
-            arcade.draw_text(
-                text=f"{passive.explanatory_text}",
-                start_x=left_margin +55,
-                start_y=item_row + y-6,
-                color=arcade.color.WHITE,
-                font_size=item_font_size-4,
-                # font_name="consola.ttf",
-                anchor_y="top"
-            )
+            # arcade.draw_text(
+            #     text=f"{passive.explanatory_text}",
+            #     start_x=skill_position,
+            #     start_y=skill_top_position,
+            #     color=arcade.color.WHITE,
+            #     font_size=item_font_size-4,
+            #     # font_name="consola.ttf",
+            #     anchor_y="top"
+            # )
 
 
-            y -= 104        
+
 
 
 
 
     def draw_messages_handle(self):
         """メッセージ表示領域"""
-        margin = 3
-        message_top_position = 20  # パネル上端からのメッセージ表示位置
-        message_left_position = self.viewport_left - margin + 17  # 画面左からのメッセージ表示位置
-        message_first_position = self.viewport_bottom + 170# STATES_PANEL_HEIGHT - message_top_position  # 最初の行
+        margin = -15
+        message_top_position = 19  # パネル上端からのメッセージ表示位置
+        message_left_position = self.viewport_left - margin  # 画面左からのメッセージ表示位置
+        message_first_position = self.viewport_bottom + GRID_SIZE*3-26# self.side_panel_height#self.viewport_bottom + 170# STATES_PANEL_HEIGHT - message_top_position  # 最初の行
 
 
         c = 255
@@ -338,7 +361,7 @@ class NormalUI:
                 start_x=message_left_position,
                 start_y=message_first_position,
                 color=(255,255,255,c),
-                font_size=15
+                font_size=14
             )
             c -= 15 # 行ごとに文字列を減色させる
 

@@ -1,7 +1,7 @@
 import random
 from constants import *
 from util import dice, stop_watch, result_add
-from actor.actor_set import *
+# from actor.actor_set import *
 from collections import Counter
 import math
 from actor.skills.base_skill import BaseSkill
@@ -41,7 +41,7 @@ class PC_Fighter(Fighter):
         self._states = arcade.SpriteList()
 
         self.level_skills = {}#level_upなどに伴う追加Skillの合計に使う
-        self.base_skill_dict = skill_dict
+        # self.base_skill_dict = skill_dict
         self._skill_list = arcade.SpriteList()
         self.equip_position = {0:(9,2), 1:(-9,3), 2:(9,-4), 3:(-11, -5), 4:(-14, 1),12:(0, 0),5:(0, 0),6:(0, 0),7:(0, 0),8:(0, 0),9:(0, 0)}
 

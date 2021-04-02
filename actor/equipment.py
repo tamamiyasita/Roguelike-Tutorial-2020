@@ -2,7 +2,7 @@ import math
 from collections import Counter
 from constants import *
 from itertools import chain
-from actor.actor_set import *
+# from actor.actor_set import *
 
 class Equipment:
     """装備部位とそこからの追加bonusを返す
@@ -106,6 +106,12 @@ class Equipment:
 
         self.states_bonus = bonus
 
+    def equip_update(self):
+        self.states_bonus_update()
+        self.skill_list_update()
+        self.resist_bonus_update()
+        self.affinity_bonus_update()
+
 
     def toggle_equip(self, equip_item):
         """装備アイテムの付け外しを行うメソッド
@@ -122,10 +128,11 @@ class Equipment:
                 
                 results.extend([{"message": f"dequipped {item.name}"}])
 
-                self.states_bonus_update()
-                self.skill_list_update()
-                self.resist_bonus_update()
-                self.affinity_bonus_update()
+                # self.states_bonus_update()
+                # self.skill_list_update()
+                # self.resist_bonus_update()
+                # self.affinity_bonus_update()
+                self.equip_update()
 
                 
                 return results
@@ -149,9 +156,10 @@ class Equipment:
 
             results.append({"message": f"equipped {equip_item.name}"})
 
-            self.states_bonus_update()
-            self.skill_list_update()
-            self.resist_bonus_update()
-            self.affinity_bonus_update()
+            self.equip_update()
+            # self.states_bonus_update()
+            # self.skill_list_update()
+            # self.resist_bonus_update()
+            # self.affinity_bonus_update()
 
             return results

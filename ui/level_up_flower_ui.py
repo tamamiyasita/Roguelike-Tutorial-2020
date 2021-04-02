@@ -48,6 +48,7 @@ class LevelUpFlower:
 
         
         if not self.flowers:
+            self.player.equipment.equip_update()
             self.engine.game_state = GAME_STATE.NORMAL
         
         if self.key == arcade.key.ENTER:
