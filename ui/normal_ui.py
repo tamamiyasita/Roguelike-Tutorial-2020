@@ -125,14 +125,14 @@ class NormalUI:
         hp_font_size = 15
         hp_bar_width = 180  # HPバーの幅
         hp_bar_height = hp_font_size + 3  # HPバーの太さ
-        hp_bar_margin = self.viewport_bottom + self.side_panel_height - 55  # 15パネル上端からのHPバーの位置
+        hp_bar_margin = self.viewport_top -35  # 15パネル上端からのHPバーの位置
         left_margin = self.viewport_left + self.side_panel_width-5  # 画面左からのHPとバーの位置
 
         Player_attr = f"{self.player.race} {self.player.name}"
 
         arcade.draw_text(text=Player_attr,
                          start_x=left_margin,
-                         start_y=hp_bar_margin+45,
+                         start_y=hp_bar_margin,
                          color=(132,255,142),
                          font_size=hp_font_size,
                          font_name=UI_FONT
@@ -150,20 +150,8 @@ class NormalUI:
         hp_color = (h,c,60)
         front_color=hp_color
 
-        # front_color=arcade.color.RAJAH
-        # if self.player.fighter.hp == self.player.fighter.max_hp:
-        #     front_color = arcade.color.MSU_GREEN
-        # elif self.player.fighter.hp <= (self.player.fighter.max_hp*0.8):
-        #     front_color = arcade.color.LIME_GREEN
-        # elif self.player.fighter.hp <= (self.player.fighter.max_hp*0.6):
-        #     front_color = arcade.color.YELLOW
-        # elif self.player.fighter.hp <= (self.player.fighter.max_hp*0.4):
-        #     front_color = arcade.color.ORANGE_PEEL
-        # elif self.player.fighter.hp <= (self.player.fighter.max_hp*0.2):
-        #     front_color = arcade.color.RED_DEVIL
-        
         draw_status_bar(start_x=left_margin,
-                        start_y=hp_bar_margin-26,
+                        start_y=hp_bar_margin-61,
                         width=hp_bar_width,
                         height=hp_bar_height,
                         current_value=self.player.fighter.hp,
@@ -173,7 +161,7 @@ class NormalUI:
 
         arcade.draw_text(text=hp_text,
                          start_x=left_margin+1,
-                         start_y=hp_bar_margin-27,
+                         start_y=hp_bar_margin-62,
                          color=COLORS["status_panel_text"],
                          font_size=hp_font_size,
                          font_name=UI_FONT
@@ -189,13 +177,13 @@ class NormalUI:
 
         arcade.draw_text(text=exp_text,
                          start_x=left_margin+1,
-                         start_y=hp_bar_margin,
+                         start_y=hp_bar_margin-37,
                          color=arcade.color.BABY_BLUE_EYES,
                          font_size=13
                          )
         # EXPバーの描画
         draw_status_bar(start_x=left_margin,  #left_margin+168,
-                        start_y=hp_bar_margin+2,
+                        start_y=hp_bar_margin-36,
                         width=hp_bar_width,
                         height=15,
                         current_value=self.player.fighter.current_xp,
@@ -209,7 +197,7 @@ class NormalUI:
 
         arcade.draw_text(text=level_text,
                          start_x=left_margin,
-                         start_y=hp_bar_margin+24,
+                         start_y=hp_bar_margin-18,
                          color=(252,248,151),
                          font_size=13,
                          font_name=UI_FONT
@@ -219,7 +207,7 @@ class NormalUI:
         # <passive skill>        
         arcade.draw_text(text="<Passive Skill>",
                          start_x=left_margin+5,
-                         start_y=hp_bar_margin-50,
+                         start_y=hp_bar_margin-500,
                          color=(252,248,151),
                          font_size=12,
                          font_name=UI_FONT
@@ -290,7 +278,7 @@ class NormalUI:
 
     def draw_passive_skill(self):
         """スキルアイコン及びステータスを右パネルに描画する"""
-        item_row = self.viewport_top - GRID_SIZE*5#(SCREEN_HEIGHT //1.3) - 320 # 行の最上段
+        item_row = self.viewport_top - GRID_SIZE*10#(SCREEN_HEIGHT //1.3) - 320 # 行の最上段
         item_font_size = 17
         item_text = ""
         left_margin = self.viewport_left + self.side_panel_width + 7  # 画面左からのHPとバーの位置

@@ -10,7 +10,7 @@ import math
 from constants import *
 from data import *
 from util import pixel_to_grid, grid_to_pixel, get_blocking_entity,  stop_watch
-# from particle import AttackParticle, PARTICLE_COUNT
+from particle import Particle2
 from attack_effect import AttackEffect
 
 
@@ -57,6 +57,7 @@ class Actor(arcade.Sprite):
         self.count_time = None
         self.from_x, self.from_y = 0,0
         self.dx, self.dy = 0,0
+        self.particle = None
 
         self.tag = {}
 
@@ -235,6 +236,7 @@ class Actor(arcade.Sprite):
 
         if self.is_dead:
             self.remove_from_sprite_lists()
+
 
 
 

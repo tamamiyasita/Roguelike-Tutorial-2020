@@ -1,5 +1,6 @@
 
 import arcade
+from random import randint
 from collections import deque
 from itertools import chain
 
@@ -34,8 +35,9 @@ from game_map.dijkstra_map import DijkstraMap
 
 from actor.action import dist_action, door_action
 
+from particle import Expulsion
 
-
+from actor.items.cabbage_flower import Cabbageflower
 from actor.items.paeonia import Paeonia
 from actor.items.silver_grass import SilverGrass
 from actor.items.ebony import Ebony
@@ -293,6 +295,9 @@ class GameEngine:
         self.sunflower = Sunflower(self.player.x, self.player.y-2)
         self.game_level.item_sprites.append(self.sunflower)
 
+        self.cabbageflower = Cabbageflower(self.player.x, self.player.y-1)
+        self.game_level.item_sprites.append(self.cabbageflower)
+
     def drunker_dungeon_init(self, level=1, stairs=None):
         image_set={"wall": "color_tile_walls",
                    "floor": "color_tile_1",
@@ -547,8 +552,6 @@ class GameEngine:
             if "remove" in action:
                 target = action["remove"]
                 target.remove_from_sprite_lists()
-                # ここでplayerにEXPが入る
-                check_experience_level(self.player, self)
 
             if "turn_end" in action:
                 target = action["turn_end"]
@@ -568,12 +571,16 @@ class GameEngine:
                     self.player.equipment.item_exp_add(target.fighter.xp_reward)
                     drop_system(self, target)
                     self.move_switch = False
+                    particle = Expulsion(target, image=target.texture)
+                    self.cur_level.effect_sprites.append(particle)
 
                     new_action_queue.extend(
-                        [{"message": f"{target.name} has been killed!"}])
+                        [{"message": f"{target.name} was Thrown out of the dungeon!"}])
 
-                    new_action_queue.extend(
-                        [{"delay": {"time": DEATH_DELAY, "action": {"remove": target}}}])
+                    # ここでplayerにEXPが入る
+                    check_experience_level(self.player, self)
+                    # new_action_queue.extend(
+                    #     [{"delay": {"time": DEATH_DELAY, "action": {"remove": target}}}])
 
             if "delay" in action:
                 target = action["delay"]
