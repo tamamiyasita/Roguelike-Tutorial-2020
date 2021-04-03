@@ -45,6 +45,8 @@ class BaseFlower(Actor):
         self.level = 1
         self.current_xp = 0
         self.count_time = 0
+        self.hp = 10
+        self.max_hp = self.hp
 
         # states
         self.rarity = "common"
@@ -61,7 +63,11 @@ class BaseFlower(Actor):
     def get_dict(self):
         result = {}
         result["level"] = self.level
+        result["hp"] = self.hp
+        result["max_hp"] = self.max_hp
+        result["rarity"] = self.rarity
         result["current_xp"] = self.current_xp
+        # skillのクールダウンタイムをここで保存する
         result["skill_count_time"] = self.flower_skill.count_time
         result["skill_during_cool_down"] = self.flower_skill.during_cool_down
 
@@ -73,6 +79,9 @@ class BaseFlower(Actor):
 
     def restore_from_dict(self, result):
         self.level = result["level"]
+        self.hp = result["hp"]
+        self.max_hp = result["max_hp"]
+        self.rarity = result["rarity"]
         self.current_xp = result["current_xp"]
         self.flower_skill.count_time = result["skill_count_time"]
         self.flower_skill.during_cool_down = result["skill_during_cool_down"]

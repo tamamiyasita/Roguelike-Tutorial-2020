@@ -59,11 +59,15 @@ class Select_param:
 
     def point_set(self):
         result = {}
+        get_hp = randint(1, 3) 
+        self.flower.max_hp += get_hp
+        self.flower.hp += get_hp
+        
         for _ in range(self.point):
             param = choices(self.up_state, self.choice_pram)
 
             if "max_hp" in param:
-                get_hp = randint(4, 8) 
+                get_hp = randint(1, 3) 
                 self.flower.states_bonus["max_hp"] += get_hp
                 result["max_hp"] = get_hp
 

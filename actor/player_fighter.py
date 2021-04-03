@@ -203,6 +203,60 @@ class PC_Fighter(Fighter):
         return self.base_attack_speed + self.owner.equipment.states_bonus["attack_speed"]
 
 
+
+    def change_hp(self, damage):
+        results = []
+        """flower_hpの減算が入る
+        10%から一つ毎に5%、最大50%
+        にしようかと思ったけど普通に最初から50%でもいい気がしてきた"""
+        flower_damage = 0
+        flowers =  self.owner.equipment.flower_slot
+        print("player_damage 1 =", damage)
+
+        if len(flowers) > 0:
+            # for i, flower in enumerate(flowers):
+            flower_damage = damage * 0.1
+            damage -= flower_damage
+            print("player_damage 2 =", damage)
+            print("flower_damage=", flower_damage)
+
+            if len(flowers) > 1:
+                flower_damage = (damage/2) * (len(flowers)*0.1)
+                damage -= flower_damage
+                print("player_damage 3 =", damage)
+        
+            for flower in flowers:
+                flower.hp -= int(flower_damage/len(flowers))
+
+             
+
+
+
+        damage -= int(damage)
+        self.hp -= damage
+
+        # 死亡処理
+        if self.hp <= 0 and self.owner.is_dead == False:
+            self.owner.is_dead = True
+            self.owner.blocks = False
+            results.append({"dead": self.owner})
+
+            print(f"{self.owner.name} is dead x!")
+
+        results.append({"damage_pop": self.owner, "damage": -damage})
+
+        return results
+
+
+
+
+
+
+
+
+
+
+
     # def effect_hit_chance(self, effect):
     #     resist = self.resist.get(effect.attr)
     #     if resist:
