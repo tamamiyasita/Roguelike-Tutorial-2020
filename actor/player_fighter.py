@@ -232,7 +232,7 @@ class PC_Fighter(Fighter):
 
 
 
-        damage -= int(damage)
+        damage = int(damage)
         self.hp -= damage
 
         # 死亡処理

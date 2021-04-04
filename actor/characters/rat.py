@@ -12,7 +12,7 @@ class Water_vole(Actor):
         fighter_component = Fighter(hp=8, STR=1, DEX=1,
                                     defense=1,
                                     evasion=2,
-                                    xp_reward=30,
+                                    xp_reward=3,
                                     level=1,
                                     resist={"physical": 1, "fire": 1, "ice": 1, "lightning":1,
                                              "acid": 1, "poison": 1, "mind": 1}

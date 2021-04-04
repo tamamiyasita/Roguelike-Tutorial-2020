@@ -43,7 +43,7 @@ class P_Grenade(BaseSkill):
     @property
     def damage(self):
         if self.owner:
-            return dice((self.level / 3 + 1), ((self.owner.fighter.INT+self._damage))/2, (self.level/1.5))
+            return dice((self.level / 3 + 1), ((self.owner.fighter.INT+self._damage))/2, (self.level+10))
 
 
     def use(self, engine):

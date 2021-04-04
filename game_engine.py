@@ -117,16 +117,16 @@ class GameEngine:
         elif level_number >= 99:
             return self.test_map(level_number)
         elif level_number >= 1:
-            cur_map = self.basic_dungeon_init(level_number)
+            # cur_map = self.basic_dungeon_init(level_number)
             # cur_map = self.bps_dungeon_init(level_number)
-            # cur_map = self.drunker_dungeon_init(level_number)
+            cur_map = self.drunker_dungeon_init(level_number)
             return cur_map
 
     def setup(self):
 
         arcade.set_background_color(COLORS["black"])
         self.flower_sprites = arcade.SpriteList(use_spatial_hash=True, spatial_hash_cell_size=32)
-        self.cur_level = self.setup_level(level_number=99)
+        self.cur_level = self.setup_level(level_number=1)
         self.stories[self.cur_floor_name] = self.cur_level
         self.turn_loop = TurnLoop(self.player)
         self.item_point = ItemPoint(self)
