@@ -138,7 +138,7 @@ class Equipment:
                 return results
 
 
-        if self.owner.fighter.level+7 > len(self.flower_slot):
+        if self.owner.fighter.level+8 > len(self.flower_slot):
 
 
             self.flower_slot.append(equip_item)

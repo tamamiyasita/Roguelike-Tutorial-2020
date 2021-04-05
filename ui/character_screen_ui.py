@@ -119,14 +119,6 @@ def draw_character_screen(engine, viewport, selected_item):
         font_size=item_font_size+5,
         font_name="consola.ttf"
     )
-    arcade.draw_text(
-        text="<key Enter> Skill on / off",
-        start_x=left_position,
-        start_y=top_position+GRID_SIZE-25 ,
-        color=(255, 102, 102),
-        font_size=item_font_size-3,
-    )
-
 
 
     for i, skill in enumerate(skill_list):

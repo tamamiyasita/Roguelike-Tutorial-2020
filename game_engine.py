@@ -28,12 +28,12 @@ from actor.restore_actor import restore_actor
 from util import  get_blocking_entity, stop_watch
 from turn_loop import TurnLoop
 from fire import Fire
-from actor.damage_pop import Damagepop
+from actor.damage_pop import Damagepop, DamagePop
 
 from game_map.square_grid import SquareGrid, breadth_first_search, a_star_search, GridWithWeights, reconstruct_path
 from game_map.dijkstra_map import DijkstraMap
 
-from actor.action import dist_action, door_action
+from actor.action import dist_action
 
 from particle import Expulsion
 
@@ -98,7 +98,8 @@ class GameEngine:
         self.game_state = GAME_STATE.NORMAL
         self.grid_select_handlers = []
         self.move_switch = True
-        self.pop_position = deque([35,65,40,70])
+        self.pop_position = deque([35,68,40,73,50,88])
+        self.damage_pop = []
         self.messenger = None
 
         self.player = Player(
@@ -126,7 +127,7 @@ class GameEngine:
 
         arcade.set_background_color(COLORS["black"])
         self.flower_sprites = arcade.SpriteList(use_spatial_hash=True, spatial_hash_cell_size=32)
-        self.cur_level = self.setup_level(level_number=1)
+        self.cur_level = self.setup_level(level_number=99)
         self.stories[self.cur_floor_name] = self.cur_level
         self.turn_loop = TurnLoop(self.player)
         self.item_point = ItemPoint(self)
@@ -717,7 +718,8 @@ class GameEngine:
                     damage= -damage
                 y = self.pop_position[0]
                 self.pop_position.rotate()
-                Damagepop(self, damage, txt_color,  target, y)
+                self.damage_pop.append(DamagePop(damage, txt_color, target, y))
+                # Damagepop(self, damage, txt_color,  target, y)
 
 
             if "talk" in action:
@@ -769,7 +771,7 @@ class GameEngine:
         self.check_for_player_movement(player_direction)
         self.skill_dispry_check()
         self.skill_position_update()
-        
+
 
 
 

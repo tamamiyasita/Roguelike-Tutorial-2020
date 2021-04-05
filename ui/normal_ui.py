@@ -10,22 +10,29 @@ class NormalUI:
     """GameState=Normal時に描画するUI
     """
 
-    def __init__(self, engine, viewport, selected_item, messages, mouse_position):
+    def __init__(self, engine):
         self.engine = engine
         self.player = engine.player
+        # self.viewport_left = viewport
+        # self.viewport_right = viewport
+        # self.viewport_bottom = viewport
+        # self.viewport_top = viewport
+
+        self.messages = engine.messages
+        self.panel_line_width = 1
+
+
+    def draw_in_normal_state(self, viewport):
+        """mainに渡すメソッドをまとめる"""
+
         self.viewport_left = viewport[0]
         self.viewport_right = viewport[1]
         self.viewport_bottom = viewport[2]
         self.viewport_top = viewport[3]
-
-        self.selected_item = selected_item
-        self.messages = messages
-        self.mouse_position = mouse_position
-        self.panel_line_width = 1
         self.side_panel_height = SCREEN_HEIGHT - GRID_SIZE*3
         self.side_panel_width = SCREEN_WIDTH - STATES_PANEL_WIDTH
         self.side_panel_x_line = self.viewport_left + SCREEN_WIDTH - STATES_PANEL_WIDTH-15
-        self.side_panel_y_line = self.viewport_bottom+GRID_SIZE*3+9
+        self.side_panel_y_line = self.viewport_bottom+GRID_SIZE*3+6
 
         self.active_panel_line = self.viewport_left+(GRID_SIZE*6)+7
         self.passive_panel_line = self.active_panel_line+(GRID_SIZE*5)-11
@@ -39,10 +46,6 @@ class NormalUI:
         self.field_width = SCREEN_WIDTH / 6 / self.separate_size  # アイテム表示感覚を決める変数
 
         self.text_level = self.skill_top_position-35
-
-
-    def draw_in_normal_state(self):
-        """mainに渡すメソッドをまとめる"""
 
         self.panel_ui()
         self.draw_hp_and_status_bar()
@@ -62,8 +65,8 @@ class NormalUI:
             arcade.draw_texture_rectangle(
                     center_x=icon_pos_x,
                     center_y=icon_pos_y + y,
-                    width=155,
-                    height=155,
+                    width=40,
+                    height=40,
                     texture=icon
                     )
             y += y
@@ -94,8 +97,8 @@ class NormalUI:
             bottom_left_x=self.side_panel_x_line,
             bottom_left_y=self.side_panel_y_line,
             width=STATES_PANEL_WIDTH + 8,
-            height=self.side_panel_height-16,
-            color=arcade.color.LEMON_CHIFFON,
+            height=self.side_panel_height-14,
+            color=(255,129,128),
             border_width=self.panel_line_width
         )
         # アクティブスキルアイコン枠
@@ -105,7 +108,7 @@ class NormalUI:
             bottom_left_y=self.viewport_bottom+8,
             width=(SCREEN_WIDTH-(GRID_SIZE*10))/2 +d,
             height=self.skill_panel_height,
-            color=arcade.color.BALL_BLUE,
+            color=arcade.color.ORANGE,
             border_width=self.panel_line_width
         )
         # パッシブスキルアイコン枠
@@ -126,12 +129,31 @@ class NormalUI:
             color=arcade.color.WHITE_SMOKE,
             border_width=self.panel_line_width
         )
+
+        # 状態変化枠背景
+        arcade.draw_xywh_rectangle_filled(
+            bottom_left_x=self.passive_panel_line+GRID_SIZE*2-28,
+            bottom_left_y=self.side_panel_y_line,
+            width=STATES_PANEL_WIDTH+10,
+            height=self.skill_panel_height+3,
+            color=(25,25,25,55)
+        )
+        # 状態変化ステータス枠
+        arcade.draw_xywh_rectangle_outline(
+            bottom_left_x=self.passive_panel_line+GRID_SIZE*2-28,
+            bottom_left_y=self.side_panel_y_line,
+            width=STATES_PANEL_WIDTH+10,
+            height=self.skill_panel_height+3,
+            color=arcade.color.YELLOW_ROSE,
+            border_width=self.panel_line_width
+        )
+
         # ミニマップ黒背景
         arcade.draw_xywh_rectangle_filled(
             bottom_left_x=self.side_panel_x_line,
             bottom_left_y=self.viewport_bottom+8,
             width=STATES_PANEL_WIDTH+8,
-            height=GRID_SIZE*3-7,
+            height=self.skill_panel_height,
             color=arcade.color.BLACK
         )
         # ミニマップ囲い線
@@ -139,7 +161,7 @@ class NormalUI:
             bottom_left_x=self.side_panel_x_line,
             bottom_left_y=self.viewport_bottom+8,
             width=STATES_PANEL_WIDTH+8,
-            height=(GRID_SIZE*3)-7,
+            height=self.skill_panel_height,
             color=arcade.color.GO_GREEN,
             border_width=self.panel_line_width
         )
@@ -327,7 +349,7 @@ class NormalUI:
             arcade.draw_text(text=level_text,
                             start_x=flower_x_position+50,
                             start_y=flower_y_position+29-y,
-                            color=(252,248,151),
+                            color=(252,248,151, 149),
                             font_size=10,
                             font_name=UI_FONT
                             )
@@ -349,7 +371,7 @@ class NormalUI:
         arcade.draw_text(text="[Active Skill]",
                          start_x=self.active_panel_line+5,
                          start_y=self.panel_top_position - 15,
-                         color=arcade.color.BALL_BLUE,
+                         color=arcade.color.ORANGE,
                          font_size=12,
                          font_name=UI_FONT
                          )
@@ -363,6 +385,13 @@ class NormalUI:
             key_number = f"<key {i+1}>"
 
             # スキルアイコンの描画
+            arcade.draw_texture_rectangle(
+                center_x=skill_position,
+                center_y=skill_top_position,
+                width=40,
+                height=40,
+                texture=IMAGE_ID["black_board"]
+            )
             arcade.draw_texture_rectangle(
                 center_x=skill_position,
                 center_y=skill_top_position,
@@ -446,6 +475,13 @@ class NormalUI:
             #     # font_name="consola.ttf"
             # )
 
+            arcade.draw_texture_rectangle(
+                center_x=skill_position,
+                center_y=skill_top_position,
+                width=40,
+                height=40,
+                texture=IMAGE_ID["black_board"]
+            )
             arcade.draw_texture_rectangle(
                 center_x=skill_position,
                 center_y=skill_top_position,

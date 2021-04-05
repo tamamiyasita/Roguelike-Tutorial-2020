@@ -84,6 +84,7 @@ class MG(arcade.Window):
 
         self.level_up_window = LevelupUI()
         self.level_up_flower = LevelUpFlower(self.engine)
+        self.normal_UI = NormalUI(self.engine)
 
     def draw_sprites(self):
         """ 全てのスプライトリストをここで描画する """
@@ -146,9 +147,9 @@ class MG(arcade.Window):
 
         # ノーマルステート時の画面表示6
         if self.engine.game_state == GAME_STATE.NORMAL or self.engine.game_state == GAME_STATE.DELAY_WINDOW:
-            normal_UI = NormalUI(self.engine, self.viewports,
-                                 self.engine.selected_item, self.engine.messages, self.mouse_position)
-            normal_UI.draw_in_normal_state()
+            # normal_UI = NormalUI(self.engine, self.viewports,
+            #                      self.engine.selected_item, self.engine.messages, self.mouse_position)
+            self.normal_UI.draw_in_normal_state(self.viewports)
             if self.mouse_position:
                 self.mouse_ui.draw_mouse_over_text()
 
@@ -182,6 +183,14 @@ class MG(arcade.Window):
         if self.engine.game_state == GAME_STATE.NORMAL or self.engine.game_state == GAME_STATE.DELAY_WINDOW:
             self.color_attachment.use(0)
             self.mini_map_quad.render(self.program)
+
+        if self.engine.damage_pop:
+            for i in self.engine.damage_pop:
+                if i.dist > 40:
+                    self.engine.damage_pop.remove(i)
+                elif i.dist < 30:
+                    i.draw()
+                    
 
     def on_update(self, delta_time):
         """全てのスプライトリストのアップデートを行う
