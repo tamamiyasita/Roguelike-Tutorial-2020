@@ -13,10 +13,6 @@ class NormalUI:
     def __init__(self, engine):
         self.engine = engine
         self.player = engine.player
-        # self.viewport_left = viewport
-        # self.viewport_right = viewport
-        # self.viewport_bottom = viewport
-        # self.viewport_top = viewport
 
         self.messages = engine.messages
         self.panel_line_width = 1
@@ -36,6 +32,7 @@ class NormalUI:
 
         self.active_panel_line = self.viewport_left+(GRID_SIZE*6)+7
         self.passive_panel_line = self.active_panel_line+(GRID_SIZE*5)-11
+        self.states_panel_line =  self.passive_panel_line+GRID_SIZE*2-28
         self.skill_panel_height = (GRID_SIZE*3)-10
 
         self.a_skill_left_position = self.active_panel_line+37
@@ -44,6 +41,7 @@ class NormalUI:
         self.skill_top_position = self.panel_top_position - 45
         self.separate_size=3.57
         self.field_width = SCREEN_WIDTH / 6 / self.separate_size  # アイテム表示感覚を決める変数
+        self.item_font_size = 11
 
         self.text_level = self.skill_top_position-35
 
@@ -56,20 +54,57 @@ class NormalUI:
 
 
     def draw_status_icons(self):
-        y = GRID_SIZE+5
-        icon_pos_x = self.viewport_right - (GRID_SIZE*4.5)
-        icon_pos_y = self.viewport_top - (GRID_SIZE * 6)
+        y = 0
+        x = 34
+        icon_pos_x = self.states_panel_line
+        icon_pos_y = self.side_panel_y_line+self.skill_panel_height-32
+        if self.player.fighter.states:
+             # 状態変化枠背景
+            arcade.draw_xywh_rectangle_filled(
+                bottom_left_x=self.states_panel_line,
+                bottom_left_y=self.side_panel_y_line,
+                width=STATES_PANEL_WIDTH+10,
+                height=self.skill_panel_height+3,
+                color=(25,25,25,55)
+            )
+            # 状態変化ステータス枠
+            arcade.draw_xywh_rectangle_outline(
+                bottom_left_x=self.states_panel_line,
+                bottom_left_y=self.side_panel_y_line,
+                width=STATES_PANEL_WIDTH+10,
+                height=self.skill_panel_height+3,
+                color=arcade.color.YELLOW_ROSE,
+                border_width=self.panel_line_width
+            )
         for i in range(len(self.player.fighter.states)):
             icon = self.player.fighter.states[i].icon[0]
 
             arcade.draw_texture_rectangle(
-                    center_x=icon_pos_x,
+                center_x=icon_pos_x + x,
+                center_y=icon_pos_y + y,
+                width=40,
+                height=40,
+                texture=IMAGE_ID["black_board"]
+            )
+            arcade.draw_texture_rectangle(
+                    center_x=icon_pos_x + x,
                     center_y=icon_pos_y + y,
                     width=40,
                     height=40,
                     texture=icon
                     )
-            y += y
+            if i < 2:
+                x += GRID_SIZE
+            elif i == 2:
+                x = 34
+                y -= 58
+            elif i < 5:
+                x += GRID_SIZE
+            elif i == 5:
+                x = 34
+                y -= 58
+            elif i < 9:
+                x += GRID_SIZE
 
 
     def panel_ui(self):
@@ -130,23 +165,7 @@ class NormalUI:
             border_width=self.panel_line_width
         )
 
-        # 状態変化枠背景
-        arcade.draw_xywh_rectangle_filled(
-            bottom_left_x=self.passive_panel_line+GRID_SIZE*2-28,
-            bottom_left_y=self.side_panel_y_line,
-            width=STATES_PANEL_WIDTH+10,
-            height=self.skill_panel_height+3,
-            color=(25,25,25,55)
-        )
-        # 状態変化ステータス枠
-        arcade.draw_xywh_rectangle_outline(
-            bottom_left_x=self.passive_panel_line+GRID_SIZE*2-28,
-            bottom_left_y=self.side_panel_y_line,
-            width=STATES_PANEL_WIDTH+10,
-            height=self.skill_panel_height+3,
-            color=arcade.color.YELLOW_ROSE,
-            border_width=self.panel_line_width
-        )
+
 
         # ミニマップ黒背景
         arcade.draw_xywh_rectangle_filled(
@@ -171,7 +190,7 @@ class NormalUI:
         # パネル用変数
         hp_font_size = 15
         hp_bar_width = 180  # HPバーの幅
-        hp_bar_height = hp_font_size + 3  # HPバーの太さ
+        hp_bar_height = hp_font_size + 4  # HPバーの太さ
         hp_bar_margin = self.viewport_top -35  # 15パネル上端からのHPバーの位置
         left_margin = self.viewport_left + self.side_panel_width-5  # 画面左からのHPとバーの位置
 
@@ -194,7 +213,7 @@ class NormalUI:
         h = 255-int(127*((self.player.fighter.hp)/self.player.fighter.max_hp))
         if h >= 55:
             c = int(255*(self.player.fighter.hp/self.player.fighter.max_hp))
-        hp_color = (h,c,60)
+        hp_color = (h,c,60,150)
         front_color=hp_color
 
         draw_status_bar(start_x=left_margin,
@@ -207,11 +226,11 @@ class NormalUI:
                         )
 
         arcade.draw_text(text=hp_text,
-                         start_x=left_margin+1,
+                         start_x=left_margin+3,
                          start_y=hp_bar_margin-62,
-                         color=COLORS["status_panel_text"],
+                         color=(c,255,255),
                          font_size=hp_font_size,
-                         font_name=UI_FONT
+                         font_name=UI_FONT2
 
                          )
 
@@ -222,12 +241,6 @@ class NormalUI:
         else:
             exp_text = f"XP {self.player.fighter.current_xp}"
 
-        arcade.draw_text(text=exp_text,
-                         start_x=left_margin+1,
-                         start_y=hp_bar_margin-37,
-                         color=arcade.color.BABY_BLUE_EYES,
-                         font_size=13
-                         )
         # EXPバーの描画
         draw_status_bar(start_x=left_margin,
                         start_y=hp_bar_margin-36,
@@ -235,15 +248,22 @@ class NormalUI:
                         height=15,
                         current_value=self.player.fighter.current_xp,
                         max_value=xp_to_next_level,
-                        front_color=arcade.color.BABY_BLUE_EYES,
-                        bac_color=(100,100,100,100)
+                        front_color=(71,130,239),
+                        bac_color=(180,180,180,140)
                         )
+        arcade.draw_text(text=exp_text,
+                         start_x=left_margin+3,
+                         start_y=hp_bar_margin-38,
+                         color=(239,192,70),
+                         font_size=13,
+                         font_name=UI_FONT2
+                         )
 
         # レベルの表示
         level_text = f"Level {self.player.fighter.level}"
 
         arcade.draw_text(text=level_text,
-                         start_x=left_margin,
+                         start_x=left_margin+3,
                          start_y=hp_bar_margin-18,
                          color=(252,248,151),
                          font_size=13,
@@ -254,20 +274,29 @@ class NormalUI:
     def flower_icons(self):
         flower_x_position = self.side_panel_x_line+10
         flower_y_position = self.viewport_top - GRID_SIZE * 2 + 20
-        y = 85
+        y = 75
 
         arcade.draw_text(
-            "[flowers]",
-            flower_x_position,
-            flower_y_position - 15,
-            (255,255,255),
-            11,
+            "[Flowers]",
+            flower_x_position-4,
+            flower_y_position - 14,
+            (255,129,128),
+            12,
             font_name=UI_FONT
         )
 
 
 
         for i, flower in enumerate(self.player.equipment.flower_slot):
+            # アイコン背景
+            arcade.draw_lrwh_rectangle_textured(
+                bottom_left_x=flower_x_position,
+                bottom_left_y=flower_y_position - y,
+                width=40,
+                height=40,
+                texture=IMAGE_ID["black_board"]
+            )
+
             # flower_icon 描画
             # arcade.draw_texture_rectangle(
             #     center_x=flower_x_position,
@@ -276,11 +305,13 @@ class NormalUI:
             #     height=40,
             #     texture=flower.icon
             # )
+
+            # アイコン（仮）
             arcade.draw_xywh_rectangle_filled(
                 flower_x_position,
                 flower_y_position-y,
-                40,
-                40,
+                20,
+                20,
                 (200,150,200)
             )
             arcade.draw_text(
@@ -298,7 +329,7 @@ class NormalUI:
             h = 255-int(127*((flower.hp)/flower.max_hp))
             if h >= 55:
                 c = int(255*(flower.hp/flower.max_hp))
-            hp_color = (h,c,60)
+            hp_color = (h,c,60,150)
             front_color=hp_color
 
             draw_status_bar(start_x=flower_x_position+50,
@@ -312,8 +343,8 @@ class NormalUI:
 
             arcade.draw_text(text=hp_text,
                             start_x=flower_x_position+52,
-                            start_y=flower_y_position+1-y,
-                            color=COLORS["status_panel_text"],
+                            start_y=flower_y_position-y,
+                            color=(c,255,255),
                             font_size=10,
                             font_name=UI_FONT
                             )
@@ -326,12 +357,6 @@ class NormalUI:
             else:
                 exp_text = f"XP {flower.current_xp}"
 
-            arcade.draw_text(text=exp_text,
-                            start_x=flower_x_position+52,
-                            start_y=flower_y_position+17-y,
-                            color=arcade.color.BABY_BLUE_EYES,
-                            font_size=9
-                            )
             # EXPバーの描画
             draw_status_bar(start_x=flower_x_position+50,
                             start_y=flower_y_position+18-y,
@@ -339,8 +364,15 @@ class NormalUI:
                             height=11,
                             current_value=flower.current_xp,
                             max_value=xp_to_next_level,
-                            front_color=arcade.color.BABY_BLUE_EYES,
-                            bac_color=(100,100,100,100)
+                            front_color=(71,130,239),
+                            bac_color=(180,180,180,140)
+                            )
+            arcade.draw_text(text=exp_text,
+                            start_x=flower_x_position+52,
+                            start_y=flower_y_position+17-y,
+                            color=(239,192,70),
+                            font_size=9,
+                            font_name=UI_FONT2
                             )
 
             # レベルの表示
@@ -349,11 +381,11 @@ class NormalUI:
             arcade.draw_text(text=level_text,
                             start_x=flower_x_position+50,
                             start_y=flower_y_position+29-y,
-                            color=(252,248,151, 149),
+                            color=(252,248,151),
                             font_size=10,
                             font_name=UI_FONT
                             )
-            y += 75
+            y += 70
     def draw_active_skill(self):
         """スキルアイコンの表示"""
     #     slot_len = len(self.player.fighter.active_skill)
@@ -362,7 +394,6 @@ class NormalUI:
         skill_top_position = self.skill_top_position
     #     # パネル上端からの所持アイテム表示位置の調整に使う変数
     #     self.separate_size = 4.5  # スキル名の表示間隔の調整に使う変数
-        item_font_size = 11
     #     self.field_width = SCREEN_WIDTH / (slot_len + 1) / self.separate_size  # アイテム表示感覚を決める変数
 
         # キャパシティ数をループし、インベントリのアイテム名とアウトラインを描画する
@@ -382,7 +413,7 @@ class NormalUI:
                 i -= 5
             skill_position = i * self.field_width + self.a_skill_left_position  # self.左からの所持skillの表示位置
 
-            key_number = f"<key {i+1}>"
+            key_number = f"[Key {i+1}]"
 
             # スキルアイコンの描画
             arcade.draw_texture_rectangle(
@@ -413,7 +444,7 @@ class NormalUI:
                     text=str(skill.count_time),
                     start_x=skill_position,
                     start_y=skill_top_position,
-                    color=arcade.color.DARK_BLUE,
+                    color=arcade.color.BLUE,
                     font_size=27,
                     anchor_x="center",
                     anchor_y="center"
@@ -422,17 +453,19 @@ class NormalUI:
                 arcade.draw_text(
                     text=key_number,
                     start_x=skill_position,
-                    start_y=skill_top_position-67,
+                    start_y=self.text_level-12,
                     color=arcade.color.YELLOW_ORANGE,
-                    font_size=item_font_size
+                    font_size=self.item_font_size,
+                    anchor_x="center"
                 )
 
             arcade.draw_text(
-                text=f"level {skill.level}",
-                start_x=skill_position-11,
+                text=f"Level {skill.level}",
+                start_x=skill_position,
                 start_y=self.text_level,
                 color=COLORS["status_panel_text"],
-                font_size=item_font_size
+                font_size=self.item_font_size,
+                anchor_x="center"
             )
 
     def draw_passive_skill(self):
@@ -443,7 +476,6 @@ class NormalUI:
         # self.separate_size=3.57
         # self.field_width = SCREEN_WIDTH / 6 / self.separate_size  # アイテム表示感覚を決める変数
 
-        item_font_size = 17
         item_text = ""
 
         # <passive skill>        
@@ -463,17 +495,6 @@ class NormalUI:
                 i -= 5
 
             skill_position = i * self.field_width + self.p_skill_left_position  # 左からの所持skillの表示位置
-            item_text = f"{skill.name} (level {skill.level})".replace("_", " ").title()
-
-
-            # arcade.draw_text(
-            #     text=item_text,
-            #     start_x=skill_position,
-            #     start_y=skill_top_position,
-            #     color=arcade.color.ARYLIDE_YELLOW,
-            #     font_size=item_font_size-3,
-            #     # font_name="consola.ttf"
-            # )
 
             arcade.draw_texture_rectangle(
                 center_x=skill_position,
@@ -491,24 +512,13 @@ class NormalUI:
             )
 
             arcade.draw_text(
-                text=f"level {skill.level}",
-                start_x=skill_position-11,
+                text=f"Level {skill.level}",
+                start_x=skill_position,
                 start_y=self.text_level,
                 color=COLORS["status_panel_text"],
-                font_size=11
+                font_size=self.item_font_size,
+                anchor_x="center"
             )
-                
-            # arcade.draw_text(
-            #     text=f"{passive.explanatory_text}",
-            #     start_x=skill_position,
-            #     start_y=self.skill_top_position,
-            #     color=arcade.color.WHITE,
-            #     font_size=item_font_size-4,
-            #     # font_name="consola.ttf",
-            #     anchor_y="top"
-            # )
-
-
 
 
 

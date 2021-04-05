@@ -85,7 +85,7 @@ class LevelUpFlower:
                 start_y=self.back_panel_top_left-10,
                 color=arcade.color.BLUE_GREEN,
                 font_size=font_size,
-                # font_name="consola.ttf",
+                # font_name=UI_FONT2,
                 anchor_y="top"
             )
 
@@ -117,7 +117,7 @@ class LevelUpFlower:
                         start_y=self.back_panel_top_left + y - (22) - ifs,
                         color=font_color,
                         font_size=font_size,
-                        font_name="consola.ttf",
+                        font_name=UI_FONT2,
                         anchor_y="top"
                     )
                     ifs += 23
@@ -129,7 +129,7 @@ class LevelUpFlower:
             #         start_y=self.back_panel_top_left + y - (22) - ifs,
             #         color=arcade.color.CORNSILK,
             #         font_size=font_size,
-            #         font_name="consola.ttf",
+            #         font_name=UI_FONT2,
             #         anchor_y="top"
             #     )
             #     ifs += 19

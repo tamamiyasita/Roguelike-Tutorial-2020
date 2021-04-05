@@ -87,7 +87,8 @@ class LevelupUI:
             start_x=self.text_position_x-10,
             start_y=self.text_position_y,
             color=text_color,
-            font_size=text_size
+            font_size=text_size,
+            font_name=UI_FONT2
         )
 
         # ability point表示
@@ -96,7 +97,7 @@ class LevelupUI:
             text=f"ability point: {self.player.fighter.ability_points}",
             start_x=self.text_position_x,
             start_y=self.text_position_y - spacing,
-            font_name="consola.ttf",
+            font_name=UI_FONT2,
             color=text_color,
             font_size=text_size-7
         )
@@ -112,7 +113,7 @@ class LevelupUI:
             text=STR,
             start_x=self.text_position_x,
             start_y=self.text_position_y - spacing,
-            font_name="consola.ttf",
+            font_name=UI_FONT2,
             color=text_color,
             font_size=text_size-7
         )
@@ -123,7 +124,7 @@ class LevelupUI:
             text=DEX,
             start_x=self.text_position_x,
             start_y=self.text_position_y - spacing,
-            font_name="consola.ttf",
+            font_name=UI_FONT2,
             color=text_color,
             font_size=text_size-7
         )
@@ -134,7 +135,7 @@ class LevelupUI:
             text=INT,
             start_x=self.text_position_x,
             start_y=self.text_position_y - spacing,
-            font_name="consola.ttf",
+            font_name=UI_FONT2,
             color=text_color,
             font_size=text_size-7
         )
@@ -149,9 +150,10 @@ class LevelupUI:
                 text=f"It's OK? ( YES : key[y]   NO : key[n] )",
                 start_x=self.text_position_x+10,
                 start_y=self.text_position_y-60,
-                # font_name="consola.ttf",
+                # font_name=UI_FONT2,
                 color=arcade.color.OLD_BURGUNDY,
-                font_size=15
+                font_size=10,
+                font_name=UI_FONT2
             )
 
             # Yボタンが押されたらgame stateをノーマルに戻し終了

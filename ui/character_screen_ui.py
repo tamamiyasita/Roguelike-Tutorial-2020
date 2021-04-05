@@ -11,7 +11,7 @@ def draw_character_screen(engine, viewport, selected_item):
     viewport_right = viewport[1]
     viewport_bottom = viewport[2] + GRID_SIZE*3
     viewport_top = viewport[3]
-    font_name="consola.ttf"
+    font_name=UI_FONT2
 
     # viewport_left = viewport_x+100
     # viewport_bottom = viewport_y+100
@@ -117,7 +117,7 @@ def draw_character_screen(engine, viewport, selected_item):
         start_y=top_position+GRID_SIZE-10 ,
         color=(129, 255, 71),
         font_size=item_font_size+5,
-        font_name="consola.ttf"
+        font_name=UI_FONT2
     )
 
 
@@ -147,7 +147,7 @@ def draw_character_screen(engine, viewport, selected_item):
             start_y=top_position + y,
             color=(129, 255, 81),
             font_size=item_font_size-4,
-            # font_name="consola.ttf"
+            # font_name=UI_FONT2
         )
 
         # スキルのテクスチャ
@@ -167,7 +167,7 @@ def draw_character_screen(engine, viewport, selected_item):
             start_y=top_position + y-2,
             color=(234, 255, 96),
             font_size=item_font_size-4,
-            # font_name="consola.ttf",
+            # font_name=UI_FONT2,
             anchor_y="top"
         )
 
@@ -178,7 +178,7 @@ def draw_character_screen(engine, viewport, selected_item):
             start_y=top_position + y-15,
             color=arcade.color.WHITE,
             font_size=item_font_size-5,
-            # font_name="consola.ttf",
+            # font_name=UI_FONT2,
             anchor_y="top"
         )
 

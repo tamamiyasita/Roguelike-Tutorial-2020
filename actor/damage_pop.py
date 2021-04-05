@@ -27,7 +27,7 @@ class DamagePop():
     def draw(self):
         self.dist += 1
         self.center_y = arcade.lerp(self.center_y, self.c, 0.3)
-        arcade.draw_text(str(self.text), self.center_x, self.center_y, (self.c1, self.c2, self.c3, self.c4), font_size=self.size, font_name="mplus-2c-bold.ttf")
+        arcade.draw_text(str(self.text), self.center_x, self.center_y, (self.c1, self.c2, self.c3, self.c4), font_size=self.size, font_name="mplus-2c-bold.ttf", anchor_x="center")
         if self.dist > 15 and not self.c4-38 < 1:
             self.c4 -= 38
 

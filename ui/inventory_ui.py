@@ -88,7 +88,7 @@ def draw_inventory(player, selected_item, viewport):
                     start_y=back_panel_top_left -(GRID_SIZE/2) + y,
                     color=font_color,
                     font_size=item_font_size-7,
-                    font_name="consola.ttf",
+                    font_name=UI_FONT2,
                     anchor_y="center",
                     anchor_x="center"
                 )
@@ -101,7 +101,7 @@ def draw_inventory(player, selected_item, viewport):
                     start_y=back_panel_top_left -(GRID_SIZE/2) + y,
                     color=font_color,
                     font_size=item_font_size-7,
-                    font_name="consola.ttf",
+                    font_name=UI_FONT2,
                     anchor_y="center",
                     anchor_x="center"
                 )
@@ -122,7 +122,7 @@ def draw_inventory(player, selected_item, viewport):
                     start_y=back_panel_bottom_left - (GRID_SIZE) - 5,
                     color=font_color,
                     font_size=item_font_size-3,
-                    font_name="consola.ttf",
+                    font_name=UI_FONT2,
                     anchor_y="top"
                 )
 
@@ -138,7 +138,7 @@ def draw_inventory(player, selected_item, viewport):
             start_y=back_panel_top_left -(GRID_SIZE/2) + y, #bottom_left + panel_height - 120 + y,
             color=font_color,
             font_size=item_font_size,
-            font_name="consola.ttf",
+            font_name=UI_FONT2,
             anchor_y="center"
         )
         y -= GRID_SIZE
@@ -167,7 +167,7 @@ def draw_inventory(player, selected_item, viewport):
                 start_y=back_panel_top_left + y - item_font_size,
                 color=arcade.color.APPLE_GREEN,
                 font_size=item_font_size-7,
-                # font_name="consola.ttf",
+                # font_name=UI_FONT2,
                 anchor_y="top"
             )
 
@@ -179,7 +179,7 @@ def draw_inventory(player, selected_item, viewport):
                     start_y=back_panel_top_left + y - (item_font_size + 8) - ifs,
                     color=arcade.color.CORNSILK,
                     font_size=item_font_size-6,
-                    font_name="consola.ttf",
+                    font_name=UI_FONT2,
                     anchor_y="top"
                 )
                 ifs += 17
@@ -191,7 +191,7 @@ def draw_inventory(player, selected_item, viewport):
                     start_y=back_panel_top_left + y - (item_font_size+10) - ifs,
                     color=arcade.color.PALE_LAVENDER,
                     font_size=item_font_size-6,
-                    font_name="consola.ttf",
+                    font_name=UI_FONT2,
                     anchor_y="top"
                 )
                 wfs += 55
@@ -212,7 +212,7 @@ def draw_inventory(player, selected_item, viewport):
             start_y=back_panel_top_left + y,
             color=arcade.color.ARYLIDE_YELLOW,
             font_size=item_font_size-4,
-            font_name="consola.ttf",
+            font_name=UI_FONT2,
             anchor_y="top"
         )
 
