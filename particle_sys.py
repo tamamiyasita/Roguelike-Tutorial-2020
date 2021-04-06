@@ -28,20 +28,30 @@ class MyWindow(arcade.Window):
         self.burst_list = []
 
         # ポイントを視覚化するプログラム
-        self.program = self.ctx.load_program(
         # vertex_shaderはパーティクルの各頂点をレンダリングする、四角形なら4回実行される
-            vertex_shader="vertex_shader_v1.glsl",# vertex_shader_v1.glslファイルを読み込み位置と色を取得
         # fragment_shaderは各ピクセルに対してレンダリングする
+        # vertex_shader_v1.glslファイルを読み込み位置と色を取得
+        # shaderファイルは日本語でコメントするとエラーがでるので注意
+        self.program = self.ctx.load_program(
+            vertex_shader="vertex_shader_v1.glsl",
             fragment_shader="fragment_shader.glsl",
         )
 
 
 
-        self.ctx.enable_only
+        self.ctx.enable_only()
 
     def on_draw(self):
         """ Draw everything """
         self.clear()
+
+        # 粒子サイズの設定
+        self.ctx.point_size = 2 * self.get_pixel_ratio()
+
+        # 各バーストをループする
+        for burst in self.burst_list:
+            # バーストをレンダリングする
+            burst.vao.render(self.program, mode=self.ctx.POINTS)
 
     def on_update(self, dt):
         """ Update everything """
@@ -58,6 +68,27 @@ class MyWindow(arcade.Window):
         # 現在のピクセル位置からOpenGLへの座標を再計算する
         x2 = x / self.width * 2.0 - 1.0
         y2 = y / self.height * 2.0 - 1.0
+
+        # 粒子の初期データの取得
+        initial_data = _gen_initial_data(x2, y2)
+
+        # そのデータでバッファを作成
+        buffer = self.ctx.buffer(data=array("f", initial_data))
+
+        # バッファのデータがどのようにフォーマットされているかを示すバッファの説明文を作成します
+        buffer_description = arcade.gl.BufferDescription(buffer, "2f", ["in_pos"])
+
+        # 頂点属性オブジェクトの作成
+        vao = self.ctx.geometry([buffer_description])
+
+        # バーストオブジェクトを作成しバーストリストに追加する
+        burst = Burst(buffer=buffer, vao=vao)
+        self.burst_list.append(burst)
+
+
+
+
+
 
 
     def on_key_press(self, key: int, modifiers: int):

@@ -25,17 +25,17 @@ class LevelUpFlower:
         self.window_width = SCREEN_WIDTH - 924
         self.window_height = SCREEN_HEIGHT - 800
 
-        self.bottom_left_x=self.viewport_left+(MAIN_PANEL_X/2) -(self.window_width/2)
-        self.bottom_left_y=self.viewport_bottom+500
+        self.bottom_left_x=self.viewport_left+GRID_SIZE*7
+        self.bottom_left_y=self.viewport_bottom+GRID_SIZE*8
         self.back_panel_top_left = self.viewport_top - (GRID_SIZE*4)
 
         # 最下部の基本枠
         arcade.draw_xywh_rectangle_filled(
-            bottom_left_x=self.viewport_left + (GRID_SIZE*5),
-            bottom_left_y=self.back_panel_top_left- (GRID_SIZE*3),
+            bottom_left_x=self.bottom_left_x,
+            bottom_left_y=self.bottom_left_y,
             width=(GRID_SIZE*5),
             height=(GRID_SIZE*3),
-            color=[255, 255, 255, 60]
+            color=[232, 55, 25, 100]
         )
         # flowerアイコン
         arcade.draw_rectangle_filled(
@@ -43,7 +43,7 @@ class LevelUpFlower:
             center_y=self.back_panel_top_left + (GRID_SIZE),
             width=100,
             height=100,
-            color=(150,150,150,150)
+            color=(250,250,250,150)
         )
 
         
@@ -79,13 +79,43 @@ class LevelUpFlower:
                 )
                 
             # タイトル
+            title = self.bottom_left_x+10
             arcade.draw_text(
-                text=f"LEVEL UP {item_text} level {item.level+1}!",
-                start_x=self.bottom_left_x,
+                text=f"LEVEL UP!",
+                start_x=title,
                 start_y=self.back_panel_top_left-10,
                 color=arcade.color.BLUE_GREEN,
                 font_size=font_size,
                 # font_name=UI_FONT2,
+                anchor_y="top"
+            )
+            f_name = title + 80
+            arcade.draw_text(
+                text=f" {item_text} ",
+                start_x=f_name,
+                start_y=self.back_panel_top_left-10,
+                color=arcade.color.PEARL,
+                font_size=font_size,
+                # font_name=UI_FONT2,
+                anchor_y="top"
+            )
+            l = "level"
+            arcade.draw_text(
+                text=f"{l:16}",
+                start_x=self.bottom_left_x + 33,
+                start_y=self.back_panel_top_left-35,
+                color=arcade.color.AERO_BLUE,
+                font_size=font_size,
+                font_name=UI_FONT2,
+                anchor_y="top"
+            )
+            arcade.draw_text(
+                text=f"+ {item.level:6}",
+                start_x=self.bottom_left_x + GRID_SIZE*2.5,
+                start_y=self.back_panel_top_left-35,
+                color=arcade.color.AERO_BLUE,
+                font_size=font_size,
+                font_name=UI_FONT2,
                 anchor_y="top"
             )
 
@@ -99,8 +129,8 @@ class LevelUpFlower:
                 for k,v in self.level_bonus.items():
 
                     font_color = (50, 150, 55)
-                    if k == "max_hp":
-                        font_color = (15, 15, 15)
+                    if k == f"max_hp":
+                        font_color = (75, 15, 15)
                     if k in ["STR", "DEX", "INT"]:
                         font_color = (190, 55, 55)
                     if k in ["evasion", "defense"]:
@@ -112,10 +142,19 @@ class LevelUpFlower:
 
 
                     arcade.draw_text(
-                        text=f"{k:15} + {v:7}",
-                        start_x=self.bottom_left_x + 40,
-                        start_y=self.back_panel_top_left + y - (22) - ifs,
+                        text=f"{k:16}",
+                        start_x=self.bottom_left_x + 33,
+                        start_y=self.back_panel_top_left + y - (52) - ifs,
                         color=font_color,
+                        font_size=font_size,
+                        font_name=UI_FONT2,
+                        anchor_y="top"
+                    )
+                    arcade.draw_text(
+                        text=f"+ {v:6}",
+                        start_x=self.bottom_left_x + GRID_SIZE*2.5,
+                        start_y=self.back_panel_top_left + y - (52) - ifs,
+                        color=arcade.color.WHITE,
                         font_size=font_size,
                         font_name=UI_FONT2,
                         anchor_y="top"
