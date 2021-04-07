@@ -122,6 +122,7 @@ long_sword_right = arcade.load_texture(
 long_sword = [long_sword_right, long_sword_left]
 
 silver_grass = arcade.load_texture_pair(r"image\silver_grass.png")
+silver_grass_icon = arcade.load_texture(r"image\silver_grass_icon.png")
 grass_cutter = arcade.load_texture_pair(r"image\grass_cutter.png")
 grass_cutter_icon = arcade.load_texture(r"image\grass_cutter_icon.png")
 cirsium = arcade.load_texture_pair(r"image\Cirsium.png")
@@ -133,6 +134,7 @@ branch_baton_icon = arcade.load_texture(r"image\branch_baton_icon.png")
 healing_icon = arcade.load_texture(r"image\healing_icon.png")
 healing = arcade.load_texture_pair(r"image\healing.png")
 Paeonia = arcade.load_texture(r"image\paeonia.png")
+Paeonia_icon = arcade.load_texture(r"image\paeonia_icon.png")
 sunflower = arcade.load_texture(r"image\sunflower.png")
 pineapple = arcade.load_texture(r"image/pineapple.png")
 aconite = arcade.load_texture(r"image/aconite.png")
@@ -269,9 +271,11 @@ IMAGE_ID = {"Rou": player,
 
             "cirsium": cirsium,
             "silver_grass": silver_grass,
+            "silver_grass_icon": silver_grass_icon,
             "ebony":ebony,
             "sunflower":sunflower,
             "paeonia":Paeonia,
+            "paeonia_icon":Paeonia_icon,
             "pineapple":pineapple,
             "aconite":aconite,
             "bananaflower":bananaflower,

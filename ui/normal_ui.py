@@ -299,21 +299,24 @@ class NormalUI:
 
             # flower_icon 描画
             # arcade.draw_texture_rectangle(
-            #     center_x=flower_x_position,
-            #     center_y=flower_y_position,
-            #     width=40,
-            #     height=40,
-            #     texture=flower.icon
-            # )
+                # center_x=flower_x_position,
+                # center_y=flower_y_position-y,
+            arcade.draw_lrwh_rectangle_textured(
+                bottom_left_x=flower_x_position,
+                bottom_left_y=flower_y_position - y,
+                width=40,
+                height=40,
+                texture=flower.icon
+            )
 
             # アイコン（仮）
-            arcade.draw_xywh_rectangle_filled(
-                flower_x_position,
-                flower_y_position-y,
-                20,
-                20,
-                (200,150,200)
-            )
+            # arcade.draw_xywh_rectangle_filled(
+            #     flower_x_position,
+            #     flower_y_position-y,
+            #     20,
+            #     20,
+            #     (200,150,200)
+            # )
             arcade.draw_text(
                 f"{flower.name}".replace("_", " ").title(),
                 flower_x_position,

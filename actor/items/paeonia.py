@@ -1,6 +1,7 @@
 
 from actor.items.base_flower import BaseFlower
 from actor.skills.healing import Healing
+from data import *
 
 class Paeonia(BaseFlower):
     def __init__(self, x=0, y=0, name="paeonia"):
@@ -20,6 +21,8 @@ class Paeonia(BaseFlower):
         self.scale = 1.2
         self.flower_skill = skill_component
         self.flower_skill.flower = self
+        self.icon = IMAGE_ID.get(self.name+"_icon")
+
         ###################################
 
         self.level = 1

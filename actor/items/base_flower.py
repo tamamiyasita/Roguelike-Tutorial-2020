@@ -19,6 +19,7 @@ class BaseFlower(Actor):
         skill_component = BaseSkill()# コンポーネントの切替で変化を表したい
 
         # 定数 #############################
+        self.icon = IMAGE_ID.get(self.name+"_icon")
         self.tag = [Tag.item, Tag.equip, Tag.flower]
         self.max_level = 5
         self.experience_per_level = exp_calc()
