@@ -15,6 +15,7 @@ from actor.items.sunflower import Sunflower
 from actor.items.pineapple import Pineapple
 from actor.items.aconite import Aconite
 from actor.items.banana_flower import Bananaflower
+from actor.items.bamboo_flower import Bambooflower
 
 
 from actor.skills.grass_cutter import GrassCutter
@@ -23,6 +24,7 @@ from actor.skills.healing import Healing
 from actor.skills.seed_shot import SeedShot
 from actor.skills.p_grenade import P_Grenade
 from actor.skills.poison_dart import PoisonDart
+from actor.skills.bamboo_blade import BambooBlade
 
 from actor.states.poison_status import PoisonStatus
 
@@ -78,6 +80,8 @@ def restore_actor(actor_dict):
         actor = Aconite()
     elif actor_name == "Bananaflower":
         actor = Bananaflower()
+    elif actor_name == "Bambooflower":
+        actor = Bambooflower()
     
 
     elif actor_name == "GrassCutter":
@@ -92,6 +96,8 @@ def restore_actor(actor_dict):
         actor = P_Grenade()
     elif actor_name == "PoisonDart":
         actor = PoisonDart()
+    elif actor_name == "BambooBlade":
+        actor = BambooBlade()
 
 
     elif actor_name == "PoisonStatus":

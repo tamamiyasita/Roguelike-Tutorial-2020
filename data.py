@@ -131,14 +131,20 @@ leaf_blade_icon = arcade.load_texture(r"image\leaf_blade_icon.png")
 ebony = arcade.load_texture_pair(r"image\ebony.png")
 branch_baton = arcade.load_texture_pair(r"image\BranchBaton.png")
 branch_baton_icon = arcade.load_texture(r"image\branch_baton_icon.png")
+bambooflower = arcade.load_texture(r"image\bambooflower.png")
+bambooflower_icon = arcade.load_texture(r"image\bambooflower_icon.png")
+bamboo_blade = arcade.load_texture_pair(r"image\bamboo_blade.png")
+bamboo_blade_icon = arcade.load_texture(r"image\bamboo_blade_icon.png")
 healing_icon = arcade.load_texture(r"image\healing_icon.png")
 healing = arcade.load_texture_pair(r"image\healing.png")
 Paeonia = arcade.load_texture(r"image\paeonia.png")
 Paeonia_icon = arcade.load_texture(r"image\paeonia_icon.png")
 sunflower = arcade.load_texture(r"image\sunflower.png")
+sunflower_icon = arcade.load_texture(r"image\sunflower_icon.png")
 pineapple = arcade.load_texture(r"image/pineapple.png")
 aconite = arcade.load_texture(r"image/aconite.png")
 bananaflower = arcade.load_texture(r"image/bananaflower.png")
+bananaflower_icon = arcade.load_texture(r"image/bananaflower_icon.png")
 cabbageflower = arcade.load_texture(r"image\cabbage_flower.png")
 
 seed_shot = arcade.load_texture_pair(r"image/seed_shot.png")
@@ -157,6 +163,7 @@ pineapple_grenade = arcade.load_texture_pair(r"image/p_grenade.png")
 pineapple_grenade_icon = arcade.load_texture(r"image/pineapple_grenade_icon.png")
 explosion = [arcade.load_texture(img) for img in glob.glob(r"image\effect\explosion\*")]
 
+attack_icon = arcade.load_texture(r"image\poison.png")
 poison = arcade.load_texture(r"image\poison.png")
 stun = arcade.load_texture(r"image\stun.png")
 
@@ -273,15 +280,23 @@ IMAGE_ID = {"Rou": player,
             "silver_grass": silver_grass,
             "silver_grass_icon": silver_grass_icon,
             "ebony":ebony,
+            "bambooflower":bambooflower,
+            "bambooflower_icon":bambooflower_icon,
+            "bamboo_blade":bamboo_blade,
+            "bamboo_blade_icon":bamboo_blade_icon,
+
             "sunflower":sunflower,
+            "sunflower_icon":sunflower_icon,
             "paeonia":Paeonia,
             "paeonia_icon":Paeonia_icon,
             "pineapple":pineapple,
             "aconite":aconite,
             "bananaflower":bananaflower,
+            "bananaflower_icon":bananaflower_icon,
             "cabbageflower":cabbageflower,
 
-            "attack": leaf_blade,
+            "attack": attack_icon,
+            "attack_icon": attack_icon,
 
             "grass_cutter": grass_cutter,
             "grass_cutter_icon": grass_cutter_icon,

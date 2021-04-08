@@ -8,11 +8,12 @@ from util import dice
 
 
 class PoisonDart(BaseSkill):
-    def __init__(self, x=0, y=0, image="poison_dart"):
+    def __init__(self, x=0, y=0, name="poison_dart"):
         super().__init__(
             x=x,
             y=y,
-            image=image,
+            name=name,
+            image=name,
         )
 
 

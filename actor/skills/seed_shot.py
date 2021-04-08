@@ -8,9 +8,10 @@ from util import dice
 
 
 class SeedShot(BaseSkill):
-    def __init__(self, x=0, y=0, image="seed_shot"):
+    def __init__(self, x=0, y=0, name="seed_shot"):
         super().__init__(
-            image=image,
+            name=name,
+            image=name,
             x=x,
             y=y,
         )

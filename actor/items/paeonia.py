@@ -21,7 +21,6 @@ class Paeonia(BaseFlower):
         self.scale = 1.2
         self.flower_skill = skill_component
         self.flower_skill.flower = self
-        self.icon = IMAGE_ID.get(self.name+"_icon")
 
         ###################################
 

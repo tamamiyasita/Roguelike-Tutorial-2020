@@ -47,9 +47,10 @@ class HealingEffect(Actor):
 
 
 class Healing(BaseSkill):
-    def __init__(self,x=0, y=0, image="healing"):
+    def __init__(self,x=0, y=0, name="healing"):
         super().__init__(
-            image=image,
+            name=name,
+            image=name,
             x=x,
             y=y
         )

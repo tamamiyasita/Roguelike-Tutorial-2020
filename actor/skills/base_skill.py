@@ -4,10 +4,11 @@ from data import *
 
 
 class BaseSkill(Actor):
-    def __init__(self, x=0, y=0, image="attack", 
+    def __init__(self, x=0, y=0, name="grass_cutter",image=None, 
                 level=1, damage=1, hit_rate=90, attr="physical", effect=None):
         super().__init__(
-            image=image,
+            name=name,
+            image=name,
             x=x,
             y=y,
         )
@@ -30,7 +31,8 @@ class BaseSkill(Actor):
 
         self.tag = []
 
-        self.icon = IMAGE_ID["grass_cutter_icon"]
+        self.icon = IMAGE_ID.get(self.name+"_icon")
+
 
         self.item_weight = 1.1
 

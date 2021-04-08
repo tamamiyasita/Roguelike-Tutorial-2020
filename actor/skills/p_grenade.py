@@ -6,9 +6,10 @@ from util import dice
 
 
 class P_Grenade(BaseSkill):
-    def __init__(self, x=0, y=0, image="p_grenade"):
+    def __init__(self, x=0, y=0, name="p_grenade"):
         super().__init__(
-            image=image,
+            name=name,
+            image=name,
             x=x,
             y=y
             )

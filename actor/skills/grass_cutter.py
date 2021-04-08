@@ -6,9 +6,10 @@ from util import dice
 
 
 class GrassCutter(BaseSkill):
-    def __init__(self, x=0, y=0, image="grass_cutter"):
+    def __init__(self, x=0, y=0, name="grass_cutter"):
         super().__init__(
-            image=image,
+            name=name,
+            image=name,
             x=x,
             y=y,
         )

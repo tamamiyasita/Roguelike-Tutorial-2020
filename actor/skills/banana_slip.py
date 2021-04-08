@@ -5,9 +5,10 @@ from actor.states.stun import StunStatus
 from util import dice
 
 class BananaSlip(BaseSkill):
-    def __init__(self, x=0, y=0, image="banana_slip"):
+    def __init__(self, x=0, y=0, name="banana_slip"):
         super().__init__(
-            image=image,
+            name=name,
+            image=name,
             x=x,
             y=y,
         )

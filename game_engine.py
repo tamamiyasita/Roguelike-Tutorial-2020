@@ -45,6 +45,7 @@ from actor.items.sunflower import Sunflower
 from actor.items.pineapple import Pineapple
 from actor.items.aconite import Aconite
 from actor.items.banana_flower import Bananaflower
+from actor.items.bamboo_flower import Bambooflower
 from level_up_sys import check_experience_level
 
 #test
@@ -174,6 +175,8 @@ class GameEngine:
         self.aconite = Aconite(self.player.x+1, self.player.y-2)
         self.game_level.item_sprites.append(self.aconite)
 
+        self.bamboo = Bambooflower(self.player.x+2, self.player.y-2)
+        self.game_level.item_sprites.append(self.bamboo)
 
         self.st = Up_Stairs(self.player.x + 1, self.player.y-1)
         self.st.scale = 2

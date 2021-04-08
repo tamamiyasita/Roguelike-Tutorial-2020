@@ -4,8 +4,8 @@ from data import *
 from actor.skills.base_skill import BaseSkill
 from random import randint
 
-class BranchBaton(BaseSkill):
-    def __init__(self, x=0, y=0, name="branch_baton"):
+class BambooBlade(BaseSkill):
+    def __init__(self, x=0, y=0, name="bamboo_blade"):
         super().__init__(
             name=name,
             image=name,
@@ -28,7 +28,6 @@ class BranchBaton(BaseSkill):
 
         self.explanatory_text = f"damage: {self.level}D{self.damage}\nhit rate: {self.hit_rate}"
 
-        self.icon = IMAGE_ID["branch_baton_icon"]
 
 
     def update_animation(self, delta_time):
