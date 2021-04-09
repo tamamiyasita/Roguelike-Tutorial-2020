@@ -142,6 +142,7 @@ Paeonia_icon = arcade.load_texture(r"image\paeonia_icon.png")
 sunflower = arcade.load_texture(r"image\sunflower.png")
 sunflower_icon = arcade.load_texture(r"image\sunflower_icon.png")
 pineapple = arcade.load_texture(r"image/pineapple.png")
+pineapple_icon = arcade.load_texture(r"image/pineapple.png")
 aconite = arcade.load_texture(r"image/aconite.png")
 bananaflower = arcade.load_texture(r"image/bananaflower.png")
 bananaflower_icon = arcade.load_texture(r"image/bananaflower_icon.png")
@@ -290,6 +291,7 @@ IMAGE_ID = {"Rou": player,
             "paeonia":Paeonia,
             "paeonia_icon":Paeonia_icon,
             "pineapple":pineapple,
+            "pineapple_icon":pineapple_icon,
             "aconite":aconite,
             "bananaflower":bananaflower,
             "bananaflower_icon":bananaflower_icon,

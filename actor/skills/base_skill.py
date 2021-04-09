@@ -26,6 +26,7 @@ class BaseSkill(Actor):
         self.max_cooldown_time = 6
         self.count_time = 0
         self.during_cool_down = False
+        self.size = None
 
         self.speed = 10
 

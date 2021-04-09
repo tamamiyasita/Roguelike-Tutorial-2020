@@ -4,8 +4,9 @@ from constants import *
 from util import grid_to_pixel
 from actor.actor import Actor
 
-from damage_range import circle_range
+from damage_range import circle_range, square_shape
 from hit_anime import Hit_Anime
+from ui.select_ui import SelectUI
 
 import math
 
@@ -13,18 +14,20 @@ import math
 
 
 class Flying(Actor):
-    def __init__(self, shooter, tar_point, engine, skill, spin):
+    def __init__(self, shooter, tar_point, engine, skill, spin, range):
         super().__init__(
             image=skill.amm,
             color=COLORS["white"],
         )
         self.engine = engine
+        self.select_UI = SelectUI(engine)
         self.center_x = shooter.center_x
         self.center_y = shooter.center_y
         self.shooter = shooter
         self.tar_point = tar_point
         self.skill = skill
         self.spin = spin
+        self.range = range
 
         self.shot_speed = skill.shot_speed
         self.delay_time = 10 / skill.shot_speed
@@ -51,9 +54,10 @@ class Flying(Actor):
 
     def update_animation(self, delta_time=1 / 60):
         super().update_animation(delta_time)
+        if self.spin:
+            self.angle += self.spin
+
         if self.trigger:
-            if self.spin:
-                self.angle += self.spin
 
             if arcade.check_for_collision(self, self.tar_point):
                 self.trigger = None
@@ -73,7 +77,7 @@ class Flying(Actor):
                     
 
                 elif self.damage_range == "circle":
-                    damage = circle_range(self.skill, self.engine, self.tar_point.x, self.tar_point.y)
+                    damage = circle_range(self.skill, self.engine, self.tar_point.position_xy, self.range)
                     # Hit_Anime(self.anime_effect, self.target.position)
                     self.engine.action_queue.extend([*damage,{"delay": {"time": self.delay_time, "action": {"turn_end": self.shooter}}}])
 
@@ -92,6 +96,11 @@ class Ranged:
         self.spin = spin
         self.target = target
 
+        if self.skill.damage_range ==  "circle":
+            self.range = square_shape(self.skill.size)
+            self.engine.skill_shape = self.range
+
+
     def use(self):
         print("use")
         self.engine.game_state = GAME_STATE.SELECT_LOCATION
@@ -99,12 +108,18 @@ class Ranged:
         return None
 
     def shot(self, x, y):
+        
         results = []
         if not self.target:
             for actor in self.actor_sprites:
+                # xyがターゲットの位置と一致するなら
                 if actor.x== x and actor.y == y:
+
+                    # ターゲット決定
                     if actor.is_visible:
                         self.target = actor
+
+                        # 左右のスプライトを決める
                         if self.target and self.shooter.x < self.target.x:
                             self.shooter.left_face = False
                         elif self.target and self.shooter.x > self.target.x:
@@ -121,7 +136,7 @@ class Ranged:
                 self.engine.player.form = self.skill.player_form
 
             Flying(shooter=self.shooter, tar_point=self.target,
-                        engine=self.engine, skill=self.skill, spin=self.spin)
+                        engine=self.engine, skill=self.skill, spin=self.spin, range=self.range)
 
             self.skill.count_time = self.skill.max_cooldown_time
 

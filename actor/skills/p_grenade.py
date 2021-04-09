@@ -24,8 +24,10 @@ class P_Grenade(BaseSkill):
         self.effect = None
 
         self.damage_range = "circle"
+        self.size = 1
         self.player_form = form.THROW
         self._level = 1
+
 
 
         self.shot_speed = 16
@@ -53,6 +55,8 @@ class P_Grenade(BaseSkill):
 
             fire = Ranged(engine, self.owner, self, spin=60)
             fire.use()
+
+            engine.skill_shape = self
 
     def update_animation(self, delta_time):
         super().update_animation(delta_time)

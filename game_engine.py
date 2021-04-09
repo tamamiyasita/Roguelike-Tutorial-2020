@@ -97,7 +97,8 @@ class GameEngine:
         self.selected_item = 0  # キー押下で直接選択したアイテム
         self.turn_check = []
         self.game_state = GAME_STATE.NORMAL
-        self.grid_select_handlers = []
+        self.skill_shape = None
+        self.sub_grid_handlers = []
         self.move_switch = True
         self.pop_position = deque([35,68,40,73,50,88])
         self.damage_pop = []
@@ -745,6 +746,8 @@ class GameEngine:
             if results:
                 self.action_queue.extend(results)
         self.grid_select_handlers = []
+
+
 
     def fov(self):
         """recompute_fovでTCODによるFOVの計算を行い

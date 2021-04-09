@@ -77,10 +77,6 @@ class SelectUI:
 
             #############
 
-            ##ターゲットシステムの構想　fireシステムに渡す、またはターゲットSkill使用時に呼び出される？　actor.spritesをループし、visibleならカーソルをそのアクターに合わせる
-            # その際に問題となる点。キー押下で決定　または次のターゲットにするのと近くのターゲットに最初にカーソルを合わせる方法
-            # ていうかfireシステムから機能をうまく分離すれば良さそうな感じだ
-            # あとファイアボールスクロールクラスからターゲット選択中の一時停止処理を借りれば
         try:
             for line in Bresenham((self.engine.player.x, self.engine.player.y),(self.dx, self.dy)):
                 line = grid_to_pixel(*line)
@@ -176,6 +172,18 @@ class SelectUI:
             height=SPRITE_SIZE*SPRITE_SCALE-2,
             color=[255, 255, 255, self.d_time]
         )
+        if self.engine.skill_shape:
+            for x, y in self.engine.ski:
+                arcade.draw_rectangle_filled(
+                    center_x=x,
+                    center_y=y,
+                    width=SPRITE_SIZE*SPRITE_SCALE-2,
+                    height=SPRITE_SIZE*SPRITE_SCALE-2,
+                    color=[255, 255, 255, self.d_time]
+                )
+                
+
+
         try:
 
             # グリッド囲い線の中にあるオブジェクトの情報の表示
