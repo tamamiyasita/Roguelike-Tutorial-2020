@@ -27,8 +27,9 @@ MAIN_PANEL_Y = int(SCREEN_HEIGHT)
 
 VIEWPORT_MARGIN = int(((MAIN_PANEL_X) /2 + (MAIN_PANEL_Y) / 2)/2)
 
-UI_FONT = "mplus-1c-bold.ttf"
-UI_FONT2 = "consola.ttf"
+UI_FONT = "mplus-2m-bold.ttf"
+UI_FONT2 = "mplus-1c-bold.ttf"
+UI_FONT3 = "mplus-1p-medium.ttf"
 
 MOVE_SPEED = 9
 

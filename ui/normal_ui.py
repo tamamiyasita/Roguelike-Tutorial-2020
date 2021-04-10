@@ -542,7 +542,8 @@ class NormalUI:
                 start_x=message_left_position,
                 start_y=message_first_position,
                 color=(255,255,255,c),
-                font_size=14
+                font_name=UI_FONT3,
+                font_size=13
             )
             c -= 15 # 行ごとに文字列を減色させる
 

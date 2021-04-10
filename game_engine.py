@@ -129,7 +129,7 @@ class GameEngine:
 
         arcade.set_background_color(COLORS["black"])
         self.flower_sprites = arcade.SpriteList(use_spatial_hash=True, spatial_hash_cell_size=32)
-        self.cur_level = self.setup_level(level_number=99)
+        self.cur_level = self.setup_level(level_number=1)
         self.stories[self.cur_floor_name] = self.cur_level
         self.turn_loop = TurnLoop(self.player)
         self.item_point = ItemPoint(self)
@@ -152,32 +152,6 @@ class GameEngine:
         self.game_level.floor_level = level
         self.game_level.map_name = f"test_dungeon"
 
-        # テスト用エンティティ
-
-        self.pineapple = Pineapple(self.player.x+1, self.player.y + 1)
-        self.game_level.item_sprites.append(self.pineapple)
-
-        self.hp = Paeonia(self.player.x-1, self.player.y)
-        self.game_level.item_sprites.append(self.hp)
-
-        self.silver_grass = SilverGrass(self.player.x + 1, self.player.y)
-        random_flower_gen(self.silver_grass, 20)
-        self.game_level.item_sprites.append(self.silver_grass)
-
-        self.ebony = Ebony(self.player.x + 1, self.player.y-1)
-        self.game_level.item_sprites.append(self.ebony)
-
-        self.sunflower = Sunflower(self.player.x, self.player.y-2)
-        self.game_level.item_sprites.append(self.sunflower)
-
-        self.bananaflower = Bananaflower(self.player.x-1, self.player.y+1)
-        self.game_level.item_sprites.append(self.bananaflower)
-
-        self.aconite = Aconite(self.player.x+1, self.player.y-2)
-        self.game_level.item_sprites.append(self.aconite)
-
-        self.bamboo = Bambooflower(self.player.x+2, self.player.y-2)
-        self.game_level.item_sprites.append(self.bamboo)
 
         self.st = Up_Stairs(self.player.x + 1, self.player.y-1)
         self.st.scale = 2
@@ -284,14 +258,16 @@ class GameEngine:
         self.target_player_map = DijkstraMap(dungeon.game_map.tiles, [self.player])
 
         ####################
+        # テスト用エンティティ
 
-        self.pineapple = Pineapple(self.player.x-1, self.player.y + 1)
+        self.pineapple = Pineapple(self.player.x+1, self.player.y + 1)
         self.game_level.item_sprites.append(self.pineapple)
 
         self.hp = Paeonia(self.player.x-1, self.player.y)
         self.game_level.item_sprites.append(self.hp)
 
         self.silver_grass = SilverGrass(self.player.x + 1, self.player.y)
+        random_flower_gen(self.silver_grass, 20)
         self.game_level.item_sprites.append(self.silver_grass)
 
         self.ebony = Ebony(self.player.x + 1, self.player.y-1)
@@ -299,6 +275,30 @@ class GameEngine:
 
         self.sunflower = Sunflower(self.player.x, self.player.y-2)
         self.game_level.item_sprites.append(self.sunflower)
+
+        self.bananaflower = Bananaflower(self.player.x-1, self.player.y+1)
+        self.game_level.item_sprites.append(self.bananaflower)
+
+        self.aconite = Aconite(self.player.x+1, self.player.y-2)
+        self.game_level.item_sprites.append(self.aconite)
+
+        self.bamboo = Bambooflower(self.player.x+2, self.player.y-2)
+        self.game_level.item_sprites.append(self.bamboo)
+
+        # self.pineapple = Pineapple(self.player.x-1, self.player.y + 1)
+        # self.game_level.item_sprites.append(self.pineapple)
+
+        # self.hp = Paeonia(self.player.x-1, self.player.y)
+        # self.game_level.item_sprites.append(self.hp)
+
+        # self.silver_grass = SilverGrass(self.player.x + 1, self.player.y)
+        # self.game_level.item_sprites.append(self.silver_grass)
+
+        # self.ebony = Ebony(self.player.x + 1, self.player.y-1)
+        # self.game_level.item_sprites.append(self.ebony)
+
+        # self.sunflower = Sunflower(self.player.x, self.player.y-2)
+        # self.game_level.item_sprites.append(self.sunflower)
 
         self.cabbageflower = Cabbageflower(self.player.x, self.player.y-1)
         self.game_level.item_sprites.append(self.cabbageflower)

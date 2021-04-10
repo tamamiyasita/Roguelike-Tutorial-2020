@@ -263,7 +263,8 @@ class Fighter:
         elif damage >= 1:
             if skill.anime and Tag.range_attack not in skill.tag:
                 Hit_Anime(skill, self.owner)
-            message += f" {owner_name} took {int(damage)} damage! from {skill_name}"
+            message += f" {owner_name} took {int(damage)} damage!"
+            results.append({"message": f"from {skill_name}"})
             results.append({"message": message})
 
             damage = int(damage)
