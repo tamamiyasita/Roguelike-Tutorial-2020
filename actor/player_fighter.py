@@ -142,10 +142,12 @@ class PC_Fighter(Fighter):
     def attack_skill(self):
         try:
             result =  [skill for skill in self.skill_list if Tag.weapon in skill.tag]
-            if not result:
-                result = [self.unarmed]
+            result.append(self.unarmed)
+            # if not result:
+            #     result = [self.unarmed]
         except:
-            result = [self.unarmed]
+            pass
+            # result = [self.unarmed]
         return result
 
 

@@ -20,7 +20,7 @@ class Hit_Anime(arcade.Sprite):
         self.textures = skill.anime
         self.texture = self.textures[0]
         self.tmp_state = skill.owner.state
-        self.scale = scale
+        self.scale = scale*skill.size
         self.timer = 0
 
         self.anime_type = skill.anime_type

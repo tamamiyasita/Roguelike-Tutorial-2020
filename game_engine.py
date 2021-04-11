@@ -98,10 +98,10 @@ class GameEngine:
         self.turn_check = []
         self.game_state = GAME_STATE.NORMAL
         self.skill_shape = None
-        self.sub_grid_handlers = []
+        self.grid_select_handlers = []
         self.move_switch = True
-        self.pop_position = deque([35,68,40,73,50,88])
         self.damage_pop = []
+        self.pop_position = 30
         self.messenger = None
 
         self.player = Player(
@@ -129,7 +129,7 @@ class GameEngine:
 
         arcade.set_background_color(COLORS["black"])
         self.flower_sprites = arcade.SpriteList(use_spatial_hash=True, spatial_hash_cell_size=32)
-        self.cur_level = self.setup_level(level_number=1)
+        self.cur_level = self.setup_level(level_number=99)
         self.stories[self.cur_floor_name] = self.cur_level
         self.turn_loop = TurnLoop(self.player)
         self.item_point = ItemPoint(self)
@@ -720,9 +720,9 @@ class GameEngine:
                 elif 0 > damage:
                     txt_color = COLORS["status_bar_foreground"]
                     damage= -damage
-                y = self.pop_position[0]
-                self.pop_position.rotate()
+                y = self.pop_position
                 self.damage_pop.append(DamagePop(damage, txt_color, target, y))
+                self.pop_position += 33
                 # Damagepop(self, damage, txt_color,  target, y)
 
 
@@ -777,6 +777,7 @@ class GameEngine:
         self.check_for_player_movement(player_direction)
         self.skill_dispry_check()
         self.skill_position_update()
+        # self.skill_shape = None
 
 
 

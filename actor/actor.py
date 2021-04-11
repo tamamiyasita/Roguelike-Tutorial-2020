@@ -1,5 +1,7 @@
 from os import stat
 from random import random, randint, uniform
+from collections import deque
+
 from arcade import particle
 from arcade.key import F
 from arcade.text import draw_text
@@ -58,6 +60,7 @@ class Actor(arcade.Sprite):
         self.from_x, self.from_y = 0,0
         self.dx, self.dy = 0,0
         self.particle = None
+
 
         self.tag = {}
 

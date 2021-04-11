@@ -30,14 +30,31 @@ class BambooBlade(BaseSkill):
 
 
 
+
     def update_animation(self, delta_time):
         super().update_animation(delta_time)
         try:
 
             if self.master.state == state.ATTACK and Tag.weapon in self.tag:
-                self.item_margin_x = (self.item_position_x + 3) * SPRITE_SCALE
-                self.item_margin_y += randint(-8,8)
-                self.item_margin_x += randint(-8,8)
+                # self.item_margin_x = (self.item_position_x + 3) * SPRITE_SCALE
+                # self.item_margin_y += randint(-8,8)
+                # self.item_margin_x += randint(-8,8)
+                self.item_margin_x = (self.item_position_x + 5) * SPRITE_SCALE
+                # self.item_margin_x += randint(-3,3)
+
+                if self.owner.left_face:
+                    self.angle += 22
+                    if self.angle >= 55:
+                        self.angle -= 90
+                elif not self.owner.left_face:
+                    self.angle -= 22
+                    if self.angle <= -55:
+                        self.angle += 90
+
+
+                        
+            else:
+                self.angle = 0
 
         except:
             pass

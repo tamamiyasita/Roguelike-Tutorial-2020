@@ -4,7 +4,7 @@ from constants import *
 from util import grid_to_pixel
 from actor.actor import Actor
 
-from damage_range import circle_range, square_shape
+from damage_range import damage_range, square_shape
 from hit_anime import Hit_Anime
 from ui.select_ui import SelectUI
 
@@ -76,10 +76,11 @@ class Flying(Actor):
                     self.engine.player.state = state.READY
                     
 
-                elif self.damage_range == "circle":
-                    damage = circle_range(self.skill, self.engine, self.tar_point.position_xy, self.range)
-                    # Hit_Anime(self.anime_effect, self.target.position)
+                else:
+                    damage = damage_range(self.skill, self.engine, self.tar_point.position_xy, self.range)
                     self.engine.action_queue.extend([*damage,{"delay": {"time": self.delay_time, "action": {"turn_end": self.shooter}}}])
+
+                self.engine.skill_shape = None
 
 
 
@@ -91,11 +92,13 @@ class Ranged:
         self.skill = skill
         self.x, self.y = shooter.x, shooter.y
         self.actor_sprites = engine.cur_level.floor_sprites
+        self.range = "single"
 
 
         self.spin = spin
         self.target = target
 
+        # ここでスキルの効果範囲を渡す
         if self.skill.damage_range ==  "circle":
             self.range = square_shape(self.skill.size)
             self.engine.skill_shape = self.range

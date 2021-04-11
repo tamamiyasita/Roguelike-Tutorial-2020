@@ -72,15 +72,16 @@ class SelectUI:
     def update(self):
 
         self.d_time -= 2
-        if -40 > self.d_time:
-            self.d_time = 120
+        if 40 > self.d_time:
+            self.d_time = 170
 
             #############
 
         try:
-            for line in Bresenham((self.engine.player.x, self.engine.player.y),(self.dx, self.dy)):
-                line = grid_to_pixel(*line)
-                arcade.draw_rectangle_filled(line[0],line[1], GRID_SIZE, GRID_SIZE, [100,100,10,100,])
+            if self.engine.skill_shape:
+                for line in Bresenham((self.engine.player.x, self.engine.player.y),(self.dx, self.dy)):
+                    line = grid_to_pixel(*line)
+                    arcade.draw_rectangle_filled(line[0],line[1], GRID_SIZE, GRID_SIZE, [255,251,160,100,])
         except:
             pass
         # try:
@@ -162,7 +163,7 @@ class SelectUI:
             width=SPRITE_SIZE*SPRITE_SCALE,
             height=SPRITE_SIZE*SPRITE_SCALE,
             color=arcade.color.LIGHT_BLUE,
-            border_width=2
+            border_width=3
         )
         # 点滅するグリッド内部
         arcade.draw_rectangle_filled(
@@ -173,13 +174,13 @@ class SelectUI:
             color=[255, 255, 255, self.d_time]
         )
         if self.engine.skill_shape:
-            for x, y in self.engine.ski:
+            for x, y in self.engine.skill_shape:
                 arcade.draw_rectangle_filled(
-                    center_x=x,
-                    center_y=y,
-                    width=SPRITE_SIZE*SPRITE_SCALE-2,
-                    height=SPRITE_SIZE*SPRITE_SCALE-2,
-                    color=[255, 255, 255, self.d_time]
+                    center_x=self.x+(x*64),
+                    center_y=self.y+(y*64),
+                    width=SPRITE_SIZE*SPRITE_SCALE,
+                    height=SPRITE_SIZE*SPRITE_SCALE,
+                    color=[200, 115, 155, self.d_time]
                 )
                 
 

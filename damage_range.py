@@ -4,7 +4,7 @@ from util import grid_to_pixel
 
 
 
-def circle_range(skill, engine, xy, range):
+def damage_range(skill, engine, xy, range):
     x, y = xy
     results = []
     for xy in range:

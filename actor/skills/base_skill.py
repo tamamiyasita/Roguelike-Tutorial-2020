@@ -4,7 +4,7 @@ from data import *
 
 
 class BaseSkill(Actor):
-    def __init__(self, x=0, y=0, name="grass_cutter",image=None, 
+    def __init__(self, x=0, y=0, name="attack",image=None, 
                 level=1, damage=1, hit_rate=90, attr="physical", effect=None):
         super().__init__(
             name=name,
@@ -26,7 +26,7 @@ class BaseSkill(Actor):
         self.max_cooldown_time = 6
         self.count_time = 0
         self.during_cool_down = False
-        self.size = None
+        self.size = 1
 
         self.speed = 10
 

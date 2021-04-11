@@ -115,6 +115,8 @@ class TurnLoop:
                 else:
                     # 他のアクターを障害物としてマップを計算する
                     engine.target_player_map.compute_distance_map(blocks=engine.cur_level.actor_sprites)
+                    
+                engine.pop_position = 30
             elif self.actor.state == state.READY and self.actor != self.player:
                 engine.action_queue.extend([{"turn_end": self.actor}])
 

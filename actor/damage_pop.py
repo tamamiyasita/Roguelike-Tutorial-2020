@@ -1,4 +1,3 @@
-from arcade.key import Y
 from constants import *
 import arcade
 from actor.actor import Actor
@@ -9,11 +8,11 @@ class DamagePop():
     def __init__(self, text, color, target, y, size=23):
         self.is_int = True
         if isinstance(text, str):
-            size = 21
+            size = 17
             self.is_int = False
         self.text = text
         self.target = target
-        self.size = size+randint(-2,2)
+        self.size = size+randint(-1,1)
         self.center_x = target.center_x+randint(-8,8)
         self.center_y = target.center_y
         self.tmp_center_y = target.center_y
