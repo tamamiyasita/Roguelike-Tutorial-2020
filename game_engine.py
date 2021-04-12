@@ -105,7 +105,7 @@ class GameEngine:
         self.messenger = None
 
         self.player = Player(
-            inventory=Inventory(capacity=9))
+            inventory=Inventory(capacity=18))
 
 
 

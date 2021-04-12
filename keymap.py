@@ -128,6 +128,16 @@ def inventory_key(key, engine):
         if engine.player.inventory.capacity-1 < engine.selected_item:
             engine.selected_item = 0
 
+    elif key in KEYMAP_LEFT:
+        
+        if -1 < engine.selected_item > 8:
+            engine.selected_item -= 9
+
+    elif key in KEYMAP_RIGHT:
+        if -1 < engine.selected_item < 9:
+            engine.selected_item += 9
+
+
 
 
     elif key in KEYMAP_USE_ITEM:
