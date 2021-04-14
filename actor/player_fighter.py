@@ -140,9 +140,11 @@ class PC_Fighter(Fighter):
         return result
     @property
     def attack_skill(self):
+        result = []
+        result.append(self.unarmed)
         try:
-            result =  [skill for skill in self.skill_list if Tag.weapon in skill.tag]
-            result.append(self.unarmed)
+            result.extend([skill for skill in self.skill_list if Tag.weapon in skill.tag])
+            # result.append(self.unarmed)
             # if not result:
             #     result = [self.unarmed]
         except:

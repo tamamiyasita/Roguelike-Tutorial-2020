@@ -93,7 +93,7 @@ class GameEngine:
         self.player = None
         self.game_map = None
         self.action_queue = []
-        self.messages = deque(maxlen=9)
+        self.messages = deque(maxlen=8)
         self.selected_item = 0  # キー押下で直接選択したアイテム
         self.turn_check = []
         self.game_state = GAME_STATE.NORMAL
@@ -120,16 +120,16 @@ class GameEngine:
         elif level_number >= 99:
             return self.test_map(level_number)
         elif level_number >= 1:
-            # cur_map = self.basic_dungeon_init(level_number)
+            cur_map = self.basic_dungeon_init(level_number)
             # cur_map = self.bps_dungeon_init(level_number)
-            cur_map = self.drunker_dungeon_init(level_number)
+            # cur_map = self.drunker_dungeon_init(level_number)
             return cur_map
 
     def setup(self):
 
         arcade.set_background_color(COLORS["black"])
         self.flower_sprites = arcade.SpriteList(use_spatial_hash=True, spatial_hash_cell_size=32)
-        self.cur_level = self.setup_level(level_number=99)
+        self.cur_level = self.setup_level(level_number=1)
         self.stories[self.cur_floor_name] = self.cur_level
         self.turn_loop = TurnLoop(self.player)
         self.item_point = ItemPoint(self)

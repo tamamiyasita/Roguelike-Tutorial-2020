@@ -27,14 +27,31 @@ def draw_inventory(player, selected_item, viewport):
         height=panel_height,
         color=[5,5,5,180],
         )
-    arcade.draw_xywh_rectangle_outline(
+    # arcade.draw_xywh_rectangle_outline(
+    #     bottom_left_x=back_panel_left,
+    #     bottom_left_y=back_panel_bottom_left - GRID_SIZE,
+    #     width=panel_width,
+    #     height=panel_height,
+    #     color=[70,221,130,255],
+    #     border_width=3
+    #     )
+    arcade.draw_text(text="Inventory".upper(),
+                        start_x=back_panel_left+20,
+                        start_y=viewport_top - GRID_SIZE-9,
+                        color=arcade.color.DAFFODIL,
+                        font_size=20,
+                        font_name=UI_FONT2,
+                        # anchor_y="
+                        )
+    ip = arcade.load_texture(r"image\i_p.png")
+    arcade.draw_lrwh_rectangle_textured(
         bottom_left_x=back_panel_left,
         bottom_left_y=back_panel_bottom_left - GRID_SIZE,
         width=panel_width,
         height=panel_height,
-        color=[70,221,130,255],
-        border_width=3
-        )
+        texture=ip
+
+    )
 
 
     y = GRID_SIZE # itemtextの改行スペース
@@ -73,20 +90,29 @@ def draw_inventory(player, selected_item, viewport):
 
         if item == selected_item:
             # アウトラインをitemカーソルとして描画
-            arcade.draw_lrtb_rectangle_filled(
-                left=back_panel_left + x,
-                right=back_panel_right + x,
-                top=back_panel_top_left + y,
-                bottom=back_panel_top_left + y - GRID_SIZE,
-                color=[155,255,155,55],
-            )
-            arcade.draw_lrtb_rectangle_outline(
-                left=back_panel_left + x,
-                right=back_panel_right + x,
-                top=back_panel_top_left + y,
-                bottom=back_panel_top_left + y - GRID_SIZE,
-                color=[252,250,20,255],
-                border_width=3
+            # arcade.draw_lrtb_rectangle_filled(
+            #     left=back_panel_left + x,
+            #     right=back_panel_right + x,
+            #     top=back_panel_top_left + y,
+            #     bottom=back_panel_top_left + y - GRID_SIZE,
+            #     color=[155,255,155,55],
+            # )
+            # arcade.draw_lrtb_rectangle_outline(
+            #     left=back_panel_left + x,
+            #     right=back_panel_right + x,
+            #     top=back_panel_top_left + y,
+            #     bottom=back_panel_top_left + y - GRID_SIZE,
+            #     color=[252,250,20,255],
+            #     border_width=3
+            # )
+            cs = arcade.load_texture(r"image\c_s.png")
+            arcade.draw_lrwh_rectangle_textured(
+                bottom_left_x=back_panel_left + x,
+                bottom_left_y=back_panel_top_left-GRID_SIZE + y,
+                width=64*7,
+                height=64,
+                texture=cs
+
             )
         # itemのアイコンを描画
         if cur_item:

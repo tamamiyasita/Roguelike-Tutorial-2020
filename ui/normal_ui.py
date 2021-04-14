@@ -47,8 +47,8 @@ class NormalUI:
 
         self.panel_ui()
         self.draw_hp_and_status_bar()
-        self.draw_active_skill()
         self.draw_messages_handle()
+        self.draw_active_skill()
         self.draw_passive_skill()
         self.draw_status_icons()
 
@@ -109,81 +109,118 @@ class NormalUI:
 
     def panel_ui(self):
         # 画面下のパネルをarcadeの四角形を描画する変数で作成
-        arcade.draw_xywh_rectangle_filled(
-            bottom_left_x=self.viewport_left,
-            bottom_left_y=self.viewport_bottom,
-            width=self.side_panel_width,
-            height=STATES_PANEL_HEIGHT,
-            color=(255,255,255,0)#COLORS["status_panel_background"]
-        )
+        # arcade.draw_xywh_rectangle_filled(
+        #     bottom_left_x=self.viewport_left,
+        #     bottom_left_y=self.viewport_bottom,
+        #     width=self.side_panel_width,
+        #     height=STATES_PANEL_HEIGHT,
+        #     color=(255,255,255,0)#COLORS["status_panel_background"]
+        # )
 
 
         # 画面横のパネル
-        arcade.draw_xywh_rectangle_filled(
+        side = arcade.load_texture(r"image\side_p.png")
+        arcade.draw_lrwh_rectangle_textured(
+        # arcade.draw_xywh_rectangle_filled(
             bottom_left_x=self.side_panel_x_line,
             bottom_left_y=self.side_panel_y_line,
             width=STATES_PANEL_WIDTH+8,
             height=self.side_panel_height-16,
-            color=(25,25,55,55)
+            # color=(25,25,55,55)
+            texture=side
+        )
+        arcade.draw_text(
+            "[Flowers]",
+            start_x=self.passive_panel_line+GRID_SIZE*5,
+            start_y=self.viewport_top-9,
+            color=(255,129,128),
+            font_size=10,
+            font_name=UI_FONT,
+            anchor_y="top"
         )
 
+
+
        # 横パネルの周りの線
-        arcade.draw_xywh_rectangle_outline(
-            bottom_left_x=self.side_panel_x_line,
-            bottom_left_y=self.side_panel_y_line,
-            width=STATES_PANEL_WIDTH + 8,
-            height=self.side_panel_height-14,
-            color=(255,129,128),
-            border_width=self.panel_line_width
-        )
+        # arcade.draw_xywh_rectangle_outline(
+        #     bottom_left_x=self.side_panel_x_line,
+        #     bottom_left_y=self.side_panel_y_line,
+        #     width=STATES_PANEL_WIDTH + 8,
+        #     height=self.side_panel_height-14,
+        #     color=(255,129,128),
+        #     border_width=self.panel_line_width
+        # )
         # アクティブスキルアイコン枠
         d = 14
-        arcade.draw_xywh_rectangle_outline(
+        ap = arcade.load_texture(r"image\ac_p.png")
+        arcade.draw_lrwh_rectangle_textured(
+        # arcade.draw_xywh_rectangle_outline(
             bottom_left_x=self.active_panel_line,
             bottom_left_y=self.viewport_bottom+8,
             width=(SCREEN_WIDTH-(GRID_SIZE*10))/2 +d,
             height=self.skill_panel_height,
-            color=arcade.color.ORANGE,
-            border_width=self.panel_line_width
+            # color=arcade.color.ORANGE,
+            # border_width=self.panel_line_width
+            texture=ap
         )
         # パッシブスキルアイコン枠
-        arcade.draw_xywh_rectangle_outline(
+        ps = arcade.load_texture(r"image\ps_p.png")
+        arcade.draw_lrwh_rectangle_textured(
+        # arcade.draw_xywh_rectangle_outline(
             bottom_left_x=self.passive_panel_line,
             bottom_left_y=self.viewport_bottom+8,
             width=(SCREEN_WIDTH-(GRID_SIZE*10))/2 +d,
             height=self.skill_panel_height,
-            color=arcade.color.BABY_BLUE,
-            border_width=self.panel_line_width
+            # color=arcade.color.BABY_BLUE,
+            # border_width=self.panel_line_width
+            texture=ps
         )
         # メッセージパネル枠
-        arcade.draw_xywh_rectangle_outline(
+        log = arcade.load_texture(r"image\log_p.png")
+        arcade.draw_lrwh_rectangle_textured(
+        # arcade.draw_xywh_rectangle_outline(
             bottom_left_x=self.viewport_left+8,
             bottom_left_y=self.viewport_bottom+8,
             width=GRID_SIZE*6-8,
             height=self.skill_panel_height,
-            color=arcade.color.WHITE_SMOKE,
-            border_width=self.panel_line_width
+            # color=arcade.color.WHITE_SMOKE,
+            # border_width=self.panel_line_width
+            texture=log
         )
 
 
 
-        # ミニマップ黒背景
-        arcade.draw_xywh_rectangle_filled(
-            bottom_left_x=self.side_panel_x_line,
-            bottom_left_y=self.viewport_bottom+8,
-            width=STATES_PANEL_WIDTH+8,
-            height=self.skill_panel_height,
-            color=arcade.color.BLACK
-        )
+        # (確認用)ミニマップ黒背景
+        # arcade.draw_xywh_rectangle_filled(
+        #     bottom_left_x=self.side_panel_x_line,
+        #     bottom_left_y=self.viewport_bottom+8,
+        #     width=STATES_PANEL_WIDTH+8,
+        #     height=self.skill_panel_height,
+        #     color=arcade.color.BLACK
+        # )
+
         # ミニマップ囲い線
-        arcade.draw_xywh_rectangle_outline(
+        map = arcade.load_texture(r"image\map_p.png")
+        arcade.draw_lrwh_rectangle_textured(
+        # arcade.draw_xywh_rectangle_outline(
             bottom_left_x=self.side_panel_x_line,
             bottom_left_y=self.viewport_bottom+8,
             width=STATES_PANEL_WIDTH+8,
             height=self.skill_panel_height,
-            color=arcade.color.GO_GREEN,
-            border_width=self.panel_line_width
+            # color=arcade.color.GO_GREEN,
+            # border_width=self.panel_line_width
+            texture=map
         )
+        # <mini_mapタイトル>        
+        arcade.draw_text(text="[Mini Map]",
+                         start_x=self.passive_panel_line+GRID_SIZE*5,
+                         start_y=self.panel_top_position+10,
+                         color=arcade.color.BUD_GREEN,
+                         font_size=10,
+                         font_name=UI_FONT,
+                         anchor_y="top"
+                         )
+
 
     def draw_hp_and_status_bar(self):
         """ステータスパネルとHPバー"""
@@ -191,14 +228,14 @@ class NormalUI:
         hp_font_size = 15
         hp_bar_width = 180  # HPバーの幅
         hp_bar_height = hp_font_size + 4  # HPバーの太さ
-        hp_bar_margin = self.viewport_top -35  # 15パネル上端からのHPバーの位置
+        hp_bar_margin = self.viewport_top -53  # 15パネル上端からのHPバーの位置
         left_margin = self.viewport_left + self.side_panel_width-5  # 画面左からのHPとバーの位置
 
         Player_attr = f"{self.player.race} {self.player.name}"
 
         arcade.draw_text(text=Player_attr,
                          start_x=left_margin,
-                         start_y=hp_bar_margin,
+                         start_y=hp_bar_margin+1,
                          color=(132,255,142),
                          font_size=hp_font_size,
                          font_name=UI_FONT
@@ -276,15 +313,6 @@ class NormalUI:
         flower_y_position = self.viewport_top - GRID_SIZE * 2 + 20
         y = 75
 
-        arcade.draw_text(
-            "[Flowers]",
-            flower_x_position-4,
-            flower_y_position - 14,
-            (255,129,128),
-            12,
-            font_name=UI_FONT
-        )
-
 
 
         for i, flower in enumerate(self.player.equipment.flower_slot):
@@ -337,7 +365,7 @@ class NormalUI:
 
             draw_status_bar(start_x=flower_x_position+50,
                             start_y=flower_y_position+1-y,
-                            width=100,
+                            width=130,
                             height=13,
                             current_value=flower.hp,
                             front_color=front_color,
@@ -363,7 +391,7 @@ class NormalUI:
             # EXPバーの描画
             draw_status_bar(start_x=flower_x_position+50,
                             start_y=flower_y_position+18-y,
-                            width=100,
+                            width=130,
                             height=11,
                             current_value=flower.current_xp,
                             max_value=xp_to_next_level,
@@ -403,11 +431,12 @@ class NormalUI:
         # TODO 複数行にする処理を考える（５回ループしたら縦と横の変数に増減するなど）
         # <active skill>        
         arcade.draw_text(text="[Active Skill]",
-                         start_x=self.active_panel_line+5,
-                         start_y=self.panel_top_position - 15,
-                         color=arcade.color.ORANGE,
-                         font_size=12,
-                         font_name=UI_FONT
+                         start_x=self.active_panel_line+10,
+                         start_y=self.panel_top_position+10,
+                         color=arcade.color.WILLPOWER_ORANGE,
+                         font_size=10,
+                         font_name=UI_FONT,
+                         anchor_y="top"
                          )
         for i, skill in enumerate(self.player.fighter.active_skill):
             if i == 5:
@@ -483,11 +512,12 @@ class NormalUI:
 
         # <passive skill>        
         arcade.draw_text(text="[Passive Skill]",
-                         start_x=self.passive_panel_line+5,
-                         start_y=self.panel_top_position - 15,
-                         color=arcade.color.BABY_BLUE,
-                         font_size=12,
-                         font_name=UI_FONT
+                         start_x=self.passive_panel_line+10,
+                         start_y=self.panel_top_position+10,
+                         color=arcade.color.SKY_BLUE,
+                         font_size=10,
+                         font_name=UI_FONT,
+                         anchor_y="top"
                          )
 
         
@@ -529,11 +559,20 @@ class NormalUI:
 
     def draw_messages_handle(self):
         """メッセージ表示領域"""
-        margin = -15
-        message_top_position = 19  # パネル上端からのメッセージ表示位置
+        margin = -20
+        message_top_position = 20  # 行間のスペース
         message_left_position = self.viewport_left - margin  # 画面左からのメッセージ表示位置
-        message_first_position = self.viewport_bottom + GRID_SIZE*3-26# self.side_panel_height#self.viewport_bottom + 170# STATES_PANEL_HEIGHT - message_top_position  # 最初の行
+        message_first_position = self.viewport_bottom + GRID_SIZE*3-36# self.side_panel_height#self.viewport_bottom + 170# STATES_PANEL_HEIGHT - message_top_position  # 最初の行
 
+        # <log>        
+        arcade.draw_text(text="[Log]",
+                         start_x=self.viewport_left+18,
+                         start_y=self.panel_top_position+10,
+                         color=arcade.color.GRAY_BLUE,
+                         font_size=10,
+                         font_name=UI_FONT,
+                         anchor_y="top"
+                         )
 
         c = 255
         for message in list(reversed(self.messages)):

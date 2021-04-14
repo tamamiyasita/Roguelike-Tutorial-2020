@@ -57,7 +57,7 @@ class MG(arcade.Window):
         # ここでminimapの作成を行う
         # ----------------------
         # ミニマップの描画位置指定
-        screen_size = (GAME_GROUND_WIDTH, GAME_GROUND_HEIGHT)
+        screen_size = (SCREEN_WIDTH, SCREEN_HEIGHT)
         self.program = self.ctx.load_program(
             vertex_shader=arcade.resources.shaders.vertex.default_projection,
             fragment_shader=arcade.resources.shaders.fragment.texture)
@@ -73,7 +73,7 @@ class MG(arcade.Window):
         self.quad_fs = geometry.quad_2d_fs()
 
         self.mini_map_quad = geometry.quad_2d(
-            size=(0.66, 1.05), pos=(.995, -.475))
+            size=(0.31, .31), pos=(.824, -.8))
         # ----------------------
 
         # Lコマンドで呼び出すlook機能
@@ -114,7 +114,7 @@ class MG(arcade.Window):
         """minimap draw"""
         if self.engine.game_state == GAME_STATE.NORMAL or self.engine.game_state == GAME_STATE.DELAY_WINDOW:
             self.offscreen.use()
-            self.offscreen.clear(arcade.color.BLACK)
+            # self.offscreen.clear(arcade.color.BLACK)
 
             arcade.set_viewport(0, GAME_GROUND_WIDTH, 0,
                                 GAME_GROUND_HEIGHT+GRID_SIZE*2)

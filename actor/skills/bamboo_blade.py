@@ -43,13 +43,13 @@ class BambooBlade(BaseSkill):
                 # self.item_margin_x += randint(-3,3)
 
                 if self.owner.left_face:
-                    self.angle += 22
-                    if self.angle >= 55:
-                        self.angle -= 90
+                    self.angle += 40
+                    if self.angle >= 90:
+                        self.angle -= 170
                 elif not self.owner.left_face:
-                    self.angle -= 22
-                    if self.angle <= -55:
-                        self.angle += 90
+                    self.angle -= 40
+                    if self.angle <= -90:
+                        self.angle += 170
 
 
                         
