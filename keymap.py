@@ -79,6 +79,7 @@ def grid_select_key(key, select_UI):
         select_UI.grid_select = [0,0]
         select_UI.x, select_UI.y = 0,0
         select_UI.engine.game_state = GAME_STATE.NORMAL
+        select_UI.engine.grid_select_handlers = []
 
 
     elif key == arcade.key.TAB:

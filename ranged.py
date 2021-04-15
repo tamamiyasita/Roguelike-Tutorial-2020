@@ -102,7 +102,9 @@ class Ranged:
         if self.skill.damage_range ==  "circle":
             self.range = square_shape(self.skill.size)
             self.engine.skill_shape = self.range
-
+        elif self.range == "single":
+            self.range = [(0, 0)]
+            self.engine.skill_shape = self.range
 
     def use(self):
         print("use")
