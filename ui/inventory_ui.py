@@ -105,6 +105,8 @@ def draw_inventory(player, selected_item, viewport):
             #     color=[252,250,20,255],
             #     border_width=3
             # )
+
+            # カーソル表示
             cs = arcade.load_texture(r"image\c_s.png")
             arcade.draw_lrwh_rectangle_textured(
                 bottom_left_x=back_panel_left + x,
@@ -112,8 +114,104 @@ def draw_inventory(player, selected_item, viewport):
                 width=64*7,
                 height=64,
                 texture=cs
-
             )
+            cy = 10 + item_font_size
+            if cur_item:
+            # itemの説明文をパネル下部に表示
+
+                arcade.draw_lrtb_rectangle_filled(
+                    left=back_panel_left,
+                    right=back_panel_right+GRID_SIZE*7,
+                    top=back_panel_bottom_left-GRID_SIZE-2,
+                    bottom=back_panel_bottom_left-(GRID_SIZE*6),
+                    color=[100,100,100,250],
+                )
+                left = back_panel_left + 15
+                arcade.draw_text(
+                    text=f"LEVEL {cur_item.level}",
+                    start_x=left,
+                    start_y=back_panel_bottom_left-GRID_SIZE-cy,
+                    color=font_color,
+                    font_size=item_font_size,
+                    font_name=UI_FONT,
+                    anchor_y="top"
+                )
+                arcade.draw_text(
+                    text=f"HP {cur_item.hp}/{cur_item.max_hp}",
+                    start_x=left,
+                    start_y=back_panel_bottom_left-GRID_SIZE-cy*2,
+                    color=font_color,
+                    font_size=item_font_size,
+                    font_name=UI_FONT,
+                    anchor_y="top"
+                )
+                arcade.draw_text(
+                    text=f"EXP {cur_item.current_xp}",
+                    start_x=left,
+                    start_y=back_panel_bottom_left-GRID_SIZE-cy*3,
+                    color=font_color,
+                    font_size=item_font_size,
+                    font_name=UI_FONT,
+                    anchor_y="top"
+                )
+                arcade.draw_texture_rectangle(
+                    center_x=left+25,
+                    center_y=back_panel_bottom_left-GRID_SIZE-cy*7,
+                    width=40,
+                    height=40,
+                    texture=IMAGE_ID["black_board"]
+                )
+                arcade.draw_texture_rectangle(
+                    center_x=left+25,
+                    center_y=back_panel_bottom_left-GRID_SIZE-cy*7,
+                    width=40,
+                    height=40,
+                    texture=cur_item.flower_skill.icon,
+
+                )
+                arcade.draw_text(
+                    text=f"skill",
+                    start_x=left,
+                    start_y=back_panel_bottom_left-GRID_SIZE-cy*5,
+                    color=font_color,
+                    font_size=item_font_size,
+                    font_name=UI_FONT,
+                    anchor_y="top"
+                )
+                # arcade.draw_lrwh_rectangle_textured(
+                #     bottom_left_x=back_panel_left+15,
+                #     bottom_left_y=back_panel_bottom_left-GRID_SIZE-cy*8,
+                #     width=40,
+                #     height=40,
+                #     texture=cur_item.flower_skill.icon
+
+                # )
+                arcade.draw_text(
+                    text=f"States Bonus",
+                    start_x=back_panel_left+GRID_SIZE*2,
+                    start_y=back_panel_bottom_left-GRID_SIZE-cy,
+                    color=font_color,
+                    font_size=item_font_size,
+                    font_name=UI_FONT,
+                    anchor_y="top"
+                )
+
+                ky = GRID_SIZE+item_font_size
+                for key, val in cur_item.states_bonus.items():
+                    if val:
+                        
+
+                        arcade.draw_text(
+                            text=f"{key} + {val}",
+                            start_x=back_panel_left+GRID_SIZE*2,
+                            start_y=back_panel_bottom_left-GRID_SIZE-ky,
+                            color=font_color,
+                            font_size=item_font_size-2,
+                            font_name=UI_FONT,
+                            # anchor_y="top"
+                        )
+                        ky += 10+item_font_size
+
         # itemのアイコンを描画
         if cur_item:
             arcade.draw_texture_rectangle(
@@ -162,23 +260,40 @@ def draw_inventory(player, selected_item, viewport):
             
             # itemの説明文をパネル下部に表示
             # if hasattr(cur_item, "explanatory_text"):
-            arcade.draw_lrtb_rectangle_filled(
-                left=back_panel_left+GRID_SIZE,
-                right=back_panel_right+GRID_SIZE*6,
-                top=back_panel_bottom_left-GRID_SIZE-2,
-                bottom=back_panel_bottom_left-(GRID_SIZE*3),
-                color=[20,20,20,250],
-            )
+            # arcade.draw_lrtb_rectangle_filled(
+            #     left=back_panel_left,
+            #     right=back_panel_right+GRID_SIZE*7,
+            #     top=back_panel_bottom_left-GRID_SIZE-2,
+            #     bottom=back_panel_bottom_left-(GRID_SIZE*6),
+            #     color=[100,100,200,250],
+            # )
+            # if item == selected_item:
 
-                # arcade.draw_text(
-                #     text=f"<explanatory note>\n{cur_item.explanatory_text}",
-                #     start_x=back_panel_left +10,
-                #     start_y=back_panel_bottom_left - (GRID_SIZE) - 5,
-                #     color=font_color,
-                #     font_size=item_font_size-7,
-                #     font_name=UI_FONT2,
-                #     anchor_y="top"
-                # )
+            #     arcade.draw_text(
+            #         text=f"States Bonus",
+            #         start_x=back_panel_left+GRID_SIZE*3,
+            #         start_y=back_panel_bottom_left-GRID_SIZE-12,
+            #         color=font_color,
+            #         font_size=item_font_size-5,
+            #         font_name=UI_FONT,
+            #         anchor_y="top"
+            #     )
+
+            #     ky = GRID_SIZE
+            #     for key, val in cur_item.states_bonus.items():
+            #         if val:
+                        
+
+            #             arcade.draw_text(
+            #                 text=f"{key} : {val}",
+            #                 start_x=back_panel_left+GRID_SIZE*3,
+            #                 start_y=back_panel_bottom_left-GRID_SIZE-ky,
+            #                 color=font_color,
+            #                 font_size=item_font_size-5,
+            #                 font_name=UI_FONT,
+            #                 # anchor_y="top"
+            #             )
+            #             ky += 22
 
 
 
@@ -213,7 +328,7 @@ def draw_inventory(player, selected_item, viewport):
         y -= GRID_SIZE
 
 
-    # y = GRID_SIZE
+    # y = 12
     # for item in player.equipment.flower_slot:
 
     #     if item:

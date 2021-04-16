@@ -26,11 +26,11 @@ void main() {
 
 
     // set the RGBA color
-    color = vec4(in_color[0], in_color[1], in_color[2], alpha);
+    color = vec4(abs(cos(in_color[2])), in_color[0], in_color[1], alpha);
     // if(alpha < 0.7) alpha =  1.0 - (in_fade_rate * (time*300));
     // if(alpha < time) color = vec4(1,1,1,0.3+alpha);
 
-    if(in_fade_rate > time) if(alpha < 0.6) color = vec4(1,1,1,0.4+alpha);
+    if(in_fade_rate > time) if(alpha < 0.6) color = vec4(1,1,abs(sin(time*5)),0.4+alpha);
 
     if(alpha < 0.0) alpha = 0;
 
