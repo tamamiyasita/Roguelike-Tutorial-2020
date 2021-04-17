@@ -48,7 +48,7 @@ class Select_param:
         rarity_point = {"common":1, "uncomon":2, "rare":3}
         self.flower = flower
         self.point = rarity_point[self.flower.rarity]
-        self.up_state = ("max_hp", "base_states", "high_states", "resist", "speed")
+        self.up_state = ("max_hp", "base_states", "high_states", "resist", "move_speed")
         if self.flower.rarity == "common":
             self.choice_pram = [35, 5, 1, 0, 0]
         if self.flower.rarity == "uncommon":
@@ -86,9 +86,9 @@ class Select_param:
                 self.flower.resist_bonus[choice_reg] += 1
                 result[choice_reg] = 1
 
-            elif "speed" in param:
+            elif "move_speed" in param:
                 self.flower.states_bonus["attack_speed"] += 1
-                result["speed"] = 1
+                result["move_speed"] = 1
 
         return result
 

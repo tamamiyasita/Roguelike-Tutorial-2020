@@ -17,7 +17,7 @@ class Equipment:
         self.skill_list = []# arcade.SpriteList()
 
         self.states_bonus = {"max_hp": 0,"STR": 0,"DEX": 0, "INT": 0,
-                             "defense": 0, "evasion": 0, "attack_speed":0}
+                             "defense": 0, "evasion": 0, "move_speed":0, "attack_speed":0}
         self.affinity_bonus = {"physical": 0, "fire": 0, "ice": 0, "lightning":0, "acid": 0, "poison": 0, "mind": 0, "recovery":0}
         self.resist_bonus = {"physical": 0, "fire": 0, "ice": 0, "lightning":0, "acid": 0, "poison": 0, "mind": 0}
         
@@ -99,7 +99,7 @@ class Equipment:
         """flower_slotをループしてstates bonusを合計し返す"""
 
         bonus = {"max_hp": 0, "max_mp": 0, "STR": 0,
-                 "DEX": 0, "INT": 0, "defense": 0, "evasion": 0, "attack_speed":0}
+                 "DEX": 0, "INT": 0, "defense": 0, "evasion": 0, "move_speed":0, "attack_speed":0}
         for parts in self.flower_slot:
             if parts and not isinstance(parts, str) and parts.states_bonus:
                 bonus = Counter(bonus) + Counter(parts.states_bonus)

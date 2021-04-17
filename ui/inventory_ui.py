@@ -115,8 +115,9 @@ def draw_inventory(player, selected_item, viewport):
                 height=64,
                 texture=cs
             )
-            cy = 10 + item_font_size
+            cy = 13 + item_font_size
             if cur_item:
+                font_color2 = arcade.color.PINK_SHERBET
             # itemの説明文をパネル下部に表示
 
                 arcade.draw_lrtb_rectangle_filled(
@@ -131,7 +132,7 @@ def draw_inventory(player, selected_item, viewport):
                     text=f"LEVEL {cur_item.level}",
                     start_x=left,
                     start_y=back_panel_bottom_left-GRID_SIZE-cy,
-                    color=font_color,
+                    color=font_color2,
                     font_size=item_font_size,
                     font_name=UI_FONT,
                     anchor_y="top"
@@ -140,7 +141,7 @@ def draw_inventory(player, selected_item, viewport):
                     text=f"HP {cur_item.hp}/{cur_item.max_hp}",
                     start_x=left,
                     start_y=back_panel_bottom_left-GRID_SIZE-cy*2,
-                    color=font_color,
+                    color=font_color2,
                     font_size=item_font_size,
                     font_name=UI_FONT,
                     anchor_y="top"
@@ -149,7 +150,7 @@ def draw_inventory(player, selected_item, viewport):
                     text=f"EXP {cur_item.current_xp}",
                     start_x=left,
                     start_y=back_panel_bottom_left-GRID_SIZE-cy*3,
-                    color=font_color,
+                    color=font_color2,
                     font_size=item_font_size,
                     font_name=UI_FONT,
                     anchor_y="top"
@@ -170,10 +171,10 @@ def draw_inventory(player, selected_item, viewport):
 
                 )
                 arcade.draw_text(
-                    text=f"skill",
+                    text=f"SKILL",
                     start_x=left,
                     start_y=back_panel_bottom_left-GRID_SIZE-cy*5,
-                    color=font_color,
+                    color=font_color2,
                     font_size=item_font_size,
                     font_name=UI_FONT,
                     anchor_y="top"
@@ -188,9 +189,9 @@ def draw_inventory(player, selected_item, viewport):
                 # )
                 arcade.draw_text(
                     text=f"States Bonus",
-                    start_x=back_panel_left+GRID_SIZE*2,
+                    start_x=back_panel_left+GRID_SIZE*3,
                     start_y=back_panel_bottom_left-GRID_SIZE-cy,
-                    color=font_color,
+                    color=arcade.color.GREEN_YELLOW,
                     font_size=item_font_size,
                     font_name=UI_FONT,
                     anchor_y="top"
@@ -202,8 +203,32 @@ def draw_inventory(player, selected_item, viewport):
                         
 
                         arcade.draw_text(
-                            text=f"{key} + {val}",
-                            start_x=back_panel_left+GRID_SIZE*2,
+                            text=f"{key: <13} + {val}".replace("_", " ").title(),
+                            start_x=back_panel_left+GRID_SIZE*3,
+                            start_y=back_panel_bottom_left-GRID_SIZE-ky,
+                            color=font_color,
+                            font_size=item_font_size-2,
+                            font_name=UI_FONT,
+                            # anchor_y="top"
+                        )
+                        ky += 10+item_font_size
+                arcade.draw_text(
+                    text=f"Resist Bonus",
+                    start_x=back_panel_left+GRID_SIZE*7,
+                    start_y=back_panel_bottom_left-GRID_SIZE-cy,
+                    color=arcade.color.ORIOLES_ORANGE,
+                    font_size=item_font_size,
+                    font_name=UI_FONT,
+                    anchor_y="top"
+                )
+                ky = GRID_SIZE+item_font_size
+                for key, val in cur_item.resist_bonus.items():
+                    if val:
+                        
+
+                        arcade.draw_text(
+                            text=f"{key: <13} + {val}".replace("_", " ").title(),
+                            start_x=back_panel_left+GRID_SIZE*7,
                             start_y=back_panel_bottom_left-GRID_SIZE-ky,
                             color=font_color,
                             font_size=item_font_size-2,

@@ -137,7 +137,7 @@ class LevelUpFlower:
                         font_color = (250, 55, 155)
                     if k in self.player.fighter.resist:
                         font_color = (150, 10, 250)
-                    if "speed" in k:
+                    if "move_speed" in k:
                         font_color = (250, 250, 50)
 
 

@@ -28,7 +28,7 @@ class Paeonia(BaseFlower):
         self.current_xp = 0
 
         self.flower_color = "pink"
-        self.states_bonus =  {"max_hp": 0,"STR": 0,"DEX": 0, "INT": 1, "defense": 0, "evasion": 0, "attack_speed":0}
+        self.states_bonus =  {"max_hp": 0,"STR": 0,"DEX": 0, "INT": 1, "defense": 0, "evasion": 0, "move_speed":0, "attack_speed":0}
         self.skill_bonus = {"healing":1}
         self.resist_bonus = {"physical": 0, "fire": 0, "ice": 0, "lightning":0, "acid": 0, "poison": 1, "mind": 0}
 

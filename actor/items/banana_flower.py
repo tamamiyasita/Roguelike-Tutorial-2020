@@ -25,7 +25,7 @@ class Bananaflower(BaseFlower):
         self.current_xp = 0
         
         self.flower_color = "purple"
-        self.states_bonus =  {"max_hp": 2,"STR": 0,"DEX": 0, "INT": 0, "defense": 0, "evasion": 0, "attack_speed":0}
+        self.states_bonus =  {"max_hp": 2,"STR": 0,"DEX": 0, "INT": 0, "defense": 0, "evasion": 0, "move_speed":0, "attack_speed":0}
         self.skill_bonus = {"banana_slip":1}
         self.resist_bonus = {"physical": 0, "fire": 0, "ice": 0, "lightning":0, "acid": 0, "poison": 0, "mind": 0}
 

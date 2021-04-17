@@ -147,7 +147,7 @@ class GameEngine:
         self.game_level.actor_sprites.append(self.cs)
 
         self.npc = Citizen(x=14,y=14)
-        self.game_level.actor_sprites.append(self.npc)
+        # self.game_level.actor_sprites.append(self.npc)
 
         self.game_level.floor_level = level
         self.game_level.map_name = f"test_dungeon"

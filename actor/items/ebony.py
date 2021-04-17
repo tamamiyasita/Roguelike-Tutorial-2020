@@ -26,7 +26,7 @@ class Ebony(BaseFlower):
 
 
         self.flower_color = "white"
-        self.states_bonus =  {"max_hp": 0, "STR": 1, "DEX": 0, "INT": 0, "defense": 0, "evasion": 0, "attack_speed":0}
+        self.states_bonus =  {"max_hp": 0, "STR": 1, "DEX": 0, "INT": 0, "defense": 0, "evasion": 0, "move_speed":0, "attack_speed":0}
         self.skill_bonus = {"branch_baton":1}
         self.resist_bonus = {"physical": 0, "fire": 0, "ice": 0, "lightning":0, "acid": 0, "poison": 0, "mind": 0}
 

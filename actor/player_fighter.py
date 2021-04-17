@@ -48,8 +48,13 @@ class PC_Fighter(Fighter):
         # TODO バフデバフ効果に使う辞書　effect_bonus_update関数を作らねば
         self.effect_bonus = {"max_hp": 0, "max_mp": 0, "STR": 0,
                  "DEX": 0, "INT": 0, "defense": 0, "evasion": 0}
-
-
+##############
+#＊特性＊
+#蔓性(vines),悪臭(stink), 芳香(fragrance),素朴(simple),華やか(gorgeous),可憐(pretty)
+#棘(thorns),色彩(colorful),硬い(hard),柔らかい(soft),しなやか(supple),甘い(sweet),苦い(bitter)
+#野菜(vegetables),果物(fruit),大きい(large),小さい(small),酸味(sour),
+#やっぱ使わないかな…
+##############
     def get_dict(self):
         result = {}
 
