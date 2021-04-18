@@ -21,8 +21,8 @@ class DijkstraMap:
 
         self.compute_distance_map()
 
-        self.neighbors = [(-1, -1), (0, -1), (1, -1), (-1, 0),
-                          (1, 0), (-1, 1), (0, 1), (1, 1)]
+        self.neighbors = [(0, -1),(-1, 0),(1, 0),(0, 1),  
+                          (-1, 1), (1, -1), (-1, -1),  (1, 1)]
 
     def tile_cost(self, tile):
         if tile == TILE.WALL:

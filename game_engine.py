@@ -50,6 +50,8 @@ from level_up_sys import check_experience_level
 
 #test
 from level_up_sys import random_flower_gen
+from actor.ai import auto_explore
+
 
 class GameLevel:
     """dungeon階層毎にsprite_listを生成し、self.storiesに格納する"""
@@ -129,7 +131,7 @@ class GameEngine:
 
         arcade.set_background_color(COLORS["black"])
         self.flower_sprites = arcade.SpriteList(use_spatial_hash=True, spatial_hash_cell_size=32)
-        self.cur_level = self.setup_level(level_number=99)
+        self.cur_level = self.setup_level(level_number=1)
         self.stories[self.cur_floor_name] = self.cur_level
         self.turn_loop = TurnLoop(self.player)
         self.item_point = ItemPoint(self)
@@ -256,6 +258,7 @@ class GameEngine:
 
         # playerを目標にしたダイクストラマップ作成
         self.target_player_map = DijkstraMap(dungeon.game_map.tiles, [self.player])
+        self.target_tile_map = DijkstraMap(dungeon.game_map.tiles, self.game_level.floor_sprites)
 
         ####################
         # テスト用エンティティ
@@ -764,12 +767,13 @@ class GameEngine:
         """
         if self.player.state == state.READY and dist and self.move_switch:
             self.action_queue.extend([{"action":(self.player,(dist))}])
-
-            # attack = self.player.move(dist, None, self)
-            # if attack:
-            #     self.action_queue.extend(attack)
-            # self.move_switch = False
             dist = None
+
+        elif self.player.state == state.AUTO:
+            
+            self.action_queue.extend(auto_explore(self, self.player))
+
+
 
     def normal_state_update(self, player_direction, delta_time):
         # ノーマルステート時に更新したい関数

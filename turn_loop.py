@@ -110,6 +110,7 @@ class TurnLoop:
             if self.actor.state == state.TURN_END or self.actor.state is None or self.actor.is_dead or self.actor.state == state.STUN:
                 self.turn = Turn.ON
                 if self.actor == self.player:
+                    
                     # Playerをターゲットとしたダイクストラマップの更新
                     engine.target_player_map.compute_distance_map(targets=engine.cur_level.chara_sprites)
                 else:

@@ -131,6 +131,9 @@ class Basicmonster:
 
         if self.visible_check:
 
+
+
+            #playerをtargetにしたダイクストラマップを作成
             result_dijkstra = engine.target_player_map.get_low_number(monster.x, monster.y)
 
 
@@ -158,6 +161,29 @@ class Basicmonster:
         else:
             results.extend([{"turn_end": monster}])
         return results
+
+
+
+def auto_explore(engine, player):
+    results = []
+    # ##test
+    mif = [floor for floor in  engine.cur_level.floor_sprites if floor.color == (0,0,0)]
+    engine.target_tile_map.compute_distance_map(targets=mif)
+    ##
+    result_dijkstra = engine.target_tile_map.get_low_number(player.x, player.y)
+    if result_dijkstra:
+        point = result_dijkstra
+
+
+        x, y = point[0], point[1]
+        # ターゲット座標から自分の座標を引いたdx,dyをmoveに渡す
+        dx = x - player.x
+        dy = y - player.y
+
+        results.extend([{"action":(player,(dx, dy))}])
+
+        return results
+
 
 class ConfusedMonster:
     def __init__(self, pre_ai=None, confused_turn=50):

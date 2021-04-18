@@ -34,6 +34,7 @@ KEYMAP_USE_STAIRS = [arcade.key.ENTER]
 KEYMAP_CANCEL = [arcade.key.ESCAPE]
 KEYMAP_DOOR = [arcade.key.K]
 KEYMAP_GRID_SELECT = [arcade.key.L]
+KEYMAP_AUTO_EXPLORE = [arcade.key.O]
 
 
 def choices_key(key):
@@ -217,8 +218,9 @@ def keymap(key, engine):
         elif key in KEYMAP_DOOR:
             engine.action_queue.extend([{"close_door": True}])
         elif key in KEYMAP_GRID_SELECT:
-            # engine.action_queue.extend([{"grid_select": True}])
             engine.game_state = GAME_STATE.LOOK
+        elif key in KEYMAP_AUTO_EXPLORE:
+            engine.player.state = state.AUTO
 
         return direction
 
