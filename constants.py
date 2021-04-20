@@ -144,6 +144,7 @@ class form(Enum):
     NORMAL = auto()
     ATTACK = auto()
     ON_MOVE = auto()
+    AUTO_MOVE = auto()
     SHOT = auto()
     THROW = auto()
     DEFENSE = auto()

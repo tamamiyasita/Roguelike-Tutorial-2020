@@ -130,9 +130,6 @@ class Basicmonster:
 
 
         if self.visible_check:
-
-
-
             #playerをtargetにしたダイクストラマップを作成
             result_dijkstra = engine.target_player_map.get_low_number(monster.x, monster.y)
 

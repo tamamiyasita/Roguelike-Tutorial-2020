@@ -88,10 +88,11 @@ class TurnLoop:
                 self.turn = Turn.DELAY
 
             if self.actor == self.player:
-                self.player.state = state.READY
+                # self.player.state = state.READY
                 self.player.form = form.NORMAL
                 self.turn = Turn.DELAY
                 engine.fov_recompute = True
+
             elif Tag.enemy in self.actor.tag:
                 result = self.actor.ai.take_turn_2(self.player, engine)
                 if result:

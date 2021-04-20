@@ -105,6 +105,8 @@ class GameEngine:
         self.damage_pop = []
         self.pop_position = 30
         self.messenger = None
+        self.found_item = [] # 発見済みのアイテム
+
 
         self.player = Player(
             inventory=Inventory(capacity=18))
@@ -757,21 +759,59 @@ class GameEngine:
            fov_getで表示するスプライトを制御する
         """
         if self.fov_recompute == True:
-            recalculate_fov(self.player.x, self.player.y, FOV_RADIUS,
+            recalculate_fov(self.player, FOV_RADIUS,
                             [self.cur_level.wall_sprites, self.cur_level.floor_sprites, self.cur_level.actor_sprites, self.cur_level.item_sprites, self.cur_level.map_obj_sprites, self.cur_level.map_point_sprites, self.cur_level.item_point_sprites])
 
             self.fov_recompute = False
 
     def check_for_player_movement(self, dist):
-        """プレイヤーの移動
-        """
+        """プレイヤーの移動"""
+
         if self.player.state == state.READY and dist and self.move_switch:
             self.action_queue.extend([{"action":(self.player,(dist))}])
             dist = None
 
-        elif self.player.state == state.AUTO:
-            
-            self.action_queue.extend(auto_explore(self, self.player))
+        elif self.player.state == state.AUTO or self.player.tmp_state == state.AUTO:
+            visible_mns  = [v for v in self.cur_level.actor_sprites if v.is_visible]
+            visible_item  = [v for v in self.cur_level.item_sprites if v.is_visible]
+            if visible_item:
+                check = False
+                for i in visible_item:
+                    if i.found_item == False:
+                        check = True
+                        i.found_item = True
+                        self.action_queue.append({"message": f"{self.player.name} found a {i.name}!"})
+                        self.player.state = state.READY
+                        self.player.tmp_state = state.READY
+                if check:
+                    return
+
+            if not visible_mns:
+                dist_auto =  auto_explore(self, self.player)
+                if dist_auto:
+                    self.action_queue.extend(dist_auto)
+                    self.player.tmp_state = state.AUTO
+                else:
+                    self.player.state = state.READY
+                    self.player.tmp_state = state.READY
+
+                # if check == False:
+                #     dist_auto =  auto_explore(self, self.player)
+                #     if dist_auto:
+                #         self.action_queue.extend(dist_auto)
+                #         self.player.tmp_state = state.AUTO
+                #     else:
+                #         self.player.state = state.READY
+                #         self.player.tmp_state = state.READY
+
+
+
+            else:
+                self.player.state = state.READY
+                self.player.tmp_state = state.READY
+
+
+
 
 
 

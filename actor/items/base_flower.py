@@ -15,6 +15,7 @@ class BaseFlower(Actor):
             image=name,
             x=x,
             y=y,
+            not_visible_color=(80,80,80)
         )
         skill_component = BaseSkill()# コンポーネントの切替で変化を表したい
 
@@ -27,6 +28,7 @@ class BaseFlower(Actor):
         self.owner = None
         self.flower_skill = skill_component
         self.flower_skill.flower = self
+        self.found_item = False
 
         # position
         self.item_margin_x = 0

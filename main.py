@@ -1,3 +1,4 @@
+from os import stat
 import arcade
 from arcade.gl import geometry
 import json
@@ -213,6 +214,7 @@ class MG(arcade.Window):
             self.engine.flower_sprites.update_animation()
             self.engine.cur_level.map_obj_sprites.update_animation()
             TMP_EFFECT_SPRITES.update()
+         
             TMP_EFFECT_SPRITES.update_animation()
 
 
@@ -225,6 +227,12 @@ class MG(arcade.Window):
 
 
     def on_key_press(self, key, modifiers):
+        # auto_moveキャンセル処理
+        if self.engine.player.state == state.AUTO:
+            self.engine.player.state = state.READY
+        if self.engine.player.tmp_state == state.AUTO:
+            self.engine.player.tmp_state = state.READY
+            
         # windowを閉じた時にjsonにダンプする
         if key == arcade.key.BACKSPACE:
             self.engine.game_state = GAME_STATE.DELAY_WINDOW
@@ -245,6 +253,7 @@ class MG(arcade.Window):
         self.engine.move_switch = True
         if self.engine.game_state == GAME_STATE.NORMAL:
             self.player_direction = keymap(key, self.engine)
+
 
         # ドア開閉
         if self.engine.player.form == form.DOOR:

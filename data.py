@@ -6,18 +6,19 @@ from arcade.texture import load_texture
 from util import get_tile_set
 
 # playerテクスチャ生成
-player = arcade.load_texture_pair(r"image/rou6.png")
-pc_move1 = arcade.load_texture_pair(r"image/rou6_m.png")
-pc_move2 = arcade.load_texture_pair(r"image/_rou6_m_.png")
-pc_attack = arcade.load_texture_pair(r"image/rou6_a.png")
-pc_delay = arcade.load_texture_pair(r"image/rou6_d.png")
-pc_delay2 = arcade.load_texture_pair(r"image/rou6_d2.png")
-pc_delay3 = arcade.load_texture_pair(r"image/rou6t.png")
-pc_open = arcade.load_texture_pair(r"image/rou6_op.png")
-pc_shot2 = arcade.load_texture_pair(r"image/rou6_shot2.png")
-pc_throw = arcade.load_texture_pair(r"image/rou6_throw.png")
-pc_def = arcade.load_texture_pair(r"image/rou6_def.png")
-pc_smy = arcade.load_texture_pair(r"image/rou6_smy.png")
+player = arcade.load_texture_pair(r"image/rou/rou6.png")
+pc_move1 = arcade.load_texture_pair(r"image/rou/rou6_m.png")
+pc_move2 = arcade.load_texture_pair(r"image/rou/_rou6_m_.png")
+pc_attack = arcade.load_texture_pair(r"image/rou/rou6_a.png")
+pc_delay = arcade.load_texture_pair(r"image/rou/rou6_d.png")
+pc_delay2 = arcade.load_texture_pair(r"image/rou/rou6_d2.png")
+pc_delay3 = arcade.load_texture_pair(r"image/rou/rou6t.png")
+pc_open = arcade.load_texture_pair(r"image/rou/rou6_op.png")
+pc_shot2 = arcade.load_texture_pair(r"image/rou/rou6_shot2.png")
+pc_throw = arcade.load_texture_pair(r"image/rou/rou6_throw.png")
+pc_def = arcade.load_texture_pair(r"image/rou/rou6_def.png")
+pc_smy = arcade.load_texture_pair(r"image/rou/rou6_smy.png")
+pc_auto_move = [arcade.load_texture_pair(img) for img in glob.glob(r"image\rou\auto_move\*")]
 
 # test_texture
 # player = arcade.load_texture_pair(r"t_image/rou6.png")

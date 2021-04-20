@@ -11,9 +11,10 @@ from constants import *
 from util import grid_to_pixel
 
 
-def recalculate_fov(char_x, char_y, radius, sprite_lists):
+def recalculate_fov(player, radius, sprite_lists):
     """ Fovの計算を行う
     """
+    char_x, char_y  = player.position_xy
 
 
 
@@ -66,4 +67,3 @@ def recalculate_fov(char_x, char_y, radius, sprite_lists):
             if sprite.is_visible:
                 sprite.color = sprite.visible_color
                 sprite.alpha = 255
-

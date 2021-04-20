@@ -70,9 +70,13 @@ def door_action(owner, door):
 
 def walk_action(owner):
     if Tag.player in owner.tag:
+        move = MOVE_SPEED
+        if owner.tmp_state == state.AUTO:
+            move += 9
+
         owner.state = state.ON_MOVE
-        owner.change_x = owner.dx * (MOVE_SPEED)
-        owner.change_y = owner.dy * (MOVE_SPEED)
+        owner.change_x = owner.dx * (move)
+        owner.change_y = owner.dy * (move)
     else:
         owner.x += owner.dx
         owner.y += owner.dy

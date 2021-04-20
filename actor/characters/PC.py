@@ -9,6 +9,7 @@ from random import choices
 from actor.skills.base_skill import BaseSkill
 from random import uniform
 from enum import Enum, auto
+import random
 
 class Player(Actor):
     def __init__(self, x=0, y=0, inventory=0):
@@ -41,6 +42,7 @@ class Player(Actor):
         self.race = "Alraune"
 
         self.state = state.READY
+        self.tmp_state = state.READY
         self.delay_time = 5
         self.visible_check = False
         self.form = form.NORMAL
@@ -58,6 +60,7 @@ class Player(Actor):
     def update(self):
         super().update()
 
+            
         if self.state == state.ON_MOVE:
 
             if abs(self.from_x - self.center_x) >= GRID_SIZE  or abs(self.from_y - self.center_y) >= GRID_SIZE:
@@ -84,11 +87,11 @@ class Player(Actor):
     def update_animation(self, delta_time=1 / 60):
         super().update_animation(delta_time)
 
-        if self.state == state.ON_MOVE and not self.left_face:
+        if self.state == state.ON_MOVE and not self.left_face and self.tmp_state != state.AUTO:
             self.form = form.ON_MOVE
             self.delay_time = 3
             self.texture = pc_move1[0]
-        if self.state == state.ON_MOVE and self.left_face:
+        if self.state == state.ON_MOVE and self.left_face and self.tmp_state != state.AUTO:
             self.form = form.ON_MOVE
             self.delay_time = 3
             self.texture = pc_move1[1]
@@ -100,6 +103,14 @@ class Player(Actor):
             self.form = form.ATTACK
             self.texture = pc_attack[1]
 
+        if self.tmp_state == state.AUTO and not self.left_face:
+            self.form = form.AUTO_MOVE
+            p = random.randint(0,2)
+            self.texture = pc_auto_move[p][0]
+        if self.tmp_state == state.AUTO and self.left_face:
+            self.form = form.AUTO_MOVE
+            p = random.randint(0,2)
+            self.texture = pc_auto_move[p][1]
 
         
 

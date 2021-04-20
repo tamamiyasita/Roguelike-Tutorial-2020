@@ -151,7 +151,7 @@ def inventory_key(key, engine):
 
 
 
-def keymap(key, engine):
+def keymap(key, engine):      
 
     if key in KEYMAP_CHARACTER_SCREEN:
         engine.game_state = GAME_STATE.CHARACTER_SCREEN
