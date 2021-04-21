@@ -419,7 +419,7 @@ class GameEngine:
     def restore_from_dict(self, data):
         """ オブジェクトをjsonから復元する為の関数 """
         self.game_state = GAME_STATE.DELAY_WINDOW
-        self.player.state = state.DELAY
+        self.player.state = state.READY
 
         print("**load**")
         ####################
@@ -766,25 +766,41 @@ class GameEngine:
 
     def check_for_player_movement(self, dist):
         """プレイヤーの移動"""
+        check = False
+        if self.player.state == state.TURN_END:
+            visible_item  = [v for v in self.cur_level.item_sprites if v.is_visible]
+            for i in visible_item:
+                if i.found_item == False:
+                    check = True
+                    i.found_item = True
+                    self.action_queue.append({"message": f"{self.player.name} found a {i.name}!"})
+            self.player.state = state.DELAY
+            
 
         if self.player.state == state.READY and dist and self.move_switch:
             self.action_queue.extend([{"action":(self.player,(dist))}])
             dist = None
+            # visible_item  = [v for v in self.cur_level.item_sprites if v.is_visible]
+            # for i in visible_item:
+            #     if i.found_item == False:
+            #         check = True
+            #         i.found_item = True
+            #         self.action_queue.append({"message": f"{self.player.name} found a {i.name}!"})
 
         elif self.player.state == state.AUTO or self.player.tmp_state == state.AUTO:
             visible_mns  = [v for v in self.cur_level.actor_sprites if v.is_visible]
-            visible_item  = [v for v in self.cur_level.item_sprites if v.is_visible]
-            if visible_item:
-                check = False
-                for i in visible_item:
-                    if i.found_item == False:
-                        check = True
-                        i.found_item = True
-                        self.action_queue.append({"message": f"{self.player.name} found a {i.name}!"})
-                        self.player.state = state.READY
-                        self.player.tmp_state = state.READY
-                if check:
-                    return
+            # visible_item  = [v for v in self.cur_level.item_sprites if v.is_visible]
+            # if visible_item:
+            #     check = False
+            #     for i in visible_item:
+            #         if i.found_item == False:
+            #             check = True
+            #             i.found_item = True
+            #             self.action_queue.append({"message": f"{self.player.name} found a {i.name}!"})
+            #             self.player.state = state.READY
+            #             self.player.tmp_state = state.READY
+            if check:
+                return
 
             if not visible_mns:
                 dist_auto =  auto_explore(self, self.player)
@@ -794,15 +810,6 @@ class GameEngine:
                 else:
                     self.player.state = state.READY
                     self.player.tmp_state = state.READY
-
-                # if check == False:
-                #     dist_auto =  auto_explore(self, self.player)
-                #     if dist_auto:
-                #         self.action_queue.extend(dist_auto)
-                #         self.player.tmp_state = state.AUTO
-                #     else:
-                #         self.player.state = state.READY
-                #         self.player.tmp_state = state.READY
 
 
 

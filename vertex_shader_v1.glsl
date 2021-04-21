@@ -3,12 +3,12 @@
 //time since burst start
 uniform float time;
 
+uniform vec2  r; // resolution
 //(x, y) position passed in
 in vec2 in_pos;
 
 // velocity of particle
 in vec2 in_vel;
-
 // color of particle
 in vec3 in_color;
 
@@ -40,11 +40,29 @@ void main() {
     new_vel[1] -= time * 0.2;
 
     // calculate a new position
-    vec2 new_pos = in_pos + (time * new_vel);
 
     // calculate a new position
     //vec2 new_pos = in_pos + (time * in_vel);
-
+    float f = 0.0;
+    for(float i = 0.0; i < 10.0; i++){
+        float s = sin(time + i * 0.628318) * 0.5;
+        float c = cos(time + i * 0.628318) * 0.5;
+        f += 0.0025 / abs(length(512 + vec2(c, s)) - 0.5);
+    }
+    vec2 new_pos = in_pos + (sin(time) * new_vel);
     // set the position (x, y, z, w)
-    gl_Position = vec4(new_pos, 0.0, 1);
+    gl_Position = vec4(new_pos, f, 1);
 }
+
+// void main(void){
+//     vec2 p = (in_pos);
+//     vec3 destColor = vec3(1.0, 0.3, 0.7);
+//     float f = 0.0;
+//     for(float i = 0.0; i < 10.0; i++){
+//         float s = sin(time + i * 0.628318) * 0.5;
+//         float c = cos(time + i * 0.628318) * 0.5;
+//         f += 0.0025 / abs(length(p + vec2(c, s)) - 0.9);
+//     }
+//     color = vec4(vec3(destColor * f), 1.0);
+//     gl_Position = vec4(vec3(f), 1.0);
+// }

@@ -52,7 +52,7 @@ class MyWindow(arcade.Window):
         self.clear()
 
         # 粒子サイズの設定
-        self.ctx.point_size = 8 * self.get_pixel_ratio()
+        self.ctx.point_size = 146 * self.get_pixel_ratio()
 
         # 各バーストをループする
         for burst in self.burst_list:
@@ -78,7 +78,7 @@ class MyWindow(arcade.Window):
             for i in range(PARTICLE_COUNT):
                 angle = random.uniform(0, 2 * math.pi)
                 # speed = random.uniform((0.0, 0.3))
-                speed = abs(random.gauss(0, 1)) * 0.5
+                speed = abs(random.gauss(0.1, 0.5)) * 0.7
 
                 dx = math.sin(angle) * speed
                 dy = math.cos(angle) * speed
