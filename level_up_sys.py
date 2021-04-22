@@ -12,6 +12,7 @@ def check_experience_level(player, game_engine):
     if player.fighter.current_xp >= xp_to_next_level:
         player.fighter.level += 1
         player.fighter.ability_points += 1
+        player.fighter.current_xp = 0
         game_engine.action_queue.extend([{"message": "Level up!!!"}])
         game_engine.game_state = GAME_STATE.LEVEL_UP_WINDOW
     # 花のレベルアップUI作成
@@ -48,7 +49,7 @@ class Select_param:
         rarity_point = {"common":1, "uncomon":2, "rare":3}
         self.flower = flower
         self.point = rarity_point[self.flower.rarity]
-        self.up_state = ("max_hp", "base_states", "high_states", "resist", "move_speed")
+        self.up_state = ("max_hp", "base_states", "high_states", "resist", "speed")
         if self.flower.rarity == "common":
             self.choice_pram = [35, 5, 1, 0, 0]
         if self.flower.rarity == "uncommon":
@@ -82,13 +83,13 @@ class Select_param:
                 result[choice_high] = 1
 
             elif "resist" in param:
-                choice_reg = choice(["fire", "ice", "lightning", "acid", "poison", "mind"])
+                choice_reg = choice(["fire", "ice", "elec", "acid", "poison", "mind"])
                 self.flower.resist_bonus[choice_reg] += 1
                 result[choice_reg] = 1
 
-            elif "move_speed" in param:
-                self.flower.states_bonus["attack_speed"] += 1
-                result["move_speed"] = 1
+            elif "speed" in param:
+                self.flower.states_bonus["speed"] += 1
+                result["speed"] = 1
 
         return result
 

@@ -12,12 +12,12 @@ class Villager(Actor):
 
     def __init__(self, x=0, y=0):
         fighter_component = Fighter(hp=9, STR=1, DEX=1,
-                                    attack_speed=9,
+                                    speed=9,
                                     defense=2,
                                     evasion=2,
                                     xp_reward=3,
                                     level=1,
-                                    resist={"physical": 1, "fire": 1, "ice": 1, "lightning":1,
+                                    resist={"physical": 1, "fire": 1, "ice": 1, "elec":1,
                                              "acid": 1, "poison": 1, "mind": 1}
                                     )
         ai_component = RandomMove()

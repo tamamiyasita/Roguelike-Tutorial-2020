@@ -16,7 +16,7 @@ class Player(Actor):
         unarmed_component = BaseSkill()
         unarmed_component.tag.append(Tag.weapon)
         fighter_component = PC_Fighter(hp=25, STR=2, DEX=3, INT=3,
-                                    resist={"physical": 1, "fire": 1, "ice": 1, "lightning":1, "acid": 1, "poison": 1, "mind": 1},#雷忘れてた
+                                    resist={"physical": 1, "fire": 0, "ice": 1, "elec":1, "acid": 1, "poison": 1, "mind": 1},#雷忘れてた
                                     defense=2,
                                     evasion=5,
                                     level=1

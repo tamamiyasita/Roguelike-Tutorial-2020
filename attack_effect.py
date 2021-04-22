@@ -48,6 +48,6 @@ class AttackEffect:
             self.owner.x = self.owner.fx
             self.owner.change_x, self.owner.change_y = 0, 0
             self.owner.dx, self.owner.dy = 0, 0
-            self.owner.fighter.wait += self.owner.fighter.attack_speed
+            self.owner.fighter.wait += self.owner.fighter.speed
             self.owner.state = state.TURN_END
 

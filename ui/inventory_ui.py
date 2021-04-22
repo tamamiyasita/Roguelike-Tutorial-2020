@@ -54,6 +54,7 @@ def draw_inventory(player, selected_item, viewport):
     )
 
 
+
     y = GRID_SIZE # itemtextの改行スペース
     item_font_size = 17
     capacity = player.inventory.capacity

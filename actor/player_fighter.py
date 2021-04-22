@@ -9,10 +9,10 @@ from hit_anime import hit_particle, Hit_Anime
 from actor.fighter import Fighter
 
 class PC_Fighter(Fighter):
-    def __init__(self, hp=0, defense=0, STR=0, DEX=0, INT=0, speed=10, attack_speed=DEFAULT_ATTACK_SPEED,
+    def __init__(self, hp=0, defense=0, STR=0, DEX=0, INT=0, speed=10,
                  evasion=0, xp_reward=0, current_xp=0, level=1,
-                 affinity={"physical": 0, "fire": 0, "ice": 0, "lightning": 0, "acid": 0, "poison": 0, "mind": 0, "recovery":0},
-                 resist={"physical": 1, "fire": 1, "ice": 1, "lightning":1, "acid": 1, "poison": 1, "mind": 1}, ability_points=0):
+                 affinity={"physical": 0, "fire": 0, "ice": 0, "elec": 0, "acid": 0, "poison": 0, "mind": 0, "recovery":0},
+                 resist={"physical": 3, "fire": 0, "ice": 1, "elec":1, "acid": 1, "poison": 1, "mind": 1}, ability_points=0):
 
         self.level_up_bonus = {"max_hp": 0,"STR": 0,"DEX": 0, "INT": 0, "defense": 0, "evasion": 0}
         self.hp = hp
@@ -23,9 +23,8 @@ class PC_Fighter(Fighter):
         self.base_intelligence = INT
 
         # self.unarmed = BaseSkill()#{"damage":1, "level":1, "attr":"physical"}
-        self.speed = speed
+        self.base_speed = speed
         self.wait = speed//2
-        self.base_attack_speed = attack_speed
 
         self.base_defense = defense
         self.base_evasion = evasion
@@ -47,7 +46,7 @@ class PC_Fighter(Fighter):
 
         # TODO バフデバフ効果に使う辞書　effect_bonus_update関数を作らねば
         self.effect_bonus = {"max_hp": 0, "max_mp": 0, "STR": 0,
-                 "DEX": 0, "INT": 0, "defense": 0, "evasion": 0}
+                 "DEX": 0, "INT": 0, "defense": 0, "evasion": 0, "speed":0}
 ##############
 #＊特性＊
 #蔓性(vines),悪臭(stink), 芳香(fragrance),素朴(simple),華やか(gorgeous),可憐(pretty)
@@ -67,7 +66,7 @@ class PC_Fighter(Fighter):
 
         result["defense"] = self.base_defense
         result["evasion"] = self.base_evasion
-        result["attack_speed"] = self.attack_speed
+        result["speed"] = self.speed
 
         result["xp_reward"] = self.xp_reward
         result["current_xp"] = self.current_xp
@@ -93,7 +92,7 @@ class PC_Fighter(Fighter):
 
         self.base_defense = result["defense"]
         self.base_evasion = result["evasion"]
-        self.attack_speed = result["attack_speed"]
+        self.speed = result["speed"]
 
         self.xp_reward = result["xp_reward"]
         self.current_xp = result["current_xp"]
@@ -167,7 +166,7 @@ class PC_Fighter(Fighter):
 
     @property
     def affinity(self):
-        base_affinity = {"physical": 0, "fire": 0, "ice": 0, "lightning":0, "acid": 0, "poison": 0, "mind": 0, "recovery":0}
+        base_affinity = {"physical": 0, "fire": 0, "ice": 0, "elec":0, "acid": 0, "poison": 0, "mind": 0, "recovery":0}
         for name in self._affinity:
             base_affinity[name] = self._affinity[name] + self.owner.equipment.affinity_bonus[name]
         print(base_affinity)
@@ -176,7 +175,7 @@ class PC_Fighter(Fighter):
 
     @property
     def resist(self):
-        base_resist = {"physical": 0, "fire": 0, "ice": 0, "lightning":0, "acid": 0, "poison": 0, "mind": 0}
+        base_resist = {"physical": 0, "fire": 0, "ice": 0, "elec":0, "acid": 0, "poison": 0, "mind": 0}
         for name in self._resist:
             base_resist[name] = self._resist[name] + self.owner.equipment.resist_bonus[name]
 
@@ -208,8 +207,8 @@ class PC_Fighter(Fighter):
         return self.base_evasion + self.owner.equipment.states_bonus["evasion"] + self.DEX//2
     
     @property
-    def attack_speed(self):
-        return self.base_attack_speed + self.owner.equipment.states_bonus["attack_speed"]
+    def speed(self):
+        return self.base_speed + self.owner.equipment.states_bonus["speed"]
 
 
 

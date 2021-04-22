@@ -9,10 +9,10 @@ from hit_anime import hit_particle, Hit_Anime
 
 
 class Fighter:
-    def __init__(self, hp=0, defense=0, STR=0, DEX=0, INT=0, speed=10, attack_speed=DEFAULT_ATTACK_SPEED,
+    def __init__(self, hp=0, defense=0, STR=0, DEX=0, INT=0, speed=10,
                  evasion=0, xp_reward=0, level=1,
                  # 物理:オレンジ, 火:赤, 氷:白, 雷:青, 酸:黄色, 毒:紫, 精神:ピンク
-                 resist={"physical": 1, "fire": 0, "ice": 1, "lightning":1, "acid": 1, "poison": 1, "mind": 1},           
+                 resist={"physical": 1, "fire": 0, "ice": 1, "elec":1, "acid": 1, "poison": 1, "mind": 1},           
                  ability_points=0):
 
         self.hp = hp
@@ -25,9 +25,8 @@ class Fighter:
         self.defense = defense
         self.evasion = evasion
         self.speed = speed
-        self.wait = speed//2
+        self.wait = speed
 
-        self.attack_speed = attack_speed
         self.resist = resist
 
         self.owner = None
@@ -55,7 +54,7 @@ class Fighter:
 
         # result["defense"] = self.base_defense
         # result["evasion"] = self.base_evasion
-        # result["attack_speed"] = self.attack_speed
+        # result["speed"] = self.speed
 
         # result["xp_reward"] = self.xp_reward
         # result["current_xp"] = self.current_xp
@@ -82,7 +81,7 @@ class Fighter:
 
         # self.base_defense = result["defense"]
         # self.base_evasion = result["evasion"]
-        # self.attack_speed = result["attack_speed"]
+        # self.speed = result["speed"]
 
         # self.xp_reward = result["xp_reward"]
         # self.current_xp = result["current_xp"]

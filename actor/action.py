@@ -72,7 +72,7 @@ def walk_action(owner):
     if Tag.player in owner.tag:
         move = MOVE_SPEED
         if owner.tmp_state == state.AUTO:
-            move += 9
+            move *= 3
 
         owner.state = state.ON_MOVE
         owner.change_x = owner.dx * (move)
