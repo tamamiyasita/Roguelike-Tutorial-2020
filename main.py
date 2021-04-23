@@ -14,7 +14,7 @@ from keymap import keymap, grid_select_key, inventory_key, character_screen_key,
 from ui.normal_ui import NormalUI
 from ui.mouse_ui import MouseUI
 from ui.select_ui import SelectUI
-from ui.character_screen_ui import draw_character_screen
+from ui.character_screen_ui import CharacterScreenUI
 from ui.inventory_ui import draw_inventory
 from ui.message_window import MessageWindow
 from ui.level_up_ui import LevelupUI
@@ -79,6 +79,7 @@ class MG(arcade.Window):
 
         # Lコマンドで呼び出すlook機能
         self.select_UI = SelectUI(engine=self.engine)
+        self.character_UI = CharacterScreenUI(engine=self.engine)
 
         # 会話画面の初期化はここで行う
         self.massage_window = MessageWindow(self.engine)
@@ -160,7 +161,7 @@ class MG(arcade.Window):
 
         # Character_Screen表示
         elif self.engine.game_state == GAME_STATE.CHARACTER_SCREEN:
-            draw_character_screen(self.engine, arcade.get_viewport(), self.engine.selected_item)
+            self.character_UI.draw_character_screen(arcade.get_viewport(), self.engine.selected_item)
             
 
 
