@@ -26,7 +26,7 @@ class CharacterScreenUI:
         self.panel_height = SCREEN_HEIGHT-GRID_SIZE*6
 
         self.panel_top = self.viewport_bottom + self.panel_height
-        self.panel_side = self.viewport_left + 16
+        self.panel_side = self.viewport_left + 18
         """背景"""
         cs = arcade.load_texture(r"image\chara_screen.png")
         arcade.draw_lrwh_rectangle_textured(
@@ -38,14 +38,14 @@ class CharacterScreenUI:
         )
         # キャラクターアイコン
         c = arcade.Sprite(filename=r"image\chara_sheet.png", scale=6,
-                        center_x=self.viewport_left + 66,
+                        center_x=self.viewport_left + 82,
                         center_y=self.panel_top - GRID_SIZE - 20)
         self.ui_sprites.append(c)
         
 
 
         """タイトル"""
-        spacing = 1.8
+        spacing = 1.65
         text_position_y = self.panel_top 
         text_position_x = self.panel_side+2
         text_size = 24 
@@ -62,9 +62,9 @@ class CharacterScreenUI:
 
         """ステータス表示"""
         text_position_y -= text_size * spacing
-        text_size = 15
-        m = 3
-        u = GRID_SIZE *2
+        text_size = 16
+        m = -2
+        u = GRID_SIZE *2+18
 
         states_text = f"Race: {self.player.race}"
         arcade.draw_text(
@@ -72,7 +72,7 @@ class CharacterScreenUI:
             start_x=self.panel_side+u,
             start_y=text_position_y+m,
             color=text_color,
-            font_size=text_size+m,
+            font_size=text_size,
             font_name=self.font_name
         )
 
@@ -83,7 +83,7 @@ class CharacterScreenUI:
             start_x=self.panel_side+u,
             start_y=text_position_y+m,
             color=text_color,
-            font_size=text_size+m,
+            font_size=text_size,
             font_name=self.font_name
         )
 
@@ -94,7 +94,7 @@ class CharacterScreenUI:
             start_x=self.panel_side+u,
             start_y=text_position_y+m,
             color=text_color,
-            font_size=text_size+m,
+            font_size=text_size,
             font_name=self.font_name
         )
         text_position_y -= text_size * spacing
@@ -104,23 +104,25 @@ class CharacterScreenUI:
             start_x=self.panel_side+u,
             start_y=text_position_y+m,
             color=text_color,
-            font_size=text_size+m,
+            font_size=text_size,
             font_name=self.font_name
         )
 
 
-        text_position_y -= text_size * spacing 
-        states_text = f"[States]"
+        spacing = 1.78
+        text_size = 15
+        text_position_y -= text_size * spacing +8
+        states_text ="[States]"
         arcade.draw_text(
-            text=states_text,
+            text=f"{states_text: ^14}",
             start_x=text_position_x,
             start_y=text_position_y,
             color=text_color,
             font_size=text_size-1,
-            font_name=self.font_name
+            font_name=self.font_name,
         )
         text_position_y -= text_size * spacing
-        states_text = f"MHP: {self.player.fighter.max_hp: >3}  + {self.player.equipment.states_bonus['max_hp']: >3}"
+        states_text = f"MHP: {self.player.fighter.max_hp: >3}  +{self.player.equipment.states_bonus['max_hp']: >3}"
         arcade.draw_text(
             text=states_text,
             start_x=text_position_x,
@@ -131,7 +133,7 @@ class CharacterScreenUI:
         )
 
         text_position_y -= text_size * spacing
-        states_text = f"STR: {self.player.fighter.base_strength: >3}  + {self.player.equipment.states_bonus['STR']: >3}"
+        states_text = f"STR: {self.player.fighter.base_strength: >3}  +{self.player.equipment.states_bonus['STR']: >3}"
         arcade.draw_text(
             text=states_text,
             start_x=text_position_x,
@@ -142,7 +144,7 @@ class CharacterScreenUI:
         )
 
         text_position_y -= text_size * spacing 
-        states_text = f"DEX: {self.player.fighter.base_dexterity: >3}  + {self.player.equipment.states_bonus['DEX']: >3}"
+        states_text = f"DEX: {self.player.fighter.base_dexterity: >3}  +{self.player.equipment.states_bonus['DEX']: >3}"
         arcade.draw_text(
             text=states_text,
             start_x=text_position_x,
@@ -153,7 +155,7 @@ class CharacterScreenUI:
         )
 
         text_position_y -= text_size * spacing
-        states_text = f"INT: {self.player.fighter.base_intelligence: >3}  + {self.player.equipment.states_bonus['INT']: >3}"
+        states_text = f"INT: {self.player.fighter.base_intelligence: >3}  +{self.player.equipment.states_bonus['INT']: >3}"
         arcade.draw_text(
             text=states_text,
             start_x=text_position_x,
@@ -163,7 +165,7 @@ class CharacterScreenUI:
             font_name=self.font_name
         )
         text_position_y -= text_size * spacing
-        states_text = f"DEF: {self.player.fighter.defense: >3}  + {self.player.equipment.states_bonus['defense']: >3}"
+        states_text = f"DEF: {self.player.fighter.defense: >3}  +{self.player.equipment.states_bonus['defense']: >3}"
         arcade.draw_text(
             text=states_text,
             start_x=text_position_x,
@@ -173,7 +175,7 @@ class CharacterScreenUI:
             font_name=self.font_name
         )
         text_position_y -= text_size * spacing
-        states_text = f"EVE: {self.player.fighter.defense: >3}  + {self.player.equipment.states_bonus['evasion']: >3}"
+        states_text = f"EVE: {self.player.fighter.defense: >3}  +{self.player.equipment.states_bonus['evasion']: >3}"
         arcade.draw_text(
             text=states_text,
             start_x=text_position_x,
@@ -183,7 +185,7 @@ class CharacterScreenUI:
             font_name=self.font_name
         )
         text_position_y -= text_size * spacing
-        states_text = f"SPD: {self.player.fighter.speed: >3}  + {self.player.equipment.states_bonus['speed']: >3}"
+        states_text = f"SPD: {self.player.fighter.speed: >3}  +{self.player.equipment.states_bonus['speed']: >3}"
         arcade.draw_text(
             text=states_text,
             start_x=text_position_x,
@@ -192,11 +194,11 @@ class CharacterScreenUI:
             font_size=text_size,
             font_name=self.font_name
         )
-        text_position_y -= text_size * spacing +4
+        text_position_y -= text_size * spacing +7
         states_text = f"[Resistance]"
         arcade.draw_text(
-            text=states_text,
-            start_x=text_position_x,
+            text=f"{states_text: ^14}",
+            start_x=text_position_x-5,
             start_y=text_position_y,
             color=text_color,
             font_size=text_size,
@@ -204,10 +206,10 @@ class CharacterScreenUI:
         )
         text_position_y -= text_size * spacing
         for r_key, r_val in self.player.fighter.resist.items():
-            states_text = f"{r_key[:4]:<4}:  {r_val}  + {self.player.equipment.resist_bonus[r_key]: >3}"
+            states_text = f"{r_key[:4]:<4}:  {r_val}  +{self.player.equipment.resist_bonus[r_key]: >3}"
             arcade.draw_text(
                 text=states_text,
-                start_x=self.panel_side,
+                start_x=self.panel_side+2,
                 start_y=text_position_y,
                 color=text_color,
                 font_size=15,
@@ -273,6 +275,18 @@ class CharacterScreenUI:
                 width=40,
                 height=40,
                 texture=flower.icon
+            )
+            skill = flower.flower_skill
+            if Tag.passive in skill.tag:
+                sx = GRID_SIZE*2
+            elif Tag.active in skill.tag:
+                sx = GRID_SIZE*4
+            arcade.draw_texture_rectangle(
+                center_x=left_position + sx,
+                center_y=top_position + y-21,
+                width=40,
+                height=40,
+                texture=skill.icon
             )
                 
             # スキルレベル
