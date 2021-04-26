@@ -25,7 +25,7 @@ class Fighter:
         self.defense = defense
         self.evasion = evasion
         self.speed = speed
-        self.wait = speed
+        self.wait = 0
 
         self.resist = resist
 

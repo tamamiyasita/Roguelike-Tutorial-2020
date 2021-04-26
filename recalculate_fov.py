@@ -1,6 +1,5 @@
 """視野の計算"""
 
-from data import player
 from math import radians
 import arcade
 import math
@@ -9,12 +8,19 @@ from arcade import sprite_list
 
 from constants import *
 from util import grid_to_pixel
+from actor.damage_pop import DamagePop
 
 
-def recalculate_fov(player, radius, sprite_lists):
+def recalculate_fov(engine, radius):
     """ Fovの計算を行う
     """
+    player = engine.player
     char_x, char_y  = player.position_xy
+    sprite_lists = [engine.cur_level.wall_sprites, engine.cur_level.floor_sprites, 
+                    engine.cur_level.actor_sprites, engine.cur_level.item_sprites,
+                    engine.cur_level.map_obj_sprites, engine.cur_level.map_point_sprites,
+                    engine.cur_level.item_point_sprites]
+    
 
 
 
@@ -57,6 +63,11 @@ def recalculate_fov(player, radius, sprite_lists):
                     sprite.is_visible = True
                     if sprite.block_sight:
                         blocks = True
+                    if hasattr(sprite.ai, "visible_check"):
+                        if sprite.ai.visible_check == False:
+                            engine.damage_pop.append(DamagePop("！", (250,240,0), sprite, 15, size=30))
+                            engine.move_switch = False
+                            sprite.ai.visible_check = True
 
             if blocks:
                 break

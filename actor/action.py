@@ -62,7 +62,7 @@ def door_action(owner, door):
         owner.state = state.DELAY
         if door.left_face == False:
             door.left_face = True
-            result.extend([{"delay": {"time": 0.2, "action": {"turn_end":owner}}}])
+        result.extend([{"delay": {"time": 0.2, "action": {"turn_end":owner}}}])
     else:
         result.extend([{"delay": {"time": 0.2, "action": {"turn_end":owner}}}])
     return result

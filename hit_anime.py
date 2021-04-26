@@ -49,7 +49,7 @@ class Hit_Anime(arcade.Sprite):
             # self.skill.owner.state = state.SMILE
             if self.timer >= 0.25:
                 self.owner.angle = 0
-                self.skill.owner.state = None
+                self.skill.owner.state = state.TURN_END
                 self.remove_from_sprite_lists()
             elif self.timer >= 0.035:
                 self.current_texture += 1
@@ -61,6 +61,7 @@ class Hit_Anime(arcade.Sprite):
 
         elif self.timer >= 0.5:
             self.remove_from_sprite_lists()
+            self.skill.owner.state = None
 
 
 class Fall(arcade.Sprite):

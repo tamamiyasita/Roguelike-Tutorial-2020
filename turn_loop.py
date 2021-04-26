@@ -1,6 +1,6 @@
 from itertools import chain
 from constants import *
-from actor.actor import Actor
+
 from enum import Enum, auto
 import logging
 
@@ -11,6 +11,8 @@ class Turn(Enum):
     ON = auto()
     OFF = auto()
     DELAY = auto()
+    PLAYER = auto()
+    ENEMY = auto()
 
 
 class TurnLoop:
@@ -18,7 +20,7 @@ class TurnLoop:
         self.actor = None
         self.sprites = None
         self.player = player
-        self.turn = Turn.ON
+        self.game_turn = Turn.ON
 
     def elapsed_time(self, actor, queue, engine):
         """スキルクールダウンとステータス効果時間のカウントダウンを行う
@@ -53,7 +55,7 @@ class TurnLoop:
         """actor間のメインループ制御"""
         queue = engine.action_queue
 
-        while self.turn == Turn.ON:
+        while self.game_turn == Turn.ON:
             self.sprites = {i for i in chain(engine.cur_level.chara_sprites, engine.cur_level.actor_sprites)}
 
             # waitが0になったactorに行動権を与えてループ終了
@@ -69,9 +71,13 @@ class TurnLoop:
                     if self.actor.is_dead or self.actor.state == state.STUN or self.actor.fighter.wait:
                         continue
                     else:
-                        self.turn = Turn.OFF
+                        if self.actor == self.player:
+                            self.game_turn = Turn.PLAYER
+                        else:
+                            self.game_turn = Turn.ENEMY
+                    #     self.game_turn = Turn.OFF
 
-                    if self.turn == Turn.OFF:
+                    # if self.game_turn == Turn.OFF:
                         break
             
             for sprite in self.sprites:
@@ -83,43 +89,53 @@ class TurnLoop:
 
 
 
-        if self.turn == Turn.OFF:
-            if actor.is_dead or actor.state == state.STUN:
-                self.turn = Turn.DELAY
+        if self.game_turn == Turn.PLAYER:
+            # Playerをターゲットとしたダイクストラマップの更新
+            engine.target_player_map.compute_distance_map(targets=engine.cur_level.chara_sprites)
+            # if actor.is_dead or actor.state == state.STUN:
+            #     self.game_turn = Turn.DELAY
 
-            if self.actor == self.player:
                 # self.player.state = state.READY
+            if self.player.state == state.TURN_END:
                 self.player.form = form.NORMAL
-                self.turn = Turn.DELAY
-                engine.fov_recompute = True
+                self.game_turn = Turn.DELAY
+                engine.fov()
+
+            elif self.player.tmp_state == state.AUTO:
+                engine.auto_move_check()
+
+
+        elif self.game_turn == Turn.ENEMY:
+            # 他のアクターを障害物としてマップを計算する
+            if self.player.tmp_state == state.AUTO:
+                self.player.tmp_state = state.READY
+                self.player.state = state.READY
+                self.game_turn = Turn.PLAYER
 
             elif Tag.enemy in self.actor.tag:
                 result = self.actor.ai.take_turn_2(self.player, engine)
                 if result:
                     engine.action_queue.extend(result)
-                self.turn = Turn.DELAY
+                    self.game_turn = Turn.DELAY
             elif Tag.friendly in self.actor.tag:
                 result = self.actor.ai.take_turn(engine)
                 if result:
                     engine.action_queue.extend(result)
-                self.turn = Turn.DELAY
+                    self.game_turn = Turn.DELAY
 
             
-        elif self.turn == Turn.DELAY:
+        elif self.game_turn == Turn.DELAY:
             # log.debug(
             #     f"{self.actor.image=}, {self.actor.fighter.wait=}, {self.actor.state=}, {self.actor.is_dead=}")
             if self.actor.state == state.TURN_END or self.actor.state is None or self.actor.is_dead or self.actor.state == state.STUN:
-                self.turn = Turn.ON
-                if self.actor == self.player:
+                self.actor.fighter.wait = self.actor.fighter.speed
+                self.game_turn = Turn.ON
                     
-                    # Playerをターゲットとしたダイクストラマップの更新
-                    engine.target_player_map.compute_distance_map(targets=engine.cur_level.chara_sprites)
-                else:
-                    # 他のアクターを障害物としてマップを計算する
-                    engine.target_player_map.compute_distance_map(blocks=engine.cur_level.actor_sprites)
                     
                 engine.pop_position = 30
+
+            #未発見で待機
             elif self.actor.state == state.READY and self.actor != self.player:
                 engine.action_queue.extend([{"turn_end": self.actor}])
 
-    
+

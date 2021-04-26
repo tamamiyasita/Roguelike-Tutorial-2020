@@ -5,6 +5,8 @@ from astar import astar
 from constants import *
 from util import pixel_to_grid, stop_watch
 from game_map.square_grid import SquareGrid, breadth_first_search, a_star_search, GridWithWeights, reconstruct_path
+from actor.damage_pop import DamagePop
+
 
 class Wait:
     def __init__(self):
@@ -121,8 +123,8 @@ class Basicmonster:
 
 
         # 視野のチェック
-        if monster.is_visible:
-            self.visible_check = True
+        # if monster.is_visible:
+        #     self.visible_check = True
 
         # ターゲット座標の更新
         if target:
@@ -130,7 +132,11 @@ class Basicmonster:
 
 
         if self.visible_check:
-            #playerをtargetにしたダイクストラマップを作成
+            # engine.damage_pop.append(DamagePop("!", (200,100,0), monster, 15))
+
+            # #playerをtargetにしたダイクストラマップを作成
+            engine.target_player_map.compute_distance_map(targets=[target], blocks=engine.cur_level.actor_sprites)
+
             result_dijkstra = engine.target_player_map.get_low_number(monster.x, monster.y)
 
 
@@ -161,11 +167,19 @@ class Basicmonster:
 
 
 
-def auto_explore(engine, player):
+def auto_explore(engine, player, tar="floor"):
     results = []
+    floor = None
+    stairs = None
     # ##test
-    mif = [floor for floor in  engine.cur_level.floor_sprites if floor.color == (0,0,0)]
-    engine.target_tile_map.compute_distance_map(targets=mif)
+    if tar == "floor":
+        floor = [floor for floor in engine.cur_level.floor_sprites if floor.color == (0,0,0)]
+    if floor:
+        engine.target_tile_map.compute_distance_map(targets=floor)
+    else:
+        stairs = [stairs for stairs in engine.cur_level.map_obj_sprites if Tag.down_stairs in stairs.tag]
+    if stairs:
+        engine.target_tile_map.compute_distance_map(targets=stairs)
     ##
     result_dijkstra = engine.target_tile_map.get_low_number(player.x, player.y)
     if result_dijkstra:

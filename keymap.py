@@ -221,6 +221,7 @@ def keymap(key, engine):
             engine.game_state = GAME_STATE.LOOK
         elif key in KEYMAP_AUTO_EXPLORE:
             engine.player.state = state.AUTO
+            engine.player.tmp_state = state.AUTO
 
         return direction
 

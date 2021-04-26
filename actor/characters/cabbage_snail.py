@@ -9,7 +9,7 @@ from actor.skills.base_skill import BaseSkill
 class CabbageSnail(Actor):
     def __init__(self, x=0, y=0):
         fighter_component = Fighter(hp=9, STR=1, DEX=1,
-                                    speed=9,
+                                    speed=13,
                                     defense=2,
                                     evasion=2,
                                     xp_reward=3,

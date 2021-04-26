@@ -64,7 +64,7 @@ class DijkstraMap:
         if blocks:
             self.cost_map_init(self.game_map)
             for block in blocks:
-                self.cost_map[block.x][block.y] = 8
+                self.cost_map[block.x][block.y] += 8
 
         
         pq = []
@@ -82,7 +82,7 @@ class DijkstraMap:
             dist_map[pos[0]][pos[1]] = dist
 
             # 近隣のタイルを調べ壁ならスキップ床なら値を比べてpqに入れるか決める
-            for d_pos in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
+            for d_pos in [(-1, 0), (1, 0), (0, -1), (0, 1),  (-1, 1), (1, -1), (-1, -1),  (1, 1)]:
                 pos_new = (pos[0] + d_pos[0], pos[1] + d_pos[1])# 周りを調べる
                 if not self.map_range_inner(x=pos_new[0], y=pos_new[1]):# 調べる範囲がマップサイズに収まってなければスキップさせる
                     continue

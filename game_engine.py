@@ -26,9 +26,9 @@ from actor.characters.npc import Citizen
 from actor.map_obj.stairs import Up_Stairs, Down_Stairs
 from actor.restore_actor import restore_actor
 from util import  get_blocking_entity, stop_watch
-from turn_loop import TurnLoop
+from turn_loop import Turn, TurnLoop
 from fire import Fire
-from actor.damage_pop import Damagepop, DamagePop
+from actor.damage_pop import DamagePop
 
 from game_map.square_grid import SquareGrid, breadth_first_search, a_star_search, GridWithWeights, reconstruct_path
 from game_map.dijkstra_map import DijkstraMap
@@ -137,6 +137,8 @@ class GameEngine:
         self.stories[self.cur_floor_name] = self.cur_level
         self.turn_loop = TurnLoop(self.player)
         self.item_point = ItemPoint(self)
+        self.fov()
+
 
     def test_map(self, level):
         image_set={"wall": "b_wall",
@@ -262,6 +264,7 @@ class GameEngine:
         self.target_player_map = DijkstraMap(dungeon.game_map.tiles, [self.player])
         self.target_tile_map = DijkstraMap(dungeon.game_map.tiles, self.game_level.floor_sprites)
 
+
         ####################
         # テスト用エンティティ
 
@@ -346,7 +349,6 @@ class GameEngine:
         self.ut.scale = 2
         self.game_level.map_obj_sprites.append(self.ut)
 
-        self.fov_recompute = True
 
         return self.game_level
 
@@ -528,7 +530,7 @@ class GameEngine:
         self.action_queue.append({"message": "*load*"})
         self.player.state = state.READY
         self.game_state = GAME_STATE.NORMAL
-        self.fov_recompute = True
+        self.fov()
         self.player.equipment.item_sprite_check(self.flower_sprites)
         self.player.equipment.equip_position_reset()
 
@@ -565,7 +567,7 @@ class GameEngine:
 
             if "turn_end" in action:
                 target = action["turn_end"]
-                target.fighter.wait += target.fighter.speed
+                target.fighter.wait = target.fighter.speed
                 target.state = state.TURN_END
                 print(f"{target.name} is pass Turn_END")
 
@@ -697,7 +699,7 @@ class GameEngine:
                     self.player.equipment.equip_position_reset()
                     self.game_state = GAME_STATE.NORMAL
                     self.turn_loop = TurnLoop(self.player)
-                    self.fov_recompute = True
+                    self.fov()
 
             if "grid_select" in action:
                 self.game_state = GAME_STATE.SELECT_LOCATION
@@ -758,47 +760,36 @@ class GameEngine:
         """recompute_fovでTCODによるFOVの計算を行い
            fov_getで表示するスプライトを制御する
         """
-        if self.fov_recompute == True:
-            recalculate_fov(self.player, FOV_RADIUS,
-                            [self.cur_level.wall_sprites, self.cur_level.floor_sprites, self.cur_level.actor_sprites, self.cur_level.item_sprites, self.cur_level.map_obj_sprites, self.cur_level.map_point_sprites, self.cur_level.item_point_sprites])
+        recalculate_fov(self, FOV_RADIUS)
 
-            self.fov_recompute = False
+
+    def check_new_item(self):
+        check = False
+        visible_item  = [v for v in self.cur_level.item_sprites if v.is_visible]
+        for i in visible_item:
+            if i.found_item == False:
+                check = True
+                i.found_item = True
+                self.action_queue.append({"message": f"{self.player.name} found a {i.name}!"})
+        return check
 
     def check_for_player_movement(self, dist):
         """プレイヤーの移動"""
-        check = False
+
         if self.player.state == state.TURN_END:
-            visible_item  = [v for v in self.cur_level.item_sprites if v.is_visible]
-            for i in visible_item:
-                if i.found_item == False:
-                    check = True
-                    i.found_item = True
-                    self.action_queue.append({"message": f"{self.player.name} found a {i.name}!"})
-            self.player.state = state.DELAY
+            self.check_new_item()
             
 
         if self.player.state == state.READY and dist and self.move_switch:
             self.action_queue.extend([{"action":(self.player,(dist))}])
             dist = None
-            # visible_item  = [v for v in self.cur_level.item_sprites if v.is_visible]
-            # for i in visible_item:
-            #     if i.found_item == False:
-            #         check = True
-            #         i.found_item = True
-            #         self.action_queue.append({"message": f"{self.player.name} found a {i.name}!"})
 
-        elif self.player.state == state.AUTO or self.player.tmp_state == state.AUTO:
-            visible_mns  = [v for v in self.cur_level.actor_sprites if v.is_visible]
-            # visible_item  = [v for v in self.cur_level.item_sprites if v.is_visible]
-            # if visible_item:
-            #     check = False
-            #     for i in visible_item:
-            #         if i.found_item == False:
-            #             check = True
-            #             i.found_item = True
-            #             self.action_queue.append({"message": f"{self.player.name} found a {i.name}!"})
-            #             self.player.state = state.READY
-            #             self.player.tmp_state = state.READY
+    def auto_move_check(self):
+
+        if self.player.state == state.AUTO or self.player.tmp_state == state.AUTO:
+            visible_mns  = [v for v in self.cur_level.actor_sprites if v.ai.visible_check or v.is_visible]
+
+            check = self.check_new_item()
             if check:
                 return
 
@@ -807,9 +798,15 @@ class GameEngine:
                 if dist_auto:
                     self.action_queue.extend(dist_auto)
                     self.player.tmp_state = state.AUTO
+
                 else:
-                    self.player.state = state.READY
-                    self.player.tmp_state = state.READY
+                    dist_auto =  auto_explore(self, self.player, tar="stairs")
+                    if dist_auto:
+                        self.action_queue.extend(dist_auto)
+                        self.player.tmp_state = state.AUTO
+                    else:
+                        self.player.state = state.READY
+                        self.player.tmp_state = state.READY
 
 
 
@@ -825,9 +822,10 @@ class GameEngine:
     def normal_state_update(self, player_direction, delta_time):
         # ノーマルステート時に更新したい関数
         self.turn_loop.loop_on(self)
-        self.check_for_player_movement(player_direction)
         self.skill_dispry_check()
         self.skill_position_update()
+        if self.turn_loop.game_turn == Turn.PLAYER:
+            self.check_for_player_movement(player_direction)
         # self.skill_shape = None
 
 

@@ -74,7 +74,8 @@ class Tag(Enum):
     wall = auto()
     floor = auto()
     door = auto()
-    stairs = auto()
+    down_stairs = auto()
+    up_stairs = auto()
 
     free = auto()
     image_off = auto()

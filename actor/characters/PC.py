@@ -68,7 +68,7 @@ class Player(Actor):
                 self.change_y = 0
                 self.x += self.dx
                 self.y += self.dy
-                self.fighter.wait += self.fighter.speed
+                # self.fighter.wait += self.fighter.speed
                 self.dx, self.dy = 0, 0
                 
                 self.from_x, self.from_y = self.center_x, self.center_y

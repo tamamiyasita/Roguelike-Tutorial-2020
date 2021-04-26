@@ -178,9 +178,6 @@ class MG(arcade.Window):
         elif self.engine.game_state == GAME_STATE.MESSAGE_WINDOW:
             self.massage_window.window_pop(arcade.get_viewport(), self.choice)
 
-        # fov_recomputeがTruならfov計算
-        if self.engine.fov_recompute:
-            self.engine.fov()
 
         # draw the mini_map
         if self.engine.game_state == GAME_STATE.NORMAL or self.engine.game_state == GAME_STATE.DELAY_WINDOW:

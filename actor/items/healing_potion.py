@@ -1,6 +1,6 @@
 from PIL.ImageOps import scale
 from actor.actor import Actor
-from actor.damage_pop import Damagepop
+from actor.damage_pop import DamagePop
 from constants import *
 from data import *
 import random

@@ -15,7 +15,7 @@ class Up_Stairs(Actor):
             visible_color=COLORS.get("light_wall"),
             not_visible_color=COLORS.get("dark_wall")
         )
-        self.tag = [Tag.map_obj, Tag.stairs]
+        self.tag = [Tag.map_obj, Tag.up_stairs]
 
 class Down_Stairs(Actor):
     def __init__(self, x=0, y=0):
@@ -30,4 +30,4 @@ class Down_Stairs(Actor):
             visible_color=COLORS.get("light_wall"),
             not_visible_color=COLORS.get("dark_wall")
         )
-        self.tag = [Tag.map_obj, Tag.stairs]
+        self.tag = [Tag.map_obj, Tag.down_stairs]
