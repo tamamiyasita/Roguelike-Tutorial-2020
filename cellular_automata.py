@@ -20,7 +20,7 @@ class CellularAutomata:
     def __init__(self):
         self.level = []
 
-        self.iterations = 5550
+        self.iterations = 15550
         self.neighbors = 4 # cellに隣接する壁の数
         self.wall_probability = 0.455 #セルが壁になる初期確率。.35から.55の間であることが推奨されます
 

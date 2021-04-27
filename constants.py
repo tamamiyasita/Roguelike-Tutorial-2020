@@ -138,6 +138,7 @@ class state(Enum):
     ATTACK = auto()
     DELAY = auto()
     STUN = auto()
+    DOOR = auto()
     AUTO = auto()
 
 class form(Enum):

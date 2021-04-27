@@ -96,6 +96,7 @@ class TurnLoop:
             #     self.game_turn = Turn.DELAY
 
                 # self.player.state = state.READY
+
             if self.player.state == state.TURN_END:
                 self.player.form = form.NORMAL
                 self.game_turn = Turn.DELAY
@@ -104,6 +105,9 @@ class TurnLoop:
             elif self.player.tmp_state == state.AUTO:
                 engine.auto_move_check()
 
+            # 姿勢を正す
+            if self.player.form == form.DEFENSE:
+                self.player.form = form.NORMAL
 
         elif self.game_turn == Turn.ENEMY:
             # 他のアクターを障害物としてマップを計算する
@@ -133,6 +137,7 @@ class TurnLoop:
                     
                     
                 engine.pop_position = 30
+                
 
             #未発見で待機
             elif self.actor.state == state.READY and self.actor != self.player:

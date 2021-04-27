@@ -16,7 +16,8 @@ class LevelUpFlower:
 
 
     def window_pop(self, viewports):
-        self.flowers = check_flower_level(self.engine.player) 
+        # self.flowers = check_flower_level(self.engine.player) 
+        self.flowers = self.engine.player.equipment.flower_slot.values()
 
         self.viewport_left = viewports[0]
         self.viewport_righit = viewports[1]
@@ -47,17 +48,19 @@ class LevelUpFlower:
         )
 
         
-        if not self.flowers:
-            self.player.equipment.equip_update()
-            self.engine.game_state = GAME_STATE.NORMAL
-        
         if self.key == arcade.key.ENTER:
-            self.flowers[0].level += 1
+            # self.flowers[0].level += 1
+            # self.flowers[0].current_xp = 0
             self.level_bonus = None
             self.flowers.remove(self.flowers[0])
             self.key = None
                 
-        if len(self.flowers) > 0:
+        if len(self.flowers) < 1:
+            self.player.equipment.equip_update()
+            self.engine.game_state = GAME_STATE.NORMAL
+        
+        # if len(self.flowers) > 0:
+        else:
 
             item = self.flowers[0]
             level_bonus = Select_param(item)

@@ -117,8 +117,8 @@ def inventory_key(key, engine):
     """インベントリを開いたときのキー"""
 
     if key in KEYMAP_CANCEL:
-        engine.selected_item = 0
-        engine.game_state = GAME_STATE.NORMAL
+        engine.selected_item = "exit"
+        # engine.game_state = GAME_STATE.NORMAL
 
     if key in KEYMAP_UP:
         engine.selected_item -= 1

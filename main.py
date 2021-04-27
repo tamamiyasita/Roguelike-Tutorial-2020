@@ -47,7 +47,7 @@ class MG(arcade.Window):
         self.viewports = None
         self.viewport_left = 0
         self.viewport_bottom = 0
-        self.choice = 0
+        self.choice = 0 # messagewindowの選択
         self.game_dict = None
 
     def setup(self):
@@ -166,7 +166,7 @@ class MG(arcade.Window):
 
 
         elif self.engine.game_state == GAME_STATE.INVENTORY:
-            draw_inventory(self.engine.player, self.engine.selected_item, self.viewports)
+            draw_inventory(self.engine, self.engine.selected_item, self.viewports)
 
         elif self.engine.game_state == GAME_STATE.LEVEL_UP_WINDOW:
             self.level_up_window.window_pop(self.viewports, self.engine)
@@ -255,7 +255,7 @@ class MG(arcade.Window):
 
 
         # ドア開閉
-        if self.engine.player.form == form.DOOR:
+        if self.engine.player.state == state.DOOR:
             door_check = door_key(key, self.engine)
             if door_check:
                 self.player_direction = None

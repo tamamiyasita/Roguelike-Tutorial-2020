@@ -238,11 +238,35 @@ class CharacterScreenUI:
             font_name=UI_FONT
         )
 
+        # First icon
+        arcade.draw_texture_rectangle(
+            center_x=left_position + 20,
+            center_y=top_position + y-21,
+            width=40,
+            height=40,
+            texture=IMAGE_ID["black_board"]
+        )
+        y -= 54        
 
         for i, flower in enumerate(flowers):
 
 
             item_text = f"{flower.name}".replace("_", " ").title()
+
+            # TODO passive activeのiconの位置調整
+            # TODO 最初のslot icon
+            # TODO 全体的なiconのテキスト位置
+            # TODO 選択枠のsprite
+            # TODO 背景のsprite変更
+
+
+
+
+
+            # 二列目
+            if i > 5:
+                left_position += GRID_SIZE * 5
+                y = -20
             
             
             # 上下移動出来る選択枠
@@ -268,7 +292,15 @@ class CharacterScreenUI:
                 # font_nameself.=UI_FONT2
             )
 
+            
             # flower icon
+            arcade.draw_texture_rectangle(
+                center_x=left_position + 20,
+                center_y=top_position + y-21,
+                width=40,
+                height=40,
+                texture=IMAGE_ID["black_board"]
+            )
             arcade.draw_texture_rectangle(
                 center_x=left_position + 20,
                 center_y=top_position + y-21,
@@ -276,20 +308,29 @@ class CharacterScreenUI:
                 height=40,
                 texture=flower.icon
             )
+
+            # passviveとactiveでicon位置調整
             skill = flower.flower_skill
             if Tag.passive in skill.tag:
                 sx = GRID_SIZE*2
             elif Tag.active in skill.tag:
                 sx = GRID_SIZE*4
             arcade.draw_texture_rectangle(
-                center_x=left_position + sx,
+                center_x=left_position + 20 + sx,
+                center_y=top_position + y-21,
+                width=40,
+                height=40,
+                texture=IMAGE_ID["black_board"]
+            )
+            arcade.draw_texture_rectangle(
+                center_x=left_position + 20 + sx,
                 center_y=top_position + y-21,
                 width=40,
                 height=40,
                 texture=skill.icon
             )
                 
-            # スキルレベル
+            # skill level
             arcade.draw_text(
                 text=f"level {flower.level}",
                 start_x=left_position + 43,

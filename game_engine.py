@@ -706,6 +706,7 @@ class GameEngine:
 
             if "close_door" in action:
                 self.player.form = form.DOOR
+                self.player.state = state.DOOR
                 new_action_queue.extend(
                     [{"message": f"What direction do you want the door to close?"}])
 

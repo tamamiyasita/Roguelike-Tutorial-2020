@@ -38,7 +38,8 @@ class RandomMove:
         results = []
         dice = randint(1,6)
         if dice <= 5: 
-            self.owner.move((randint(-1, 1), randint(-1, 1)), engine=engine)
+            results.extend([{"action":(self.owner,(randint(-1, 1), randint(-1, 1)))}])
+
 
         message = choice(self.owner.message)
         results.append(message)

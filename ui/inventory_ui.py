@@ -4,8 +4,16 @@ from constants import *
 from data import *
 
 
-def draw_inventory(player, selected_item, viewport):
+def draw_inventory(engine, selected_item, viewport):
     """インベントリを描画する"""
+
+    player = engine.player
+
+    if selected_item == "exit":
+        player.equipment.equip_update()
+        engine.game_state = GAME_STATE.NORMAL
+
+
     viewport_left = viewport[0]
     viewport_right = viewport[1]
     viewport_bottom = viewport[2]
