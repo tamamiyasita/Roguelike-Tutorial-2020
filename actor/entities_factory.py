@@ -13,6 +13,8 @@ from actor.characters.orcs import Orc, Troll
 from actor.characters.crab import Crab
 from actor.characters.rat import Water_vole
 from actor.characters.cabbage_snail import CabbageSnail
+from actor.characters.dog import Dog
+from actor.characters.goblin_shaman import Goblin_Shaman
 
 from level_up_sys import random_flower_gen
 
@@ -41,7 +43,7 @@ entities = load_entities(r"actor/actors.csv")
 #         return m1
 def get_random_monster_by_challenge(challenge):
     monster_list = [
-        Water_vole(), CabbageSnail() #Crab(),# Orc(), Troll()
+        Water_vole(), CabbageSnail(), Dog(), Goblin_Shaman()  #Crab(),# Orc(), Troll()
     ]
     if challenge:
         # TODO 普通のfor文にして柔軟性のあるリストに作り変える

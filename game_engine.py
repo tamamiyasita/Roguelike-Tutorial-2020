@@ -22,6 +22,7 @@ from actor.characters.PC import Player
 from actor.characters.rat import Water_vole
 from actor.characters.cabbage_snail import CabbageSnail
 from actor.characters.npc import Citizen
+from actor.characters.goblin_shaman import Goblin_Shaman
 
 from actor.map_obj.stairs import Up_Stairs, Down_Stairs
 from actor.restore_actor import restore_actor
@@ -124,9 +125,9 @@ class GameEngine:
         elif level_number >= 99:
             return self.test_map(level_number)
         elif level_number >= 1:
-            cur_map = self.basic_dungeon_init(level_number)
+            # cur_map = self.basic_dungeon_init(level_number)
             # cur_map = self.bps_dungeon_init(level_number)
-            # cur_map = self.drunker_dungeon_init(level_number)
+            cur_map = self.drunker_dungeon_init(level_number)
             return cur_map
 
     def setup(self):
@@ -147,8 +148,8 @@ class GameEngine:
 
         self.wb = Water_vole(x=10,y=17)
         self.game_level.actor_sprites.append(self.wb)
-        self.wb2 = Water_vole(x=11,y=17)
-        self.game_level.actor_sprites.append(self.wb2)
+        self.gs = Goblin_Shaman(x=11,y=17)
+        self.game_level.actor_sprites.append(self.gs)
         self.cs = CabbageSnail(x=12,y=17)
         self.game_level.actor_sprites.append(self.cs)
 
@@ -823,9 +824,9 @@ class GameEngine:
     def normal_state_update(self, player_direction, delta_time):
         # ノーマルステート時に更新したい関数
         self.turn_loop.loop_on(self)
-        self.skill_dispry_check()
-        self.skill_position_update()
         if self.turn_loop.game_turn == Turn.PLAYER:
+            self.skill_dispry_check()
+            self.skill_position_update()
             self.check_for_player_movement(player_direction)
         # self.skill_shape = None
 

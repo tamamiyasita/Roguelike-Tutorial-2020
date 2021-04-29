@@ -15,6 +15,7 @@ class DrunkerWalk:
         self.enemy_num = 10 * dungeon_level
         self.item_num = 10 * dungeon_level
         self.PLAYER_POINT = None
+        self.STAIRS_POINT = None
 
 
 
@@ -55,10 +56,15 @@ class DrunkerWalk:
             y = random.randint(1, self.map_height-1)
 
             if self.tiles[x][y] == TILE.EMPTY:
-                self.actor_tiles[x][y] = self.dungeon_level# TODO 後でレベルの調整
-                self.enemy_num -= 1
                 if not self.PLAYER_POINT:
                     self.PLAYER_POINT = (x,y)
+                    self.tiles[x][y] = TILE.STAIRS_UP  
+                elif not self.STAIRS_POINT:
+                    self.STAIRS_POINT = True
+                    self.tiles[x][y] = TILE.STAIRS_DOWN  
+                else:
+                    self.actor_tiles[x][y] = self.dungeon_level# TODO 後でレベルの調整
+                    self.enemy_num -= 1
 
         while self.item_num > 0:
             x = random.randint(1, self.map_width-1)

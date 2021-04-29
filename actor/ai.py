@@ -47,6 +47,81 @@ class RandomMove:
         return results
 
 
+class Rangid_AI:
+    def __init__(self, target_point=None, visible_check=False):
+        self.owner = None
+        self.target_point = target_point  # targetの位置を格納する
+        self.visible_check = visible_check  # 視野に入った場合チェックされ,Trueなら移動する
+
+    @stop_watch
+    def take_turn_2(self, target, engine):
+        results = []
+        monster = self.owner
+
+
+        # 視野のチェック
+        # if monster.is_visible:
+        #     self.visible_check = True
+
+        # ターゲット座標の更新
+        if target:
+            self.target_point = target.x, target.y
+
+
+        if self.visible_check:
+            # engine.damage_pop.append(DamagePop("!", (200,100,0), monster, 15))
+
+            # #playerをtargetにしたダイクストラマップを作成
+            engine.target_player_map.compute_distance_map(targets=[target], blocks=engine.cur_level.actor_sprites)
+
+            result_dijkstra = engine.target_player_map.get_low_number(monster.x, monster.y)
+
+            if monster.fighter.skill_list:
+                self_skills =  monster.fighter.skill_list
+                cur_skill = None
+                for s in self_skills:
+                    if s.count_time <= 0:
+                        cur_skill = s
+                        break
+
+
+                if cur_skill and monster.is_visible:
+                    cur_skill.target = target
+                    cur_skill.use(engine)
+                    return "ok"
+
+
+
+
+
+
+                # results[1]がターゲットパスへの最初のタイル座標なので変数pointに格納
+                elif result_dijkstra:
+                    point = result_dijkstra
+
+
+                    x, y = point[0], point[1]
+                    # ターゲット座標から自分の座標を引いたdx,dyをmoveに渡す
+                    dx = x - monster.x
+                    dy = y - monster.y
+
+                    # attack = monster.move(
+                    #     (dx, dy), target, engine)
+                    # if attack:
+                    #     results.extend(attack)
+
+
+                    results.extend([{"action":(self.owner,(dx, dy))}])
+
+            else:
+                results.extend([{"turn_end": monster}])
+
+
+        else:
+            results.extend([{"turn_end": monster}])
+        return results
+
+
 class Basicmonster:
     def __init__(self, target_point=None, visible_check=False):
         self.owner = None

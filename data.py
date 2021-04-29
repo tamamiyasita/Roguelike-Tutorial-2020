@@ -42,6 +42,14 @@ cabbage_snail_0  = arcade.load_texture_pair(r"image/cabbage_snail0.png")
 cabbage_snail_1 = arcade.load_texture_pair(r"image/cabbage_snail1.png")
 cabbage_snail =[*cabbage_snail_0, *cabbage_snail_1]
 
+dog_1 = arcade.load_texture_pair(r"image\dog1.png")
+dog_2 = arcade.load_texture_pair(r"image\dog2.png")
+dog = [*dog_1, *dog_2]
+
+goblin_shaman_0 = arcade.load_texture_pair(r"image\goblin_shaman_0.png")
+goblin_shaman_1 = arcade.load_texture_pair(r"image\goblin_shaman_1.png")
+goblin_shaman = [*goblin_shaman_0, *goblin_shaman_1]
+
 size = 16  # テクスチャのサイズと位置情報も兼ねる
 orcs_tiles_0 = (r"image\Characters\Player0.png")  # orcタイルイメージ
 orcs_tiles_1 = (r"image\Characters\Player1.png")  # orcタイルイメージ
@@ -152,6 +160,9 @@ cabbageflower = arcade.load_texture(r"image\cabbage_flower.png")
 seed_shot = arcade.load_texture_pair(r"image/seed_shot.png")
 seed_shot_b = arcade.load_texture(r"image/seed_shot_b.png")
 seed_shot_icon = arcade.load_texture(r"image/seed_shot_icon.png")
+
+fire_arrow = arcade.load_texture_pair(r"image/fire_arrow.png")
+fire_arrow_icon = arcade.load_texture(r"image/fire_arrow.png")
 
 banana_slip = arcade.load_texture_pair(r"image/banana_slip.png")
 banana_slip_icon = arcade.load_texture(r"image/banana_slip_icon.png")
@@ -265,6 +276,8 @@ IMAGE_ID = {"Rou": player,
             "crab": crab,
             "water_vole": water_vole,
             "cabbage_snail": cabbage_snail,
+            "dog":dog,
+            "goblin_shaman":goblin_shaman,
 
             "orc": orc,
             "troll": troll,
@@ -312,6 +325,8 @@ IMAGE_ID = {"Rou": player,
             "seed_shot":seed_shot,
             "seed_shot_b":seed_shot_b,
             "seed_shot_icon":seed_shot_icon,
+            "fire_arrow":fire_arrow,
+
             "poison_dart":poison_dart,
             "poison_dart_icon":poison_dart_icon,
             "poison_start":poison_start,

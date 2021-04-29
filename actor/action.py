@@ -80,4 +80,5 @@ def walk_action(owner):
     else:
         owner.x += owner.dx
         owner.y += owner.dy
+        owner.state = state.TURN_END
 

@@ -30,11 +30,13 @@ class Flying(Actor):
         self.range = range
 
         self.shot_speed = skill.shot_speed
-        self.delay_time = 10 / skill.shot_speed
+        self.delay_time = 15 / skill.shot_speed
         self.shot_damage = -skill.damage
         self.attr = skill.attr
         self.damage_range = skill.damage_range
         self.target = arcade.get_sprites_at_point(self.tar_point.position, self.engine.cur_level.actor_sprites)
+        if shooter != self.engine.player:
+            self.target = arcade.get_sprites_at_point(self.tar_point.position, self.engine.cur_level.chara_sprites)
 
         TMP_EFFECT_SPRITES.append(self)
     
@@ -108,8 +110,12 @@ class Ranged:
 
     def use(self):
         print("use")
-        self.engine.game_state = GAME_STATE.SELECT_LOCATION
-        self.engine.grid_select_handlers.append(self.shot)
+        if self.shooter == self.engine.player:
+            self.engine.game_state = GAME_STATE.SELECT_LOCATION
+            self.engine.grid_select_handlers.append(self.shot)
+            # return None
+        else:
+            self.engine.action_queue.extend(self.shot(self.target.x, self.target.y))
         return None
 
     def shot(self, x, y):

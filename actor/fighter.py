@@ -12,7 +12,8 @@ class Fighter:
     def __init__(self, hp=0, defense=0, STR=0, DEX=0, INT=0, speed=10,
                  evasion=0, xp_reward=0, level=1,
                  # 物理:オレンジ, 火:赤, 氷:白, 雷:青, 酸:黄色, 毒:紫, 精神:ピンク
-                 resist={"physical": 1, "fire": 0, "ice": 1, "elec":1, "acid": 1, "poison": 1, "mind": 1},           
+                 resist={"physical": 1, "fire": 1, "ice": 1, "elec":1, "acid": 1, "poison": 1, "mind": 1},
+                 skill_list=None,           
                  ability_points=0):
 
         self.hp = hp
@@ -34,7 +35,7 @@ class Fighter:
         self.level = level
         self._states = []
 
-        self._skill_list = arcade.SpriteList()
+        self._skill_list = skill_list
 
         # TODO バフデバフ効果に使う辞書　effect_bonus_update関数を作らねば
         self.effect_bonus = {"max_hp": 0, "max_mp": 0, "STR": 0,
@@ -118,10 +119,11 @@ class Fighter:
         return result
     @property
     def counter_skill(self):
-        result = [skill for skill in self.skill_list if Tag.counter in skill.tag]
-        if not result:
-            return []
-        return result
+        if self.skill_list:
+            result = [skill for skill in self.skill_list if Tag.counter in skill.tag]
+            if not result:
+                return []
+            return result
     @property
     def attack_skill(self):
         try:
@@ -135,9 +137,10 @@ class Fighter:
 
     @property
     def skill_list(self):
-        for skill in self._skill_list:
-            if skill and not isinstance(skill, str):
-                skill.owner = self.owner
+        if self._skill_list:
+            for skill in self._skill_list:
+                if skill and not isinstance(skill, str):
+                    skill.owner = self.owner
 
         return self._skill_list
 
@@ -207,9 +210,11 @@ class Fighter:
             return results
 
         if Tag.counter not in skill.tag or Tag.range_attack not in skill.tag or Tag.shot not in skill.tag:# カウンタースキルにはカウンターチェックしない
-            results.extend(self.other_counter_check(skill.owner))
-            if skill.owner.fighter.hp < 1 or skill.owner.state == state.STUN:
-                return results
+            check = self.other_counter_check(skill.owner)
+            if check:
+                results.extend(check)
+                if skill.owner.fighter.hp < 1 or skill.owner.state == state.STUN:
+                    return results
 
         
 
@@ -306,8 +311,9 @@ class Fighter:
         return results
 
     def other_counter_check(self, target):
-        result = []            
-        for c in self.counter_skill:
-            result = c.use(target)
+        if self.skill_list:
+            result = []            
+            for c in self.counter_skill:
+                result = c.use(target)
 
-        return result
+            return result
