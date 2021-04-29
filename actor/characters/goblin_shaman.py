@@ -25,7 +25,7 @@ class Goblin_Shaman(Actor):
         ai_component = Rangid_AI()
 
         super().__init__(
-            scale=1.8,
+            scale=2,
             name="goblin_shaman",
             image="goblin_shaman",
             x=x,

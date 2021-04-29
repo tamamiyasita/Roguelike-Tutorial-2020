@@ -117,7 +117,7 @@ def inventory_key(key, engine):
     """インベントリを開いたときのキー"""
 
     if key in KEYMAP_CANCEL:
-        engine.selected_item = "exit"
+        engine.selected_item = 99
         # engine.game_state = GAME_STATE.NORMAL
 
     if key in KEYMAP_UP:
@@ -157,6 +157,7 @@ def keymap(key, engine):
         engine.game_state = GAME_STATE.CHARACTER_SCREEN
         
     elif key in KEYMAP_INVENTORY:
+        engine.selected_item = 0
         engine.game_state = GAME_STATE.INVENTORY
 
     elif key in KEYMAP_CANCEL and engine.game_state != GAME_STATE.LEVEL_UP_WINDOW:

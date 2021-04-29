@@ -134,7 +134,7 @@ class GameEngine:
 
         arcade.set_background_color(COLORS["black"])
         self.flower_sprites = arcade.SpriteList(use_spatial_hash=True, spatial_hash_cell_size=32)
-        self.cur_level = self.setup_level(level_number=1)
+        self.cur_level = self.setup_level(level_number=99)
         self.stories[self.cur_floor_name] = self.cur_level
         self.turn_loop = TurnLoop(self.player)
         self.item_point = ItemPoint(self)
@@ -147,11 +147,11 @@ class GameEngine:
         self.init_dungeon_sprites(TestMap(self.map_width, self.map_height, dungeon_level=99), image_set=image_set)
 
         self.wb = Water_vole(x=10,y=17)
-        self.game_level.actor_sprites.append(self.wb)
+        # self.game_level.actor_sprites.append(self.wb)
         self.gs = Goblin_Shaman(x=11,y=17)
         self.game_level.actor_sprites.append(self.gs)
         self.cs = CabbageSnail(x=12,y=17)
-        self.game_level.actor_sprites.append(self.cs)
+        # self.game_level.actor_sprites.append(self.cs)
 
         self.npc = Citizen(x=14,y=14)
         # self.game_level.actor_sprites.append(self.npc)
@@ -825,10 +825,9 @@ class GameEngine:
         # ノーマルステート時に更新したい関数
         self.turn_loop.loop_on(self)
         if self.turn_loop.game_turn == Turn.PLAYER:
-            self.skill_dispry_check()
             self.skill_position_update()
             self.check_for_player_movement(player_direction)
-        # self.skill_shape = None
+            self.skill_dispry_check()
 
 
 

@@ -91,7 +91,6 @@ class TurnLoop:
 
         if self.game_turn == Turn.PLAYER:
             # Playerをターゲットとしたダイクストラマップの更新
-            engine.target_player_map.compute_distance_map(targets=engine.cur_level.chara_sprites)
             # if actor.is_dead or actor.state == state.STUN:
             #     self.game_turn = Turn.DELAY
 
@@ -100,6 +99,7 @@ class TurnLoop:
             if self.player.state == state.TURN_END:
                 self.player.form = form.NORMAL
                 self.game_turn = Turn.DELAY
+                # engine.target_player_map.compute_distance_map(targets=engine.cur_level.chara_sprites)
                 engine.fov()
 
             elif self.player.tmp_state == state.AUTO:
@@ -121,6 +121,7 @@ class TurnLoop:
                 if result:
                     engine.action_queue.extend(result)
                     self.game_turn = Turn.DELAY
+                    self.actor.state = state.DELAY
             elif Tag.friendly in self.actor.tag:
                 result = self.actor.ai.take_turn(engine)
                 if result:
@@ -134,7 +135,7 @@ class TurnLoop:
             if self.actor.state == state.TURN_END or self.actor.state is None or self.actor.is_dead or self.actor.state == state.STUN:
                 self.actor.fighter.wait = self.actor.fighter.speed
                 self.game_turn = Turn.ON
-                    
+
                     
                 engine.pop_position = 30
                 

@@ -229,24 +229,25 @@ class CharacterScreenUI:
         skill_list = list(self.player.fighter.skill_list)
         skill_list = sorted(skill_list, key=lambda x: x.level, reverse=True)
 
-        arcade.draw_text(
-            text="Flowers",
-            start_x=left_position,
-            start_y=top_position,
-            color=(129, 255, 71),
-            font_size=item_font_size,
-            font_name=UI_FONT
-        )
+        # arcade.draw_text(
+        #     text="Flowers",
+        #     start_x=left_position,
+        #     start_y=top_position,
+        #     color=(129, 255, 71),
+        #     font_size=item_font_size,
+        #     font_name=UI_FONT
+        # )
 
         # First icon
+        first_icon = arcade.load_texture(r"image\first.png")
         arcade.draw_texture_rectangle(
             center_x=left_position + 20,
             center_y=top_position + y-21,
             width=40,
             height=40,
-            texture=IMAGE_ID["black_board"]
+            texture=first_icon
         )
-        y -= 54        
+        y -= 84        
 
         for i, flower in enumerate(flowers):
 
@@ -258,13 +259,14 @@ class CharacterScreenUI:
             # TODO 全体的なiconのテキスト位置
             # TODO 選択枠のsprite
             # TODO 背景のsprite変更
+            # 花アイコンには上に名前横にLV　HP/MHP　EXP
 
 
 
 
 
             # 二列目
-            if i > 5:
+            if i == 4:
                 left_position += GRID_SIZE * 5
                 y = -20
             
@@ -308,13 +310,26 @@ class CharacterScreenUI:
                 height=40,
                 texture=flower.icon
             )
-
+            # EXPの表示
+            if flower.level < len(flower.experience_per_level):
+                xp_to_next_level = flower.experience_per_level[flower.level+1]
+                exp_text = f"XP {flower.current_xp: >4} / {xp_to_next_level: >4}"
+            else:
+                exp_text = f"XP {flower.current_xp}"
+            arcade.draw_text(text=exp_text,
+                            start_x=left_position + 43,
+                            start_y=top_position + y-20,
+                            color=(239,192,70),
+                            font_size=9,
+                            font_name=UI_FONT2
+                            )
             # passviveとactiveでicon位置調整
             skill = flower.flower_skill
-            if Tag.passive in skill.tag:
-                sx = GRID_SIZE*2
-            elif Tag.active in skill.tag:
-                sx = GRID_SIZE*4
+            # if Tag.passive in skill.tag:
+            #     sx = GRID_SIZE*2
+            # elif Tag.active in skill.tag:
+            #     sx = GRID_SIZE*3
+            sx = GRID_SIZE*2
             arcade.draw_texture_rectangle(
                 center_x=left_position + 20 + sx,
                 center_y=top_position + y-21,
@@ -341,7 +356,7 @@ class CharacterScreenUI:
                 anchor_y="top"
             )
 
-            y -= 54        
+            y -= 84        
 
 
 

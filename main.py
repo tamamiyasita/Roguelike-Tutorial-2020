@@ -99,7 +99,7 @@ class MG(arcade.Window):
         self.engine.cur_level.map_obj_sprites.draw(filter=gl.GL_LO_BIAS_NV)
         self.engine.cur_level.item_sprites.draw(filter=gl.GL_NEAREST)
         self.engine.cur_level.actor_sprites.draw(filter=gl.GL_NEAREST)
-        self.engine.flower_sprites.draw(filter=gl.GL_NEAREST)
+        self.engine.flower_sprites.draw(filter=gl.GL_LO_BIAS_NV)
         self.engine.cur_level.chara_sprites.draw(filter=gl.GL_NEAREST)
         self.engine.cur_level.equip_sprites.draw(filter=gl.GL_NEAREST)
         self.engine.cur_level.effect_sprites.draw(filter=gl.GL_NEAREST)

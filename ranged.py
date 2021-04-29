@@ -30,7 +30,7 @@ class Flying(Actor):
         self.range = range
 
         self.shot_speed = skill.shot_speed
-        self.delay_time = 15 / skill.shot_speed
+        self.delay_time = 0.6
         self.shot_damage = -skill.damage
         self.attr = skill.attr
         self.damage_range = skill.damage_range

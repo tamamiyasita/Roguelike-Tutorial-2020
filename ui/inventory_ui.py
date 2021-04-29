@@ -9,7 +9,7 @@ def draw_inventory(engine, selected_item, viewport):
 
     player = engine.player
 
-    if selected_item == "exit":
+    if selected_item == 99:
         player.equipment.equip_update()
         engine.game_state = GAME_STATE.NORMAL
 

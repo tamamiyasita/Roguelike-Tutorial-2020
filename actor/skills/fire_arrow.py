@@ -23,7 +23,7 @@ class Firearrow(BaseSkill):
 
         self._damage = 6
         self.hit_rate = 85
-        self.shot_speed = 35
+        self.shot_speed = 55
         self.attr = "fire"
 
         self.damage_range = "single"
