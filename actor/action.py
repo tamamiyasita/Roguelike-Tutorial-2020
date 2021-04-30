@@ -34,6 +34,10 @@ def dist_action(dxy, owner, engine):
 
     elif Tag.friendly in blocking_actor.tag:
             result.extend(talk_action(blocking_actor, owner))
+            
+    else:
+        result.extend([{"delay": {"time": .3, "action": {"turn_end":owner}}}])
+
 
     return result
 

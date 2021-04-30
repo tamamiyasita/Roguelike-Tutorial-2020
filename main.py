@@ -1,6 +1,8 @@
 from os import stat
 import arcade
 from arcade.gl import geometry
+from arcade.experimental.lights import Light, LightLayer
+
 import json
 import pyglet.gl as gl
 
@@ -88,6 +90,15 @@ class MG(arcade.Window):
         self.level_up_flower = LevelUpFlower(self.engine)
         self.normal_UI = NormalUI(self.engine)
 
+
+        self.light_layer = LightLayer(SCREEN_WIDTH, SCREEN_HEIGHT)
+        self.light_layer.set_background_color(arcade.color.BLACK)
+        light = Light(100, 200, radius=100, color=arcade.color.WHITE, mode="soft")
+        self.light_layer.add(light)
+
+        self.player_light = Light(0,0, 390, arcade.color.WHITE, mode="soft")
+
+
     def draw_sprites(self):
         """ 全てのスプライトリストをここで描画する """
         # 背景が表示されないように最初に黒で塗りつぶす、他の方法を考えないと…
@@ -144,8 +155,12 @@ class MG(arcade.Window):
         self.viewports = arcade.get_viewport()
         self.viewport_left = self.viewports[0]
         self.viewport_bottom = self.viewports[2]
-        self.draw_sprites()
-        arcade.set_background_color(arcade.color.BLACK)
+        with self.light_layer:
+            self.draw_sprites()
+            # self.engine.fov_sprites.draw()
+
+        self.light_layer.draw(ambient_color=(1,1,1,1))
+        # arcade.set_background_color(arcade.color.BLACK)
 
         # ノーマルステート時の画面表示6
         if self.engine.game_state == GAME_STATE.NORMAL or self.engine.game_state == GAME_STATE.DELAY_WINDOW:
@@ -191,6 +206,8 @@ class MG(arcade.Window):
                 elif i.dist < 30:
                     i.draw()
                     
+    def on_resize(self, width: float, height: float):
+        self.light_layer.resize(width, height)
 
     def on_update(self, delta_time):
         """全てのスプライトリストのアップデートを行う
@@ -219,6 +236,8 @@ class MG(arcade.Window):
 
             self.engine.normal_state_update(self.player_direction, delta_time)
 
+            self.player_light.position = self.engine.player.position
+
 
 
 
@@ -226,7 +245,7 @@ class MG(arcade.Window):
 
 
     def on_key_press(self, key, modifiers):
-        # auto_moveキャンセル処理
+           # auto_moveキャンセル処理
         if self.engine.player.state == state.AUTO:
             self.engine.player.state = state.READY
         if self.engine.player.tmp_state == state.AUTO:
@@ -302,6 +321,12 @@ class MG(arcade.Window):
         if key == arcade.key.F2:
             self.engine.player.fighter.states.append(PoisonStatus(3, 3))
 
+        if key == arcade.key.SPACE:
+            if self.player_light in self.light_layer:
+                self.light_layer.remove(self.player_light)
+            else:
+                self.light_layer.add(self.player_light)
+
 
 
     def on_key_release(self, key, modifiers):
@@ -347,6 +372,7 @@ class MG(arcade.Window):
 def main():
     window = MG(SCREEN_WIDTH, SCREEN_HEIGHT, TITLE)
     window.setup()
+    window.ctx.BLEND_ADDITIVE
     # window.set_location(20, 200)
 
     arcade.run()

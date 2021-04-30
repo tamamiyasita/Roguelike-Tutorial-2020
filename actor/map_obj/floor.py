@@ -15,7 +15,7 @@ class Floor(Actor):
             y=y,
             scale=SPRITE_SCALE*1,
             blocks=False,
-            color=COLORS.get("black"),
+            color=COLORS.get("black"),#(255,255,255,255), #
             visible_color=COLORS.get("light_ground"),
             not_visible_color=COLORS.get("dark_ground")
 

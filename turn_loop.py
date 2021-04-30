@@ -119,9 +119,9 @@ class TurnLoop:
             elif Tag.enemy in self.actor.tag:
                 result = self.actor.ai.take_turn_2(self.player, engine)
                 if result:
-                    engine.action_queue.extend(result)
                     self.game_turn = Turn.DELAY
                     self.actor.state = state.DELAY
+                    engine.action_queue.extend(result)
             elif Tag.friendly in self.actor.tag:
                 result = self.actor.ai.take_turn(engine)
                 if result:

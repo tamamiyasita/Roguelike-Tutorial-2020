@@ -52,7 +52,7 @@ class MyWindow(arcade.Window):
         self.clear()
 
         # 粒子サイズの設定
-        self.ctx.point_size = 146 * self.get_pixel_ratio()
+        self.ctx.point_size = 6 * self.get_pixel_ratio()
 
         # 各バーストをループする
         for burst in self.burst_list:
