@@ -1,3 +1,4 @@
+import arcade
 from actor.items.base_flower import BaseFlower
 from actor.skills.branch_baton import BranchBaton
 
@@ -25,7 +26,7 @@ class Ebony(BaseFlower):
         self.current_xp = 0
 
 
-        self.flower_color = "white"
+        self.flower_color = arcade.color.WHITE_SMOKE
         self.states_bonus =  {"max_hp": 0, "STR": 1, "DEX": 0, "INT": 0, "defense": 0, "evasion": 0, "speed":0}
         self.skill_bonus = {"branch_baton":1}
         self.resist_bonus = {"physical": 0, "fire": 0, "ice": 0, "elec":0, "acid": 0, "poison": 0, "mind": 0}

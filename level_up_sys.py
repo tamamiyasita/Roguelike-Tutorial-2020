@@ -34,8 +34,8 @@ def check_flower_level(player):
     for flower in player.equipment.flower_slot:
         xp_to_next_level = flower.experience_per_level[flower.level+1]
         if flower.current_xp >= xp_to_next_level and flower.max_level >= flower.level:
-            flower.level += 1
-            flower.current_xp = flower.current_xp - xp_to_next_level
+            # flower.level += 1
+            # flower.current_xp = flower.current_xp - xp_to_next_level
             result.append(flower)
 
     return result

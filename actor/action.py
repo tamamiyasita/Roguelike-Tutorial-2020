@@ -25,6 +25,8 @@ def dist_action(dxy, owner, engine):
         if Tag.player in owner.tag:
             engine.move_switch = False
             result.extend(attack_action(blocking_actor, owner))
+        else:
+            result.extend([{"delay": {"time": .3, "action": {"turn_end":owner}}}])
     elif Tag.player in blocking_actor.tag:
         if Tag.enemy in owner.tag:
             result.extend(attack_action(blocking_actor, owner))

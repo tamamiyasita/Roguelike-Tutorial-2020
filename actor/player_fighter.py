@@ -11,7 +11,6 @@ from actor.fighter import Fighter
 class PC_Fighter(Fighter):
     def __init__(self, hp=0, defense=0, STR=0, DEX=0, INT=0, speed=10,
                  evasion=0, xp_reward=0, current_xp=0, level=1,
-                 affinity={"physical": 0, "fire": 0, "ice": 0, "elec": 0, "acid": 0, "poison": 0, "mind": 0, "recovery":0},
                  resist={"physical": 3, "fire": 0, "ice": 1, "elec":1, "acid": 1, "poison": 1, "mind": 1}, ability_points=0):
 
         self.level_up_bonus = {"max_hp": 0,"STR": 0,"DEX": 0, "INT": 0, "defense": 0, "evasion": 0}
@@ -28,7 +27,6 @@ class PC_Fighter(Fighter):
 
         self.base_defense = defense
         self.base_evasion = evasion
-        self._affinity = affinity
         self._resist = resist
 
 
@@ -161,16 +159,6 @@ class PC_Fighter(Fighter):
     def skill_weight_list(self):
         result = sorted(self.skill_list, key=lambda x: x.item_weight)
         return result
-
-
-
-    @property
-    def affinity(self):
-        base_affinity = {"physical": 0, "fire": 0, "ice": 0, "elec":0, "acid": 0, "poison": 0, "mind": 0, "recovery":0}
-        for name in self._affinity:
-            base_affinity[name] = self._affinity[name] + self.owner.equipment.affinity_bonus[name]
-        print(base_affinity)
-        return base_affinity
 
 
     @property

@@ -56,7 +56,8 @@ class Inventory:
         return results
 
     def get_item_number(self, item_number: int):
-        return self.item_bag[item_number]
+        if item_number <= self.capacity:
+            return self.item_bag[item_number]
 
     def remove_item_number(self, item_number: int):
         results = []

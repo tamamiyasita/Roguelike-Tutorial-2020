@@ -1,3 +1,5 @@
+import arcade
+import math
 from actor.actor import Actor
 from constants import *
 from data import *
@@ -34,6 +36,7 @@ class BaseFlower(Actor):
         self.item_margin_x = 0
         self.item_margin_y = 0
         self.my_speed = 4.3
+        self.base_my_speed = self.my_speed
         self.scale=2
         # TODO 別の動きをそのうち実装したい
         self.flower_move = 0
@@ -53,11 +56,15 @@ class BaseFlower(Actor):
 
         # states
         self.rarity = "common"
-        self.flower_color = ""
+
         self.states_bonus = {"max_hp": 0,"STR": 0,"DEX": 0, "INT": 0, "defense": 0, "evasion": 0, "speed":0}
         self.skill_bonus = {}
         self.resist_bonus = {"physical": 0, "fire": 0, "ice": 0, "elec":0, "acid": 0, "poison": 0, "mind": 0}
 
+        self.flower_color = arcade.color.WHITE
+        # self.light = Light(0, 0, radius=self.texture.width/3, color=self.flower_color, mode="soft")
+        self.a_time = 0
+    
         ###################################
 
 
@@ -97,6 +104,7 @@ class BaseFlower(Actor):
 
     def update_animation(self, delta_time):
         super().update_animation(delta_time)
+
         try:
 
             if self.master.left_face:
@@ -104,6 +112,27 @@ class BaseFlower(Actor):
             else:
                 item_margin_x = -self.item_margin_x
             item_margin_y = self.item_margin_y
+
+
+
+            self.a_time +=1
+            if self.a_time < 70:
+                self.light.radius += delta_time*uniform(1.4, 4.8)
+            elif self.a_time < 140:
+                self.light.radius -= delta_time*uniform(1.4, 4.8)
+            elif self.a_time < 210:
+                self.a_time = 0
+                self.light.radius =self.texture.width/3
+
+            self.light.position = self.position
+
+            if abs(arcade.get_distance_between_sprites(self, self.owner)) >= 150:
+                self.my_speed += 1
+            else:
+                self.my_speed = self.base_my_speed
+
+
+
 
             if self.flower_move == 0:
                     

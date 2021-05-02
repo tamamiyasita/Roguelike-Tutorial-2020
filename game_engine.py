@@ -1,5 +1,7 @@
 
 import arcade
+from arcade.experimental.lights import Light, LightLayer
+
 from random import randint
 from collections import deque
 from itertools import chain
@@ -112,6 +114,12 @@ class GameEngine:
         self.player = Player(
             inventory=Inventory(capacity=18))
 
+        # 光源システム
+        self.light_layer = LightLayer(SCREEN_WIDTH, SCREEN_HEIGHT)
+        self.light_layer.set_background_color(arcade.color.BLACK)
+
+        self.player_light = Light(0,0, 390, (230,230,230), mode="soft")
+        self.light_layer.add(self.player_light)
 
 
     def setup_level(self, level_number):
@@ -134,12 +142,12 @@ class GameEngine:
 
         arcade.set_background_color(COLORS["black"])
         self.flower_sprites = arcade.SpriteList(use_spatial_hash=True, spatial_hash_cell_size=32)
-        self.cur_level = self.setup_level(level_number=99)
+        self.cur_level = self.setup_level(level_number=1)
         self.stories[self.cur_floor_name] = self.cur_level
         self.turn_loop = TurnLoop(self.player)
         self.item_point = ItemPoint(self)
         self.fov()
-
+        
 
     def test_map(self, level):
         image_set={"wall": "b_wall",
@@ -845,11 +853,31 @@ class GameEngine:
                 self.cur_level.equip_sprites.append(skill)
 
     def skill_position_update(self):
-        # アイテムポジションをプレイヤーに追従するようにする
+        # skill_itemをプレイヤーに追従するようにする
         for i, skill in enumerate(self.player.fighter.skill_weight_list):
             if self.player.state == state.ON_MOVE or self.player.state == state.READY:
                 skill.item_position_x = self.player.fighter.equip_position[i][0]
                 skill.item_position_y = self.player.fighter.equip_position[i][1]
+
+
+
+    def flower_light(self):
+        self.light_layer = LightLayer(SCREEN_WIDTH, SCREEN_HEIGHT)
+        self.light_layer.set_background_color(arcade.color.BLACK)
+
+        self.player_light = Light(0,0, 390, arcade.color.WHITE, mode="soft")
+        self.light_layer.add(self.player_light)
+        
+        for i, flower in enumerate(self.player.equipment.flower_slot):
+            flower.light = Light(0, 0, radius=flower.texture.width/3, color=flower.flower_color, mode="soft")
+            self.light_layer.add(flower.light)
+
+
+
+
+
+
+
 
 
     def use_stairs(self):
@@ -889,6 +917,7 @@ class GameEngine:
 
 
                 self.player.state = state.READY
+                self.flower_light()
                 return [{"message": "You went down a level."}]
 
         for stairs in get_stairs:
@@ -916,6 +945,7 @@ class GameEngine:
                     self.player.restore_from_dict(player_dict["Player"])
                     self.player.x, self.player.y = down_stairs[0].x, down_stairs[0].y
                     
+                self.flower_light()
                 return [{"message": "You went UP a level."}]
 
         return None #[{"message": "There are no stairs here"}]

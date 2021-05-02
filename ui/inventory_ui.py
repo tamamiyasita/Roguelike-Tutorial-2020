@@ -11,6 +11,7 @@ def draw_inventory(engine, selected_item, viewport):
 
     if selected_item == 99:
         player.equipment.equip_update()
+        engine.flower_light()
         engine.game_state = GAME_STATE.NORMAL
 
 

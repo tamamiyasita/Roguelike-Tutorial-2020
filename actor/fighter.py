@@ -192,11 +192,6 @@ class Fighter:
         attr = skill.attr
         hit_rate = skill.hit_rate
 
-        if hasattr(self.owner.fighter, "affinity"):
-            affinity = self.owner.fighter.affinity[attr]
-            print(affinity, "affinity")
-            damage += (damage*affinity*0.05)
-
         # damage = dice(level, damage)
 
         # HP回復

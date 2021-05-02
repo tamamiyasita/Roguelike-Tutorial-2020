@@ -2,7 +2,6 @@ import math
 from collections import Counter
 from constants import *
 from itertools import chain
-# from actor.actor_set import *
 
 class Equipment:
     """装備部位とそこからの追加bonusを返す
@@ -18,10 +17,9 @@ class Equipment:
 
         self.states_bonus = {"max_hp": 0,"STR": 0,"DEX": 0, "INT": 0,
                              "defense": 0, "evasion": 0, "speed":0}
-        self.affinity_bonus = {"physical": 0, "fire": 0, "ice": 0, "elec":0, "acid": 0, "poison": 0, "mind": 0, "recovery":0}
         self.resist_bonus = {"physical": 0, "fire": 0, "ice": 0, "elec":0, "acid": 0, "poison": 0, "mind": 0}
         
-        self.flower_position = {i:(40*math.cos(math.radians(s)), 40*math.sin(math.radians(s))) for i, s in enumerate([30,60,90,120,150])}
+        self.flower_position = {i:(40*math.cos(math.radians(s)), 40*math.sin(math.radians(s))) for i, s in enumerate([90,20,160,55,125])}
         self.flower_position2 = {i:(60*math.cos(math.radians(s)), 60*math.sin(math.radians(s))) for i, s in enumerate([40,70,100,130,150])}
 
 
@@ -68,20 +66,6 @@ class Equipment:
 
         self.skill_list = skill_gen
 
-
-    def affinity_bonus_update(self):
-        """flower_slotをループしてaffinity bonusを合計し返す"""
-
-        color = {"orange":"physical", "red":"fire", "white":"ice", "blue":"elec", "yellow":"acid", "purple":"poison", "pink":"mind", "green":"recovery"}
-
-        bonus = {"physical": 0, "fire": 0, "ice": 0, "elec":0, "acid": 0, "poison": 0, "mind": 0, "recovery":0}
-
-        for parts in self.flower_slot:
-            if parts and not isinstance(parts, str) and parts.flower_color:
-                c = parts.flower_color
-                bonus[color[c]] += 1
-
-        self.affinity_bonus = bonus
     
 
     def resist_bonus_update(self):
@@ -110,8 +94,18 @@ class Equipment:
         self.states_bonus_update()
         self.skill_list_update()
         self.resist_bonus_update()
-        self.affinity_bonus_update()
+        self.equip_position_set()
 
+    def equip_position_set(self):
+        pos = len(self.flower_slot)
+        if pos < 6:
+            for i in range(0, pos):
+                self.flower_slot[i].item_margin_x = self.flower_position[i][0]
+                self.flower_slot[i].item_margin_y = self.flower_position[i][1]
+        if pos >= 6:
+            for j in range(5, pos):
+                self.flower_slot[j].item_margin_x = self.flower_position2[j-5][0]
+                self.flower_slot[j].item_margin_y = self.flower_position2[j-5][1]
 
     def toggle_equip(self, equip_item):
         """装備アイテムの付け外しを行うメソッド
@@ -128,10 +122,6 @@ class Equipment:
                 
                 results.extend([{"message": f"dequipped {item.name}"}])
 
-                # self.states_bonus_update()
-                # self.skill_list_update()
-                # self.resist_bonus_update()
-                # self.affinity_bonus_update()
                 self.equip_update()
 
                 
@@ -144,22 +134,10 @@ class Equipment:
             self.flower_slot.append(equip_item)
             equip_item.master = self.owner
             equip_item.flower_skill.master = self.owner
-            pos = len(self.flower_slot)
-            if pos < 6:
-                for i in range(0, pos):
-                    self.flower_slot[i].item_margin_x = self.flower_position[i][0]
-                    self.flower_slot[i].item_margin_y = self.flower_position[i][1]
-            if pos >= 6:
-                for j in range(5, pos):
-                    self.flower_slot[j].item_margin_x = self.flower_position2[j-5][0]
-                    self.flower_slot[j].item_margin_y = self.flower_position2[j-5][1]
 
             results.append({"message": f"equipped {equip_item.name}"})
 
             self.equip_update()
-            # self.states_bonus_update()
-            # self.skill_list_update()
-            # self.resist_bonus_update()
-            # self.affinity_bonus_update()
+
 
             return results
