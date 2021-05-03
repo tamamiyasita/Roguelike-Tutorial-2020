@@ -68,18 +68,15 @@ class TurnLoop:
                     self.elapsed_time(self.actor, queue, engine)# ターンが来たらステータス効果発動
 
                     # ステータス効果による死亡やスタン判定
-                    if self.actor.is_dead or self.actor.state == state.STUN or self.actor.fighter.wait:
+                    if self.actor.is_dead or self.actor.state == state.TURN_END or 0 < self.actor.fighter.wait:
                         continue
                     else:
                         if self.actor == self.player:
                             self.game_turn = Turn.PLAYER
                         else:
                             self.game_turn = Turn.ENEMY
-                    #     self.game_turn = Turn.OFF
-
-                    # if self.game_turn == Turn.OFF:
                         break
-            
+
             for sprite in self.sprites:
                 # playerもしくは他のactorの時はvisibleの場合のみwaitを減らす
                 if sprite == self.player or sprite.is_visible or sprite.ai and sprite.ai.visible_check:
@@ -110,10 +107,10 @@ class TurnLoop:
                 self.player.form = form.NORMAL
 
         elif self.game_turn == Turn.ENEMY:
-            # 他のアクターを障害物としてマップを計算する
             if self.player.tmp_state == state.AUTO:
                 self.player.tmp_state = state.READY
                 self.player.state = state.READY
+                self.player.fighter.wait = 0
                 self.game_turn = Turn.PLAYER
 
             elif Tag.enemy in self.actor.tag:

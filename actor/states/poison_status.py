@@ -41,8 +41,6 @@ class PoisonStatus(Actor):
     def apply(self, engine):
         self.engine = engine
 
-        # if self.owner and self.count_time > 0:
-
         result = self.owner.fighter.skill_process(self)
         PoisonEffect(self.owner,  self.engine)
 

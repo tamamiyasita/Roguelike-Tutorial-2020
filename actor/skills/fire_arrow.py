@@ -36,7 +36,7 @@ class Firearrow(BaseSkill):
 
         self._level = 1
 
-        self.tag = [Tag.item, Tag.used, Tag.active, Tag.skill, Tag.equip]
+        self.tag = [Tag.item, Tag.used, Tag.active, Tag.skill, Tag.equip, Tag.shot]
 
         self.explanatory_text = f""
 

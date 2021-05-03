@@ -576,7 +576,7 @@ class GameEngine:
 
             if "turn_end" in action:
                 target = action["turn_end"]
-                target.fighter.wait = target.fighter.speed
+                target.fighter.wait += target.fighter.speed
                 target.state = state.TURN_END
                 print(f"{target.name} is pass Turn_END")
 

@@ -87,7 +87,7 @@ class Healing(BaseSkill):
             self.count_time = self.max_cooldown_time
 
 
-            result = self.owner.fighter.skill_process(self)
+            result = self.owner.fighter.recovery_process(self)
             HealingEffect(self.owner, self.engine)
 
             return [{"turn_end":self.owner, "message": f"{self.owner.name} used {self.name}"}, *result]
