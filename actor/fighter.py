@@ -163,37 +163,27 @@ class Fighter:
 
 
 
-    def effect_hit_chance(self, effect):
-        resist = self.resist.get(effect.attr)
+    def effect_hit_chance(self, effect, target):
+        # skillの追加効果
+        resist = target.resist.get(effect.attr)
         if resist:
             hit_chance = 100/resist
             resist_chance = random.randrange(1, 99)
             print(f"{resist_chance=} < {hit_chance=} ")
             if  resist_chance < hit_chance:
-                self.states.append(effect)
+                target.states.append(effect)
                 print(f"success hit {effect=}")
             if Tag.used in effect.tag:
-                effect.use(self.owner)# 即時効果
+                effect.use(target)# 即時効果
                 # self.owner.name is {effect.name} rd
         else:
-            self.states.append(effect)
+            target.states.append(effect)
 
-
-
-    def skill_process(self, skill):
-        
-        message = ""
+    def recovery_process(self, skill):
         results = []
-        owner_name = self.owner.name.capitalize()
-        skill_name = skill.name
 
-        level = skill.level
         damage = skill.damage
         attr = skill.attr
-        hit_rate = skill.hit_rate
-
-        # damage = dice(level, damage)
-
         # HP回復
         if attr == "recovery":
             damage = int(damage)
@@ -204,41 +194,61 @@ class Fighter:
                 self.hp = self.max_hp
             return results
 
-        if Tag.counter not in skill.tag or Tag.range_attack not in skill.tag or Tag.shot not in skill.tag:# カウンタースキルにはカウンターチェックしない
-            check = self.other_counter_check(skill.owner)
-            if check:
-                results.extend(check)
-                if skill.owner.fighter.hp < 1 or skill.owner.state == state.STUN:
-                    return results
+
+
+
+    def skill_process(self, skill):
+        
+        owner = skill.owner
+        target = self.owner
+
+        message = ""
+        results = []
+        target_name = target.name.capitalize()
+        skill_name = skill.name
+
+        damage = skill.damage
+        attr = skill.attr
+        hit_rate = skill.hit_rate
+
+
+        # カウンターチェック
+        check = self.other_counter_check(owner, target)
+        if check:
+            results.extend(check)
+            # death chaeck
+            if target.fighter.hp < 1 or target.state == state.TURN_END:
+                return results
+
 
         
 
         # (命中率)％ ＝（α／１００）＊（１ー （β ／ １００））＊ １００
         # 命中率（α）＝９５、回避率（β）＝５
-        if self.owner.state != state.STUN and Tag.player in self.owner.tag:
-            self.owner.form = form.DEFENSE
+        if target.state != state.STUN and Tag.player in target.tag:
+            target.form = form.DEFENSE
         if hit_rate:
-            hit_chance = ((hit_rate-self.DEX+skill.owner.fighter.DEX) / 100) * (1 - (self.evasion / 100)) * 100
+            hit_chance = ((hit_rate-self.DEX+owner.fighter.DEX) / 100) * (1 - (self.evasion / 100)) * 100
             if random.randrange(1, 100) <= hit_chance:
                 # ヒット 
                 message = f"Hit"
-                hit_particle(target=self.owner)
+                hit_particle(target=target)
 
 
                 # critical_flag:
-                if random.randrange(1, (100+self.DEX)) < 3+skill.owner.fighter.DEX:
+                if random.randrange(1, (100+target.DEX)) < 3+owner.fighter.DEX:
                     damage = skill.damage * 2
                     message += " CRITICAL!"
 
                 # 物理防御処理
                 elif attr == "physical":
-                    defens_p = self.level // 3
-                    damage = damage - dice(defens_p, defens_p+self.defense, self.owner.fighter.level)
+                    defens_p = target.level // 3
+                    damage = damage - dice(defens_p, defens_p+target.defense, target.fighter.level)
 
             else:
                 # 回避
-                results.append({"damage_pop": self.owner, "damage": "MISS"})
-                results.append({"message": f"{owner_name} Avoided {skill_name}"})
+                results.append({"damage_pop": target, "damage": "MISS"})
+                results.append({"message": f"{target_name} Avoided {skill_name}"})
                 return results
 
 
@@ -246,49 +256,49 @@ class Fighter:
 
 
 
-        if self.resist[attr] <= 0:
+        if target.resist[attr] <= 0:
             damage *= 2.5# 弱点ダメージ
         else:
-            damage = damage / self.resist[attr]
+            damage = damage / target.resist[attr]
 
 
         # 完全防御
         if damage < 1:
-            message += f" But {owner_name} was undamaged."
-            results.extend([{"message": message},{"damage_pop": self.owner, "damage": "Guard!"}])
+            message += f" But {target_name} was undamaged."
+            results.extend([{"message": message},{"damage_pop": target, "damage": "Guard!"}])
             return results
 
         
         elif damage >= 1:
             if skill.anime and Tag.range_attack not in skill.tag:
-                Hit_Anime(skill, self.owner)
-            message += f" {owner_name} took {int(damage)} damage!"
+                Hit_Anime(skill, target)
+            message += f" {target_name} took {int(damage)} damage!"
             results.append({"message": f"from {skill_name}"})
             results.append({"message": message})
 
             damage = int(damage)
 
-            results.extend(self.change_hp(damage))
+            results.extend(target.change_hp(damage, target))
 
             if skill.effect:
-                self.effect_hit_chance(skill.effect)
+                owner.effect_hit_chance(skill.effect, target)
 
         return results
 
-    def change_hp(self, damage):
+    def change_hp(self, damage, target):
         results = []
 
-        self.hp -= damage
+        target.hp -= damage
 
         # 死亡処理
-        if self.hp <= 0 and self.owner.is_dead == False:
-            self.owner.is_dead = True
-            self.owner.blocks = False
-            results.append({"dead": self.owner})
+        if target.hp <= 0 and target.is_dead == False:
+            target.is_dead = True
+            target.blocks = False
+            results.append({"dead": target})
 
-            print(f"{self.owner.name} is dead x!")
+            print(f"{target.name} is dead x!")
 
-        results.append({"damage_pop": self.owner, "damage": -damage})
+        results.append({"damage_pop": target, "damage": -damage})
 
         return results
 
@@ -297,18 +307,24 @@ class Fighter:
         """ここはダンプアタックを処理する
             attack_skillをループしskill_process関数に渡す"""
         results = []
+        owner = self.owner
 
-        results.append({"message": f"{self.owner.name.capitalize()} attacked {target.name}"})
+        results.append({"message": f"{owner.name.capitalize()} attacked {target.name}"})
         for skill in self.attack_skill:
 
                 results.extend(target.fighter.skill_process(skill))
 
         return results
 
-    def other_counter_check(self, target):
-        if self.skill_list:
-            result = []            
-            for c in self.counter_skill:
-                result = c.use(target)
+    def other_counter_check(self, owner, target):
+        # カウンターチェック
+        result = []            
+        skill = owner.skill
 
-            return result
+        if Tag.counter not in skill.tag or Tag.range_attack not in skill.tag or Tag.shot not in skill.tag:# カウンタースキルにはカウンターチェックしない
+
+            if owner.skill_list:
+                for counter in owner.counter_skill:
+                    result = counter.use(target)
+
+                return result
