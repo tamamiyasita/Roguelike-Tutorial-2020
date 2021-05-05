@@ -221,8 +221,8 @@ class CharacterScreenUI:
 
     def draw_flowers(self):
         """スキルリストの表示"""
-        left_position = self.viewport_left + GRID_SIZE*3+20
-        top_position = self.panel_top-GRID_SIZE*2-25
+        left_position = self.viewport_left + GRID_SIZE*3
+        top_position = self.panel_top-GRID_SIZE*2
         y = -20 # セパレート
         item_font_size = 15
         flowers = self.player.equipment.flower_slot
@@ -242,17 +242,19 @@ class CharacterScreenUI:
         first_icon = arcade.load_texture(r"image\first.png")
         arcade.draw_texture_rectangle(
             center_x=left_position + 20,
-            center_y=top_position + y-21,
+            center_y=top_position + y-24,
             width=40,
             height=40,
             texture=first_icon
         )
-        y -= 84        
+        y_margin = 84
+        y -= y_margin     
 
         for i, flower in enumerate(flowers):
 
 
             item_text = f"{flower.name}".replace("_", " ").title()
+            skill_text = f"{flower.flower_skill.name}".replace("_", " ").title()
 
             # TODO passive activeのiconの位置調整
             # TODO 最初のslot icon
@@ -267,26 +269,34 @@ class CharacterScreenUI:
 
             # 二列目
             if i == 4:
-                left_position += GRID_SIZE * 5
+                left_position += GRID_SIZE * 4
                 y = -20
             
             
             # 上下移動出来る選択枠
             if i == self.selected_item:
-                arcade.draw_lrtb_rectangle_outline(
-                    left=left_position,
-                    right=left_position + GRID_SIZE*3,
-                    top=top_position + y,
-                    bottom=top_position + y - (GRID_SIZE/2) - 9,
-                    color=[252,250,20,255],
-                    border_width=1
-                )
+                # arcade.draw_lrtb_rectangle_outline(
+                #     left=left_position,
+                #     right=left_position + GRID_SIZE*3,
+                #     top=top_position + y,
+                #     bottom=top_position + y - (GRID_SIZE/2) - 9,
+                #     color=[252,250,20,255],
+                #     border_width=1
+                # )
+                ip = arcade.load_texture(r"image\cs_c.png")
+                arcade.draw_lrwh_rectangle_textured(
+                    bottom_left_x=left_position-41,
+                    bottom_left_y=top_position + y - (GRID_SIZE/2) - 18,
+                    width=GRID_SIZE*4,
+                    height=71,
+                    texture=ip
 
+                )
 
 
             # タイトル
             arcade.draw_text(
-                text=item_text,
+                text=f"{item_text} / {skill_text}",
                 start_x=left_position,
                 start_y=top_position + y,
                 color=(129, 255, 81),
@@ -318,10 +328,17 @@ class CharacterScreenUI:
                 exp_text = f"XP {flower.current_xp}"
             arcade.draw_text(text=exp_text,
                             start_x=left_position + 43,
-                            start_y=top_position + y-20,
+                            start_y=top_position + y-29,
                             color=(239,192,70),
                             font_size=9,
-                            font_name=UI_FONT2
+                            font_name=UI_FONT
+                            )
+            arcade.draw_text(text=f"HP {flower.hp: >2}/{flower.max_hp}",
+                            start_x=left_position + 43,
+                            start_y=top_position + y-42,
+                            color=(239,192,70),
+                            font_size=9,
+                            font_name=UI_FONT
                             )
             # passviveとactiveでicon位置調整
             skill = flower.flower_skill
@@ -356,7 +373,7 @@ class CharacterScreenUI:
                 anchor_y="top"
             )
 
-            y -= 84        
+            y -= y_margin
 
 
 

@@ -200,7 +200,7 @@ class PC_Fighter(Fighter):
 
 
 
-    def change_hp(self, damage):
+    def change_hp(self, damage, target=None):
         results = []
         """flower_hpの減算が入る
         10%から一つ毎に5%、最大50%

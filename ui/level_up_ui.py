@@ -159,11 +159,6 @@ class LevelupUI:
             # Yボタンが押されたらgame stateをノーマルに戻し終了
             if self.key == arcade.key.Y:
                 check_experience_level(self.engine.player, self.engine)
-                # flower_check =check_experience_level(self.engine.player, self.engine)
-                # if flower_check:
-                #     self.engine.game_state = GAME_STATE.LEVEL_UP_FLOWER
-                # else:
-                #     self.engine.game_state = GAME_STATE.NORMAL
 
 
             # Nボタンならability pointを戻し再選択させる

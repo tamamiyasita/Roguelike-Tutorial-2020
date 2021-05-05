@@ -151,8 +151,8 @@ class MG(arcade.Window):
         self.viewport_bottom = self.viewports[2]
         with self.engine.light_layer:
             self.draw_sprites()
+            self.engine.light_layer.draw(ambient_color=(1,1,1))
 
-        self.engine.light_layer.draw(ambient_color=(10,10,10))
         # arcade.set_background_color(arcade.color.BLACK)
 
         # ノーマルステート時の画面表示6

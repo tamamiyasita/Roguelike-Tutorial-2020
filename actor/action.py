@@ -38,7 +38,8 @@ def dist_action(dxy, owner, engine):
             result.extend(talk_action(blocking_actor, owner))
             
     else:
-        result.extend([{"delay": {"time": .3, "action": {"turn_end":owner}}}])
+        # result.extend([{"delay": {"time": .3, "action": {"turn_end":owner}}}])
+        return
 
 
     return result

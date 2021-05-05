@@ -165,19 +165,19 @@ class Fighter:
 
     def effect_hit_chance(self, effect, target):
         # skillの追加効果
-        resist = target.resist.get(effect.attr)
+        resist = target.fighter.resist.get(effect.attr)
         if resist:
             hit_chance = 100/resist
             resist_chance = random.randrange(1, 99)
             print(f"{resist_chance=} < {hit_chance=} ")
             if  resist_chance < hit_chance:
-                target.states.append(effect)
+                target.fighter.states.append(effect)
                 print(f"success hit {effect=}")
             if Tag.used in effect.tag:
                 effect.use(target)# 即時効果
                 # self.owner.name is {effect.name} rd
         else:
-            target.states.append(effect)
+            target.fighter.states.append(effect)
 
     def recovery_process(self, skill):
         results = []
@@ -213,7 +213,7 @@ class Fighter:
 
 
         # カウンターチェック
-        check = self.other_counter_check(owner, target)
+        check = self.other_counter_check(skill, owner, target)
         if check:
             results.extend(check)
             # death chaeck
@@ -236,14 +236,14 @@ class Fighter:
 
 
                 # critical_flag:
-                if random.randrange(1, (100+target.DEX)) < 3+owner.fighter.DEX:
+                if random.randrange(1, (100+target.fighter.DEX)) < 3+owner.fighter.DEX:
                     damage = skill.damage * 2
                     message += " CRITICAL!"
 
                 # 物理防御処理
                 elif attr == "physical":
-                    defens_p = target.level // 3
-                    damage = damage - dice(defens_p, defens_p+target.defense, target.fighter.level)
+                    defens_p = target.fighter.level // 3
+                    damage = damage - dice(defens_p, defens_p+target.fighter.defense, target.fighter.level)
 
             else:
                 # 回避
@@ -256,10 +256,10 @@ class Fighter:
 
 
 
-        if target.resist[attr] <= 0:
+        if target.fighter.resist[attr] <= 0:
             damage *= 2.5# 弱点ダメージ
         else:
-            damage = damage / target.resist[attr]
+            damage = damage / target.fighter.resist[attr]
 
 
         # 完全防御
@@ -278,20 +278,20 @@ class Fighter:
 
             damage = int(damage)
 
-            results.extend(target.change_hp(damage, target))
+            results.extend(target.fighter.change_hp(damage, target))
 
             if skill.effect:
-                owner.effect_hit_chance(skill.effect, target)
+                owner.fighter.effect_hit_chance(skill.effect, target)
 
         return results
 
     def change_hp(self, damage, target):
         results = []
 
-        target.hp -= damage
+        target.fighter.hp -= damage
 
         # 死亡処理
-        if target.hp <= 0 and target.is_dead == False:
+        if target.fighter.hp <= 0 and target.is_dead == False:
             target.is_dead = True
             target.blocks = False
             results.append({"dead": target})
@@ -316,15 +316,14 @@ class Fighter:
 
         return results
 
-    def other_counter_check(self, owner, target):
+    def other_counter_check(self, skill, owner, target):
         # カウンターチェック
         result = []            
-        skill = owner.skill
 
-        if Tag.counter not in skill.tag or Tag.range_attack not in skill.tag or Tag.shot not in skill.tag:# カウンタースキルにはカウンターチェックしない
+        if Tag.counter not in skill.tag and Tag.range_attack not in skill.tag and Tag.shot not in skill.tag:# カウンタースキルにはカウンターチェックしない
 
-            if owner.skill_list:
-                for counter in owner.counter_skill:
-                    result = counter.use(target)
+            if target.fighter.skill_list:
+                for counter in target.fighter.counter_skill:
+                    result = counter.use(owner)
 
                 return result

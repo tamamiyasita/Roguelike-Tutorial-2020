@@ -18,7 +18,7 @@ class SilverGrass(BaseFlower):
         skill_component = GrassCutter()
 
         # 定数 #############################
-        self.explanatory_text = f"Is silvergrass \n st"
+        self.explanatory_text = f"This flower will equip your tentacles with a mower.\nThis will give you extra damage when you hit an enemy. \nSince it's called a mower,\nI think it works well on grass-based enemies.\nUse it with safety first."
 
         self.my_speed = 4.3
         self.flower_skill = skill_component

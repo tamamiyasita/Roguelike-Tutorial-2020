@@ -19,7 +19,7 @@ class Equipment:
                              "defense": 0, "evasion": 0, "speed":0}
         self.resist_bonus = {"physical": 0, "fire": 0, "ice": 0, "elec":0, "acid": 0, "poison": 0, "mind": 0}
         
-        self.flower_position = {i:(40*math.cos(math.radians(s)), 40*math.sin(math.radians(s))) for i, s in enumerate([90,20,160,55,125])}
+        self.flower_position = {i:(40*math.cos(math.radians(s)), 40*math.sin(math.radians(s))) for i, s in enumerate([90,55,20,125,160])}
         self.flower_position2 = {i:(60*math.cos(math.radians(s)), 60*math.sin(math.radians(s))) for i, s in enumerate([40,70,100,130,150])}
 
 

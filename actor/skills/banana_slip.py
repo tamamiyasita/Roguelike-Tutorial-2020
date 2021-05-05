@@ -20,7 +20,7 @@ class BananaSlip(BaseSkill):
         self.attr = "mind"
         self.effect = None
 
-        self.tag = [Tag.item, Tag.equip, Tag.counter, Tag.skill, Tag.counter, Tag.passive]
+        self.tag = [Tag.item, Tag.equip, Tag.counter, Tag.skill, Tag.passive]
 
         self._level = 1
         

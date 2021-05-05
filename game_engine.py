@@ -142,7 +142,7 @@ class GameEngine:
 
         arcade.set_background_color(COLORS["black"])
         self.flower_sprites = arcade.SpriteList(use_spatial_hash=True, spatial_hash_cell_size=32)
-        self.cur_level = self.setup_level(level_number=1)
+        self.cur_level = self.setup_level(level_number=99)
         self.stories[self.cur_floor_name] = self.cur_level
         self.turn_loop = TurnLoop(self.player)
         self.item_point = ItemPoint(self)
@@ -556,13 +556,10 @@ class GameEngine:
             if "action" in action:
                 target = action["action"][0]
                 dist = action["action"][1]
-                # target.move(dxy=dist, engine=self)
                 result = dist_action(dist, target, self)
                 if result:
                     new_action_queue.extend(result)
                     
-
-                # [{"action":(self, (3,6))}]
 
             if "None" in action:
                 pass
@@ -600,8 +597,6 @@ class GameEngine:
 
                     # ここでplayerにEXPが入る
                     check_experience_level(self.player, self)
-                    # new_action_queue.extend(
-                    #     [{"delay": {"time": DEATH_DELAY, "action": {"remove": target}}}])
 
             if "delay" in action:
                 target = action["delay"]

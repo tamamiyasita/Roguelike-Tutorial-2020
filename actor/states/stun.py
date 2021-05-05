@@ -33,7 +33,7 @@ class StunStatus(Actor):
 
         # if self.owner and self.count_time >= 0:
 
-        self.owner.fighter.wait = 11
+        self.owner.fighter.wait += 15
         print(f"stun! {self.owner.name=} {self.owner.fighter.wait=} {self.owner.fighter.speed=}")
 
         results = [{"message": f"{self.owner.name} STUN!"}]
@@ -44,5 +44,5 @@ class StunStatus(Actor):
 
 
     def use(self, target):
-        target.fighter.wait += 11
+        target.fighter.wait += 15
         target.state = state.TURN_END
