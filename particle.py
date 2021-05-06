@@ -1,7 +1,7 @@
 from os import remove
 
 from arcade import texture
-from constants import GRID_SIZE, SPRITE_SCALE
+from constants import GRID_SIZE, SPRITE_SCALE, TMP_EFFECT_SPRITES
 import arcade
 import random
 import math
@@ -85,6 +85,7 @@ class Expulsion(arcade.Sprite):
         self.lifetime = 100
         self.gravity = 1
         self.texture = image
+        TMP_EFFECT_SPRITES.append(self)
 
     def update(self):
         self.lifetime -= 1

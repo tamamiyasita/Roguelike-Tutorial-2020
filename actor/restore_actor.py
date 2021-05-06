@@ -6,7 +6,6 @@ from actor.characters.crab import Crab
 from actor.characters.rat import Water_vole
 from actor.characters.npc import Villager, Citizen
 
-from actor.items.healing_potion import HealingPotion
 
 from actor.items.silver_grass import SilverGrass
 from actor.items.ebony import Ebony
@@ -42,29 +41,6 @@ def restore_actor(actor_dict):
     elif actor_name == "Player":
         actor = Player()
 
-    elif actor_name == "ShortSword":
-        actor = ShortSword()
-    elif actor_name == "LongSword":
-        actor = LongSword()
-    elif actor_name == "SmallShield":
-        actor = SmallShield()
-    elif actor_name == "Boomerang":
-        actor = Boomerang()
-
-    elif actor_name == "HealingPotion":
-        actor = HealingPotion()
-    elif actor_name == "FireballScroll":
-        actor = FireballScroll()
-    elif actor_name == "FireballEffect":
-        actor = FireballEffect()
-    elif actor_name == "LightningScroll":
-        actor = LightningScroll()
-    elif actor_name == "LightningEffect":
-        actor = LightningEffect()
-    elif actor_name == "ConfusionScroll":
-        actor = ConfusionScroll()
-    elif actor_name == "ConfusionEffect":
-        actor = ConfusionEffect()
 
     elif actor_name == "SilverGrass":
         actor = SilverGrass()

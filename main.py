@@ -1,4 +1,3 @@
-from os import stat
 import arcade
 from arcade.gl import geometry
 
@@ -13,7 +12,6 @@ from game_engine import GameEngine
 from keymap import keymap, grid_select_key, inventory_key, character_screen_key, door_key
 
 from ui.normal_ui import NormalUI
-from ui.mouse_ui import MouseUI
 from ui.select_ui import SelectUI
 from ui.character_screen_ui import CharacterScreenUI
 from ui.inventory_ui import draw_inventory
@@ -21,7 +19,7 @@ from ui.message_window import MessageWindow
 from ui.level_up_ui import LevelupUI
 from ui.level_up_flower_ui import LevelUpFlower
 
-from util import grid_to_pixel, pixel_to_grid, stop_watch
+from util import grid_to_pixel, stop_watch
 from viewport import viewport
 from actor.states.poison_status import PoisonStatus
 
@@ -44,20 +42,20 @@ class MG(arcade.Window):
         self.engine = GameEngine()
 
         self.player_direction = None
-        self.mouse_position = None
         self.viewports = None
-        self.viewport_left = 0
-        self.viewport_bottom = 0
         self.choice = 0 # messagewindowの選択
-        self.game_dict = None
+        self.game_dict = None# saveファイルの格納に使う
 
     def setup(self):
-        """変数に値を設定する、ミニマップ作成の情報もここで渡す"""
+        """LOOK機能、character_screen画面, level_up画面、ノーマルstate時のUIの初期化を行う
+        ミニマップ作成の情報もここで渡す
+        """
         self.engine.setup()
         viewport(self.engine.player.center_x, self.engine.player.center_y)
 
         # ここでminimapの作成を行う
-        # ----------------------
+        # ------------------------------------------------------------------------------
+
         # ミニマップの描画位置指定
         screen_size = (SCREEN_WIDTH, SCREEN_HEIGHT)
         self.program = self.ctx.load_program(
@@ -71,15 +69,14 @@ class MG(arcade.Window):
         # 必要な色を添付したフレームバッファを作成する
         self.offscreen = self.ctx.framebuffer(
             color_attachments=[self.color_attachment])
-
         self.quad_fs = geometry.quad_2d_fs()
-
         self.mini_map_quad = geometry.quad_2d(
             size=(0.31, .31), pos=(.824, -.8))
-        # ----------------------
+        # -------------------------------------------------------------------------------
 
         # Lコマンドで呼び出すlook機能
         self.select_UI = SelectUI(engine=self.engine)
+        
         self.character_UI = CharacterScreenUI(engine=self.engine)
 
         # 会話画面の初期化はここで行う
@@ -107,7 +104,6 @@ class MG(arcade.Window):
         self.engine.flower_sprites.draw(filter=gl.GL_LO_BIAS_NV)
         self.engine.cur_level.chara_sprites.draw(filter=gl.GL_NEAREST)
         self.engine.cur_level.equip_sprites.draw(filter=gl.GL_NEAREST)
-        self.engine.cur_level.effect_sprites.draw(filter=gl.GL_NEAREST)
 
         TMP_EFFECT_SPRITES.draw(filter=gl.GL_NEAREST)
         for e in TMP_EFFECT_SPRITES:
@@ -118,8 +114,10 @@ class MG(arcade.Window):
         """全画像の表示"""
 
         arcade.start_render()
+
+        # minimap start ------------------------------------------------------------------------------------------------------------
         """minimap draw"""
-        if self.engine.game_state == GAME_STATE.NORMAL or self.engine.game_state == GAME_STATE.DELAY_WINDOW:
+        if self.engine.game_state == GAME_STATE.NORMAL:
             self.offscreen.use()
             # self.offscreen.clear(arcade.color.BLACK)
 
@@ -135,71 +133,76 @@ class MG(arcade.Window):
         self.use()
         self.color_attachment.use(0)
         self.quad_fs.render(self.program)
-        # アタック時はビューポート固定する
-        if self.engine.player.state == state.ATTACK or self.engine.player.state == state.TURN_END and hasattr(self.engine.player, "from_x"):
-            viewport(self.engine.player.from_x, self.engine.player.from_y)
-        else:
-            viewport(self.engine.player.center_x, self.engine.player.center_y)
-        # LOOKシステム
-        if self.engine.game_state == GAME_STATE.SELECT_LOCATION or self.engine.game_state == GAME_STATE.LOOK:
-            x, y = grid_to_pixel(self.select_UI.grid_select[0]+self.engine.player.x, self.select_UI.grid_select[1]+self.engine.player.y)
-            viewport(x, y)
+        # minimap end -------------------------------------------------------------------------------------------------------------
 
-        # ビューポートの左と下の現在位置を変数に入れる、これはステータスパネルを画面に固定する為に使います
+
+
+
+            
+        # アタック時はビューポート固定する
+        if self.engine.game_state == GAME_STATE.NORMAL:
+            if self.engine.player.state == state.ON_MOVE:
+                viewport(self.engine.player.center_x, self.engine.player.center_y)
+                # viewport(self.engine.player.from_x, self.engine.player.from_y)
+            else:
+                x, y = (grid_to_pixel(self.engine.player.x, self.engine.player.y))
+                viewport(x,y)
+
+        # ビューポート情報取得(この位置で取得しないとバグる)
         self.viewports = arcade.get_viewport()
-        self.viewport_left = self.viewports[0]
-        self.viewport_bottom = self.viewports[2]
+
+        # arcadeの光源効果
         with self.engine.light_layer:
             self.draw_sprites()
             self.engine.light_layer.draw(ambient_color=(1,1,1))
 
-        # arcade.set_background_color(arcade.color.BLACK)
 
-        # ノーマルステート時の画面表示6
+        # ノーマルステート時の画面表示
         if self.engine.game_state == GAME_STATE.NORMAL or self.engine.game_state == GAME_STATE.DELAY_WINDOW:
-            # normal_UI = NormalUI(self.engine, self.viewports,
-            #                      self.engine.selected_item, self.engine.messages, self.mouse_position)
             self.normal_UI.draw_in_normal_state(self.viewports)
-            if self.mouse_position:
-                self.mouse_ui.draw_mouse_over_text()
+            # damage表示
+            for i in self.engine.damage_pop:
+                if i.dist > 40:
+                    self.engine.damage_pop.remove(i)
+                elif i.dist < 30:
+                    i.draw()
 
-        # アイテム使用時マウス位置にグリッド表示
-        elif self.engine.game_state == GAME_STATE.SELECT_LOCATION or self.engine.game_state == GAME_STATE.LOOK:
-            self.select_UI.draw_in_select_ui(arcade.get_viewport(), self.engine)
 
         # Character_Screen表示
         elif self.engine.game_state == GAME_STATE.CHARACTER_SCREEN:
             self.character_UI.draw_character_screen(arcade.get_viewport(), self.engine.selected_item)
             
-
-
+        # inventory表示
         elif self.engine.game_state == GAME_STATE.INVENTORY:
             draw_inventory(self.engine, self.engine.selected_item, self.viewports)
 
+        # level_up画面表示
         elif self.engine.game_state == GAME_STATE.LEVEL_UP_WINDOW:
             self.level_up_window.window_pop(self.viewports, self.engine)
-
         elif self.engine.game_state == GAME_STATE.LEVEL_UP_FLOWER:
             self.level_up_flower.window_pop(self.viewports)
+
+        # LOOKシステム
+        elif self.engine.game_state == GAME_STATE.SELECT_LOCATION or self.engine.game_state == GAME_STATE.LOOK:
+            # lookカーソルにviewportを渡す
+            x, y = grid_to_pixel(self.select_UI.grid_select[0]+self.engine.player.x, self.select_UI.grid_select[1]+self.engine.player.y)
+            viewport(x, y)
+            # Lookメイン関数
+            self.select_UI.draw_in_select_ui(self.viewports, self.engine)
 
         # 会話画面の表示
         elif self.engine.game_state == GAME_STATE.MESSAGE_WINDOW:
             self.massage_window.window_pop(arcade.get_viewport(), self.choice)
 
 
-        # draw the mini_map
-        if self.engine.game_state == GAME_STATE.NORMAL or self.engine.game_state == GAME_STATE.DELAY_WINDOW:
+        # draw the mini_map(この位置に置かないとバグる)
+        if self.engine.game_state == GAME_STATE.NORMAL:
             self.color_attachment.use(0)
             self.mini_map_quad.render(self.program)
 
-        if self.engine.damage_pop:
-            for i in self.engine.damage_pop:
-                if i.dist > 40:
-                    self.engine.damage_pop.remove(i)
-                elif i.dist < 30:
-                    i.draw()
                     
     def on_resize(self, width: float, height: float):
+        # 光源処理効果の為に必要、まだ理解していない
         self.engine.light_layer.resize(width, height)
 
     def on_update(self, delta_time):
@@ -211,19 +214,16 @@ class MG(arcade.Window):
 
         if self.engine.game_state == GAME_STATE.NORMAL:
 
-            self.engine.cur_level.chara_sprites.update_animation(delta_time)
             self.engine.cur_level.chara_sprites.update()
-            self.engine.cur_level.actor_sprites.update_animation(delta_time)
+            self.engine.cur_level.chara_sprites.update_animation(delta_time)
             self.engine.cur_level.actor_sprites.update()
-            self.engine.cur_level.effect_sprites.update()
-            self.engine.cur_level.effect_sprites.update_animation()
+            self.engine.cur_level.actor_sprites.update_animation(delta_time)
             self.engine.cur_level.equip_sprites.update()
             self.engine.cur_level.equip_sprites.update_animation()
             self.engine.flower_sprites.update()
             self.engine.flower_sprites.update_animation()
             self.engine.cur_level.map_obj_sprites.update_animation()
             TMP_EFFECT_SPRITES.update()
-         
             TMP_EFFECT_SPRITES.update_animation()
 
 
@@ -239,12 +239,12 @@ class MG(arcade.Window):
 
     def on_key_press(self, key, modifiers):
            # auto_moveキャンセル処理
-        if self.engine.player.state == state.AUTO:
-            self.engine.player.state = state.READY
         if self.engine.player.tmp_state == state.AUTO:
             self.engine.player.tmp_state = state.READY
+        if self.engine.player.state == state.AUTO:
+            self.engine.player.state = state.READY
             
-        # windowを閉じた時にjsonにダンプする
+        # backspace_keyでwindowを閉じた時にjsonにダンプする
         if key == arcade.key.BACKSPACE:
             self.engine.game_state = GAME_STATE.DELAY_WINDOW
             print("save")
@@ -254,7 +254,7 @@ class MG(arcade.Window):
                 json.dump(self.game_dict, write_file, indent=4, sort_keys=True, check_circular=False) 
                 
             arcade.close_window()
-        
+        # delete_keyで即windowを閉じる
         if key == arcade.key.DELETE:
             arcade.close_window()
 
@@ -325,23 +325,6 @@ class MG(arcade.Window):
     def on_key_release(self, key, modifiers):
         self.player_direction = None
 
-    def on_mouse_motion(self, x, y, dx, dy):
-        """マウスオーバー処理"""
-        # マウスの位置にビューポートの座標を足す
-        self.mouse_position = x + self.viewport_left, y + self.viewport_bottom
-
-        if self.mouse_position:
-            self.mouse_ui = MouseUI(mouse_position=self.mouse_position,
-                                    viewport_x=self.viewport_left, viewport_y=self.viewport_bottom,
-                                    sprite_lists=[self.engine.cur_level.actor_sprites, self.engine.cur_level.item_sprites])
-
-    def on_mouse_press(self, x, y, button, modifiers):
-        # engineのgrid_clickに渡されるマウスボタン処理
-        if self.engine.game_state == GAME_STATE.SELECT_LOCATION:
-            grid_x, grid_y = pixel_to_grid(
-                x + self.viewport_left, y + self.viewport_bottom)
-            self.engine.grid_click(grid_x, grid_y)
-            self.engine.game_state = GAME_STATE.NORMAL
 
 
     @stop_watch

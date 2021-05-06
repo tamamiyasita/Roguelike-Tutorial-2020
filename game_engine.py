@@ -2,7 +2,6 @@
 import arcade
 from arcade.experimental.lights import Light, LightLayer
 
-from random import randint
 from collections import deque
 from itertools import chain
 
@@ -28,17 +27,17 @@ from actor.characters.goblin_shaman import Goblin_Shaman
 
 from actor.map_obj.stairs import Up_Stairs, Down_Stairs
 from actor.restore_actor import restore_actor
-from util import  get_blocking_entity, stop_watch
+from util import   stop_watch
 from turn_loop import Turn, TurnLoop
-from fire import Fire
 from actor.damage_pop import DamagePop
 
-from game_map.square_grid import SquareGrid, breadth_first_search, a_star_search, GridWithWeights, reconstruct_path
 from game_map.dijkstra_map import DijkstraMap
 
 from actor.action import dist_action
 
 from particle import Expulsion
+
+from level_up_sys import check_experience_level
 
 from actor.items.cabbage_flower import Cabbageflower
 from actor.items.paeonia import Paeonia
@@ -49,7 +48,6 @@ from actor.items.pineapple import Pineapple
 from actor.items.aconite import Aconite
 from actor.items.banana_flower import Bananaflower
 from actor.items.bamboo_flower import Bambooflower
-from level_up_sys import check_experience_level
 
 #test
 from level_up_sys import random_flower_gen
@@ -69,7 +67,6 @@ class GameLevel:
         self.item_sprites = None
         self.item_pointe_sprites = None
         self.equip_sprites = None
-        self.effect_sprites = None
         self.map_obj_sprites = None
 
         self.map_name = None
@@ -203,8 +200,6 @@ class GameEngine:
         self.game_level.item_point_sprites = items_point_sprite
         self.game_level.equip_sprites = arcade.SpriteList(
             use_spatial_hash=True, spatial_hash_cell_size=32)
-        self.game_level.effect_sprites = arcade.SpriteList(
-            use_spatial_hash=True, spatial_hash_cell_size=32)
         self.game_level.chara_sprites = arcade.SpriteList(
             use_spatial_hash=True, spatial_hash_cell_size=32)
 
@@ -258,8 +253,6 @@ class GameEngine:
         self.game_level.item_point_sprites = items_point_sprite
         self.game_level.equip_sprites = arcade.SpriteList(
             use_spatial_hash=True, spatial_hash_cell_size=32)
-        self.game_level.effect_sprites = arcade.SpriteList(
-            use_spatial_hash=True, spatial_hash_cell_size=32)
         self.game_level.chara_sprites = arcade.SpriteList(
             use_spatial_hash=True, spatial_hash_cell_size=32)
         self.game_level.chara_sprites.append(self.player)
@@ -267,7 +260,6 @@ class GameEngine:
         self.player.x, self.player.y = dungeon.game_map.PLAYER_POINT 
         self.player.from_x, self.player.from_y = self.player.position
 
-        self.square_graph = SquareGrid(self.map_width, self.map_height, dungeon.game_map.tiles)
 
         # playerを目標にしたダイクストラマップ作成
         self.target_player_map = DijkstraMap(dungeon.game_map.tiles, [self.player])
@@ -394,7 +386,6 @@ class GameEngine:
             dungeon_obj_dict = [self.get_actor_dict(s) for s in level.map_obj_sprites]
             item_dict = [self.get_actor_dict(s) for s in level.item_sprites]
             item_point_dict = [self.get_actor_dict(s) for s in level.item_point_sprites]
-            effect_dict = [self.get_actor_dict(s) for s in level.effect_sprites]
 
 
             level_dict = {
@@ -408,7 +399,6 @@ class GameEngine:
                 "dungeon_obj": dungeon_obj_dict,
                 "item": item_dict,
                 "item_point": item_point_dict,
-                "effect": effect_dict,
             }
             levels_dict[map_name] = level_dict
 
@@ -470,8 +460,6 @@ class GameEngine:
             level.equip_sprites = arcade.SpriteList(
                 use_spatial_hash=True, spatial_hash_cell_size=16)
 
-            level.effect_sprites = arcade.SpriteList(
-                use_spatial_hash=True, spatial_hash_cell_size=16)
             
 
             level.floor_level = level_dict["level"]
@@ -518,9 +506,6 @@ class GameEngine:
                 item_point = restore_actor(item_point_dict)
                 level.item_point_sprites.append(item_point)
 
-            for effect_dict in level_dict["effect"]:
-                effect = restore_actor(effect_dict)
-                level.effect_sprites.append(effect)
 
 
 
@@ -589,9 +574,9 @@ class GameEngine:
                     self.player.equipment.item_exp_add(target.fighter.xp_reward)
                     drop_system(self, target)
                     self.move_switch = False
-                    particle = Expulsion(target, image=target.texture)
-                    self.cur_level.effect_sprites.append(particle)
 
+                    # dungeon追放anm
+                    Expulsion(target, image=target.texture)
                     new_action_queue.extend(
                         [{"message": f"{target.name} was Thrown out of the dungeon!"}])
 

@@ -1,7 +1,6 @@
 from actor.actor import Actor
 from data import *
 from constants import *
-from fire import Fire
 from actor.skills.base_skill import BaseSkill
 from ranged import Ranged
 from util import dice
