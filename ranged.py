@@ -1,4 +1,4 @@
-from data import *
+from data import IMAGE_ID
 from constants import *
 from actor.actor import Actor
 
@@ -14,7 +14,7 @@ import math
 class Flying(Actor):
     def __init__(self, shooter, tar_point, engine, skill, spin, range):
         super().__init__(
-            image=skill.amm,
+            image=IMAGE_ID[skill.amm],
             color=COLORS["white"],
         )
         self.engine = engine

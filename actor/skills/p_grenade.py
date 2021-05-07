@@ -1,5 +1,5 @@
 from constants import *
-from data import *
+from data import IMAGE_ID
 from actor.skills.base_skill import BaseSkill
 from ranged import Ranged
 from util import dice
@@ -9,7 +9,7 @@ class P_Grenade(BaseSkill):
     def __init__(self, x=0, y=0, name="p_grenade"):
         super().__init__(
             name=name,
-            image=name,
+            image=IMAGE_ID[name],
             x=x,
             y=y
             )
@@ -40,7 +40,7 @@ class P_Grenade(BaseSkill):
         self.explanatory_text = f""
          
         self.icon = IMAGE_ID["p_grenade_icon"]
-        self.anime = IMAGE_ID["explosion_effect"]
+        self.anime = IMAGE_ID["pineapple_explosion"]
 
 
     @property

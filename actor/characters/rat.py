@@ -1,14 +1,14 @@
 from actor.actor import Actor
 from actor.fighter import Fighter
 from actor.ai import Basicmonster
-from data import *
+from data import IMAGE_ID
 from constants import *
 from actor.skills.base_skill import BaseSkill
 from actor.flowers.aconite import Aconite
 from actor.flowers.banana_flower import Bananaflower
 
 class Water_vole(Actor):
-    def __init__(self, x=0, y=0):
+    def __init__(self, x=0, y=0, name="water_vole"):
         fighter_component = Fighter(hp=8, STR=1, DEX=1,
                                     defense=1,
                                     evasion=2,
@@ -21,8 +21,8 @@ class Water_vole(Actor):
 
         super().__init__(
             scale=1.8,
-            name="water_vole",
-            image="water_vole",
+            name=name,
+            image=IMAGE_ID[name],
             x=x,
             y=y,
             # speed=8,

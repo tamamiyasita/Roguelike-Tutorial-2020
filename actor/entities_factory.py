@@ -1,16 +1,10 @@
 
 import random
-import csv
-from arcade import load_texture
-from actor.actor import Actor
-from actor.ai import Basicmonster
-from actor.fighter import Fighter
+
 from constants import *
-from data import *
+from data import IMAGE_ID
 from actor.flowers.silver_grass import SilverGrass
 
-from actor.characters.orcs import Orc, Troll
-from actor.characters.crab import Crab
 from actor.characters.rat import Water_vole
 from actor.characters.cabbage_snail import CabbageSnail
 from actor.characters.dog import Dog

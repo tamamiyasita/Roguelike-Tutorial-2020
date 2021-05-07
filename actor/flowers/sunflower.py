@@ -1,13 +1,13 @@
 import arcade
+from data import IMAGE_ID
 from actor.flowers.base_flower import BaseFlower
 from actor.skills.seed_shot import SeedShot
-
 
 class Sunflower(BaseFlower):
     def __init__(self, x=0, y=0, name="sunflower"):
         super().__init__(
             name=name,
-            image=name,
+            image=IMAGE_ID[name],
             x=x,
             y=y,
         )

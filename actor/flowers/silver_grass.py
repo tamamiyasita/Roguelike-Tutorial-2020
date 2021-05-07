@@ -1,15 +1,13 @@
 import arcade
-from constants import *
-import random
+from data import IMAGE_ID
 from actor.flowers.base_flower import BaseFlower
 from actor.skills.grass_cutter import GrassCutter
-from arcade.experimental.lights import Light
 
 class SilverGrass(BaseFlower):
     def __init__(self, x=0, y=0, name="silver_grass"):
         super().__init__(
             name=name,
-            image=name,
+            image=IMAGE_ID[name],
             x=x,
             y=y,
         )
@@ -33,21 +31,7 @@ class SilverGrass(BaseFlower):
         self.resist_bonus = {"physical": 1, "fire": 1, "ice": 1, "elec":1, "acid": 1, "poison": 1, "mind": 1}
 
         self.flower_color = arcade.color.SILVER
-        # self.light = Light(0, 0, radius=self.texture.width/3, color=self.flower_color, mode="soft")
-        # self.a_time = 0
 
-    # def update_animation(self, delta_time):
-    #     super().update_animation(delta_time)
-    #     self.a_time +=1
-    #     if self.a_time < 70:
-    #         self.light.radius += delta_time*random.uniform(1.2, 4.6)
-    #     elif self.a_time < 140:
-    #         self.light.radius -= delta_time*random.uniform(1.2, 4.6)
-    #     elif self.a_time < 210:
-    #         self.a_time = 0
-    #         self.light.radius =self.texture.width/3
-
-    #     self.light.position = self.position
 
 
 

@@ -1,10 +1,9 @@
 from actor.actor import Actor
 
 from actor.characters.PC import Player
-from actor.characters.orcs import Orc, Troll
-from actor.characters.crab import Crab
+
 from actor.characters.rat import Water_vole
-from actor.characters.npc import Villager, Citizen
+
 
 
 from actor.flowers.silver_grass import SilverGrass

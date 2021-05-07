@@ -2,7 +2,7 @@ from random import randint, choice
 
 from game_map.door_check import door_check
 from constants import *
-from data import *
+from data import IMAGE_ID
 
 
 MAX_ROOMS = 80

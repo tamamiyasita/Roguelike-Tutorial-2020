@@ -1,3 +1,4 @@
+from data import IMAGE_ID
 import arcade
 from actor.actor import Actor
 from util import grid_to_pixel
@@ -16,7 +17,7 @@ class ItemPoint:
                 item_point.remove_from_sprite_lists()
 
     def add_point(self, item):
-        item_point = Actor(image="items_point", scale=1.2,
+        item_point = Actor(image=IMAGE_ID["items_point"], scale=1.2,
                            color=COLORS["light_ground"], visible_color=COLORS["light_ground"], not_visible_color=COLORS["light_ground"])
 
         item_point.center_x = self.engine.player.center_x

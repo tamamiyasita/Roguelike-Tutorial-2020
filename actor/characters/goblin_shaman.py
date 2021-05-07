@@ -1,14 +1,14 @@
 from actor.actor import Actor
 from actor.fighter import Fighter
 from actor.ai import Rangid_AI
-from data import *
+from data import IMAGE_ID
 from constants import *
 from actor.skills.base_skill import BaseSkill
 from actor.skills.fire_arrow import Firearrow
 
 
 class Goblin_Shaman(Actor):
-    def __init__(self, x=0, y=0):
+    def __init__(self, x=0, y=0, name="goblin_shaman"):
         fighter_component = Fighter(hp=9, STR=1, DEX=1,
                                     speed=13,
                                     defense=1,
@@ -26,8 +26,8 @@ class Goblin_Shaman(Actor):
 
         super().__init__(
             scale=2,
-            name="goblin_shaman",
-            image="goblin_shaman",
+            name=name,
+            image=IMAGE_ID[name],
             x=x,
             y=y,
             # speed=8,

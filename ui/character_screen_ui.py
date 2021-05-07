@@ -1,6 +1,6 @@
 import arcade
 from constants import *
-from data import *
+from data import IMAGE_ID
 import pyglet.gl as gl
 
 class CharacterScreenUI:

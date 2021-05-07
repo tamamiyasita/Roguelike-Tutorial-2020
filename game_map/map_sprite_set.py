@@ -1,6 +1,6 @@
 from actor.map_obj.stairs import Up_Stairs, Down_Stairs
 import arcade
-from data import *
+from data import IMAGE_ID
 from constants import *
 from util import grid_to_pixel, pixel_to_grid
 
@@ -78,7 +78,7 @@ class ActorPlacement:
             floor_sprites.append(f_wall)
 
 
-    def floor_set(self, image="block_floor", image2=None):
+    def floor_set(self, image=IMAGE_ID["block_floor"], image2=None):
         floor_sprites = arcade.SpriteList(
             use_spatial_hash=True, spatial_hash_cell_size=32)
 
@@ -89,7 +89,7 @@ class ActorPlacement:
 
                     if self.width - 1 > x > 0 and self.height - 2 > y > 0 and self.tiles[x][y+1] != TILE.WALL:
 
-                        floor = Floor(image=image, x=x, y=y)
+                        floor = Floor(image, x=x, y=y)
                         floor_sprites.append(floor)
 
                 if self.tiles[x][y] == TILE.WALL:
@@ -225,19 +225,19 @@ class ActorPlacement:
                 # == TILE.EMPTY or TILE.STAIRS_DOWN or TILE.DOOR:
                 if self.tiles[x][y] != TILE.WALL and self.tiles[x][y] != TILE.STAIRS_DOWN:
 
-                    point = Actor(image="floor_point", scale=2, x=x, y=y,
+                    point = Actor(image=IMAGE_ID["floor_point"], scale=2, x=x, y=y,
                                   color=COLORS["black"], visible_color=COLORS["light_ground"], not_visible_color=COLORS["light_ground"])
 
                     map_point_sprites.append(point)
 
                 elif self.tiles[x][y] == TILE.WALL:# ここでcolorをwhiteにするとマップ全体が見れる
-                    point = Actor(image="wall_point", scale=2, x=x, y=y,
+                    point = Actor(image=IMAGE_ID["wall_point"], scale=2, x=x, y=y,
                                   color=COLORS["black"], visible_color=COLORS["light_ground"], not_visible_color=COLORS["light_ground"])
 
                     map_point_sprites.append(point)
 
                 elif self.tiles[x][y] == TILE.STAIRS_DOWN:
-                    point = Actor(image="stairs_down_point", scale=2, x=x, y=y,
+                    point = Actor(image=IMAGE_ID["stairs_down_point"], scale=2, x=x, y=y,
                                   color=COLORS["black"], visible_color=COLORS["light_ground"], not_visible_color=COLORS["light_ground"])
                 if point:
                     map_point_sprites.append(point)
@@ -323,7 +323,7 @@ class ActorPlacement:
             for y in range(self.height):
                 if type(self.item_tiles[x][y]) is int:
 
-                    item = Actor(image="items_point", scale=1.2, x=x, y=y,
+                    item = Actor(image=IMAGE_ID["items_point"], scale=1.2, x=x, y=y,
                                  color=COLORS["black"], visible_color=COLORS["light_ground"], not_visible_color=COLORS["light_ground"])
                     item.x = x
                     item.y = y

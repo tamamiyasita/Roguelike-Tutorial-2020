@@ -1,5 +1,5 @@
 from actor.actor import Actor
-from data import *
+from data import IMAGE_ID
 from constants import *
 
 

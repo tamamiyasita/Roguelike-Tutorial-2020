@@ -1,6 +1,6 @@
 from actor.actor import Actor
 from constants import *
-from data import *
+from data import IMAGE_ID
 import random
 from util import dice
 from actor.skills.base_skill import BaseSkill
@@ -11,7 +11,7 @@ class HealingEffect(Actor):
         super().__init__(
             x=owner.x,
             y=owner.y,
-            image="healing_potion_effect",
+            image=IMAGE_ID["healing_potion_effect"],
             color=COLORS["white"]
         )
         self.owner = owner
@@ -49,7 +49,7 @@ class Healing(BaseSkill):
     def __init__(self,x=0, y=0, name="healing"):
         super().__init__(
             name=name,
-            image=name,
+            image=IMAGE_ID[name],
             x=x,
             y=y
         )

@@ -1,14 +1,15 @@
+from PIL.Image import NONE
 from actor.actor import Actor
 from constants import *
-from data import *
+from data import IMAGE_ID
 
 
 class BaseSkill(Actor):
-    def __init__(self, x=0, y=0, name="attack",image=None, 
+    def __init__(self, x=0, y=0, name="attack",image=NONE, 
                 level=1, damage=1, hit_rate=90, attr="physical", effect=None):
         super().__init__(
             name=name,
-            image=name,
+            image=IMAGE_ID[name],
             x=x,
             y=y,
         )

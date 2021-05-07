@@ -1,6 +1,6 @@
 from actor.actor import Actor
 from constants import *
-from data import *
+from data import IMAGE_ID
 import random
 
 
@@ -8,7 +8,7 @@ import random
 class PoisonStatus(Actor):
     def __init__(self, count_time=None, power=None):
         super().__init__(
-            image="poison",
+            image=IMAGE_ID["poison"],
             scale=4.5,
 
         )
@@ -52,7 +52,7 @@ class PoisonEffect(Actor):
         super().__init__(
             x=owner.x,
             y=owner.y,
-            image="poison",
+            image=IMAGE_ID["poison"],
             color=COLORS["white"]
         )
         self.owner = owner

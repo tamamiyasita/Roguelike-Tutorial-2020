@@ -15,7 +15,6 @@ from ui.normal_ui import NormalUI
 from ui.select_ui import SelectUI
 from ui.character_screen_ui import CharacterScreenUI
 from ui.inventory_ui import draw_inventory
-from ui.message_window import MessageWindow
 from ui.level_up_ui import LevelupUI
 from ui.level_up_flower_ui import LevelUpFlower
 
@@ -78,8 +77,6 @@ class MG(arcade.Window):
         
         self.character_UI = CharacterScreenUI(engine=self.engine)
 
-        # 会話画面の初期化はここで行う
-        self.massage_window = MessageWindow(self.engine)
 
         self.level_up_window = LevelupUI()
         self.level_up_flower = LevelUpFlower(self.engine)
@@ -189,10 +186,6 @@ class MG(arcade.Window):
             # Lookメイン関数
             self.select_UI.draw_in_select_ui(self.viewports, self.engine)
 
-        # 会話画面の表示
-        elif self.engine.game_state == GAME_STATE.MESSAGE_WINDOW:
-            self.massage_window.window_pop(arcade.get_viewport(), self.choice)
-
 
         # draw the mini_map(この位置に置かないとバグる)
         if self.engine.game_state == GAME_STATE.NORMAL:
@@ -288,9 +281,6 @@ class MG(arcade.Window):
             self.level_up_flower.states_choices(key)
 
  
-        # 会話画面の返答処理
-        elif self.engine.game_state == GAME_STATE.MESSAGE_WINDOW:
-            self.choice = self.massage_window.message_choices(key)
 
         # キャラクタースクリーンでスキルのオンオフ操作
         elif self.engine.game_state == GAME_STATE.CHARACTER_SCREEN:

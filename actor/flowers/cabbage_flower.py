@@ -1,14 +1,14 @@
 import arcade
+from data import IMAGE_ID
 from actor.flowers.base_flower import BaseFlower
 from actor.skills.seed_shot import SeedShot
-
 
 class Cabbageflower(BaseFlower):
     # cabbageflower = arcade.load_texture(r"image\cabbage_flower.png")
     def __init__(self, x=0, y=0, name="cabbageflower"):
         super().__init__(
             name=name,
-            image=name,
+            image=IMAGE_ID[name],
             x=x,
             y=y,
         )

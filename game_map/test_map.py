@@ -5,7 +5,7 @@ from util import grid_to_pixel
 
 from game_map.door_check import door_check
 from constants import *
-from data import *
+from data import IMAGE_ID
 
 
 

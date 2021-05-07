@@ -1,5 +1,5 @@
 from actor.actor import Actor
-from data import *
+from data import IMAGE_ID
 from constants import *
 from actor.skills.base_skill import BaseSkill
 from ranged import Ranged
@@ -10,7 +10,7 @@ class SeedShot(BaseSkill):
     def __init__(self, x=0, y=0, name="seed_shot"):
         super().__init__(
             name=name,
-            image=name,
+            image=IMAGE_ID[name],
             x=x,
             y=y,
         )

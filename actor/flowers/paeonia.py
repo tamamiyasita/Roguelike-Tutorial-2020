@@ -1,15 +1,15 @@
 
+import arcade
+from data import IMAGE_ID
 from actor.flowers.base_flower import BaseFlower
 from actor.skills.healing import Healing
-from data import *
-# from arcade.experimental.lights import Light
 
 
 class Paeonia(BaseFlower):
     def __init__(self, x=0, y=0, name="paeonia"):
         super().__init__(
             name=name,
-            image=name,
+            image=IMAGE_ID[name],
             x=x,
             y=y,         
         )
@@ -30,7 +30,6 @@ class Paeonia(BaseFlower):
         self.current_xp = 0
 
         self.flower_color = arcade.color.PINK
-        # self.light = Light(0, 0, radius=self.texture.width/3, color=self.flower_color, mode="soft")
 
         self.states_bonus =  {"max_hp": 0,"STR": 0,"DEX": 0, "INT": 1, "defense": 0, "evasion": 0, "speed":0}
         self.skill_bonus = {"healing":1}

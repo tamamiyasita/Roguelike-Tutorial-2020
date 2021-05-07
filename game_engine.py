@@ -1,4 +1,5 @@
 
+from data import IMAGE_ID
 import arcade
 from arcade.experimental.lights import Light, LightLayer
 
@@ -6,7 +7,6 @@ from collections import deque
 from itertools import chain
 
 from constants import *
-# from data import *
 from game_map.basic_dungeon import BasicDungeon
 from game_map.town_map import TownMap
 from game_map.map_sprite_set import ActorPlacement
@@ -22,7 +22,6 @@ from ui.item_point_check import ItemPoint
 from actor.characters.PC import Player
 from actor.characters.rat import Water_vole
 from actor.characters.cabbage_snail import CabbageSnail
-from actor.characters.npc import Citizen
 from actor.characters.goblin_shaman import Goblin_Shaman
 
 from actor.map_obj.stairs import Up_Stairs, Down_Stairs
@@ -147,7 +146,7 @@ class GameEngine:
 
     def test_map(self, level):
         image_set={"wall": "basic_wall",
-                   "floor": "color_tile_1"}
+                   "floor": IMAGE_ID["color_tile_1"]}
         self.init_dungeon_sprites(TestMap(self.map_width, self.map_height, dungeon_level=99), image_set=image_set)
 
         self.wb = Water_vole(x=10,y=17)
@@ -157,8 +156,6 @@ class GameEngine:
         self.cs = CabbageSnail(x=12,y=17)
         # self.game_level.actor_sprites.append(self.cs)
 
-        self.npc = Citizen(x=14,y=14)
-        # self.game_level.actor_sprites.append(self.npc)
 
         self.game_level.floor_level = level
         self.game_level.map_name = f"test_dungeon"

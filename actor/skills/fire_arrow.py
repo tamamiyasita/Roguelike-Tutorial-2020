@@ -1,5 +1,5 @@
 from actor.actor import Actor
-from data import *
+from data import IMAGE_ID
 from constants import *
 from actor.skills.base_skill import BaseSkill
 from ranged import Ranged
@@ -10,7 +10,7 @@ class Firearrow(BaseSkill):
     def __init__(self, x=0, y=0, name="fire_arrow", target=None):
         super().__init__(
             name=name,
-            image=name,
+            image=IMAGE_ID[name],
             x=x,
             y=y,
         )
@@ -39,7 +39,7 @@ class Firearrow(BaseSkill):
 
         self.explanatory_text = f""
 
-        self.icon = IMAGE_ID["fire_arrow"]
+        self.icon = IMAGE_ID["fire_arrow_icon"]
 
 
     @property

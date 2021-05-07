@@ -1,6 +1,6 @@
 
 from constants import *
-from data import *
+from data import IMAGE_ID
 from actor.skills.base_skill import BaseSkill
 from random import randint
 
@@ -8,7 +8,7 @@ class BambooBlade(BaseSkill):
     def __init__(self, x=0, y=0, name="bamboo_blade"):
         super().__init__(
             name=name,
-            image=name,
+            image=IMAGE_ID[name],
             x=x,
             y=y,
         )

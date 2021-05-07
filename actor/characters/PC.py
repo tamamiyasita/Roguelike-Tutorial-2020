@@ -2,7 +2,7 @@
 from actor.actor import Actor
 from actor.player_fighter import PC_Fighter
 from actor.equipment import Equipment
-from data import *
+from data import IMAGE_ID, PC_ID
 from constants import *
 from util import exp_calc, grid_to_pixel
 from random import choices
@@ -12,7 +12,7 @@ from enum import Enum, auto
 import random
 
 class Player(Actor):
-    def __init__(self, x=0, y=0, inventory=0):
+    def __init__(self, x=0, y=0, name="Rou", inventory=0):
         unarmed_component = BaseSkill()
         unarmed_component.tag.append(Tag.weapon)
         fighter_component = PC_Fighter(hp=85, STR=2, DEX=3, INT=3,
@@ -23,8 +23,8 @@ class Player(Actor):
                                     )
         equip_component = Equipment()
         super().__init__(
-            name="Rou",
-            image="Rou",
+            name=name,
+            image=PC_ID[name],
             x=x,
             y=y,
             color=COLORS["white"],
@@ -90,76 +90,74 @@ class Player(Actor):
         if self.state == state.ON_MOVE and not self.left_face and self.tmp_state != state.AUTO:
             self.form = form.ON_MOVE
             self.delay_time = 3
-            self.texture = pc_move1[0]
+            self.texture = PC_ID["pc_move"][0]
         if self.state == state.ON_MOVE and self.left_face and self.tmp_state != state.AUTO:
             self.form = form.ON_MOVE
             self.delay_time = 3
-            self.texture = pc_move1[1]
+            self.texture = PC_ID["pc_move"][1]
 
         if self.state == state.ATTACK and not self.left_face:
             self.form = form.ATTACK
-            self.texture = pc_attack[0]
+            self.texture = PC_ID["pc_attack"][0]
         if self.state == state.ATTACK and self.left_face:
             self.form = form.ATTACK
-            self.texture = pc_attack[1]
+            self.texture = PC_ID["pc_attack"][1]
 
         if self.tmp_state == state.AUTO and not self.left_face:
             self.form = form.AUTO_MOVE
             p = random.randint(0,2)
-            self.texture = pc_auto_move[p][0]
+            self.texture = PC_ID["pc_auto_move"][p][0]
         if self.tmp_state == state.AUTO and self.left_face:
             self.form = form.AUTO_MOVE
             p = random.randint(0,2)
-            self.texture = pc_auto_move[p][1]
+            self.texture = PC_ID["pc_auto_move"][p][1]
 
         
 
 
         if self.form == form.DOOR and not self.left_face:
-            self.texture = pc_open[0]
+            self.texture = PC_ID["pc_door_open"][0]
         if self.form == form.DOOR and self.left_face:
-            self.texture = pc_open[1]
+            self.texture = PC_ID["pc_door_open"][1]
   
         if self.form == form.SHOT and not self.left_face:
-            self.texture = pc_shot2[0]
+            self.texture = PC_ID["pc_gun"][0]
         if self.form == form.SHOT and self.left_face:
-            self.texture = pc_shot2[1]
+            self.texture = PC_ID["pc_gun"][1]
 
         if self.form == form.THROW and not self.left_face:
-            self.texture = pc_throw[0]
+            self.texture = PC_ID["pc_throw"][0]
         if self.form == form.THROW and self.left_face:
-            self.texture = pc_throw[1]
+            self.texture = PC_ID["pc_throw"][1]
 
         if self.form == form.SMILE and not self.left_face:
-            self.texture = pc_smy[0]
+            self.texture = PC_ID["pc_smile"][0]
         if self.form == form.SMILE and self.left_face:
-            self.texture = pc_smy[1]
+            self.texture = PC_ID["pc_smile"][1]
 
         if self.form == form.DEFENSE and not self.left_face:
-            self.texture = pc_def[0]
-            # self.change_x += uniform(-0.7, 0.7)
-
+            self.texture = PC_ID["pc_defense"][0]
         if self.form == form.DEFENSE and self.left_face:
-            self.texture = pc_def[1]
+            self.texture = PC_ID["pc_defense"][1]
 
 
 
 
         if self.form == form.NORMAL and self.left_face:
-            self.texture = player[1]
+            self.texture = PC_ID["Rou"][1]
             self.delay_time -= delta_time
             if self.delay_time < 0.7:
-                self.texture = pc_delay2[1]
+                self.texture = PC_ID["pc_delay2"][1]
             if self.delay_time <= 0.5:
-                self.texture = pc_delay[1]
+                self.texture = PC_ID["pc_delay1"][1]
             if self.delay_time < 0:
                 self.delay_time = 5
         if self.form == form.NORMAL and not self.left_face:
-            self.texture = player[0]
+            self.texture = PC_ID["Rou"][0]
             self.delay_time -= delta_time
             if self.delay_time < 0.7:
-                self.texture = pc_delay2[0]
+                self.texture = PC_ID["pc_delay2"][0]
             if self.delay_time <= 0.5:
-                self.texture = pc_delay[0]
+                self.texture = PC_ID["pc_delay1"][0]
             if self.delay_time < 0:
                 self.delay_time = 5

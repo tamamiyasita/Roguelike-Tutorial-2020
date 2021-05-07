@@ -1,12 +1,12 @@
 from actor.actor import Actor
 from constants import *
-from data import *
+from data import IMAGE_ID
 
 
 class StunStatus(Actor):
     def __init__(self, count_time=None):
         super().__init__(
-            image="stun",
+            image=IMAGE_ID["stun"],
             scale=4.5,
 
         )

@@ -1,7 +1,7 @@
 import arcade
 from random import randint
 from constants import *
-from data import *
+# from data import IMAGE_ID
 from functools import wraps
 import time
 

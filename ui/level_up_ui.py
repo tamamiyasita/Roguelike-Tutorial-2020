@@ -1,6 +1,6 @@
 import arcade
 from constants import *
-from data import *
+from data import IMAGE_ID
 from level_up_sys import check_experience_level
 # from actor.actor_set import *
 

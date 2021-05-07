@@ -1,12 +1,12 @@
 from constants import *
 from actor.actor import Actor
-
+from data import IMAGE_ID
 
 class DoorH(Actor):
     def __init__(self, x=0, y=0):
         super().__init__(
             texture_number=0,
-            image="door_h",
+            image=IMAGE_ID["door_h"],
             x=x,
             y=y,
             scale=SPRITE_SCALE,
@@ -37,7 +37,7 @@ class DoorW(Actor):
     def __init__(self, x=0, y=0):
         super().__init__(
             texture_number=0,
-            image="door_w",
+            image=IMAGE_ID["door_w"],
             x=x,
             y=y,
             scale=SPRITE_SCALE,

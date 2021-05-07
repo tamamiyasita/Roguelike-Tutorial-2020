@@ -1,14 +1,14 @@
 import arcade
+from data import IMAGE_ID
 from actor.flowers.base_flower import BaseFlower
 from actor.skills.poison_dart import PoisonDart
-# from arcade.experimental.lights import Light
 
 
 class Aconite(BaseFlower):
     def __init__(self, x=0, y=0, name="aconite"):
         super().__init__(
             name=name,
-            image=name,
+            image=IMAGE_ID[name],
             x=x,
             y=y,
         )

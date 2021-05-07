@@ -1,5 +1,5 @@
 from constants import *
-from data import *
+from data import IMAGE_ID
 from random import randint
 from actor.skills.base_skill import BaseSkill
 from util import dice
@@ -9,7 +9,7 @@ class GrassCutter(BaseSkill):
     def __init__(self, x=0, y=0, name="grass_cutter"):
         super().__init__(
             name=name,
-            image=name,
+            image=IMAGE_ID[name],
             x=x,
             y=y,
         )

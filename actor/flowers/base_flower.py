@@ -1,8 +1,8 @@
 import arcade
+from data import IMAGE_ID
 import math
 from actor.actor import Actor
 from constants import *
-from data import *
 from util import exp_calc
 import math
 from random import random, uniform
@@ -14,7 +14,7 @@ class BaseFlower(Actor):
     def __init__(self, x=0, y=0, name="silver_grass", image=None):
         super().__init__(
             name=name,
-            image=name,
+            image=IMAGE_ID[name],
             x=x,
             y=y,
             not_visible_color=(80,80,80)

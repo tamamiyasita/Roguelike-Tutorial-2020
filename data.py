@@ -3,21 +3,6 @@ import glob
 
 from util import get_tile_set
 
-# playerテクスチャ生成
-player = arcade.load_texture_pair(r"image/character/rou/rou6.png")
-pc_move1 = arcade.load_texture_pair(r"image/character/rou/rou6_m.png")
-pc_move2 = arcade.load_texture_pair(r"image/character/rou/_rou6_m_.png")
-pc_attack = arcade.load_texture_pair(r"image/character/rou/rou6_a.png")
-pc_delay = arcade.load_texture_pair(r"image/character/rou/rou6_d.png")
-pc_delay2 = arcade.load_texture_pair(r"image/character/rou/rou6_d2.png")
-pc_delay3 = arcade.load_texture_pair(r"image/character/rou/rou6t.png")
-pc_open = arcade.load_texture_pair(r"image/character/rou/rou6_op.png")
-pc_shot2 = arcade.load_texture_pair(r"image/character/rou/rou6_shot2.png")
-pc_throw = arcade.load_texture_pair(r"image/character/rou/rou6_throw.png")
-pc_def = arcade.load_texture_pair(r"image/character/rou/rou6_def.png")
-pc_smy = arcade.load_texture_pair(r"image/character/rou/rou6_smy.png")
-pc_auto_move = [arcade.load_texture_pair(img) for img in glob.glob(r"image\rou\auto_move\*")]
-
 
 # MONSTER
 water_vole_0 = arcade.load_texture_pair(r"image/character/monster/water_vole0.png")
@@ -84,7 +69,7 @@ poison_start = [arcade.load_texture(img) for img in glob.glob(r"image\effect\poi
 
 pineapple_grenade = arcade.load_texture_pair(r"image/skill/p_grenade.png")
 pineapple_grenade_icon = arcade.load_texture(r"image/icon/pineapple_grenade_icon.png")
-explosion = [arcade.load_texture(img) for img in glob.glob(r"image\effect\explosion\*")]
+pineapple_explosion = [arcade.load_texture(img) for img in glob.glob(r"image\effect\pineapple_explosion\*")]
 
 attack_icon = arcade.load_texture(r"image/icon/poison.png")
 
@@ -116,7 +101,9 @@ color_tile_walls = [color_tile_walls[w] for w in [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 
 
 door1 = arcade.load_texture(r"image\map_obj\wood_door1.png")
 door2 = arcade.load_texture(r"image\map_obj\wood_door2.png")
-doors_h = [door1,door2]
+door = [door1,door2]
+
+
 
 
 # UI
@@ -147,35 +134,17 @@ chara_cursor = arcade.load_texture(r"image\ui\character_screen\chara_cursor.png"
 first_point = arcade.load_texture(r"image\ui\character_screen\first_point.png")
 
 
-# actorに渡す画像はリスト型にすること
-IMAGE_ID = {"Rou": player,
-            "pc_move": pc_move1,
-            "pc_attack": pc_attack,
-            "pc_delay": pc_delay,
-            "pc_delay2": pc_delay2,
-            "pc_open": pc_open,
 
-            "chara_main":chara_main,
-            "chara_sheet":chara_sheet,
-            "chara_cursor":chara_cursor,
-            "first_point":first_point,
-
-            "active_panel":active_panel,
-            "passive_panel":passive_panel,
-            "massage_panel":massage_panel,
-            "map_panel":map_panel,
-            "side_panel":side_panel,
-
-            "inventory_main":inventory_main,
-            "inventory_sub":inventory_sub,
-            "inventory_cursor":inventory_cursor,
-
+IMAGE_ID = {
+            # MONSTER
             "water_vole": water_vole,
             "cabbage_snail": cabbage_snail,
             "dog":dog,
             "goblin_shaman":goblin_shaman,
 
 
+
+            # FLOWER & SKILL & ICON & SKILL_EFFECT
             "silver_grass": silver_grass,
             "silver_grass_icon": silver_grass_icon,
             "grass_cutter": grass_cutter,
@@ -196,15 +165,17 @@ IMAGE_ID = {"Rou": player,
             "paeonia_icon":Paeonia_icon,
             "healing_icon":healing_icon,
             "healing":healing,
+            "healing_potion_effect":healing_potion_effect,
 
             "aconite":aconite,
             "poison_dart":poison_dart,
-            "poison_dart_icon":poison_dart_icon,
             "poison_start":poison_start,
+            "poison_dart_icon":poison_dart_icon,
 
             "pineapple":pineapple,
             "pineapple_icon":pineapple_icon,
             "p_grenade":pineapple_grenade,
+            "pineapple_explosion":pineapple_explosion,
             "p_grenade_icon":pineapple_grenade_icon,
 
             "bananaflower":bananaflower,
@@ -215,35 +186,82 @@ IMAGE_ID = {"Rou": player,
             
             "cabbageflower":cabbageflower,
 
-
             "attack": attack_icon,
             "attack_icon": attack_icon,
 
             "fire_arrow":fire_arrow,
-            "explosion_effect":explosion,
-            "cool_down":cool_down,
+            "fire_arrow_icon":fire_arrow_icon,
 
-            "poison":[poison],
+
+
+            # STATES EFFECT
+            "poison":poison,
             "stun":stun,
 
-            "healing_potion_effect":[healing_potion_effect],
 
-            "floor_point": [floor_point],
+
+            # MAP OBJ
+            "floor_point": floor_point,
             "items_point": items_point,
             "wall_point": wall_point,
             "stairs_down_point": stairs_down_point,
 
             "color_tile_1": color_tile_1,
-            "block_floor":[block_floor],
+            "block_floor":block_floor,
 
             "color_tile_walls":color_tile_walls,
             "basic_wall": basic_wall,
-            "up_stairs": [up_stairs],
-            "down_stairs": [down_stairs],
-            "door_h": doors_h,
-            "door_w": doors_h,
+            "up_stairs": up_stairs,
+            "down_stairs": down_stairs,
+            "door_h": door,
+            "door_w": door,
 
+
+
+            #UI
+            "chara_main":chara_main,
+            "chara_sheet":chara_sheet,
+            "chara_cursor":chara_cursor,
+            "first_point":first_point,
+
+            "active_panel":active_panel,
+            "passive_panel":passive_panel,
+            "massage_panel":massage_panel,
+            "map_panel":map_panel,
+            "side_panel":side_panel,
+
+            "inventory_main":inventory_main,
+            "inventory_sub":inventory_sub,
+            "inventory_cursor":inventory_cursor,
             "pop":pop,
+            "cool_down":cool_down,
             "black_board":black_board
 
+            }
+
+
+# playerテクスチャ生成
+player = arcade.load_texture_pair(r"image/character/rou/rou6.png")
+pc_move = arcade.load_texture_pair(r"image/character/rou/rou6_move.png")
+pc_attack = arcade.load_texture_pair(r"image/character/rou/rou6_attack.png")
+pc_delay1 = arcade.load_texture_pair(r"image/character/rou/rou6_delay1.png")
+pc_delay2 = arcade.load_texture_pair(r"image/character/rou/rou6_delay2.png")
+pc_door_open = arcade.load_texture_pair(r"image/character/rou/rou6_door_open.png")
+pc_gun = arcade.load_texture_pair(r"image/character/rou/rou6_gun.png")
+pc_throw = arcade.load_texture_pair(r"image/character/rou/rou6_throw.png")
+pc_defense = arcade.load_texture_pair(r"image/character/rou/rou6_defense.png")
+pc_smile = arcade.load_texture_pair(r"image/character/rou/rou6_smile.png")
+pc_auto_move = [arcade.load_texture_pair(img) for img in glob.glob(r"image\rou\auto_move\*")]
+
+PC_ID = {"Rou": player,
+        "pc_move": pc_move,
+        "pc_attack": pc_attack,
+        "pc_delay1": pc_delay1,
+        "pc_delay2": pc_delay2,
+        "pc_door_open": pc_door_open,
+        "pc_gun":pc_gun,
+        "pc_throw":pc_throw,
+        "pc_defense":pc_defense,
+        "pc_smile":pc_smile,
+        "pc_auto_move":pc_auto_move
             }

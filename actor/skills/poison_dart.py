@@ -1,6 +1,6 @@
 from actor.actor import Actor
 from constants import *
-from data import *
+from data import IMAGE_ID
 from actor.skills.base_skill import BaseSkill
 from actor.states_effect.poison_status import PoisonStatus
 from ranged import Ranged
@@ -13,7 +13,7 @@ class PoisonDart(BaseSkill):
             x=x,
             y=y,
             name=name,
-            image=name,
+            image=IMAGE_ID[name],
         )
 
 

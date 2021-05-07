@@ -2,7 +2,7 @@
 import arcade
 
 from constants import *
-from data import *
+from data import IMAGE_ID
 from util import pixel_to_grid, grid_to_pixel, get_blocking_entity,  stop_watch
 
 
@@ -29,7 +29,10 @@ class Actor(arcade.Sprite):
         if image:
             self.image = image
             self.texture_number = texture_number
-            self.texture_ = self.image
+            if isinstance(image, list):
+                self.texture = image[0]
+            else:
+                self.texture = image
         self.dx, self.dy = 0, 0
         # self.center_x, self.center_y = grid_to_pixel(x, y)
         self._x, self._y = 0, 0
@@ -200,21 +203,21 @@ class Actor(arcade.Sprite):
         self._x, self._y = value
         self.center_x, self.center_y = grid_to_pixel(self._x, self._y)
 
-    @property
-    def texture_(self):
-        return self.textures
+    # @property
+    # def texture(self):
+    #     return self._texture
 
-    @texture_.setter
-    def texture_(self, value):
-        self.textures = []
-        img = IMAGE_ID.get(value)
-        if isinstance(img, list):
-            self.textures.extend(img)
-        else:
-            self.textures.append(img)
+    # @texture.setter
+    # def _texture(self, value):
+    #     self.textures = []
+    #     if isinstance(self._texture, list):
+    #         self.textures.extend(self._texture)
+    #         self.texture = self.textures[value]
+    #     else:
+    #         self.textures.append(self._texture)
 
 
-        self.texture = self.textures[self.texture_number]
+    #     self.texture = self.textures[self.texture_number]
 
     def update_animation(self, delta_time=1 / 60):
         super().update_animation()
