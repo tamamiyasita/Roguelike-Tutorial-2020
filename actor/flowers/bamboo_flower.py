@@ -1,6 +1,6 @@
 import arcade
 from actor.skills.bamboo_blade import BambooBlade
-from actor.items.base_flower import BaseFlower
+from actor.flowers.base_flower import BaseFlower
 from actor.skills.bamboo_blade import BambooBlade
 from arcade.experimental.lights import Light
 

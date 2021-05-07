@@ -1,6 +1,6 @@
 from constants import TMP_EFFECT_SPRITES
 import arcade
-from particle import AttackParticle
+from anime.particle import AttackParticle
 from constants import *
 
 def hit_particle(target, anime=None):

@@ -1,14 +1,11 @@
 """視野の計算"""
 
-from math import radians
 import arcade
 import math
 
-from arcade import sprite_list
-
 from constants import *
 from util import grid_to_pixel
-from actor.damage_pop import DamagePop
+from anime.damage_pop import DamagePop
 
 
 def recalculate_fov(engine, radius):
@@ -65,7 +62,7 @@ def recalculate_fov(engine, radius):
                         blocks = True
                     if hasattr(sprite.ai, "visible_check"):
                         if sprite.ai.visible_check == False:
-                            engine.damage_pop.append(DamagePop("！", (250,240,0), sprite, 15, size=30))
+                            engine.damage_pop.append(DamagePop("!", (250,240,0), sprite, 15, size=30))
                             engine.move_switch = False
                             sprite.ai.visible_check = True
 

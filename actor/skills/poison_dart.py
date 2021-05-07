@@ -2,7 +2,7 @@ from actor.actor import Actor
 from constants import *
 from data import *
 from actor.skills.base_skill import BaseSkill
-from actor.states.poison_status import PoisonStatus
+from actor.states_effect.poison_status import PoisonStatus
 from ranged import Ranged
 from util import dice
 

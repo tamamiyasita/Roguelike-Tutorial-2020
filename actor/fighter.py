@@ -1,11 +1,7 @@
 import random
 from constants import *
-from util import dice, stop_watch, result_add
-# from actor.actor_set import *
-from collections import Counter
-import math
-from actor.skills.base_skill import BaseSkill
-from hit_anime import hit_particle, Hit_Anime
+from util import dice, stop_watch
+from anime.hit_anime import hit_particle, Hit_Anime
 
 
 class Fighter:

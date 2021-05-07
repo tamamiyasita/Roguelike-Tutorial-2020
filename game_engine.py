@@ -6,7 +6,7 @@ from collections import deque
 from itertools import chain
 
 from constants import *
-from data import *
+# from data import *
 from game_map.basic_dungeon import BasicDungeon
 from game_map.town_map import TownMap
 from game_map.map_sprite_set import ActorPlacement
@@ -18,7 +18,7 @@ from game_map.drunker import DrunkerWalk
 from recalculate_fov import recalculate_fov
 from actor.entities_factory import drop_system
 from actor.inventory import Inventory
-from actor.item_point_check import ItemPoint
+from ui.item_point_check import ItemPoint
 from actor.characters.PC import Player
 from actor.characters.rat import Water_vole
 from actor.characters.cabbage_snail import CabbageSnail
@@ -29,25 +29,24 @@ from actor.map_obj.stairs import Up_Stairs, Down_Stairs
 from actor.restore_actor import restore_actor
 from util import   stop_watch
 from turn_loop import Turn, TurnLoop
-from actor.damage_pop import DamagePop
+from anime.damage_pop import DamagePop
 
 from game_map.dijkstra_map import DijkstraMap
 
-from actor.action import dist_action
+from action import dist_action
 
-from particle import Expulsion
+from anime.particle import Expulsion
 
 from level_up_sys import check_experience_level
 
-from actor.items.cabbage_flower import Cabbageflower
-from actor.items.paeonia import Paeonia
-from actor.items.silver_grass import SilverGrass
-from actor.items.ebony import Ebony
-from actor.items.sunflower import Sunflower
-from actor.items.pineapple import Pineapple
-from actor.items.aconite import Aconite
-from actor.items.banana_flower import Bananaflower
-from actor.items.bamboo_flower import Bambooflower
+from actor.flowers.cabbage_flower import Cabbageflower
+from actor.flowers.paeonia import Paeonia
+from actor.flowers.silver_grass import SilverGrass
+from actor.flowers.sunflower import Sunflower
+from actor.flowers.pineapple import Pineapple
+from actor.flowers.aconite import Aconite
+from actor.flowers.banana_flower import Bananaflower
+from actor.flowers.bamboo_flower import Bambooflower
 
 #test
 from level_up_sys import random_flower_gen
@@ -147,7 +146,7 @@ class GameEngine:
         
 
     def test_map(self, level):
-        image_set={"wall": "b_wall",
+        image_set={"wall": "basic_wall",
                    "floor": "color_tile_1"}
         self.init_dungeon_sprites(TestMap(self.map_width, self.map_height, dungeon_level=99), image_set=image_set)
 
@@ -215,8 +214,6 @@ class GameEngine:
         self.silver_grass = SilverGrass(self.player.x + 1, self.player.y)
         self.game_level.item_sprites.append(self.silver_grass)
 
-        self.ebony = Ebony(self.player.x + 1, self.player.y-1)
-        self.game_level.item_sprites.append(self.ebony)
 
         self.sunflower = Sunflower(self.player.x, self.player.y-2)
         self.game_level.item_sprites.append(self.sunflower)
@@ -279,8 +276,6 @@ class GameEngine:
         random_flower_gen(self.silver_grass, 20)
         self.game_level.item_sprites.append(self.silver_grass)
 
-        self.ebony = Ebony(self.player.x + 1, self.player.y-1)
-        self.game_level.item_sprites.append(self.ebony)
 
         self.sunflower = Sunflower(self.player.x, self.player.y-2)
         self.game_level.item_sprites.append(self.sunflower)
@@ -293,21 +288,6 @@ class GameEngine:
 
         self.bamboo = Bambooflower(self.player.x+2, self.player.y-2)
         self.game_level.item_sprites.append(self.bamboo)
-
-        # self.pineapple = Pineapple(self.player.x-1, self.player.y + 1)
-        # self.game_level.item_sprites.append(self.pineapple)
-
-        # self.hp = Paeonia(self.player.x-1, self.player.y)
-        # self.game_level.item_sprites.append(self.hp)
-
-        # self.silver_grass = SilverGrass(self.player.x + 1, self.player.y)
-        # self.game_level.item_sprites.append(self.silver_grass)
-
-        # self.ebony = Ebony(self.player.x + 1, self.player.y-1)
-        # self.game_level.item_sprites.append(self.ebony)
-
-        # self.sunflower = Sunflower(self.player.x, self.player.y-2)
-        # self.game_level.item_sprites.append(self.sunflower)
 
         self.cabbageflower = Cabbageflower(self.player.x, self.player.y-1)
         self.game_level.item_sprites.append(self.cabbageflower)
@@ -324,7 +304,7 @@ class GameEngine:
 
 
     def bps_dungeon_init(self, level=1, stairs=None):
-        image_set={"wall": "b_wall",
+        image_set={"wall": "basic_wall",
                    "floor": "block_floor",
                    "floor_wall": "side_floor"}
         self.init_dungeon_sprites(BSPTree(self.map_width, self.map_height, dungeon_level=level),image_set=image_set)
@@ -337,7 +317,7 @@ class GameEngine:
     def basic_dungeon_init(self, level=1, stairs=None):
         """基本のdungeonの生成"""
                 
-        image_set={"wall": "b_wall",
+        image_set={"wall": "basic_wall",
                    "floor": "block_floor",
                    "floor_wall": "side_floor"}
         self.init_dungeon_sprites(BasicDungeon(self.map_width, self.map_height, dungeon_level=level),image_set=image_set)
@@ -592,14 +572,7 @@ class GameEngine:
                 else:
                     new_action_queue.extend([target["action"]])
                     self.move_switch = True
-
-            if "fire" in action:
-                shooter = action["fire"]
-                fire = Fire(self, shooter=shooter)
-                result = fire.shot()
-                if result:
-                    new_action_queue.extend(result)
-    
+  
             if "use_skill" in action:
                 select_skill = action["use_skill"]
                 user = action["user"]
@@ -747,9 +720,6 @@ class GameEngine:
 
 
     def fov(self):
-        """recompute_fovでTCODによるFOVの計算を行い
-           fov_getで表示するスプライトを制御する
-        """
         recalculate_fov(self, FOV_RADIUS)
 
 

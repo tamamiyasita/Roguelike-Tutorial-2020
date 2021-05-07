@@ -1,5 +1,5 @@
 import arcade
-from actor.items.base_flower import BaseFlower
+from actor.flowers.base_flower import BaseFlower
 from actor.skills.poison_dart import PoisonDart
 # from arcade.experimental.lights import Light
 

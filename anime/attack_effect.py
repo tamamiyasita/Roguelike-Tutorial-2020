@@ -1,5 +1,3 @@
-from particle import AttackParticle
-from random import uniform
 from constants import *
 
 

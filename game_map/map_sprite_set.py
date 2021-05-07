@@ -8,7 +8,6 @@ from actor.actor import Actor
 from actor.map_obj.wall import Wall
 from actor.map_obj.floor import Floor
 from actor.map_obj.door import DoorH,DoorW
-from actor.characters.npc import Citizen, Villager, villager
 
 from actor.entities_factory import get_random_monster_by_challenge, get_random_items_by_challenge
 

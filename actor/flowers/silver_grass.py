@@ -1,7 +1,7 @@
 import arcade
 from constants import *
 import random
-from actor.items.base_flower import BaseFlower
+from actor.flowers.base_flower import BaseFlower
 from actor.skills.grass_cutter import GrassCutter
 from arcade.experimental.lights import Light
 

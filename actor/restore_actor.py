@@ -7,25 +7,23 @@ from actor.characters.rat import Water_vole
 from actor.characters.npc import Villager, Citizen
 
 
-from actor.items.silver_grass import SilverGrass
-from actor.items.ebony import Ebony
-from actor.items.paeonia import Paeonia
-from actor.items.sunflower import Sunflower
-from actor.items.pineapple import Pineapple
-from actor.items.aconite import Aconite
-from actor.items.banana_flower import Bananaflower
-from actor.items.bamboo_flower import Bambooflower
+from actor.flowers.silver_grass import SilverGrass
+from actor.flowers.paeonia import Paeonia
+from actor.flowers.sunflower import Sunflower
+from actor.flowers.pineapple import Pineapple
+from actor.flowers.aconite import Aconite
+from actor.flowers.banana_flower import Bananaflower
+from actor.flowers.bamboo_flower import Bambooflower
 
 
 from actor.skills.grass_cutter import GrassCutter
-from actor.skills.branch_baton import BranchBaton
 from actor.skills.healing import Healing
 from actor.skills.seed_shot import SeedShot
 from actor.skills.p_grenade import P_Grenade
 from actor.skills.poison_dart import PoisonDart
 from actor.skills.bamboo_blade import BambooBlade
 
-from actor.states.poison_status import PoisonStatus
+from actor.states_effect.poison_status import PoisonStatus
 
 from actor.map_obj.wall import Wall
 from actor.map_obj.floor import Floor
@@ -44,8 +42,6 @@ def restore_actor(actor_dict):
 
     elif actor_name == "SilverGrass":
         actor = SilverGrass()
-    elif actor_name == "Ebony":
-        actor = Ebony()
     elif actor_name == "Paeonia":
         actor = Paeonia()
     elif actor_name == "Sunflower":
@@ -62,8 +58,6 @@ def restore_actor(actor_dict):
 
     elif actor_name == "GrassCutter":
         actor = GrassCutter()
-    elif actor_name == "BranchBaton":
-        actor = BranchBaton()
     elif actor_name == "Healing":
         actor = Healing()
     elif actor_name == "SeedShot":

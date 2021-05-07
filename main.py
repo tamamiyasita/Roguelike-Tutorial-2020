@@ -21,7 +21,6 @@ from ui.level_up_flower_ui import LevelUpFlower
 
 from util import grid_to_pixel, stop_watch
 from viewport import viewport
-from actor.states.poison_status import PoisonStatus
 
 # log = logging.getLogger("__main__")
 
@@ -310,9 +309,6 @@ class MG(arcade.Window):
             self.engine.player.fighter.current_xp += 70
             self.engine.player.equipment.item_exp_add(70)
             check_experience_level(self.engine.player, self.engine)
-
-        if key == arcade.key.F2:
-            self.engine.player.fighter.states.append(PoisonStatus(3, 3))
 
         if key == arcade.key.SPACE:
             if self.engine.player_light in self.engine.light_layer:

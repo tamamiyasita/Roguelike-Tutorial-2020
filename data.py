@@ -1,269 +1,151 @@
 import arcade
 import glob
-from random import choice
 
-from arcade.texture import load_texture
 from util import get_tile_set
 
 # playerテクスチャ生成
-player = arcade.load_texture_pair(r"image/rou/rou6.png")
-pc_move1 = arcade.load_texture_pair(r"image/rou/rou6_m.png")
-pc_move2 = arcade.load_texture_pair(r"image/rou/_rou6_m_.png")
-pc_attack = arcade.load_texture_pair(r"image/rou/rou6_a.png")
-pc_delay = arcade.load_texture_pair(r"image/rou/rou6_d.png")
-pc_delay2 = arcade.load_texture_pair(r"image/rou/rou6_d2.png")
-pc_delay3 = arcade.load_texture_pair(r"image/rou/rou6t.png")
-pc_open = arcade.load_texture_pair(r"image/rou/rou6_op.png")
-pc_shot2 = arcade.load_texture_pair(r"image/rou/rou6_shot2.png")
-pc_throw = arcade.load_texture_pair(r"image/rou/rou6_throw.png")
-pc_def = arcade.load_texture_pair(r"image/rou/rou6_def.png")
-pc_smy = arcade.load_texture_pair(r"image/rou/rou6_smy.png")
+player = arcade.load_texture_pair(r"image/character/rou/rou6.png")
+pc_move1 = arcade.load_texture_pair(r"image/character/rou/rou6_m.png")
+pc_move2 = arcade.load_texture_pair(r"image/character/rou/_rou6_m_.png")
+pc_attack = arcade.load_texture_pair(r"image/character/rou/rou6_a.png")
+pc_delay = arcade.load_texture_pair(r"image/character/rou/rou6_d.png")
+pc_delay2 = arcade.load_texture_pair(r"image/character/rou/rou6_d2.png")
+pc_delay3 = arcade.load_texture_pair(r"image/character/rou/rou6t.png")
+pc_open = arcade.load_texture_pair(r"image/character/rou/rou6_op.png")
+pc_shot2 = arcade.load_texture_pair(r"image/character/rou/rou6_shot2.png")
+pc_throw = arcade.load_texture_pair(r"image/character/rou/rou6_throw.png")
+pc_def = arcade.load_texture_pair(r"image/character/rou/rou6_def.png")
+pc_smy = arcade.load_texture_pair(r"image/character/rou/rou6_smy.png")
 pc_auto_move = [arcade.load_texture_pair(img) for img in glob.glob(r"image\rou\auto_move\*")]
 
-# test_texture
-# player = arcade.load_texture_pair(r"t_image/rou6.png")
-# pc_move = arcade.load_texture_pair(r"t_image/rou6_m.png")
-# pc_attack = arcade.load_texture_pair(r"t_image/rou6_a.png")
-# pc_delay = arcade.load_texture_pair(r"t_image/rou6_d.png")
-# pc_delay2 = arcade.load_texture_pair(r"t_image/rou6_d2.png")
 
-###enemys###
-# crab pairで生成
-crab_0 = arcade.load_texture_pair(r"image/crab0.png")
-crab_1 = arcade.load_texture_pair(r"image/crab1.png")
-crab = [*crab_0, *crab_1]
-
-
-water_vole_0 = arcade.load_texture_pair(r"image/water_vole0.png")
-water_vole_1 = arcade.load_texture_pair(r"image/water_vole1.png")
+# MONSTER
+water_vole_0 = arcade.load_texture_pair(r"image/character/monster/water_vole0.png")
+water_vole_1 = arcade.load_texture_pair(r"image/character/monster/water_vole1.png")
 water_vole =[*water_vole_0, *water_vole_1]
 
-cabbage_snail_0  = arcade.load_texture_pair(r"image/cabbage_snail0.png")
-cabbage_snail_1 = arcade.load_texture_pair(r"image/cabbage_snail1.png")
+cabbage_snail_0  = arcade.load_texture_pair(r"image/character/monster/cabbage_snail0.png")
+cabbage_snail_1 = arcade.load_texture_pair(r"image/character/monster/cabbage_snail1.png")
 cabbage_snail =[*cabbage_snail_0, *cabbage_snail_1]
 
-dog_1 = arcade.load_texture_pair(r"image\dog1.png")
-dog_2 = arcade.load_texture_pair(r"image\dog2.png")
+dog_1 = arcade.load_texture_pair(r"image\character\monster\dog1.png")
+dog_2 = arcade.load_texture_pair(r"image\character\monster\dog2.png")
 dog = [*dog_1, *dog_2]
 
-goblin_shaman_0 = arcade.load_texture_pair(r"image\goblin_shaman_0.png")
-goblin_shaman_1 = arcade.load_texture_pair(r"image\goblin_shaman_1.png")
+goblin_shaman_0 = arcade.load_texture_pair(r"image\character\monster\goblin_shaman_0.png")
+goblin_shaman_1 = arcade.load_texture_pair(r"image\character\monster\goblin_shaman_1.png")
 goblin_shaman = [*goblin_shaman_0, *goblin_shaman_1]
 
-size = 16  # テクスチャのサイズと位置情報も兼ねる
-orcs_tiles_0 = (r"image\Characters\Player0.png")  # orcタイルイメージ
-orcs_tiles_1 = (r"image\Characters\Player1.png")  # orcタイルイメージ
-
-humanoid_tiles_0 =(r"image\Characters\Humanoid0.png")
-humanoid_tiles_1 =(r"image\Characters\Humanoid1.png")
-
-# orcテクスチャ生成
-orc_right_0 = arcade.load_texture(
-    orcs_tiles_0, x=0, y=12*size, width=size, height=size, mirrored=True)
-orc_left_0 = arcade.load_texture(
-    orcs_tiles_0, x=0, y=12*size, width=size, height=size)
-orc_right_1 = arcade.load_texture(
-    orcs_tiles_1, x=0, y=12*size, width=size, height=size, mirrored=True)
-orc_left_1 = arcade.load_texture(
-    orcs_tiles_1, x=0, y=12*size, width=size, height=size)
-orc = [orc_right_0, orc_left_0, orc_right_1, orc_left_1]
-
-# trollテクスチャ生成
-troll_right_0 = arcade.load_texture(
-    orcs_tiles_0, x=size*7, y=12*size, width=size, height=size, mirrored=True)
-troll_left_0 = arcade.load_texture(
-    orcs_tiles_0, x=size*7, y=12*size, width=size, height=size)
-troll_right_1 = arcade.load_texture(
-    orcs_tiles_1, x=size*7, y=12*size, width=size, height=size, mirrored=True)
-troll_left_1 = arcade.load_texture(
-    orcs_tiles_1, x=size*7, y=12*size, width=size, height=size)
-troll = [troll_right_0, troll_left_0, troll_right_1, troll_left_1]
-#######
-
-# npcテクスチャ生成
-villager_right_0 = arcade.load_texture(
-    humanoid_tiles_0, x=size*1, y=size*3, width=size, height=size, mirrored=True)
-villager_left_0 = arcade.load_texture(
-    humanoid_tiles_0, x=size*1, y=size*3, width=size, height=size)
-villager_right_1 = arcade.load_texture(
-    humanoid_tiles_1, x=size*1, y=size*3, width=size, height=size, mirrored=True)
-villager_left_1 = arcade.load_texture(
-    humanoid_tiles_1, x=size*1, y=size*3, width=size, height=size)
-villager = [villager_right_0,villager_left_0, villager_right_1, villager_left_1]
-
-citizen_right_0 = arcade.load_texture(
-    humanoid_tiles_0, x=size*3, y=size*4, width=size, height=size, mirrored=True)
-citizen_left_0 = arcade.load_texture(
-    humanoid_tiles_0, x=size*3, y=size*4, width=size, height=size)
-citizen_right_1 = arcade.load_texture(
-    humanoid_tiles_1, x=size*3, y=size*4, width=size, height=size, mirrored=True)
-citizen_left_1 = arcade.load_texture(
-    humanoid_tiles_1, x=size*3, y=size*4, width=size, height=size)
-citizen = [citizen_right_0,citizen_left_0, citizen_right_1, citizen_left_1]
-
-
-
-g1 = arcade.load_texture_pair(r"image\gb1.png")
-g2 = arcade.load_texture_pair(r"image\gb2.png")
-gb = [*g1,*g2]
-
-
-ssr1 = arcade.load_texture_pair(r"image\ssr1.png")
-ssr2 = arcade.load_texture_pair(r"image\ssr2.png")
+ssr1 = arcade.load_texture_pair(r"image\character\monster\ssr1.png")
+ssr2 = arcade.load_texture_pair(r"image\character\monster\ssr2.png")
 ssr = [*ssr1, *ssr2]
 
-# short weaponテクスチャ生成
-short_weapon_tiles = (r"image/ShortWep.png")
 
-short_sword_left = arcade.load_texture(
-    short_weapon_tiles, x=0, y=0, width=size, height=size)
-short_sword_right = arcade.load_texture(
-    short_weapon_tiles, x=0, y=0, width=size, height=size, mirrored=True)
-short_sword = [short_sword_right, short_sword_left]
-######
+# FLOWER #
+silver_grass = arcade.load_texture_pair(r"image\items\flower\silver_grass.png")
+bambooflower = arcade.load_texture(r"image\items\flower\bambooflower.png")
+Paeonia = arcade.load_texture(r"image\items\flower\paeonia.png")
+sunflower = arcade.load_texture(r"image\items\flower\sunflower.png")
+pineapple = arcade.load_texture(r"image/items/flower/pineapple.png")
+aconite = arcade.load_texture(r"image/items/flower/aconite.png")
+bananaflower = arcade.load_texture(r"image/items/flower/bananaflower.png")
+cabbageflower = arcade.load_texture(r"image\items\flower\cabbage_flower.png")
+# FLOWER ICON
+silver_grass_icon = arcade.load_texture(r"image\icon\silver_grass_icon.png")
+bambooflower_icon = arcade.load_texture(r"image\icon\bambooflower_icon.png")
+Paeonia_icon = arcade.load_texture(r"image\icon\paeonia_icon.png")
+sunflower_icon = arcade.load_texture(r"image\icon\sunflower_icon.png")
+pineapple_icon = arcade.load_texture(r"image/icon/pineapple_icon.png")
+bananaflower_icon = arcade.load_texture(r"image/icon/bananaflower_icon.png")
 
-# mid weaponテクスチャ生成
-med_weapon_tiles = (r"image/MedWep.png")
-long_sword_left = arcade.load_texture(
-    med_weapon_tiles, x=0, y=0, width=size, height=size)
-long_sword_right = arcade.load_texture(
-    med_weapon_tiles, x=0, y=0, width=size, height=size, mirrored=True)
-long_sword = [long_sword_right, long_sword_left]
 
-silver_grass = arcade.load_texture_pair(r"image\silver_grass.png")
-silver_grass_icon = arcade.load_texture(r"image\silver_grass_icon.png")
-grass_cutter = arcade.load_texture_pair(r"image\grass_cutter.png")
-grass_cutter_icon = arcade.load_texture(r"image\grass_cutter_icon.png")
-cirsium = arcade.load_texture_pair(r"image\Cirsium.png")
-leaf_blade = arcade.load_texture_pair(r"image\LeafBlade.png")
-leaf_blade_icon = arcade.load_texture(r"image\leaf_blade_icon.png")
-ebony = arcade.load_texture_pair(r"image\ebony.png")
-branch_baton = arcade.load_texture_pair(r"image\BranchBaton.png")
-branch_baton_icon = arcade.load_texture(r"image\branch_baton_icon.png")
-bambooflower = arcade.load_texture(r"image\bambooflower.png")
-bambooflower_icon = arcade.load_texture(r"image\bambooflower_icon.png")
-bamboo_blade = arcade.load_texture_pair(r"image\bamboo_blade.png")
-bamboo_blade_icon = arcade.load_texture(r"image\bamboo_blade_icon.png")
-healing_icon = arcade.load_texture(r"image\healing_icon.png")
-healing = arcade.load_texture_pair(r"image\healing.png")
-Paeonia = arcade.load_texture(r"image\paeonia.png")
-Paeonia_icon = arcade.load_texture(r"image\paeonia_icon.png")
-sunflower = arcade.load_texture(r"image\sunflower.png")
-sunflower_icon = arcade.load_texture(r"image\sunflower_icon.png")
-pineapple = arcade.load_texture(r"image/pineapple.png")
-pineapple_icon = arcade.load_texture(r"image/pineapple_icon.png")
-aconite = arcade.load_texture(r"image/aconite.png")
-bananaflower = arcade.load_texture(r"image/bananaflower.png")
-bananaflower_icon = arcade.load_texture(r"image/bananaflower_icon.png")
-cabbageflower = arcade.load_texture(r"image\cabbage_flower.png")
+# SKILL
+grass_cutter = arcade.load_texture_pair(r"image\skill\grass_cutter.png")
+grass_cutter_icon = arcade.load_texture(r"image\icon\grass_cutter_icon.png")
 
-seed_shot = arcade.load_texture_pair(r"image/seed_shot.png")
-seed_shot_b = arcade.load_texture(r"image/seed_shot_b.png")
-seed_shot_icon = arcade.load_texture(r"image/seed_shot_icon.png")
+bamboo_blade = arcade.load_texture_pair(r"image\skill\bamboo_blade.png")
+bamboo_blade_icon = arcade.load_texture(r"image\icon\bamboo_blade_icon.png")
 
-fire_arrow = arcade.load_texture_pair(r"image/fire_arrow.png")
-fire_arrow_icon = arcade.load_texture(r"image/fire_arrow.png")
+healing = arcade.load_texture_pair(r"image\skill\healing.png")
+healing_icon = arcade.load_texture(r"image\icon\healing_icon.png")
+healing_potion_effect = arcade.load_texture("image\skill\green_ball.png")
 
-banana_slip = arcade.load_texture_pair(r"image/banana_slip.png")
-banana_slip_icon = arcade.load_texture(r"image/banana_slip_icon.png")
+seed_shot = arcade.load_texture_pair(r"image/skill/seed_shot.png")
+seed_shot_b = arcade.load_texture(r"image/skill/seed_shot_b.png")
+seed_shot_icon = arcade.load_texture(r"image/icon/seed_shot_icon.png")
+
+banana_slip = arcade.load_texture_pair(r"image/skill/banana_slip.png")
+banana_slip_icon = arcade.load_texture(r"image/icon/banana_slip_icon.png")
 banana_fall = [arcade.load_texture(img) for img in glob.glob(r"image\effect\banana_fall\*")]
 
-poison_dart = arcade.load_texture_pair(r"image/poison_dart.png")
-poison_dart_icon = arcade.load_texture(r"image/poison_dart_icon.png")
+poison_dart = arcade.load_texture_pair(r"image/skill/poison_dart.png")
+poison_dart_icon = arcade.load_texture(r"image/icon/poison_dart_icon.png")
 poison_start = [arcade.load_texture(img) for img in glob.glob(r"image\effect\poison_start\*")]
 
-pineapple_grenade = arcade.load_texture_pair(r"image/p_grenade.png")
-pineapple_grenade_icon = arcade.load_texture(r"image/pineapple_grenade_icon.png")
+pineapple_grenade = arcade.load_texture_pair(r"image/skill/p_grenade.png")
+pineapple_grenade_icon = arcade.load_texture(r"image/icon/pineapple_grenade_icon.png")
 explosion = [arcade.load_texture(img) for img in glob.glob(r"image\effect\explosion\*")]
 
-attack_icon = arcade.load_texture(r"image\poison.png")
-poison = arcade.load_texture(r"image\poison.png")
-stun = arcade.load_texture(r"image\stun.png")
+attack_icon = arcade.load_texture(r"image/icon/poison.png")
 
-cool_down = arcade.load_texture(r"image\cool_down.png")
-###items###
-# healing_potionテクスチャセット生成
-healing_potion_tile_img = (r"image/Potion.png")
-healing_potion_tile = get_tile_set(healing_potion_tile_img, tile_size=16)
+fire_arrow = arcade.load_texture_pair(r"image/skill/fire_arrow.png")
+fire_arrow_icon = arcade.load_texture(r"image/skill/fire_arrow.png")
 
-scroll_tile_img = (r"image/Scroll.png")
-scroll_tile = get_tile_set(scroll_tile_img, tile_size=16)
+# STATES_EFFECT_ICON
+poison = arcade.load_texture(r"image\icon\poison.png")
+stun = arcade.load_texture(r"image\icon\stun.png")
 
 
-shield_img = (r"image\Shield.png")
-shield_tile = get_tile_set(shield_img, tile_size=16)
 
 
-ammo_img = (r"image\Items\Ammo.png")
-ammo_tile = get_tile_set(ammo_img, tile_size=16)
-#######
+# MAP_OBJECT
+up_stairs = arcade.load_texture(r"image\map_obj\up_stairs.png")
+down_stairs = arcade.load_texture(r"image\map_obj\down_stairs.png")
+block_floor = arcade.load_texture(r"image\map_obj\block_floor.png")
+color_tile_1 = arcade.load_texture(r"image\map_obj\color_tile_1.png")
 
-###effect###
-effect_img_1 = (r"image/Effect1.png")  # 83
-effect1_tile = get_tile_set(effect_img_1, tile_size=16)
 
-healing_potion_effect = arcade.load_texture("image\green_ball.png")
-#######
+basic_walls = (r"image/map_obj/tiles/basic_walls.png")
+basic_walls_tiles = get_tile_set(basic_walls, tile_size=32)
+basic_wall = [basic_walls_tiles[w] for w in [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]]
 
-items_point = arcade.load_texture_pair(r"image/items_point.png")
-floor_point = arcade.load_texture(r"image/floor_point.png")
-wall_point = arcade.load_texture_pair(r"image/wall_point.png")
-stairs_down_point = arcade.load_texture_pair(r"image/stairs_down_point.png")
-
-# floor_img = (r"t_image/Tile.png")  # test_texture
-floor_img = (r"image/Tile.png")
-floor_tile = get_tile_set(floor_img, tile_size=16)
-floor_len = len(floor_tile)
-floors = [floor_tile[v] for v in range(floor_len)]
-up_stairs = arcade.load_texture(r"image\up_stairs.png")
-down_stairs = arcade.load_texture(r"image\down_stairs.png")
-stone_floor = arcade.load_texture(r"image\stone_tile.png")
-block_floor = arcade.load_texture(r"image\floor_15.png")
-tst_floor = arcade.load_texture(r"image\tst_floor.png")
-color_tile_1 = arcade.load_texture(r"image\color_tile_1.png")
-
-# walls_1 = (r"image/wall1.png")
-# walls_1_tiles = get_tile_set(walls_1, tile_size=16)
-# wall_1 = {k: walls_1_tiles[v] for k, v in zip(
-#     range(16), [6, 6, 11, 11, 10, 10, 1, 12, 4, 5, 2, 5, 0, 5, 1, 8])}
-# walls_2 = (r"image/wall2.png")
-# walls_2_tiles = get_tile_set(walls_2, tile_size=16)
-# wall_2 = {k: walls_2_tiles[v] for k, v in zip(
-#     range(16), [6, 6, 11, 11, 10, 10, 1, 12, 4, 5, 2, 5, 0, 5, 1, 8])}
-walls_3 = (r"image/wall3.png")
-# walls_3 = (r"t_image/wall3.png")  # test_texture
-walls_3_tiles = get_tile_set(walls_3, tile_size=16)
-
-wall_3 = [walls_3_tiles[w]
-          for w in [6, 6, 11, 11, 10, 10, 1, 12, 4, 5, 2, 5, 0, 5, 1, 8]]
-
-b_walls = (r"image/bs_walls.png")
-b_walls_tiles = get_tile_set(b_walls, tile_size=32)
-b_wall = [b_walls_tiles[w] for w in [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]]
-color_tile_walls = (r"image/color_tile_walls.png")
+color_tile_walls = (r"image/map_obj/tiles/color_tile_walls.png")
 color_tile_walls = get_tile_set(color_tile_walls, tile_size=32)
 color_tile_walls = [color_tile_walls[w] for w in [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]]
 
-side_floor = (r"image/side_walls.png")
-side_floor = get_tile_set(side_floor, tile_size=32)
-side_floor = [side_floor[w] for w in [0, 1, 2, 3, 4, 5, 6, 7]]
-side_color_tile_1 = (r"image/side_color_tile_1.png")
-side_color_tile_1 = get_tile_set(side_color_tile_1, tile_size=32)
-side_color_tile_1 = [side_color_tile_1[w] for w in [0, 1, 2, 3, 4, 5, 6, 7]]
 
-# door_img = (r"image/Door0.png")
-# door_tile = get_tile_set(door_img, tile_size=16)
-# door_len = len(door_tile)
-door1 = arcade.load_texture(r"image\wood_door1.png")
-door2 = arcade.load_texture(r"image\wood_door2.png")
+door1 = arcade.load_texture(r"image\map_obj\wood_door1.png")
+door2 = arcade.load_texture(r"image\map_obj\wood_door2.png")
 doors_h = [door1,door2]
-door3 = arcade.load_texture(r"image\door3.png")
-door4 = arcade.load_texture(r"image\door4.png")
-doors_w = [door3,door4]
 
-pop = arcade.load_texture(r"image\pop.png")
-stop_skill = arcade.load_texture(r"image\stop_skill.png")
-black_board = arcade.load_texture(r"image\black_board.png")
+
+# UI
+items_point = arcade.load_texture_pair(r"image/ui/items_point.png")
+floor_point = arcade.load_texture(r"image/ui/floor_point.png")
+wall_point = arcade.load_texture_pair(r"image/ui/wall_point.png")
+stairs_down_point = arcade.load_texture_pair(r"image/ui/stairs_down_point.png")
+cool_down = arcade.load_texture(r"image\ui\cool_down.png")
+pop = arcade.load_texture(r"image\ui\pop.png")
+black_board = arcade.load_texture(r"image\icon\black_board.png")
+
+# inventory_ui
+inventory_main = arcade.load_texture(r"image\ui\inventory\main_panel.png")
+inventory_cursor = arcade.load_texture(r"image\ui\inventory\cursor.png")
+inventory_sub = arcade.load_texture(r"image\ui\inventory\sub_panel.png")
+
+# normal_ui
+active_panel = arcade.load_texture(r"image\ui\normal\active_panel.png")
+passive_panel = arcade.load_texture(r"image\ui\normal\passive_panel.png")
+massage_panel = arcade.load_texture(r"image\ui\normal\massage_panel.png")
+map_panel = arcade.load_texture(r"image\ui\normal\map_panel.png")
+side_panel = arcade.load_texture(r"image\ui\normal\side_panel.png")
+
+# character_screen_ui
+chara_main = arcade.load_texture(r"image\ui\character_screen\chara_main.png")
+chara_sheet = arcade.load_texture(r"image\ui\character_screen\chara_sheet.png")
+chara_cursor = arcade.load_texture(r"image\ui\character_screen\chara_cursor.png")
+first_point = arcade.load_texture(r"image\ui\character_screen\first_point.png")
+
 
 # actorに渡す画像はリスト型にすること
 IMAGE_ID = {"Rou": player,
@@ -273,80 +155,77 @@ IMAGE_ID = {"Rou": player,
             "pc_delay2": pc_delay2,
             "pc_open": pc_open,
 
-            "crab": crab,
+            "chara_main":chara_main,
+            "chara_sheet":chara_sheet,
+            "chara_cursor":chara_cursor,
+            "first_point":first_point,
+
+            "active_panel":active_panel,
+            "passive_panel":passive_panel,
+            "massage_panel":massage_panel,
+            "map_panel":map_panel,
+            "side_panel":side_panel,
+
+            "inventory_main":inventory_main,
+            "inventory_sub":inventory_sub,
+            "inventory_cursor":inventory_cursor,
+
             "water_vole": water_vole,
             "cabbage_snail": cabbage_snail,
             "dog":dog,
             "goblin_shaman":goblin_shaman,
 
-            "orc": orc,
-            "troll": troll,
-            "villager":ssr,
-            # "citizen":citizen,
-            "citizen":gb,
 
-            "short_sword": short_sword,
-            "long_sword": long_sword,
-            "small_shield": [shield_tile[0]],
-            "wood_buckler": [shield_tile[5]],
-            "boomerang": [ammo_tile[22]],
-
-            "cirsium": cirsium,
             "silver_grass": silver_grass,
             "silver_grass_icon": silver_grass_icon,
-            "ebony":ebony,
+            "grass_cutter": grass_cutter,
+            "grass_cutter_icon": grass_cutter_icon,
+
             "bambooflower":bambooflower,
             "bambooflower_icon":bambooflower_icon,
-            "bamboo_blade":bamboo_blade,
             "bamboo_blade_icon":bamboo_blade_icon,
+            "bamboo_blade":bamboo_blade,
 
             "sunflower":sunflower,
             "sunflower_icon":sunflower_icon,
+            "seed_shot":seed_shot,
+            "seed_shot_b":seed_shot_b,
+            "seed_shot_icon":seed_shot_icon,
+
             "paeonia":Paeonia,
             "paeonia_icon":Paeonia_icon,
+            "healing_icon":healing_icon,
+            "healing":healing,
+
+            "aconite":aconite,
+            "poison_dart":poison_dart,
+            "poison_dart_icon":poison_dart_icon,
+            "poison_start":poison_start,
+
             "pineapple":pineapple,
             "pineapple_icon":pineapple_icon,
-            "aconite":aconite,
+            "p_grenade":pineapple_grenade,
+            "p_grenade_icon":pineapple_grenade_icon,
+
             "bananaflower":bananaflower,
             "bananaflower_icon":bananaflower_icon,
+            "banana_slip":banana_slip,
+            "banana_slip_icon":banana_slip_icon,
+            "banana_fall":banana_fall,
+            
             "cabbageflower":cabbageflower,
+
 
             "attack": attack_icon,
             "attack_icon": attack_icon,
 
-            "grass_cutter": grass_cutter,
-            "grass_cutter_icon": grass_cutter_icon,
-            "leaf_blade": leaf_blade,
-            "leaf_blade_icon": leaf_blade_icon,
-            "branch_baton": branch_baton,
-            "branch_baton_icon": branch_baton_icon,
-            "healing_icon":healing_icon,
-            "healing":healing,
-            "seed_shot":seed_shot,
-            "seed_shot_b":seed_shot_b,
-            "seed_shot_icon":seed_shot_icon,
             "fire_arrow":fire_arrow,
-
-            "poison_dart":poison_dart,
-            "poison_dart_icon":poison_dart_icon,
-            "poison_start":poison_start,
-            "p_grenade":pineapple_grenade,
-            "p_grenade_icon":pineapple_grenade_icon,
             "explosion_effect":explosion,
-            "banana_slip":banana_slip,
-            "banana_slip_icon":banana_slip_icon,
-            "banana_fall":banana_fall,
             "cool_down":cool_down,
-            "confusion_scroll": [scroll_tile[15]],
-            "lightning_scroll": [scroll_tile[2]],
-            "fireball_scroll": [scroll_tile[6]],
 
             "poison":[poison],
             "stun":stun,
 
-            "lightning_effect": [effect1_tile[87]],
-            "confusion_effect": [effect1_tile[140]],
-            "fireball_effect": [effect1_tile[134]],
             "healing_potion_effect":[healing_potion_effect],
 
             "floor_point": [floor_point],
@@ -354,25 +233,17 @@ IMAGE_ID = {"Rou": player,
             "wall_point": wall_point,
             "stairs_down_point": stairs_down_point,
 
-            "floor": floors,
-            "tst_floor": tst_floor,
             "color_tile_1": color_tile_1,
-            "stone_floor":stone_floor,
             "block_floor":[block_floor],
-            "side_floor":side_floor,
-            "side_color_tile_1":side_color_tile_1,
-            # "wall_1": wall_1,
-            # "wall_2": wall_2,
+
             "color_tile_walls":color_tile_walls,
-            "b_wall": b_wall,
-            "wall_3": wall_3,
+            "basic_wall": basic_wall,
             "up_stairs": [up_stairs],
             "down_stairs": [down_stairs],
             "door_h": doors_h,
             "door_w": doors_h,
 
             "pop":pop,
-            "stop_skill":stop_skill,
             "black_board":black_board
 
             }

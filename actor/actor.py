@@ -1,19 +1,10 @@
-from os import stat
-from random import random, randint, uniform
-from collections import deque
 
-from arcade import particle
-from arcade.key import F
-from arcade.text import draw_text
-from actor.ai import Basicmonster, ConfusedMonster,RandomMove,Wait
 import arcade
-import math
 
 from constants import *
 from data import *
 from util import pixel_to_grid, grid_to_pixel, get_blocking_entity,  stop_watch
-from particle import Particle2
-from attack_effect import AttackEffect
+
 
 
 from functools import lru_cache
@@ -117,9 +108,7 @@ class Actor(arcade.Sprite):
         if self.npc_state:
             result["npc_state"] = self.npc_state.name
 
-        if self.ai.__class__.__name__ == "ConfusedMonster":
-            result["confused_ai"] = self.ai.get_dict()
-        elif self.ai:
+        if self.ai:
             result["ai"] = self.ai.__class__.__name__
 
         # if self.fighter:
@@ -167,10 +156,6 @@ class Actor(arcade.Sprite):
         if "ai" in result:
             self.ai = eval(result["ai"])()
             self.ai.owner = self
-        if "confused_ai" in result:
-            self.ai = ConfusedMonster()
-            self.ai.owner = self
-            self.ai.restore_from_dict(result["confused_ai"])
 
         self.inventory = None
         if "inventory" in result:

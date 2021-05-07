@@ -1,6 +1,4 @@
-import arcade
 from actor.restore_actor import restore_actor
-from actor.item_point_check import ItemPoint
 
 
 class Inventory:

@@ -7,7 +7,7 @@ from actor.ai import Basicmonster
 from actor.fighter import Fighter
 from constants import *
 from data import *
-from actor.items.silver_grass import SilverGrass
+from actor.flowers.silver_grass import SilverGrass
 
 from actor.characters.orcs import Orc, Troll
 from actor.characters.crab import Crab
@@ -19,28 +19,7 @@ from actor.characters.goblin_shaman import Goblin_Shaman
 from level_up_sys import random_flower_gen
 
 
-def load_entities(filename):
-    monsters = []
-    with open(filename) as input_file:
-        reader = csv.DictReader(input_file)
-        for actor in reader:
-            monsters.append(actor)
 
-    return monsters
-
-
-entities = load_entities(r"actor/actors.csv")
-
-
-# def get_random_monster_by_challenge(challenge):
-#     if challenge:
-#         filtered_monsters = [monster for monster in entities if int(
-#             monster["Challenge"]) == challenge]
-#         if len(filtered_monsters) == 0:
-#             raise ValueError(
-#                 f"Error, no entities for challenge level {challenge}.")
-#         m1 = random.choice(filtered_monsters)
-#         return m1
 def get_random_monster_by_challenge(challenge):
     monster_list = [
         Water_vole(), CabbageSnail(), Dog(), Goblin_Shaman()  #Crab(),# Orc(), Troll()
@@ -81,23 +60,3 @@ def drop_system(engine, target):
                 engine.cur_level.item_sprites.append(item)
         
 
-
-def make_monster_sprite(monster_dict):
-    sprite = Actor(image=monster_dict["Name"])
-
-    sprite.name = monster_dict["Name"]
-    sprite.ai = Basicmonster()
-    sprite.ai.owner = sprite
-    sprite.fighter = Fighter()
-    sprite.fighter.owner = sprite
-    sprite.fighter.hp = int(monster_dict["HP"])
-    sprite.fighter.base_max_hp = int(monster_dict["HP"])
-    sprite.fighter.base_strength = int(monster_dict["Attack"])
-    sprite.fighter.base_defense = int(monster_dict["Defense"])
-    sprite.speed = int(monster_dict["SPEED"])
-    sprite.fighter.xp_reward = int(monster_dict["XP"])
-    sprite.scale = float(monster_dict["scale"])
-    sprite.blocks = True
-    sprite.state = state.TURN_END
-    print(f"Made a {sprite.name}.")
-    return sprite

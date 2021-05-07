@@ -1,7 +1,7 @@
 from util import get_blocking_entity
 from constants import *
 
-from attack_effect import AttackEffect
+from anime.attack_effect import AttackEffect
 
 
 def dist_action(dxy, owner, engine):

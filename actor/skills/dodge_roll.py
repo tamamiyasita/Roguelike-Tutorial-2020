@@ -1,7 +1,7 @@
 from constants import *
 from data import *
 from actor.skills.base_skill import BaseSkill
-from actor.states.stun import StunStatus
+from actor.states_effect.stun import StunStatus
 from util import dice
 
 class DodgeRoll(BaseSkill):

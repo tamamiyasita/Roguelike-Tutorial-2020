@@ -4,8 +4,8 @@ from actor.ai import Basicmonster
 from data import *
 from constants import *
 from actor.skills.base_skill import BaseSkill
-from actor.items.aconite import Aconite
-from actor.items.banana_flower import Bananaflower
+from actor.flowers.aconite import Aconite
+from actor.flowers.banana_flower import Bananaflower
 
 class Water_vole(Actor):
     def __init__(self, x=0, y=0):

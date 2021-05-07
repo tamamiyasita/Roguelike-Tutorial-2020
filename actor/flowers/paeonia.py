@@ -1,5 +1,5 @@
 
-from actor.items.base_flower import BaseFlower
+from actor.flowers.base_flower import BaseFlower
 from actor.skills.healing import Healing
 from data import *
 # from arcade.experimental.lights import Light

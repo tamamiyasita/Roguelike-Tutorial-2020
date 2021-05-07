@@ -28,16 +28,15 @@ class CharacterScreenUI:
         self.panel_top = self.viewport_bottom + self.panel_height
         self.panel_side = self.viewport_left + 18
         """背景"""
-        cs = arcade.load_texture(r"image\chara_screen.png")
         arcade.draw_lrwh_rectangle_textured(
             bottom_left_x=self.viewport_left,
             bottom_left_y=self.viewport_bottom,
             width=self.panel_width,
             height=self.panel_height,
-            texture=cs
+            texture=IMAGE_ID["chara_main"]
         )
         # キャラクターアイコン
-        c = arcade.Sprite(filename=r"image\chara_sheet.png", scale=6,
+        c = arcade.Sprite(filename=r"image\ui\character_screen\chara_sheet.png", scale=6,
                         center_x=self.viewport_left + 82,
                         center_y=self.panel_top - GRID_SIZE - 20)
         self.ui_sprites.append(c)
@@ -239,13 +238,12 @@ class CharacterScreenUI:
         # )
 
         # First icon
-        first_icon = arcade.load_texture(r"image\first.png")
         arcade.draw_texture_rectangle(
             center_x=left_position + 20,
             center_y=top_position + y-24,
             width=40,
             height=40,
-            texture=first_icon
+            texture=IMAGE_ID["first_point"]
         )
         y_margin = 84
         y -= y_margin     
@@ -283,13 +281,12 @@ class CharacterScreenUI:
                 #     color=[252,250,20,255],
                 #     border_width=1
                 # )
-                ip = arcade.load_texture(r"image\cs_c.png")
                 arcade.draw_lrwh_rectangle_textured(
                     bottom_left_x=left_position-41,
                     bottom_left_y=top_position + y - (GRID_SIZE/2) - 18,
                     width=GRID_SIZE*4,
                     height=71,
-                    texture=ip
+                    texture=IMAGE_ID["chara_cursor"]
 
                 )
 

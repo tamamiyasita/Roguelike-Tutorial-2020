@@ -1,11 +1,9 @@
-from arcade.color import SPRING_BUD
 from data import *
 from constants import *
-from util import grid_to_pixel
 from actor.actor import Actor
 
 from damage_range import damage_range, square_shape
-from hit_anime import Hit_Anime
+from anime.hit_anime import Hit_Anime
 from ui.select_ui import SelectUI
 
 import math

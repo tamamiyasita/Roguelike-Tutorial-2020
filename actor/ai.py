@@ -1,11 +1,9 @@
-from os import remove
-import arcade
+
 from random import randint, choice
 from astar import astar
 from constants import *
-from util import pixel_to_grid, stop_watch
-from game_map.square_grid import SquareGrid, breadth_first_search, a_star_search, GridWithWeights, reconstruct_path
-from actor.damage_pop import DamagePop
+from util import stop_watch
+from game_map.square_grid import breadth_first_search, a_star_search
 
 
 class Wait:

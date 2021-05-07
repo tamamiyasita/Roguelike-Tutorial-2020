@@ -119,7 +119,6 @@ class NormalUI:
 
 
         # 画面横のパネル
-        side = arcade.load_texture(r"image\side_p.png")
         arcade.draw_lrwh_rectangle_textured(
         # arcade.draw_xywh_rectangle_filled(
             bottom_left_x=self.side_panel_x_line,
@@ -127,7 +126,7 @@ class NormalUI:
             width=STATES_PANEL_WIDTH+8,
             height=self.side_panel_height-16,
             # color=(25,25,55,55)
-            texture=side
+            texture=IMAGE_ID["side_panel"]
         )
         arcade.draw_text(
             "[Flowers]",
@@ -152,19 +151,15 @@ class NormalUI:
         # )
         # アクティブスキルアイコン枠
         d = 14
-        ap = arcade.load_texture(r"image\ac_p.png")
         arcade.draw_lrwh_rectangle_textured(
         # arcade.draw_xywh_rectangle_outline(
             bottom_left_x=self.active_panel_line,
             bottom_left_y=self.viewport_bottom+8,
             width=(SCREEN_WIDTH-(GRID_SIZE*10))/2 +d,
             height=self.skill_panel_height,
-            # color=arcade.color.ORANGE,
-            # border_width=self.panel_line_width
-            texture=ap
+            texture=IMAGE_ID["active_panel"]
         )
         # パッシブスキルアイコン枠
-        ps = arcade.load_texture(r"image\ps_p.png")
         arcade.draw_lrwh_rectangle_textured(
         # arcade.draw_xywh_rectangle_outline(
             bottom_left_x=self.passive_panel_line,
@@ -173,10 +168,9 @@ class NormalUI:
             height=self.skill_panel_height,
             # color=arcade.color.BABY_BLUE,
             # border_width=self.panel_line_width
-            texture=ps
+            texture=IMAGE_ID["passive_panel"]
         )
         # メッセージパネル枠
-        log = arcade.load_texture(r"image\log_p.png")
         arcade.draw_lrwh_rectangle_textured(
         # arcade.draw_xywh_rectangle_outline(
             bottom_left_x=self.viewport_left+8,
@@ -185,7 +179,7 @@ class NormalUI:
             height=self.skill_panel_height,
             # color=arcade.color.WHITE_SMOKE,
             # border_width=self.panel_line_width
-            texture=log
+            texture=IMAGE_ID["massage_panel"]
         )
 
 
@@ -200,16 +194,13 @@ class NormalUI:
         # )
 
         # ミニマップ囲い線
-        map = arcade.load_texture(r"image\map_p.png")
         arcade.draw_lrwh_rectangle_textured(
         # arcade.draw_xywh_rectangle_outline(
             bottom_left_x=self.side_panel_x_line,
             bottom_left_y=self.viewport_bottom+8,
             width=STATES_PANEL_WIDTH+8,
             height=self.skill_panel_height,
-            # color=arcade.color.GO_GREEN,
-            # border_width=self.panel_line_width
-            texture=map
+            texture=IMAGE_ID["map_panel"]
         )
         # <mini_mapタイトル>        
         arcade.draw_text(text="[Mini Map]",
